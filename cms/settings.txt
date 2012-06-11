@@ -1,0 +1,1 @@
+1. Add LOGIN_URL = '/login/'

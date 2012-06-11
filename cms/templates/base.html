@@ -1,0 +1,32 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>{% block title %}Base Template {% endblock %}</title>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8">
+
+    {% block css %}
+    <link rel="stylesheet" type="text/css" href="/static/css/style.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/jquery-ui-1.8.14.custom.css">
+    {% endblock css %}
+    {% block js %}
+    <script type="text/javascript" src="/static/js/jquery-1.7.2.min.js"></script>
+    <script type="text/javascript" src="/static/js/jquery-ui-1.8.14.custom.min.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.ba-hashchange.min.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.validate.min.js"></script>
+    <script type="text/javascript" src="/static/js/additional-methods.min.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.simplemodal-1.4.2.js"></script>
+    <script type="text/javascript" src="/static/js/content-manager.js"></script>
+    <script type="text/javascript" src="/static/js/auth.js"></script>
+    <script type="text/javascript" src="/static/js/welcome.js"></script>
+    {% endblock js %}
+</head>
+<body>
+	<div id="container">
+		<div id="appcontainer">
+		    {% block body %}
+		    <h1> BODY </h1>
+		    {% endblock body %}
+		</div>
+	</div>
+</body>
+</html>

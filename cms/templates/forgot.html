@@ -1,0 +1,28 @@
+{% extends "base_auth.html" %}
+
+{% block title %} Forgot your CMS Password? {% endblock title %}
+
+{% block js %}
+	{{ block.super }}
+{% endblock js %}
+
+{% block content %}
+	<div id="left">
+		<h2>Forgot your Password?</h2>
+		<p>No problem. Just enter your username and/or your email to the right, and we'll send a reset password to the email account you registered with.</p>
+		<div id="errorcontainer">
+			{% if state %}<label class="error">{{ state }}</label>{% endif %}
+		</div>
+	</div>
+	<div id="right">
+		<form id="loginform" action="/forgot/" method="post">
+			{% csrf_token %}
+			<span> Username </span><input class="text empty" type="text" name="username" value="">
+			<span> Email </span><input class="text empty" type="text" name="email" value="">
+			<button class="authsubmit" type="submit">Reset!</button>
+			<span class="register"> Wrong turn? <a class="nav" href="/login">&larr; Back to login</a></span>
+		</form>
+	</div>
+{% endblock content %}
+
+

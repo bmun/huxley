@@ -1,0 +1,211 @@
+{% extends "advisor_index.html" %}
+
+{% block content %}
+<h2>Edit Roster</h2>
+<p> Here you can edit your roster. To change a delegate's name, simply click on it. To <span class="bold">erase</span> a delegate, click the <img src="/static/images/delete_over.png"> button.
+To <span class="bold">switch</span> delegates, click the <img src="/static/images/switch_over.png"> button of the first delegate, and then the corresponding button of the second delegate.
+When you're done, <span class="bold">don't forget to save your changes!</span> </p>
+<form id="theRoster" action="/updateroster/">
+{% csrf_token %}
+<div id="tablemenu" class="tableheader">
+    Don't forget to <input class="saved button" type="submit" value="SAVE!"/>
+</div>
+<div id="rostercontainer">
+<table id="roster">
+    <thead>
+        <tr>
+            <th> Edit </th>
+            <th class="delegatename"> Delegate Name </th>
+            <th class="delegateemail"> Delegate Email </th>
+            <th class="delegatecountry"> Country/Position </th>
+            <th class="delegatecommittee"> Committee </th>
+        </tr>
+    </thead>
+    <tr class="rosterrow">
+        <td id="edit">
+            <div class="delegateoption button" id="delete"></div>
+            <div class="delegateoption button" id="switch"></div>
+        </td>
+        <td class="delegatename">
+            <input type="text" name="delegatename" value="Kunal Deepak Mehta" />
+        </td>
+        <td class="delegateemail">
+            <input type="text" name="delegateemail" value="kunalmehta@bmun.net" />
+        </td>
+        <td class="delegatecountry">
+            Saint Vincent and Grenadines
+        </td>
+        <td class="delegatecommittee">
+            Crisis
+        </td>
+    </tr>
+    {% if slots %}
+        {% for slot in slots %}
+        <tr class="rosterrow" slotid="{{ slot.id }}">
+            <td id="edit">
+                <div class="delegateoption button" id="delete"></div>
+                <div class="delegateoption button" id="switch"></div>
+            </td>
+            <td class="delegatename">
+                {% if slot.delegate %}
+                    <input type="text" name="delegatename" value="{{ slot.delegate.name }}" />
+                {% else %}
+                    <span class="nodelegate"> Click here to add a Delegate.</span>
+                {% endif %}
+            </td>
+            <td class="delegateemail">
+                {% if slot.delegate %}
+                    <input type="text" name="delegateemail" value="{{ slot.delegate.email }}" />
+                {% endif %}
+            </td>
+            <td class="delegatecountry">
+                {{ slot.assignment.country }}
+            </td>
+            <td class="delegatecommittee">
+                {{ slot.assignment.committee }}
+            </td>
+        </tr>
+        {% endfor %}
+    {% endif %}
+</table>
+</div>
+<div id="tablemenu" class="tablefooter">
+    Don't forget to <input class="saved button" type="submit" value="SAVE!" />
+</div>
+</form>
+
+<script language="javascript" type="text/javascript" src="/static/js/jquery.form.js"></script>
+<script type="text/javascript">
+
+    var nodelegate = '[Delegate Name]'
+    var switch1 = undefined;
+    var switch2 = undefined;
+    
+    function aggregateData(){
+        var payload = {};
+        payload['csrfmiddlewaretoken'] = $("input[name=csrfmiddlewaretoken]").attr('value');
+        
+        $("#roster tr.rosterrow").each(function(){
+            var did = $(this).attr('delegateid');           
+            
+            var name = getDelegateName(did);
+            var country = getDelegateCountry(did);
+            var committee = getDelegateCommittee(did);
+            
+            payload[did] = JSON.stringify({'name':name, 'country':country, 'committee':committee});
+        });
+        
+        //alert("PAYLOAD: " + JSON.stringify(payload));
+        return payload;
+    }
+    
+    function getDelegateId(obj){
+        return $(obj).closest('tr').attr('delegateid');
+    }
+    
+    function getDelegateInput(did){
+        return $("#roster tr.rosterrow[delegateid=" + did + "] td.delegatename input");
+    }
+    
+    function getDelegateName(did){
+        return getDelegateInput(did).attr('value');
+    }
+    
+    function getDelegateCountry(did){
+        return $("#roster tr.rosterrow[delegateid=" + did + "] td.delegatecountry").html().trim();
+    }
+    
+    function getDelegateCommittee(did){
+        return $("#roster tr.rosterrow[delegateid=" + did + "] td.delegatecommittee").html().trim();
+    }
+    
+    function setUnsaved(){
+        $("#tablemenu input[type=submit]").removeClass('saved').addClass('unsaved');
+    }
+    
+    function setSaved(){
+        $("#tablemenu input[type=submit]").removeClass('unsaved').addClass('saved');
+    }
+    
+    $(document).ready(function() {
+        $('#theRoster').submit(function() {
+            
+            $.ajax({
+                type: 'POST',
+                url: "/updateroster/",
+                data: aggregateData(),
+                contentType: 'application/json',
+                success: function(response){ setSaved();},
+                error: function(something, error, msg) {alert('didnt work, sorry: ' + msg)}
+            });
+            
+            return false;
+        });
+        
+        $("#roster input[value='" + nodelegate + "']").addClass('empty');
+        
+        $("#roster").tablesorter();
+        
+    });
+    
+    $("#delete.delegateoption").click(function() {
+        var did = getDelegateId(this);
+        var input = getDelegateInput(did);           
+        if(input.val() != nodelegate){
+            input.val(nodelegate).addClass('empty');
+            setUnsaved();  
+        }
+    });
+    
+    $("#switch.delegateoption").click(function(){
+        var did = getDelegateId(this);
+        if(switch1 == undefined){
+            switch1 = did;
+            $(this).addClass('active');
+        }
+        else {
+            switch2 = did;
+            var row1 = $("#roster tr.rosterrow[delegateid=" + switch1 + "]");
+            var row2 = $("#roster tr.rosterrow[delegateid=" + switch2 + "]");
+            var input1 = getDelegateInput(switch1);
+            var input2 = getDelegateInput(switch2);
+            var val1 = input1.val();
+            var val2 = input2.val();
+            setUnsaved();
+            input1.fadeOut(250, function() {input1.val(val2).fadeIn(250)});
+            input2.fadeOut(250, function() {input2.val(val1).fadeIn(250)});
+            row1.attr('delegateid', switch2);
+            row2.attr('delegateid', switch1);
+            switch1 = undefined;
+            switch2 = undefined;
+        }
+    });
+    
+    
+    
+    $("#roster input[type=text]").focus(function() {
+        var input = $(this);
+        if(input.hasClass('empty')){
+            input.val('').toggleClass('empty');
+        }
+    });
+    
+    $("#roster input[type=text]").blur(function(){
+        var input = $(this);
+        if(input.val() == ''){
+            input.val(nodelegate);
+            input.addClass('empty');
+        }
+    });
+    
+    $("#roster input[type=text]").change(function(){
+        setUnsaved();
+    });
+    
+    $('.button').hover(function() {
+        $(this).css('cursor','pointer');
+    }, function() {
+        $(this).css('cursor','auto');
+    });
+</script>
+{% endblock content %}

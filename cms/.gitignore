@@ -1,0 +1,7 @@
+# Compiled Source #
+###################
+*.pyc
+
+# OS-Generated Files #
+######################
+.DS_Store*

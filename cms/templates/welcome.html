@@ -1,0 +1,138 @@
+{% extends "advisor_index.html" %}
+
+{% block title %} Welcome to CMS! {% endblock title %}
+
+{% block content %}
+<h2> Welcome, <span class="advisorfirstname">{{ user.first_name }}!</span> </h2>
+
+<p>We're very excited to see <span class="schoolname">{{ school }}</span> at BMUN 60 this year for our Diamond Session!
+Here, you can view and edit your registration information for the conference, edit your delegate roster, and find answers to frequently asked questions.
+To edit your information, just click on any of the highlighted fields and add your changes. Also, <span class="bold">don't forget to save any information you update!</span></p>
+<br>
+<p>If you have any other further questions, please contact me at <a href="mailto:info@bmun.net">info@bmun.net</a> and I will respond to all requests efficiently. See you soon!</p>
+<br>
+<p class="bold">Ginny Sklar</p>
+<p>Under-Secretary General of External Relations, 60th Session</p>
+<script type="text/javascript" src="/static/js/jquery.form.js"></script>
+
+<form id = "welcomepage" action="">
+{% csrf_token %}
+
+<div id = "tablemenu" class="tableheader">
+	Don't forget to <input class="saved button" type="submit" value="SAVE!"/>
+</div>
+
+<div id = "welcomeinfocontainer">
+<table id = "welcomeinfo">
+	<tr>
+		<th colspan=2> Advisor Information </th>
+	</tr>
+	<tr>
+		<td class='fieldLabel'> First Name </td>
+		<td class='field'> <input type="text" name="firstname" value="{{ user.first_name }}" class="required" /> </td>
+	</tr>
+	<tr>
+		<td class='fieldLabel'> Last Name </td>
+		<td class='field'> <input type="text" name="lastname" value="{{ user.last_name }}" class="required" />  </td>
+	</tr>
+	<tr>
+		<th colspan=2> School Information </th>
+	</tr>
+	<tr>
+		<td class='fieldLabel'> Name </td>
+		<td class='field'> <input type="text" name="schoolname" value="{{ school.name }}" class="required" /> </td>
+	</tr>
+	<tr>
+		<td class='fieldLabel'> Address </td>
+		<td class='field'> <input type="text" name="address" value="{{ school.address }}" class="required" /> </td>
+	</tr>
+	<tr>
+		<td class='fieldLabel'> City </td>
+		<td class='field'> <input type="text" name="city" value="{{ school.city }}" class="required" </td>
+	</tr>
+	<tr>
+		<td class='fieldLabel'> Zip </td>
+		<td class='field'> <input type="text" name="zip" value="{{ school.zip }}" class="required zip" </td>
+	</tr>
+	<tr>
+		<th colspan=2> Program Information </th>
+	</tr>
+	<tr>
+		<td class='fieldLabel'> Program Type </td>
+		<td class="field"> 
+		<input type="radio" class="other" name="programtype" value="class" {% if school.programtype == "class" %} checked="checked" {% endif %}><label> Class </label>
+		&nbsp;&nbsp;
+		<input type="radio" name="programtype" value="club" {% if school.programtype == "club" %} checked="checked" {% endif %} ><label> Club </label>
+		</td>
+	</tr>
+	<tr>
+		<td class='fieldLabel'> Times Attended </td>
+		<td class='field'> <input type="text" name="attendance" value="{{ school.timesattended }}" class="required IntegersOnly" </td>
+	</tr>
+	<tr>
+		<td class='fieldLabel'> Minimum Delegation </td>
+		<td class='field'> <input type="text" name="minDel" value="{{ school.mindelegationsize }}" class="required IntegersOnly" </td>
+	</tr>
+	<tr>
+		<td class='fieldLabel'> Maximum Delegation </td>
+		<td class='field'> <input type="text" name="maxDel" value="{{ school.maxdelegationsize }}" class="required IntegersOnly" </td>
+	</tr>
+	<tr>
+		<th colspan=2> Primary Contact Information </th>
+	</tr>
+	<tr>
+		<td class='fieldLabel'> Name </td>
+		<td class='field'> <input type="text" name="primaryname" value="{{ school.primaryname }}" class="required" </td>
+	</tr>
+	<tr>
+		<td class='fieldLabel'> Email </td>
+		<td class='field'> <input type="text" name="primaryemail" value="{{ school.primaryemail }}" class="required email" </td>
+	</tr>
+	<tr>
+		<td class='fieldLabel'> Phone </td>
+		<td class='field'> <input type="text" name="primaryphone" value="{{ school.primaryphone }}" class="required phoneNum phoneVal" </td>
+	</tr>
+	<tr>
+		<th colspan=2> Secondary Contact Information </th>
+	</tr>
+	<tr>
+		<td class='fieldLabel'> Name </td>
+		<td class='field'> <input type="text" name="secname" value="{{ school.secondaryname }}" </td>
+	</tr>
+	<tr>
+		<td class='fieldLabel'> Email </td>
+		<td class='field'> <input type="text" name="secemail" value="{{ school.secondaryemail }}" class="email" </td>
+	</tr>
+	<tr>
+		<td class='fieldLabel'> Phone </td>
+		<td class='field'> <input type="text" name="secphone" value="{{ school.secondaryphone }}" class="phoneNum phoneVal" </td>
+	</tr>
+	<tr>
+		<th colspan=2> Registration Status </th>
+	</tr>
+	<tr>
+		<td class='fieldLabel'> Registration Paid </td>
+		<td> <span class="other"> ${{ school.registrationpaid }} </span> </td>
+	</tr>
+	<tr>
+		<td class='fieldLabel'> Registration Owed </td>
+		<td> <span id="regowed" class="other"> ${{ school.registrationowed }} </span> </td>
+	</tr>
+	<tr>
+		<td class='fieldLabel'> Registration Net </td>
+		<td> <span id="regnet"r class="other" > ${{ school.registrationnet }} </span> </td>
+	</tr>
+	<tr>
+		<td class='fieldLabel'> Delegation Paid </td>
+		<td> <span class="other"> ${{ school.delegationpaid }} </span> </td>
+	</tr>
+</table>
+</div>
+<div id="tablemenu" class="tablefooter">
+    Don't forget to <input class="saved button" type="submit" value="SAVE!" />
+</div>
+</form>
+<script type="text/javascript">
+	var regowed = {{ school.registrationowed }};
+</script>
+{% endblock content %}

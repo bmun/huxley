@@ -1,0 +1,26 @@
+{% extends "base_auth.html" %}
+
+{% block title %} Welcome to BMUN Conference Management System {% endblock title %}
+
+{% block content %}
+	<div id="left">
+		<h2> Introducing: the Conference Management System!</h2>
+		<p>CMS is a new system we're using to make your conference experience smoother than ever.</p>
+		<p>Log in to get started, or <a class="nav" href="/about">learn more about CMS!</a></p>
+		<!--<p><a href="/forgot/" class="nav">Forgot your password?</a></p>-->
+		<div id="errorcontainer">
+			{% if state %}<label class="error">{{ state }}</label>{% endif %}
+		</div>
+	</div>
+	<div id="right">
+		<form id="loginform" action="/login/" method="post">
+			{% csrf_token %}
+			<span> Username </span><input class="text empty rounded-small" type="text" name="username" value="" tabindex="1">
+			<span> Password </span><a href="/forgot" class="nav forgot" tabindex="5">Forgot your password?</a><input class="text empty rounded-small" type="password" name="password" value="" tabindex="2">
+			<button class="authsubmit rounded-small" type="submit" tabindex="3">Log In!</button>
+			<span class="register"> Not signed up? <a class="nav" href="/register" tabindex="4">Register now!</a></span>
+		</form>
+	</div>
+{% endblock content %}
+
+

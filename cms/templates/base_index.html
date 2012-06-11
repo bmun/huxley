@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+{% block title %} Index Template {% endblock title %}
+
+{% block js %}
+    {{ block.super }}
+    <script type="text/javascript" src="/static/js/help.js"></script>
+	<script type="text/javascript" src="/static/js/roster-edit.js"></script>
+	<script type="text/javascript" src="/static/js/pref.js"></script>
+    <script type="text/javascript" src="/static/js/format-phone.js"></script>
+	<script type="text/javascript" src="/static/js/change-password.js"></script>
+{% endblock js %}
+
+{% block body %}
+<div id="headerwrapper" class="transparent rounded-bottom">
+    <div id="header">
+        {% block header %}
+            <ul id="right">
+                <li>Logged in as <span class="advisorfirstname bold">{{ user.first_name }}</span>&nbsp;<span class="advisorlastname bold">{{ user.last_name }}</span></li>
+                <li><a id="newpassword" href="#">Change Password</a></li>
+                <li><a id="logout" class="topbarbutton" href="/logout/">LOGOUT</a><li>
+            </ul>
+            <div id="left">
+            <span class="bold">BMUN</span> Conference Management System &middot; <span class="usertype">for 
+            {% block usertype %}
+            {% endblock usertype %}
+            </span>
+            </div>
+        {% endblock header %}
+    </div>
+</div>
+<div id="changepassword" class="rounded-bottom transparent changepassword">
+    <form id="changepasswordform" action="/changepassword/">
+        {% csrf_token %}
+        <div class="input">
+            <label for="oldpassword">Current Password</label>
+            <input type="password" class="rounded-small" name="oldpassword" value="">
+        </div>
+        <div class="input">
+            <label for="newpassword">New Password</label>
+            <input type="password" class="rounded-small" name="newpassword" value="">
+        </div>
+        <div class="input">
+            <label for="newpassword">New Password (again)</label>
+            <input type="password" class="rounded-small" name="newpassword2" value="">
+        </div>
+        <div>
+            <button type="submit" class="rounded-small topbarbutton">Change Password!</button>
+        </div>
+        <div id="message">
+            <label class="error"> Woops! </label>
+        </div>
+    </form>
+</div>
+<div id="splash" class="rounded transparent">
+    {% block splash %}
+        <h1> SPLASH! </h1>
+        <noscript>
+            <p>Hi there, {{ user.first_name }}! Thanks for your interest in using the BMUN Conference Management System.
+            Unfortunately, it seems that the browser you're using doesn't support JavaScript, which CMS needs to run. If you're on a school
+            computer, it's likely that your administrator has disabled JavaScript. Please access CMS with a browser with JavaScript enabled (
+            we recommend Google Chrome, it's awesome). See you soon!</p>
+            <a id="logout" href="/logout/">&larr; LOGOUT</a>
+        </noscript>
+    {% endblock splash %}
+</div>
+<div id="app" class="application">
+    <div id="appnavbar" class="titlebar rounded-top">
+        {% block navmenu %}
+        {% endblock navmenu %}
+    </div>
+    <div id="appcontent" class="content transparent ie-layout rounded-bottom">
+        <div id="contentwrapper">
+            <div id="capsule">
+                {% block content %}
+                <h1> CONTENT </h1>
+                {% endblock content %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id = "modal" style = "display:none">
+	<table>
+		<tr>
+			<th> Error </th>
+		</tr>
+		<tr>
+			<td><p> You seem to have lost your way! Let me guide you. Just press "return". </p></td>
+		</tr>
+		<tr>
+			<td><a href = "/#/advisor/welcome" class="simplemodal-close"> Return </a></td>
+		</tr>
+	</table>
+</div>
+{% endblock body %}

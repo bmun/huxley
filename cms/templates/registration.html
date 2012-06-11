@@ -1,0 +1,334 @@
+{% extends "base_auth.html" %}
+
+{% block title %} Register for Berkeley Model United Nations {% endblock title %}
+
+{% block content %}
+<h2>Register for Berkeley Model United Nations</h2>
+<p>Please fill out the following information to register your school for BMUN 60. All fields are required except for Secondary Contact information.</p>
+
+<br/>
+<a class="nav" href="/login"> &larr; Back to Login</a>
+
+<form method="post" id="registrationform" action="/register/">
+{% csrf_token %}
+
+<fieldset>
+	<legend>Account Information</legend>
+	<div class="sub left">
+		<span>First Name:</span><input type="text" name="FirstName" value="{{ fn_val }}" class="half required">
+		{% if fname %}
+		<label class="error">> Please enter your first name. </label>
+		{% endif %}
+		<span>Last Name:</span><input type="text" name="LastName"  value="{{ ln_val }}" class="half required"> 
+		{% if lname %}
+		<label class="error">> Please enter your last name. </label>
+		{% endif %}
+		</div>
+	<div class="sub right">
+		<span>Username:</span><input type="text" name="Username"  value="{{ user_val }}" class="half required uniqueUser username" minlength="4">
+		{% if v_username %}
+		<label class="error"> Username must be unique and be at least 4 characters (letters, numbers, and underscores only) long. </label>
+		{% endif %}
+		<span>Password:</span><input id="pass1" type="password" name="Password"  value="{{ pass_val }}" class="half required pass1 validChars" minlength="6">
+		{% if pass1 %}
+		<label class="error"> Password must be at least 6 characters long. </label>
+		{% endif %}
+		{% if pass_again %}
+		<label class="error"> Passwords do not match! </label>
+		{% endif %}
+		<span>Password (again):</span><input id="pass2" type="password" name="Password2"  value="{{ pass2_val }}" class="half required pass2" equalTo="#pass1">
+		{% if pass1 %}
+		<label class="error"> Password must be at least 6 characters long. </label>
+		{% endif %}
+		{% if pass_again %}
+		<label class="error"> Passwords do not match! </label>
+		{% endif %}
+	</div>
+</fieldset>
+
+<fieldset>
+	<legend>School Information</legend>
+	<p>Is your school an international school?</p>
+	<label><input type="radio" class="int_check" name="us_or_int" value="us" {% ifequal ctype_check 'us' %} checked="checked" {% endifequal %} {% if not ctype_check %} checked="checked" {% endif %} </input><label> American School </label></label>
+	&nbsp;&nbsp;
+	<label><input type="radio" class="int_check" name="us_or_int" value="international" {% ifequal ctype_check 'international' %} checked="checked" {% endifequal %}> </input><label> International School </label></label>
+	<br></br>
+	<span>Official School Name:</span><input type="text" name="SchoolName"  value="{{ sname_val }}" class="full required">
+	{% if sname %}
+		<label class="error"> School name must be unique. </label>
+	{% endif %}
+	<span>Address:</span><input type="text" name="SchoolAddress"  value="{{ sadd_val }}" class="full required">
+	{% if sadd %}
+		<label class="error"> Please enter the school address. </label>
+	{% endif %}
+	<span>City:</span><input type="text" name="SchoolCity"  value="{{ city_val }}" class="required">
+	{% if city %}
+		<label class="error"> Please enter the school city. </label>
+	{% endif %}
+	<span>State/Province:</span><input type="text" name="SchoolState"  value="{{ state_val }}" class="required">
+	{% if s_state %}
+		<label class="error"> Please enter the state. </label>
+	{% endif %}
+	<span>ZIP:</span><input type="text" name="SchoolZip"  value="{{ zip_val }}" class="required zip">
+	{% if s_zip %}
+		<label class="error"> Zip code must be 5 digits. </label>
+	{% endif %}
+	<br>
+	<br>
+	<span class="showhide">Country:</span><br><input type="text" name="SchoolCountry" value="{{ country_val }}" class="showhide">
+	{% if s_country %}
+		<label class="error"> Please enter a country. </label>
+	{% endif %}
+</fieldset>
+
+<fieldset>
+	<legend>Program Information</legend>
+	<p> Which category best describes your program? </p>
+	<ul>
+	<li><label><input type="radio" name="programtype" value="class" class="" {% ifequal ptype_check 'class' %} checked="checked" {% endifequal %} {% if not ptype_check %} checked="checked" {% endif %} ></input><label> Class (Delegates receive an academic grade) </label></label></li>
+	<li><label><input type="radio" name="programtype" value="club" class="" {% ifequal ptype_check 'club' %} checked="checked" {% endifequal %} ></input><label> Club (Delegates do not receive an academic grade) </label></label></li>
+	</ul>
+	{% if ptype %}
+			<label class="error"> Please choose either class or club. </label>
+	{% endif %}
+	
+	<p> Approximately how many times has your program attended BMUN? </p>
+	<input type="text" name="howmany" value="{{ howmany_val }}" class="required IntegersOnly"></input>
+	{% if howmany %}
+		<label class="error"> Please enter a number. </label>
+	{% endif %}
+	<p> Delegation Size: </p>
+	<div class="sub left">
+		<span>Minimum:</span><input type="text" name="MinDelegation" value="{{ minDel_val }}" class="required IntegersOnly"></input>
+		{% if minDel %}
+			<label class="error"> Please enter a number. </label>
+		{% endif %}
+	</div>
+	<div class="sub right">
+		<span>Maximum:</span><input type="text" name="MaxDelegation" value="{{ maxDel_val }}" class="required IntegersOnly"></input>
+		{% if maxDel %}
+			<label class="error"> Please enter a number. </label>
+		{% endif %}	
+	</div>
+</fieldset>
+
+<fieldset id="primarycontact">
+	<legend>Primary Contact</legend>
+	<div class="sub left">
+		<span>Name:</span><input type="text" name="PrimaryName"  value="{{ pname_val }}" class="required">
+		{% if pname %}
+			<label class="error"> Please enter a primary contact name. </label>
+		{% endif %}
+		<span>Email Address:</span><input type="text" name="PrimaryEmail"  value="{{ pemail_val }}" class="required email">
+		{% if v_pemail %}
+			<label class="error"> Please enter a valid email address. </label>
+		{% endif %}
+	</div>
+	<div class="sub right">
+		<span>Phone:</span><input type="text" name="PrimaryPhone"  value="{{ pphone_val }}" class="required phoneNum phoneVal">
+		{% if pphone %}
+			<label class="error"> Please enter a phone number in the above specified format. </label>
+		{% endif %}
+	</div>
+</fieldset>
+
+<fieldset id="secondarycontact">
+	<legend>Secondary Contact</legend>
+	<div class="sub left">
+		<span>Name:</span><input type="text" name="SecondaryName"  value="{{ secname_val }}">
+		{% if secname %}
+			<label class="error"> Please enter a name. </label>
+		{% endif %}
+		<span>Email Address:</span><input type="text" name="SecondaryEmail" class="email" value="{{ semail_val }}">
+		{% if semail %}
+			<label class="error"> Please enter a valid email address. </label>
+		{% endif %}
+	</div>
+	<div class="sub right">
+		<span>Phone:</span><input type="text" name="SecondaryPhone"  value="{{ sphone_val }}" class="phoneNum phoneVal">
+		{% if sphone %}
+			<label class="error"> Please enter a phone number in the above specified format. </label>
+		{% endif %}
+	</div>
+</fieldset>
+
+<fieldset>
+	<legend>Country Preferences</legend>
+	<p>Please choose 10 United Nations Member States or Observers your school would like to represent.<br/>A reference list of 
+	countries and their relation to committees is available online. Please diversify your selection.</label>
+	<div class="sub left">
+		<ul>
+			<li>
+				<label>01</label>
+				<select name="CountryPref1">
+				{% if not countryprefs.0 %}
+					<option value="NULL">Select a Country</option>
+				{% endif %}
+				{% for country in countries %}
+					{% if country in countryprefs and countryprefs.0 and country == countryprefs.0 %}
+						<option value="{{ country.id }}" selected="selected">{{ country }}</option>
+					{% else %}
+						<option value="{{ country.id }}">{{ country }}</option>
+					{% endif %}
+				{% endfor %}
+			</select>
+			</li>
+			<li>
+				<label>02</label>
+				<select name="CountryPref2">
+				{% if not countryprefs.1 %}
+					<option value="NULL">Select a Country</option>
+				{% endif %}
+				{% for country in countries %}
+					{% if country in countryprefs and countryprefs.1 and country == countryprefs.1 %}
+						<option value="{{ country.id }}" selected="selected">{{ country }}</option>
+					{% else %}
+						<option value="{{ country.id }}">{{ country }}</option>
+					{% endif %}
+				{% endfor %}
+			</select>
+			</li>
+			<li>
+				<label>03</label>
+				<select name="CountryPref3">
+				{% if not countryprefs.2 %}
+					<option value="NULL">Select a Country</option>
+				{% endif %}
+				{% for country in countries %}
+					{% if country in countryprefs and countryprefs.2 and country == countryprefs.2 %}
+						<option value="{{ country.id }}" selected="selected">{{ country }}</option>
+					{% else %}
+						<option value="{{ country.id }}">{{ country }}</option>
+					{% endif %}
+				{% endfor %}
+			</select>
+			</li>
+			<li>
+				<label>04</label>
+				<select name="CountryPref4">
+				{% if not countryprefs.3 %}
+					<option value="NULL">Select a Country</option>
+				{% endif %}
+				{% for country in countries %}
+					{% if country in countryprefs and countryprefs.3 and country == countryprefs.3 %}
+						<option value="{{ country.id }}" selected="selected">{{ country }}</option>
+					{% else %}
+						<option value="{{ country.id }}">{{ country }}</option>
+					{% endif %}
+				{% endfor %}
+			</select>
+			</li>
+			<li>
+				<label>05</label>
+				<select name="CountryPref5">
+				{% if not countryprefs.4 %}
+					<option value="NULL">Select a Country</option>
+				{% endif %}
+				{% for country in countries %}
+					{% if country in countryprefs and countryprefs.4 and country == countryprefs.4 %}
+						<option value="{{ country.id }}" selected="selected">{{ country }}</option>
+					{% else %}
+						<option value="{{ country.id }}">{{ country }}</option>
+					{% endif %}
+				{% endfor %}
+			</select>
+			</li>
+		</ul>
+	</div>
+	<div class="sub right">
+		<ul>
+			<li>
+				<label>06</label>
+							<select name="CountryPref6">
+				{% if not countryprefs.5 %}
+					<option value="NULL">Select a Country</option>
+				{% endif %}
+				{% for country in countries %}
+					{% if country in countryprefs and countryprefs.5 and country == countryprefs.5 %}
+						<option value="{{ country.id }}" selected="selected">{{ country }}</option>
+					{% else %}
+						<option value="{{ country.id }}">{{ country }}</option>
+					{% endif %}
+				{% endfor %}
+			</select>
+
+			</li>
+			<li>
+				<label>07</label>
+				<select name="CountryPref7">
+				{% if not countryprefs.6 %}
+					<option value="NULL">Select a Country</option>
+				{% endif %}
+				{% for country in countries %}
+					{% if country in countryprefs and countryprefs.6 and country == countryprefs.6 %}
+						<option value="{{ country.id }}" selected="selected">{{ country }}</option>
+					{% else %}
+						<option value="{{ country.id }}">{{ country }}</option>
+					{% endif %}
+				{% endfor %}
+			</select>
+			</li>
+			<li>
+				<label>08</label>
+				<select name="CountryPref8">
+				{% if not countryprefs.7 %}
+					<option value="NULL">Select a Country</option>
+				{% endif %}
+				{% for country in countries %}
+					{% if country in countryprefs and countryprefs.7 and country == countryprefs.7 %}
+						<option value="{{ country.id }}" selected="selected">{{ country }}</option>
+					{% else %}
+						<option value="{{ country.id }}">{{ country }}</option>
+					{% endif %}
+				{% endfor %}
+			</select>
+			</li>
+			<li>
+				<label>09</label>
+				<select name="CountryPref9">
+				{% if not countryprefs.8 %}
+					<option value="NULL">Select a Country</option>
+				{% endif %}
+				{% for country in countries %}
+					{% if country in countryprefs and countryprefs.8 and country == countryprefs.8 %}
+						<option value="{{ country.id }}" selected="selected">{{ country }}</option>
+					{% else %}
+						<option value="{{ country.id }}">{{ country }}</option>
+					{% endif %}
+				{% endfor %}
+			</select>
+			</li>
+			<li>
+				<label>10</label>
+				<select name="CountryPref10">
+				{% if not countryprefs.9 %}
+					<option value="NULL">Select a Country</option>
+				{% endif %}
+				{% for country in countries %}
+					{% if country in countryprefs and countryprefs.9 and country == countryprefs.9 %}
+						<option value="{{ country.id }}" selected="selected">{{ country }}</option>
+					{% else %}
+						<option value="{{ country.id }}">{{ country }}</option>
+					{% endif %}
+				{% endfor %}
+			</select>
+			</li>
+		</ul>
+	</div>
+</fieldset>
+
+<fieldset>
+	<legend>Special Committee Preferences</legend>
+	<p>Would your delegation be interested in being represented in the following small/specialized committees? Positions are limited and we may not be able to accomodate all preferences.</p>
+	<ul>
+	{% for committee in committees %}
+		<li><label><input type="checkbox" name="{{ committee.name }}" value="{{ committee.id }}">{{ committee.fullname }}</label></li>
+	{% endfor %}
+	</ul>
+</fieldset>
+
+<div style="text-align:right;">
+	<a style="float:left; margin-top: 16px;"class="nav" href="/login"> &larr; Back to Login</a> Completed the form? Then let's <button class="authsubmit rounded-small" type="submit">Register!</button>
+</div>
+</form>
+{% endblock content %}

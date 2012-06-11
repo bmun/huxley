@@ -1,0 +1,707 @@
+/* --- General --- */
+
+* { margin: 0px; padding: 0px; }
+html { overflow-y: scroll; }
+body { background: #f0f0f0 url(/static/img/unga3.jpg) center top no-repeat fixed; text-align: center; }
+
+
+/* --- Structure --- */
+
+#app{ display: none; margin: 0px auto; }
+#authheader{ width: 598px; margin-top: 80px; }
+#authcontent{ width: 580px; min-height: 160px; }
+#authcontent #left{ width: 289px; height: 160px; float:left; padding-right: 10px; border-right: 1px solid #fff; }
+#authcontent #right{ width: 269px; height: 160px; float:right; padding-left: 10px; border-left: 1px solid #ddd; }
+#authcontent #registrationform fieldset .sub{ width: 274px; display: inline-block; }
+#authcontent #registrationform fieldset .left{ float:left; margin-right: 10px; }
+#authcontent #registrationfrom fieldset .right{ float:right; }
+#wrapper{ width: 800px; margin: 0px auto 50px auto; }
+#headerwrapper{ display:none; height: 39px; margin: 0px auto; background: #111; border-bottom: 1px solid #222; margin-bottom: 20px; }
+#header { display:none; font: 12px Helvetica, Arial, sans-serif; height: 25px; min-width:760px; margin: 0px auto; padding: 7px 15px; opacity: 1.0; }
+#header #left{ font-size: 13px; float: left; padding-top: 5px; color: #aaa;}
+#header #right { float:right; color: #fff; padding-top: 2px;}
+#noscriptwrapper{ background: #faa; margin: 0px auto; border-bottom: 1px solid #fbb; box-shadow: 0px 0px 3px #fbb; }
+#noscript{ width: 520px; padding: 10px 0px 10px 80px; margin: 0px auto; text-align: left; }
+#splash{ background: #111 url(/static/img/splash.png) center top no-repeat; padding: 10px; width: 600px; min-height: 250px; border: 1px solid #222; margin: 60px auto;}
+#changepassword{ text-align: left; display:none; padding: 15px; width: 183px; background: #111; position: absolute; top: 40px; right: 92px; z-index: 1; border: 1px solid #222; border-width: 0px 1px 1px 1px;}
+#changepassword #message{ display:none; margin-top: 10px;}
+
+/* --- Layout --- */
+
+.rounded{ border-radius: 6px 6px 6px 6px; -moz-border-radius: 6px 6px 6px 6px; -webkit-border-radius: 6px 6px 6px 6px; behavior: url(/static/htc/PIE.htc) }
+.rounded-small{ border-radius: 3px 3px 3px 3px; -moz-border-radius: 3px 3px 3px 3px; -webkit-border-radius: 3px 3px 3px 3px; behavior: url(/static/htc/PIE.htc) }
+.rounded-top{ border-radius: 6px 6px 0px 0px; -moz-border-radius: 6px 6px 0px 0px; -webkit-border-radius: 6px 6px 0px 0px; behavior: url(/static/htc/PIE.htc) }
+.rounded-bottom{ border-radius: 0px 0px 6px 6px; -moz-border-radius: 0px 0px 6px 6px; -webkit-border-radius: 0px 0px 6px 6px; behavior: url(/static/htc/PIE.htc) }
+.titlebar{ height: 15px; padding: 10px 0px 10px 12px; background: #111; margin: 40px auto 0px auto; border-top: 1px solid #555; font: 10px Helvetica, Arial, sans-serif; font-weight: 500; color: #666; letter-spacing: 13px; text-align: center; }
+.content{ padding: 15px; background: #eee; margin: 0px auto 40px auto; font: 12px Helvetica, Arial, sans-serif; font-weight: 300; color: #555; text-shadow: 0px 1px #fff; border-top: 1px solid #fff; text-align: left; }
+.ie-layout{ zoom: 1; }
+#authheader.transparent{ -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=70)"; /* IE8 */ filter: alpha(opacity=70); /* IE6/7 */ -moz-opacity: 0.7; /* Netscape? */ -khtml-opacity: 0.7; /* Safari 1.x */ opacity: 0.7; /* Not shitty browsers */ }
+.content.transparent{ -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=90)"; /* IE8 */ filter: alpha(opacity=90); /* IE6/7 */ -moz-opacity: 0.9; /* Netscape? */ -khtml-opacity: 0.9; /* Safari 1.x */ opacity: 0.9; /* Not shitty browsers */ }
+.transparent{ -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=90)"; /* IE8 */ filter: alpha(opacity=90); /* IE6/7 */ -moz-opacity: 0.9; /* Netscape? */ -khtml-opacity: 0.9; /* Safari 1.x */ opacity: 0.9; /* Not shitty browsers */ }
+
+
+/* --- Typography --- */
+
+body { font-family: Helvetica, Arial, sans-serif;}
+#authcontent p{ background: #eee; padding: 5px 0px; text-rendering: optimizeLegibility; font-smooth:always; }
+#noscript p{ font-size: 11px; color: #300; }
+.bold{font-weight: 700;}
+#splash p{
+    font-size: 14px;
+    text-shadow: 0px 1px #333;
+    font-weight: 300;
+    text-align: left;
+    line-height: 18px;
+}
+#changepassword div.input label{
+    color: #aaa;
+    font-size: 11px;
+}
+
+/* Text Colors */
+.usertype{ color: #ddd;}
+.usertype:hover{
+    color: #fff;
+}
+#splash p{
+    color:#eee; 
+}
+#changepassword div.input:hover label{
+    color: #eee;
+}
+
+/* --- Headings --- */
+
+h1{ font-weight: 300; }
+#authcontent h2{ background: #eee; }
+#header h2{ font-size:10px; font-weight: 500; color: #666; letter-spacing: 12px; padding: 5px 0px; }
+#appcontent h2{ padding-bottom: 10px; }
+#appcontent h3{ color: #666; margin-top: 15px; padding-left: 2px; border-bottom: 1px solid #ddd; font-weight:500; font-size: 11px; }
+#noscript h3{ color: #600; text-shadow: 0px 1px #fcc; font-size: 14px; }
+#authcontent h3{ background: #eee; margin-top: 15px; }
+
+
+/* Links */
+
+#header a#newpassword{ color: #ccc; text-decoration: none;}
+#header a#newpassword:hover{ color: #fff;}
+#authcontent a{ background-color: #eee; text-decoration: none; color: #333; font-weight: 700; }
+#authcontent a:hover{ text-shadow: 0px 0px 10px #fff; }
+.content a{font-weight: 700; text-decoration: none; color: #333;}
+.content a:hover{text-decoration: underline;}
+
+#authcontent .forgot {
+    font-size: 9px;
+    font-weight: 500;
+    margin-left: 115px;
+}
+
+/* Tables */
+/* Lists */
+
+
+/* --- Forms --- */
+
+#authcontent input[type=text], #authcontent input[type=password]{
+    font-family: Helvetica, Arial, sans-serif;
+    font-weight: 300; 
+    color: #666;
+    border: 1px solid #ccc;
+    box-shadow: inset 0 1px 5px rgba(0, 0, 0, 0.1);
+    webkit-box-shadow: inset 0 1px 5px rgba(0, 0, 0, 0.1);
+    moz-box-shadow: inset 0 1px 5px rgba(0, 0, 0, 0.1);
+    -webkit-transition: box-shadow linear 0.1s, border linear 0.05s;
+    -moz-transition: box-shadow linear 0.1s, background linear 0.05s;
+    -ms-transition: box-shadow linear 0.1s, background linear 0.05s;
+    -o-transition: box-shadow linear 0.1s, background linear 0.05s;
+    transition: box-shadow linear 0.1s, background linear 0.05s;
+    padding: 6px; 
+}
+
+#authcontent input[type=text]:hover, #authcontent input[type=password]:hover{ 
+    border-color: #bbb;  
+}
+
+#authcontent input[type=text]:focus, #authcontent input[type=password]:focus{
+    outline: 0;
+    border-color:#aaa;
+}
+
+#authcontent input[type=text].error, #authcontent input[type=password].error {
+    !border-color: #f99;
+}
+
+#loginform input[type=text], #loginform input[type=password]{
+    width: 255px; 
+    margin-bottom:10px;
+    font-size: 18px;
+}
+
+#registrationform fieldset input[type=text], #registrationform fieldset input[type=password]{
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 2px; 
+    moz-border-radius: 2px;
+    webkit-border-radius: 2px;
+    padding: 5px;
+}
+
+#registrationform input[type=text]:focus, #registrationform input[type=password]:focus{
+    border-color:#abc;
+    background: #f0f9ff;
+    box-shadow: inset 0 1px 5px rgba(0, 85, 255, 0.15);
+    webkit-box-shadow: inset 0 1px 5px rgba(0, 85, 255, 0.15);
+    moz-box-shadow: inset 0 1px 5px rgba(0, 85, 255, 0.15);
+}
+
+#authcontent button.authsubmit{ 
+    background: #eee; 
+    width: 75px; 
+    height: 25px; 
+    border: 1px solid #ccc; 
+    font: 13px Helvetica, Arial, sans-serif; 
+    font-weight: 700; 
+    color: #003; 
+    text-shadow: #fff 0px 1px; 
+    margin-top: 10px; 
+    box-shadow: 0px 1px 1px #ddd;
+    webkit-box-shadow: 0px 1px 1px #ddd;
+    moz-box-shadow: 0px 1px 1px #ddd;
+}
+
+#authcontent button.authsubmit:hover{ background: #e8e8e8; cursor: pointer; }
+#registrationform fieldset{ margin: 20px auto; padding: 10px; border: 1px solid #bbb; border-radius: 3px; }
+#registrationform fieldset legend{ font: 14px Helvetica, Arial, sans-serif; font-weight: 700; padding: 0px 5px; background: #eee; }
+#registrationform fieldset input[type=checkbox]{ margin-right: 7px; }
+#changepasswordform input[type=password]{ width: 175px; margin-bottom:10px; font: 14px Helvetica, Arial, sans-serif; font-weight: 300; color: #666; background: #eee; border: none; border-top: 1px solid #aaa; padding: 4px; }
+#changepasswordform input[type=password]:hover{ border-top: 1px solid #999; }
+#changepasswordform button{ padding: 3px; margin-top: 5px;}
+.topbarbutton { font-size: 11px; font-weight:700; border: 1px solid #ccc; background: #ddd; }
+.topbarbutton:hover { background: #fff; box-shadow: 0px 0px 3px #aaa; }
+
+
+
+/* PRE-LOGIN CONTENT */
+
+#authheader .title{
+    margin: 0px auto;
+}
+
+#authheader #logo{
+    height: 40px;
+    width: 100px;
+    opacity: 1;
+    !background: #fff;
+    float:left;
+}
+
+#authheader #title{
+    height: 40px;
+    width: 100px;
+    !background: #fff;
+    float:right;
+}
+
+#authcontent ul{
+    list-style: none;
+    padding: 0px 10px;
+}
+
+#authcontent li{
+    padding: 5px 0px;
+}
+
+#authcontent span{
+    background: #eee;
+}
+
+#authcontent span.register{
+    margin-left: 13px;
+}
+
+#authcontent #errorcontainer{
+    margin-top:23px;
+}
+
+label.error{
+    color: #f30;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 7px 0px 5px 20px;
+    background: url(/static/img/exclamation.png) left center no-repeat;
+}
+
+#authcontent label.error{
+    background-color: #eee;
+    display:block;
+}
+
+/* REGISTRATION */
+
+#registrationform input.full{
+    width:548px;
+}
+
+#registrationform input.half{
+    width: 264px;
+}
+
+#registrationform span{
+    display:block;
+    padding: 5px 0px;
+}
+
+#registrationform fieldset p{
+    !margin-bottom: 10px;
+    font-weight: 700;
+}
+
+#registrationform fieldset li{
+    list-style: none;
+    padding: 5px 0px;   
+}
+
+#registrationform fieldset li label{
+    display: inline-block;
+    !text-align: right;
+}
+
+#registrationform fieldset li select{
+    width: 240px;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+#registrationform fieldset li input[type=radio]{
+    margin-right: 7px;
+}
+
+#registrationform .showhide {
+	!display: block;
+	display: none;
+}
+
+/* MAIN APP CONTENT */
+
+#header #right li{
+    display: inline;
+    padding: 0px 5px;
+}
+
+#logout {
+    display: inline-block;
+    width: 65px;
+    height: 13px;
+    border: 1px solid #999;
+    border-radius: 3px;
+    moz-border-radius: 3px;
+    color: #003;
+    text-shadow: #fff 0px 1px;
+    text-decoration:none;
+    text-align: center;
+    padding: 3px;
+}
+
+#logout:hover {
+    cursor: pointer;
+}
+
+#appcontent {
+    line-height: 18px;
+    width: 740px;
+    text-align:left;
+}
+
+#appcontent img{
+    margin-bottom: -1px;
+    padding: 0px 2px;
+}
+
+#appnavbar{
+    width: 760px;
+    letter-spacing:1px;
+    !text-align:left;
+    font-size: 12px;
+    font-weight:500;
+    opacity: 0.7;
+}
+
+#appnavbar ul{
+    list-style: none;
+}
+
+#appnavbar li{
+    display: inline;
+    padding: 0px 10px;
+}
+
+#appnavbar li a{
+    text-decoration: none;
+    color: #777;
+    padding: 3px;
+}
+
+#appnavbar li a:hover{
+    color: #eee;
+    text-shadow: 0px 1px #444;
+}
+
+#appnavbar li a.currentpage{
+    color: #fff;
+    text-shadow: 0px 1px #444;
+}
+/* ROSTER EDIT */
+
+#rostercontainer{
+    width: 740px;
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    border-top: 1px solid #fff;
+    border-bottom: 1px solid #fff;
+    margin: 0px auto;
+}
+
+#tablemenu{
+    width:734px;
+    height: 20px;
+    margin: 0px auto;
+    background: #ccc;
+    border: 1px solid #aaa;
+    font: 10px 300 Helvetia, Arial, sans-serif;
+    padding: 3px;
+    text-align: right;
+}
+
+#tablemenu.tableheader{
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    margin-top: 20px;
+}
+
+#tablemenu.tablefooter{
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+    !margin-bottom: 10px;
+}
+
+#roster {
+    width: 700px;
+    margin: 10px auto 20px auto;
+    font-size: 13px;
+    font-weight: 300;
+    border-collapse: collapse;
+    background: #eee;
+}
+
+#roster thead {
+    font-size: 13px;
+}
+
+#roster th{
+    text-align:left;
+    color: #222;
+}
+
+#roster tr{
+    height:28px;
+    padding: 0px;
+    !border-top: 1px solid #fff;
+    border-bottom: 1px solid #ddd;
+    !vertical-align: middle;
+}
+
+
+
+#roster .delegatename {
+    width: 180px;
+    padding-left: 5px;
+}
+
+#roster .delegateemail {
+    width: 180px;
+    padding-left: 5px;
+}
+
+#roster .delegatecountry {
+    width: 185px;
+    padding-left: 5px;
+}
+
+#roster .delegatecommittee {
+    width: 75px;
+    padding-left: 5px;
+}
+
+#roster input[type=text]{
+    border: none;
+    background: none;
+    height: 20px;
+    margin: 0px;
+    font-family: Helvetica, Arial, sans-serif;
+    font-weight: 300;
+    font-size: 13px;
+    color: #111;
+    text-shadow: 0px 1px #fff;
+    margin: 0;
+    padding: 0;
+    width: 180px;
+}
+
+#roster input[type=text].empty{
+    color: #999;
+}
+
+#tablemenu input[type=submit]{
+    width: 70px;
+    height: 20px;
+    border-radius: 3px;
+    font: 12px Helvetica, Arial, sans-serif;
+    font-weight: 700;
+    text-align: left;
+    padding: 3px;
+}
+
+#tablemenu .saved{
+    background: #0c0 url(/static/img/tick.png) right no-repeat;
+    border: 1px solid #090;
+    color: #cfc;
+    text-shadow: 0px 1px #090;
+}
+
+#tablemenu .unsaved{
+    background: #cc0 url(/static/img/warning_small.png) right no-repeat;
+    border: 1px solid #990;
+    color: #ffc;
+    text-shadow: 0px 1px #990;
+    /*icon from wefunction.com*/
+}
+
+#tablemenu .saving{
+    background: #cc0 url(/static/img/spinner.gif) center no-repeat;
+    border: 1px solid #990;
+}
+
+#edit .delegateoption {
+    display: block;
+    float:left;
+    margin: 0px 0px 0px 0px;
+    padding: 5px 5px 5px 0px;
+}
+
+#edit #delete{
+    width: 10px;
+    height: 10px;
+    background: url(/static/img/delete.png) center no-repeat;
+}
+
+#edit #delete:hover {
+    background: url(/static/img/delete_over.png) center no-repeat;
+}
+
+#edit #switch{
+    width:10px;
+    height:10px;
+    background: url(/static/img/switch2.png) center no-repeat;
+}
+
+#edit #switch:hover{
+    background: url(/static/img/switch_over.png) center no-repeat;
+}
+
+#edit #switch .active{
+    background: url(/static/img/switch_over.png) center no-repeat;
+}
+
+
+/* FOOTER */
+
+#footerwrapper{
+    margin: 0px auto;
+    background: #111;
+    border-top: 1px solid #333;
+    margin-bottom: 0px;
+    opacity: .8;
+}
+
+#footer {
+    font: 10px Helvetica, Arial, sans-serif;
+    height: 50px;
+    width:800px;
+    margin: 0px auto;
+    padding: 5px;
+    opacity: 1.0;
+}
+
+#accordion{
+    margin: 5px auto 0px auto;
+    !border-bottom: 1px solid #ddd;
+}
+
+a.acc_topic {
+	background: #eee url(/static/img/triangle-hidden.png) left center no-repeat;
+        display: block;
+        padding: 2px 0px 2px 15px;
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 12px;
+        border: 1px solid #eee;
+        border-radius:3px;
+}
+
+a.acc_topic:hover {
+    background-color: #dfdfdf;
+    text-decoration: none;
+}
+
+a.acc_topic.active {
+    background: #ddd url(/static/img/triangle-open.png) left center no-repeat;
+    border: 1px solid #ccc;
+}
+
+.acc_content {
+	margin: 0px 0px 0px 0px;
+        padding: 10px 10px 10px 16px;
+	overflow: hidden;
+	font-size: 12px;
+	clear: both;
+	!background: #E8E8E8;
+	border-bottom: 1px solid #e6e6e6;
+        !height: 40px;
+        display: none;
+}
+
+/* WELCOME */
+
+#welcomeinfocontainer{
+    width: 740px;
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    border-top: 1px solid #fff;
+    border-bottom: 1px solid #fff;
+    margin: 0px auto;
+}
+
+#welcomeinfo {
+    width: 700px;
+    margin: 10px auto 20px auto;
+    font-size: 14px;
+    font-weight: 300;
+    border-collapse: collapse;
+    background: #eee;
+}
+
+#welcomeinfo tr{
+    height:28px;
+    padding: 0px;
+    !border-top: 1px solid #fff;
+    border-bottom: 1px solid #ddd;
+    !vertical-align: middle;
+}
+
+#welcomeinfo th{
+    text-align:left;
+    color: #222;
+}
+
+#welcomeinfo input[type=text]{
+    border: none;
+    background: none;
+    width: 190px;
+    height: 20px;
+    margin: 0px 10px;
+    font-family: Helvetica, Arial, sans-serif;
+    font-weight: 300;
+    font-size: 14px;
+}
+
+#welcomeinfo input[type=text].empty{
+    color: #999;
+}
+
+#welcomeinfo td.fieldLabel{
+    width: 250px;
+    border-right: #f00;
+}
+
+#welcomeinfo td.field:hover {
+	background: #E0E0E0;
+	!border: 1px solid #ccc;
+}
+
+#welcomeinfo .other {
+	margin-left: 10px;
+}
+
+#welcomeinfo .good {
+	color: #00CC00;
+}
+
+#welcomeinfo .negative {
+	color: #f30;
+}
+
+#changepassword label.success {
+	color: #00CC00;
+	font-size: 11px;
+    font-weight: 700;
+    padding: 7px 0px 5px 20px;
+    background: url(/static/img/tick.png) left center no-repeat;
+}
+
+/* PREFERENCES */
+#preferences {
+    width: 740px;
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    border-top: 1px solid #fff;
+    border-bottom: 1px solid #fff;
+    margin: 0px auto;
+}
+
+.preferencestable {
+    width: 700px;
+    margin: 10px auto 20px auto;
+    font-size: 14px;
+    font-weight: 300;
+    border-collapse: collapse;
+    background: #eee;
+}
+
+.preferencestable tr{
+    height:28px;
+    padding: 0px;
+    !border-top: 1px solid #fff;
+    border-bottom: 1px solid #ddd;
+    !vertical-align: middle;
+}
+
+.preferencestable th{
+    text-align:left;
+    color: #222;
+}
+
+.preferencestable td.fieldLabel{
+    width: 250px;
+    border-right: #f00;
+}
+
+.preferencestable td.field:hover {
+	background: #E0E0E0;
+	!border: 1px solid #ccc;
+}
+
+.preferencestable .other {
+	margin-left: 10px;
+}
+
+.preferencestable select{
+	min-width: 120px;
+}
+
+.preferencestable label, .preferencestable input{
+	margin: 0px 10px;
+}
+
+/* REPORT BUGS */
+textarea {
+	width: 100%;
+}

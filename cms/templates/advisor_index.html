@@ -1,0 +1,21 @@
+{% extends "base_index.html" %}
+
+{% block title %} BMUN Conference Management System &middot; for Advisors {% endblock title %}
+
+{% block usertype %}
+<span class="bold" usertype="advisor">Advisors</span>
+{% endblock usertype %}
+
+{% block navmenu %}
+<ul id="navmenu">
+    <li><a class="nav" href="/advisor/welcome">Welcome!</a></li>
+    <li><a class="nav" href="/advisor/roster">Edit Roster</a></li>
+    <li><a class="nav" href="/advisor/preferences">Edit Preferences</a></li>
+    <li><a class="nav" href="/advisor/attendance">Check Attendance</a></li>
+    <li><a class="nav" href="/advisor/help">Need Help?</a></li>
+    <li><a class="nav" href="/advisor/bugs">Report Bugs</a></li>
+</ul>
+{% endblock navmenu %}
+
+{% block content %}
+{% endblock content %}

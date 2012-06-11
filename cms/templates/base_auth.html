@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %} Authentication Template {% endblock title %}
+
+{% block js %}
+    {{ block.super }}
+    <script type="text/javascript" src="/static/js/registration.js"></script>
+    <script type="text/javascript" src="/static/js/format-phone.js"></script>
+{% endblock js %}
+
+{% block body %}
+<noscript>
+    <style type="text/css">
+        #app{
+            display: block;
+        }
+    </style>
+    <div id="noscriptwrapper">
+        <div id="noscript">
+            <h3>Woops... It looks like the browser you're on doesn't support JavaScript.</h3>
+            <p> If you're on a school computer, it may be that your administrator has disabled JavaScript. That's okay, you can still register! But, to login and use CMS, you'll need to use a browser with JavaScript enabled.</p>
+            <br />
+            <p> For more information and help, click here.</p>
+        </div>
+    </div>
+</noscript>
+<div id="app" class="authentication">
+<div id="authheader" class="titlebar transparent ie-layout rounded-top">
+    {% block header %}
+        BERKELEY MODEL UNITED NATIONS
+    {% endblock header %}
+</div>
+<div id="authcontent" class="content transparent ie-layout rounded-bottom">
+    <div id="contentwrapper">
+        <div id="capsule">
+        {% block content %}
+        {% endblock content %}
+        </div>
+    </div>
+</div>
+</div>
+
+{% block extrashit %}
+{% endblock extrashit %}
+
+{% endblock body %}
