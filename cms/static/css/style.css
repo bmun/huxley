@@ -559,14 +559,12 @@ a.acc_topic.active {
 
 .acc_content {
 	margin: 0px 0px 0px 0px;
-        padding: 10px 10px 10px 16px;
+	padding: 10px 10px 10px 16px;
 	overflow: hidden;
 	font-size: 12px;
 	clear: both;
-	!background: #E8E8E8;
 	border-bottom: 1px solid #e6e6e6;
-        !height: 40px;
-        display: none;
+	display: none;
 }
 
 /* WELCOME */
