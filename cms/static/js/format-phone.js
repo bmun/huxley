@@ -3,7 +3,7 @@ $(function(){
     // Phone Number Auto-Formatting
     // Based off of http://nsreekanth.blogspot.com/2010/12/simple-jquery-plugin-to-validate-format.html
     
-    $(".content").delegate(".phoneVal", "keyup", function(k) {
+    $(document).on("keyup", ".phoneVal", function(k) {
             var userinput = $(this).val();
             var len = userinput.length;
             var currChar = userinput[len-1];
