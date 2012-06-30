@@ -8,7 +8,7 @@ $(function() {
 		$("#tablemenu input[type=submit]").removeClass('unsaved').addClass('saved');
 	}
 
-	$(document).on("submit", ".content #editprefs", function() {
+	$(document).on("submit", "#editprefs", function() {
 		$.ajax({
 			type: 'POST',
 			url: 'updateprefs/',
