@@ -24,6 +24,7 @@ urlpatterns = patterns('',
     url(r'^updateroster/', 'cms.views.update_roster'),
     url(r'^logout/', 'cms.views.logout_user'),
     url(r'^login/', 'cms.views.login_user'),
+    url(r'^uniqueuser/', 'cms.views.validate_unique_user'),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^$', 'cms.views.index'),
 )
