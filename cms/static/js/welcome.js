@@ -2,17 +2,19 @@ var WelcomeManager = {
 	
 	/* Initialization */
 	init: function(){
-		$(".content").delegate(".button", "hover", function() {
+		$(document).on("mouseover", ".content .button", function() {
 			$(this).css('cursor', 'pointer');
-			}, function() {
+		});
+		
+		$(document).on("mouseout", ".content .button", function() {
 			$(this).css('cursor', 'auto');
 		});
 	
-		$(".content").delegate(".field input", "change", function() {
+		$(document).on("change", ".content .field input", function() {
 			WelcomeManager.setUnsaved();
 		});
 		
-		$(".content").delegate("#welcomepage", "submit", WelcomeManager.submit);
+		$(document).on("submit", ".content #welcomepage", WelcomeManager.submit);
 	},
 	
 	/* Sets the SAVE button to saved (green) */
