@@ -1,13 +1,7 @@
 $(function(){    
     // Accordion Stuff
     // Tutorial courtesy of: http://www.sohtanaka.com/web-design/simple-accordion-w-css-and-jquery/
-    
-    // Initialization
-    $(".acc_content").hide(); // Make sure they're all closed
-    
-    // When clicked...
-    
-    $(".content").delegate(".acc_topic", "click", function(){
+    $(document).on("click", ".acc_topic", function(){
         if ($(this).next().is(':hidden')) {
                 $(".acc_topic").removeClass('active');
                 $(".acc_topic").next().children('p').fadeOut(150);
