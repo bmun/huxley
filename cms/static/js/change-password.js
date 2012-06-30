@@ -1,6 +1,6 @@
 $(function(){
 
-$(".content").delegate("#newpassword", "click", function(){
+$(document).on("click", "#newpassword", function(e){
     if($("#changepassword").is(":visible")){
         $("#changepassword").slideUp(function(){
             $("#changepassword div.input input").val('');
@@ -14,7 +14,7 @@ $(".content").delegate("#newpassword", "click", function(){
     return false;
 });
 
-$(document).live("click", function(){
+$(document).click(function(){
     if($("#changepassword").is(":visible")){
         $("#changepassword").slideUp(function(){
             $("#changepassword div.input input").val('');
@@ -23,12 +23,12 @@ $(document).live("click", function(){
     }
 });
 
-$(".content").delegate(".changepassword", "click", function(e){
+$(document).on("click", ".changepassword", function(e){
     e.stopPropagation();
 });
 
 
-$(".content").delegate("#changepasswordform", "submit", function(){
+$(document).on("submit", "#changepasswordform", function(){
     $.post('/changepassword/', $(this).serializeArray(), function(data){
         if(data == 'OK'){
         	$("#changepassword input[type=password]").val("");
