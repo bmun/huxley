@@ -2,11 +2,11 @@ var WelcomeManager = {
 	
 	/* Initialization */
 	init: function(){
-		$(document).on("mouseover", ".content .button", function() {
+		$(document).on("mouseover", "#welcomepage .button", function() {
 			$(this).css('cursor', 'pointer');
 		});
 		
-		$(document).on("mouseout", ".content .button", function() {
+		$(document).on("mouseout", "#welcomepage .button", function() {
 			$(this).css('cursor', 'auto');
 		});
 	

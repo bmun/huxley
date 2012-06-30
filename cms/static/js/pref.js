@@ -8,7 +8,7 @@ $(function() {
 		$("#tablemenu input[type=submit]").removeClass('unsaved').addClass('saved');
 	}
 
-	$(".content").delegate("#editprefs", "submit", function() {
+	$(document).on("submit", ".content #editprefs", function() {
 		$.ajax({
 			type: 'POST',
 			url: 'updateprefs/',
@@ -20,13 +20,15 @@ $(function() {
 		return false;
 	});
 	
-	$(".content").delegate(".button", "hover", function() {
+	$(document).on("mouseover", "#editprefs .button", function() {
 		$(this).css('cursor', 'pointer');
-	}, function() {
+	});
+	
+	$(document).on("mouseout", "#editprefs .button", function() {
 		$(this).css('cursor', 'auto');
 	});
 	
-	$(".content").delegate(".select", "change", function() {
+	$(document).on("change", "#editprefs .select", function() {
 		setUnsaved();
 	});
 	
