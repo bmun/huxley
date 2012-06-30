@@ -62,7 +62,7 @@
     };
     
     $(function() {
-        $(".content").delegate("#theRoster", "submit", function() {
+        $(document).on("submit", "#theRoster", function() {
             
             $.ajax({
                 type: 'POST',
@@ -82,7 +82,7 @@
         // Move... somewhere else? Also UI?
         //$("#roster").tablesorter();
         
-        $(".content").delegate("#switch.delegateoption", "click", function(){
+        $(document).on("click", "#switch.delegateoption", function(){
             var did = Roster.getDelegateId(this);
             if(Roster.switch1 == undefined){
                 Roster.switch1 = did;
@@ -106,14 +106,14 @@
             }
         });
         
-        $(".content").delegate("#roster input[type=text]", "focus", function() {
+        $(document).on("focus", "#roster input[type=text]", function() {
             var input = $(this);
             if(input.hasClass('empty')){
                 input.val('').toggleClass('empty');
             }
         });
     
-        $(".content").delegate("#roster input[type=text]", "blur", function(){
+        $(document).on("blur", "#roster input[type=text]", function(){
             var input = $(this);
             if(input.val() == ''){
                 input.val(Roster.nodelegate);
@@ -121,15 +121,17 @@
             }
         });
     
-        $(".content").delegate("#roster input[type=text]", "change", function(){
+        $(document).on("change", "#roster input[type=text]", function(){
             Roster.setUnsaved();
         });
     
-        $(".content").delegate('.button', "hover", function() {
-            $(this).css('cursor','pointer');
-        }, function() {
-            $(this).css('cursor','auto');
-        });
+        $(document).on("mouseover", "#theRoster .button", function() {
+			$(this).css('cursor', 'pointer');
+		});
+		
+		$(document).on("mouseout", "#theRoster .button", function() {
+			$(this).css('cursor', 'auto');
+		});
         
         
         // NEW CODE BEYOND THIS POINT
