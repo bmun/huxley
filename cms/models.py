@@ -166,6 +166,15 @@ class AdvisorProfile(models.Model):
 class SecretariatProfile(models.Model):
     user = models.OneToOneField(User, blank=True, related_name='secretariat_profile')
     committee = models.ForeignKey(Committee, related_name='secretariat_profile')
+    is_sg = models.BooleanField(default=False)
+    is_staff = models.BooleanField(default=False)
+    is_tech = models.BooleanField(default=False)
+    is_internal = models.BooleanField(default=False)
+    is_external = models.BooleanField(default=False)
+    is_outreach = models.BooleanField(default=False)
+    is_publication = models.BooleanField(default=False)
+    is_research = models.BooleanField(default=False)
+  
     class Meta:
         db_table = u'SecretariatProfile'
 
