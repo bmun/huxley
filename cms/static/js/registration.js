@@ -1,8 +1,7 @@
 $(function(){
     // Show/hide Country Field based on American/International
     // Change validation rules too
-    $("#authcontent").delegate(".int_check", "click", function() {
-		//alert($(this).val());
+    $(document).on("click", "#authcontent .int_check", function() {
 		if ($(this).val() == "international") {
 			$(".showhide").slideDown();
 			$(".showhide").addClass('required');
@@ -87,7 +86,7 @@ $(function(){
             return this.optional(element) || /^[A-Za-z0-9\_\.!@#\$%\^&\*\(\)~\-=\+`\?]+$/i.test(value);
     }, "Passwords may only contain letters, numbers, and certain symbols.");
     
-    $("#authcontent").delegate("#registrationform", "submit", function(){
+    $(document).on("submit", "#authcontent #registrationform", function(){
             
         // Actual Validation
         $("#registrationform").validate({
@@ -114,7 +113,7 @@ $(function(){
         
         var isValid = $(this).valid();
         if(isValid){
-                HashManager.loadNewContent('/register/', $("#registrationform").serializeArray());
+                ContentManager.loadNewContent('/register/', $("#registrationform").serializeArray());
         }
         $('html, body').animate({scrollTop:0}, 'slow');
         
