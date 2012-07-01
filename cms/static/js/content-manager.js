@@ -77,6 +77,7 @@
                 });
             }
             else{
+				ContentManager.loadPageTitle(hash);
                 $(".content #contentwrapper").load(hash + " #capsule", data, function(){
                     $("#app").delay(250).fadeIn(500);
                 });
