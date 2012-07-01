@@ -30,6 +30,13 @@
 			ContentManager.onPageLoad();
 		},
 		
+		/* Changes the page title. */
+		loadPageTitle: function(hash){
+			$("title").load(hash + " title", function(){
+				document.title = $(this).text();
+			});
+		},
+		
         /* Fades the initial content into view. */
         onPageLoad: function(){
             if(window.location.hash == ""){
@@ -56,6 +63,7 @@
         /* Loads initial content into the application content container.*/
         loadInitContent: function(hash, data){
 			ContentManager.initializeManagers();
+			ContentManager.loadPageTitle(hash);
             if($("#splash").is(":visible")){
                 $(".content #contentwrapper").load(hash + " #capsule", data, function(){
 					$("#appnavbar a[href='" + window.location.hash.substring(1) + "']").addClass('currentpage');
@@ -79,6 +87,7 @@
         loadNewContent: function(hash, data){
             $(".content").css('height', $(".content").height() + "px");
             $(".content #contentwrapper").fadeOut(150, function(){
+				ContentManager.loadPageTitle(hash);
                 $(".content #contentwrapper").load(hash + " #capsule", data, function(response, status, xhr){
                     if(status == 'error') { 
                     	/*$("#modal").modal({
@@ -120,13 +129,18 @@
 		},
 		
 		onLogout: function(){
-      		$("#container").fadeOut(250, function(){
-          		$("#container").load("/login/ #appcontainer", null, function(){
-              		$("#container").css("display","");
-              		window.location.href = "/#/login";
-              		$("#app").delay(250).fadeIn(250);
-          		});
-      		});
+			$("#header").slideUp(250, function(){
+				$("#headerwrapper").slideUp(250, function(){
+      				$("#container").fadeOut(350, function(){
+						ContentManager.loadPageTitle("/login");
+		         		$("#container").load("/login/ #appcontainer", null, function(){
+		             		$("#container").css("display","");
+		             		window.location.href = "/#/login";
+		             		$("#app").delay(250).fadeIn(250);
+		         		});
+		     		});
+				});
+			});
 		},
 		
         /* Triggers a hash change event. */
