@@ -63,8 +63,8 @@
         /* Loads initial content into the application content container.*/
         loadInitContent: function(hash, data){
 			ContentManager.initializeManagers();
+			ContentManager.loadPageTitle(hash);
             if($("#splash").is(":visible")){
-				ContentManager.loadPageTitle(hash);
                 $(".content #contentwrapper").load(hash + " #capsule", data, function(){
 					$("#appnavbar a[href='" + window.location.hash.substring(1) + "']").addClass('currentpage');
                     $("#splash").delay(250).fadeOut(250, function(){
@@ -77,7 +77,6 @@
                 });
             }
             else{
-				ContentManager.loadPageTitle(hash);
                 $(".content #contentwrapper").load(hash + " #capsule", data, function(){
                     $("#app").delay(250).fadeIn(500);
                 });
