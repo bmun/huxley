@@ -87,6 +87,7 @@
         loadNewContent: function(hash, data){
             $(".content").css('height', $(".content").height() + "px");
             $(".content #contentwrapper").fadeOut(150, function(){
+            	$(".content").addClass("content-loading");
 				ContentManager.loadPageTitle(hash);
                 $(".content #contentwrapper").load(hash + " #capsule", data, function(response, status, xhr){
                     if(status == 'error') { 
@@ -104,6 +105,7 @@
                     var height = $("#contentwrapper").height();
                     $("#contentwrapper").css({'visibility':'', 'display': 'none'});
                     $(".content").animate({height: height}, 500, function(){
+                    		$(".content").removeClass("content-loading");
                             $("#contentwrapper").fadeIn(150, function(){
                                     $(".content").css('height','');
                             });
