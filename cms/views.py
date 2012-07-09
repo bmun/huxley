@@ -10,7 +10,7 @@ from django.template import Context, RequestContext
 from django.utils import simplejson
 from django.core.validators import email_re
 
-from cms.forms.registration import RegistrationForm
+#from cms.forms.registration import RegistrationForm
 
 import datetime
 import re
