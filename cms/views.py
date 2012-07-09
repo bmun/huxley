@@ -10,6 +10,8 @@ from django.template import Context, RequestContext
 from django.utils import simplejson
 from django.core.validators import email_re
 
+from cms.forms.registration import RegistrationForm
+
 import datetime
 import re
 
@@ -146,6 +148,9 @@ def register(request):
         c.update({'selectionrange': range(1, 11)})
 
         if request.POST:
+                # TODO: Need to fix names first before using the line below
+                # form = RegistrationForm(request.POST)
+                
                 # Grab registration field values
                 fname = request.POST.get('FirstName')           # Validated
                 lname = request.POST.get('LastName')            # Validated
@@ -615,24 +620,24 @@ def validate_school_name(sname):
         return (unique and validate_name(sname))
 
 def validate_username(new_user):
-	unique = (len(User.objects.filter(username=new_user)) == 0)
-	# May only be alphanumeric characters, underscores
-	valid_user = False
-	if re.match("^[A-Za-z0-9\_]+$", new_user):
-		valid_user = True
-	return (unique and valid_user and len(new_user) >= 4)
+    unique = (len(User.objects.filter(username=new_user)) == 0)
+    # May only be alphanumeric characters, underscores
+    valid_user = False
+    if re.match("^[A-Za-z0-9\_]+$", new_user):
+        valid_user = True
+    return (unique and valid_user and len(new_user) >= 4)
 
 def validate_unique_user(request):
-	if request.method == 'POST':
-		username = request.POST.get('Username')
-		#print "Username",username
-		unique = (len(User.objects.filter(username=username)) == 0)
-		if unique:
-			#print "I'M UNIQUE"
-			return HttpResponse(status=200)
-		else:
-			#print "I'M ORDINARY D:"
-			return HttpResponse(status=406)
+    if request.method == 'POST':
+        username = request.POST.get('Username')
+        #print "Username",username
+        unique = (len(User.objects.filter(username=username)) == 0)
+        if unique:
+            #print "I'M UNIQUE"
+            return HttpResponse(status=200)
+        else:
+            #print "I'M ORDINARY D:"
+            return HttpResponse(status=406)
 
 def validate_zip(zip):
         #properLen = (len(zip) == 5)
@@ -646,10 +651,10 @@ def validate_email(email):
         #        return True
         #else:
         #        return False
-		if email_re.match(email):
-			return True
-		else:
-			return False
+        if email_re.match(email):
+            return True
+        else:
+            return False
 
 def validate_phone(phoneNum):
         # Format: (123) 456-7890 || Note the space after the area code.
