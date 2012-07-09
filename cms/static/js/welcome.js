@@ -73,9 +73,10 @@ var WelcomeManager = {
 		
 		var isValid = $(this).valid();
 		if (isValid) {
+			var uri = $("#welcomepage").attr("action");
 			$.ajax({
 				type: 'POST',
-				url: 'updatewelcome/',
+				url: uri,
 				data: $(this).serializeArray(),
 				success: function(name) {
 					WelcomeManager.setSaved();

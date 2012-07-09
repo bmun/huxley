@@ -13,10 +13,6 @@ from django.core.validators import email_re
 import datetime
 import re
 
-# Testing purposes
-def ajax_working(request):
-    return HttpResponse("yes") if request.is_ajax() else HttpResponse("no")
-
 # --------------------------
 # --- PAGE DISPLAY VIEWS ---
 # --------------------------
@@ -422,14 +418,6 @@ def update_roster(request):
                                 pass
                 
         return HttpResponse('')
-                        
-                        
-
-def test_update_roster(request):
-        if request.method == 'POST':
-                json_data = simplejson.loads(request.POST.get('768'))
-                c = json_data['country']
-                return HttpResponse(c)
                 
 def update_welcome(request):
         if request.method == 'POST':

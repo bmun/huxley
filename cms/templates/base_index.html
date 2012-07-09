@@ -21,7 +21,7 @@
     </div>
 </div>
 <div id="changepassword" class="rounded-bottom transparent changepassword">
-    <form id="changepasswordform" action="/changepassword/">
+    <form id="changepasswordform" action="{% url changepassword %}">
         {% csrf_token %}
         <div class="input">
             <label for="oldpassword">Current Password</label>
