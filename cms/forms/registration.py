@@ -20,7 +20,7 @@ class RegistrationForm(forms.Form):
     city = forms.CharField(widget=forms.TextInput(attrs={'class':'required'}))
     state = forms.CharField(widget=forms.TextInput(attrs={'class':'required'}))
     zip = forms.CharField(widget=forms.TextInput(attrs={'class':'required zip'}))
-    country = forms.CharField(widget=forms.TextInput(attrs={'class':'showhide'}))
+    country = forms.CharField(widget=forms.TextInput(attrs={'class':'showhide'}), required=False)
 
     # Program Information
     programtype = forms.ChoiceField(widget=forms.RadioSelect, choices=(('club', 'Club'), ('class', 'Class')))
@@ -32,9 +32,22 @@ class RegistrationForm(forms.Form):
     primary_name = forms.CharField(widget=forms.TextInput(attrs={'class':'required'}))
     primary_email = forms.EmailField(widget=forms.TextInput(attrs={'class':'required email'}))
     primary_phone = forms.CharField(widget=forms.TextInput(attrs={'class':'required phoneNum phoneVal'}))
-    secondary_name = forms.CharField(widget=forms.TextInput())
-    secondary_email = forms.EmailField(widget=forms.TextInput(attrs={'class':'email'}))
-    secondary_phone = forms.CharField(widget=forms.TextInput(attrs={'class':'phoneNum phoneVal'}))
+    secondary_name = forms.CharField(widget=forms.TextInput(), required=False)
+    secondary_email = forms.EmailField(widget=forms.TextInput(attrs={'class':'email'}), required=False)
+    secondary_phone = forms.CharField(widget=forms.TextInput(attrs={'class':'phoneNum phoneVal'}), required=False)
 
-    # Preferences
-    # TODO: Add this
+    # Country Preferences
+    # TODO: Make sure this will work
+    countrypref1 = forms.CharField(widget=forms.TextInput)
+    countrypref2 = forms.CharField(widget=forms.TextInput)
+    countrypref3 = forms.CharField(widget=forms.TextInput)
+    countrypref4 = forms.CharField(widget=forms.TextInput)
+    countrypref5 = forms.CharField(widget=forms.TextInput)
+    countrypref6 = forms.CharField(widget=forms.TextInput)
+    countrypref7 = forms.CharField(widget=forms.TextInput)
+    countrypref8 = forms.CharField(widget=forms.TextInput)
+    countrypref9 = forms.CharField(widget=forms.TextInput)
+    countrypref10 = forms.CharField(widget=forms.TextInput)
+
+    # Committee Preferences
+    # TODO: Maybe leave this to views.py
