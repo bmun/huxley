@@ -15,7 +15,7 @@ To edit your information, just click on any of the highlighted fields and add yo
 <p>Under-Secretary General of External Relations, 60th Session</p>
 <script type="text/javascript" src="/static/js/jquery.form.js"></script>
 
-<form id = "welcomepage" action="">
+<form id = "welcomepage" action="{% url updatewelcome %}">
 {% csrf_token %}
 
 <div id = "tablemenu" class="tableheader">

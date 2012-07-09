@@ -63,10 +63,10 @@
     
     $(function() {
         $(document).on("submit", "#theRoster", function() {
-            
+            var uri = $(this).attr("action");
             $.ajax({
                 type: 'POST',
-                url: "/updateroster/",
+                url: uri,
                 data: aggregateData(),
                 contentType: 'application/json',
                 success: function(response){ Roster.setSaved();},

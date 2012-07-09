@@ -1,8 +1,9 @@
 $(function(){
 	$("#container").delegate("#loginform", "submit", function(){
-		var credentials = $("#loginform").serializeArray();
-
-		$.post('/login/', credentials, function(data){
+		var credentials = $(this).serializeArray();
+		var uri = $(this).attr("action");
+		
+		$.post(uri, credentials, function(data){
 			if(data == 'OK'){
 				ContentManager.onLogin();
 			}
@@ -16,9 +17,11 @@ $(function(){
 	});
 	
 	$("#container").delegate("#logout", "click", function(){
-     	$.get("/logout/", function(){
+		var uri = $(this).attr("href");
+     	$.get(uri, function(){
            	ContentManager.onLogout();
           });
+        
      	return false;
 	});
 });
