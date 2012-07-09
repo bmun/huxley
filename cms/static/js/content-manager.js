@@ -91,14 +91,11 @@
 				ContentManager.loadPageTitle(hash);
                 $(".content #contentwrapper").load(hash + " #capsule", data, function(response, status, xhr){
                     if(status == 'error') { 
-                    	/*$("#modal").modal({
-                    		overlayClose: true,
-                    		opacity: 50,
-                    		overlayCss: {backgroundColor:"#000000"},
-                    		containerCss: {backgroundColor:"#000000"},
-                    		dataCss: {color:"#FFFFFF"}
-                    	});*/
-                    	alert("Sorry, there was an error.");
+                    	$("#osx-modal").modal({
+                    		overlayId: 'osx-overlay',
+                		containerId: 'osx-container',
+                    	});
+                    	//alert("Sorry, there was an error.");
                     	parent.history.back();
                     };
                     $("#contentwrapper").css({'visibility':'hidden', 'display': 'block'});
