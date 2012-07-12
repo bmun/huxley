@@ -9,9 +9,10 @@ $(function() {
 	}
 
 	$(document).on("submit", "#editprefs", function() {
+		var uri = $(this).attr("action");
 		$.ajax({
 			type: 'POST',
-			url: 'updateprefs/',
+			url: uri,
 			data: $(this).serializeArray(),
 			success: function(name) {
 				setSaved();

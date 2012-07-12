@@ -7,7 +7,7 @@
 <p> Here you can edit your roster. To change a delegate's name, simply click on it. To <span class="bold">erase</span> a delegate, click the <img src="/static/img/delete_over.png"> button.
 To <span class="bold">switch</span> delegates, click the <img src="/static/img/switch_over.png"> button of the first delegate, and then the corresponding button of the second delegate.
 When you're done, <span class="bold">don't forget to save your changes!</span> </p>
-<form id="theRoster" action="/updateroster/">
+<form id="theRoster" action="{% url updateroster %}">
 {% csrf_token %}
 <div id="tablemenu" class="tableheader">
     Don't forget to <input class="saved button" type="submit" value="SAVE!"/>
