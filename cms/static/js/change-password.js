@@ -29,7 +29,8 @@ $(document).on("click", ".changepassword", function(e){
 
 
 $(document).on("submit", "#changepasswordform", function(){
-    $.post('/changepassword/', $(this).serializeArray(), function(data){
+	var uri = $(this).attr("action");
+    $.post(uri, $(this).serializeArray(), function(data){
         if(data == 'OK'){
         	$("#changepassword input[type=password]").val("");
         	if ($("#changepassword #message").is(":visible")) {
@@ -39,7 +40,6 @@ $(document).on("submit", "#changepasswordform", function(){
         	}
             $("#changepassword").delay(750).slideUp();
             $("#changepassword #message").delay(750).slideUp();
-            
         }
         else{
             if($("#changepassword #message").is(":visible")){

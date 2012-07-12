@@ -22,7 +22,7 @@ body { background: #f0f0f0 url(/static/img/unga3.jpg) center top no-repeat fixed
 #header #right { float:right; color: #fff; padding-top: 2px;}
 #noscriptwrapper{ background: #faa; margin: 0px auto; border-bottom: 1px solid #fbb; box-shadow: 0px 0px 3px #fbb; }
 #noscript{ width: 520px; padding: 10px 0px 10px 80px; margin: 0px auto; text-align: left; }
-#splash{ background: #111 url(/static/img/splash.png) center top no-repeat; padding: 10px; width: 600px; min-height: 250px; border: 1px solid #222; margin: 60px auto;}
+#splash{ background: #111 url(/static/img/logo_white.png) center center no-repeat; padding: 10px; width: 600px; min-height: 250px; border: 1px solid #222; margin: 60px auto;}
 #changepassword{ text-align: left; display:none; padding: 15px; width: 183px; background: #111; position: absolute; top: 40px; right: 92px; z-index: 1; border: 1px solid #222; border-width: 0px 1px 1px 1px;}
 #changepassword #message{ display:none; margin-top: 10px;}
 
@@ -34,6 +34,11 @@ body { background: #f0f0f0 url(/static/img/unga3.jpg) center top no-repeat fixed
 .rounded-bottom{ border-radius: 0px 0px 6px 6px; -moz-border-radius: 0px 0px 6px 6px; -webkit-border-radius: 0px 0px 6px 6px; behavior: url(/static/htc/PIE.htc) }
 .titlebar{ height: 15px; padding: 10px 0px 10px 12px; background: #111; margin: 40px auto 0px auto; border-top: 1px solid #555; font: 10px Helvetica, Arial, sans-serif; font-weight: 500; color: #666; letter-spacing: 13px; text-align: center; }
 .content{ padding: 15px; background: #eee; margin: 0px auto 40px auto; font: 12px Helvetica, Arial, sans-serif; font-weight: 300; color: #555; text-shadow: 0px 1px #fff; border-top: 1px solid #fff; text-align: left; }
+.content-loading {
+  background-image: url(/static/img/loading.gif);
+  background-repeat: no-repeat;
+  background-position: center 30px;
+}
 .ie-layout{ zoom: 1; }
 #authheader.transparent{ -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=70)"; /* IE8 */ filter: alpha(opacity=70); /* IE6/7 */ -moz-opacity: 0.7; /* Netscape? */ -khtml-opacity: 0.7; /* Safari 1.x */ opacity: 0.7; /* Not shitty browsers */ }
 .content.transparent{ -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=90)"; /* IE8 */ filter: alpha(opacity=90); /* IE6/7 */ -moz-opacity: 0.9; /* Netscape? */ -khtml-opacity: 0.9; /* Safari 1.x */ opacity: 0.9; /* Not shitty browsers */ }
