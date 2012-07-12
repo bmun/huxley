@@ -9,6 +9,7 @@ from django.views.decorators.csrf import csrf_protect
 from django.template import Context, RequestContext
 from django.utils import simplejson
 from django.core.validators import email_re
+from django.core.urlresolvers import reverse
 
 #from cms.forms.registration import RegistrationForm
 
@@ -103,6 +104,11 @@ def chair(request, page="grading"):
         logout(request)
         return render_to_response('auth.html', context_instance = RequestContext(request))
 
+def _is_user_chair(user):
+  try:
+    return user.secretariat_profile is not None
+  except:
+    return False
 
 # TODO - fix the redirect to index when there is no error
 def login_user(request):
@@ -122,7 +128,13 @@ def login_user(request):
             login(request, user)
             
         if request.is_ajax():
-            return HttpResponse(error) if len(error) > 0 else HttpResponse("OK")
+          if len(error) > 0:
+            response = {"success": False, "error": error }
+          elif _is_user_chair(request.user):
+            response = {"success": True, "redirect": reverse('chair', args=['grading'])}
+          else:
+            response = {"success": True, "redirect": reverse('advisor', args=['welcome'])}
+          return HttpResponse(simplejson.dumps(response), mimetype='application/json')
         
     c = RequestContext(request, {'state':error})
     return render_to_response('auth.html', c) if len(error) > 0 else HttpResponseRedirect('/')
@@ -130,7 +142,7 @@ def login_user(request):
 
 def logout_user(request):
     logout(request)
-    return HttpResponse(status=200) if request.is_ajax() else HttpResponseRedirect('/')
+    return HttpResponse(reverse('login')) if request.is_ajax() else HttpResponseRedirect('/')
             
                 
 def register(request):

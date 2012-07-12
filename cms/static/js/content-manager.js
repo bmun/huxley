@@ -112,29 +112,24 @@
         },
         
 		/* Loads in the new app frame upon login*/
-		onLogin: function(){
+		onLogin: function(redirect){
 			$("#container").fadeOut(150, function(){
-				$("#container").load("/ #appcontainer", null, function(){
-					$("#container").fadeIn(250, function(){
-						if ($("span.usertype span").attr("usertype") == "advisor"){
-                        	window.location.href = "/#/advisor/welcome";
-	                    }
-	                    else if ($("span.usertype span").attr("usertype") == "chair"){
-	                        window.location.href = "/#/chair/grading";
-	                    }
-					});
+				$("#container").load(redirect + " #appcontainer", null, function(){
+					$("#container").fadeIn(250, function() {
+     					window.location.href = "/#" + redirect;
+     				});
 				});
 			});
 		},
 		
-		onLogout: function(){
+		onLogout: function(redirect){
 			$("#header").slideUp(250, function(){
 				$("#headerwrapper").slideUp(250, function(){
       				$("#container").fadeOut(350, function(){
-						ContentManager.loadPageTitle("/login");
-		         		$("#container").load("/login/ #appcontainer", null, function(){
+						ContentManager.loadPageTitle(redirect);
+		         		$("#container").load(redirect + " #appcontainer", null, function(){
 		             		$("#container").css("display","");
-		             		window.location.href = "/#/login";
+		             		window.location.href = "/#" + redirect;
 		             		$("#app").delay(250).fadeIn(250);
 		         		});
 		     		});
