@@ -6,10 +6,10 @@
 		
 		/* Initializer function */
 		init: function(){
-			$(window).bind('hashchange', function(){
+			$(window).bind('hashchange', function() {
 		        var newHash = window.location.hash.substring(1);
 		        
-		        if($("#app").is(":hidden")){
+		        if ($("#app").is(":hidden")) {
 		            ContentManager.loadInitContent(newHash);
 		        }
 		        else {
@@ -22,7 +22,7 @@
             	return false;
         	});
 			
-			$("#container").delegate("#appnavbar a.nav", "click", function(){
+		$("#container").delegate("#appnavbar a.nav", "click", function(){
             	$("#appnavbar a.nav.currentpage").removeClass('currentpage');
             	$(this).addClass('currentpage');
         	});
@@ -39,23 +39,14 @@
 		
         /* Fades the initial content into view. */
         onPageLoad: function(){
-            if(window.location.hash == ""){
-                if(window.location.pathname == "/"){
-                    if($("#app.authentication").length > 0){
-                        window.location.href = "/#/login";
-                    }
-                    else if ($("span.usertype span").attr("usertype") == "advisor"){
-                        window.location.href = "/#/advisor/welcome";
-                    }
-                    else if ($("span.usertype span").attr("usertype") == "chair"){
-                        window.location.href = "/#/chair/grading";
-                    }
+            if (window.location.hash == "") {
+                if (window.location.pathname == "/") {
+                    var hash = $("a.nav.default").attr("href");
+                    window.location.href = "/#" + (hash ? hash : "/login");
+                } else {
+                    window.location.href = "/#" + window.location.pathname;
                 }
-                else{
-                    window.location.href = "/#" + window.location.pathname.substring(0, window.location.pathname.length -1);
-                }
-            }
-            else{
+            } else {
                 ContentManager.triggerHashChange();
             }
         },
@@ -111,28 +102,12 @@
             });
         },
         
-		/* Loads in the new app frame upon login*/
-		onLogin: function(redirect){
+		onLoginLogout: function(redirect, fadetime){
 			$("#container").fadeOut(150, function(){
 				$("#container").load(redirect + " #appcontainer", null, function(){
-					$("#container").fadeIn(250, function() {
+					$("#container").fadeIn(fadetime, function() {
      					window.location.href = "/#" + redirect;
      				});
-				});
-			});
-		},
-		
-		onLogout: function(redirect){
-			$("#header").slideUp(250, function(){
-				$("#headerwrapper").slideUp(250, function(){
-      				$("#container").fadeOut(350, function(){
-						ContentManager.loadPageTitle(redirect);
-		         		$("#container").load(redirect + " #appcontainer", null, function(){
-		             		$("#container").css("display","");
-		             		window.location.href = "/#" + redirect;
-		             		$("#app").delay(250).fadeIn(250);
-		         		});
-		     		});
 				});
 			});
 		},
