@@ -5,7 +5,7 @@ $(function(){
 		
 		$.post(uri, credentials, function(data){
 			if(data.success === true){
-				ContentManager.onLogin(data.redirect);
+				ContentManager.onLoginLogout(data.redirect, 250);
 			}
 			else{
 				$("#errorcontainer").hide().html('<label class="error">' + data.error + '</label>').fadeIn(250);
@@ -18,8 +18,12 @@ $(function(){
 	
 	$("#container").delegate("#logout", "click", function(){
 		var uri = $(this).attr("href");
-     	$.get(uri, function(redirect){
-           	ContentManager.onLogout(redirect);
+     	$.get(uri, function(redirect) {
+           	$("#header").slideUp(250, function(){
+				$("#headerwrapper").slideUp(250, function() {
+      				ContentManager.onLoginLogout(redirect, 0);
+				});
+			});
           });
         
      	return false;
