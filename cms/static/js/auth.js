@@ -4,11 +4,11 @@ $(function(){
 		var uri = $(this).attr("action");
 		
 		$.post(uri, credentials, function(data){
-			if(data == 'OK'){
-				ContentManager.onLogin();
+			if(data.success === true){
+				ContentManager.onLogin(data.redirect);
 			}
 			else{
-				$("#errorcontainer").hide().html('<label class="error">' + data + '</label>').fadeIn(250);
+				$("#errorcontainer").hide().html('<label class="error">' + data.error + '</label>').fadeIn(250);
 				$("#app").effect("shake", { direction:"up", times:2, distance:2 }, 50);
 			}
 		});
@@ -18,8 +18,8 @@ $(function(){
 	
 	$("#container").delegate("#logout", "click", function(){
 		var uri = $(this).attr("href");
-     	$.get(uri, function(){
-           	ContentManager.onLogout();
+     	$.get(uri, function(redirect){
+           	ContentManager.onLogout(redirect);
           });
         
      	return false;
