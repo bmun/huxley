@@ -468,7 +468,6 @@ def update_welcome(request):
     return HttpResponse('')
 
 def update_prefs(request):
-    print "Updating Preferences"
     if request.method == "POST":
         profile = request.user.advisor_profile
         school = profile.school
@@ -478,8 +477,7 @@ def update_prefs(request):
         
         cprefs = []
         for index in range(0,10):
-            #print "cprefs at index:", index
-            prefs.append(request.POST.get('CountryPref'+str(index+1)))
+            cprefs.append(request.POST.get('CountryPref'+str(index+1)))
         cprefs = filter((lambda p: p != "NULL"), cprefs)
 
         countrylist = []

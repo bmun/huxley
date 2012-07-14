@@ -1,4 +1,3 @@
-
   function hashify(path) {
       return "/#" + path;
   }
@@ -118,9 +117,9 @@
           var managers;
           type = $("span.usertype span").attr("usertype");
           
-          if (type == "advisor"){
+          if (type == "advisor") {
               managers = ContentManager.advisorManagers;
-          } else if (type == "chair"){
+          } else if (type == "chair") {
               managers = ContentManager.chairManagers;
           } else {
               managers = [];
