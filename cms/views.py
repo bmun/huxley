@@ -22,62 +22,62 @@ import re
 
 #@login_required
 def index(request):
-        try:
-            if request.user.is_authenticated():
-                try:
-                    if request.user.secretariat_profile is not None:
-                        return render_to_response('secretariat_index.html', context_instance = RequestContext(request))
-                except:
-                    if request.user.advisor_profile is not None:
-                        sid = request.user.advisor_profile.school.id
-                        school = School.objects.get(id=sid)
-                        return render_to_response('advisor_index.html', {'school': school}, context_instance = RequestContext(request))
-            else:
-                return render_to_response('auth.html', context_instance = RequestContext(request))
-        except:
-            logout(request)
+    try:
+        if request.user.is_authenticated():
+            try:
+                if request.user.secretariat_profile is not None:
+                    return render_to_response('secretariat_index.html', context_instance = RequestContext(request))
+            except:
+                if request.user.advisor_profile is not None:
+                    sid = request.user.advisor_profile.school.id
+                    school = School.objects.get(id=sid)
+                    return render_to_response('advisor_index.html', {'school': school}, context_instance = RequestContext(request))
+        else:
             return render_to_response('auth.html', context_instance = RequestContext(request))
+    except:
+        logout(request)
+        return render_to_response('auth.html', context_instance = RequestContext(request))
 
 
 def advisor(request, page="welcome"):
-        try:
-            if not request.user.is_authenticated():
-                return render_to_response('auth.html', context_instance = RequestContext(request))
-            try:
-                profile = request.user.advisor_profile
-            except:
-                return HttpResponse(status=403)
-            
-            sid = profile.school.id
-            school = School.objects.get(id=sid)
-            countryprefs = school.countrypreferences.all().order_by("countrypreference__rank")
-            committeeprefs = school.committeepreferences.all()
-            countries = Country.objects.filter(special=False).order_by('name')
-            committees = Committee.objects.filter(special=True)
-
-            if page == "welcome":
-                return render_to_response('welcome.html', {'school': school}, context_instance = RequestContext(request))
-            elif page == "roster":
-                slots = DelegateSlot.objects.filter(assignment__school=school)
-                return render_to_response('roster_edit.html', {'slots': slots}, context_instance = RequestContext(request))
-            elif page == "help":
-                c = Context()
-                questions = {}
-                for cat in HelpCategory.objects.all():
-                        questions[cat.name] = HelpQuestion.objects.filter(category=cat)
-                c.update({"categories": questions})
-                return render_to_response('help.html', c, context_instance = RequestContext(request))
-            elif page == "bugs":
-                return render_to_response('bugs.html', context_instance = RequestContext(request))
-            elif page == "preferences":
-                return render_to_response('preferences.html', {'countryprefs': countryprefs, 'countries': countries, 'committees': committees, 'committeeprefs':committeeprefs}, context_instance = RequestContext(request))
-            elif page == "attendance":
-                return render_to_response('comingsoon.html')
-            else:
-                return HttpResponseNotFound()
-        except:
-            logout(request)
+    try:
+        if not request.user.is_authenticated():
             return render_to_response('auth.html', context_instance = RequestContext(request))
+        try:
+            profile = request.user.advisor_profile
+        except:
+            return HttpResponse(status=403)
+        
+        sid = profile.school.id
+        school = School.objects.get(id=sid)
+        countryprefs = school.countrypreferences.all().order_by("countrypreference__rank")
+        committeeprefs = school.committeepreferences.all()
+        countries = Country.objects.filter(special=False).order_by('name')
+        committees = Committee.objects.filter(special=True)
+
+        if page == "welcome":
+            return render_to_response('welcome.html', {'school': school}, context_instance = RequestContext(request))
+        elif page == "roster":
+            slots = DelegateSlot.objects.filter(assignment__school=school)
+            return render_to_response('roster_edit.html', {'slots': slots}, context_instance = RequestContext(request))
+        elif page == "help":
+            c = Context()
+            questions = {}
+            for cat in HelpCategory.objects.all():
+                    questions[cat.name] = HelpQuestion.objects.filter(category=cat)
+            c.update({"categories": questions})
+            return render_to_response('help.html', c, context_instance = RequestContext(request))
+        elif page == "bugs":
+            return render_to_response('bugs.html', context_instance = RequestContext(request))
+        elif page == "preferences":
+            return render_to_response('preferences.html', {'countryprefs': countryprefs, 'countries': countries, 'committees': committees, 'committeeprefs':committeeprefs}, context_instance = RequestContext(request))
+        elif page == "attendance":
+            return render_to_response('comingsoon.html')
+        else:
+            return HttpResponseNotFound()
+    except:
+        logout(request)
+        return render_to_response('auth.html', context_instance = RequestContext(request))
 
 
 def chair(request, page="grading"):
@@ -477,7 +477,6 @@ def update_prefs(request):
         
         cprefs = []
         for index in range(0,10):
-            #print "cprefs at index:", index
             cprefs.append(request.POST.get('CountryPref'+str(index+1)))
         cprefs = filter((lambda p: p != "NULL"), cprefs)
 
@@ -518,7 +517,7 @@ def change_password(request):
     
     if not request.user.is_authenticated():
         return HttpResponse(status=401)
-    elif (len(oldpassword) == 0 or len(newpassword) == 0 or len(newpassword2) == 0):
+    elif not (oldpassword or newpassword or newpassword2):
         return HttpResponse("One or more fields is blank.")
     elif newpassword != newpassword2:
         return HttpResponse("New passwords must match.")
