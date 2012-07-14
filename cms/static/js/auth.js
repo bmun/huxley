@@ -1,4 +1,6 @@
 $(function() {
+
+    // Attempts to log in, and changes the UI accordingly.
     $(document).on("submit", "#loginform", function() {
         var credentials = $(this).serializeArray();
         var uri = $(this).attr("action");
@@ -6,14 +8,22 @@ $(function() {
             if(data.success === true) {
                 ContentManager.onLoginLogout(data.redirect, 250);
             } else {
-                $("#errorcontainer").hide().html('<label class="error">' + data.error + '</label>').fadeIn(250);
-                $("#app").effect("shake", { direction:"up", times:2, distance:2 }, 50);
+                $("#errorcontainer")
+                    .hide()
+                    .html('<label class="error">' + data.error + '</label>')
+                    .fadeIn(250);
+                $("#app").effect(
+                    "shake",
+                    {direction:"up", times:2, distance:2},
+                    50
+                );
             }
         });
         
         return false;
     });
-	
+
+    // Logs out and changes the UI accordingly.
     $(document).on("click", "#logout", function() {
         var uri = $(this).attr("href");
         $.get(uri, function(redirect) {

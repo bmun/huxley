@@ -6,8 +6,9 @@ function errorLabel(message) {
     return '<label class="error">' + message + '</label>';
 }
 
-$(function(){
+$(function() {
 
+    // Opens and closes the Change Password tab.
     $(document).on("click", "#newpassword", function(e) {
         if ($("#changepassword").is(":visible")) {
             $("#changepassword").slideUp(function() {
@@ -21,6 +22,7 @@ $(function(){
         return false;
     });
 
+    // Slides the tab up upon clicking on the page.
     $(document).click(function() {
         if ($("#changepassword").is(":visible")) {
             $("#changepassword").slideUp(function() {
@@ -30,11 +32,12 @@ $(function(){
         }
     });
 
+    // Stops the tab from sliding up when it's clicked on.
     $(document).on("click", ".changepassword", function(e) {
         e.stopPropagation();
     });
 
-
+    // Submits the changed password to the server and updates UI accordingly.
     $(document).on("submit", "#changepasswordform", function() {
         var uri = $(this).attr("action");
         $.post(uri, $(this).serializeArray(), function(data) {
@@ -68,7 +71,7 @@ $(function(){
             }
             $("#changepassword").effect(
                 "shake",
-                { direction:"left", times:2, distance:2 },
+                {direction:"left", times:2, distance:2},
                 50
             );
         });
