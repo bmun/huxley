@@ -77,31 +77,31 @@ $(function() {
     // Validates the form upon submit and POSTs if it's valid.
     $(document).on("submit", "#authcontent #registrationform", function() {
         $("#registrationform").validate({
-        messages: {
-        FirstName: {required: "Please enter your first name."},
-        LastName: {required: "Please enter your last name."},
-        Username: {required: "Please enter your desired username."},
-        Password: {required: "Please enter a password."},
-        Password2: {
-                required: "Please enter a password.",
-                equalTo: "Please enter the same password again."
-        },
-        SchoolName: {required: "Please enter the name of your school."},
-        SchoolAddress: {required: "Please enter the school's address."},
-        SchoolCity: {required: "Please enter the city."},
-        SchoolState: {required: "Please enter the state."},
-        SchoolZip: {required: "Please enter the zip code."},
-        SchoolCountry: {required: "Please enter the country."},
-        PrimaryName: {required: "Please enter a name."},
-        PrimaryEmail: {required: "Please enter an email address."},
-        PrimaryPhone: {required: "Please enter a phone number."}
-        }
+            messages: {
+                FirstName: {required: "Please enter your first name."},
+                LastName: {required: "Please enter your last name."},
+                Username: {required: "Please enter your desired username."},
+                Password: {required: "Please enter a password."},
+                Password2: {
+                        required: "Please enter a password.",
+                        equalTo: "Please enter the same password again."
+                },
+                SchoolName: {required: "Please enter the name of your school."},
+                SchoolAddress: {required: "Please enter the school's address."},
+                SchoolCity: {required: "Please enter the city."},
+                SchoolState: {required: "Please enter the state."},
+                SchoolZip: {required: "Please enter the zip code."},
+                SchoolCountry: {required: "Please enter the country."},
+                PrimaryName: {required: "Please enter a name."},
+                PrimaryEmail: {required: "Please enter an email address."},
+                PrimaryPhone: {required: "Please enter a phone number."}
+            }
         });
         
-        var isValid = $(this).valid();
-        if(isValid){
+        var uri = $(this).attr("action");
+        if($(this).valid()){
             ContentManager.loadNewContent(
-                '/register/',
+                uri,
                 $("#registrationform").serializeArray()
             );
         }
