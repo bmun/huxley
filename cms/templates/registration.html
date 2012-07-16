@@ -9,7 +9,7 @@
 <br/>
 <a class="nav" href="/login"> &larr; Back to Login</a>
 
-<form method="post" id="registrationform" action="/register/">
+<form method="post" id="registrationform" action="{% url register %}">
 {% csrf_token %}
 
 <fieldset>

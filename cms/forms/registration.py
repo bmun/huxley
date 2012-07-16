@@ -14,7 +14,7 @@ class RegistrationForm(forms.Form):
 
     # School Information
     # TODO: Pick a default for international
-    us_or_int = forms.ChoiceField(widget=forms.RadioSelect, choices=(('us', 'United States'), ('int', 'International')))
+    us_or_int = forms.ChoiceField(widget=forms.RadioSelect, choices=(('us', 'United States'), ('international', 'International')))
     SchoolName = forms.CharField(widget=forms.TextInput(attrs={'class':'full required'}))
     SchoolAddress = forms.CharField(widget=forms.TextInput(attrs={'class':'full required'}))
     SchoolCity = forms.CharField(widget=forms.TextInput(attrs={'class':'required'}))
@@ -36,7 +36,7 @@ class RegistrationForm(forms.Form):
     SecondaryEmail = forms.EmailField(widget=forms.TextInput(attrs={'class':'email'}), required=False)
     SecondaryPhone = forms.CharField(widget=forms.TextInput(attrs={'class':'phoneNum phoneVal'}), required=False)
 
-    # Country Preferences
+    # Country Preferences (the ids)
     # TODO: Make sure this will work
     CountryPref1 = forms.CharField(widget=forms.TextInput)
     CountryPref2 = forms.CharField(widget=forms.TextInput)
