@@ -1,11 +1,19 @@
 
 from django.db import models
 from django.db.models.signals import post_save, pre_delete
+from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 
 class HuxleyUser(User):
     class Meta:
         proxy = True
+    @classmethod
+    def authenticate(_class, username, password):
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            huser = _class()
+            huser.__dict__ = user.__dict__
+            return huser
     def is_chair(self):
         return SecretariatProfile.objects.filter(user=self).exists()
     def is_advisor(self):
