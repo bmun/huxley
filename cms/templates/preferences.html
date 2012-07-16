@@ -184,8 +184,9 @@
 	<tr>
 		<th colspan=2> Special Committee Preferences </th>
 	</tr>
-	{% for committee in committees %}
+	{% for pair in committees %}
 		<tr>
+      		{% for committee in pair %}
 			<td class='field'>
 				{% if committee in committeeprefs %}
 				<label><input type="checkbox" checked = "checked" name="{{ committee.name }}" value="{{ committee.id }}">{{ committee.fullname }} </input></label>
@@ -193,6 +194,7 @@
 				<label><input type="checkbox" name="{{ committee.name }}" value="{{ committee.id }}">{{ committee.fullname }} </input></label>
 				{% endif %}
 			</td>
+			{% endfor %}
 		</tr>
 	{% endfor %}
 </table>
