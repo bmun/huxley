@@ -10,7 +10,7 @@ from django.template import Context, RequestContext
 from django.utils import simplejson
 from django.core.validators import email_re
 
-from cms.forms.registration import RegistrationForm
+from forms.registration import RegistrationForm
 
 import datetime
 import re
@@ -150,6 +150,7 @@ def register(request):
         if request.POST:
                 # TODO: Need to fix names first before using the line below
                 # form = RegistrationForm(request.POST)
+                # if form.is_valid() {}
                 
                 # Grab registration field values
                 fname = request.POST.get('FirstName')           # Validated

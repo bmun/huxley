@@ -11,3 +11,5 @@ settings.py
 # Local Database
 cmsdb
 huxdb
+*.db
+wsgi.py
