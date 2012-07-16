@@ -70,6 +70,7 @@ def advisor(request, page="welcome"):
         elif page == "bugs":
             return render_to_response('bugs.html', context_instance = RequestContext(request))
         elif page == "preferences":
+            committees = [committees[i:i+2] for i in range(0, len(committees), 2)]
             return render_to_response('preferences.html', {'countryprefs': countryprefs, 'countries': countries, 'committees': committees, 'committeeprefs':committeeprefs}, context_instance = RequestContext(request))
         elif page == "attendance":
             return render_to_response('comingsoon.html')
