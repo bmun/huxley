@@ -100,6 +100,7 @@ var ContentManager = {
         });
     },
     
+    // Prepares the UI upon login/logout.
     onLoginLogout: function(redirect, fadetime) {
         $("#container").fadeOut(150, function() {
             $("#container").load(redirect + " #appcontainer", null, function() {
