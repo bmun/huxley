@@ -7,10 +7,9 @@ class HuxleyUser(User):
     class Meta:
         proxy = True
     def is_chair(self):
-        try:
-            return self.secretariat_profile is not None
-        except:
-            return False
+        return SecretariatProfile.objects.filter(user=self).exists()
+    def is_advisor(self):
+        return AdvisorProfile.objects.filter(user=self).exists()
 
 class Conference(models.Model):
     session = models.IntegerField(null=False, blank=False, db_column="session", default=60)
