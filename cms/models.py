@@ -7,17 +7,17 @@ from django.contrib.auth.models import User
 class HuxleyUser(User):
     class Meta:
         proxy = True
-    @classmethod
-    def authenticate(_class, username, password):
-        user = authenticate(username=username, password=password)
-        if user is not None:
-            huser = _class()
-            huser.__dict__ = user.__dict__
-            return huser
+    def __init__(self, user):
+        self.__dict__ = user.__dict__
     def is_chair(self):
         return SecretariatProfile.objects.filter(user=self).exists()
     def is_advisor(self):
         return AdvisorProfile.objects.filter(user=self).exists()
+    @classmethod
+    def authenticate(_class, username, password):
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            return _class(user)
 
 class Conference(models.Model):
     session = models.IntegerField(null=False, blank=False, db_column="session", default=60)
