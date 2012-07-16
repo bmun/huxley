@@ -13,12 +13,12 @@
 		</div>
 	</div>
 	<div id="right">
-		<form id="loginform" action="/login/" method="post">
+		<form id="loginform" action="{% url login %}" method="post">
 			{% csrf_token %}
 			<span> Username </span><input class="text empty rounded-small" type="text" name="username" value="" tabindex="1">
-			<span> Password </span><a href="/forgot" class="nav forgot" tabindex="5">Forgot your password?</a><input class="text empty rounded-small" type="password" name="password" value="" tabindex="2">
+			<span> Password </span><a href="{% url forgotpassword %}" class="nav forgot" tabindex="5">Forgot your password?</a><input class="text empty rounded-small" type="password" name="password" value="" tabindex="2">
 			<button class="authsubmit rounded-small" type="submit" tabindex="3">Log In!</button>
-			<span class="register"> Not signed up? <a class="nav" href="/register" tabindex="4">Register now!</a></span>
+			<span class="register"> Not signed up? <a class="nav" href="{% url register %}" tabindex="4">Register now!</a></span>
 		</form>
 	</div>
 {% endblock content %}

@@ -9,15 +9,12 @@ from django.views.decorators.csrf import csrf_protect
 from django.template import Context, RequestContext
 from django.utils import simplejson
 from django.core.validators import email_re
+from django.core.urlresolvers import reverse
 
 from forms.registration import RegistrationForm
 
 import datetime
 import re
-
-# Testing purposes
-def ajax_working(request):
-    return HttpResponse("yes") if request.is_ajax() else HttpResponse("no")
 
 # --------------------------
 # --- PAGE DISPLAY VIEWS ---
@@ -25,62 +22,63 @@ def ajax_working(request):
 
 #@login_required
 def index(request):
-        try:
-            if request.user.is_authenticated():
-                try:
-                    if request.user.secretariat_profile is not None:
-                        return render_to_response('secretariat_index.html', context_instance = RequestContext(request))
-                except:
-                    if request.user.advisor_profile is not None:
-                        sid = request.user.advisor_profile.school.id
-                        school = School.objects.get(id=sid)
-                        return render_to_response('advisor_index.html', {'school': school}, context_instance = RequestContext(request))
-            else:
-                return render_to_response('auth.html', context_instance = RequestContext(request))
-        except:
-            logout(request)
+    try:
+        if request.user.is_authenticated():
+            try:
+                if request.user.secretariat_profile is not None:
+                    return render_to_response('secretariat_index.html', context_instance = RequestContext(request))
+            except:
+                if request.user.advisor_profile is not None:
+                    sid = request.user.advisor_profile.school.id
+                    school = School.objects.get(id=sid)
+                    return render_to_response('advisor_index.html', {'school': school}, context_instance = RequestContext(request))
+        else:
             return render_to_response('auth.html', context_instance = RequestContext(request))
+    except:
+        logout(request)
+        return render_to_response('auth.html', context_instance = RequestContext(request))
 
 
 def advisor(request, page="welcome"):
-        try:
-            if not request.user.is_authenticated():
-                return render_to_response('auth.html', context_instance = RequestContext(request))
-            try:
-                profile = request.user.advisor_profile
-            except:
-                return HttpResponse(status=403)
-            
-            sid = profile.school.id
-            school = School.objects.get(id=sid)
-            countryprefs = school.countrypreferences.all().order_by("countrypreference__rank")
-            committeeprefs = school.committeepreferences.all()
-            countries = Country.objects.filter(special=False).order_by('name')
-            committees = Committee.objects.filter(special=True)
-
-            if page == "welcome":
-                return render_to_response('welcome.html', {'school': school}, context_instance = RequestContext(request))
-            elif page == "roster":
-                slots = DelegateSlot.objects.filter(assignment__school=school)
-                return render_to_response('roster_edit.html', {'slots': slots}, context_instance = RequestContext(request))
-            elif page == "help":
-                c = Context()
-                questions = {}
-                for cat in HelpCategory.objects.all():
-                        questions[cat.name] = HelpQuestion.objects.filter(category=cat)
-                c.update({"categories": questions})
-                return render_to_response('help.html', c, context_instance = RequestContext(request))
-            elif page == "bugs":
-                return render_to_response('bugs.html', context_instance = RequestContext(request))
-            elif page == "preferences":
-                return render_to_response('preferences.html', {'countryprefs': countryprefs, 'countries': countries, 'committees': committees, 'committeeprefs':committeeprefs}, context_instance = RequestContext(request))
-            elif page == "attendance":
-                return render_to_response('comingsoon.html')
-            else:
-                return HttpResponseNotFound()
-        except:
-            logout(request)
+    try:
+        if not request.user.is_authenticated():
             return render_to_response('auth.html', context_instance = RequestContext(request))
+        try:
+            profile = request.user.advisor_profile
+        except:
+            return HttpResponse(status=403)
+        
+        sid = profile.school.id
+        school = School.objects.get(id=sid)
+        countryprefs = school.countrypreferences.all().order_by("countrypreference__rank")
+        committeeprefs = school.committeepreferences.all()
+        countries = Country.objects.filter(special=False).order_by('name')
+        committees = Committee.objects.filter(special=True)
+
+        if page == "welcome":
+            return render_to_response('welcome.html', {'school': school}, context_instance = RequestContext(request))
+        elif page == "roster":
+            slots = DelegateSlot.objects.filter(assignment__school=school)
+            return render_to_response('roster_edit.html', {'slots': slots}, context_instance = RequestContext(request))
+        elif page == "help":
+            c = Context()
+            questions = {}
+            for cat in HelpCategory.objects.all():
+                    questions[cat.name] = HelpQuestion.objects.filter(category=cat)
+            c.update({"categories": questions})
+            return render_to_response('help.html', c, context_instance = RequestContext(request))
+        elif page == "bugs":
+            return render_to_response('bugs.html', context_instance = RequestContext(request))
+        elif page == "preferences":
+            committees = [committees[i:i+2] for i in range(0, len(committees), 2)]
+            return render_to_response('preferences.html', {'countryprefs': countryprefs, 'countries': countries, 'committees': committees, 'committeeprefs':committeeprefs}, context_instance = RequestContext(request))
+        elif page == "attendance":
+            return render_to_response('comingsoon.html')
+        else:
+            return HttpResponseNotFound()
+    except:
+        logout(request)
+        return render_to_response('auth.html', context_instance = RequestContext(request))
 
 
 def chair(request, page="grading"):
@@ -107,6 +105,11 @@ def chair(request, page="grading"):
         logout(request)
         return render_to_response('auth.html', context_instance = RequestContext(request))
 
+def _is_user_chair(user):
+  try:
+    return user.secretariat_profile is not None
+  except:
+    return False
 
 # TODO - fix the redirect to index when there is no error
 def login_user(request):
@@ -126,7 +129,13 @@ def login_user(request):
             login(request, user)
             
         if request.is_ajax():
-            return HttpResponse(error) if len(error) > 0 else HttpResponse("OK")
+          if len(error) > 0:
+            response = {"success": False, "error": error }
+          elif _is_user_chair(request.user):
+            response = {"success": True, "redirect": reverse('chair', args=['grading'])}
+          else:
+            response = {"success": True, "redirect": reverse('advisor', args=['welcome'])}
+          return HttpResponse(simplejson.dumps(response), mimetype='application/json')
         
     c = RequestContext(request, {'state':error})
     return render_to_response('auth.html', c) if len(error) > 0 else HttpResponseRedirect('/')
@@ -134,277 +143,88 @@ def login_user(request):
 
 def logout_user(request):
     logout(request)
-    return HttpResponse(status=200) if request.is_ajax() else HttpResponseRedirect('/')
+    return HttpResponse(reverse('login')) if request.is_ajax() else HttpResponseRedirect('/')
             
                 
 def register(request):
-        c = RequestContext(request, {})
-        state = ""
-        username = password = ''
-        c.update({'state':state})
-        c.update({'username':username})
-        c.update({'countries': Country.objects.filter(special=False).order_by('name')})
-        c.update({'committees': Committee.objects.filter(special=True)})
-        c.update({'selectionrange': range(1, 11)})
+    c = RequestContext(request, {})
+    state = ""
+    username = password = ''
+    c.update({'state':state})
+    c.update({'username':username})
+    c.update({'countries': Country.objects.filter(special=False).order_by('name')})
+    c.update({'committees': Committee.objects.filter(special=True)})
+    c.update({'selectionrange': range(1, 11)})
 
-        if request.POST:
-                # TODO: Need to fix names first before using the line below
-                # form = RegistrationForm(request.POST)
-                # if form.is_valid() {}
-                
-                # Grab registration field values
-                fname = request.POST.get('FirstName')           # Validated
-                lname = request.POST.get('LastName')            # Validated
-                username = request.POST.get('Username')         # Validated
-                password = request.POST.get('Password')         # Validated
-                pass2 = request.POST.get('Password2')           # Validated
-                international = request.POST.get('us_or_int')
-                sname = request.POST.get('SchoolName')          # Validated
-                sadd = request.POST.get('SchoolAddress')        # Validated
-                city = request.POST.get('SchoolCity')           # Validated
-                state = request.POST.get('SchoolState')         # Validated
-                zip = request.POST.get('SchoolZip')             # Validated
-                country = request.POST.get('SchoolCountry')
-                pname = request.POST.get('PrimaryName')         # Validated
-                pemail = request.POST.get('PrimaryEmail')       # Validated
-                pphone = request.POST.get('PrimaryPhone')       # Validated
-                secname = request.POST.get('SecondaryName')     # Validated
-                semail = request.POST.get('SecondaryEmail')     # Validated
-                sphone = request.POST.get('SecondaryPhone')     # Validated
-                
-                # Program Information
-                programtype = request.POST.get('programtype')   # Validated
-                howmany = request.POST.get('howmany')           # Validated
-                minDel = request.POST.get('MinDelegation')      # Validated
-                maxDel = request.POST.get('MaxDelegation')      # Validated
-                
-                # Country Preferences
-                countrypreferenceslist = []
-                for num in range(1, 11):
-                        prefid = request.POST.get('CountryPref' + str(num))
-                        if prefid != "NULL":
-                                print prefid
-                                print Country.objects.get(id=prefid)
+    if request.POST:
+        form = RegistrationForm(request.POST)
 
-                                countrypreferenceslist.append(Country.objects.get(id=prefid))       
+        if form.is_valid():
+            # Creating a new user object
+            newUser = User.objects.create_user(form.cleaned_data['Username'], \
+                                               form.cleaned_data['PrimaryEmail'], \
+                                               form.cleaned_data['Password'])
+            newUser.first_name = form.cleaned_data['FirstName']
+            newUser.last_name = form.cleaned_data['LastName']
+            newUser.save()
+                    
+            # Creating a new school object
+            newSchool = School.objects.create(name=form.cleaned_data['SchoolName'], \
+                                              address=form.cleaned_data['SchoolAddress'], \
+                                              city=form.cleaned_data['SchoolCity'], \
+                                              state=form.cleaned_data['SchoolState'], \
+                                              zip=form.cleaned_data['SchoolZip'], \
+                                              primaryname = form.cleaned_data['PrimaryName'], \
+                                              primaryemail = form.cleaned_data['PrimaryEmail'], \
+                                              primaryphone = form.cleaned_data['PrimaryPhone'], \
+                                              secondaryname = form.cleaned_data['SecondaryName'], \
+                                              secondaryemail = form.cleaned_data['SecondaryEmail'], \
+                                              secondaryphone = form.cleaned_data['SecondaryPhone'], \
+                                              programtype = form.cleaned_data['programtype'], \
+                                              timesattended = form.cleaned_data['howmany'], \
+                                              mindelegationsize = form.cleaned_data['MinDelegation'], \
+                                              maxdelegationsize = form.cleaned_data['MaxDelegation'], \
+                                              international = form.cleaned_data['us_or_int'])
+            newSchool.save()
 
-                # Begin Validation
-                valid = True
-                
-                # Validation Checks -----------------------------
-                        
-                if validate_name(fname):
-                        c.update({'fn_val': fname})
-                else:
-                        valid = False
-                        c.update({'fname': True})
-                        c.update({'fn_val': fname})
-                
-                if validate_name(lname):
-                        c.update({'ln_val': lname})
-                else:
-                        valid = False
-                        c.update({'lname': True})
-                        c.update({'fn_val': fname})
-                
-                if validate_username(username):
-                        c.update({'user_val': username})
-                else:
-                        valid = False
-                        c.update({'v_username': True})
-                        c.update({'user_val': username})
-                
-                if validate_pass(password):
-                        c.update({'pass_val': password})
-                else:
-                        valid = False
-                        c.update({'pass1': True})
-                        c.update({'pass_val': password})
-                
-                if validate_pass_again(password, pass2):
-                        c.update({'pass2_val': pass2})
-                else:
-                        valid = False
-                        c.update({'pass_again': True})
-                        c.update({'pass2_val': pass2})
-                
-                schoolint = False
-                if (international == "us"):
-                        c.update({'ctype_check': 'us'})
-                else:
-                        c.update({'ctype_check': 'international'})
-                        schoolint = True
-                
-                if validate_school_name(sname):
-                        c.update({'sname_val': sname})
-                else:
-                        valid = False
-                        c.update({'sname': True})
-                        c.update({'sname_val': sname})
-                
-                if validate_name(sadd):
-                        c.update({'sadd_val': sadd})
-                else:
-                        valid = False
-                        c.update({'sadd': True})
-                        c.update({'sadd_val': sadd})
-                
-                if validate_name(city):
-                        c.update({'city_val': city})
-                else:
-                        valid = False
-                        c.update({'city': True})
-                        c.update({'city_val': city})
-                
-                if validate_name(state):
-                        c.update({'state_val': state})
-                else:
-                        valid = False
-                        c.update({'s_state': True})
-                        c.update({'state_val': state})
-                
-                if validate_zip(zip):
-                        c.update({'zip_val': zip})
-                else:
-                        valid = False
-                        c.update({'s_zip': True})
-                        c.update({'zip_val': zip})
-                        
-                if schoolint:
-                        if validate_name(country):
-                                c.update({'country_val': country})
-                        else:
-                                valid = False
-                                c.update({'s_country': True})
-                                c.update({'country_val': country})
-                        
-                if validate_name(pname):
-                        c.update({'pname_val': pname})
-                else:
-                        valid = False
-                        c.update({'pname': True})
-                        c.update({'pname_val': pname})
-                
-                if validate_email(pemail):
-                        c.update({'pemail_val': pemail})
-                else:
-                        valid = False
-                        c.update({'v_pemail': True})
-                        c.update({'pemail_val': pemail})
-                
-                if schoolint:
-                        if validate_int_phone(pphone):
-                                c.update({'pphone': True})
-                        else:
-                                valid = False
-                                c.update({'pphone': True})
-                                c.update({'pphone_val': pphone})
-                else:
-                        if validate_phone(pphone):
-                                c.update({'pphone_val': pphone})
-                        else:
-                                valid = False
-                                c.update({'pphone': True})
-                                c.update({'pphone_val': pphone})
-                
-                if (secname != "") or (semail != "") or (sphone != ""):
-                        if validate_name(secname):
-                                c.update({'secname_val': secname})
-                        else:
-                                valid = False
-                                c.update({'secname': True})
-                                c.update({'secname_val': secname})
-                        
-                        if validate_email(semail):
-                                c.update({'semail_val': semail})
-                        else:
-                                valid = False
-                                c.update({'semail': True})
-                                c.update({'semail_val': semail})
-                        
-                        if validate_phone(sphone):
-                                c.update({'sphone_val': sphone})
-                        else:
-                                valid = False
-                                c.update({'sphone': True})
-                                c.update({'sphone_val': sphone})
-                
-                if validate_programtype(programtype):
-                        if (programtype == "club"):
-                                c.update({'ptype_check': 'club'})
-                        else:
-                                c.update({'ptype_check': 'class'})
-                else:
-                        c.update({'ptype_check': 'class'})
-                        valid = False
-                        c.update({'ptype': True})
-                
-                if validate_number(howmany):
-                        c.update({'howmany_val': howmany})
-                else:
-                        valid = False
-                        c.update({'howmany': True})
-                        c.update({'howmany_val': howmany})
-                
-                if validate_number(minDel):
-                        c.update({'minDel_val': minDel})
-                else:
-                        valid = False
-                        c.update({'minDel': True})
-                        c.update({'minDel_val': minDel})
-                
-                if validate_number(maxDel):
-                        c.update({'maxDel_val': maxDel})
-                else:
-                        valid = False
-                        c.update({'maxDel': True})
-                        c.update({'maxDel_val': maxDel})
+            # TODO: get rid of the chunks below in favor of form object processing
+            # Country Preferences
+            countrypreferenceslist = []
+            for num in range(1, 11):
+                prefid = request.POST.get('CountryPref' + str(num))
+                if prefid != "NULL":
+                    countrypreferenceslist.append(Country.objects.get(id=prefid)) 
 
-                
-                # Validation Check End ---------------------------
-                
-                #print valid
-                if valid: 
-                        # Assuming the user isn't a total dumbass
-                        newUser = User.objects.create_user(username, pemail, password)
-                        newUser.first_name = fname
-                        newUser.last_name = lname
-                        newUser.save()
+            # Add country preferences
+            print "Country Preferences List: " + str(countrypreferenceslist)
+            for country in countrypreferenceslist:
+                print "Country " + str(country) + " is at index " + str(countrypreferenceslist.index(country))
+                CountryPreference.objects.create(school=newSchool, country=country, rank=countrypreferenceslist.index(country) + 1).save()
+                print "Adding " + str(country) + " to the school's preferences. Current list is " + str(newSchool.countrypreferences.all())
                         
-                        newSchool = School.objects.create(name=sname, address=sadd, city=city, state=state, zip=zip, primaryname = pname, primaryemail = pemail, primaryphone = pphone, secondaryname = secname, secondaryemail = semail, secondaryphone = sphone, programtype = programtype, timesattended = howmany, mindelegationsize = minDel, maxdelegationsize = maxDel, international = schoolint)
-                        newSchool.save()
+            # Add committee preferences
+            for committee in Committee.objects.filter(special=True):
+                if committee.name in request.POST:
+                    print "Adding " + committee.name + " to Committee Preferences of school " + newSchool.name
+                    newSchool.committeepreferences.add(committee)
+            newSchool.save()
                         
-                        # Add country preferences
-                        print "Country Preferences List: " + str(countrypreferenceslist)
-                        for country in countrypreferenceslist:
-                                print "Country " + str(country) + " is at index " + str(countrypreferenceslist.index(country))
-                                CountryPreference.objects.create(school=newSchool, country=country, rank=countrypreferenceslist.index(country) + 1).save()
-                                print "Adding " + str(country) + " to the school's preferences. Current list is " + str(newSchool.countrypreferences.all())
+            newProfile = AdvisorProfile.objects.create(user=newUser, school=newSchool)
+            newProfile.save()
                         
-                        # Add committee preferences
-                        for committee in Committee.objects.filter(special=True):
-                                if committee.name in request.POST:
-                                        print "Adding " + committee.name + " to Committee Preferences of school " + newSchool.name
-                                        newSchool.committeepreferences.add(committee)
-                        newSchool.save()
-                        
-                        newProfile = AdvisorProfile.objects.create(user=newUser, school=newSchool)
-                        newProfile.save()
-                        
-                        return render_to_response('thanks.html', c)
-                else:
-                        c.update({'username':username})
-                        # Probably because the username field is blank.
-                        c.update({'state':"Invalid Fields. Please try again."})
-                        return render_to_response('registration.html', c)
-                
+            return render_to_response('thanks.html', c)    
         else:
-                # For GET requests and anything other than POST
-                return render_to_response('registration.html', c)
+            print "FORM IS NOT VALID"        
+                
+    else:
+        # Accessing for the first time
+        form = RegistrationForm()
+
+    return render_to_response('registration.html', {'form': form}, c)
 
 
 def about(request):
-        return render_to_response('about.html')
+    return render_to_response('about.html')
 
 # ---------------------
 # --- PAGE UPDATE VIEWS
@@ -428,86 +248,76 @@ def update_roster(request):
                                 pass
                 
         return HttpResponse('')
-                        
-                        
-
-def test_update_roster(request):
-        if request.method == 'POST':
-                json_data = simplejson.loads(request.POST.get('768'))
-                c = json_data['country']
-                return HttpResponse(c)
                 
 def update_welcome(request):
-        if request.method == 'POST':
-                profile = request.user.advisor_profile
-                school = profile.school
-                
-                # Actually modify database here:
-                # User (Model)
-                request.user.first_name = request.POST.get('firstname')
-                request.user.last_name = request.POST.get('lastname')
-                request.user.save();
-                
-                # School (Model)
-                school.name = request.POST.get('schoolname')
-                school.address = request.POST.get('address')
-                school.city = request.POST.get('city')
-                school.zip = request.POST.get('zip')
-                school.programtype = request.POST.get('programtype')
-                school.timesattended = request.POST.get('attendance')
-                school.primaryname = request.POST.get('primaryname')
-                school.primaryemail = request.POST.get('primaryemail')
-                school.primaryphone = request.POST.get('primaryphone')
-                school.secondaryname = request.POST.get('secname')
-                school.secondaryemail = request.POST.get('secemail')
-                school.secondaryphone = request.POST.get('secphone')
-                # delegationpaid?
-                school.mindelegationsize = request.POST.get('minDel')
-                school.maxdelegationsize = request.POST.get('maxDel')
-                school.save();
-                
-        return HttpResponse('')
+    if request.method == 'POST':
+        profile = request.user.advisor_profile
+        school = profile.school
+        
+        # Actually modify database here:
+        # User (Model)
+        request.user.first_name = request.POST.get('firstname')
+        request.user.last_name = request.POST.get('lastname')
+        request.user.save();
+        
+        # School (Model)
+        school.name = request.POST.get('schoolname')
+        school.address = request.POST.get('address')
+        school.city = request.POST.get('city')
+        school.zip = request.POST.get('zip')
+        school.programtype = request.POST.get('programtype')
+        school.timesattended = request.POST.get('attendance')
+        school.primaryname = request.POST.get('primaryname')
+        school.primaryemail = request.POST.get('primaryemail')
+        school.primaryphone = request.POST.get('primaryphone')
+        school.secondaryname = request.POST.get('secname')
+        school.secondaryemail = request.POST.get('secemail')
+        school.secondaryphone = request.POST.get('secphone')
+        # delegationpaid?
+        school.mindelegationsize = request.POST.get('minDel')
+        school.maxdelegationsize = request.POST.get('maxDel')
+        school.save();
+            
+    return HttpResponse('')
 
 def update_prefs(request):
-        print "Updating Preferences..."
-        if request.method == "POST":
-                profile = request.user.advisor_profile
-                school = profile.school
-                prefs = school.countrypreferences.all()
-                commprefs = school.committeepreferences.all() 
-                committees = Committee.objects.filter(special=True)
-                
-                cprefs = []
-                for index in range(0,10):
-                        #print "cprefs at index:", index
-                        cprefs.append(request.POST.get('CountryPref'+str(index+1)))
-                cprefs = filter((lambda p: p != "NULL"), cprefs)
+    if request.method == "POST":
+        profile = request.user.advisor_profile
+        school = profile.school
+        prefs = school.countrypreferences.all()
+        commprefs = school.committeepreferences.all() 
+        committees = Committee.objects.filter(special=True)
+        
+        cprefs = []
+        for index in range(0,10):
+            cprefs.append(request.POST.get('CountryPref'+str(index+1)))
+        cprefs = filter((lambda p: p != "NULL"), cprefs)
 
-                countrylist = []
-                alreadyDone = set();
-                for countryid in cprefs:
-                        if countryid not in alreadyDone:
-                                alreadyDone.add(countryid)
-                                countrylist.append(Country.objects.get(id=countryid))
-                
-                # Delete old prefs and create new ones
-                school.countrypreferences.clear()
-                print "school prefs:", school.countrypreferences.all()
-                for country in countrylist:
-                        CountryPreference.objects.create(school=school, country=country, rank=countrylist.index(country) + 1).save()
-                
-                # Deal with committee preferences now
-                school.committeepreferences.clear()
-                for comm in committees:
-                    if comm.name in request.POST:
-                        print "Adding committee:", comm
-                        school.committeepreferences.add(comm)
-                    
-                school.save()
-                print "school prefs:", school.countrypreferences.all()
-                print "comm prefs:", school.committeepreferences.all()
+        countrylist = []
+        alreadyDone = set();
+        for countryid in cprefs:
+            if countryid not in alreadyDone:
+                alreadyDone.add(countryid)
+                countrylist.append(Country.objects.get(id=countryid))
+        
+        # Delete old prefs and create new ones
+        school.countrypreferences.clear()
+        print "school prefs:", school.countrypreferences.all()
+        for country in countrylist:
+            CountryPreference.objects.create(school=school, country=country, rank=countrylist.index(country) + 1).save()
+        
+        # Deal with committee preferences now
+        school.committeepreferences.clear()
+        for comm in committees:
+            if comm.name in request.POST:
+                print "Adding committee:", comm
+                school.committeepreferences.add(comm)
+            
+        school.save()
+        print "school prefs:", school.countrypreferences.all()
+        print "comm prefs:", school.committeepreferences.all()
 
-        return HttpResponse('')
+    return HttpResponse('')
         
 
 def change_password(request):
@@ -520,7 +330,7 @@ def change_password(request):
     
     if not request.user.is_authenticated():
         return HttpResponse(status=401)
-    elif (len(oldpassword) == 0 or len(newpassword) == 0 or len(newpassword2) == 0):
+    elif not (oldpassword or newpassword or newpassword2):
         return HttpResponse("One or more fields is blank.")
     elif newpassword != newpassword2:
         return HttpResponse("New passwords must match.")
