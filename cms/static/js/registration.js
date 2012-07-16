@@ -40,11 +40,9 @@ $(function() {
 
     // International Phone Number
     $.validator.addMethod("intPhone", function(value, element) {
-        if (this.optional(element)) {
-            return /^$/i.test(value) || /^[0-9\-x\s\+\(\)]+$/i.test(value);
-        } else {
-            return /^[0-9\-x\s\+\(\)]+$/i.test(value);
-        }
+        return (this.optional(element))
+            ? (/^$/i.test(value) || /^[0-9\-x\s\+\(\)]+$/i.test(value))
+            : /^[0-9\-x\s\+\(\)]+$/i.test(value);
     }, "Please enter a valid phone number.");
 
     // Username Check
