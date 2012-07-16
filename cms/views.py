@@ -105,12 +105,6 @@ def chair(request, page="grading"):
         logout(request)
         return render_to_response('auth.html', context_instance = RequestContext(request))
 
-def _is_user_chair(user):
-  try:
-    return user.secretariat_profile is not None
-  except:
-    return False
-
 # TODO - fix the redirect to index when there is no error
 def login_user(request):
     error = ""
@@ -127,15 +121,17 @@ def login_user(request):
             error = "We're sorry, but your account is inactive."
         else:
             login(request, user)
-            
+        
+        huser = HuxleyUser()
+        huser.__dict__ = user.__dict__ # Prevents a second hit to the database.
         if request.is_ajax():
-          if len(error) > 0:
-            response = {"success": False, "error": error }
-          elif _is_user_chair(request.user):
-            response = {"success": True, "redirect": reverse('chair', args=['grading'])}
-          else:
-            response = {"success": True, "redirect": reverse('advisor', args=['welcome'])}
-          return HttpResponse(simplejson.dumps(response), mimetype='application/json')
+            if len(error) > 0:
+                response = {"success": False, "error": error}
+            elif huser.is_chair():
+                response = {"success": True, "redirect": reverse('chair', args=['grading'])}
+            else:
+                response = {"success": True, "redirect": reverse('advisor', args=['welcome'])}
+            return HttpResponse(simplejson.dumps(response), mimetype='application/json')
         
     c = RequestContext(request, {'state':error})
     return render_to_response('auth.html', c) if len(error) > 0 else HttpResponseRedirect('/')
