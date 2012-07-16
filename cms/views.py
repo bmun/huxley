@@ -21,17 +21,14 @@ import re
 
 def index(request):
     try:
-        if request.user.is_authenticated():
-            try:
-                if request.user.secretariat_profile is not None:
-                    return render_to_response('secretariat_index.html', context_instance = RequestContext(request))
-            except:
-                if request.user.advisor_profile is not None:
-                    sid = request.user.advisor_profile.school.id
-                    school = School.objects.get(id=sid)
-                    return render_to_response('advisor_index.html', {'school': school}, context_instance = RequestContext(request))
-        else:
+        user = HuxleyUser(request.user)
+        if not user.is_authenticated():
             return render_to_response('auth.html', context_instance = RequestContext(request))
+        elif user.is_chair():
+            return render_to_response('secretariat_index.html', context_instance = RequestContext(request))
+        else:
+            school = user.advisor_profile.school
+            return render_to_response('advisor_index.html', {'school': school}, context_instance = RequestContext(request))
     except:
         logout(request)
         return render_to_response('auth.html', context_instance = RequestContext(request))
