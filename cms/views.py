@@ -1,16 +1,14 @@
-from django.shortcuts import render_to_response
-from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotAllowed, HttpResponseNotFound
-from cms.models import *
-from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth import login, logout
 from django.contrib.auth.models import User
 from django.core.context_processors import csrf
-from django.views.decorators.csrf import csrf_protect
+from django.core.urlresolvers import reverse
+from django.core.validators import email_re
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotAllowed, HttpResponseNotFound
+from django.shortcuts import render_to_response
 from django.template import Context, RequestContext
 from django.utils import simplejson
-from django.core.validators import email_re
-from django.core.urlresolvers import reverse
 
+from cms.models import *
 #from cms.forms.registration import RegistrationForm
 
 import datetime
@@ -20,20 +18,16 @@ import re
 # --- PAGE DISPLAY VIEWS ---
 # --------------------------
 
-#@login_required
 def index(request):
     try:
-        if request.user.is_authenticated():
-            try:
-                if request.user.secretariat_profile is not None:
-                    return render_to_response('secretariat_index.html', context_instance = RequestContext(request))
-            except:
-                if request.user.advisor_profile is not None:
-                    sid = request.user.advisor_profile.school.id
-                    school = School.objects.get(id=sid)
-                    return render_to_response('advisor_index.html', {'school': school}, context_instance = RequestContext(request))
-        else:
+        user = HuxleyUser(request.user)
+        if not user.is_authenticated():
             return render_to_response('auth.html', context_instance = RequestContext(request))
+        elif user.is_chair():
+            return render_to_response('secretariat_index.html', context_instance = RequestContext(request))
+        else:
+            school = user.advisor_profile.school
+            return render_to_response('advisor_index.html', {'school': school}, context_instance = RequestContext(request))
     except:
         logout(request)
         return render_to_response('auth.html', context_instance = RequestContext(request))
@@ -111,7 +105,7 @@ def login_user(request):
     if request.method == "POST":    
         username = request.POST.get('username')
         password = request.POST.get('password')
-        user = authenticate(username=username, password=password)
+        user = HuxleyUser.authenticate(username=username, password=password)
         
         if len(username) == 0 or len(password) == 0:
             error = "Woops! One or more of the fields is blank."
@@ -122,12 +116,10 @@ def login_user(request):
         else:
             login(request, user)
         
-        huser = HuxleyUser()
-        huser.__dict__ = user.__dict__ # Prevents a second hit to the database.
         if request.is_ajax():
             if len(error) > 0:
                 response = {"success": False, "error": error}
-            elif huser.is_chair():
+            elif user.is_chair():
                 response = {"success": True, "redirect": reverse('chair', args=['grading'])}
             else:
                 response = {"success": True, "redirect": reverse('advisor', args=['welcome'])}
