@@ -155,6 +155,8 @@ class AdvisorProfile(models.Model):
     school = models.ForeignKey(School, related_name='advisor_profile')
     class Meta:
         db_table = u'AdvisorProfile'
+    def __unicode__(self):
+        return self.user.username
 
 class SecretariatProfile(models.Model):
     user = models.OneToOneField(User, blank=True, related_name='secretariat_profile')
