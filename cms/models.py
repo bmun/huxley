@@ -17,15 +17,15 @@ class Conference(models.Model):
     researchofficer = models.ForeignKey(User, db_column="researchofficer", related_name="unused4")
     publicationsofficer = models.ForeignKey(User, db_column="publicationsofficer", related_name="unused5")
     class Meta:
-	db_table = u'Conference'
+        db_table = u'Conference'
 
 class Country(models.Model):
     name = models.CharField(max_length=765, db_column='name', null=False, blank=True)
     special = models.BooleanField(null=False, blank=False, db_column="special", default=False)
     class Meta:
-	db_table = u'Country'
+        db_table = u'Country'
     def __unicode__(self):
-	return self.name
+        return self.name
 
 
 class Committee(models.Model):
@@ -35,9 +35,9 @@ class Committee(models.Model):
     delegatesperdelegation = models.IntegerField(db_column='delegatesperdelegation', default=2, blank=False, null=False)
     special = models.BooleanField(null=False, blank=False, db_column="special", default=False)
     class Meta:
-	db_table = u'Committee'
+        db_table = u'Committee'
     def __unicode__(self):
-	return self.name
+        return self.name
 
 
 class School(models.Model):
@@ -83,31 +83,31 @@ class Assignment(models.Model):
     country = models.ForeignKey(Country)
     school = models.ForeignKey(School, null=True, blank=True, default=None)
     class Meta:
-	db_table = u'Assignment'
+        db_table = u'Assignment'
     def __unicode__(self):
-	return self.committee.name + " : " + self.country.name
+        return self.committee.name + " : " + self.country.name
 
 class CountryPreference(models.Model):
     school = models.ForeignKey(School)
     country = models.ForeignKey(Country, limit_choices_to={'special':False})
     rank = models.IntegerField(db_column='rank', null=False, blank=False, default=1)
     class Meta:
-	db_table = u'CountryPreference'
+        db_table = u'CountryPreference'
     def __unicode__(self):
-	return self.school.name + " : " + self.country.name + " (" + str(self.rank) + ")"
+        return self.school.name + " : " + self.country.name + " (" + str(self.rank) + ")"
 
 class DelegateSlot(models.Model):
     assignment = models.ForeignKey(Assignment)
     class Meta:
-	db_table = u'DelegateSlot'
+        db_table = u'DelegateSlot'
     def __unicode__(self):
-	return self.assignment.__str__()
+        return self.assignment.__str__()
     def get_country(self):
-	return assignment.country
+        return assignment.country
     def get_committee(self):
-	return assignment.committee
+        return assignment.committee
     def get_school(self):
-	return assignment.school
+        return assignment.school
 
 
 class Delegate(models.Model):
@@ -117,30 +117,30 @@ class Delegate(models.Model):
     class Meta:
         db_table = u'Delegate'
     def __unicode__(self):
-	return self.name
+        return self.name
     def get_country(self):
-	return self.delegateslot.get_country()
+        return self.delegateslot.get_country()
     def get_committee(self):
-	return self.delegateslot.get_committee()
+        return self.delegateslot.get_committee()
     def get_school(self):
-	return self.delegateslot.get_school()
+        return self.delegateslot.get_school()
 
 
 class HelpCategory(models.Model):
     name = models.CharField(unique=True, max_length=255, db_column="Name")
     class Meta:
-	db_table = u'HelpCategory'
+        db_table = u'HelpCategory'
     def __unicode__(self):
-	return self.name
+        return self.name
 
 class HelpQuestion(models.Model):
     category = models.ForeignKey(HelpCategory)
     question = models.CharField(max_length=255, db_column='Question')
     answer = models.TextField(db_column='Answer')
     class Meta:
-	db_table = u'HelpQuestion'
+        db_table = u'HelpQuestion'
     def __unicode__(self):
-	return self.question
+        return self.question
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, blank=True)
