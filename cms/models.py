@@ -3,6 +3,15 @@ from django.db import models
 from django.db.models.signals import post_save, pre_delete
 from django.contrib.auth.models import User
 
+class HuxleyUser(User):
+    class Meta:
+        proxy = True
+    def is_chair(self):
+        try:
+            return self.secretariat_profile is not None
+        except:
+            return False
+
 class Conference(models.Model):
     session = models.IntegerField(null=False, blank=False, db_column="session", default=60)
     registrationstart = models.DateField(db_column="registrationstart")
@@ -141,21 +150,6 @@ class HelpQuestion(models.Model):
         db_table = u'HelpQuestion'
     def __unicode__(self):
         return self.question
-
-class UserProfile(models.Model):
-    user = models.OneToOneField(User, blank=True)
-    school = models.ForeignKey(School, related_name='advisor')
-    committee = models.CharField(max_length=765, db_column='ChairCommittee', blank=True)
-    class Meta:
-        permissions = (
-            ("can_edit_profile", "Can edit their personal profile."),
-            ("can_mod_roster", "Can modify their roster."),
-            ("can_check_attnd", "Can check the delegates' attendance."),
-            ("can_take_attnd", "Can take committee attendance."),
-            ("can_grade", "Can grade delegates in committee."),
-            ("can_req_documents", "Can issue missing document requests to OPI")
-        )
-        db_table = u'UserProfile'
 
 class AdvisorProfile(models.Model):
     user = models.OneToOneField(User, blank=True, related_name='advisor_profile')
