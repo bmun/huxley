@@ -1,13 +1,12 @@
-from django.shortcuts import render_to_response
-from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotAllowed, HttpResponseNotFound
 from django.contrib.auth import login, logout
 from django.contrib.auth.models import User
 from django.core.context_processors import csrf
-from django.views.decorators.csrf import csrf_protect
+from django.core.urlresolvers import reverse
+from django.core.validators import email_re
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotAllowed, HttpResponseNotFound
+from django.shortcuts import render_to_response
 from django.template import Context, RequestContext
 from django.utils import simplejson
-from django.core.validators import email_re
-from django.core.urlresolvers import reverse
 
 from cms.models import *
 #from cms.forms.registration import RegistrationForm
