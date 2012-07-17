@@ -5,9 +5,5 @@
 # Compiled Python Files
 *.pyc
 
-# Settings File
-settings.py
-
 # Local Database
-cmsdb
-huxdb
+huxley.db
