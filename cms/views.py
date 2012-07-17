@@ -617,13 +617,9 @@ def validate_username(new_user):
 def validate_unique_user(request):
     if request.method == 'POST':
         username = request.POST.get('Username')
-        #print "Username",username
-        unique = (len(User.objects.filter(username=username)) == 0)
-        if unique:
-            #print "I'M UNIQUE"
+        if User.objects.filter(username=username).exists():
             return HttpResponse(status=200)
         else:
-            #print "I'M ORDINARY D:"
             return HttpResponse(status=406)
 
 def validate_zip(zip):
