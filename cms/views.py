@@ -1,4 +1,4 @@
-from django.contrib.auth import login, logout
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.core.context_processors import csrf
 from django.core.urlresolvers import reverse
@@ -12,6 +12,8 @@ from cms.models import *
 #from cms.forms.registration import RegistrationForm
 
 import datetime
+import sys
+import traceback
 import re
 
 # --------------------------
@@ -20,18 +22,18 @@ import re
 
 def index(request):
     try:
-        user = HuxleyUser(request.user)
-        if not user.is_authenticated():
+        if not request.user.is_authenticated():
             return render_to_response('auth.html', context_instance = RequestContext(request))
-        elif user.is_chair():
+        elif SecretariatProfile.objects.filter(user=request.user).exists():
             return render_to_response('secretariat_index.html', context_instance = RequestContext(request))
         else:
-            school = user.advisor_profile.school
+            school = request.user.advisor_profile.school
             return render_to_response('advisor_index.html', {'school': school}, context_instance = RequestContext(request))
-    except:
+    except TypeError as e:
+        print e
+        traceback.print_tb(sys.exc_info()[2])
         logout(request)
         return render_to_response('auth.html', context_instance = RequestContext(request))
-
 
 def advisor(request, page="welcome"):
     try:
@@ -105,7 +107,7 @@ def login_user(request):
     if request.method == "POST":    
         username = request.POST.get('username')
         password = request.POST.get('password')
-        user = HuxleyUser.authenticate(username=username, password=password)
+        user = authenticate(username=username, password=password)
         
         if len(username) == 0 or len(password) == 0:
             error = "Woops! One or more of the fields is blank."
@@ -119,7 +121,7 @@ def login_user(request):
         if request.is_ajax():
             if len(error) > 0:
                 response = {"success": False, "error": error}
-            elif user.is_chair():
+            elif SecretariatProfile.objects.filter(user=user).exists():
                 response = {"success": True, "redirect": reverse('chair', args=['grading'])}
             else:
                 response = {"success": True, "redirect": reverse('advisor', args=['welcome'])}
