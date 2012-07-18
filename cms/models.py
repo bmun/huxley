@@ -1,22 +1,6 @@
-from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models.signals import post_save, pre_delete
-
-class HuxleyUser(User):
-    class Meta:
-        proxy = True
-    def __init__(self, user):
-        self.__dict__ = user.__dict__
-    def is_chair(self):
-        return SecretariatProfile.objects.filter(user=self).exists()
-    def is_advisor(self):
-        return AdvisorProfile.objects.filter(user=self).exists()
-    @classmethod
-    def authenticate(_class, username, password):
-        user = authenticate(username=username, password=password)
-        if user is not None:
-            return _class(user)
 
 class Conference(models.Model):
     session = models.IntegerField(null=False, blank=False, db_column="session", default=60)
@@ -162,6 +146,8 @@ class AdvisorProfile(models.Model):
     school = models.ForeignKey(School, related_name='advisor_profile')
     class Meta:
         db_table = u'AdvisorProfile'
+    def __unicode__(self):
+        return self.user.username
 
 class SecretariatProfile(models.Model):
     user = models.OneToOneField(User, blank=True, related_name='secretariat_profile')
