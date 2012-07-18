@@ -3,21 +3,6 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.db.models.signals import post_save, pre_delete
 
-class HuxleyUser(User):
-    class Meta:
-        proxy = True
-    def __init__(self, user):
-        self.__dict__ = user.__dict__
-    def is_chair(self):
-        return SecretariatProfile.objects.filter(user=self).exists()
-    def is_advisor(self):
-        return AdvisorProfile.objects.filter(user=self).exists()
-    @classmethod
-    def authenticate(_class, username, password):
-        user = authenticate(username=username, password=password)
-        if user is not None:
-            return _class(user)
-
 class Conference(models.Model):
     session = models.IntegerField(null=False, blank=False, db_column="session", default=60)
     registrationstart = models.DateField(db_column="registrationstart")
