@@ -48,7 +48,7 @@ var ContentManager = {
               // Replace the title and content.
               $("title").html(response.match(/<title>(.*?)<\/title>/)[1]);
               $("#capsule").replaceWith($("#capsule", $(response)));
-              $("#appnavbar a[href='" + window.location.hash.substring(1) + "']")
+              $("#appnavbar a[href='" + window.location.hash.slice(1) + "']")
                 .addClass('currentpage');
               // Fade in.
               $("#splash").delay(250).fadeOut(250, function() {
