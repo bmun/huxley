@@ -46,7 +46,8 @@ def advisor(request, page="welcome"):
         
         sid = profile.school.id
         school = School.objects.get(id=sid)
-        countryprefs = school.countrypreferences.all().order_by("countrypreference__rank")
+        countryprefs = school.countrypreferences.all() \
+                             .order_by("countrypreference__rank")
         committeeprefs = school.committeepreferences.all()
         countries = Country.objects.filter(special=False).order_by('name')
         committees = Committee.objects.filter(special=True)
