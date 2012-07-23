@@ -119,4 +119,5 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'cms',
     'core',
+    'advisors',
 )

@@ -35,48 +35,6 @@ def index(request):
         logout(request)
         return render_to_response('auth.html', context_instance = RequestContext(request))
 
-def advisor(request, page="welcome"):
-    try:
-        if not request.user.is_authenticated():
-            return render_to_response('auth.html', context_instance = RequestContext(request))
-        try:
-            profile = request.user.advisor_profile
-        except:
-            return HttpResponse(status=403)
-        
-        sid = profile.school.id
-        school = School.objects.get(id=sid)
-        countryprefs = school.countrypreferences.all() \
-                             .order_by("countrypreference__rank")
-        committeeprefs = school.committeepreferences.all()
-        countries = Country.objects.filter(special=False).order_by('name')
-        committees = Committee.objects.filter(special=True)
-
-        if page == "welcome":
-            return render_to_response('welcome.html', {'school': school}, context_instance = RequestContext(request))
-        elif page == "roster":
-            slots = DelegateSlot.objects.filter(assignment__school=school)
-            return render_to_response('roster_edit.html', {'slots': slots}, context_instance = RequestContext(request))
-        elif page == "help":
-            c = Context()
-            questions = {}
-            for cat in HelpCategory.objects.all():
-                    questions[cat.name] = HelpQuestion.objects.filter(category=cat)
-            c.update({"categories": questions})
-            return render_to_response('help.html', c, context_instance = RequestContext(request))
-        elif page == "bugs":
-            return render_to_response('bugs.html', context_instance = RequestContext(request))
-        elif page == "preferences":
-            committees = [committees[i:i+2] for i in range(0, len(committees), 2)]
-            return render_to_response('preferences.html', {'countryprefs': countryprefs, 'countries': countries, 'committees': committees, 'committeeprefs':committeeprefs}, context_instance = RequestContext(request))
-        elif page == "attendance":
-            return render_to_response('comingsoon.html')
-        else:
-            return HttpResponseNotFound()
-    except:
-        logout(request)
-        return render_to_response('auth.html', context_instance = RequestContext(request))
-
 
 def chair(request, page="grading"):
     try:
