@@ -101,14 +101,15 @@ def chair(request, page="grading"):
         logout(request)
         return render_to_response('auth.html', context_instance = RequestContext(request))
 
-# TODO - fix the redirect to index when there is no error
+
 def login_user(request):
-    error = ""
     if request.method == "POST":    
         username = request.POST.get('username')
         password = request.POST.get('password')
         user = authenticate(username=username, password=password)
+        error = ""
         
+        # Determine if the login is valid.
         if len(username) == 0 or len(password) == 0:
             error = "Woops! One or more of the fields is blank."
         elif user is None:
@@ -118,22 +119,34 @@ def login_user(request):
         else:
             login(request, user)
         
+        # Determine the appropriate response.
         if request.is_ajax():
-            if len(error) > 0:
+            if error:
                 response = {"success": False, "error": error}
             elif SecretariatProfile.objects.filter(user=user).exists():
-                response = {"success": True, "redirect": reverse('chair', args=['grading'])}
+                response = {"success": True,
+                            "redirect": reverse('chair', args=['grading'])}
             else:
-                response = {"success": True, "redirect": reverse('advisor', args=['welcome'])}
-            return HttpResponse(simplejson.dumps(response), mimetype='application/json')
+                response = {"success": True,
+                            "redirect": reverse('advisor', args=['welcome'])}
+            
+            return HttpResponse(simplejson.dumps(response),
+                                mimetype='application/json')
+        elif error:
+            c = RequestContext(request, {'state':error})
+            return render_to_response('auth.html', c)
+        else:
+            return HttpResponseRedirect(reverse('index'))
         
-    c = RequestContext(request, {'state':error})
-    return render_to_response('auth.html', c) if len(error) > 0 else HttpResponseRedirect('/')
+    return render_to_response('auth.html')
             
 
 def logout_user(request):
     logout(request)
-    return HttpResponse(reverse('login')) if request.is_ajax() else HttpResponseRedirect('/')
+    if request.is_ajax():
+        return HttpResponse(reverse('login'))
+    else:
+        return HttpResponseRedirect(reverse('index'))
             
                 
 def register(request):
