@@ -1,4 +1,5 @@
 from django import forms
+from cms.models import *
 
 class RegistrationForm(forms.Form):
     # TODO: don't know what to do about value
@@ -51,3 +52,27 @@ class RegistrationForm(forms.Form):
 
     # Committee Preferences
     # TODO: Maybe leave this to views.py
+
+    # Validation
+    # Format: clean_<field>
+    def clean_SchoolName(self):
+        # Check for uniqueness
+        school_name = self.cleaned_data['SchoolName']
+        unique = len(School.objects.filter(name = school_name)) == 0
+        if not unique:
+            raise forms.ValidationError("A school with this name has already been registered.")
+        # Return data, whether changed or not
+        return school_name
+
+    # General clean method
+    def clean(self):
+        cleaned_data = super(RegistrationForm, self).clean()
+        Password = cleaned_data.get('Password')
+        Password2 = cleaned_data.get('Password2')
+
+        if Password and Password2:
+            if Password != Password2:
+                raise forms.ValidationError("Passwords must match!")
+
+        # Always return cleaned_data
+        return cleaned_data

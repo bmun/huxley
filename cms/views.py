@@ -160,6 +160,7 @@ def register(request):
         form = RegistrationForm(request.POST)
 
         if form.is_valid():
+            # TODO: Move the object creation into the form object
             # Creating a new user object
             newUser = User.objects.create_user(form.cleaned_data['Username'], \
                                                form.cleaned_data['PrimaryEmail'], \
