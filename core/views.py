@@ -115,10 +115,9 @@ def forgot_password(request):
         new_pass = User.objects.make_random_password(length=8)
         user.set_password(new_pass)
         user.save()
-        saidUser.email_user("Huxley Password Reset",
-                            "Your password has been reset to %s." % new_pass,
-                            "password@cms.bmun.net")
-        
+        user.email_user("Huxley Password Reset",
+                        "Your password has been reset to %s." % new_pass,
+                        "password@cms.bmun.net")
         return HttpResponse()
     else:
         return render_to_response('forgot.html',
