@@ -410,15 +410,15 @@ def forgot_password(request):
 # --- HELPER FUNCTIONS ---
 # ------------------------
 
-def validate_pass_again(pass1, pass2):
+def validate_pass_again(pass1, pass2): # Done
         return pass1 == pass2
 
-def validate_name(name):
+def validate_name(name): # Skip
         # Not much to check really, right?
         #I don't think checking that they're all roman alphabet characters is a good idea.
         return len(name) >= 1
 
-def validate_pass(pass1):
+def validate_pass(pass1): # Done
         # How strong do you want their passwords to be?
         # Valid symbols: `~!@#$%^&*()-_+=?
         valid_pass = False
@@ -427,11 +427,11 @@ def validate_pass(pass1):
         
         return (valid_pass and len(pass1) >= 6)
 
-def validate_school_name(sname):
+def validate_school_name(sname): # Done
         unique = (len(School.objects.filter(name = sname)) == 0)        
         return (unique and validate_name(sname))
 
-def validate_username(new_user):
+def validate_username(new_user): # Done
     unique = (len(User.objects.filter(username=new_user)) == 0)
     # May only be alphanumeric characters, underscores
     valid_user = False
@@ -439,7 +439,7 @@ def validate_username(new_user):
         valid_user = True
     return (unique and valid_user and len(new_user) >= 4)
 
-def validate_unique_user(request):
+def validate_unique_user(request): # Keep here?
     if request.method == 'POST':
         username = request.POST.get('Username')
         #print "Username",username
@@ -451,12 +451,12 @@ def validate_unique_user(request):
             #print "I'M ORDINARY D:"
             return HttpResponse(status=406)
 
-def validate_zip(zip):
+def validate_zip(zip): # Done
         #properLen = (len(zip) == 5)
         #return (properLen and zip.isdigit())
         return zip.isdigit()
 
-def validate_email(email):
+def validate_email(email): # Done
         # Super LONG regex courtesy of http://www.ex-parrot.com/pdw/Mail-RFC822-Address.html
         # Figure out how to use super long regex later. Here's the naive version for now.
         #if re.match(".+@.+\..+", email):
@@ -468,21 +468,21 @@ def validate_email(email):
         else:
             return False
 
-def validate_phone(phoneNum):
+def validate_phone(phoneNum): # Done
         # Format: (123) 456-7890 || Note the space after the area code.
         if re.match("^\(?([0-9]{3})\)?\s([0-9]{3})-([0-9]{4})(\sx[0-9]{1,5})?$", phoneNum):
                 return True
         else:
                 return False
-def validate_int_phone(phoneNum):
+def validate_int_phone(phoneNum): # Done 
         if re.match("^[0-9\-x\s\+\(\)]+$", phoneNum):
                 return True
         else:
                 return False
 
-def validate_number(numString):
+def validate_number(numString): # Done, I think
         return numString.isdigit()
 
-def validate_programtype(ptype):
+def validate_programtype(ptype): # Unnecessary
         # Pretty simple
         return (ptype == "class" or ptype == "club")
