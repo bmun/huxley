@@ -8,35 +8,35 @@ class RegistrationForm(forms.Form):
     # By default, fields are required unless you specify required=False
 
     # User Information
-    FirstName = forms.CharField(widget=forms.TextInput(attrs={'class':'half required'}))
-    LastName = forms.CharField(widget=forms.TextInput(attrs={'class':'half required'}))
-    Username = forms.CharField(widget=forms.TextInput(attrs={'class':'half required uniqueUser username'}), min_length=4)
-    Password = forms.CharField(widget=forms.PasswordInput(attrs={'class':'half required pass1 validChars'}), min_length=6)
-    Password2 = forms.CharField(widget=forms.PasswordInput(attrs={'class':'half required pass1 validChars'}))
+    FirstName = forms.CharField(label="First Name", widget=forms.TextInput(attrs={'class':'half required'}))
+    LastName = forms.CharField(label="Last Name", widget=forms.TextInput(attrs={'class':'half required'}))
+    Username = forms.CharField(label="Username", widget=forms.TextInput(attrs={'class':'half required uniqueUser username'}), min_length=4)
+    Password = forms.CharField(label="Password", widget=forms.PasswordInput(attrs={'class':'half required pass1 validChars'}), min_length=6)
+    Password2 = forms.CharField(label="Password (again)", widget=forms.PasswordInput(attrs={'class':'half required pass1 validChars'}))
 
     # School Information
     # TODO: Pick a default for international
-    us_or_int = forms.ChoiceField(widget=forms.RadioSelect, choices=(('us', 'United States'), ('international', 'International')))
-    SchoolName = forms.CharField(widget=forms.TextInput(attrs={'class':'full required'}))
-    SchoolAddress = forms.CharField(widget=forms.TextInput(attrs={'class':'full required'}))
-    SchoolCity = forms.CharField(widget=forms.TextInput(attrs={'class':'required'}))
-    SchoolState = forms.CharField(widget=forms.TextInput(attrs={'class':'required'}))
-    SchoolZip = forms.CharField(widget=forms.TextInput(attrs={'class':'required zip'}), min_length=5)
-    SchoolCountry = forms.CharField(widget=forms.TextInput(attrs={'class':'showhide'}), required=False)
+    us_or_int = forms.ChoiceField(label="Where is your school?", widget=forms.RadioSelect(attrs={'class':'int_check', 'name':'us_or_int'}), choices=(('us', 'United States'), ('international', 'International')))
+    SchoolName = forms.CharField(label="Official School Name", widget=forms.TextInput(attrs={'class':'full required'}))
+    SchoolAddress = forms.CharField(label="Address", widget=forms.TextInput(attrs={'class':'full required'}))
+    SchoolCity = forms.CharField(label="City", widget=forms.TextInput(attrs={'class':'required'}))
+    SchoolState = forms.CharField(label="State", widget=forms.TextInput(attrs={'class':'required'}))
+    SchoolZip = forms.CharField(label="Zip", widget=forms.TextInput(attrs={'class':'required zip'}), min_length=5)
+    SchoolCountry = forms.CharField(label="Country", widget=forms.TextInput(attrs={'class':'showhide'}), required=False)
 
     # Program Information
-    programtype = forms.ChoiceField(widget=forms.RadioSelect, choices=(('club', 'Club'), ('class', 'Class')))
-    howmany = forms.IntegerField(widget=forms.TextInput(attrs={'class':'required IntegersOnly'}))
-    MinDelegation = forms.IntegerField(widget=forms.TextInput(attrs={'class':'required IntegersOnly'}))
-    MaxDelegation = forms.IntegerField(widget=forms.TextInput(attrs={'class':'required IntegersOnly'}))
+    programtype = forms.ChoiceField(label="What category best describes your program?", widget=forms.RadioSelect, choices=(('club', 'Club'), ('class', 'Class')))
+    howmany = forms.IntegerField(label="Approximately how many times has your program attended BMUN?", widget=forms.TextInput(attrs={'class':'required IntegersOnly'}))
+    MinDelegation = forms.IntegerField(label="Minimum", widget=forms.TextInput(attrs={'class':'required IntegersOnly'}))
+    MaxDelegation = forms.IntegerField(label="Maximum", widget=forms.TextInput(attrs={'class':'required IntegersOnly'}))
 
     # Contact Information
-    PrimaryName = forms.CharField(widget=forms.TextInput(attrs={'class':'required'}))
-    PrimaryEmail = forms.EmailField(widget=forms.TextInput(attrs={'class':'required email'}))
-    PrimaryPhone = forms.CharField(widget=forms.TextInput(attrs={'class':'required phoneNum phoneVal'}))
-    SecondaryName = forms.CharField(widget=forms.TextInput(), required=False)
-    SecondaryEmail = forms.EmailField(widget=forms.TextInput(attrs={'class':'email'}), required=False)
-    SecondaryPhone = forms.CharField(widget=forms.TextInput(attrs={'class':'phoneNum phoneVal'}), required=False)
+    PrimaryName = forms.CharField(label="Name", widget=forms.TextInput(attrs={'class':'required'}))
+    PrimaryEmail = forms.EmailField(label="Email", widget=forms.TextInput(attrs={'class':'required email'}))
+    PrimaryPhone = forms.CharField(label="Phone", widget=forms.TextInput(attrs={'class':'required phoneNum phoneVal'}))
+    SecondaryName = forms.CharField(label="Name", widget=forms.TextInput(), required=False)
+    SecondaryEmail = forms.EmailField(label="Email", widget=forms.TextInput(attrs={'class':'email'}), required=False)
+    SecondaryPhone = forms.CharField(label="Phone", widget=forms.TextInput(attrs={'class':'phoneNum phoneVal'}), required=False)
 
     # Country Preferences (the ids)
     # TODO: Make sure this will work

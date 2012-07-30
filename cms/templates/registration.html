@@ -13,54 +13,51 @@
 {% csrf_token %}
 
 <fieldset>
-	<legend>Account Information</legend>
+	<legend> Account Information </legend>
 	<div class="sub left">
-		<span>First Name:</span><input type="text" name="FirstName" value="{{ fn_val }}" class="half required">
-		{% if fname %}
-		<label class="error">> Please enter your first name. </label>
-		{% endif %}
-		<span>Last Name:</span><input type="text" name="LastName"  value="{{ ln_val }}" class="half required"> 
-		{% if lname %}
-		<label class="error">> Please enter your last name. </label>
-		{% endif %}
+		<span> {{ form.FirstName.label }}: </span> {{ form.FirstName }}
+		{% for error in form.FirstName.errors %}
+			<label class="error"> {{ error|escape }} </label>
+		{% endfor %}
+
+		<span> {{ form.LastName.label }}: </span> {{ form.LastName }}
+		{% for error in form.LastName.errors %}
+			<label class="error"> {{ error|escape }} </label>
+		{% endfor %}	
 		</div>
 	<div class="sub right">
-		<span>Username:</span><input type="text" name="Username"  value="{{ user_val }}" class="half required uniqueUser username" minlength="4">
-		{% if v_username %}
-		<label class="error"> Username must be unique and be at least 4 characters (letters, numbers, and underscores only) long. </label>
-		{% endif %}
-		<span>Password:</span><input id="pass1" type="password" name="Password"  value="{{ pass_val }}" class="half required pass1 validChars" minlength="6">
-		{% if pass1 %}
-		<label class="error"> Password must be at least 6 characters long. </label>
-		{% endif %}
-		{% if pass_again %}
-		<label class="error"> Passwords do not match! </label>
-		{% endif %}
-		<span>Password (again):</span><input id="pass2" type="password" name="Password2"  value="{{ pass2_val }}" class="half required pass2" equalTo="#pass1">
-		{% if pass1 %}
-		<label class="error"> Password must be at least 6 characters long. </label>
-		{% endif %}
-		{% if pass_again %}
-		<label class="error"> Passwords do not match! </label>
-		{% endif %}
+		<span> {{ form.Username.label }}: </span> {{ form.Username }}
+		{% for error in form.Username.errors %}
+			<label class="error"> {{ error|escape }} </label>
+		{% endfor %}
+
+		<span> {{ form.Password.label }}: </span> {{ form.Password }}
+		{% for error in form.Password.errors %}
+			<label class="error"> {{ error|escape }} </label>
+		{% endfor %}
+
+		<span> {{ form.Password2.label }}: </span> {{ form.Password2 }}
+		{% for error in form.Password2.errors %}
+			<label class="error"> {{ error|escape }} </label>
+		{% endfor %}
 	</div>
 </fieldset>
 
 <fieldset>
-	<legend>School Information</legend>
-	<p>Is your school an international school?</p>
-	<label><input type="radio" class="int_check" name="us_or_int" value="us" {% ifequal ctype_check 'us' %} checked="checked" {% endifequal %} {% if not ctype_check %} checked="checked" {% endif %} </input><label> American School </label></label>
-	&nbsp;&nbsp;
-	<label><input type="radio" class="int_check" name="us_or_int" value="international" {% ifequal ctype_check 'international' %} checked="checked" {% endifequal %}> </input><label> International School </label></label>
-	<br></br>
-	<span>Official School Name:</span><input type="text" name="SchoolName"  value="{{ sname_val }}" class="full required">
-	{% if sname %}
-		<label class="error"> School name must be unique. </label>
-	{% endif %}
-	<span>Address:</span><input type="text" name="SchoolAddress"  value="{{ sadd_val }}" class="full required">
-	{% if sadd %}
-		<label class="error"> Please enter the school address. </label>
-	{% endif %}
+	<legend> School Information </legend>
+	<p> {{ form.us_or_int.label }} </p>
+	{{ form.us_or_int }}
+	
+	<span> {{ form.SchoolName.label }}: </span> {{ form.SchoolName }}
+	{% for error in form.SchoolName.errors %}
+		<label class="error"> {{ error|escape }} </label>
+	{% endfor %}
+
+	<span> {{ form.SchoolAddress.label }} </span> {{ form.SchoolAddress }}
+	{% for error in form.SchoolAddress.errors %}
+		<label class="error"> {{ error|escape }} </label>
+	{% endfor %}
+	
 	<span>City:</span><input type="text" name="SchoolCity"  value="{{ city_val }}" class="required">
 	{% if city %}
 		<label class="error"> Please enter the school city. </label>
