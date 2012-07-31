@@ -36,31 +36,6 @@ def index(request):
         return render_to_response('auth.html', context_instance = RequestContext(request))
 
 
-def chair(request, page="grading"):
-    try:
-        if request.user.is_authenticated():
-            try:
-                profile = request.user.secretariat_profile
-                committee = profile.committee
-            except:
-                return HttpResponse(status=403)
-            
-            if page == "attendance":
-                return render_to_response('take_attendance.html')
-            elif page == "help":
-                c = Context()
-                questions = {}
-                for cat in HelpCategory.objects.all():
-                    questions[cat.name] = HelpQuestion.objects.filter(category=cat)
-                    c.update({"categories": questions})
-                return render_to_response('help.html', c, context_instance = RequestContext(request))
-            else:
-                return render_to_response('comingsoon.html')
-    except:
-        logout(request)
-        return render_to_response('auth.html', context_instance = RequestContext(request))
-
-
 def register(request):
         c = RequestContext(request, {})
         state = ""
