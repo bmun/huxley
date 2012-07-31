@@ -22,8 +22,10 @@ def dispatch(request, page='welcome'):
         
         # Call the appropriate view function from the dictionary.
         return views[page](request.user.advisor_profile, context)
+    # No such view exists.
     except KeyError:
         return HttpResponseNotFound()
+    # The profile doesn't exist, meaning user isn't an advisor.
     except ObjectDoesNotExist:
         return HttpResponse(status=403)
 
