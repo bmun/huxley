@@ -8,9 +8,20 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.utils import simplejson
 
-from cms.models import *
+from core.models import *
 
 import re
+
+# Renders the appropriate base index template.
+def index(request):
+    context = RequestContext(request)
+    if not request.user.is_authenticated():
+        return render_to_response('auth.html', context)
+    elif SecretariatProfile.objects.filter(user=request.user).exists():
+        return render_to_response('secretariat_index.html', context)
+    else:
+        return render_to_response('advisor_index.html', context)
+
 
 # Logs in a user or renders the login template.
 def login_user(request):
@@ -122,6 +133,16 @@ def forgot_password(request):
     else:
         return render_to_response('forgot.html',
                                   context_instance=RequestContext(request))
+
+
+# Checks that a username is unique.
+def validate_unique_user(request):
+    if request.method == 'POST':
+        username = request.POST.get('Username')
+        if User.objects.filter(username=username).exists():
+            return HttpResponse(status=200)
+        else:
+            return HttpResponse(status=406)
 
 
 # Renders the "About" page.
