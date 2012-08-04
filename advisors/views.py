@@ -4,7 +4,7 @@ from django.http import HttpResponse, HttpResponseNotFound
 from django.shortcuts import render_to_response
 from django.template import Context, RequestContext
 
-from cms.models import *
+from core.models import *
 
 # Dispatch to the appropriate view per the request.
 def dispatch(request, page='welcome'):

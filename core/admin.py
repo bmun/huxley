@@ -1,9 +1,8 @@
 #!/usr/bin/env python
 
-from cms.models import *
+from core.models import *
 from django.contrib import admin
 
-admin.site.register(Conference)
 admin.site.register(Country)
 admin.site.register(School)
 admin.site.register(Committee)

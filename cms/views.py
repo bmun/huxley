@@ -8,8 +8,7 @@ from django.shortcuts import render_to_response
 from django.template import Context, RequestContext
 from django.utils import simplejson
 
-from cms.models import *
-#from cms.forms.registration import RegistrationForm
+from core.models import *
 
 import datetime
 import sys
@@ -19,22 +18,6 @@ import re
 # --------------------------
 # --- PAGE DISPLAY VIEWS ---
 # --------------------------
-
-def index(request):
-    try:
-        if not request.user.is_authenticated():
-            return render_to_response('auth.html', context_instance = RequestContext(request))
-        elif SecretariatProfile.objects.filter(user=request.user).exists():
-            return render_to_response('secretariat_index.html', context_instance = RequestContext(request))
-        else:
-            school = request.user.advisor_profile.school
-            return render_to_response('advisor_index.html', {'school': school}, context_instance = RequestContext(request))
-    except TypeError as e:
-        print e
-        traceback.print_tb(sys.exc_info()[2])
-        logout(request)
-        return render_to_response('auth.html', context_instance = RequestContext(request))
-
 
 def register(request):
         c = RequestContext(request, {})
