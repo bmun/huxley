@@ -1,10 +1,15 @@
 from django import forms
+
 from cms.models import *
 import re
 
+countries = Country.objects.filter(special=False).order_by('name')
+country_choices = [(country.id, country.name) for country in countries]
+
+special_committees = Committee.objects.filter(special=True)
+special_committees_choices = [(committee.id, committee.name) for committee in special_committees]
+
 class RegistrationForm(forms.Form):
-    # TODO: don't know what to do about value
-    # TODO: add other tags
     # By default, fields are required unless you specify required=False
 
     # User Information
@@ -39,22 +44,99 @@ class RegistrationForm(forms.Form):
     SecondaryPhone = forms.CharField(label="Phone", widget=forms.TextInput(attrs={'class':'phoneNum phoneVal'}), required=False)
 
     # Country Preferences (the ids)
-    # TODO: Make sure this will work
-    CountryPref1 = forms.CharField(widget=forms.TextInput)
-    CountryPref2 = forms.CharField(widget=forms.TextInput)
-    CountryPref3 = forms.CharField(widget=forms.TextInput)
-    CountryPref4 = forms.CharField(widget=forms.TextInput)
-    CountryPref5 = forms.CharField(widget=forms.TextInput)
-    CountryPref6 = forms.CharField(widget=forms.TextInput)
-    CountryPref7 = forms.CharField(widget=forms.TextInput)
-    CountryPref8 = forms.CharField(widget=forms.TextInput)
-    CountryPref9 = forms.CharField(widget=forms.TextInput)
-    CountryPref10 = forms.CharField(widget=forms.TextInput)
+    CountryPref1 = forms.ChoiceField(label="01", widget=forms.Select(), choices=country_choices)
+    CountryPref2 = forms.ChoiceField(label="02", widget=forms.Select(), choices=country_choices)
+    CountryPref3 = forms.ChoiceField(label="03", widget=forms.Select(), choices=country_choices)
+    CountryPref4 = forms.ChoiceField(label="04", widget=forms.Select(), choices=country_choices)
+    CountryPref5 = forms.ChoiceField(label="05", widget=forms.Select(), choices=country_choices)
+    CountryPref6 = forms.ChoiceField(label="06", widget=forms.Select(), choices=country_choices)
+    CountryPref7 = forms.ChoiceField(label="07", widget=forms.Select(), choices=country_choices)
+    CountryPref8 = forms.ChoiceField(label="08", widget=forms.Select(), choices=country_choices)
+    CountryPref9 = forms.ChoiceField(label="09", widget=forms.Select(), choices=country_choices)
+    CountryPref10 = forms.ChoiceField(label="10", widget=forms.Select(), choices=country_choices)
 
     # Committee Preferences
-    # TODO: Maybe leave this to views.py
+    CommitteePrefs = forms.MultipleChoiceField(label="Special Committee Preferences", 
+                                               widget=forms.CheckboxSelectMultiple(),
+                                               choices=special_committees_choices,
+                                               required=False)
 
-    # Validation
+    # ===== DB Functions ====================================================================
+    def create_user(self):
+        try:
+            new_user = User.objects.create_user(self.cleaned_data['Username'], self.cleaned_data['PrimaryEmail'], self.cleaned_data['Password'])
+            new_user.first_name = self.cleaned_data['FirstName']
+            new_user.last_name = self.cleaned_data['LastName']
+            new_user.save()
+            return new_user
+        except:
+            print "> ERROR WHILE CREATING USER. REMEMBER TO VALIDATE FIRST."
+            return None
+
+
+    def create_school(self):
+        try:
+            new_school = School.objects.create(name=self.cleaned_data['SchoolName'],
+                                               address=self.cleaned_data['SchoolAddress'],
+                                               city=self.cleaned_data['SchoolCity'],
+                                               state=self.cleaned_data['SchoolState'],
+                                               zip=self.cleaned_data['SchoolZip'],
+                                               primaryname = self.cleaned_data['PrimaryName'],
+                                               primaryemail = self.cleaned_data['PrimaryEmail'],
+                                               primaryphone = self.cleaned_data['PrimaryPhone'],
+                                               secondaryname = self.cleaned_data['SecondaryName'],
+                                               secondaryemail = self.cleaned_data['SecondaryEmail'],
+                                               secondaryphone = self.cleaned_data['SecondaryPhone'],
+                                               programtype = self.cleaned_data['programtype'],
+                                               timesattended = self.cleaned_data['howmany'],
+                                               mindelegationsize = self.cleaned_data['MinDelegation'],
+                                               maxdelegationsize = self.cleaned_data['MaxDelegation'],
+                                               international = self.cleaned_data['us_or_int'])
+            new_school.save()
+            return new_school
+        except:
+            print "> ERROR WHILE CREATING SCHOOL. REMEMBER TO VALIDATE FIRST."
+            return None
+
+
+    def add_country_preferences(self, school):
+        try:
+            for i in range(1,11):
+                # TODO: try using country instead of id for value
+                country_id = self.cleaned_data['CountryPref'+str(i)]
+                country = Country.objects.get(id=int(country_id))
+                country_pref = CountryPreference.objects.create(school=school, country=country, rank=i)
+                country_pref.save()
+            return True
+        except:
+            print "> ERROR WHILE ADDING COUNTRY PREFERENCES. REMEMBER TO VALIDATE FIRST."
+            return False
+
+
+    def add_committee_preferences(self, school):
+        try:
+            committees = self.cleaned_data["CommitteePrefs"]
+            for committee_id in committees:
+                committee = Committee.objects.get(id=int(committee_id))
+                school.committeepreferences.add(committee)
+            school.save()
+            return True
+        except:
+            print "> ERROR WHILE ADDING COMMITTEE PREFERENCES. REMEMBER TO VALIDATE FIRST."
+            return False
+
+
+    def create_advisor_profile(self, user, school):
+        try:
+            new_profile = AdvisorProfile.objects.create(user=user, school=school)
+            new_profile.save()
+            return new_profile
+        except:
+            print "> ERROR WHILE MAKING ADVISOR PROFILE."
+            return None
+
+
+    # ===== Validation ===============================================================================
     # Format: clean_<field>
     def clean_SchoolName(self):
         # Check for uniqueness
