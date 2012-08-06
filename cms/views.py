@@ -147,81 +147,30 @@ def logout_user(request):
             
                 
 def register(request):
-    c = RequestContext(request, {})
-    state = ""
-    username = password = ''
-    c.update({'state':state})
-    c.update({'username':username})
-    c.update({'countries': Country.objects.filter(special=False).order_by('name')})
-    c.update({'committees': Committee.objects.filter(special=True)})
-    c.update({'selectionrange': range(1, 11)})
-
     if request.POST:
         form = RegistrationForm(request.POST)
-
         if form.is_valid():
-            # TODO: Move the object creation into the form object
-            # Creating a new user object
-            newUser = User.objects.create_user(form.cleaned_data['Username'], \
-                                               form.cleaned_data['PrimaryEmail'], \
-                                               form.cleaned_data['Password'])
-            newUser.first_name = form.cleaned_data['FirstName']
-            newUser.last_name = form.cleaned_data['LastName']
-            newUser.save()
-                    
-            # Creating a new school object
-            newSchool = School.objects.create(name=form.cleaned_data['SchoolName'], \
-                                              address=form.cleaned_data['SchoolAddress'], \
-                                              city=form.cleaned_data['SchoolCity'], \
-                                              state=form.cleaned_data['SchoolState'], \
-                                              zip=form.cleaned_data['SchoolZip'], \
-                                              primaryname = form.cleaned_data['PrimaryName'], \
-                                              primaryemail = form.cleaned_data['PrimaryEmail'], \
-                                              primaryphone = form.cleaned_data['PrimaryPhone'], \
-                                              secondaryname = form.cleaned_data['SecondaryName'], \
-                                              secondaryemail = form.cleaned_data['SecondaryEmail'], \
-                                              secondaryphone = form.cleaned_data['SecondaryPhone'], \
-                                              programtype = form.cleaned_data['programtype'], \
-                                              timesattended = form.cleaned_data['howmany'], \
-                                              mindelegationsize = form.cleaned_data['MinDelegation'], \
-                                              maxdelegationsize = form.cleaned_data['MaxDelegation'], \
-                                              international = form.cleaned_data['us_or_int'])
-            newSchool.save()
-
-            # TODO: get rid of the chunks below in favor of form object processing
-            # Country Preferences
-            countrypreferenceslist = []
-            for num in range(1, 11):
-                prefid = request.POST.get('CountryPref' + str(num))
-                if prefid != "NULL":
-                    countrypreferenceslist.append(Country.objects.get(id=prefid)) 
-
-            # Add country preferences
-            print "Country Preferences List: " + str(countrypreferenceslist)
-            for country in countrypreferenceslist:
-                print "Country " + str(country) + " is at index " + str(countrypreferenceslist.index(country))
-                CountryPreference.objects.create(school=newSchool, country=country, rank=countrypreferenceslist.index(country) + 1).save()
-                print "Adding " + str(country) + " to the school's preferences. Current list is " + str(newSchool.countrypreferences.all())
+            new_user = form.create_user()                    
+            new_school = form.create_school()
+            form.add_country_preferences(new_school)
+            form.add_committee_preferences(new_school)
+            form.create_advisor_profile(new_user, new_school)
                         
-            # Add committee preferences
-            for committee in Committee.objects.filter(special=True):
-                if committee.name in request.POST:
-                    print "Adding " + committee.name + " to Committee Preferences of school " + newSchool.name
-                    newSchool.committeepreferences.add(committee)
-            newSchool.save()
-                        
-            newProfile = AdvisorProfile.objects.create(user=newUser, school=newSchool)
-            newProfile.save()
-                        
-            return render_to_response('thanks.html', c)    
+            return render_to_response('thanks.html', context_instance=RequestContext(request))    
         else:
-            print "FORM IS NOT VALID"        
-                
+            print "> ERROR: FORM IS NOT VALID"        
     else:
         # Accessing for the first time
         form = RegistrationForm()
 
-    return render_to_response('registration.html', {'form': form}, c)
+    countries = Country.objects.filter(special=False).order_by('name')
+    committees = Committee.objects.filter(special=True)
+
+    return render_to_response('registration.html', 
+                                {'form': form, 'state':'', 
+                                 'countries': countries,
+                                 'committees': committees},
+                                context_instance=RequestContext(request))
 
 
 def about(request):
