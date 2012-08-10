@@ -10,3 +10,6 @@ huxley.db
 
 # WSGI file
 wsgi.py
+
+# Local Settings File
+local_settings.py
