@@ -7,3 +7,6 @@
 
 # Local Database
 huxley.db
+
+# WSGI file
+wsgi.py
