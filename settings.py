@@ -123,4 +123,5 @@ INSTALLED_APPS = (
     'cms',
     'core',
     'advisors',
+    'chairs',
 )
