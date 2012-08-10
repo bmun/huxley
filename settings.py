@@ -125,3 +125,9 @@ INSTALLED_APPS = (
     'advisors',
     'chairs',
 )
+
+# Local settings hack. Used for overriding variables in stage/prod.
+try:
+    from local_settings import *
+except:
+    pass
