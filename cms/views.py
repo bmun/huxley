@@ -288,25 +288,6 @@ def register(request):
 # --- PAGE UPDATE VIEWS
 # ---------------------
 
-def update_roster(request):
-        if(request.method == "POST"):
-                operations = simplejson.loads(request.POST.get('ops'))
-                for operation in operations:
-                        try:
-                                if operation['op'] == 'new':
-                                        sid = operation['sid']
-                                        slot = DelegateSlot.objects.get(id=sid)
-                                        Delegate(name="Delegate Name", email="delegate@site.com", delegateslot=slot).save()
-                                        print "Created a new delegate!"
-                                elif operation['op'] == 'delete':
-                                        sid = operation['sid']
-                                        DelegateSlot.objects.get(id=sid).delegate.delete()
-                                        print "Deleted a delegate!"
-                        except:
-                                pass
-                
-        return HttpResponse('')
-
 def update_prefs(request):
     if request.method == "POST":
         profile = request.user.advisor_profile

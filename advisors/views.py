@@ -83,11 +83,15 @@ def preferences(request, profile, context):
 
 # Display the advisor's editable roster.
 def roster(request, profile, context):
-    school = profile.school
-    slots = DelegateSlot.objects.filter(assignment__school=school)
-    return render_to_response('roster_edit.html',
-                              {'slots': slots},
-                              context_instance=context)
+    if request.method == 'GET':
+        school = profile.school
+        slots = DelegateSlot.objects.filter(assignment__school=school)
+        return render_to_response('roster_edit.html',
+                                  {'slots': slots},
+                                  context_instance=context)
+    elif request.method == 'POST':
+        # TODO (kmeht): Create the roster update view.
+        return HttpResponse(status=200)
 
 
 # Display the advisor's attendance list.
