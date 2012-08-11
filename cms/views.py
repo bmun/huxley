@@ -306,37 +306,6 @@ def update_roster(request):
                                 pass
                 
         return HttpResponse('')
-                
-def update_welcome(request):
-    if request.method == 'POST':
-        profile = request.user.advisor_profile
-        school = profile.school
-        
-        # Actually modify database here:
-        # User (Model)
-        request.user.first_name = request.POST.get('firstname')
-        request.user.last_name = request.POST.get('lastname')
-        request.user.save();
-        
-        # School (Model)
-        school.name = request.POST.get('schoolname')
-        school.address = request.POST.get('address')
-        school.city = request.POST.get('city')
-        school.zip = request.POST.get('zip')
-        school.programtype = request.POST.get('programtype')
-        school.timesattended = request.POST.get('attendance')
-        school.primaryname = request.POST.get('primaryname')
-        school.primaryemail = request.POST.get('primaryemail')
-        school.primaryphone = request.POST.get('primaryphone')
-        school.secondaryname = request.POST.get('secname')
-        school.secondaryemail = request.POST.get('secemail')
-        school.secondaryphone = request.POST.get('secphone')
-        # delegationpaid?
-        school.mindelegationsize = request.POST.get('minDel')
-        school.maxdelegationsize = request.POST.get('maxDel')
-        school.save();
-            
-    return HttpResponse('')
 
 def update_prefs(request):
     if request.method == "POST":

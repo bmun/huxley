@@ -21,7 +21,7 @@ def dispatch(request, page='welcome'):
                  'bugs': bugs}
         
         # Call the appropriate view function from the dictionary.
-        return views[page](request.user.advisor_profile, context)
+        return views[page](request, request.user.advisor_profile, context)
     # No such view exists.
     except KeyError:
         return HttpResponseNotFound()
@@ -31,15 +31,39 @@ def dispatch(request, page='welcome'):
 
 
 # Display and/or edit the advisor's profile information.
-def welcome(profile, context):
+def welcome(request, profile, context):
     school = profile.school
-    return render_to_response('welcome.html',
-                              {'school': school},
-                              context_instance=context)
+    if request.method == 'GET':
+        return render_to_response('welcome.html',
+                                  {'school': school},
+                                  context_instance=context)
+    elif request.method == 'POST':
+        # TODO (wchieng): refactor this into a Django form.
+        request.user.first_name = request.POST.get('firstname')
+        request.user.last_name = request.POST.get('lastname')
+        request.user.save();
+        school.name = request.POST.get('schoolname')
+        school.address = request.POST.get('address')
+        school.city = request.POST.get('city')
+        school.zip = request.POST.get('zip')
+        school.programtype = request.POST.get('programtype')
+        school.timesattended = request.POST.get('attendance')
+        school.primaryname = request.POST.get('primaryname')
+        school.primaryemail = request.POST.get('primaryemail')
+        school.primaryphone = request.POST.get('primaryphone')
+        school.secondaryname = request.POST.get('secname')
+        school.secondaryemail = request.POST.get('secemail')
+        school.secondaryphone = request.POST.get('secphone')
+        school.mindelegationsize = request.POST.get('minDel')
+        school.maxdelegationsize = request.POST.get('maxDel')
+        school.save();
+        
+        return HttpResponse(status=200)
+        
 
 
 # Display and/or update the advisor's country/committee preferences.
-def preferences(profile, context):
+def preferences(request, profile, context):
     school = profile.school
     countries = Country.objects.filter(special=False).order_by('name')
     countryprefs = school.countrypreferences.all() \
@@ -58,7 +82,7 @@ def preferences(profile, context):
 
 
 # Display the advisor's editable roster.
-def roster(profile, context):
+def roster(request, profile, context):
     school = profile.school
     slots = DelegateSlot.objects.filter(assignment__school=school)
     return render_to_response('roster_edit.html',
@@ -67,12 +91,12 @@ def roster(profile, context):
 
 
 # Display the advisor's attendance list.
-def attendance(profile, context):
+def attendance(request, profile, context):
     return render_to_response('comingsoon.html')
 
 
 # Display a FAQ view.
-def help(profile, context):
+def help(request, profile, context):
     c = Context()
     questions = {}
     for cat in HelpCategory.objects.all():
@@ -82,5 +106,5 @@ def help(profile, context):
 
 
 # Display a bug-reporting view.
-def bugs(profile, context):
+def bugs(request, profile, context):
     return render_to_response('bugs.html', context_instance=context)
