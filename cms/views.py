@@ -284,50 +284,6 @@ def register(request):
                 return render_to_response('registration.html', c)
 
 
-# ---------------------
-# --- PAGE UPDATE VIEWS
-# ---------------------
-
-def update_prefs(request):
-    if request.method == "POST":
-        profile = request.user.advisor_profile
-        school = profile.school
-        prefs = school.countrypreferences.all()
-        commprefs = school.committeepreferences.all() 
-        committees = Committee.objects.filter(special=True)
-        
-        cprefs = []
-        for index in range(0,10):
-            cprefs.append(request.POST.get('CountryPref'+str(index+1)))
-        cprefs = filter((lambda p: p != "NULL"), cprefs)
-
-        countrylist = []
-        alreadyDone = set();
-        for countryid in cprefs:
-            if countryid not in alreadyDone:
-                alreadyDone.add(countryid)
-                countrylist.append(Country.objects.get(id=countryid))
-        
-        # Delete old prefs and create new ones
-        school.countrypreferences.clear()
-        print "school prefs:", school.countrypreferences.all()
-        for country in countrylist:
-            CountryPreference.objects.create(school=school, country=country, rank=countrylist.index(country) + 1).save()
-        
-        # Deal with committee preferences now
-        school.committeepreferences.clear()
-        for comm in committees:
-            if comm.name in request.POST:
-                print "Adding committee:", comm
-                school.committeepreferences.add(comm)
-            
-        school.save()
-        print "school prefs:", school.countrypreferences.all()
-        print "comm prefs:", school.committeepreferences.all()
-
-    return HttpResponse('')
-
-                        
 # ------------------------
 # --- HELPER FUNCTIONS ---
 # ------------------------

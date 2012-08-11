@@ -65,20 +65,55 @@ def welcome(request, profile, context):
 # Display and/or update the advisor's country/committee preferences.
 def preferences(request, profile, context):
     school = profile.school
-    countries = Country.objects.filter(special=False).order_by('name')
-    countryprefs = school.countrypreferences.all() \
-                         .order_by("countrypreference__rank")
-    
-    # Split the committees into pairs for double-columning in the template.
-    committees = Committee.objects.filter(special=True)
-    committees = [committees[i:i+2] for i in range(0, len(committees), 2)]
-    committeeprefs = school.committeepreferences.all()
-    return render_to_response('preferences.html',
-                              {'countryprefs': countryprefs,
-                               'countries': countries,
-                               'committees': committees,
-                               'committeeprefs':committeeprefs},
-                              context_instance=context)
+    if request.method == 'GET':
+        countries = Country.objects.filter(special=False).order_by('name')
+        countryprefs = school.countrypreferences.all() \
+                             .order_by("countrypreference__rank")
+        
+        # Split the committees into pairs for double-columning in the template.
+        committees = Committee.objects.filter(special=True)
+        committees = [committees[i:i+2] for i in range(0, len(committees), 2)]
+        committeeprefs = school.committeepreferences.all()
+        return render_to_response('preferences.html',
+                                  {'countryprefs': countryprefs,
+                                   'countries': countries,
+                                   'committees': committees,
+                                   'committeeprefs':committeeprefs},
+                                  context_instance=context)
+    elif request.method == 'POST':
+        prefs = school.countrypreferences.all()
+        commprefs = school.committeepreferences.all() 
+        committees = Committee.objects.filter(special=True)
+        
+        cprefs = []
+        for index in range(0,10):
+            cprefs.append(request.POST.get('CountryPref'+str(index+1)))
+        cprefs = filter((lambda p: p != "NULL"), cprefs)
+
+        countrylist = []
+        alreadyDone = set();
+        for countryid in cprefs:
+            if countryid not in alreadyDone:
+                alreadyDone.add(countryid)
+                countrylist.append(Country.objects.get(id=countryid))
+        
+        # Delete old prefs and create new ones
+        school.countrypreferences.clear()
+        print "school prefs:", school.countrypreferences.all()
+        for country in countrylist:
+            CountryPreference.objects.create(school=school,
+                                             country=country,
+                                             rank=countrylist.index(country) + 1)
+        
+        # Deal with committee preferences now
+        school.committeepreferences.clear()
+        for comm in committees:
+            if comm.name in request.POST:
+                print "Adding committee:", comm
+                school.committeepreferences.add(comm)
+            
+        school.save()
+        return HttpResponse(status=200)
 
 
 # Display the advisor's editable roster.
