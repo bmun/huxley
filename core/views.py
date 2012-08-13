@@ -140,9 +140,9 @@ def validate_unique_user(request):
     if request.method == 'POST':
         username = request.POST.get('Username')
         if User.objects.filter(username=username).exists():
-            return HttpResponse(status=200)
-        else:
             return HttpResponse(status=406)
+        else:
+            return HttpResponse(status=200)
 
 
 # Renders the "About" page.
