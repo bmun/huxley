@@ -44,28 +44,36 @@ var ContentManager = {
     loadInitContent: function(hash, data) {
         ContentManager.initializeManagers();
         if ($("#splash").is(":visible")) {
-            $.get(hash, function(response) {
-              // Replace the title and content.
-              $("title").html(response.match(/<title>(.*?)<\/title>/)[1]);
-              $("#capsule").replaceWith($("#capsule", $(response)));
-              $("#appnavbar a[href='" + window.location.hash.slice(1) + "']")
-                .addClass('currentpage');
-              // Fade in.
-              $("#splash").delay(250).fadeOut(250, function() {
-                    $("#app").delay(250).fadeIn(500, function() {
-                        $("#headerwrapper").slideDown(350, function() {
-                            $("#header").slideDown(350);
+            $.ajax({
+                url: hash,
+                success: function(response) {
+                    // Replace the title and content.
+                    $("title").html(response.match(/<title>(.*?)<\/title>/)[1]);
+                    $("#capsule").replaceWith($("#capsule", $(response)));
+                    $("#appnavbar a[href='" + window.location.hash.slice(1) + "']")
+                      .addClass('currentpage');
+                    // Fade in.
+                    $("#splash").delay(250).fadeOut(250, function() {
+                        $("#app").delay(250).fadeIn(500, function() {
+                            $("#headerwrapper").slideDown(350, function() {
+                                $("#header").slideDown(350);
+                            });
                         });
                     });
-                });
+                },
+                error: Error.show
             });
         } else {
-            $.get(hash, function(response) {
-                // Replace the title and content.
-                $("title").html(response.match(/<title>(.*?)<\/title>/)[1]);
-                $("#capsule").replaceWith($("#capsule", $(response)));
-                // Fade in.
-                $("#app").delay(250).fadeIn(500);
+            $.ajax({
+                url: hash, 
+                success: function(response) {
+                  // Replace the title and content.
+                  $("title").html(response.match(/<title>(.*?)<\/title>/)[1]);
+                  $("#capsule").replaceWith($("#capsule", $(response)));
+                  // Fade in.
+                  $("#app").delay(250).fadeIn(500);
+                },
+                error: Error.show
             });
         }
     },
@@ -100,7 +108,8 @@ var ContentManager = {
                             $(".content").css('height','');
                         });
                     });
-                }
+                },
+                error: Error.show
             });
         });
     },
