@@ -1,6 +1,8 @@
 from django import forms
 
 from cms.models import *
+from django.contrib.auth.models import User
+
 import re
 
 countries = Country.objects.filter(special=False).order_by('name')
@@ -141,7 +143,7 @@ class RegistrationForm(forms.Form):
     def clean_SchoolName(self):
         # Check for uniqueness
         school_name = self.cleaned_data['SchoolName']
-        unique = len(School.objects.filter(name = school_name)) == 0
+        unique = School.objects.filter(name = school_name).exists()
         if not unique:
             raise forms.ValidationError("A school with this name has already been registered.")
         # Return data, whether changed or not
@@ -151,7 +153,7 @@ class RegistrationForm(forms.Form):
     def clean_Username(self):
         # Check for uniqueness
         username = self.cleaned_data['Username']
-        unique = len(User.objects.filter(username=username)) == 0
+        unique = User.objects.filter(username=username).exists()
         if not unique:
             raise forms.ValidationError("This username is already in use. Please choose another one.")
         # Make sure the characters are valid
@@ -200,6 +202,14 @@ class RegistrationForm(forms.Form):
 
         if secondary_phone and not self.phone_num_is_valid(secondary_phone, international):
             raise forms.ValidationError("Phone in incorrect format. US Format: (XXX) XXX-XXXX")
+
+        # Checks for duplicates in country preferences
+        countryprefs = set()
+        for i in xrange(1,11):
+            pref = cleaned_data["countrypref"+str(i)]
+            if pref in countryprefs:
+                raise forms.ValidationError("You can only choose a country once for your preferences.")
+            countryprefs.add(pref)
 
         # Always return cleaned_data
         return cleaned_data
