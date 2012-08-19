@@ -169,27 +169,7 @@ class RegistrationForm(forms.Form):
         return password
 
 
-    def clean_PrimaryPhone(self):
-        phone_num = self.cleaned_data['PrimaryPhone']
-        international = self.cleaned_data['us_or_int']
-
-        if not phone_num_is_valid(phone_num, international):
-            raise forms.ValidationError("Phone number in incorrect format. Format: (XXX) XXX-XXXX")
-        # Return data, changed or not
-        return primary_phone
-
-
-    def clean_SecondaryPhone(self):
-        phone_num = self.cleaned_data['SecondaryPhone']
-        international = self.cleaned_data['us_or_int']
-
-        if not phone_num_is_valid(phone_num, international):
-            raise forms.ValidationError("Phone number in incorrect format. Format: (XXX) XXX-XXXX")
-        # Return data, changed or not
-        return primary_phone
-
-
-    def phone_num_is_valid(number, international):
+    def phone_num_is_valid(self, number, international):
         if international == "international":
             if re.match("^[0-9\-x\s\+\(\)]+$", number):
                 return True
@@ -208,10 +188,18 @@ class RegistrationForm(forms.Form):
         cleaned_data = super(RegistrationForm, self).clean()
         Password = cleaned_data.get('Password')
         Password2 = cleaned_data.get('Password2')
+        international = cleaned_data.get('us_or_int')
+        primary_phone = cleaned_data.get('PrimaryPhone')
+        secondary_phone = cleaned_data.get('SecondaryPhone')
 
-        if Password and Password2:
-            if Password != Password2:
-                raise forms.ValidationError("Passwords must match!")
+        if Password and Password2 and Password != Password2:
+            raise forms.ValidationError("Passwords must match!")
+
+        if primary_phone and not self.phone_num_is_valid(primary_phone, international):
+            raise forms.ValidationError("Phone in incorrect format. US Format: (XXX) XXX-XXXX")
+
+        if secondary_phone and not self.phone_num_is_valid(secondary_phone, international):
+            raise forms.ValidationError("Phone in incorrect format. US Format: (XXX) XXX-XXXX")
 
         # Always return cleaned_data
         return cleaned_data
