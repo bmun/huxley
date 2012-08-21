@@ -28,8 +28,6 @@ True
 
 class RegistrationTest(unittest.TestCase):
 
-    optional_fields = ("SchoolCountry", "SecondaryName", "SecondaryEmail", "SecondaryPhone", "CommitteePrefs", "CountryPref1", "CountryPref2", "CountryPref3", "CountryPref4", "CountryPref5", "CountryPref6", "CountryPref7", "CountryPref8", "CountryPref9", "CountryPref10")
-
     def test_sanity(self):
         """ Simple test case that makes sure a form with all valid data works """
 
@@ -41,14 +39,20 @@ class RegistrationTest(unittest.TestCase):
                   "SchoolZip":12345, "programtype": "club", 
                   "howmany":9, "MinDelegation":9, "MaxDelegation":9,
                   "PrimaryName":"Manager", "PrimaryEmail":"kimtaeyon@snsd.com",
-                  "PrimaryPhone":"(123) 435-7543", "CountryPref1": "South Korea",
-                  "CountryPref2": "China", "CountryPref3": "United States", 
-                  "CountryPref4": "United Kingdom", "CountryPref5": "France",
-                  "CountryPref6": "Spain", "CountryPref7": "Japan", 
-                  "CountryPref8": "Italy", "CountryPref9": "Germany",
-                  "CountryPref10": "Russia"}
+                  "PrimaryPhone":"(123) 435-7543", "CountryPref1": 1,
+                  "CountryPref2": 2, "CountryPref3": 3, 
+                  "CountryPref4": 4, "CountryPref5": 5,
+                  "CountryPref6": 6, "CountryPref7": 7, 
+                  "CountryPref8": 8, "CountryPref9": 9,
+                  "CountryPref10": 10}
 
         form = RegistrationForm(params)
+        if not form.is_valid():
+            print "----- Test: test_sanity ----------------------------------------------------------------------------"
+            for key, errors in form.errors.items():
+                for error in errors:
+                    print "> [Field: %s] Validation Error: %s" % (key, error)
+            print "----------------------------------------------------------------------------------------------------"
         self.assertTrue(form.is_valid())
 
 
@@ -62,9 +66,9 @@ class RegistrationTest(unittest.TestCase):
         self.assertFalse(valid)
 
         # Check that all required fields are in form.errors.
-        for field in form.cleaned_data:
-            if field not in self.optional_fields:
-                self.assertIn(field, form.errors)
+        for name, field in form.fields.items():
+            if field.required:
+                self.assertIn(name, form.errors)
 
 
     # def test_valid_usernames(self):

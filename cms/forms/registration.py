@@ -142,8 +142,8 @@ class RegistrationForm(forms.Form):
     def clean_SchoolName(self):
         # Check for uniqueness
         school_name = self.cleaned_data['SchoolName']
-        unique = School.objects.filter(name = school_name).exists()
-        if not unique:
+        school_exists = School.objects.filter(name = school_name).exists()
+        if school_exists:
             raise forms.ValidationError("A school with this name has already been registered.")
         # Return data, whether changed or not
         return school_name
@@ -152,8 +152,8 @@ class RegistrationForm(forms.Form):
     def clean_Username(self):
         # Check for uniqueness
         username = self.cleaned_data['Username']
-        unique = User.objects.filter(username=username).exists()
-        if not unique:
+        user_exists = User.objects.filter(username=username).exists()
+        if user_exists:
             raise forms.ValidationError("This username is already in use. Please choose another one.")
         # Make sure the characters are valid
         if re.match("^[A-Za-z0-9\_\-]+$", username) is None:
@@ -205,7 +205,10 @@ class RegistrationForm(forms.Form):
         # Checks for duplicates in country preferences
         countryprefs = set()
         for i in xrange(1,11):
-            pref = cleaned_data["CountryPref"+str(i)]
+            current_pref = "CountryPref"+str(i)
+            if current_pref not in cleaned_data:
+                continue
+            pref = cleaned_data[current_pref]
             if pref in countryprefs:
                 raise forms.ValidationError("You can only choose a country once for your preferences.")
             countryprefs.add(pref)
