@@ -22,7 +22,6 @@ class RegistrationForm(forms.Form):
     Password2 = forms.CharField(label="Password (again)", widget=forms.PasswordInput(attrs={'class':'half required pass1 validChars'}))
 
     # School Information
-    # TODO: Pick a default for international
     us_or_int = forms.ChoiceField(label="Where is your school?", widget=forms.RadioSelect(attrs={'class':'int_check', 'name':'us_or_int'}), choices=(('us', 'United States'), ('international', 'International')))
     SchoolName = forms.CharField(label="Official School Name", widget=forms.TextInput(attrs={'class':'full required'}))
     SchoolAddress = forms.CharField(label="Address", widget=forms.TextInput(attrs={'class':'full required'}))
@@ -46,16 +45,16 @@ class RegistrationForm(forms.Form):
     SecondaryPhone = forms.CharField(label="Phone", widget=forms.TextInput(attrs={'class':'phoneNum phoneVal'}), required=False)
 
     # Country Preferences (the ids)
-    CountryPref1 = forms.ChoiceField(label="01", widget=forms.Select(), choices=country_choices)
-    CountryPref2 = forms.ChoiceField(label="02", widget=forms.Select(), choices=country_choices)
-    CountryPref3 = forms.ChoiceField(label="03", widget=forms.Select(), choices=country_choices)
-    CountryPref4 = forms.ChoiceField(label="04", widget=forms.Select(), choices=country_choices)
-    CountryPref5 = forms.ChoiceField(label="05", widget=forms.Select(), choices=country_choices)
-    CountryPref6 = forms.ChoiceField(label="06", widget=forms.Select(), choices=country_choices)
-    CountryPref7 = forms.ChoiceField(label="07", widget=forms.Select(), choices=country_choices)
-    CountryPref8 = forms.ChoiceField(label="08", widget=forms.Select(), choices=country_choices)
-    CountryPref9 = forms.ChoiceField(label="09", widget=forms.Select(), choices=country_choices)
-    CountryPref10 = forms.ChoiceField(label="10", widget=forms.Select(), choices=country_choices)
+    CountryPref1 = forms.ChoiceField(label="01", widget=forms.Select(), choices=country_choices, required=False)
+    CountryPref2 = forms.ChoiceField(label="02", widget=forms.Select(), choices=country_choices, required=False)
+    CountryPref3 = forms.ChoiceField(label="03", widget=forms.Select(), choices=country_choices, required=False)
+    CountryPref4 = forms.ChoiceField(label="04", widget=forms.Select(), choices=country_choices, required=False)
+    CountryPref5 = forms.ChoiceField(label="05", widget=forms.Select(), choices=country_choices, required=False)
+    CountryPref6 = forms.ChoiceField(label="06", widget=forms.Select(), choices=country_choices, required=False)
+    CountryPref7 = forms.ChoiceField(label="07", widget=forms.Select(), choices=country_choices, required=False)
+    CountryPref8 = forms.ChoiceField(label="08", widget=forms.Select(), choices=country_choices, required=False)
+    CountryPref9 = forms.ChoiceField(label="09", widget=forms.Select(), choices=country_choices, required=False)
+    CountryPref10 = forms.ChoiceField(label="10", widget=forms.Select(), choices=country_choices, required=False)
 
     # Committee Preferences
     CommitteePrefs = forms.MultipleChoiceField(label="Special Committee Preferences", 
@@ -206,7 +205,7 @@ class RegistrationForm(forms.Form):
         # Checks for duplicates in country preferences
         countryprefs = set()
         for i in xrange(1,11):
-            pref = cleaned_data["countrypref"+str(i)]
+            pref = cleaned_data["CountryPref"+str(i)]
             if pref in countryprefs:
                 raise forms.ValidationError("You can only choose a country once for your preferences.")
             countryprefs.add(pref)
