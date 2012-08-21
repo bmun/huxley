@@ -46,7 +46,7 @@ class RegistrationTest(unittest.TestCase):
     def test_sanity(self):
         """ Simple test case that makes sure a form with all valid data works """
 
-        params = self.valid_params
+        params = self.valid_params.copy()
 
         form = RegistrationForm(params)
         if not form.is_valid():
@@ -79,7 +79,7 @@ class RegistrationTest(unittest.TestCase):
         """ Tests for: minimum length """
 
         # Too short (len: 3)
-        params = self.valid_params
+        params = self.valid_params.copy()
         params["Username"] = "abc" # Too short, so invalid
 
         form = RegistrationForm(params)
@@ -105,7 +105,7 @@ class RegistrationTest(unittest.TestCase):
         """ Tests for: valid characters (alphanumeric, hyphens, underscores) """
 
         # All invalid characters
-        params = self.valid_params
+        params = self.valid_params.copy()
         params["Username"] = "!@#$"
         form = RegistrationForm(params)
         self.assertFalse(form.is_valid())
@@ -138,7 +138,41 @@ class RegistrationTest(unittest.TestCase):
         self.assertTrue(form.is_valid())
 
 
+    def test_create_user(self):
+        params = self.valid_params.copy()
+        params["Username"] = "ajummaTaeng"
+        form = RegistrationForm(params)
+
+        self.assertTrue(form.is_valid())
+        user = form.create_user()
+
+        # Check return value
+        self.assertEqual(user.username, params["Username"])
+        self.assertEqual(user.first_name, params["FirstName"])
+        self.assertEqual(user.last_name, params["LastName"])
+
+        # Check to see that it's in the database as well
+        users_in_db = User.objects.filter(username=params["Username"])
+        self.assertGreater(len(users_in_db), 0)
+        self.assertEqual(users_in_db[0], user)
+
+
     def test_username_unique(self):
         """ Tests for: uniqueness """
-        pass
+        
+        params = self.valid_params.copy()
+        params["Username"] = "abcdef"
+
+        # This should be valid, as "abcdef" should be unique
+        form = RegistrationForm(params)
+        self.assertTrue(form.is_valid())
+        form.create_user()
+
+        # Try again and it should throw a validation error
+        form = RegistrationForm(params)
+        self.assertFalse(form.is_valid())
+
+        self.assertEqual(len(form.errors), 1)
+        self.assertIn("Username", form.errors)
+        self.assertItemsEqual(form.errors["Username"], ["Username '%s' is already in use. Please choose another one." % (params["Username"])])        
 
