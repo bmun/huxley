@@ -12,4 +12,7 @@ settings.py
 cmsdb
 huxdb
 *.db
+
+# Misc
 wsgi.py
+cms/forms/test_registration.py
