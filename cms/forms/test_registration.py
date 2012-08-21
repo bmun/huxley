@@ -1,5 +1,6 @@
 from django.utils import unittest
 from cms.forms.registration import RegistrationForm
+from cms.models import *
 
 
 class RegistrationTest(unittest.TestCase):
