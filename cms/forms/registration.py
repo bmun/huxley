@@ -63,6 +63,8 @@ class RegistrationForm(forms.Form):
                                                required=False)
 
     # ===== DB Functions ====================================================================
+    # Run these only if the form is valid.
+    
     def create_user(self):
         try:
             new_user = User.objects.create_user(self.cleaned_data['Username'], self.cleaned_data['PrimaryEmail'], self.cleaned_data['Password'])
@@ -154,7 +156,7 @@ class RegistrationForm(forms.Form):
         username = self.cleaned_data['Username']
         user_exists = User.objects.filter(username=username).exists()
         if user_exists:
-            raise forms.ValidationError("This username is already in use. Please choose another one.")
+            raise forms.ValidationError("Username '%s' is already in use. Please choose another one." % (username))
         # Make sure the characters are valid
         if re.match("^[A-Za-z0-9\_\-]+$", username) is None:
             raise forms.ValidationError("Usernames must be alphanumeric, underscores, and/or hyphens only.")
