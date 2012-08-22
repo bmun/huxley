@@ -7,6 +7,7 @@
     {% block css %}
     <link rel="stylesheet" type="text/css" href="/static/css/style.css">
     <link rel="stylesheet" type="text/css" href="/static/css/osx.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/error.css">
     {% endblock css %}
     {% block js %}
     <script type="text/javascript" src="/static/js/jquery-1.7.2.min.js"></script>
@@ -16,6 +17,7 @@
     <script type="text/javascript" src="/static/js/additional-methods.min.js"></script>
     <script type="text/javascript" src="/static/js/jquery.simplemodal.js"></script>
     <script type="text/javascript" src="/static/js/osx.js"></script>
+    <script type="text/javascript" src="/static/js/error.js"></script>
     <script type="text/javascript" src="/static/js/content-manager.js"></script>
     <script type="text/javascript" src="/static/js/auth.js"></script>
     <script type="text/javascript" src="/static/js/registration.js"></script>
@@ -31,12 +33,18 @@
     {% endblock js %}
 </head>
 <body>
-	<div id="container">
-		<div id="appcontainer">
-		    {% block body %}
-		    <h1> BODY </h1>
-		    {% endblock body %}
-		</div>
-	</div>
+    <div id="container">
+        <div id="appcontainer">
+            {% block body %}
+            <h1> BODY </h1>
+            {% endblock body %}
+        </div>
+    </div>
+    <div id="error-overlay">
+        <div id="error-container">
+            <div id="error-content">
+            </div>
+        </div>
+    </div>
 </body>
 </html>
