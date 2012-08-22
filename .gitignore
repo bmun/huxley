@@ -5,11 +5,14 @@
 # Compiled Python Files
 *.pyc
 
-# Settings File
-settings.py
-
 # Local Database
 cmsdb
 huxdb
 *.db
+huxley.db
+
+# WSGI file
 wsgi.py
+
+# Local Settings File
+local_settings.py

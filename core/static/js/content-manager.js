@@ -29,13 +29,6 @@ var ContentManager = {
         ContentManager.onPageLoad();
     },
     
-    // Changes the page title.
-    loadPageTitle: function(hash) {
-        $("title").load(hash + " title", function() {
-            document.title = $(this).text();
-        });
-    },
-    
     // Fades the initial content into view.
     onPageLoad: function() {
         if (!window.location.hash) {
@@ -50,22 +43,37 @@ var ContentManager = {
     // Loads initial content into the application content container.
     loadInitContent: function(hash, data) {
         ContentManager.initializeManagers();
-        ContentManager.loadPageTitle(hash);
         if ($("#splash").is(":visible")) {
-            $(".content #contentwrapper").load(hash + " #capsule", data, function() {
-                $("#appnavbar a[href='" + window.location.hash.substring(1) + "']")
-                    .addClass('currentpage');
-                $("#splash").delay(250).fadeOut(250, function() {
-                    $("#app").delay(250).fadeIn(500, function() {
-                        $("#headerwrapper").slideDown(350, function() {
-                            $("#header").slideDown(350);
+            $.ajax({
+                url: hash,
+                success: function(response) {
+                    // Replace the title and content.
+                    $("title").html(response.match(/<title>(.*?)<\/title>/)[1]);
+                    $("#capsule").replaceWith($("#capsule", $(response)));
+                    $("#appnavbar a[href='" + window.location.hash.slice(1) + "']")
+                      .addClass('currentpage');
+                    // Fade in.
+                    $("#splash").delay(250).fadeOut(250, function() {
+                        $("#app").delay(250).fadeIn(500, function() {
+                            $("#headerwrapper").slideDown(350, function() {
+                                $("#header").slideDown(350);
+                            });
                         });
                     });
-                });
+                },
+                error: Error.show
             });
         } else {
-            $(".content #contentwrapper").load(hash + " #capsule", data, function() {
-                $("#app").delay(250).fadeIn(500);
+            $.ajax({
+                url: hash, 
+                success: function(response) {
+                  // Replace the title and content.
+                  $("title").html(response.match(/<title>(.*?)<\/title>/)[1]);
+                  $("#capsule").replaceWith($("#capsule", $(response)));
+                  // Fade in.
+                  $("#app").delay(250).fadeIn(500);
+                },
+                error: Error.show
             });
         }
     },
@@ -74,28 +82,34 @@ var ContentManager = {
     loadNewContent: function(hash, data) {
         $(".content").css('height', $(".content").height() + "px");
         $(".content #contentwrapper").fadeOut(150, function() {
-        	$(".content").addClass("content-loading");
-        	ContentManager.loadPageTitle(hash);
-            $(".content #contentwrapper").load(hash + " #capsule", data, function(response, status, xhr) {
-                if (status == 'error') { 
-                    $("#osx-modal").modal({
-                        overlayId: 'osx-overlay',
-                        containerId: 'osx-container',
+            $(".content").addClass("content-loading");
+            var method = data ? "POST" : "GET";
+            $.ajax({
+                type: method,
+                url: hash,
+                data: data,
+                success: function(data) {
+                    // Replace the title and content.
+                    $("title").html(data.match(/<title>(.*?)<\/title>/)[1]);
+                    $("#capsule").replaceWith($("#capsule", $(data)));
+                    // Animate and fade in.
+                    $("#contentwrapper").css({
+                        'visibility':'hidden',
+                        'display': 'block'
                     });
-                    parent.history.back();
-                };
-                $("#contentwrapper").css({
-                    'visibility':'hidden',
-                    'display': 'block'
-                });
-                var height = $("#contentwrapper").height();
-                $("#contentwrapper").css({'visibility':'', 'display': 'none'});
-                $(".content").animate({height: height}, 500, function() {
-                    $(".content").removeClass("content-loading");
-                    $("#contentwrapper").fadeIn(150, function() {
-                        $(".content").css('height','');
+                    var height = $("#contentwrapper").height();
+                    $("#contentwrapper").css({
+                        'visibility':'',
+                        'display': 'none'
                     });
-                });
+                    $(".content").animate({height: height}, 500, function() {
+                        $(".content").removeClass("content-loading");
+                        $("#contentwrapper").fadeIn(150, function() {
+                            $(".content").css('height','');
+                        });
+                    });
+                },
+                error: Error.show
             });
         });
     },
