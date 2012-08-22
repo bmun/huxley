@@ -192,3 +192,19 @@ class RegistrationTest(unittest.TestCase):
         self.assertEqual(len(form.errors), 1)
         self.assertIn("Password", form.errors)
         self.assertItemsEqual(form.errors["Password"], ["Ensure this value has at least 6 characters (it has 5)."])
+
+        # Tests len == 6
+        params["Password"] = "abcdef"
+        params["Password2"] = "abcdef"
+        form = RegistrationForm(params)
+        self.assertTrue(form.is_valid())
+
+        # Tests len > 6
+        params["Password"] = "abcdefgh"
+        params["Password2"] = "abcdefgh"
+        form = RegistrationForm(params)
+        self.assertTrue(form.is_valid())
+
+
+    def test_password_confirm(self):
+        pass
