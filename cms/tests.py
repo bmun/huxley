@@ -207,4 +207,17 @@ class RegistrationTest(unittest.TestCase):
 
 
     def test_password_confirm(self):
-        pass
+        """ Tests that password and password2 match """
+
+        params = self.valid_params.copy()
+        params["Password"] = "abcdef"
+        params["Password2"] = "abcdefg"
+
+        form = RegistrationForm(params)
+        self.assertFalse(form.is_valid())
+
+        self.assertEqual(len(form.errors), 2)
+        self.assertIn("Password", form.errors)
+        self.assertIn("Password2", form.errors)
+        self.assertItemsEqual(form.errors["Password"], ["Passwords do not match!"])
+        self.assertItemsEqual(form.errors["Password2"], ["Passwords do not match!"])
