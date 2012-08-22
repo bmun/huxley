@@ -7,6 +7,7 @@ import re
 
 countries = Country.objects.filter(special=False).order_by('name')
 country_choices = [(country.id, country.name) for country in countries]
+country_choices.append((0, "No Preference"))
 
 special_committees = Committee.objects.filter(special=True)
 special_committees_choices = [(committee.id, committee.name) for committee in special_committees]
@@ -45,16 +46,16 @@ class RegistrationForm(forms.Form):
     SecondaryPhone = forms.CharField(label="Phone", widget=forms.TextInput(attrs={'class':'phoneNum phoneVal'}), required=False)
 
     # Country Preferences (the ids)
-    CountryPref1 = forms.ChoiceField(label="01", widget=forms.Select(), choices=country_choices, required=False)
-    CountryPref2 = forms.ChoiceField(label="02", widget=forms.Select(), choices=country_choices, required=False)
-    CountryPref3 = forms.ChoiceField(label="03", widget=forms.Select(), choices=country_choices, required=False)
-    CountryPref4 = forms.ChoiceField(label="04", widget=forms.Select(), choices=country_choices, required=False)
-    CountryPref5 = forms.ChoiceField(label="05", widget=forms.Select(), choices=country_choices, required=False)
-    CountryPref6 = forms.ChoiceField(label="06", widget=forms.Select(), choices=country_choices, required=False)
-    CountryPref7 = forms.ChoiceField(label="07", widget=forms.Select(), choices=country_choices, required=False)
-    CountryPref8 = forms.ChoiceField(label="08", widget=forms.Select(), choices=country_choices, required=False)
-    CountryPref9 = forms.ChoiceField(label="09", widget=forms.Select(), choices=country_choices, required=False)
-    CountryPref10 = forms.ChoiceField(label="10", widget=forms.Select(), choices=country_choices, required=False)
+    CountryPref1 = forms.ChoiceField(label="01", widget=forms.Select(), choices=country_choices, required=False, initial=0)
+    CountryPref2 = forms.ChoiceField(label="02", widget=forms.Select(), choices=country_choices, required=False, initial=0)
+    CountryPref3 = forms.ChoiceField(label="03", widget=forms.Select(), choices=country_choices, required=False, initial=0)
+    CountryPref4 = forms.ChoiceField(label="04", widget=forms.Select(), choices=country_choices, required=False, initial=0)
+    CountryPref5 = forms.ChoiceField(label="05", widget=forms.Select(), choices=country_choices, required=False, initial=0)
+    CountryPref6 = forms.ChoiceField(label="06", widget=forms.Select(), choices=country_choices, required=False, initial=0)
+    CountryPref7 = forms.ChoiceField(label="07", widget=forms.Select(), choices=country_choices, required=False, initial=0)
+    CountryPref8 = forms.ChoiceField(label="08", widget=forms.Select(), choices=country_choices, required=False, initial=0)
+    CountryPref9 = forms.ChoiceField(label="09", widget=forms.Select(), choices=country_choices, required=False, initial=0)
+    CountryPref10 = forms.ChoiceField(label="10", widget=forms.Select(), choices=country_choices, required=False, initial=0)
 
     # Committee Preferences
     CommitteePrefs = forms.MultipleChoiceField(label="Special Committee Preferences", 
@@ -104,12 +105,15 @@ class RegistrationForm(forms.Form):
 
     def add_country_preferences(self, school):
         try:
-            for i in range(1,11):
-                # TODO: try using country instead of id for value
+            rank = 1
+            for i in xrange(1,11):
                 country_id = self.cleaned_data['CountryPref'+str(i)]
+                if country_id == 0:
+                    continue
                 country = Country.objects.get(id=int(country_id))
-                country_pref = CountryPreference.objects.create(school=school, country=country, rank=i)
+                country_pref = CountryPreference.objects.create(school=school, country=country, rank=rank)
                 country_pref.save()
+                rank += 1
             return True
         except:
             print "> ERROR WHILE ADDING COUNTRY PREFERENCES. REMEMBER TO VALIDATE FIRST."
