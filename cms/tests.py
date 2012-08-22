@@ -7,7 +7,7 @@ Replace these with more appropriate tests for your application.
 
 from django.test import TestCase
 from django.utils import unittest
-from cms.models import *
+from core.models import *
 from cms.forms.registration import RegistrationForm
 
 
@@ -139,6 +139,8 @@ class RegistrationTest(unittest.TestCase):
 
 
     def test_create_user(self):
+        """ Tests parameters and db insertion """
+
         params = self.valid_params.copy()
         params["Username"] = "ajummaTaeng"
         form = RegistrationForm(params)
@@ -176,3 +178,17 @@ class RegistrationTest(unittest.TestCase):
         self.assertIn("Username", form.errors)
         self.assertItemsEqual(form.errors["Username"], ["Username '%s' is already in use. Please choose another one." % (params["Username"])])        
 
+
+    def test_password_len(self):
+        """ Tests for: minimum length """
+        params = self.valid_params.copy()
+        # Tests len < 6
+        params["Password"] = "abcde"
+        params["Password2"] = "abcde"
+
+        form = RegistrationForm(params)
+        self.assertFalse(form.is_valid())
+
+        self.assertEqual(len(form.errors), 1)
+        self.assertIn("Password", form.errors)
+        self.assertItemsEqual(form.errors["Password"], ["Ensure this value has at least 6 characters (it has 5)."])
