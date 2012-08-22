@@ -1,0 +1,7 @@
+#error-overlay {
+    background-color: #000;
+}
+
+#error-container {
+    display: none;
+}

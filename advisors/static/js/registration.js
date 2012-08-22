@@ -52,14 +52,14 @@ $(function() {
 
     // Unique username check.
     $.validator.addMethod("uniqueUser", function(value, element) {
-        var unique = false
+        var unique = false;
         $.ajax({
             type: 'POST',
             async: false,
             url: 'uniqueuser/',
             data: $("#registrationform").serializeArray(),
             success: function(data, status, jq) {
-                unique = (status == "200");
+                unique = (status == "success");
             }
         });
         return unique;
