@@ -1,6 +1,6 @@
 from django import forms
 
-from cms.models import *
+from core.models import *
 from django.contrib.auth.models import User
 
 import re
