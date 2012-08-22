@@ -14,7 +14,7 @@ To edit your information, just click on any of the highlighted fields and add yo
 <p class="bold">Ginny Sklar</p>
 <p>Under-Secretary General of External Relations, 60th Session</p>
 
-<form id = "welcomepage" action="{% url updatewelcome %}">
+<form id = "welcomepage" method="post" action="{% url advisor "welcome" %}">
 {% csrf_token %}
 
 <div id = "tablemenu" class="tableheader">
