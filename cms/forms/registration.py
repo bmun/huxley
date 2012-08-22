@@ -199,14 +199,26 @@ class RegistrationForm(forms.Form):
         primary_phone = cleaned_data.get('PrimaryPhone')
         secondary_phone = cleaned_data.get('SecondaryPhone')
 
+        # Check to see if passwords match
         if Password and Password2 and Password != Password2:
-            raise forms.ValidationError("Passwords must match!")
+            message = "Passwords do not match!"
+            self._errors["Password"] = self.error_class([message])
+            self._errors["Password2"] = self.error_class([message])
+            # These fields are not valid anymore, so delete them from cleaned_data
+            del cleaned_data["Password"]
+            del cleaned_data["Password2"]
 
+        # Check to make sure phone number is formatted correctly
         if primary_phone and not self.phone_num_is_valid(primary_phone, international):
-            raise forms.ValidationError("Phone in incorrect format. US Format: (XXX) XXX-XXXX")
+            message = "Phone in incorrect format. US Format: (XXX) XXX-XXXX"
+            self._errors["PrimaryPhone"] = self.error_class([message])
+            del cleaned_data["PrimaryPhone"]
 
+        # Check to make sure phone number is formatted correctly
         if secondary_phone and not self.phone_num_is_valid(secondary_phone, international):
-            raise forms.ValidationError("Phone in incorrect format. US Format: (XXX) XXX-XXXX")
+            message = "Phone in incorrect format. US Format: (XXX) XXX-XXXX"
+            self._errors["SecondaryPhone"] = self.error_class([message])
+            del cleaned_data["SecondaryPhone"]
 
         # Checks for duplicates in country preferences
         countryprefs = set()
