@@ -107,10 +107,10 @@ class RegistrationForm(forms.Form):
         try:
             rank = 1
             for i in xrange(1,11):
-                country_id = self.cleaned_data['CountryPref'+str(i)]
+                country_id = int(self.cleaned_data['CountryPref'+str(i)])
                 if country_id == 0:
                     continue
-                country = Country.objects.get(id=int(country_id))
+                country = Country.objects.get(id=country_id)
                 country_pref = CountryPreference.objects.create(school=school, country=country, rank=rank)
                 country_pref.save()
                 rank += 1
@@ -227,8 +227,12 @@ class RegistrationForm(forms.Form):
             if current_pref not in cleaned_data:
                 continue
             pref = cleaned_data[current_pref]
+            if int(pref) == 0: # No preference; don't check for this one
+                continue
             if pref in countryprefs:
-                raise forms.ValidationError("You can only choose a country once for your preferences.")
+                message = "You can only choose a country once for your preferences."
+                self._errors[current_pref] = self.error_class([message])
+                del cleaned_data[current_pref]
             countryprefs.add(pref)
 
         # Always return cleaned_data

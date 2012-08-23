@@ -221,3 +221,10 @@ class RegistrationTest(unittest.TestCase):
         self.assertIn("Password2", form.errors)
         self.assertItemsEqual(form.errors["Password"], ["Passwords do not match!"])
         self.assertItemsEqual(form.errors["Password2"], ["Passwords do not match!"])
+
+
+    def test_password_chars(self):
+        """ Tests that password contains only valid characters (alphanumeric, underscore, ., symbols on number keys) """
+
+        params = self.valid_params.copy()
+        

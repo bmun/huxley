@@ -16,28 +16,28 @@
 	<legend> Account Information </legend>
 	<div class="sub left">
 		<span> {{ form.FirstName.label }}: </span> {{ form.FirstName }}
-		{% for error in form.FirstName.errors %}
+		{% for error in form.errors.FirstName %}
 			<label class="error"> {{ error|escape }} </label>
 		{% endfor %}
 
 		<span> {{ form.LastName.label }}: </span> {{ form.LastName }}
-		{% for error in form.LastName.errors %}
+		{% for error in form.errors.LastName %}
 			<label class="error"> {{ error|escape }} </label>
 		{% endfor %}	
 		</div>
 	<div class="sub right">
 		<span> {{ form.Username.label }}: </span> {{ form.Username }}
-		{% for error in form.Username.errors %}
+		{% for error in form.errors.Username %}
 			<label class="error"> {{ error|escape }} </label>
 		{% endfor %}
 
 		<span> {{ form.Password.label }}: </span> {{ form.Password }}
-		{% for error in form.Password.errors %}
+		{% for error in form.errors.Password %}
 			<label class="error"> {{ error|escape }} </label>
 		{% endfor %}
 
 		<span> {{ form.Password2.label }}: </span> {{ form.Password2 }}
-		{% for error in form.Password2.errors %}
+		{% for error in form.errors.Password2 %}
 			<label class="error"> {{ error|escape }} </label>
 		{% endfor %}
 	</div>
@@ -49,34 +49,34 @@
 	{{ form.us_or_int }}
 	
 	<span> {{ form.SchoolName.label }}: </span> {{ form.SchoolName }}
-	{% for error in form.SchoolName.errors %}
+	{% for error in form.errors.SchoolName %}
 		<label class="error"> {{ error|escape }} </label>
 	{% endfor %}
 
 	<span> {{ form.SchoolAddress.label }} </span> {{ form.SchoolAddress }}
-	{% for error in form.SchoolAddress.errors %}
+	{% for error in form.errors.SchoolAddress %}
 		<label class="error"> {{ error|escape }} </label>
 	{% endfor %}
 	
 	<span> {{ form.SchoolCity.label }}: </span> {{ form.SchoolCity }}
-	{% for error in form.SchoolCity.errors %}
+	{% for error in form.errors.SchoolCity %}
 		<label class="error"> {{ error|escape }} </label>
 	{% endfor %}
 
 	<span> {{ form.SchoolState.label }}: </span> {{ form.SchoolState }}
-	{% for error in form.SchoolState.errors %}
+	{% for error in form.errors.SchoolState %}
 		<label class="error"> {{ error|escape }} </label>
 	{% endfor %}
 
 	<span> {{ form.SchoolZip.label }}: </span> {{ form.SchoolZip }}
-	{% for error in form.SchoolZip.errors %}
+	{% for error in form.errors.SchoolZip %}
 		<label class="error"> {{ error|escape }} </label>
 	{% endfor %}
 	<br>
 	<br>
 	<span class="showhide"> {{ form.SchoolCountry.label }} </span><br> 
 	{{ form.SchoolCountry }}
-	{% for error in form.SchoolCountry.errors %}
+	{% for error in form.errors.SchoolCountry %}
 		<label class="error"> {{ error|escape }} </label>
 	{% endfor %}
 </fieldset>
@@ -84,12 +84,12 @@
 <fieldset>
 	<legend>Program Information</legend>
 	<p> {{ form.programtype.label }} </p> {{ form.programtype }} 
-	{% for error in form.programtype.errors %}
+	{% for error in form.errors.programtype %}
 		<label class="error"> {{ error|escape }} </label>
 	{% endfor %}
 	
 	<p> {{ form.howmany.label }} </p> {{ form.howmany }}
-	{% for error in form.howmany.errors %}
+	{% for error in form.errors.howmany %}
 		<label class="error"> {{ error|escape }} </label>
 	{% endfor %}
 
@@ -97,14 +97,14 @@
 	<div class="sub left">
 		<span> {{ form.MinDelegation.label }}: </span> 
 		{{ form.MinDelegation }}
-		{% for error in form.MinDelegation.errors %}
+		{% for error in form.errors.MinDelegation %}
 			<label class="error"> {{ error|escape }} </label>
 		{% endfor %}
 	</div>
 	<div class="sub right">
 		<span> {{ form.MaxDelegation.label }}: </span>
 		{{ form.MaxDelegation }}
-		{% for error in form.MaxDelegation.errors %}
+		{% for error in form.errors.MaxDelegation %}
 			<label class="error"> {{ error|escape }} </label>
 		{% endfor %}	
 	</div>
@@ -115,20 +115,20 @@
 	<div class="sub left">
 		<span> {{ form.PrimaryName.label }}: </span> 
 		{{ form.PrimaryName }}
-		{% for error in form.PrimaryName.errors %}
+		{% for error in form.errors.PrimaryName %}
 			<label class="error"> {{ error|escape }} </label>
 		{% endfor %}
 
 		<span> {{ form.PrimaryEmail.label }}: </span> 
 		{{ form.PrimaryEmail}}
-		{% for error in form.PrimaryEmail.errors %}
+		{% for error in form.errors.PrimaryEmail %}
 			<label class="error"> {{ error|escape }} </label>
 		{% endfor %}
 	</div>
 	<div class="sub right">
 		<span> {{ form.PrimaryPhone.label }}: </span>
 		{{ form.PrimaryPhone }}
-		{% for error in form.PrimaryPhone.errors %}
+		{% for error in form.errors.PrimaryPhone %}
 			<label class="error"> {{ error|escape }} </label>
 		{% endfor %}
 	</div>
@@ -139,13 +139,13 @@
 	<div class="sub left">
 		<span> {{ form.SecondaryName.label }}: </span>
 		{{ form.SecondaryName }}
-		{% for error in form.SecondaryName.errors %}
+		{% for error in form.errors.SecondaryName %}
 			<label class="error"> {{ error|escape }} </label>
 		{% endfor %}
 
 		<span> {{ form.SecondaryEmail.label }}: </span>
 		{{ form.SecondaryEmail }}
-		{% for error in form.SecondaryEmail.errors %}
+		{% for error in form.errors.SecondaryEmail %}
 			<label class="error"> {{ error|escape }} </label>
 		{% endfor %}
 	</div>
@@ -153,7 +153,7 @@
 	<div class="sub right">
 		<span> {{ form.SecondaryPhone.label }}: </span>
 		{{ form.SecondaryPhone }}
-		{% for error in form.SecondaryPhone.errors %}
+		{% for error in form.errors.SecondaryPhone %}
 			<label class="error"> {{ error|escape }} </label>
 		{% endfor %}
 	</div>
@@ -169,35 +169,35 @@
 			<li>
 				<label> {{ form.CountryPref1.label }} </label>
 				{{ form.CountryPref1 }}
-				{% for error in form.CountryPref1.errors %}
+				{% for error in form.errors.CountryPref1 %}
 					<label class="error"> {{ error|escape }} </label>
 				{% endfor %}
 			</li>
 			<li>
 				<label> {{ form.CountryPref2.label }} </label>
 				{{ form.CountryPref2 }}
-				{% for error in form.CountryPref2.errors %}
+				{% for error in form.errors.CountryPref2 %}
 					<label class="error"> {{ error|escape }} </label>
 				{% endfor %}
 			</li>
 			<li>
 				<label> {{ form.CountryPref3.label }} </label>
 				{{ form.CountryPref3 }}
-				{% for error in form.CountryPref3.errors %}
+				{% for error in form.errors.CountryPref3 %}
 					<label class="error"> {{ error|escape }} </label>
 				{% endfor %}
 			</li>
 			<li>
 				<label> {{ form.CountryPref4.label }} </label>
 				{{ form.CountryPref4 }}
-				{% for error in form.CountryPref4.errors %}
+				{% for error in form.errors.CountryPref4 %}
 					<label class="error"> {{ error|escape }} </label>
 				{% endfor %}
 			</li>
 			<li>
 				<label> {{ form.CountryPref5.label }} </label>
 				{{ form.CountryPref5 }}
-				{% for error in form.CountryPref5.errors %}
+				{% for error in form.errors.CountryPref5 %}
 					<label class="error"> {{ error|escape }} </label>
 				{% endfor %}
 			</li>
@@ -208,35 +208,35 @@
 			<li>
 				<label> {{ form.CountryPref6.label }} </label>
 				{{ form.CountryPref6 }}
-				{% for error in form.CountryPref6.errors %}
+				{% for error in form.errors.CountryPref6 %}
 					<label class="error"> {{ error|escape }} </label>
 				{% endfor %}
 			</li>
 			<li>
 				<label> {{ form.CountryPref7.label }} </label>
 				{{ form.CountryPref7 }}
-				{% for error in form.CountryPref7.errors %}
+				{% for error in form.errors.CountryPref7 %}
 					<label class="error"> {{ error|escape }} </label>
 				{% endfor %}
 			</li>
 			<li>
 				<label> {{ form.CountryPref8.label }} </label>
 				{{ form.CountryPref8 }}
-				{% for error in form.CountryPref8.errors %}
+				{% for error in form.errors.CountryPref8 %}
 					<label class="error"> {{ error|escape }} </label>
 				{% endfor %}
 			</li>
 			<li>
 				<label> {{ form.CountryPref9.label }} </label>
 				{{ form.CountryPref9 }}
-				{% for error in form.CountryPref9.errors %}
+				{% for error in form.errors.CountryPref9 %}
 					<label class="error"> {{ error|escape }} </label>
 				{% endfor %}
 			</li>
 			<li>
 				<label> {{ form.CountryPref10.label }} </label>
 				{{ form.CountryPref10 }}
-				{% for error in form.CountryPref10.errors %}
+				{% for error in form.errors.CountryPref10 %}
 					<label class="error"> {{ error|escape }} </label>
 				{% endfor %}
 			</li>
@@ -250,7 +250,7 @@
 		Would your delegation be interested in being represented in the following small/specialized committees? Positions are limited and we may not be able to accomodate all preferences. 
 	</p>
 	{{ form.CommitteePrefs }}
-	{% for error in form.CommitteePrefs.errors %}
+	{% for error in form.errors.CommitteePrefs %}
 		<label class="error"> {{ error|escape }} </label>
 	{% endfor %}
 </fieldset>

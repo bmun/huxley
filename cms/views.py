@@ -31,8 +31,13 @@ def register(request):
             form.create_advisor_profile(new_user, new_school)
                         
             return render_to_response('thanks.html', context_instance=RequestContext(request))    
+        # --- Not needed in production ---
         else:
-            print "> ERROR: FORM IS NOT VALID"        
+            print "> ERROR: FORM IS NOT VALID"
+            for field, errors in form.errors.items():
+                for error in errors:
+                    print "[Field: %s] Error: %s" % (field, error)
+        # --------------------------------
     else:
         # Accessing for the first time
         form = RegistrationForm()
