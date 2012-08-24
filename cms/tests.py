@@ -176,7 +176,7 @@ class RegistrationTest(unittest.TestCase):
 
         self.assertEqual(len(form.errors), 1)
         self.assertIn("Username", form.errors)
-        self.assertItemsEqual(form.errors["Username"], ["Username '%s' is already in use. Please choose another one." % (params["Username"])])        
+        self.assertItemsEqual(form.errors["Username"], ["Username '%s' is already in use. Please choose another one." % (params["Username"])])
 
 
     def test_password_len(self):
@@ -225,6 +225,95 @@ class RegistrationTest(unittest.TestCase):
 
     def test_password_chars(self):
         """ Tests that password contains only valid characters (alphanumeric, underscore, ., symbols on number keys) """
+        # Invalid characters
+        params = self.valid_params.copy()
+        params["Password"] = "~[]\[]]\[]\[\]"
+        params["Password2"] = "~[]\[]]\[]\[\]"
+
+        form = RegistrationForm(params)
+        self.assertFalse(form.is_valid())
+
+        self.assertEqual(len(form.errors), 1)
+        self.assertIn("Password", form.errors)
+        self.assertItemsEqual(form.errors["Password"], ["Password contains invalid characters."])
+
+        # Valid characters
+        params["Password"] = "abcdefg!@#$%^&*"
+        params["Password2"] = "abcdefg!@#$%^&*"
+
+        form = RegistrationForm(params)
+        self.assertTrue(form.is_valid())
+
+
+    def test_create_school(self):
+        """ Tests that the form creates a school object in the DB properly """
 
         params = self.valid_params.copy()
-        
+        params["SchoolName"] = "GirlsGeneration"
+
+        form = RegistrationForm(params)
+        self.assertTrue(form.is_valid())
+
+        school = form.create_school()
+        self.assertFalse(school is None)
+
+        self.assertEqual(school.name, params["SchoolName"])
+        self.assertEqual(school.address, params["SchoolAddress"])
+        self.assertEqual(school.city, params["SchoolCity"])
+        self.assertEqual(school.state, params["SchoolState"])
+        self.assertEqual(school.zip, str(params["SchoolZip"]))
+        self.assertEqual(school.primaryname, params["PrimaryName"])
+        self.assertEqual(school.primaryemail, params["PrimaryEmail"])
+        self.assertEqual(school.primaryphone, params["PrimaryPhone"])
+        self.assertEqual(school.programtype, params["programtype"])
+        self.assertEqual(school.timesattended, params["howmany"])
+        self.assertEqual(school.mindelegationsize, params["MinDelegation"])
+        self.assertEqual(school.maxdelegationsize, params["MaxDelegation"])
+        self.assertEqual(school.international, params["us_or_int"])
+
+        if "SecondaryName" in params:
+            self.assertEqual(school.secondaryname, params["SecondaryName"])
+        if "SecondaryEmail" in params:
+            self.assertEqual(school.secondaryemail, params["SecondaryEmail"])
+        if "SecondaryPhone" in params:
+            self.assertEqual(school.secondaryphone, params["SecondaryPhone"])
+
+        # Check to see that it's in the database as well
+        schools_in_db = School.objects.filter(name=params["SchoolName"])
+        self.assertGreater(len(schools_in_db), 0)
+        self.assertEqual(schools_in_db[0], school)
+
+
+    def test_school_uniqueness(self):
+        """ Tests that the school name checks if it's unique """
+        params = self.valid_params.copy()
+        params["SchoolName"] = "MySchool"
+
+        # This should be valid, as "abcdef" should be unique
+        form = RegistrationForm(params)
+        self.assertTrue(form.is_valid())
+        form.create_school()
+
+        # This shouldn't be valid.
+        form = RegistrationForm(params)
+        self.assertFalse(form.is_valid())
+
+        self.assertEqual(len(form.errors), 1)
+        self.assertIn("SchoolName", form.errors)
+        self.assertItemsEqual(form.errors["SchoolName"], ["A school with the name '%s' has already been registered." % (params["SchoolName"])])
+
+        # Now try another valid one
+        params["SchoolName"] = "MySchool2"
+        form = RegistrationForm(params)
+        self.assertTrue(form.is_valid())
+
+
+    def test_add_country_preferences(self):
+        """ Tests that adding country preferences works """
+        # Initialization
+        params = self.valid_params.copy()
+        params["SchoolName"] = "CountryTest"
+        for i in xrange(1,11):
+            params["CountryPref" + str(i)] = 0
+
+        # NOT DONE YET
