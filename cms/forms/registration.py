@@ -150,7 +150,7 @@ class RegistrationForm(forms.Form):
         school_name = self.cleaned_data['SchoolName']
         school_exists = School.objects.filter(name = school_name).exists()
         if school_exists:
-            raise forms.ValidationError("A school with this name has already been registered.")
+            raise forms.ValidationError("A school with the name '%s' has already been registered." % (school_name))
         # Return data, whether changed or not
         return school_name
 
@@ -227,7 +227,7 @@ class RegistrationForm(forms.Form):
             if current_pref not in cleaned_data:
                 continue
             pref = cleaned_data[current_pref]
-            if int(pref) == 0: # No preference; don't check for this one
+            if pref == "" or int(pref) == 0: # No preference; don't check for this one
                 continue
             if pref in countryprefs:
                 message = "You can only choose a country once for your preferences."
