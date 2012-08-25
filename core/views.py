@@ -9,6 +9,7 @@ from django.template import RequestContext
 from django.utils import simplejson
 
 from core.models import *
+from core.forms.registration import RegistrationForm
 
 import re
 
@@ -71,6 +72,32 @@ def logout_user(request):
         return HttpResponse(reverse('login'))
     else:
         return HttpResponseRedirect(reverse('index'))
+
+
+# Registers a new user and school
+def register(request):
+    if request.POST:
+        form = RegistrationForm(request.POST)
+        if form.is_valid():
+            new_user = form.create_user()                    
+            new_school = form.create_school()
+            form.add_country_preferences(new_school)
+            form.add_committee_preferences(new_school)
+            form.create_advisor_profile(new_user, new_school)
+                        
+            return render_to_response('thanks.html', context_instance=RequestContext(request))    
+    else:
+        # Accessing for the first time
+        form = RegistrationForm()
+
+    countries = Country.objects.filter(special=False).order_by('name')
+    committees = Committee.objects.filter(special=True)
+
+    return render_to_response('registration.html', 
+                                {'form': form, 'state':'', 
+                                 'countries': countries,
+                                 'committees': committees},
+                                context_instance=RequestContext(request))
 
 
 # Attempts to change current user's password.
