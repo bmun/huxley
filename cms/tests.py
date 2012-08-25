@@ -312,8 +312,114 @@ class RegistrationTest(unittest.TestCase):
         """ Tests that adding country preferences works """
         # Initialization
         params = self.valid_params.copy()
-        params["SchoolName"] = "CountryTest"
         for i in xrange(1,11):
             params["CountryPref" + str(i)] = 0
 
-        # NOT DONE YET
+        # No preferences at all
+        params["SchoolName"] = "CountryTest1"
+        form = RegistrationForm(params)
+
+        self.assertTrue(form.is_valid())
+        school = form.create_school()
+        self.assertTrue(form.add_country_preferences(school))
+
+        prefs = CountryPreference.objects.filter(school=school)
+        self.assertEqual(len(prefs), 0)
+
+        # Couple of random preferences scattered around
+        params["SchoolName"] = "CountryTest2"
+        params["CountryPref1"] = 2
+        params["CountryPref3"] = 10
+        params["CountryPref7"] = 7
+        form = RegistrationForm(params)
+
+        self.assertTrue(form.is_valid())
+        school = form.create_school()
+        self.assertTrue(form.add_country_preferences(school))
+
+        prefs = CountryPreference.objects.filter(school=school)
+        self.assertEqual(len(prefs), 3)
+
+        for pref in prefs:
+            self.assertIn(pref.rank, (1,2,3))
+            if pref.rank == 1:
+                self.assertEqual(pref.country.id, params["CountryPref1"])
+            elif pref.rank == 2:
+                self.assertEqual(pref.country.id, params["CountryPref3"])
+            elif pref.rank == 3:
+                self.assertEqual(pref.country.id, params["CountryPref7"])
+            else:
+                self.assertTrue(False)
+
+
+    def test_country_preferences(self):
+        """ Tests that country preferences do not have duplicates """
+        # Initialization
+        params = self.valid_params.copy()
+        for i in xrange(1,11):
+            params["CountryPref" + str(i)] = 0
+
+        # Should be valid even with no country preferences
+        form = RegistrationForm(params)
+        self.assertTrue(form.is_valid())
+
+        # Couple of unique country preferences; valid
+        params["CountryPref1"] = 1
+        params["CountryPref3"] = 10
+        params["CountryPref7"] = 7
+
+        form = RegistrationForm(params)
+        self.assertTrue(form.is_valid())
+
+        # Duplicate country preferences; invalid
+        params["CountryPref6"] = 7
+        form = RegistrationForm(params)
+        self.assertFalse(form.is_valid())
+
+        self.assertEqual(len(form.errors), 1)
+        self.assertIn("CountryPref7", form.errors)
+        self.assertItemsEqual(form.errors["CountryPref7"], ["You can only choose a country once for your preferences."])        
+
+
+    def test_add_committee_preferences(self):
+        """ Tests that adding committee preferences works """
+        params = self.valid_params.copy()
+        params["SchoolName"] = "CommitteeTest1"
+        form = RegistrationForm(params)
+
+        # No committee preferences
+        self.assertTrue(form.is_valid())
+        school = form.create_school()
+        self.assertTrue(form.add_committee_preferences(school))
+        self.assertEqual(len(school.committeepreferences.all()), 0)
+
+        # Some preferences
+        params["CommitteePrefs"] = [13, 14, 19]
+        params["SchoolName"] = "CommitteeTest2"
+        form = RegistrationForm(params)
+
+        self.assertTrue(form.is_valid())
+        school = form.create_school()
+        self.assertTrue(form.add_committee_preferences(school))
+        self.assertEqual(len(school.committeepreferences.all()), 3)
+
+        for committee in school.committeepreferences.all():
+            self.assertIn(committee.id, params["CommitteePrefs"])
+            
+
+    def test_create_advisor_profile(self):
+        """ Tests that an advisor profile for a user and a school is successfully created upon registration """
+        params = self.valid_params.copy()
+        params["Username"] = "advisor_profile_test"
+        params["SchoolName"] = "advisor_profile_test"
+        form = RegistrationForm(params)
+        self.assertTrue(form.is_valid())
+
+        user = form.create_user()
+        school = form.create_school()
+
+        profile = form.create_advisor_profile(user, school)
+        self.assertFalse(profile is None)
+
+        self.assertEqual(profile.user, user)
+        self.assertEqual(profile.school, school)

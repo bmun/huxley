@@ -226,9 +226,14 @@ class RegistrationForm(forms.Form):
             current_pref = "CountryPref"+str(i)
             if current_pref not in cleaned_data:
                 continue
-            pref = cleaned_data[current_pref]
-            if pref == "" or int(pref) == 0: # No preference; don't check for this one
+                
+            try:
+                pref = int(cleaned_data[current_pref])
+                if pref == 0:
+                    continue
+            except:
                 continue
+
             if pref in countryprefs:
                 message = "You can only choose a country once for your preferences."
                 self._errors[current_pref] = self.error_class([message])
