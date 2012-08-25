@@ -210,13 +210,13 @@ class RegistrationForm(forms.Form):
 
         # Check to make sure phone number is formatted correctly
         if primary_phone and not self.phone_num_is_valid(primary_phone, international):
-            message = "Phone in incorrect format. US Format: (XXX) XXX-XXXX"
+            message = "Phone in incorrect format."
             self._errors["PrimaryPhone"] = self.error_class([message])
             del cleaned_data["PrimaryPhone"]
 
         # Check to make sure phone number is formatted correctly
         if secondary_phone and not self.phone_num_is_valid(secondary_phone, international):
-            message = "Phone in incorrect format. US Format: (XXX) XXX-XXXX"
+            message = "Phone in incorrect format."
             self._errors["SecondaryPhone"] = self.error_class([message])
             del cleaned_data["SecondaryPhone"]
 
@@ -226,7 +226,7 @@ class RegistrationForm(forms.Form):
             current_pref = "CountryPref"+str(i)
             if current_pref not in cleaned_data:
                 continue
-                
+
             try:
                 pref = int(cleaned_data[current_pref])
                 if pref == 0:
