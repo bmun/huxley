@@ -32,7 +32,7 @@ class RegistrationForm(forms.Form):
     SchoolCountry = forms.CharField(label="Country", widget=forms.TextInput(attrs={'class':'showhide'}), required=False)
 
     # Program Information
-    programtype = forms.ChoiceField(label="What category best describes your program?", widget=forms.RadioSelect, choices=(('club', 'Club'), ('class', 'Class')))
+    programtype = forms.ChoiceField(label="What category best describes your program?", widget=forms.RadioSelect, choices=(('club', 'Club'), ('class', 'Class')), initial="club")
     howmany = forms.IntegerField(label="Approximately how many times has your program attended BMUN?", widget=forms.TextInput(attrs={'class':'required IntegersOnly'}))
     MinDelegation = forms.IntegerField(label="Minimum", widget=forms.TextInput(attrs={'class':'required IntegersOnly'}))
     MaxDelegation = forms.IntegerField(label="Maximum", widget=forms.TextInput(attrs={'class':'required IntegersOnly'}))
@@ -242,7 +242,7 @@ class RegistrationForm(forms.Form):
                 continue
 
             if pref in countryprefs:
-                message = "You can only choose a country once for your preferences."
+                message = "Please choose different countries for each preference."
                 self._errors[current_pref] = self.error_class([message])
                 del cleaned_data[current_pref]
             countryprefs.add(pref)

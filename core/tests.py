@@ -378,7 +378,7 @@ class RegistrationTest(unittest.TestCase):
 
         self.assertEqual(len(form.errors), 1)
         self.assertIn("CountryPref7", form.errors)
-        self.assertItemsEqual(form.errors["CountryPref7"], ["You can only choose a country once for your preferences."])        
+        self.assertItemsEqual(form.errors["CountryPref7"], ["Please choose different countries for each preference."])        
 
 
     def test_add_committee_preferences(self):
