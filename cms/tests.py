@@ -405,7 +405,7 @@ class RegistrationTest(unittest.TestCase):
 
         for committee in school.committeepreferences.all():
             self.assertIn(committee.id, params["CommitteePrefs"])
-            
+
 
     def test_create_advisor_profile(self):
         """ Tests that an advisor profile for a user and a school is successfully created upon registration """
@@ -423,3 +423,76 @@ class RegistrationTest(unittest.TestCase):
 
         self.assertEqual(profile.user, user)
         self.assertEqual(profile.school, school)
+
+
+    def test_us_phone_nums(self):
+        """ Tests the US phone number validation code """
+        params = self.valid_params.copy()
+        params["us_or_int"] = "us"
+
+        # (XXX) XXX-XXXX
+        params["PrimaryPhone"] = "(123) 456-7890"
+        form = RegistrationForm(params)
+        self.assertTrue(form.is_valid())
+
+        # (XXX) XXX-XXXX xXXXX (extension)
+        params["PrimaryPhone"] = "(123) 456-7890 x1234"
+        form = RegistrationForm(params)
+        self.assertTrue(form.is_valid())
+
+        # 123-456-7890 (invalid)
+        params["PrimaryPhone"] = "123-456-7890"
+        form = RegistrationForm(params)
+        self.assertFalse(form.is_valid())
+
+        self.assertEqual(len(form.errors), 1)
+        self.assertIn("PrimaryPhone", form.errors)
+        self.assertItemsEqual(form.errors["PrimaryPhone"], ["Phone in incorrect format."])
+        
+        # (123) 12a-1231 (invalid)
+        params["PrimaryPhone"] = "(123) 12a-1231"
+        form = RegistrationForm(params)
+        self.assertFalse(form.is_valid())
+
+        self.assertEqual(len(form.errors), 1)
+        self.assertIn("PrimaryPhone", form.errors)
+        self.assertItemsEqual(form.errors["PrimaryPhone"], ["Phone in incorrect format."])
+
+
+    def test_international_phone_nums(self):
+        """ Tests the international phone number validation code """
+        params = self.valid_params.copy()
+        params["us_or_int"] = "international"
+
+        # 1234534653465 (just numbers; valid)
+        params["PrimaryPhone"] = "123434645657"
+        form = RegistrationForm(params)
+        self.assertTrue(form.is_valid())
+
+        # 1-123-123-1234 (dashes; valid)
+        params["PrimaryPhone"] = "1-123-123-1234"
+        form = RegistrationForm(params)
+        self.assertTrue(form.is_valid())        
+
+        # US format (valid)
+        params["PrimaryPhone"] = "(123) 456-7890"
+        form = RegistrationForm(params)
+        self.assertTrue(form.is_valid())
+
+        # US format with invalid characters
+        params["PrimaryPhone"] = "(12a) 456-7890"
+        form = RegistrationForm(params)
+        self.assertFalse(form.is_valid())
+
+        self.assertEqual(len(form.errors), 1)
+        self.assertIn("PrimaryPhone", form.errors)
+        self.assertItemsEqual(form.errors["PrimaryPhone"], ["Phone in incorrect format."])
+
+        # Numbers with invalid characters
+        params["PrimaryPhone"] = "1-234-4a3-as,f"
+        form = RegistrationForm(params)
+        self.assertFalse(form.is_valid())
+
+        self.assertEqual(len(form.errors), 1)
+        self.assertIn("PrimaryPhone", form.errors)
+        self.assertItemsEqual(form.errors["PrimaryPhone"], ["Phone in incorrect format."])        
