@@ -7,7 +7,7 @@ import re
 
 countries = Country.objects.filter(special=False).order_by('name')
 country_choices = [(country.id, country.name) for country in countries]
-country_choices.append((0, "No Preference"))
+country_choices.insert(0, (0, "No Preference"))
 
 special_committees = Committee.objects.filter(special=True)
 special_committees_choices = [(committee.id, committee.name) for committee in special_committees]
