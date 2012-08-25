@@ -93,6 +93,24 @@ $(function() {
                 PrimaryName: {required: "Please enter a name."},
                 PrimaryEmail: {required: "Please enter an email address."},
                 PrimaryPhone: {required: "Please enter a phone number."}
+            },
+
+            rules: {
+                Username: {
+                    minlength:4
+                },
+                Password: {
+                    minlength:6
+                },
+                Password2: {
+                    equalTo:"#id_Password"
+                },
+                programtype: {
+                    minlength:1
+                },
+                us_or_int: {
+                    minlength:1
+                }
             }
         });
         
