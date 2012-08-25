@@ -198,6 +198,7 @@ class RegistrationForm(forms.Form):
         international = cleaned_data.get('us_or_int')
         primary_phone = cleaned_data.get('PrimaryPhone')
         secondary_phone = cleaned_data.get('SecondaryPhone')
+        country = cleaned_data.get('SchoolCountry')
 
         # Check to see if passwords match
         if Password and Password2 and Password != Password2:
@@ -219,6 +220,12 @@ class RegistrationForm(forms.Form):
             message = "Phone in incorrect format."
             self._errors["SecondaryPhone"] = self.error_class([message])
             del cleaned_data["SecondaryPhone"]
+
+        # Check to make sure a country is specified for international schools
+        if international == "international":
+            if not country or re.match("^\s*$", country) is not None:
+                message = "You must specify a country."
+                self._errors["SchoolCountry"] = self.error_class([message])
 
         # Checks for duplicates in country preferences
         countryprefs = set()

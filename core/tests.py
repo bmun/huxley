@@ -463,6 +463,7 @@ class RegistrationTest(unittest.TestCase):
         """ Tests the international phone number validation code """
         params = self.valid_params.copy()
         params["us_or_int"] = "international"
+        params["SchoolCountry"] = "Japan"
 
         # 1234534653465 (just numbers; valid)
         params["PrimaryPhone"] = "123434645657"
@@ -495,4 +496,35 @@ class RegistrationTest(unittest.TestCase):
 
         self.assertEqual(len(form.errors), 1)
         self.assertIn("PrimaryPhone", form.errors)
-        self.assertItemsEqual(form.errors["PrimaryPhone"], ["Phone in incorrect format."])        
+        self.assertItemsEqual(form.errors["PrimaryPhone"], ["Phone in incorrect format."])
+
+
+    def test_school_country(self):
+        """ Tests that school country is filled out when it's an international school """
+        params = self.valid_params.copy()
+        
+        # Try US first (no country specified)
+        params["us_or_int"] = "us"
+        form = RegistrationForm(params)
+        self.assertTrue(form.is_valid())
+
+        # Try US with a country (shouldn't matter)
+        params["SchoolCountry"] = "America"
+        form = RegistrationForm(params)
+        self.assertTrue(form.is_valid())
+
+        # Try international (with no country specified)
+        params = self.valid_params.copy() 
+        params["us_or_int"] = "international"
+        form = RegistrationForm(params)
+        self.assertFalse(form.is_valid())
+
+        self.assertEqual(len(form.errors), 1)
+        self.assertIn("SchoolCountry", form.errors)
+        self.assertItemsEqual(form.errors["SchoolCountry"], ["You must specify a country."])
+
+        # Try international (with a country)
+        params["SchoolCountry"] = "Japan"
+        form = RegistrationForm(params)
+        self.assertTrue(form.is_valid())
+
