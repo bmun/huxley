@@ -23,7 +23,7 @@ class RegistrationForm(forms.Form):
     Password2 = forms.CharField(label="Password (again)", widget=forms.PasswordInput(attrs={'class':'half required pass1 validChars'}))
 
     # School Information
-    us_or_int = forms.ChoiceField(label="Where is your school?", widget=forms.RadioSelect(attrs={'class':'int_check', 'name':'us_or_int'}), choices=(('us', 'United States'), ('international', 'International')))
+    us_or_int = forms.ChoiceField(label="Where is your school?", widget=forms.RadioSelect(attrs={'class':'int_check', 'name':'us_or_int'}), choices=(('us', 'United States'), ('international', 'International')), initial="us")
     SchoolName = forms.CharField(label="Official School Name", widget=forms.TextInput(attrs={'class':'full required'}))
     SchoolAddress = forms.CharField(label="Address", widget=forms.TextInput(attrs={'class':'full required'}))
     SchoolCity = forms.CharField(label="City", widget=forms.TextInput(attrs={'class':'required'}))
