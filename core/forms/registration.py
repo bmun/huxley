@@ -226,27 +226,7 @@ class RegistrationForm(forms.Form):
             if not country or re.match("^\s*$", country) is not None:
                 message = "You must specify a country."
                 self._errors["SchoolCountry"] = self.error_class([message])
-
-        # Checks for duplicates in country preferences
-        countryprefs = set()
-        for i in xrange(1,11):
-            current_pref = "CountryPref"+str(i)
-            if current_pref not in cleaned_data:
-                continue
-
-            try:
-                pref = int(cleaned_data[current_pref])
-                if pref == 0:
-                    continue
-            except:
-                continue
-
-            if pref in countryprefs:
-                message = "Please choose different countries for each preference."
-                self._errors[current_pref] = self.error_class([message])
-                del cleaned_data[current_pref]
-            countryprefs.add(pref)
-
+                
         # Always return cleaned_data
         return cleaned_data
 
