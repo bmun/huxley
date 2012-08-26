@@ -353,7 +353,7 @@ class RegistrationTest(unittest.TestCase):
 
 
     def test_country_preferences(self):
-        """ Tests that country preferences do not have duplicates """
+        """ Tests that country preferences are optional """
         # Initialization
         params = self.valid_params.copy()
         for i in xrange(1,11):
@@ -371,16 +371,7 @@ class RegistrationTest(unittest.TestCase):
         form = RegistrationForm(params)
         self.assertTrue(form.is_valid())
 
-        # Duplicate country preferences; invalid
-        params["CountryPref6"] = 7
-        form = RegistrationForm(params)
-        self.assertFalse(form.is_valid())
-
-        self.assertEqual(len(form.errors), 1)
-        self.assertIn("CountryPref7", form.errors)
-        self.assertItemsEqual(form.errors["CountryPref7"], ["Please choose different countries for each preference."])        
-
-
+        
     def test_add_committee_preferences(self):
         """ Tests that adding committee preferences works """
         params = self.valid_params.copy()
