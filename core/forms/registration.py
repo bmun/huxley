@@ -9,7 +9,7 @@ countries = Country.objects.filter(special=False).order_by('name')
 country_choices = [(country.id, country.name) for country in countries]
 country_choices.insert(0, (0, "No Preference"))
 
-special_committees = Committee.objects.filter(special=True)
+special_committees = Committee.objects.filter(special=True).order_by('fullname')
 special_committees_choices = [(committee.id, committee.fullname) for committee in special_committees]
 
 class RegistrationForm(forms.Form):
