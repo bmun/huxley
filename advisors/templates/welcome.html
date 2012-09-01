@@ -5,14 +5,14 @@
 {% block content %}
 <h2> Welcome, <span class="advisorfirstname">{{ user.first_name }}!</span> </h2>
 
-<p>We're very excited to see <span class="schoolname">{{ school }}</span> at BMUN 60 this year for our Diamond Session!
+<p>We're very excited to see <span class="schoolname">{{ school }}</span> at BMUN 61 this year!
 Here, you can view and edit your registration information for the conference, edit your delegate roster, and find answers to frequently asked questions.
 To edit your information, just click on any of the highlighted fields and add your changes. Also, <span class="bold">don't forget to save any information you update!</span></p>
 <br>
-<p>If you have any other further questions, please contact me at <a href="mailto:info@bmun.net">info@bmun.net</a> and I will respond to all requests efficiently. See you soon!</p>
+<p>If you have any other further questions, please contact me at <a href="mailto:info@bmun.org">info@bmun.org</a> and I will respond to all requests efficiently. See you soon!</p>
 <br>
-<p class="bold">Ginny Sklar</p>
-<p>Under-Secretary General of External Relations, 60th Session</p>
+<p class="bold">Nishita Agarwal</p>
+<p>Under-Secretary General of External Relations, 61st Session</p>
 
 <form id = "welcomepage" method="post" action="{% url advisor "welcome" %}">
 {% csrf_token %}
