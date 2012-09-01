@@ -95,7 +95,7 @@ class RegistrationForm(forms.Form):
                                                timesattended = self.cleaned_data['howmany'],
                                                mindelegationsize = self.cleaned_data['MinDelegation'],
                                                maxdelegationsize = self.cleaned_data['MaxDelegation'],
-                                               international = self.cleaned_data['us_or_int'])
+                                               international = self.cleaned_data['us_or_int'] == 'international')
             new_school.save()
             return new_school
         except:
