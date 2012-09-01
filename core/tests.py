@@ -248,6 +248,7 @@ class RegistrationTest(unittest.TestCase):
     def test_create_school(self):
         """ Tests that the form creates a school object in the DB properly """
 
+        # Test that American schools are created properly
         params = self.valid_params.copy()
         params["SchoolName"] = "GirlsGeneration"
 
@@ -269,7 +270,42 @@ class RegistrationTest(unittest.TestCase):
         self.assertEqual(school.timesattended, params["howmany"])
         self.assertEqual(school.mindelegationsize, params["MinDelegation"])
         self.assertEqual(school.maxdelegationsize, params["MaxDelegation"])
-        self.assertEqual(school.international, params["us_or_int"])
+        self.assertFalse(school.international)
+
+        if "SecondaryName" in params:
+            self.assertEqual(school.secondaryname, params["SecondaryName"])
+        if "SecondaryEmail" in params:
+            self.assertEqual(school.secondaryemail, params["SecondaryEmail"])
+        if "SecondaryPhone" in params:
+            self.assertEqual(school.secondaryphone, params["SecondaryPhone"])
+
+        # Check to see that it's in the database as well
+        schools_in_db = School.objects.filter(name=params["SchoolName"])
+        self.assertGreater(len(schools_in_db), 0)
+        self.assertEqual(schools_in_db[0], school)
+
+        # Test international school creation
+        params["SchoolName"] = "GirlsGenerationInternational"
+        params["SchoolCountry"] = 10
+        params["us_or_int"] = "international"
+        form = RegistrationForm(params)
+        self.assertTrue(form.is_valid())
+
+        school = form.create_school()
+        self.assertFalse(school is None)
+        self.assertEqual(school.name, params["SchoolName"])
+        self.assertEqual(school.address, params["SchoolAddress"])
+        self.assertEqual(school.city, params["SchoolCity"])
+        self.assertEqual(school.state, params["SchoolState"])
+        self.assertEqual(school.zip, str(params["SchoolZip"]))
+        self.assertEqual(school.primaryname, params["PrimaryName"])
+        self.assertEqual(school.primaryemail, params["PrimaryEmail"])
+        self.assertEqual(school.primaryphone, params["PrimaryPhone"])
+        self.assertEqual(school.programtype, params["programtype"])
+        self.assertEqual(school.timesattended, params["howmany"])
+        self.assertEqual(school.mindelegationsize, params["MinDelegation"])
+        self.assertEqual(school.maxdelegationsize, params["MaxDelegation"])
+        self.assertTrue(school.international)
 
         if "SecondaryName" in params:
             self.assertEqual(school.secondaryname, params["SecondaryName"])
