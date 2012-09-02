@@ -27,7 +27,7 @@ class RegistrationForm(forms.Form):
     SchoolName = forms.CharField(label="Official School Name", widget=forms.TextInput(attrs={'class':'full required'}))
     SchoolAddress = forms.CharField(label="Address", widget=forms.TextInput(attrs={'class':'full required'}))
     SchoolCity = forms.CharField(label="City", widget=forms.TextInput(attrs={'class':'required'}))
-    SchoolState = forms.CharField(label="State", widget=forms.TextInput(attrs={'class':'required'}))
+    SchoolState = forms.CharField(label="State", widget=forms.TextInput(attrs={'class':'required'}), required=False)
     SchoolZip = forms.CharField(label="Zip", widget=forms.TextInput(attrs={'class':'required zip'}), min_length=5)
     SchoolCountry = forms.CharField(label="Country", widget=forms.TextInput(attrs={'class':'showhide'}), required=False)
 
@@ -195,9 +195,10 @@ class RegistrationForm(forms.Form):
         cleaned_data = super(RegistrationForm, self).clean()
         Password = cleaned_data.get('Password')
         Password2 = cleaned_data.get('Password2')
-        international = cleaned_data.get('us_or_int')
+        international = cleaned_data.get('us_or_int', 'us')
         primary_phone = cleaned_data.get('PrimaryPhone')
         secondary_phone = cleaned_data.get('SecondaryPhone')
+        state = cleaned_data.get('SchoolState')
         country = cleaned_data.get('SchoolCountry')
 
         # Check to see if passwords match
@@ -208,6 +209,12 @@ class RegistrationForm(forms.Form):
             # These fields are not valid anymore, so delete them from cleaned_data
             del cleaned_data["Password"]
             del cleaned_data["Password2"]
+
+        # Check to see if the state is required
+        if not state and international == "us":
+            message = "This field is required."
+            self._errors["SchoolState"] = self.error_class([message])
+            del cleaned_data["SchoolState"]
 
         # Check to make sure phone number is formatted correctly
         if primary_phone and not self.phone_num_is_valid(primary_phone, international):
