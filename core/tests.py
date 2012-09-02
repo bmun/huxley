@@ -9,6 +9,7 @@ from django.test import TestCase
 from django.utils import unittest
 from core.models import *
 from core.forms.registration import RegistrationForm
+import re
 
 
 class SimpleTest(TestCase):
@@ -72,7 +73,11 @@ class RegistrationTest(unittest.TestCase):
             if field.required:
                 self.assertIn(name, form.errors)
             else:
-                self.assertNotIn(name, form.errors)
+                if name == "SchoolState":
+                    # State is only required if the school is in the US
+                    self.assertIn("SchoolState", form.errors)
+                else:
+                    self.assertNotIn(name, form.errors)
 
 
     def test_username_len(self):
@@ -272,6 +277,11 @@ class RegistrationTest(unittest.TestCase):
         self.assertEqual(school.maxdelegationsize, params["MaxDelegation"])
         self.assertFalse(school.international)
 
+        # Make sure state isn't an empty string, or a string of spaces
+        # Bit unnecessary though
+        matches = re.match("^\s*$", school.state)
+        self.assertTrue(matches is None)
+
         if "SecondaryName" in params:
             self.assertEqual(school.secondaryname, params["SecondaryName"])
         if "SecondaryEmail" in params:
@@ -296,8 +306,8 @@ class RegistrationTest(unittest.TestCase):
         self.assertEqual(school.name, params["SchoolName"])
         self.assertEqual(school.address, params["SchoolAddress"])
         self.assertEqual(school.city, params["SchoolCity"])
-        self.assertEqual(school.state, params["SchoolState"])
         self.assertEqual(school.zip, str(params["SchoolZip"]))
+        self.assertEqual(school.country, params["SchoolCountry"])
         self.assertEqual(school.primaryname, params["PrimaryName"])
         self.assertEqual(school.primaryemail, params["PrimaryEmail"])
         self.assertEqual(school.primaryphone, params["PrimaryPhone"])
@@ -307,6 +317,8 @@ class RegistrationTest(unittest.TestCase):
         self.assertEqual(school.maxdelegationsize, params["MaxDelegation"])
         self.assertTrue(school.international)
 
+        if "SchoolState" in params:
+            self.assertEqual(school.state, params["SchoolState"])
         if "SecondaryName" in params:
             self.assertEqual(school.secondaryname, params["SecondaryName"])
         if "SecondaryEmail" in params:
