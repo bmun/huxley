@@ -7,10 +7,12 @@ $(function() {
             $(".showhide").slideDown();
             $(".showhide").addClass('required');
             $(".phoneVal").removeClass('phoneNum').addClass('intPhone');
+            $("#id_SchoolState").removeClass('required');
         } else {
             $(".showhide").slideUp();
             $(".showhide").removeClass('required');
             $(".phoneVal").removeClass('intPhone').addClass('phoneNum');
+            $("#id_SchoolState").addClass('required');
         }
     });
 
