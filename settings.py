@@ -142,6 +142,15 @@ PIPELINE_CSS = {
     }
 }
 
+PIPELINE_JS = {
+    'huxley': {
+        'source_filenames': (
+            'js/*.js',
+        ),
+        'output_filename': 'js/huxley.js'
+    }
+}
+
 
 
 # Local settings hack. Used for overriding variables in stage/prod.
