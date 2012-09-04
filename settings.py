@@ -54,7 +54,7 @@ MEDIA_URL = ''
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
-STATIC_ROOT = ''
+STATIC_ROOT = '%s/static/' % os.getcwd()
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
@@ -74,6 +74,9 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
+
+# This is for compression of CSS and JS files.
+STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = '+42lz(cp=6t#dzpkah^chn760l)rmu$p&f-#7ggsde2l3%fm-i'
@@ -123,7 +126,23 @@ INSTALLED_APPS = (
     'core',
     'advisors',
     'chairs',
+    'pipeline',
 )
+
+PIPELINE_CSS_COMPRESSOR = None
+
+PIPELINE_JS_COMPRESSOR = None
+
+PIPELINE_CSS = {
+    'huxley': {
+        'source_filenames': (
+            'css/*.css',
+        ),
+        'output_filename': 'css/huxley.css'
+    }
+}
+
+
 
 # Local settings hack. Used for overriding variables in stage/prod.
 try:

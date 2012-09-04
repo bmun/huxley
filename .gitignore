@@ -17,6 +17,12 @@ cms/forms/test_registration.py
 # WSGI file
 wsgi.py
 
+# Static Directory
+static/*
+
 # Local Settings File
 local_settings.py
 will_settings.py
+
+# Temporary Files
+*~
