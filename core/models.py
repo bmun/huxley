@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
-from django.db.models.signals import post_save, pre_delete
+from django.db.models.signals import pre_save, post_save, pre_delete
 
 
 class Country(models.Model):
@@ -171,4 +171,11 @@ def delete_delegate_slots(sender, **kwargs):
 	slot.delete()
 
 post_save.connect(create_delegate_slots, sender=Assignment)
-pre_delete.connect(delete_delegate_slots, sender=Assignment)    
+pre_delete.connect(delete_delegate_slots, sender=Assignment)
+
+def net_registration_fee(sender, **kwargs):
+   school = kwargs["instance"]
+   school.registrationnet = school.registrationowed - school.registrationpaid
+   print school.registrationnet
+
+pre_save.connect(net_registration_fee, sender=School)     
