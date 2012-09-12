@@ -49,12 +49,12 @@ class School(models.Model):
     maxdelegationsize = models.IntegerField(db_column='MaximumDelegationSize', default=0)
     countrypreferences = models.ManyToManyField(Country, db_column='CountryPreferences', blank=True, default=None, through='CountryPreference')
     committeepreferences = models.ManyToManyField(Committee, db_column='CommitteePreferences', limit_choices_to={'special':True}, blank=True, default=None)
-    registrationpaid = models.DecimalField(max_digits=4, decimal_places=2, db_column='RegistrationPaid', default=0) 
-    registrationowed = models.DecimalField(max_digits=4, decimal_places=2, db_column='RegistrationOwed', default=0) 
-    registrationnet = models.DecimalField(max_digits=4, decimal_places=2, db_column='RegistrationNet', default=0) 
-    delegationpaid = models.DecimalField(max_digits=4, decimal_places=2, db_column='DelegationPaid', default=0) 
-    delegationowed = models.DecimalField(max_digits=4, decimal_places=2, db_column='DelegationOwed', default=0) 
-    delegationnet = models.DecimalField(max_digits=4, decimal_places=2, db_column='DelegationNet', default=0) 
+    registrationpaid = models.DecimalField(max_digits=6, decimal_places=2, db_column='RegistrationPaid', default=0) 
+    registrationowed = models.DecimalField(max_digits=6, decimal_places=2, db_column='RegistrationOwed', default=0) 
+    registrationnet = models.DecimalField(max_digits=6, decimal_places=2, db_column='RegistrationNet', default=0) 
+    delegationpaid = models.DecimalField(max_digits=6, decimal_places=2, db_column='DelegationPaid', default=0) 
+    delegationowed = models.DecimalField(max_digits=6, decimal_places=2, db_column='DelegationOwed', default=0) 
+    delegationnet = models.DecimalField(max_digits=6, decimal_places=2, db_column='DelegationNet', default=0) 
     international = models.BooleanField(null=False, db_column='International', default=False)
     class Meta:
         db_table = u'School'
