@@ -147,7 +147,8 @@ PIPELINE_JS = {
         'source_filenames': (
             'js/jquery/*.js',
             'js/jquery-plugins/*.js',
-            'js/*.js',
+            'js/core/*.js',
+            'js/advisors/*.js',
         ),
         'output_filename': 'js/huxley.js'
     }
