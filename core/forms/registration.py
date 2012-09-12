@@ -4,6 +4,7 @@ from core.models import *
 from django.contrib.auth.models import User
 
 import re
+from datetime import date
 
 countries = Country.objects.filter(special=False).order_by('name')
 country_choices = [(country.id, country.name) for country in countries]
@@ -80,6 +81,7 @@ class RegistrationForm(forms.Form):
 
     def create_school(self):
         try:
+            registration_fee = 40.00 if date.today() < date(2012, 10, 20) else 50.00
             new_school = School.objects.create(name=self.cleaned_data['SchoolName'],
                                                address=self.cleaned_data['SchoolAddress'],
                                                city=self.cleaned_data['SchoolCity'],
@@ -95,7 +97,8 @@ class RegistrationForm(forms.Form):
                                                timesattended = self.cleaned_data['howmany'],
                                                mindelegationsize = self.cleaned_data['MinDelegation'],
                                                maxdelegationsize = self.cleaned_data['MaxDelegation'],
-                                               international = self.cleaned_data['us_or_int'] == 'international')
+                                               international = self.cleaned_data['us_or_int'] == 'international',
+                                               registrationowed = registration_fee)
             new_school.save()
             return new_school
         except:
