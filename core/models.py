@@ -1,7 +1,9 @@
 from django.contrib.auth.models import User
 from django.db import models
-from django.db.models.signals import pre_save, post_save, pre_delete
+from django.db.models.signals import pre_save, post_save, pre_delete, post_delete
 
+from datetime import datetime
+from decimal import Decimal
 
 class Country(models.Model):
     name = models.CharField(max_length=765, db_column='name', null=False, blank=True)
@@ -89,11 +91,11 @@ class DelegateSlot(models.Model):
     def __unicode__(self):
         return self.assignment.__str__()
     def get_country(self):
-        return assignment.country
+        return self.assignment.country
     def get_committee(self):
-        return assignment.committee
+        return self.assignment.committee
     def get_school(self):
-        return assignment.school
+        return self.assignment.school
 
 
 class Delegate(models.Model):
@@ -161,15 +163,15 @@ class SecretariatProfile(models.Model):
 
 def create_delegate_slots(sender, **kwargs):
     if kwargs["created"]:
-	asmt = kwargs["instance"]
-	num_slots = asmt.committee.delegatesperdelegation
-	for slot in range(0, num_slots):
-	    DelegateSlot(assignment=asmt).save()
+    	asmt = kwargs["instance"]
+    	num_slots = asmt.committee.delegatesperdelegation
+    	for slot in range(0, num_slots):
+    	    DelegateSlot(assignment=asmt).save()
 	
 def delete_delegate_slots(sender, **kwargs):
     asmt = kwargs["instance"]
     for slot in DelegateSlot.objects.filter(assignment=asmt):
-	slot.delete()
+	   slot.delete()
 
 post_save.connect(create_delegate_slots, sender=Assignment)
 pre_delete.connect(delete_delegate_slots, sender=Assignment)
@@ -179,4 +181,38 @@ def net_registration_fee(sender, **kwargs):
    school.registrationnet = school.registrationowed - school.registrationpaid
    print school.registrationnet
 
-pre_save.connect(net_registration_fee, sender=School)     
+pre_save.connect(net_registration_fee, sender=School)
+
+# Add and subtract delegate fees from a school when delegates are added
+# and deleted.
+def add_delegate_fee(sender, **kwargs):
+    if kwargs["created"]:
+        early_deadline = datetime(2013, 2, 12)
+        regular_deadline = datetime(2013, 2, 26)
+        delegate = kwargs["instance"]
+        school = delegate.get_school()
+        
+        if delegate.created_at < early_deadline:
+            school.delegationowed += Decimal.from_float(40.00)
+        elif delegate.created_at < regular_deadline:
+            school.delegationowed += Decimal.from_float(50.00)
+        else:
+            school.delegationowed += Decimal.from_float(55.00)
+        school.save()
+
+def subtract_delegate_fee(sender, **kwargs):
+    early_deadline = datetime(2013, 2, 12)
+    regular_deadline = datetime(2013, 2, 26)
+    delegate = kwargs["instance"]
+    school = delegate.get_school()
+
+    if delegate.created_at < early_deadline:
+        school.delegationowed -= Decimal.from_float(40.00)
+    elif delegate.created_at < regular_deadline:
+        school.delegationowed -= Decimal.from_float(50.00)
+    else:
+        school.delegationowed -= Decimal.from_float(55.00)
+    school.save()
+
+post_save.connect(add_delegate_fee, sender=Delegate)
+post_delete.connect(subtract_delegate_fee, sender=Delegate)
