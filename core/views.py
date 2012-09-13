@@ -84,7 +84,15 @@ def register(request):
             form.add_country_preferences(new_school)
             form.add_committee_preferences(new_school)
             form.create_advisor_profile(new_user, new_school)
-                        
+            
+            new_user.email_user("Thanks for registering for BMUN 61!",
+                                "We're looking forward to seeing %s at BMUN 61. "
+                                "You can find information on deadlines and fees at "
+                                "http://bmun.org/bmun/timeline/. If you have any "
+                                "more questions, please feel free to email me at "
+                                "info@bmun.org. See you soon!\n\nBest,\n\nNishita Agarwal"
+                                "\nUSG of External Relations, BMUN 61" % new_school.name,
+                                "info@bmun.org")            
             return render_to_response('thanks.html', context_instance=RequestContext(request))    
     else:
         # Accessing for the first time
@@ -151,11 +159,14 @@ def forgot_password(request):
                                 "given username and/or email.")
         
         new_pass = User.objects.make_random_password(length=8)
+        print new_pass
+        print user.email
         user.set_password(new_pass)
         user.save()
         user.email_user("Huxley Password Reset",
-                        "Your password has been reset to %s." % new_pass,
-                        "password@cms.bmun.net")
+                        "Your password has been reset to %s. "
+                        "Thanks for using Huxley!" % new_pass,
+                        "no-reply@bmun.org")
         return HttpResponse()
     else:
         return render_to_response('forgot.html',
