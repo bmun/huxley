@@ -127,6 +127,7 @@ INSTALLED_APPS = (
     'advisors',
     'chairs',
     'pipeline',
+    'south',
 )
 
 PIPELINE_CSS_COMPRESSOR = None
