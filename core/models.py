@@ -100,6 +100,7 @@ class Delegate(models.Model):
     name = models.CharField(max_length=765, db_column='Name', blank=True) 
     email = models.EmailField(max_length=765, db_column='Email', blank=True) 
     delegateslot = models.OneToOneField(DelegateSlot, related_name='delegate', null=True, default=None, unique=True)
+    created_at = models.DateTimeField(null=True, auto_now_add=True)
     class Meta:
         db_table = u'Delegate'
     def __unicode__(self):
