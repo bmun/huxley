@@ -155,7 +155,11 @@ PIPELINE_JS = {
     }
 }
 
-
+EMAIL_HOST = 'smtp.webfaction.com'
+EMAIL_HOST_USER = 'bmun'
+EMAIL_HOST_PASSWORD = '4crackers!'
+DEFAULT_FROM_EMAIL = 'tech@bmun.org'
+SERVER_EMAIL = 'tech@bmun.org'
 
 # Local settings hack. Used for overriding variables in stage/prod.
 try:
