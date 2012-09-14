@@ -10,6 +10,7 @@ from django.utils import simplejson
 
 from core.models import *
 from core.forms.registration import RegistrationForm
+from core.forms.forgot_pass_form import ForgotForm
 
 import re
 
@@ -138,39 +139,22 @@ def change_password(request):
 
 # Resets a user's password.
 def forgot_password(request):
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        input_email = request.POST.get('email')
-        
-        if not (username or input_email):
-            return HttpResponse("You must fill at least one of the fields.")
-        
-        user = None
-        try:
-            if username and input_email:
-                user = User.objects.get(username__exact=username,
-                                        email__exact=input_email)
-            elif input_email:
-                user = User.objects.get(email__exact=input_email)
-            else:
-                user = User.objects.get(username__exact=username)
-        except:
-            return HttpResponse("Sorry! We couldn't find a user matching the "
-                                "given username and/or email.")
-        
-        new_pass = User.objects.make_random_password(length=8)
-        print new_pass
-        print user.email
-        user.set_password(new_pass)
-        user.save()
-        user.email_user("Huxley Password Reset",
-                        "Your password has been reset to %s. "
-                        "Thanks for using Huxley!" % new_pass,
-                        "no-reply@bmun.org")
-        return HttpResponse()
+    if request.POST:
+        form = ForgotForm(request.POST)
+        if form.is_valid():
+            user = form.get_user()
+            new_pass = form.reset_pass(user)
+            # user.email_user("Huxley Password Reset",
+            #                 "Your password has been reset to %s.\nThank you for using Huxley!" % (new_pass),
+            #                 from_email="no-reply@bmun.org")
+
+            return render_to_response('reset_success.html',
+                                      context_instance=RequestContext(request))
     else:
-        return render_to_response('forgot.html',
-                                  context_instance=RequestContext(request))
+        form = ForgotForm()
+
+    return render_to_response('forgot.html', {"form":form},
+                              context_instance=RequestContext(request))
 
 
 # Checks that a username is unique.
