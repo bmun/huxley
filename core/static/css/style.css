@@ -142,6 +142,12 @@ h1{ font-weight: 300; }
     font-size: 18px;
 }
 
+#forgot-form input[type=text] {
+    width: 255px; 
+    margin-bottom:10px;
+    font-size: 18px;
+}
+
 #registrationform fieldset input[type=text], #registrationform fieldset input[type=password]{
     font-size: 14px;
     font-weight: 500;
