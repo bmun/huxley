@@ -144,9 +144,9 @@ def forgot_password(request):
         if form.is_valid():
             user = form.get_user()
             new_pass = form.reset_pass(user)
-            # user.email_user("Huxley Password Reset",
-            #                 "Your password has been reset to %s.\nThank you for using Huxley!" % (new_pass),
-            #                 from_email="no-reply@bmun.org")
+            user.email_user("Huxley Password Reset",
+                            "Your password has been reset to %s.\nThank you for using Huxley!" % (new_pass),
+                            from_email="no-reply@bmun.org")
 
             return render_to_response('reset_success.html',
                                       context_instance=RequestContext(request))
