@@ -5,6 +5,7 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
+    url(r'^favicon\.ico$', 'django.views.generic.simple.redirect_to', {'url': '/static/img/favicon.ico'}),
     url(r'^forgot/', 'core.views.forgot_password', name='forgotpassword'),
     url(r'^changepassword', 'core.views.change_password', name='changepassword'),
     url(r'^advisor/(?P<page>\w+)', 'advisors.views.dispatch', name='advisor'),
