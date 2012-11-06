@@ -7,7 +7,7 @@
 		init: function(){
 			
 			// Add new delegate.
-			$(".content").delegate('.nodelegate', "click", function(){
+			/*$(".content").delegate('.nodelegate', "click", function(){
 	            var sid = $(this).closest('tr').attr('slotid');
 	            $(this).closest('tr').attr('delegateop', 'new');
 	            $("tr[slotid=" + sid + "] td.delegatename span").fadeOut(150, function(){
@@ -16,7 +16,7 @@
 	            });
 	            Roster.opQueue.push({'op':'new', 'sid':sid});
 	            Roster.setUnsaved();
-	        });
+	        });*/
         	
 			// Delete a delegate.
 			$(".content").delegate("#delete.delegateoption", "click", function() {
