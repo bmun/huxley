@@ -3,8 +3,10 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse, HttpResponseNotFound
 from django.shortcuts import render_to_response
 from django.template import Context, RequestContext
+from django.utils import simplejson
 
 from core.models import *
+
 
 # Dispatch to the appropriate view per the request.
 def dispatch(request, page='welcome'):
@@ -126,7 +128,28 @@ def roster(request, profile, context):
         return render_to_response('roster_edit.html', c, context_instance=context)
 
     elif request.method == 'POST':
-        # TODO (kmeht): Create the roster update view.
+        slot_data = simplejson.loads(request.POST['delegates'])
+        for slot_id, delegate_data in slot_data.items():
+            slot = DelegateSlot.objects.get(id=slot_id)
+            if 'name' in delegate_data and 'email' in delegate_data:
+                try:
+                    delegate = slot.delegate
+                    delegate.name = delegate_data['name']
+                    delegate.email = delegate_data['email']
+                    delegate.save()
+                except:
+                    Delegate.objects.create(
+                        name=delegate_data['name'],
+                        email=delegate_data['email'],
+                        delegateslot=slot
+                    )
+            else:
+                try:
+                    slot.delegate.delete()
+                except:
+                    pass
+
+
         return HttpResponse(status=200)
 
 

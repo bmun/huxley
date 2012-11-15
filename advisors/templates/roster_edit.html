@@ -11,13 +11,13 @@ When you're done, <span class="bold">don't forget to save your changes!</span> <
 <form id="theRoster" method="post" action="{% url advisor "roster" %}">
 {% csrf_token %}
 <div id="tablemenu" class="tableheader">
-    <!--Don't forget to <input class="saved button" type="submit" value="SAVE!"/>-->
+    Don't forget to <input class="saved button" type="submit" value="SAVE!"/>
 </div>
 <div id="rostercontainer">
 <table id="roster">
     <thead>
         <tr>
-            <th> Edit </th>
+            <th></th>
             <th class="delegatename"> Delegate Name </th>
             <th class="delegateemail"> Delegate Email </th>
             <th class="delegatecountry"> Country/Position </th>
@@ -31,18 +31,18 @@ When you're done, <span class="bold">don't forget to save your changes!</span> <
                 <div class="delegateoption button" id="delete"></div>
                 <!--<div class="delegateoption button" id="switch"></div>-->
             </td>
-            <td class="delegatename" colspan="2">
+            <td class="delegatename">
                 {% if slot.delegate %}
                     <input type="text" name="delegatename" value="{{ slot.delegate.name }}" />
                 {% else %}
-                    <span class="nodelegate"> Adding delegates will be available soon.</span>
+                    <span class="nodelegate"> Click here to add a delegate.</span>
                 {% endif %}
             </td>
-            <!--<td class="delegateemail">
+            <td class="delegateemail">
                 {% if slot.delegate %}
                     <input type="text" name="delegateemail" value="{{ slot.delegate.email }}" />
                 {% endif %}
-            </td>-->
+            </td>
             <td class="delegatecountry">
                 {{ slot.assignment.country }}
             </td>
@@ -55,7 +55,7 @@ When you're done, <span class="bold">don't forget to save your changes!</span> <
 </table>
 </div>
 <div id="tablemenu" class="tablefooter">
-    <!--Don't forget to <input class="saved button" type="submit" value="SAVE!" />-->
+    Don't forget to <input class="saved button" type="submit" value="SAVE!" />
 </div>
 </form>
 {% endblock content %}

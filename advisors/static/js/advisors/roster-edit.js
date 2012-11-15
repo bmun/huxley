@@ -7,16 +7,16 @@
 		init: function(){
 			
 			// Add new delegate.
-			/*$(".content").delegate('.nodelegate', "click", function(){
+			$(".content").delegate('.nodelegate', "click", function(){
 	            var sid = $(this).closest('tr').attr('slotid');
 	            $(this).closest('tr').attr('delegateop', 'new');
 	            $("tr[slotid=" + sid + "] td.delegatename span").fadeOut(150, function(){
-	                $("tr[slotid=" + sid + "] td.delegatename").html("<input type=\"text\" name=\"delegateemail\" value=\"Delegate Name\" />").hide().fadeIn(150);
+	                $("tr[slotid=" + sid + "] td.delegatename").html("<input type=\"text\" name=\"delegatename\" value=\"Delegate Name\" />").hide().fadeIn(150);
 	                $("tr[slotid=" + sid + "] td.delegateemail").html("<input type=\"text\" name=\"delegateemail\" value=\"delegate@site.com\" />").hide().fadeIn(150);  
 	            });
 	            Roster.opQueue.push({'op':'new', 'sid':sid});
 	            Roster.setUnsaved();
-	        });*/
+	        });
         	
 			// Delete a delegate.
 			$(".content").delegate("#delete.delegateoption", "click", function() {
@@ -56,7 +56,14 @@
     var aggregateData = function(){
         var payload = {};
         payload['csrfmiddlewaretoken'] = $("input[name=csrfmiddlewaretoken]").attr('value');
-        payload['ops'] = JSON.stringify(Roster.opQueue);
+        delegates = {};
+        $(".rosterrow").each(function(){
+            delegates[$(this).attr('slotid')] = {
+                'name': $("input[name=delegatename]", $(this)).attr('value'),
+                'email': $("input[name=delegateemail]", $(this)).attr('value')
+            }
+        });
+        payload['delegates'] = JSON.stringify(delegates);
         
         return payload;
     };
@@ -82,7 +89,7 @@
         // Move... somewhere else? Also UI?
         //$("#roster").tablesorter();
         
-        $(document).on("click", "#switch.delegateoption", function(){
+        /*$(document).on("click", "#switch.delegateoption", function(){
             var did = Roster.getDelegateId(this);
             if(Roster.switch1 == undefined){
                 Roster.switch1 = did;
@@ -104,7 +111,7 @@
                 Roster.switch1 = undefined;
                 Roster.switch2 = undefined;
             }
-        });
+        });*/
         
         $(document).on("focus", "#roster input[type=text]", function() {
             var input = $(this);
