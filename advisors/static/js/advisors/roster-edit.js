@@ -7,7 +7,7 @@
 		init: function(){
 			
 			// Add new delegate.
-			$(".content").delegate('.nodelegate', "click", function(){
+			$(document).on("click", "#roster .nodelegate", function() {
 	            var sid = $(this).closest('tr').attr('slotid');
 	            $(this).closest('tr').attr('delegateop', 'new');
 	            $("tr[slotid=" + sid + "] td.delegatename span").fadeOut(150, function(){
@@ -19,7 +19,7 @@
 	        });
         	
 			// Delete a delegate.
-			$(".content").delegate("#delete.delegateoption", "click", function() {
+			$(document).on("click", "#roster #delete.delegateoption", function() {
 				var sid = $(this).closest('tr').attr('slotid');
 				$(this).closest('tr').attr('delegateop', 'delete');
 				$("tr[slotid=" + sid + "] td input[type=text]").fadeOut(150, function(){
