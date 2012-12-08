@@ -12,6 +12,7 @@ body { background: #f0f0f0 url(/static/img/unga3.jpg) center top no-repeat fixed
 #authcontent{ width: 580px; min-height: 160px; }
 #authcontent #left{ width: 289px; height: 160px; float:left; padding-right: 10px; border-right: 1px solid #fff; }
 #authcontent #right{ width: 269px; height: 160px; float:right; padding-left: 10px; border-left: 1px solid #ddd; }
+#authcontent #right #leftrightalign{ overflow:hidden; width:100%; position: relative; }
 #authcontent #registrationform fieldset .sub{ width: 274px; display: inline-block; }
 #authcontent #registrationform fieldset .left{ float:left; margin-right: 10px; }
 #authcontent #registrationfrom fieldset .right{ float:right; }
@@ -98,7 +99,9 @@ h1{ font-weight: 300; }
 #authcontent .forgot {
     font-size: 9px;
     font-weight: 500;
-    margin-left: 115px;
+    position: absolute;
+    right: 0px;
+    bottom: 0px;
 }
 
 /* Tables */
@@ -227,7 +230,9 @@ h1{ font-weight: 300; }
 }
 
 #authcontent span.register{
-    margin-left: 13px;
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
 }
 
 #authcontent #errorcontainer{
