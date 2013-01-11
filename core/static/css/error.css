@@ -4,4 +4,13 @@
 
 #error-container {
     display: none;
+    width: 600px;
+    height: 100px;
+}
+
+#error-content {
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-weight: 300;
+	color: #fff;
+	text-shadow: 0 0 5px #000;
 }
