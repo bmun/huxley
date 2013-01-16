@@ -167,14 +167,16 @@ def create_delegate_slots(sender, **kwargs):
     	num_slots = asmt.committee.delegatesperdelegation
     	for slot in range(0, num_slots):
     	    DelegateSlot(assignment=asmt).save()
-	
+
+"""	
 def delete_delegate_slots(sender, **kwargs):
     asmt = kwargs["instance"]
     for slot in DelegateSlot.objects.filter(assignment=asmt):
 	   slot.delete()
+"""
 
 post_save.connect(create_delegate_slots, sender=Assignment)
-pre_delete.connect(delete_delegate_slots, sender=Assignment)
+#pre_delete.connect(delete_delegate_slots, sender=Assignment)
 
 def net_registration_fee(sender, **kwargs):
    school = kwargs["instance"]
@@ -185,6 +187,7 @@ pre_save.connect(net_registration_fee, sender=School)
 
 # Add and subtract delegate fees from a school when delegates are added
 # and deleted.
+"""
 def add_delegate_fee(sender, **kwargs):
     if kwargs["created"]:
         early_deadline = datetime(2013, 2, 12)
@@ -216,3 +219,4 @@ def subtract_delegate_fee(sender, **kwargs):
 
 post_save.connect(add_delegate_fee, sender=Delegate)
 post_delete.connect(subtract_delegate_fee, sender=Delegate)
+"""

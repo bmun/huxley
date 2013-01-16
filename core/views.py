@@ -77,6 +77,10 @@ def logout_user(request):
 
 # Registers a new user and school
 def register(request):
+
+    # Registration is closed.
+    return render_to_response('registration_closed.html', context_instance=RequestContext(request))
+
     if request.POST:
         form = RegistrationForm(request.POST)
         if form.is_valid():
