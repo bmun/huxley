@@ -156,7 +156,7 @@ def roster(request, profile, context):
 # Display the advisor's attendance list.
 def attendance(request, profile, context):
     school = profile.school
-    attendInfo = getAttendInfo(request, school)
+    attendInfo = getAttendInfo(school)
     return render_to_response('check-attendance.html', {'attendInfo': attendInfo}, context_instance=context)
 
 
@@ -167,7 +167,8 @@ def getAttendInfo(request, school):
     delegates = [slot.parent_link for slot in slots]
     # Initialize the dictionary of delegate to attendance
     attendInfo = {}
-    attendInfo[delegate] = {} for delegate in delegates
+    for delegate in delegates:
+        attendInfo[delegate] = {}
     # Now for the six sessions
     for delegate in attendInfo.keys():
         for session in xrange(1,7):
