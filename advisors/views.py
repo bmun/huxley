@@ -171,8 +171,7 @@ def getAttendInfo(request, school):
     # Now for the six sessions
     for delegate in attendInfo.keys():
         for session in xrange(1,7):
-            # TODO: add "attended_session" method on delegate slot, as well as 6 booleans
-            attendInfo[delegate][session] = delegate.delegateslot.attended_session(session)
+            attendInfo[delegate][session] = delegate.attended_session(session)
     # Return
     return attendInfo
 

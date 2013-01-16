@@ -103,6 +103,12 @@ class Delegate(models.Model):
     email = models.EmailField(max_length=765, db_column='Email', blank=True) 
     delegateslot = models.OneToOneField(DelegateSlot, related_name='delegate', null=True, default=None, unique=True)
     created_at = models.DateTimeField(null=True, auto_now_add=True)
+    session1 = models.BooleanField(default=False)
+    session2 = models.BooleanField(default=False)
+    session3 = models.BooleanField(default=False)
+    session4 = models.BooleanField(default=False)
+    session5 = models.BooleanField(default=False)
+    session6 = models.BooleanField(default=False)
     class Meta:
         db_table = u'Delegate'
     def __unicode__(self):
@@ -113,6 +119,10 @@ class Delegate(models.Model):
         return self.delegateslot.get_committee()
     def get_school(self):
         return self.delegateslot.get_school()
+    def attended_session(self, num):
+        session = "session%d" % (num)
+        field = getattr(self, session)
+        return field
 
 
 class HelpCategory(models.Model):
