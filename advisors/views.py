@@ -156,7 +156,7 @@ def roster(request, profile, context):
 # Display the advisor's attendance list.
 def attendance(request, profile, context):
     school = profile.school
-    attendInfo = getAttendInfo(school)
+    attendInfo = getAttendInfo(request, school)
     return render_to_response('check-attendance.html', {'attendInfo': attendInfo}, context_instance=context)
 
 
