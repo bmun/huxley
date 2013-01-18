@@ -715,6 +715,59 @@ a.acc_topic.active {
 	margin: 0px 10px;
 }
 
+/* ATTENDANCE */
+#div-attendance {
+    width: 740px;
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    border-top: 1px solid #fff;
+    border-bottom: 1px solid #fff;
+    margin: 0px auto;
+}
+
+.table-attendance {
+    width: 700px;
+    margin: 10px auto 20px auto;
+    font-size: 14px;
+    font-weight: 300;
+    border-collapse: collapse;
+    background: #eee;
+}
+
+.table-attendance tr{
+    height:28px;
+    padding: 0px;
+    !border-top: 1px solid #fff;
+    border-bottom: 1px solid #ddd;
+    !vertical-align: middle;
+}
+
+.table-attendance th.name{
+    text-align:left;
+    color: #222;
+    width: 100%;
+}
+
+.table-attendance th.session{
+    text-align:center;
+    color: #222;
+}
+
+.table-attendance td.name{
+    text-align:left;
+    color: #222;
+    width: 100%;
+}
+
+.table-attendance td.session{
+    text-align:center;
+    color: #222;
+}
+
+.table-attendance input{
+    margin: 0px 10px;
+}
+
 /* REPORT BUGS */
 textarea {
 	width: 100%;

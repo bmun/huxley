@@ -156,25 +156,9 @@ def roster(request, profile, context):
 # Display the advisor's attendance list.
 def attendance(request, profile, context):
     school = profile.school
-    attendInfo = getAttendInfo(request, school)
-    return render_to_response('check-attendance.html', {'attendInfo': attendInfo}, context_instance=context)
-
-
-# Returns a dictionary containing the attendance info for a school's delegates
-def getAttendInfo(request, school):
-    # Get the list of delegates
     slots = DelegateSlot.objects.filter(assignment__school=school)
-    delegates = [slot.parent_link for slot in slots]
-    # Initialize the dictionary of delegate to attendance
-    attendInfo = {}
-    for delegate in delegates:
-        attendInfo[delegate] = {}
-    # Now for the six sessions
-    for delegate in attendInfo.keys():
-        for session in xrange(1,7):
-            attendInfo[delegate][session] = delegate.attended_session(session)
-    # Return
-    return attendInfo
+    delegates = [slot.delegate for slot in slots]
+    return render_to_response('check-attendance.html', {'delegates': delegates}, context_instance=context)
 
 
 # Display a FAQ view.

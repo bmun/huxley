@@ -7,6 +7,43 @@
 
 <p> Here you can check which delegates have attended which sessions. Please contact us if there are any questions or discrepancies. </p>
 
-
+<div id = "tablemenu" class="tableheader"></div>
+<div id = "div-attendance">
+	<table class = "table-attendance">
+		<tr>
+			<th class="name"> Delegate </th>
+			<th class="session"> 1 </th>
+			<th class="session"> 2 </th>
+			<th class="session"> 3 </th>
+			<th class="session"> 4 </th>
+			<th class="session"> 5 </th>
+			<th class="session"> 6 </th>
+		</tr>
+		{% for delegate in delegates %}
+			<tr>
+				<td class="name"> {{ delegate.name }} </td>
+				<td class="session"> 
+					<input type="checkbox" disabled="true" {% if delegate.session1 %} checked="true" {% endif %} ></input>
+				</td>
+				<td class="session"> 
+					<input type="checkbox" disabled="true" {% if delegate.session2 %} checked="true" {% endif %} ></input>
+				</td>
+				<td class="session"> 
+					<input type="checkbox" disabled="true" {% if delegate.session3 %} checked="true" {% endif %} ></input>
+				</td>
+				<td class="session"> 
+					<input type="checkbox" disabled="true" {% if delegate.session4 %} checked="true" {% endif %} ></input>
+				</td>
+				<td class="session"> 
+					<input type="checkbox" disabled="true" {% if delegate.session5 %} checked="true" {% endif %} ></input>
+				</td>
+				<td class="session"> 
+					<input type="checkbox" disabled="true" {% if delegate.session6 %} checked="true" {% endif %} ></input>
+				</td>
+			</tr>
+		{% endfor %}
+	</table>
+</div>
+<div id = "tablemenu" class="tablefooter"></div>
 
 {% endblock content %}
