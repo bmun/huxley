@@ -13,7 +13,7 @@ from django.utils import simplejson
 
 from core.models import *
 from core.forms.registration import RegistrationForm
-from core.forms.forgot_pass_form import ForgotForm
+from core.forms.forgot_password import ForgotPasswordForm
 
 import re
 
@@ -147,7 +147,7 @@ def change_password(request):
 # Resets a user's password.
 def forgot_password(request):
     if request.POST:
-        form = ForgotForm(request.POST)
+        form = ForgotPasswordForm(request.POST)
         if form.is_valid():
             user = form.get_user()
             new_pass = form.reset_pass(user)
@@ -158,9 +158,9 @@ def forgot_password(request):
             return render_to_response('reset_success.html',
                                       context_instance=RequestContext(request))
     else:
-        form = ForgotForm()
+        form = ForgotPasswordForm()
 
-    return render_to_response('forgot.html', {"form":form},
+    return render_to_response('forgot_password.html', {"form":form},
                               context_instance=RequestContext(request))
 
 
