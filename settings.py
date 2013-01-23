@@ -3,7 +3,7 @@ import os
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
-ADMINS = ()
+ADMINS = (('BMUN Tech Officer', 'tech@bmun.org'))
 
 MANAGERS = ADMINS
 
