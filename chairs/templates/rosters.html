@@ -1,0 +1,59 @@
+{% extends "secretariat_index.html" %}
+
+{% block title %} View Rosters {% endblock title %}
+
+{% block content %}
+<h2>View Rosters</h2>
+
+<p>Here, you can view the roster for all schools registered for BMUN. </p>
+ <form id="theRoster" method="post" action="{% url advisor "roster" %}">
+{% csrf_token %}
+<div id="tablemenu" class="tableheader">
+    <select>
+    	<option>Select a School</option>
+    	{% for school in schools %}
+    		<option value={{school.id}} {% if school.id == sid %} selected="true" {% endif %}>{{ school.name }}</option>
+    	{% endfor %}
+    </select>
+</div>
+<div id="rostercontainer">
+<table id="roster">
+    <thead>
+        <tr>
+            <th></th>
+            <th class="delegatename"> Delegate Name </th>
+            <th class="delegateemail"> Delegate Email </th>
+            <th class="delegatecountry"> Country/Position </th>
+            <th class="delegatecommittee"> Committee </th>
+        </tr>
+    </thead>
+    {% if delegates %}
+        {% for delegate in delegates %}
+        <tr class="rosterrow" slotid="{{ slot.id }}">
+            <td class="delegatename">
+                {{ delegate.name }}
+            </td>
+            <td class="delegateemail">
+                {{ delegate.email }}
+            </td>
+            <td class="delegatecountry">
+                {{ delegate.delegateslot.assignment.country }}
+            </td>
+            <td class="delegatecommittee">
+                {{ delegate.delegateslot.assignment.committee }}
+            </td>
+        </tr>
+        {% endfor %}
+    {% endif %}
+</table>
+</div>
+<div id="tablemenu" class="tablefooter">
+    <select>
+    	<option>Select a School</option>
+    	{% for school in schools %}
+    		<option value={{school.id}} {% if school.id == sid %} selected="true" {% endif %}>{{ school.name }}</option>
+    	{% endfor %}
+    </select>
+</div>
+</form>
+{% endblock content %}

@@ -26,3 +26,6 @@ will_settings.py
 
 # Temporary Files
 *~
+
+# CSV Files
+*.csv
