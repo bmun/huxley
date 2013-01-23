@@ -15,10 +15,11 @@ def dispatch(request, page="grading"):
     try:
         views = {'grading': grading,
                  'attendance': attendance,
+                 'rosters': rosters,
                  'help': help,
                  'bugs': bugs}
         
-        return views[page](request.user.secretariat_profile, context)
+        return views[page](request, request.user.secretariat_profile, context)
     # No such view exists.
     except KeyError:
         return HttpResponseNotFound()
@@ -28,17 +29,32 @@ def dispatch(request, page="grading"):
 
 
 # Display the grading page for chairs.
-def grading(profile, context):
+def grading(request, profile, context):
     return render_to_response('comingsoon.html')
 
 
 # Display a page allowing the chair to take attendance.
-def attendance(profile, context):
+def attendance(request, profile, context):
     return render_to_response('comingsoon.html')
 
 
+# Display a page allowing the USG/External to view delegate rosters.
+def rosters(request, profile, context):
+    sid, slots = 0, []
+    if 'sid' in request.GET:
+        sid = request.GET['sid']
+        school = School.objects.get(id=sid)
+        slots = DelegateSlot.objects.filter(assignment__school=school)
+    context.update({
+        'sid': sid,
+        'schools' : School.objects.all().order_by('name'),
+        'delegates' : [slot.delegate for slot in slots]
+    })
+    return render_to_response('rosters.html', context_instance=context)
+
+
 # Display a FAQ view.
-def help(profile, context):
+def help(request, profile, context):
     c = Context()
     questions = {}
     for cat in HelpCategory.objects.all():
@@ -48,5 +64,5 @@ def help(profile, context):
 
 
 # Display a bug-reporting view.
-def bugs(profile, context):
+def bugs(request, profile, context):
     return render_to_response('bugs.html', context_instance=context)
