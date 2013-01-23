@@ -8,6 +8,22 @@ from django.db.models.signals import pre_save, post_save, pre_delete, post_delet
 from datetime import datetime
 from decimal import Decimal
 
+class Conference(models.Model):
+    session =  models.IntegerField(db_column='Session', default=0)
+    startdate = models.DateField(db_column='StartDate')
+    enddate = models.DateField(db_column='EndDate')
+    registrationstart = models.DateField(db_column='RegistrationStart')
+    earlyregistrationend = models.DateField(db_column='EarlyRegistrationEnd')
+    registrationend = models.DateField(db_column='RegistrationEnd')
+    minattendance = models.IntegerField(db_column='MinAttendance', default=0)
+    maxattendance = models.IntegerField(db_column='MaxAttendance', default=0)
+    class Meta:
+        db_table = u'Conference'
+        get_latest_by = 'startdate'
+    def __unicode__(self):
+        return 'BMUN ' + str(self.session)
+
+
 class Country(models.Model):
     name = models.CharField(max_length=765, db_column='name', null=False, blank=True)
     special = models.BooleanField(null=False, blank=False, db_column="special", default=False)

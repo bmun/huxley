@@ -29,3 +29,6 @@ will_settings.py
 
 # CSV Files
 *.csv
+
+# Fabfile
+fabfile.py
