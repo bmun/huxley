@@ -1,3 +1,6 @@
+# Copyright (c) 2011-2013 Kunal Mehta. All rights reserved.
+# Use of this source code is governed by a BSD License found in README.md.
+
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models.signals import pre_save, post_save, pre_delete, post_delete
