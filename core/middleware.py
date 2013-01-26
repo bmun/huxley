@@ -6,8 +6,8 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpRequest
 
 class LatestConferenceMiddleware:
-	def process_request(self, request):
-		try:
-			request.conference = Conference.objects.latest()
-		except ObjectDoesNotExist:
-			request.conference = None
+    def process_request(self, request):
+        try:
+            request.conference = Conference.objects.latest()
+        except ObjectDoesNotExist:
+            request.conference = None
