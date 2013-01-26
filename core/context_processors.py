@@ -4,4 +4,4 @@
 from django.http import HttpRequest
 
 def conference(request):
-	return {'conference' : request.conference}
+    return {'conference' : request.conference}
