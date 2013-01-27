@@ -19,6 +19,20 @@ Huxley is built with Django, a web development framework written in Python. It a
 - [Pipeline](http://django-pipeline.readthedocs.org/en/latest): A Django utility for managing and compressing static files
 - [YUI Compressor](http://yui.github.com/yuicompressor/): A utility used for compressing JavaScript and CSS files
 
+### Getting Started
+Note: Before proceeding, remember to set up a Python [virtualenv](http://www.virtualenv.org/en/latest/), to separate your packages from the rest of your system.
+
+#### Install Django and Dependencies
+Installing these packages is as simple as
+	pip install django
+	pip install south
+	pip install django-pipeline
+
+#### Create a Fork and Clone the Repo
+
+#### Submitting a Patch
+
+
 ### BSD License
 Copyright (c) 2011-2013, Kunal Mehta.
 All rights reserved.
