@@ -14,13 +14,12 @@ Huxley's built with [Django](http://www.djangoproject.com), a web development fr
 We'd love for you to contribute to Huxley! Here's some stuff you'll find useful:
 
 ### Dependencies
-Huxley is built with Django, a web development framework written in Python. It additionally has the following dependencies:
+Huxley has the following dependencies:
 - [South](http://south.aeracode.org): A Django utility for managing schema migrations
 - [Pipeline](http://django-pipeline.readthedocs.org/en/latest): A Django utility for managing and compressing static files
 - [YUI Compressor](http://yui.github.com/yuicompressor/): A utility used for compressing JavaScript and CSS files
 
 ### Getting Started
-Note: Before proceeding, remember to set up a Python [virtualenv](http://www.virtualenv.org/en/latest/), to separate your packages from the rest of your system.
 
 **Create a Fork and Clone the Repo**
 
