@@ -1,13 +1,24 @@
 # Huxley
 Huxley is a web application designed to manage the annual Berkeley Model United Nations conference.
 
-## Dependencies
+## About BMUN
+The Berkeley Model United Nations conference is a high-school conference hosted every spring. Each year, we host over 1500 delegates from all over the country (and the world!), who compete in a simulation of the United Nations (as well as other international and historical bodies) to solve the world's most compelling problems.
+
+As the size of the conference grew, so did the logistical complexity, prompting us to begin developing a web application to centralize our data and streamline its access.
+
+## About Huxley
+Huxley was initially conceived as a way to abstract away database access from club officers in order to maintain consistency of the data. It's built with Django, a web development framework written in Python. The frontend is simple HTML and CSS, and makes heavy use of jQuery.
+
+## Contribute
+We'd love for you to contribute to Huxley! Here's some stuff you'll find useful:
+
+### Dependencies
 Huxley is built with Django, a web development framework written in Python. It additionally has the following dependencies:
 - South: A Django utility for managing schema migrations
 - Pipeline: A Django utility for managing and compressing static files
 - YUI Compressor: A utility used for compressing JavaScript and CSS files
 
-## BSD License
+### BSD License
 Copyright (c) 2011-2013, Kunal Mehta.
 All rights reserved.
 

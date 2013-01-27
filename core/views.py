@@ -146,6 +146,7 @@ def change_password(request):
 
 # Resets a user's password.
 def forgot_password(request):
+    context = RequestContext(request)
     if request.POST:
         form = ForgotPasswordForm(request.POST)
         if form.is_valid():
@@ -156,12 +157,12 @@ def forgot_password(request):
                             from_email="no-reply@bmun.org")
 
             return render_to_response('reset_success.html',
-                                      context_instance=RequestContext(request))
+                                      context_instance=context)
     else:
         form = ForgotPasswordForm()
 
     return render_to_response('forgot_password.html', {"form":form},
-                              context_instance=RequestContext(request))
+                              context_instance=context)
 
 
 # Checks that a username is unique.
