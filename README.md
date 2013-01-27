@@ -22,14 +22,25 @@ Huxley is built with Django, a web development framework written in Python. It a
 ### Getting Started
 Note: Before proceeding, remember to set up a Python [virtualenv](http://www.virtualenv.org/en/latest/), to separate your packages from the rest of your system.
 
+
 **Install Django and Dependencies**
+
 Installing these packages is as simple as
 
 	pip install django
 	pip install south
 	pip install django-pipeline
 
+To install the YUI Compressor, download a binary and place it somewhere on your PATH.
+
+
 **Create a Fork and Clone the Repo**
+
+Create a fork of this repository by going to <https://github.com/kmeht/huxley/fork> (read Github's [guide](http://help.github.com/forking/) for a refresher on forking). Then, clone the repository with `git clone https://yourusername@github.com/yourusername/huxley.git`.
+
+
+**Initial Setup**
+
 
 **Submitting a Patch**
 
