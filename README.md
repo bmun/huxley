@@ -8,7 +8,7 @@ The Berkeley Model United Nations conference is a high-school conference hosted 
 ## About Huxley
 Huxley was initially conceived as a way to abstract away database access from club officers in order to maintain consistency of the data. As the size of our conference grew, so did the logistical complexity, prompting us to begin developing a web application to centralize our data and streamline its access. 
 
-Huxley's built with [Django](www.djangoproject.com), a web development framework written in [Python](www.python.org). The frontend is simple HTML and CSS, and makes heavy use of [jQuery](http://jquery.com/).
+Huxley's built with [Django](http://www.djangoproject.com), a web development framework written in [Python](http://www.python.org). The frontend is simple HTML and CSS, and makes heavy use of [jQuery](http://jquery.com/).
 
 ## Contribute
 We'd love for you to contribute to Huxley! Here's some stuff you'll find useful:
