@@ -1,0 +1,70 @@
+/* Header */
+
+#headerwrapper {
+    display: none;
+    height: 39px;
+    margin: 0px auto 20px auto;
+    background: #111;
+    border-bottom: 1px solid #222;
+}
+
+#header {
+    display:none;
+    font-size: 12px;
+    height: 25px;
+    min-width:760px;
+    margin: 0px auto;
+    padding: 7px 15px;
+    opacity: 1.0;
+
+    h2 {
+        font: {
+            size: 10px;
+            weight: 500
+        }
+        color: #666;
+        letter-spacing: 12px;
+        padding: 5px 0px;
+    }
+
+    #left {
+        font-size: 13px;
+        float: left;
+        padding-top: 5px;
+        color: #aaa;
+    }
+
+    #right {
+        float: right;
+        color: #fff;
+        padding-top: 2px;
+
+        li {
+            display: inline;
+            padding: 0px 5px;
+        }
+
+        a#newpassword {
+            color: #ccc;
+            text-decoration: none;
+            &:hover { color: #fff; }
+        }
+
+        #logout {
+            display: inline-block;
+            width: 65px;
+            height: 13px;
+            border: 1px solid #999;
+            border-radius: 3px;
+            padding: 3px;
+            moz-border-radius: 3px;
+            color: #003;
+            text: {
+                shadow: #fff 0px 1px;
+                decoration: none;
+                align: center;
+            }
+            &:hover { cursor: pointer; }
+        }
+    }
+}
