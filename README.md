@@ -32,13 +32,12 @@ Before proceeding, remember to set up a Python [virtualenv](http://www.virtualen
 	pip install django
 	pip install south
 	pip install django-pipeline
+	pip install yuicompressor
 
 Before proceeding with the installation of Ruby dependencies, make sure you have [rvm](https://rvm.io/) installed. Then, create a Huxley gemset (it may already be created for you from the .rvmrc file).
 
 	rvm use --create @huxley
 	gem install sass
-
-To install the YUI Compressor, download a binary and place it somewhere on your PATH.
 
 **Initial Setup**
 
