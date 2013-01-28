@@ -132,6 +132,10 @@ INSTALLED_APPS = (
     'south',
 )
 
+PIPELINE_COMPILERS = (
+  'pipeline.compilers.sass.SASSCompiler',
+)
+
 PIPELINE_CSS_COMPRESSOR = None
 
 PIPELINE_JS_COMPRESSOR = None
