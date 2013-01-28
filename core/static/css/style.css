@@ -17,10 +17,6 @@ body { background: #f0f0f0 url(/static/img/unga3.jpg) center top no-repeat fixed
 #authcontent #registrationform fieldset .left{ float:left; margin-right: 10px; }
 #authcontent #registrationfrom fieldset .right{ float:right; }
 #wrapper{ width: 800px; margin: 0px auto 50px auto; }
-#headerwrapper{ display:none; height: 39px; margin: 0px auto; background: #111; border-bottom: 1px solid #222; margin-bottom: 20px; }
-#header { display:none; font: 12px Helvetica, Arial, sans-serif; height: 25px; min-width:760px; margin: 0px auto; padding: 7px 15px; opacity: 1.0; }
-#header #left{ font-size: 13px; float: left; padding-top: 5px; color: #aaa;}
-#header #right { float:right; color: #fff; padding-top: 2px;}
 #noscriptwrapper{ background: #faa; margin: 0px auto; border-bottom: 1px solid #fbb; box-shadow: 0px 0px 3px #fbb; }
 #noscript{ width: 520px; padding: 10px 0px 10px 80px; margin: 0px auto; text-align: left; }
 #splash{ background: #111 url(/static/img/logo_white.png) center center no-repeat; padding: 10px; width: 600px; min-height: 250px; border: 1px solid #222; margin: 60px auto;}
@@ -80,7 +76,6 @@ body { font-family: Helvetica, Arial, sans-serif;}
 
 h1{ font-weight: 300; }
 #authcontent h2{ background: #eee; }
-#header h2{ font-size:10px; font-weight: 500; color: #666; letter-spacing: 12px; padding: 5px 0px; }
 #appcontent h2{ padding-bottom: 10px; }
 #appcontent h3{ color: #666; margin-top: 15px; padding-left: 2px; border-bottom: 1px solid #ddd; font-weight:500; font-size: 11px; }
 #noscript h3{ color: #600; text-shadow: 0px 1px #fcc; font-size: 14px; }
@@ -88,9 +83,6 @@ h1{ font-weight: 300; }
 
 
 /* Links */
-
-#header a#newpassword{ color: #ccc; text-decoration: none;}
-#header a#newpassword:hover{ color: #fff;}
 #authcontent a{ background-color: #eee; text-decoration: none; color: #333; font-weight: 700; }
 #authcontent a:hover{ text-shadow: 0px 0px 10px #fff; }
 .content a{font-weight: 700; text-decoration: none; color: #333;}
@@ -297,29 +289,6 @@ label.error{
 }
 
 /* MAIN APP CONTENT */
-
-#header #right li{
-    display: inline;
-    padding: 0px 5px;
-}
-
-#logout {
-    display: inline-block;
-    width: 65px;
-    height: 13px;
-    border: 1px solid #999;
-    border-radius: 3px;
-    moz-border-radius: 3px;
-    color: #003;
-    text-shadow: #fff 0px 1px;
-    text-decoration:none;
-    text-align: center;
-    padding: 3px;
-}
-
-#logout:hover {
-    cursor: pointer;
-}
 
 #appcontent {
     line-height: 18px;
