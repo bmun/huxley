@@ -13,9 +13,6 @@ body { background: #f0f0f0 url(/static/img/unga3.jpg) center top no-repeat fixed
 #authcontent #left{ width: 289px; height: 160px; float:left; padding-right: 10px; border-right: 1px solid #fff; }
 #authcontent #right{ width: 269px; height: 160px; float:right; padding-left: 10px; border-left: 1px solid #ddd; }
 #authcontent #right #leftrightalign{ overflow:hidden; width:100%; position: relative; }
-#authcontent #registrationform fieldset .sub{ width: 274px; display: inline-block; }
-#authcontent #registrationform fieldset .left{ float:left; margin-right: 10px; }
-#authcontent #registrationfrom fieldset .right{ float:right; }
 #wrapper{ width: 800px; margin: 0px auto 50px auto; }
 #noscriptwrapper{ background: #faa; margin: 0px auto; border-bottom: 1px solid #fbb; box-shadow: 0px 0px 3px #fbb; }
 #noscript{ width: 520px; padding: 10px 0px 10px 80px; margin: 0px auto; text-align: left; }
@@ -44,7 +41,7 @@ body { background: #f0f0f0 url(/static/img/unga3.jpg) center top no-repeat fixed
 
 /* --- Typography --- */
 
-body { font-family: Helvetica, Arial, sans-serif;}
+body { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;}
 #authcontent p{ background: #eee; padding: 5px 0px; text-rendering: optimizeLegibility; font-smooth:always; }
 #noscript p{ font-size: 11px; color: #300; }
 .bold{font-weight: 700;}
@@ -143,23 +140,6 @@ h1{ font-weight: 300; }
     font-size: 18px;
 }
 
-#registrationform fieldset input[type=text], #registrationform fieldset input[type=password]{
-    font-size: 14px;
-    font-weight: 500;
-    border-radius: 2px; 
-    moz-border-radius: 2px;
-    webkit-border-radius: 2px;
-    padding: 5px;
-}
-
-#registrationform input[type=text]:focus, #registrationform input[type=password]:focus{
-    border-color:#abc;
-    background: #f0f9ff;
-    box-shadow: inset 0 1px 5px rgba(0, 85, 255, 0.15);
-    webkit-box-shadow: inset 0 1px 5px rgba(0, 85, 255, 0.15);
-    moz-box-shadow: inset 0 1px 5px rgba(0, 85, 255, 0.15);
-}
-
 #authcontent button.authsubmit{ 
     background: #eee; 
     width: 75px; 
@@ -176,9 +156,6 @@ h1{ font-weight: 300; }
 }
 
 #authcontent button.authsubmit:hover{ background: #e8e8e8; cursor: pointer; }
-#registrationform fieldset{ margin: 20px auto; padding: 10px; border: 1px solid #bbb; border-radius: 3px; }
-#registrationform fieldset legend{ font: 14px Helvetica, Arial, sans-serif; font-weight: 700; padding: 0px 5px; background: #eee; }
-#registrationform fieldset input[type=checkbox]{ margin-right: 7px; }
 #changepasswordform input[type=password]{ width: 175px; margin-bottom:10px; font: 14px Helvetica, Arial, sans-serif; font-weight: 300; color: #666; background: #eee; border: none; border-top: 1px solid #aaa; padding: 4px; }
 #changepasswordform input[type=password]:hover{ border-top: 1px solid #999; }
 #changepasswordform button{ padding: 3px; margin-top: 5px;}
@@ -242,50 +219,6 @@ label.error{
 #authcontent label.error{
     background-color: #eee;
     display:block;
-}
-
-/* REGISTRATION */
-
-#registrationform input.full{
-    width:548px;
-}
-
-#registrationform input.half{
-    width: 264px;
-}
-
-#registrationform span{
-    display:block;
-    padding: 5px 0px;
-}
-
-#registrationform fieldset p{
-    !margin-bottom: 10px;
-    font-weight: 700;
-}
-
-#registrationform fieldset li{
-    list-style: none;
-    padding: 5px 0px;   
-}
-
-#registrationform fieldset li label{
-    display: inline-block;
-    !text-align: right;
-}
-
-#registrationform fieldset li select{
-    width: 240px;
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-}
-
-#registrationform fieldset li input[type=radio]{
-    margin-right: 7px;
-}
-
-#registrationform .showhide {
-	!display: block;
-	display: none;
 }
 
 /* MAIN APP CONTENT */

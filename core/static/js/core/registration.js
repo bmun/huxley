@@ -59,7 +59,7 @@ $(function() {
             type: 'POST',
             async: false,
             url: 'uniqueuser/',
-            data: $("#registrationform").serializeArray(),
+            data: $("#registration").serializeArray(),
             success: function(data, status, jq) {
                 unique = (status == "success");
             }
@@ -75,8 +75,8 @@ $(function() {
     }, "Passwords may only contain letters, numbers, and certain symbols.");
 
     // Validates the form upon submit and POSTs if it's valid.
-    $(document).on("submit", "#authcontent #registrationform", function() {
-        $("#registrationform").validate({
+    $(document).on("submit", "#authcontent #registration", function() {
+        $("#registration").validate({
             messages: {
                 FirstName: {required: "Please enter your first name."},
                 LastName: {required: "Please enter your last name."},
@@ -120,7 +120,7 @@ $(function() {
         if($(this).valid()){
             ContentManager.loadNewContent(
                 uri,
-                $("#registrationform").serializeArray()
+                $("#registration").serializeArray()
             );
         }
         $('html, body').animate({scrollTop:0}, 'slow');
