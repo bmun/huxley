@@ -41,6 +41,12 @@ Before proceeding with the installation of Ruby dependencies, make sure you have
 
 **Initial Setup**
 
+- Set up the database schema with `python manage.py syncdb`. Make a superuser if prompted.
+- Then, update the migration history to reflect this with `python manage.py migrate --fake`.
+- Compile static assets with `python manage.py collectstatic --noinput`.
+- Run the server with `python manage.py runserver`. You'll now be able to access Huxley at localhost:8000.
+- With that, you're ready to go; start hacking!
+
 
 ### Submitting a Patch
 
