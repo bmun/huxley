@@ -1,0 +1,74 @@
+#registration
+{
+    fieldset
+    {
+        margin: 20px auto;
+        padding: 10px;
+        border: 1px solid #bbb;
+        border-radius: 3px;
+
+        input[type=checkbox] { margin-right: 7px; }
+
+        input[type=text], input[type=password]
+        {
+            font-size: 14px;
+            font-weight: 500;
+            border-radius: 2px; 
+            moz-border-radius: 2px;
+            webkit-border-radius: 2px;
+            padding: 5px;
+            &:focus
+            {
+                border-color:#abc;
+                background: #f0f9ff;
+                box-shadow: inset 0 1px 5px rgba(0, 85, 255, 0.15);
+                webkit-box-shadow: inset 0 1px 5px rgba(0, 85, 255, 0.15);
+                moz-box-shadow: inset 0 1px 5px rgba(0, 85, 255, 0.15);
+            }
+        }
+
+        legend
+        {
+            font: 14px "Helvetica Neue", Helvetica, Arial, sans-serif;
+            font-weight: 700;
+            padding: 0px 5px;
+            background: #eee;  
+        }
+
+        li
+        {
+            list-style: none;
+            padding: 5px 0px;
+
+            input[type=radio] { margin-right: 7px; }
+
+            label { display: inline-block; }
+
+            select
+            {
+                width: 240px;
+                font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            }
+
+
+        }
+
+        p { font-weight: 700; }
+
+        .sub { width: 274px; display: inline-block; }
+        .left { float:left; margin-right: 10px; }
+        .right { float:right; }
+
+    }
+
+    input.full { width:548px; }
+    input.half { width: 264px; }
+
+    span
+    {
+        display:block;
+        padding: 5px 0px;
+    }
+
+    .showhide { display: none; }
+}
