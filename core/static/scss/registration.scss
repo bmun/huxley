@@ -3,9 +3,11 @@
     fieldset
     {
         margin: 20px auto;
-        padding: 10px;
+        padding: 9px;
         border: 1px solid #bbb;
         border-radius: 3px;
+        moz-border-radius: 3px;
+        webkit-border-radius: 3px;
 
         input[type=checkbox] { margin-right: 7px; }
 
@@ -29,42 +31,49 @@
 
         legend
         {
-            font: 14px "Helvetica Neue", Helvetica, Arial, sans-serif;
+            font-size: 14px;
             font-weight: 700;
             padding: 0px 5px;
             background: #eee;  
         }
 
-        li
+        ul
         {
-            list-style: none;
-            padding: 5px 0px;
+            padding: 0;
 
-            input[type=radio] { margin-right: 7px; }
-
-            label { display: inline-block; }
-
-            select
+            li
             {
-                width: 240px;
-                font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+                list-style: none;
+                padding: 5px 0px;
+
+                input[type=radio] { margin-right: 5px; }
+
+                select
+                {
+                    width: 250px;
+                    margin-left: 3px;
+                }
             }
         }
 
-        p { font-weight: 700; }
+        span
+        {
+            display:block;
+            padding: 5px 0px;
+        }
 
-        .sub { width: 274px; display: inline-block; }
-        .left { float:left; margin-right: 10px; }
-        .right { float:right; }
-    }
+        .instructions { font-weight: bold; }
 
-    input.full { width:548px; }
-    input.half { width: 264px; }
+        .block
+        {
+            float: left;
+            margin-right: 10px;
+            &:last-child { margin-right: 0; float: right;}
 
-    span
-    {
-        display:block;
-        padding: 5px 0px;
+            input.full { width: 548px; }
+            input.half { width: 263px; }
+            input.third { width: 168px; }
+        }
     }
 
     .showhide { display: none; }
