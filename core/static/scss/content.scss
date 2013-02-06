@@ -1,0 +1,129 @@
+/* Content */
+
+.content
+{
+    padding: 15px;
+    margin: 0px auto 40px auto;
+    background: #eee;
+    font-size: 12px;
+    font-weight: 400;
+    color: #555;
+    text-shadow: 0px 1px #fff;
+    border-top: 1px solid #fff;
+    text-align: left;
+
+    a
+    {
+        font-weight: 700;
+        text-decoration: none;
+        color: #333;
+
+        &:hover { text-decoration: underline; }
+    }
+
+    &.transparent
+    {
+        -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=90)"; /* IE8 */
+        filter: alpha(opacity=90); /* IE6/7 */
+        -moz-opacity: 0.9; /* Netscape? */
+        -khtml-opacity: 0.9; /* Safari 1.x */
+        opacity: 0.9; /* Not shitty browsers */
+    }
+
+    &.loading
+    {
+        background-image: url(/static/img/loading.gif);
+        background-repeat: no-repeat;
+        background-position: center 30px;
+    }
+}
+
+#header-outer
+{
+    width: 598px;
+    margin-top: 80px;
+
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=70)"; /* IE8 */
+    filter: alpha(opacity=70); /* IE6/7 */
+    -moz-opacity: 0.7; /* Netscape? */
+    -khtml-opacity: 0.7; /* Safari 1.x */
+    opacity: 0.7; /* Not shitty browsers */
+}
+
+#content-outer
+{
+    width: 580px;
+    min-height: 160px;
+
+    .block
+    {
+        width: 279px;
+        height: 160px;
+
+        &.left
+        {
+            float: left;
+            padding-right: 10px;
+            border-right: 1px solid #fff;
+        }
+
+        &.right
+        {
+            float: right;
+            padding-left: 10px;
+            border-left: 1px solid #ddd;
+        }
+    }
+
+    a, p, span, label, h2, h3 { background-color: #eee; } /* Prevents ugliness during fadeout in IE. */
+
+    a
+    {
+        text-decoration: none;
+        color: #333;
+        font-weight: 700;
+
+        &:hover { text-shadow: 0px 0px 10px #fff; }
+    }
+
+    p
+    {
+        padding: 5px 0px;
+        text-rendering: optimizeLegibility;
+        font-smooth:always;
+    }
+
+    h3 { margin-top: 15px; }
+
+    ul { list-style: none; padding: 0px 10px; }
+    li { padding: 5px 0px; }
+
+    label.error { display: block; }
+
+    input[type=text], input[type=password]
+    {
+        padding: 6px;
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-weight: 300; 
+        color: #666;
+        border: 1px solid #ccc;
+        box-shadow: inset 0 1px 5px rgba(0, 0, 0, 0.1);
+        webkit-box-shadow: inset 0 1px 5px rgba(0, 0, 0, 0.1);
+        moz-box-shadow: inset 0 1px 5px rgba(0, 0, 0, 0.1);
+        -webkit-transition: box-shadow linear 0.1s, border linear 0.05s;
+        -moz-transition: box-shadow linear 0.1s, background linear 0.05s;
+        -ms-transition: box-shadow linear 0.1s, background linear 0.05s;
+        -o-transition: box-shadow linear 0.1s, background linear 0.05s;
+        transition: box-shadow linear 0.1s, background linear 0.05s;
+
+        &:hover { border-color: #bbb; }
+        &:focus { border-color: #aaa; outline: 0; }
+    }
+
+}
+
+#content-inner
+{
+
+}
+#authcontent #leftrightalign{ overflow:hidden; width:100%; position: relative; }
