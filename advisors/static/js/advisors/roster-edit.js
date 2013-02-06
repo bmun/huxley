@@ -46,10 +46,10 @@
             return $("#roster tr.rosterrow[delegateid=" + did + "] td.delegatecommittee").html().trim();
         },
         setUnsaved: function(){
-            $("#tablemenu input[type=submit]").removeClass('saved').addClass('unsaved');
+            $(".tablemenu input[type=submit]").removeClass('saved').addClass('unsaved');
         },
         setSaved: function(){
-            $("#tablemenu input[type=submit]").removeClass('unsaved').addClass('saved');
+            $(".tablemenu input[type=submit]").removeClass('unsaved').addClass('saved');
         }
     };
     

@@ -2,14 +2,14 @@ $(function() {
 
     // Sets the Save button to unsaved state.
     function setUnsaved(){
-        $("#tablemenu input[type=submit]")
+        $(".tablemenu input[type=submit]")
             .removeClass('saved')
             .addClass('unsaved');
     }
 
     // Sets the Save button to saved state.
     function setSaved(){
-        $("#tablemenu input[type=submit]")
+        $(".tablemenu input[type=submit]")
             .removeClass('unsaved')
             .addClass('saved');
     }

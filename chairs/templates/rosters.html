@@ -8,7 +8,7 @@
 <p>Here, you can view the roster for all schools registered for BMUN. </p>
  <form id="theRoster" method="post" action="{% url advisor "roster" %}">
 {% csrf_token %}
-<div id="tablemenu" class="tableheader">
+<div class="tablemenu header">
     <select>
     	<option>Select a School</option>
     	{% for school in schools %}
@@ -47,7 +47,7 @@
     {% endif %}
 </table>
 </div>
-<div id="tablemenu" class="tablefooter">
+<div class="tablemenu footer">
     <select>
     	<option>Select a School</option>
     	{% for school in schools %}

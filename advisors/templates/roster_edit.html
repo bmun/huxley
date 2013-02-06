@@ -10,7 +10,7 @@ When you're done, <span class="bold">don't forget to save your changes!</span> <
 <p>Here, you can view your roster for BMUN 61. Editing functionality will be available soon!</p>
 <form id="theRoster" method="post" action="{% url advisor "roster" %}">
 {% csrf_token %}
-<div id="tablemenu" class="tableheader">
+<div class="tablemenu header">
     Don't forget to <input class="saved button" type="submit" value="SAVE!"/>
 </div>
 <div id="rostercontainer">
@@ -54,7 +54,7 @@ When you're done, <span class="bold">don't forget to save your changes!</span> <
     {% endif %}
 </table>
 </div>
-<div id="tablemenu" class="tablefooter">
+<div class="tablemenu footer">
     Don't forget to <input class="saved button" type="submit" value="SAVE!" />
 </div>
 </form>
