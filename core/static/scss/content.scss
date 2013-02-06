@@ -84,6 +84,7 @@
         font-weight: 700;
 
         &:hover { text-shadow: 0px 0px 10px #fff; }
+        &:active, &:visited { outline: 0; }
     }
 
     p
