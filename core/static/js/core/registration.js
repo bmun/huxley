@@ -2,7 +2,7 @@ $(function() {
 
     // Show/hide Country Field based on American/International
     // Change validation rules too
-    $(document).on("click", "#authcontent .int_check", function() {
+    $(document).on("click", "#content-outer .int_check", function() {
         if ($(this).val() == "international") {
             $(".showhide").slideDown();
             $(".showhide").addClass('required');
@@ -75,7 +75,7 @@ $(function() {
     }, "Passwords may only contain letters, numbers, and certain symbols.");
 
     // Validates the form upon submit and POSTs if it's valid.
-    $(document).on("submit", "#authcontent #registration", function() {
+    $(document).on("submit", "#content-outer #registration", function() {
         $("#registration").validate({
             messages: {
                 FirstName: {required: "Please enter your first name."},

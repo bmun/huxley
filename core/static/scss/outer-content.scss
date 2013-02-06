@@ -12,7 +12,7 @@
 	opacity: 0.7; /* Not shitty browsers */
 }
 
-.content-outer
+#content-outer
 {
 	width: 580px;
 	min-height: 160px;
@@ -81,6 +81,11 @@
 	    &:hover { border-color: #bbb; }
 	    &:focus { border-color: #aaa; outline: 0; }
 	}
+
+}
+
+#content-inner
+{
 
 }
 #authcontent #leftrightalign{ overflow:hidden; width:100%; position: relative; }
