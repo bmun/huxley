@@ -8,11 +8,6 @@ body { background: #f0f0f0 url(/static/img/unga3.jpg) center top no-repeat fixed
 /* --- Structure --- */
 
 #app{ display: none; margin: 0px auto; }
-#authheader{ width: 598px; margin-top: 80px; }
-#authcontent{ width: 580px; min-height: 160px; }
-#authcontent #left{ width: 289px; height: 160px; float:left; padding-right: 10px; border-right: 1px solid #fff; }
-#authcontent #right{ width: 269px; height: 160px; float:right; padding-left: 10px; border-left: 1px solid #ddd; }
-#authcontent #right #leftrightalign{ overflow:hidden; width:100%; position: relative; }
 #wrapper{ width: 800px; margin: 0px auto 50px auto; }
 #noscriptwrapper{ background: #faa; margin: 0px auto; border-bottom: 1px solid #fbb; box-shadow: 0px 0px 3px #fbb; }
 #noscript{ width: 520px; padding: 10px 0px 10px 80px; margin: 0px auto; text-align: left; }
@@ -34,7 +29,6 @@ body { background: #f0f0f0 url(/static/img/unga3.jpg) center top no-repeat fixed
   background-position: center 30px;
 }
 .ie-layout{ zoom: 1; }
-#authheader.transparent{ -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=70)"; /* IE8 */ filter: alpha(opacity=70); /* IE6/7 */ -moz-opacity: 0.7; /* Netscape? */ -khtml-opacity: 0.7; /* Safari 1.x */ opacity: 0.7; /* Not shitty browsers */ }
 .content.transparent{ -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=90)"; /* IE8 */ filter: alpha(opacity=90); /* IE6/7 */ -moz-opacity: 0.9; /* Netscape? */ -khtml-opacity: 0.9; /* Safari 1.x */ opacity: 0.9; /* Not shitty browsers */ }
 .transparent{ -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=90)"; /* IE8 */ filter: alpha(opacity=90); /* IE6/7 */ -moz-opacity: 0.9; /* Netscape? */ -khtml-opacity: 0.9; /* Safari 1.x */ opacity: 0.9; /* Not shitty browsers */ }
 
@@ -42,7 +36,6 @@ body { background: #f0f0f0 url(/static/img/unga3.jpg) center top no-repeat fixed
 /* --- Typography --- */
 
 body { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;}
-#authcontent p{ background: #eee; padding: 5px 0px; text-rendering: optimizeLegibility; font-smooth:always; }
 #noscript p{ font-size: 11px; color: #300; }
 .bold{font-weight: 700;}
 #splash p{
@@ -72,16 +65,13 @@ body { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;}
 /* --- Headings --- */
 
 h1{ font-weight: 300; }
-#authcontent h2{ background: #eee; }
 #appcontent h2{ padding-bottom: 10px; }
 #appcontent h3{ color: #666; margin-top: 15px; padding-left: 2px; border-bottom: 1px solid #ddd; font-weight:500; font-size: 11px; }
 #noscript h3{ color: #600; text-shadow: 0px 1px #fcc; font-size: 14px; }
-#authcontent h3{ background: #eee; margin-top: 15px; }
 
 
 /* Links */
-#authcontent a{ background-color: #eee; text-decoration: none; color: #333; font-weight: 700; }
-#authcontent a:hover{ text-shadow: 0px 0px 10px #fff; }
+
 .content a{font-weight: 700; text-decoration: none; color: #333;}
 .content a:hover{text-decoration: underline;}
 
@@ -98,35 +88,6 @@ h1{ font-weight: 300; }
 
 
 /* --- Forms --- */
-
-#authcontent input[type=text], #authcontent input[type=password]{
-    font-family: Helvetica, Arial, sans-serif;
-    font-weight: 300; 
-    color: #666;
-    border: 1px solid #ccc;
-    box-shadow: inset 0 1px 5px rgba(0, 0, 0, 0.1);
-    webkit-box-shadow: inset 0 1px 5px rgba(0, 0, 0, 0.1);
-    moz-box-shadow: inset 0 1px 5px rgba(0, 0, 0, 0.1);
-    -webkit-transition: box-shadow linear 0.1s, border linear 0.05s;
-    -moz-transition: box-shadow linear 0.1s, background linear 0.05s;
-    -ms-transition: box-shadow linear 0.1s, background linear 0.05s;
-    -o-transition: box-shadow linear 0.1s, background linear 0.05s;
-    transition: box-shadow linear 0.1s, background linear 0.05s;
-    padding: 6px; 
-}
-
-#authcontent input[type=text]:hover, #authcontent input[type=password]:hover{ 
-    border-color: #bbb;  
-}
-
-#authcontent input[type=text]:focus, #authcontent input[type=password]:focus{
-    outline: 0;
-    border-color:#aaa;
-}
-
-#authcontent input[type=text].error, #authcontent input[type=password].error {
-    !border-color: #f99;
-}
 
 #loginform input[type=text], #loginform input[type=password]{
     width: 255px; 
@@ -166,38 +127,6 @@ h1{ font-weight: 300; }
 
 /* PRE-LOGIN CONTENT */
 
-#authheader .title{
-    margin: 0px auto;
-}
-
-#authheader #logo{
-    height: 40px;
-    width: 100px;
-    opacity: 1;
-    !background: #fff;
-    float:left;
-}
-
-#authheader #title{
-    height: 40px;
-    width: 100px;
-    !background: #fff;
-    float:right;
-}
-
-#authcontent ul{
-    list-style: none;
-    padding: 0px 10px;
-}
-
-#authcontent li{
-    padding: 5px 0px;
-}
-
-#authcontent span{
-    background: #eee;
-}
-
 #authcontent span.register{
     position: absolute;
     bottom: 0px;
@@ -214,11 +143,6 @@ label.error{
     font-weight: 700;
     padding: 7px 0px 5px 20px;
     background: url(/static/img/exclamation.png) left center no-repeat;
-}
-
-#authcontent label.error{
-    background-color: #eee;
-    display:block;
 }
 
 /* MAIN APP CONTENT */
