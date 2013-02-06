@@ -2,14 +2,9 @@ var WelcomeManager = {
 
     // Initialization function.
     init: function() {
-        $(document).on("mouseover", "#welcomepage .button", function() {
-            $(this).css('cursor', 'pointer');
-        });
-        
-        $(document).on("mouseout", "#welcomepage .button", function() {
-            $(this).css('cursor', 'auto');
-        });
-        
+
+        console.log("hi");
+
         $(document).on("change", ".content .field input", function() {
             WelcomeManager.setUnsaved();
         });
@@ -19,14 +14,14 @@ var WelcomeManager = {
 
     // Sets the SAVE button to saved (green).
     setSaved: function() {
-        $("#tablemenu input[type=submit]")
+        $(".tablemenu input[type=submit]")
             .removeClass('unsaved')
             .addClass('saved');
     },
 
     // Sets the SAVE button to unsaved (yellow).
     setUnsaved: function() {
-        $("#tablemenu input[type=submit]")
+        $(".tablemenu input[type=submit]")
             .removeClass('saved')
             .addClass('unsaved');
     },

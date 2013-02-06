@@ -9,7 +9,7 @@
 
 <form method="post" id = "editprefs" action="{% url advisor "preferences" %}">
 {% csrf_token %}
-<div id = "tablemenu" class="tableheader">
+<div class="tablemenu header">
 	Don't forget to <input class="saved button" type="submit" value="SAVE!"/>
 </div>
 
@@ -199,7 +199,7 @@
 </table>
 </div>
 
-<div id="tablemenu" class="tablefooter">
+<div class="tablemenu footer">
     Don't forget to <input class="saved button" type="submit" value="SAVE!" />
 </div>
 </form>
