@@ -1,0 +1,19 @@
+.login-form
+{
+    input[type=text], input[type=password]
+    {
+        width: 264px; 
+        margin-bottom:10px;
+        font-size: 18px;
+    }
+
+    .forgot
+    {
+        text-align: right;
+        vertical-align: bottom;
+
+        a { font-size: 9px; font-weight: 500; }
+    }
+
+    .register { padding-left: 10px; }
+}

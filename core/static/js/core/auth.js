@@ -1,7 +1,7 @@
 $(function() {
 
     // Attempts to log in, and changes the UI accordingly.
-    $(document).on("submit", "#loginform", function() {
+    $(document).on("submit", "form#login", function() {
         var credentials = $(this).serializeArray();
         var uri = $(this).attr("action");
         $.post(uri, credentials, function(data) {
