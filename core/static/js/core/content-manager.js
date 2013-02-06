@@ -82,7 +82,7 @@ var ContentManager = {
     loadNewContent: function(hash, data) {
         $(".content").css('height', $(".content").height() + "px");
         $(".content #contentwrapper").fadeOut(150, function() {
-            $(".content").addClass("content-loading");
+            $(".content").addClass("loading");
             var method = data ? "POST" : "GET";
             $.ajax({
                 type: method,
@@ -103,7 +103,7 @@ var ContentManager = {
                         'display': 'none'
                     });
                     $(".content").animate({height: height}, 500, function() {
-                        $(".content").removeClass("content-loading");
+                        $(".content").removeClass("loading");
                         $("#contentwrapper").fadeIn(150, function() {
                             $(".content").css('height','');
                         });
