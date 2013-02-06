@@ -3,7 +3,7 @@
 {% block title %}Login{% endblock title %}
 
 {% block content %}
-	<div id="left">
+	<div class="block left">
 		<h2> Introducing: Huxley!</h2>
 		<p>Huxley is a new system we're using to make your conference experience smoother than ever.</p>
 		<p>Log in to get started, or <a class="nav" href="/about">learn more about Huxley!</a></p>
@@ -11,7 +11,7 @@
 			{% if state %}<label class="error">{{ state }}</label>{% endif %}
 		</div>
 	</div>
-	<div id="right">
+	<div class="block right">
 		<form id="loginform" action="{% url login %}" method="post">
 			{% csrf_token %}
 			<span> Username </span><input class="text empty rounded-small" type="text" name="username" value="" tabindex="1">
