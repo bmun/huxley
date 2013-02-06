@@ -5,6 +5,10 @@
         width: 264px; 
         margin-bottom:10px;
         font-size: 18px;
+
+        border-radius: 3px;
+        moz-border-radius: 3px;
+        webkit-border-radius: 3px;
     }
 
     .forgot
@@ -15,5 +19,7 @@
         a { font-size: 9px; font-weight: 500; }
     }
 
-    .register { padding-left: 10px; }
+    .register { text-align: right; }
+
+    button.submit { margin: 5px 0px; }
 }
