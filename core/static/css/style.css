@@ -377,25 +377,6 @@ label.error{
 }
 
 
-/* FOOTER */
-
-#footerwrapper{
-    margin: 0px auto;
-    background: #111;
-    border-top: 1px solid #333;
-    margin-bottom: 0px;
-    opacity: .8;
-}
-
-#footer {
-    font: 10px Helvetica, Arial, sans-serif;
-    height: 50px;
-    width:800px;
-    margin: 0px auto;
-    padding: 5px;
-    opacity: 1.0;
-}
-
 #accordion{
     margin: 5px auto 0px auto;
     !border-bottom: 1px solid #ddd;
