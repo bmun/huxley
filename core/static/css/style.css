@@ -73,18 +73,6 @@ h1{ font-weight: 300; }
 
 /* --- Forms --- */
 
-form#login input[type=text], form#login input[type=password]{
-    width: 264px; 
-    margin-bottom:10px;
-    font-size: 18px;
-}
-
-#forgot-form input[type=text] {
-    width: 264px; 
-    margin-bottom:10px;
-    font-size: 18px;
-}
-
 #changepasswordform input[type=password]{ width: 175px; margin-bottom:10px; font: 14px Helvetica, Arial, sans-serif; font-weight: 300; color: #666; background: #eee; border: none; border-top: 1px solid #aaa; padding: 4px; }
 #changepasswordform input[type=password]:hover{ border-top: 1px solid #999; }
 #changepasswordform button{ padding: 3px; margin-top: 5px;}
