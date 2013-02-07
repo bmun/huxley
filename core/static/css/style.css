@@ -12,8 +12,6 @@ body { background: #f0f0f0 url(/static/img/unga3.jpg) center top no-repeat fixed
 #noscriptwrapper{ background: #faa; margin: 0px auto; border-bottom: 1px solid #fbb; box-shadow: 0px 0px 3px #fbb; }
 #noscript{ width: 520px; padding: 10px 0px 10px 80px; margin: 0px auto; text-align: left; }
 #splash{ background: #111 url(/static/img/logo_white.png) center center no-repeat; padding: 10px; width: 600px; min-height: 250px; border: 1px solid #222; margin: 60px auto;}
-#changepassword{ text-align: left; display:none; padding: 15px; width: 183px; background: #111; position: absolute; top: 40px; right: 92px; z-index: 1; border: 1px solid #222; border-width: 0px 1px 1px 1px;}
-#changepassword #message{ display:none; margin-top: 10px;}
 
 /* --- Layout --- */
 
@@ -38,10 +36,7 @@ body { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;}
     text-align: left;
     line-height: 18px;
 }
-#changepassword div.input label{
-    color: #aaa;
-    font-size: 11px;
-}
+
 
 /* Text Colors */
 .usertype{ color: #ddd;}
@@ -51,9 +46,7 @@ body { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;}
 #splash p{
     color:#eee; 
 }
-#changepassword div.input:hover label{
-    color: #eee;
-}
+
 
 /* --- Headings --- */
 
@@ -73,9 +66,7 @@ h1{ font-weight: 300; }
 
 /* --- Forms --- */
 
-#changepasswordform input[type=password]{ width: 175px; margin-bottom:10px; font: 14px Helvetica, Arial, sans-serif; font-weight: 300; color: #666; background: #eee; border: none; border-top: 1px solid #aaa; padding: 4px; }
-#changepasswordform input[type=password]:hover{ border-top: 1px solid #999; }
-#changepasswordform button{ padding: 3px; margin-top: 5px;}
+
 .topbarbutton { font-size: 11px; font-weight:700; border: 1px solid #ccc; background: #ddd; }
 .topbarbutton:hover { background: #fff; box-shadow: 0px 0px 3px #aaa; }
 

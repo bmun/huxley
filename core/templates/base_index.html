@@ -8,7 +8,7 @@
         {% block header %}
             <ul id="right">
                 <li>Logged in as <span class="advisorfirstname bold">{{ user.first_name }}</span>&nbsp;<span class="advisorlastname bold">{{ user.last_name }}</span></li>
-                <li><a id="newpassword" href="#">Change Password</a></li>
+                <li><a id="changepassword-link" href="#">Change Password</a></li>
                 <li><a id="logout" class="topbarbutton" href="/logout/">LOGOUT</a><li>
             </ul>
             <div id="left">
@@ -20,8 +20,8 @@
         {% endblock header %}
     </div>
 </div>
-<div id="changepassword" class="rounded-bottom transparent changepassword">
-    <form id="changepasswordform" action="{% url changepassword %}">
+<div id="changepassword-container" class="change-password rounded-bottom transparent">
+    <form id="changepassword" action="{% url changepassword %}">
         {% csrf_token %}
         <div class="input">
             <label for="oldpassword">Current Password</label>
