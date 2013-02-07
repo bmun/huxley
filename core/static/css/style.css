@@ -39,10 +39,6 @@ body { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;}
 
 
 /* Text Colors */
-.usertype{ color: #ddd;}
-.usertype:hover{
-    color: #fff;
-}
 #splash p{
     color:#eee; 
 }
