@@ -32,6 +32,11 @@
         float: left;
         padding-top: 5px;
         color: #aaa;
+
+        .usertype {
+            color: #ddd;
+            &:hover { color: #fff; }
+        }
     }
 
     #right {
