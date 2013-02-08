@@ -43,23 +43,12 @@ body { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;}
     color:#eee; 
 }
 
-
 /* --- Headings --- */
 
 h1{ font-weight: 300; }
 #appcontent h2{ padding-bottom: 10px; }
 #appcontent h3{ color: #666; margin-top: 15px; padding-left: 2px; border-bottom: 1px solid #ddd; font-weight:500; font-size: 11px; }
 #noscript h3{ color: #600; text-shadow: 0px 1px #fcc; font-size: 14px; }
-
-/* PRE-LOGIN CONTENT */
-
-label.error{
-    color: #f30;
-    font-size: 11px;
-    font-weight: 700;
-    padding: 7px 0px 5px 20px;
-    background: url(/static/img/exclamation.png) left center no-repeat;
-}
 
 /* MAIN APP CONTENT */
 
