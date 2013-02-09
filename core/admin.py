@@ -3,14 +3,27 @@
 # Copyright (c) 2011-2013 Kunal Mehta. All rights reserved.
 # Use of this source code is governed by a BSD License found in README.md.
 
+import csv
+
 from core.models import *
 from django.contrib import admin
+from django.http import HttpResponse
 
 class DelegateAdmin(admin.ModelAdmin):
     def roster(self, request):
-        return HttpResponseRedirect(
-                reverse("admin:core_delegate_changelist")
-        )
+        roster = HttpResponse(content_type='text/csv')
+        roster['Content-Disposition'] = 'attachment; filename="delegateroster.csv"'
+        writer = csv.writer(roster)
+
+        for delegate in Delegate.objects.all().order_by('delegateslot__assignment__school__name'):
+            writer.writerow([
+                delegate.name,
+                delegate.get_committee(),
+                delegate.get_country(),
+                delegate.get_school()
+            ])
+
+        return roster
 
     def get_urls(self):
         from django.conf.urls.defaults import *
