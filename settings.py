@@ -111,6 +111,7 @@ ROOT_URLCONF = 'huxley.urls'
 LOGIN_URL = '/login/'
 
 TEMPLATE_DIRS = (
+    '%s/templates/' % os.getcwd(),
     '%s/cms/templates/' % os.getcwd(),
     '%s/advisors/templates/' % os.getcwd(),
     '%s/chairs/templates/' % os.getcwd(),
