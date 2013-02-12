@@ -156,8 +156,9 @@ def roster(request, profile, context):
 # Display the advisor's attendance list.
 def attendance(request, profile, context):
     school = profile.school
-    slots = DelegateSlot.objects.filter(assignment__school=school)
-    delegates = [slot.delegate for slot in slots]
+    #slots = DelegateSlot.objects.filter(assignment__school=school)
+    delegates = Delegate.objects.filter(delegateslot__assignment__school=profile.school)
+    #delegates = [slot.delegate for slot in slots]
     return render_to_response('check-attendance.html', {'delegates': delegates}, context_instance=context)
 
 
