@@ -1,5 +1,14 @@
 /* Content */
 
+label.error
+{
+    color: #f30;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 7px 0px 5px 20px;
+    background: url(/static/img/exclamation.png) left center no-repeat;
+}
+
 .content
 {
     padding: 15px;
@@ -19,15 +28,6 @@
         color: #333;
 
         &:hover { text-decoration: underline; }
-    }
-
-    label.error
-    {
-        color: #f30;
-        font-size: 11px;
-        font-weight: 700;
-        padding: 7px 0px 5px 20px;
-        background: url(/static/img/exclamation.png) left center no-repeat;
     }
 
     &.transparent
