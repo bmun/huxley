@@ -2,9 +2,6 @@ var WelcomeManager = {
 
     // Initialization function.
     init: function() {
-
-        console.log("hi");
-
         $(document).on("change", ".content .field input", function() {
             WelcomeManager.setUnsaved();
         });
