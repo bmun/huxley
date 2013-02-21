@@ -257,7 +257,7 @@ a.acc_topic.active {
     width: 700px;
     margin: 10px auto 20px auto;
     font-size: 14px;
-    font-weight: 300;
+    font-weight: 400;
     border-collapse: collapse;
     background: #eee;
 }
@@ -282,7 +282,7 @@ a.acc_topic.active {
     height: 20px;
     margin: 0px 10px;
     font-family: Helvetica, Arial, sans-serif;
-    font-weight: 300;
+    font-weight: 400;
     font-size: 14px;
 }
 
