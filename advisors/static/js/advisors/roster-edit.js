@@ -10,12 +10,14 @@
 			$(document).on("click", "#roster .nodelegate", function() {
 	            var sid = $(this).closest('tr').attr('slotid');
 	            $(this).closest('tr').attr('delegateop', 'new');
-	            $("tr[slotid=" + sid + "] td.delegatename span").fadeOut(150, function(){
+	            $("tr[slotid=" + sid + "] td.delegatename .nodelegate").fadeOut(150, function(){
 	                $("tr[slotid=" + sid + "] td.delegatename").html("<input type=\"text\" name=\"delegatename\" value=\"Delegate Name\" />").hide().fadeIn(150);
 	                $("tr[slotid=" + sid + "] td.delegateemail").html("<input type=\"text\" name=\"delegateemail\" value=\"delegate@site.com\" />").hide().fadeIn(150);  
 	            });
 	            Roster.opQueue.push({'op':'new', 'sid':sid});
 	            Roster.setUnsaved();
+
+                return false;
 	        });
         	
 			// Delete a delegate.
@@ -23,7 +25,7 @@
 				var sid = $(this).closest('tr').attr('slotid');
 				$(this).closest('tr').attr('delegateop', 'delete');
 				$("tr[slotid=" + sid + "] td input[type=text]").fadeOut(150, function(){
-				    $("tr[slotid=" + sid + "] td.delegatename").html("<span class=\"nodelegate\"> Click here to add a Delegate.</span>").hide().fadeIn(150);
+				    $("tr[slotid=" + sid + "] td.delegatename").html("<a href=\"#\" class=\"nodelegate\"> Click here to add a Delegate.</span>").hide().fadeIn(150);
 				    $("tr[slotid=" + sid + "] td.delegateemail").html("")
 				});
 				Roster.opQueue.push({'op':'delete', 'sid':sid});
