@@ -19,7 +19,7 @@ body { background: #f0f0f0 url(/static/img/unga3.jpg) center top no-repeat fixed
 .rounded-small{ border-radius: 3px 3px 3px 3px; -moz-border-radius: 3px 3px 3px 3px; -webkit-border-radius: 3px 3px 3px 3px; behavior: url(/static/htc/PIE.htc) }
 .rounded-top{ border-radius: 6px 6px 0px 0px; -moz-border-radius: 6px 6px 0px 0px; -webkit-border-radius: 6px 6px 0px 0px; behavior: url(/static/htc/PIE.htc) }
 .rounded-bottom{ border-radius: 0px 0px 6px 6px; -moz-border-radius: 0px 0px 6px 6px; -webkit-border-radius: 0px 0px 6px 6px; behavior: url(/static/htc/PIE.htc) }
-.titlebar{ height: 15px; padding: 10px 0px 10px 12px; background: #111; margin: 40px auto 0px auto; border-top: 1px solid #555; font: 10px Helvetica, Arial, sans-serif; font-weight: 500; color: #666; letter-spacing: 13px; text-align: center; }
+.titlebar{ height: 15px; padding: 10px 0px 10px 12px; background: #111; margin: 40px auto 0px auto; border-top: 1px solid #555; font: 10px Helvetica, Arial, sans-serif; font-weight: 600; color: #666; letter-spacing: 13px; text-align: center; }
 .ie-layout{ zoom: 1; }
 .transparent{ -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=90)"; /* IE8 */ filter: alpha(opacity=90); /* IE6/7 */ -moz-opacity: 0.9; /* Netscape? */ -khtml-opacity: 0.9; /* Safari 1.x */ opacity: 0.9; /* Not shitty browsers */ }
 
@@ -168,6 +168,15 @@ h1{ font-weight: 300; }
     margin: 0;
     padding: 0;
     width: 200px;
+}
+
+#roster .nodelegate {
+    font-weight: 400;
+    text-decoration: none;
+}
+
+#roster .nodelegate:hover {
+    text-decoration: none;
 }
 
 #roster input[type=text].empty{

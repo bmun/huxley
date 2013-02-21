@@ -35,7 +35,7 @@ When you're done, <span class="bold">don't forget to save your changes!</span> <
                 {% if slot.delegate %}
                     <input type="text" name="delegatename" value="{{ slot.delegate.name }}" />
                 {% else %}
-                    <span class="nodelegate"> Click here to add a delegate.</span>
+                    <a href="#" class="nodelegate"> Click here to add a delegate.</span>
                 {% endif %}
             </td>
             <td class="delegateemail">
