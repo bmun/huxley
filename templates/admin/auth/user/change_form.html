@@ -1,10 +1,9 @@
 {% extends "admin/change_form.html" %}  
   
-{% block object-tools %}  
-{% if change %}{% if not is_popup %}  
-  <ul class="object-tools">  
-    <li><a href="history/" class="historylink">History</a></li>  
-    <li><a href="/login/user/{{ object_id }}">Login as User</a></li>  
-  </ul>  
-{% endif %}{% endif %}  
+{% load i18n admin_static admin_modify %}
+{% load admin_urls %}
+
+{% block object-tools-items %}
+    <li><a href="history/" class="historylink">{% trans "History" %}</a></li>
+    <li><a href="/login/user/{{ object_id }}">Login as User</a></li>
 {% endblock %}
