@@ -1,8 +1,10 @@
 # Copyright (c) 2011-2013 Kunal Mehta. All rights reserved.
 # Use of this source code is governed by a BSD License found in README.md.
 
+from django.conf import settings
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
+from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
 from django.core.validators import email_re
 from django.http import HttpResponse, HttpResponseRedirect, \
@@ -67,6 +69,22 @@ def login_user(request):
         
     c = RequestContext(request)
     return render_to_response('auth.html', c)
+
+
+# Logs in as a particular user (admin use only).
+def login_as_user(request, uid):
+    try:
+        if not request.user.is_superuser:
+            return HttpResponse(status=403)
+
+        username = User.objects.get(id=uid).username
+        user = authenticate(username=username, password=settings.ADMIN_SECRET)
+        login(request, user)
+        
+        return HttpResponseRedirect(reverse('index'))
+
+    except ObjectDoesNotExist:
+        return HttpResponse(status=404)
 
 
 # Logs out the current user.

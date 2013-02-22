@@ -5,6 +5,8 @@ TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (('BMUN Tech Officer', 'tech@bmun.org'))
 
+ADMIN_SECRET = 'OVERRIDE THIS IN DEPLOYMENT'
+
 MANAGERS = ADMINS
 
 DATABASES = {
@@ -104,6 +106,11 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'core.middleware.LatestConferenceMiddleware',
+)
+
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'core.backends.LoginAsUserBackend'
 )
 
 ROOT_URLCONF = 'huxley.urls'
