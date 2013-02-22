@@ -126,8 +126,6 @@ class Delegate(models.Model):
     session2 = models.BooleanField(default=False)
     session3 = models.BooleanField(default=False)
     session4 = models.BooleanField(default=False)
-    session5 = models.BooleanField(default=False)
-    session6 = models.BooleanField(default=False)
     class Meta:
         db_table = u'Delegate'
     def __unicode__(self):
