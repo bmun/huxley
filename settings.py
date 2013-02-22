@@ -119,7 +119,6 @@ LOGIN_URL = '/login/'
 
 TEMPLATE_DIRS = (
     '%s/templates/' % os.getcwd(),
-    '%s/cms/templates/' % os.getcwd(),
     '%s/advisors/templates/' % os.getcwd(),
     '%s/chairs/templates/' % os.getcwd(),
     '%s/core/templates/' % os.getcwd(),

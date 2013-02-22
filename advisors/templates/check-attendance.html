@@ -16,8 +16,6 @@
 			<th class="session"> 2 </th>
 			<th class="session"> 3 </th>
 			<th class="session"> 4 </th>
-			<th class="session"> 5 </th>
-			<th class="session"> 6 </th>
 		</tr>
 		{% for delegate in delegates %}
 			<tr>
@@ -33,12 +31,6 @@
 				</td>
 				<td class="session"> 
 					<input type="checkbox" disabled="true" {% if delegate.session4 %} checked="true" {% endif %} ></input>
-				</td>
-				<td class="session"> 
-					<input type="checkbox" disabled="true" {% if delegate.session5 %} checked="true" {% endif %} ></input>
-				</td>
-				<td class="session"> 
-					<input type="checkbox" disabled="true" {% if delegate.session6 %} checked="true" {% endif %} ></input>
 				</td>
 			</tr>
 		{% endfor %}
