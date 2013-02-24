@@ -44,7 +44,7 @@ class AssignmentAdmin(admin.ModelAdmin):
         assignments['Content-Disposition'] = 'attachment; filename="assignments.csv"'
         writer = csv.writer(assignments)
 
-        for assignment in Assignment.objects.all().order_by('school__name'):
+        for assignment in Assignment.objects.all().order_by('school__name', 'committee__name'):
             writer.writerow([assignment.school, assignment.committee, assignment.country])
 
         return assignments
