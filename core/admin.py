@@ -37,11 +37,35 @@ class DelegateAdmin(admin.ModelAdmin):
         )
         return my_urls + urls
 
+
+class AssignmentAdmin(admin.ModelAdmin):
+    def list(self, request):
+        assignments = HttpResponse(content_type='text/csv')
+        assignments['Content-Disposition'] = 'attachment; filename="assignments.csv"'
+        writer = csv.writer(assignments)
+
+        for assignment in Assignment.objects.all().order_by('school__name'):
+            writer.writerow([assignment.school, assignment.committee, assignment.country])
+
+        return assignments
+
+    def get_urls(self):
+        from django.conf.urls.defaults import *
+        urls = super(AssignmentAdmin, self).get_urls()
+        my_urls = patterns('',
+            url(
+                r'list',
+                self.admin_site.admin_view(self.list),
+                name='core_assignment_list'
+            ),
+        )
+        return my_urls + urls
+
 admin.site.register(Conference)
 admin.site.register(Country)
 admin.site.register(School)
 admin.site.register(Committee)
-admin.site.register(Assignment)
+admin.site.register(Assignment, AssignmentAdmin)
 admin.site.register(CountryPreference)
 admin.site.register(HelpQuestion)
 admin.site.register(HelpCategory)
