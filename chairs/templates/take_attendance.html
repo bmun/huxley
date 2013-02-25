@@ -5,6 +5,48 @@
 {% block content %}
 <h2>Take Attendance</h2>
 
-<p> Here you can take attendance. For now, this will be a list of delegates that you can manage or whatever. </p>
-    
+<p> Here you can take attendance. Simply place checkmarks to indicate attendance and save. </p>
+
+<form id="form-attendance" method="post" action="{% url chair "attendance" %}">
+{% csrf_token %}
+<div id = "tablemenu" class="tableheader">
+	Don't forget to <input class="saved button" type="submit" value="SAVE!"/>
+</div>
+<div id = "div-attendance">
+	<table class = "table-attendance">
+		<tr>
+			<th> 
+				Committee: {{ committee.name }} ({{ committee.fullname }})
+			</th>
+		</tr>
+		<tr>
+			<th class="name"> Delegate </th>
+			<th class="session"> 1 </th>
+			<th class="session"> 2 </th>
+			<th class="session"> 3 </th>
+			<th class="session"> 4 </th>
+		</tr>
+		{% for delegate in delegates %}
+			<tr class="delegateinfo" delegateid="{{ delegate.id }}">
+				<td class="name"> {{ delegate.name }} ({{ delegate.school }}) </td>
+				<td class="session" session="1"> 
+					<input type="checkbox" {% if delegate.session1 %} checked="true" {% endif %} ></input>
+				</td>
+				<td class="session" session="2"> 
+					<input type="checkbox" {% if delegate.session2 %} checked="true" {% endif %} ></input>
+				</td>
+				<td class="session" session="3"> 
+					<input type="checkbox" {% if delegate.session3 %} checked="true" {% endif %} ></input>
+				</td>
+				<td class="session" session="4"> 
+					<input type="checkbox" {% if delegate.session4 %} checked="true" {% endif %} ></input>
+				</td>
+			</tr>
+		{% endfor %}
+	</table>
+</div>	
+<div id = "tablemenu" class="tablefooter">
+	Don't forget to <input class="saved button" type="submit" value="SAVE!"/>
+</div>
+</form>    
 {% endblock content %}
