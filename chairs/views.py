@@ -3,6 +3,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse, HttpResponseNotFound
 from django.shortcuts import render_to_response
 from django.template import Context, RequestContext
+from django.utils import simplejson
 
 from core.models import *
 
@@ -35,7 +36,50 @@ def grading(request, profile, context):
 
 # Display a page allowing the chair to take attendance.
 def attendance(request, profile, context):
-    return render_to_response('comingsoon.html')
+    if request.POST:
+        updated_data = simplejson.loads(request.raw_post_data)
+
+        # Now for some security checks... make sure whoever's logged in has permission to make changes
+        slots = DelegateSlot.objects.filter(assignment__committee=profile.committee)
+        committee_delegates = set()
+        for slot in slots:
+            committee_delegates.add(slot.delegate)
+
+        for delegate in updated_data['delegates']:
+            try:
+                delegateid = int(delegate['delegateid'])
+                delegate_object = Delegate.objects.get(id=delegateid)
+
+                # Make sure delegate is part of the committee the logged-in person is in charge of
+                if delegate_object not in committee_delegates:
+                    print "ERROR: CHAIR TRYING TO MODIFY DELEGATES WITHOUT PERMISSION"
+                    return HttpResponse(status=403)
+
+                delegate_object.session1 = delegate['sessions']['1']
+                delegate_object.session2 = delegate['sessions']['2']
+                delegate_object.session3 = delegate['sessions']['3']
+                delegate_object.session4 = delegate['sessions']['4']
+                delegate_object.save()
+
+            except:
+                print "ERROR WHILE TRYING TO TAKE ATTENDANCE"
+                return HttpResponse(status=500)
+
+        return HttpResponse(status=200)
+
+    slots = DelegateSlot.objects.filter(assignment__committee=profile.committee)
+    delegates = [slot.delegate for slot in slots]
+    delegate_info = []
+    for delegate in delegates:
+        delegate_info.append({"id":delegate.id, \
+                              "name":delegate.name, \
+                              "session1":delegate.session1, \
+                              "session2":delegate.session2, \
+                              "session3":delegate.session3, \
+                              "session4":delegate.session4, \
+                              "school":delegate.get_school().name})
+
+    return render_to_response('take_attendance.html', {'delegates':delegate_info, 'committee':profile.committee}, context_instance=context)
 
 
 # Display a page allowing the USG/External to view delegate rosters.
