@@ -25,7 +25,7 @@ def dispatch(request, page="grading"):
     except KeyError:
         return HttpResponseNotFound()
     # The profile doesn't exist, meaning user isn't a chair.
-    except ObjectDoesNotExist:
+    except SecretariatProfile.DoesNotExist:
         return HttpResponse(status=403)
 
 
@@ -36,7 +36,7 @@ def grading(request, profile, context):
 
 # Display a page allowing the chair to take attendance.
 def attendance(request, profile, context):
-    if request.POST:
+    if request.method == "POST":
         updated_data = simplejson.loads(request.raw_post_data)
 
         # Now for some security checks... make sure whoever's logged in has permission to make changes
@@ -68,7 +68,9 @@ def attendance(request, profile, context):
         return HttpResponse(status=200)
 
     slots = DelegateSlot.objects.filter(assignment__committee=profile.committee)
-    delegates = [slot.delegate for slot in slots]
+    delegates = Delegate.objects.filter(
+        delegateslot__assignment__committee=profile.committee
+    ).order_by('delegateslot__assignment__country')
     delegate_info = []
     for delegate in delegates:
         delegate_info.append({"id":delegate.id, \
