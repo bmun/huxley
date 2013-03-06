@@ -14,35 +14,39 @@
 </div>
 <div id = "div-attendance">
 	<table class = "table-attendance">
-		<tr>
-			<th> 
-				Committee: {{ committee.name }} ({{ committee.fullname }})
-			</th>
-		</tr>
-		<tr>
+		<thead>
+			<th class="country"> Country </th>
 			<th class="name"> Delegate </th>
 			<th class="session"> 1 </th>
 			<th class="session"> 2 </th>
 			<th class="session"> 3 </th>
 			<th class="session"> 4 </th>
-		</tr>
-		{% for delegate in delegates %}
-			<tr class="delegateinfo" delegateid="{{ delegate.id }}">
-				<td class="name"> {{ delegate.name }} ({{ delegate.school }}) </td>
-				<td class="session" session="1"> 
-					<input type="checkbox" {% if delegate.session1 %} checked="true" {% endif %} ></input>
-				</td>
-				<td class="session" session="2"> 
-					<input type="checkbox" {% if delegate.session2 %} checked="true" {% endif %} ></input>
-				</td>
-				<td class="session" session="3"> 
-					<input type="checkbox" {% if delegate.session3 %} checked="true" {% endif %} ></input>
-				</td>
-				<td class="session" session="4"> 
-					<input type="checkbox" {% if delegate.session4 %} checked="true" {% endif %} ></input>
-				</td>
-			</tr>
-		{% endfor %}
+		</thead>
+		<tbody>
+			{% for slot in delegate_slots %}
+				<tr class="delegateinfo" data-slot-id="{{ slot.id }}">
+					<td class="country">{{ slot.assignment.country }}</td>
+					<td class="name">
+						{% if slot.delegate %}
+							{{ slot.delegate }}
+						{% else %}
+							Delegate Unregistered
+						{% endif %}
+					</td>
+					<td class="session" data-session="1">
+						<input type="checkbox" name="session1" {% if slot.attended_session1 %} checked="true" {% endif %}></input>
+					</td>
+					<td class="session" data-session="2">
+						<input type="checkbox" name="session2"{% if slot.attended_session2 %} checked="true" {% endif %}></input>
+					</td>
+					<td class="session" data-session="3">
+						<input type="checkbox" name="session3"{% if slot.attended_session3 %} checked="true" {% endif %}></input>
+					</td>
+					<td class="session" data-session="4">
+						<input type="checkbox" name="session4"{% if slot.attended_session4 %} checked="true" {% endif %}></input>
+					</td>
+			{% endfor %}
+		</tbody>
 	</table>
 </div>	
 <div class="tablemenu footer">

@@ -105,6 +105,10 @@ class CountryPreference(models.Model):
 
 class DelegateSlot(models.Model):
     assignment = models.ForeignKey(Assignment)
+    attended_session1 = models.BooleanField(default=False)
+    attended_session2 = models.BooleanField(default=False)
+    attended_session3 = models.BooleanField(default=False)
+    attended_session4 = models.BooleanField(default=False)
     class Meta:
         db_table = u'DelegateSlot'
     def __unicode__(self):
@@ -122,10 +126,6 @@ class Delegate(models.Model):
     email = models.EmailField(max_length=765, db_column='Email', blank=True) 
     delegateslot = models.OneToOneField(DelegateSlot, related_name='delegate', null=True, default=None, unique=True)
     created_at = models.DateTimeField(null=True, auto_now_add=True)
-    session1 = models.BooleanField(default=False)
-    session2 = models.BooleanField(default=False)
-    session3 = models.BooleanField(default=False)
-    session4 = models.BooleanField(default=False)
     class Meta:
         db_table = u'Delegate'
     def __unicode__(self):
