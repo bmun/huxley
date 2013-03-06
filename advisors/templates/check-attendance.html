@@ -17,20 +17,26 @@
 			<th class="session"> 3 </th>
 			<th class="session"> 4 </th>
 		</tr>
-		{% for delegate in delegates %}
+		{% for slot in delegate_slots %}
 			<tr>
-				<td class="name"> {{ delegate.name }} </td>
-				<td class="session"> 
-					<input type="checkbox" disabled="true" {% if delegate.session1 %} checked="true" {% endif %} ></input>
+				<td class="name">
+					{% if slot.delegate %}
+						{{ slot.delegate }}
+					{% else %}
+						Delegate Unregistered
+					{% endif %}
 				</td>
 				<td class="session"> 
-					<input type="checkbox" disabled="true" {% if delegate.session2 %} checked="true" {% endif %} ></input>
+					<input type="checkbox" disabled="true" {% if slot.attended_session1 %} checked="true" {% endif %} ></input>
 				</td>
 				<td class="session"> 
-					<input type="checkbox" disabled="true" {% if delegate.session3 %} checked="true" {% endif %} ></input>
+					<input type="checkbox" disabled="true" {% if slot.attended_session2 %} checked="true" {% endif %} ></input>
 				</td>
 				<td class="session"> 
-					<input type="checkbox" disabled="true" {% if delegate.session4 %} checked="true" {% endif %} ></input>
+					<input type="checkbox" disabled="true" {% if slot.attended_session3 %} checked="true" {% endif %} ></input>
+				</td>
+				<td class="session"> 
+					<input type="checkbox" disabled="true" {% if slot.attended_session4 %} checked="true" {% endif %} ></input>
 				</td>
 			</tr>
 		{% endfor %}

@@ -423,13 +423,21 @@ a.acc_topic.active {
 
 .table-attendance td.name{
     text-align:left;
-    color: #222;
     width: 100%;
 }
 
 .table-attendance td.session{
     text-align:center;
     color: #222;
+}
+
+.table-attendance th.country {
+    color: #222;
+    padding-right: 10px;
+}
+
+.table-attendance td.country {
+    padding-right: 10px;
 }
 
 .table-attendance input{
