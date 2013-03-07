@@ -54,7 +54,7 @@ def login_user(request):
                 response = {"success": False, "error": error}
             elif SecretariatProfile.objects.filter(user=user).exists():
                 response = {"success": True,
-                            "redirect": reverse('chair', args=['grading'])}
+                            "redirect": reverse('chair', args=['attendance'])}
             else:
                 response = {"success": True,
                             "redirect": reverse('advisor', args=['welcome'])}
