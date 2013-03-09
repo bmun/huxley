@@ -438,6 +438,7 @@ a.acc_topic.active {
 
 .table-attendance td.country {
     padding-right: 10px;
+    min-width: 250px;
 }
 
 .table-attendance input{

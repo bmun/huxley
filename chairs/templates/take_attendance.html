@@ -15,24 +15,16 @@
 <div id = "div-attendance">
 	<table class = "table-attendance">
 		<thead>
-			<th class="country"> Country </th>
-			<th class="name"> Delegate </th>
 			<th class="session"> 1 </th>
 			<th class="session"> 2 </th>
 			<th class="session"> 3 </th>
 			<th class="session"> 4 </th>
+			<th class="country"> Country </th>
+			<th class="name"> Delegate </th>
 		</thead>
 		<tbody>
 			{% for slot in delegate_slots %}
 				<tr class="delegateinfo" data-slot-id="{{ slot.id }}">
-					<td class="country">{{ slot.assignment.country }}</td>
-					<td class="name">
-						{% if slot.delegate %}
-							{{ slot.delegate }}
-						{% else %}
-							Delegate Unregistered
-						{% endif %}
-					</td>
 					<td class="session" data-session="1">
 						<input type="checkbox" name="session1" {% if slot.attended_session1 %} checked="true" {% endif %}></input>
 					</td>
@@ -44,6 +36,14 @@
 					</td>
 					<td class="session" data-session="4">
 						<input type="checkbox" name="session4"{% if slot.attended_session4 %} checked="true" {% endif %}></input>
+					</td>
+					<td class="country">{{ slot.assignment.country }}</td>
+					<td class="name">
+						{% if slot.delegate %}
+							{{ slot.delegate }}
+						{% else %}
+							Delegate Unregistered
+						{% endif %}
 					</td>
 			{% endfor %}
 		</tbody>
