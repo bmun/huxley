@@ -433,11 +433,11 @@ a.acc_topic.active {
 
 .table-attendance th.country {
     color: #222;
-    padding-right: 10px;
+    padding: 0px 10px;
 }
 
 .table-attendance td.country {
-    padding-right: 10px;
+    padding: 0px 10px;
     min-width: 250px;
 }
 
