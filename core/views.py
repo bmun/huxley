@@ -191,8 +191,3 @@ def validate_unique_user(request):
             return HttpResponse(status=406)
         else:
             return HttpResponse(status=200)
-
-
-# Renders the "About" page.
-def about(request):
-        return render_to_response('about.html')
