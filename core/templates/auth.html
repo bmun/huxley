@@ -12,7 +12,7 @@
 		</div>
 	</div>
 	<div class="block right">
-		<form id="login" class="login-form" action="{% url login %}" method="post">
+		<form id="login" class="login-form" action="{% url 'login' %}" method="post">
 			{% csrf_token %}
 			<table>
 				<tr>
@@ -23,14 +23,14 @@
 				</tr>
 				<tr>
 					<td>Password</td>
-					<td class="forgot"><a href="{% url forgotpassword %}" class="nav" tabindex="5">Forgot your password?</a></td>
+					<td class="forgot"><a href="{% url 'forgotpassword' %}" class="nav" tabindex="5">Forgot your password?</a></td>
 				</tr>
 				<tr>
 					<td colspan="2"><input class="text empty" type="password" name="password" value="" tabindex="2"></td>
 				</tr>
 				<tr>
 					<td><button class="submit rounded-small" type="submit" tabindex="3">Log In!</button></td>
-					<td class="register">Not signed up? <a class="nav" href="{% url register %}" tabindex="4">Register now!</a></td>
+					<td class="register">Not signed up? <a class="nav" href="{% url 'register' %}" tabindex="4">Register now!</a></td>
 				</tr>
 			</table>
 		</form>

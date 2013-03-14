@@ -1,11 +1,12 @@
 from django.conf.urls.defaults import patterns, include, url
+from django.views.generic import RedirectView
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    url(r'^favicon\.ico$', 'django.views.generic.simple.redirect_to', {'url': '/static/img/favicon.ico'}),
+    url(r'^favicon\.ico$', RedirectView.as_view(url='/static/img/favicon.ico')),
     url(r'^forgot/', 'core.views.forgot_password', name='forgotpassword'),
     url(r'^changepassword', 'core.views.change_password', name='changepassword'),
     url(r'^advisor/(?P<page>\w+)', 'advisors.views.dispatch', name='advisor'),
