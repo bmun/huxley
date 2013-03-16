@@ -135,9 +135,9 @@ def register(request):
                                 context_instance=RequestContext(request))
 
 
+#Attempts to change the current user's password, or returns an error.
 @require_POST
 def change_password(request):
-    """Attempts to change the current user's password, or returns an error."""
     oldpass = request.POST.get('oldpassword')
     newpass = request.POST.get('newpassword')
     newpass2 = request.POST.get('newpassword2')
