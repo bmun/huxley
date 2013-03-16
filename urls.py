@@ -6,8 +6,8 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     url(r'^favicon\.ico$', RedirectView.as_view(url='/static/img/favicon.ico')),
-    url(r'^forgot/', 'core.views.forgot_password', name='forgotpassword'),
-    url(r'^changepassword', 'core.views.change_password', name='changepassword'),
+    url(r'^password/forgot', 'core.views.forgot_password', name='forgot_password'),
+    url(r'^password/change', 'core.views.change_password', name='change_password'),
     url(r'^advisor/(?P<page>\w+)', 'advisors.views.dispatch', name='advisor'),
     url(r'^chair/(?P<page>\w+)', 'chairs.views.dispatch', name='chair'),
     url(r'^about', TemplateView.as_view(template_name='about.html'), name='about'),
