@@ -12,6 +12,7 @@ from django.http import HttpResponse, HttpResponseRedirect, \
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.utils import simplejson
+from django.views.decorators.http import require_POST
 
 from core.models import *
 from core.forms.registration import RegistrationForm
@@ -134,11 +135,9 @@ def register(request):
                                 context_instance=RequestContext(request))
 
 
-# Attempts to change current user's password.
+@require_POST
 def change_password(request):
-    if not request.method == "POST":
-        return HttpResponseNotAllowed(["POST"])
-        
+    """Attempts to change the current user's password, or returns an error."""
     oldpass = request.POST.get('oldpassword')
     newpass = request.POST.get('newpassword')
     newpass2 = request.POST.get('newpassword2')
