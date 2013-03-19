@@ -13,9 +13,6 @@ huxdb
 *.db
 huxley/huxley.db
 
-# WSGI file
-wsgi.py
-
 # Static Directory
 huxley/static/*
 
