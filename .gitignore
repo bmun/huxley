@@ -2,7 +2,7 @@
 .DS_Store
 .idea
 .sass-cache
-*/static/scss/*.css
+huxley/*/static/scss/*.css
 
 # Compiled Python Files
 *.pyc
@@ -11,16 +11,13 @@
 cmsdb
 huxdb
 *.db
-huxley.db
-
-# Misc
-cms/forms/test_registration.py
+huxley/huxley.db
 
 # WSGI file
 wsgi.py
 
 # Static Directory
-static/*
+huxley/static/*
 
 # Local Settings File
 local_settings.py
