@@ -77,9 +77,9 @@
                 type: 'POST',
                 url: uri,
                 data: aggregateData(),
-                contentType: 'application/json',
+                contentType: "application/x-www-form-urlencoded; charset=utf-8",
                 success: function(response){ Roster.setSaved();},
-                error: function(something, error, msg) {alert('didnt work, sorry: ' + msg)}
+                error: function(something, error, msg) {alert('didnt work, sorry: ' + msg)} // TODO: change this to use Error.
             });
             Roster.opQueue = []
             return false;

@@ -2,9 +2,9 @@
 # Use of this source code is governed by a BSD License found in README.md.
 
 from django import forms
-
-from core.models import *
 from django.contrib.auth.models import User
+
+from huxley.core.models import *
 
 import re
 

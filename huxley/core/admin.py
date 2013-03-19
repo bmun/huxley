@@ -5,9 +5,10 @@
 
 import csv
 
-from core.models import *
 from django.contrib import admin
 from django.http import HttpResponse
+
+from huxley.core.models import *
 
 class DelegateAdmin(admin.ModelAdmin):
     def roster(self, request):
