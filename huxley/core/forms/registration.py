@@ -2,12 +2,12 @@
 # Use of this source code is governed by a BSD License found in README.md.
 
 from django import forms
-
-from core.models import *
 from django.contrib.auth.models import User
 
-import re
+from huxley.core.models import *
+
 from datetime import date
+import re
 
 countries = Country.objects.filter(special=False).order_by('name')
 country_choices = [(country.id, country.name) for country in countries]

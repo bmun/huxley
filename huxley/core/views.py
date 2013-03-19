@@ -14,9 +14,9 @@ from django.template import RequestContext
 from django.utils import simplejson
 from django.views.decorators.http import require_POST
 
-from core.models import *
-from core.forms.registration import RegistrationForm
-from core.forms.forgot_password import ForgotPasswordForm
+from huxley.core.models import *
+from huxley.core.forms.registration import RegistrationForm
+from huxley.core.forms.forgot_password import ForgotPasswordForm
 
 import re
 

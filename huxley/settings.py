@@ -1,18 +1,20 @@
 import os
 
+FILEPATH = os.path.dirname(__file__)
+
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (('BMUN Tech Officer', 'tech@bmun.org'))
 
-ADMIN_SECRET = 'OVERRIDE THIS IN DEPLOYMENT'
+ADMIN_SECRET = 'OVERRIDE THIS IN PRODUCTION'
 
 MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': '%s/huxley.db' % os.getcwd(), # Or path to database file if using sqlite3.
+        'NAME': '%s/huxley.db' % FILEPATH, # Or path to database file if using sqlite3.
         'USER': '',                      # Not used with sqlite3.
         'PASSWORD': '',                  # Not used with sqlite3.
         'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
@@ -56,7 +58,7 @@ MEDIA_URL = ''
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
-STATIC_ROOT = '%s/static/' % os.getcwd()
+STATIC_ROOT = '%s/static/' % FILEPATH
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
@@ -90,7 +92,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.static',
     'django.contrib.auth.context_processors.auth',
     'django.contrib.messages.context_processors.messages',
-    'core.context_processors.conference',
+    'huxley.core.context_processors.conference',
 )
 
 # List of callables that know how to import templates from various sources.
@@ -105,12 +107,12 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'core.middleware.LatestConferenceMiddleware',
+    'huxley.core.middleware.LatestConferenceMiddleware',
 )
 
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
-    'core.backends.LoginAsUserBackend'
+    'huxley.core.backends.LoginAsUserBackend'
 )
 
 ROOT_URLCONF = 'huxley.urls'
@@ -118,10 +120,10 @@ ROOT_URLCONF = 'huxley.urls'
 LOGIN_URL = '/login/'
 
 TEMPLATE_DIRS = (
-    '%s/templates/' % os.getcwd(),
-    '%s/advisors/templates/' % os.getcwd(),
-    '%s/chairs/templates/' % os.getcwd(),
-    '%s/core/templates/' % os.getcwd(),
+    '%s/templates/' % FILEPATH,
+    '%s/advisors/templates/' % FILEPATH,
+    '%s/chairs/templates/' % FILEPATH,
+    '%s/core/templates/' % FILEPATH,
 )
 
 INSTALLED_APPS = (
@@ -132,9 +134,9 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.admin',
-    'core',
-    'advisors',
-    'chairs',
+    'huxley.core',
+    'huxley.advisors',
+    'huxley.chairs',
     'pipeline',
     'south',
 )

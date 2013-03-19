@@ -5,7 +5,7 @@ from django.shortcuts import render_to_response
 from django.template import Context, RequestContext
 from django.utils import simplejson
 
-from core.models import *
+from huxley.core.models import *
 
 
 # Dispatch to the appropriate view per the request.
