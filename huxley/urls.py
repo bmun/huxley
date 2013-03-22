@@ -15,7 +15,7 @@ urlpatterns = patterns('',
     url(r'^logout', 'huxley.core.views.logout_user', name='logout'),
     url(r'^login/user/(?P<uid>\d+)$', 'huxley.core.views.login_as_user', name='login_as_user'),
     url(r'^login', 'huxley.core.views.login_user', name='login'),
-    url(r'^uniqueuser/', 'huxley.core.views.validate_unique_user', name='uniqueuser'),
+    url(r'^uniqueuser/', 'huxley.core.views.validate_unique_user', name='unique_user'),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^$', 'huxley.core.views.index', name='index'),
 )
