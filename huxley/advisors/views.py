@@ -28,7 +28,7 @@ def dispatch(request, page='welcome'):
     except KeyError:
         return HttpResponseNotFound()
     # The profile doesn't exist, meaning user isn't an advisor.
-    except ObjectDoesNotExist:
+    except AdvisorProfile.DoesNotExist:
         return HttpResponse(status=403)
 
 
