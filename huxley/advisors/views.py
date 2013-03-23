@@ -3,7 +3,6 @@
 
 from django.contrib.auth.models import User
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponseForbidden
-from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.utils import simplejson
 
@@ -16,7 +15,7 @@ def dispatch(request, page='welcome'):
         for authentication and permissions. """
     context = RequestContext(request)
     if not request.user.is_authenticated():
-        return render_to_response('auth.html', context_instance=context)
+        return render_template(request, 'auth.html')
 
     views = {'welcome': welcome,
              'preferences': preferences,
@@ -67,7 +66,7 @@ def preferences(request, profile, context):
     """ Display and/or update the advisor's country and committee
         preferences. """
     school = profile.school
-    
+
     if request.method == 'POST':        
         seen = set()
         new_country_ids = []
