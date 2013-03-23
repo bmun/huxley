@@ -8,8 +8,9 @@ from django.utils import simplejson
 from huxley.core.models import *
 
 
-# Dispatch to the appropriate view per the request.
 def dispatch(request, page='welcome'):
+    """ Dispatch to the appropriate view per the request after checking
+        for authentication and permissions. """
     context = RequestContext(request)
     if not request.user.is_authenticated():
         return render_to_response('auth.html', context_instance=context)
@@ -32,8 +33,8 @@ def dispatch(request, page='welcome'):
         return HttpResponse(status=403)
 
 
-# Display and/or edit the advisor's profile information.
 def welcome(request, profile, context):
+    """ Display and/or edit the advisor's profile information. """
     school = profile.school
     if request.method == 'GET':
         return render_to_response('welcome.html',
@@ -60,12 +61,12 @@ def welcome(request, profile, context):
         school.maxdelegationsize = request.POST.get('maxDel')
         school.save();
         
-        return HttpResponse(status=200)
-        
+        return HttpResponse(status=200)    
 
 
-# Display and/or update the advisor's country/committee preferences.
 def preferences(request, profile, context):
+    """ Display and/or update the advisor's country and committee
+        preferences. """
     school = profile.school
     if request.method == 'GET':
         countries = Country.objects.filter(special=False).order_by('name')
@@ -118,8 +119,9 @@ def preferences(request, profile, context):
         return HttpResponse(status=200)
 
 
-# Display the advisor's editable roster.
 def roster(request, profile, context):
+    """ Display the advisor's editable roster, or update information as
+        necessary. """
     if request.method == 'POST':
         slot_data = simplejson.loads(request.POST['delegates'])
         for slot_id, delegate_data in slot_data.items():
@@ -150,22 +152,23 @@ def roster(request, profile, context):
                               context_instance=context)
 
 
-# Display the advisor's attendance list.
 def attendance(request, profile, context):
+    """ Display the advisor's attendance list. """
     delegate_slots = DelegateSlot.objects.filter(assignment__school=profile.school)
-    return render_to_response('check-attendance.html', {'delegate_slots': delegate_slots}, context_instance=context)
+    return render_to_response('check-attendance.html',
+                              {'delegate_slots': delegate_slots},
+                              context_instance=context)
 
 
-# Display a FAQ view.
 def help(request, profile, context):
-    c = Context()
-    questions = {}
-    for cat in HelpCategory.objects.all():
-        questions[cat.name] = HelpQuestion.objects.filter(category=cat)
-    c.update({"categories": questions})
-    return render_to_response('help.html', c, context_instance=context)
+    """ Display a FAQ view. """
+    questions = {category.name : HelpQuestion.objects.filter(category=category)
+                 for category in HelpCategory.objects.all()}
+    return render_to_response('help.html',
+                              {'categories': questions},
+                              context_instance=context)
 
 
-# Display a bug-reporting view.
 def bugs(request, profile, context):
+    """ Display a bug reporting view. """
     return render_to_response('bugs.html', context_instance=context)
