@@ -1,8 +1,7 @@
 from django.contrib.auth.models import User
-from django.core.exceptions import ObjectDoesNotExist
-from django.http import HttpResponse, HttpResponseNotFound
+from django.http import HttpResponse, HttpResponseNotFound, HttpResponseForbidden
 from django.shortcuts import render_to_response
-from django.template import Context, RequestContext
+from django.template import RequestContext
 from django.utils import simplejson
 
 from huxley.core.models import *
@@ -15,22 +14,19 @@ def dispatch(request, page='welcome'):
     if not request.user.is_authenticated():
         return render_to_response('auth.html', context_instance=context)
 
+    views = {'welcome': welcome,
+             'preferences': preferences,
+             'roster': roster,
+             'attendance': attendance,
+             'help': help,
+             'bugs': bugs}
+
     try:
-        views = {'welcome': welcome,
-                 'preferences': preferences,
-                 'roster': roster,
-                 'attendance': attendance,
-                 'help': help,
-                 'bugs': bugs}
-        
-        # Call the appropriate view function from the dictionary.
         return views[page](request, request.user.advisor_profile, context)
-    # No such view exists.
     except KeyError:
         return HttpResponseNotFound()
-    # The profile doesn't exist, meaning user isn't an advisor.
     except AdvisorProfile.DoesNotExist:
-        return HttpResponse(status=403)
+        return HttpResponseForbidden()
 
 
 def welcome(request, profile, context):
