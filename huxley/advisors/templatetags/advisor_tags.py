@@ -6,11 +6,11 @@ register = template.Library()
 
 @register.filter
 def leading_zeros(value, digits):
-	""" Pads value with leading zeros, given by digits. """
-	try:
-		value = str(value)
-		for i in range(0, int(digits) - len(value)):
-			value = "0" + value
-		return value
-	except:
-		return ""
+    """ Pads value with leading zeros, given by digits. """
+    try:
+        value = str(value)
+        for i in range(0, int(digits) - len(value)):
+            value = "0" + value
+        return value
+    except:
+        return ""
