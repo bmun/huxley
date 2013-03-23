@@ -82,37 +82,26 @@ def preferences(request, profile, context):
                                    'committees': committees,
                                    'committeeprefs':committeeprefs},
                                   context_instance=context)
-    elif request.method == 'POST':
-        prefs = school.countrypreferences.all()
-        commprefs = school.committeepreferences.all() 
-        committees = Committee.objects.filter(special=True)
+    elif request.method == 'POST':        
+        seen = set()
+        new_country_ids = []
+        for index in range(1, 11):
+            country_id = int(request.POST['CountryPref%d' % index])
+            if country_id and country_id not in seen:
+                new_country_ids.append(country_id)
         
-        cprefs = []
-        for index in range(0,10):
-            cprefs.append(request.POST.get('CountryPref'+str(index+1)))
-        cprefs = filter((lambda p: p != "NULL"), cprefs)
-
-        countrylist = []
-        alreadyDone = set();
-        for countryid in cprefs:
-            if countryid not in alreadyDone:
-                alreadyDone.add(countryid)
-                countrylist.append(Country.objects.get(id=countryid))
-        
-        # Delete old prefs and create new ones
+        # Clear and reset country preferences.
         school.countrypreferences.clear()
-        print "school prefs:", school.countrypreferences.all()
-        for country in countrylist:
+        for rank, country_id in enumerate(new_country_ids, start=1):
             CountryPreference.objects.create(school=school,
-                                             country=country,
-                                             rank=countrylist.index(country) + 1)
+                                             country_id=country_id,
+                                             rank=rank)
         
-        # Deal with committee preferences now
+        # Clear and reset committee preferences.
         school.committeepreferences.clear()
-        for comm in committees:
-            if comm.name in request.POST:
-                print "Adding committee:", comm
-                school.committeepreferences.add(comm)
+        for committee in Committee.objects.filter(special=True):
+            if committee.name in request.POST:
+                school.committeepreferences.add(committee)
             
         school.save()
         return HttpResponse(status=200)
@@ -145,7 +134,8 @@ def roster(request, profile, context):
 
         return HttpResponse(status=200)
 
-    slots = DelegateSlot.objects.filter(assignment__school=profile.school).order_by('assignment__committee__name')
+    slots = DelegateSlot.objects.filter(assignment__school=profile.school) \
+                                .order_by('assignment__committee__name')
     return render_to_response('roster_edit.html',
                               {'slots' : slots},
                               context_instance=context)
@@ -153,7 +143,9 @@ def roster(request, profile, context):
 
 def attendance(request, profile, context):
     """ Display the advisor's attendance list. """
-    delegate_slots = DelegateSlot.objects.filter(assignment__school=profile.school)
+    delegate_slots = DelegateSlot.objects.filter(
+        assignment__school=profile.school
+    )
     return render_to_response('check-attendance.html',
                               {'delegate_slots': delegate_slots},
                               context_instance=context)
