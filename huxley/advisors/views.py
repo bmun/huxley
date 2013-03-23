@@ -120,14 +120,7 @@ def preferences(request, profile, context):
 
 # Display the advisor's editable roster.
 def roster(request, profile, context):
-    if request.method == 'GET':
-        c = Context()
-        school = profile.school
-        slots = DelegateSlot.objects.filter(assignment__school=school).order_by('assignment__committee__name')
-        c.update({'slots':slots})
-        return render_to_response('roster_edit.html', c, context_instance=context)
-
-    elif request.method == 'POST':
+    if request.method == 'POST':
         slot_data = simplejson.loads(request.POST['delegates'])
         for slot_id, delegate_data in slot_data.items():
             slot = DelegateSlot.objects.get(id=slot_id)
@@ -137,7 +130,7 @@ def roster(request, profile, context):
                     delegate.name = delegate_data['name']
                     delegate.email = delegate_data['email']
                     delegate.save()
-                except:
+                except Delegate.DoesNotExist:
                     Delegate.objects.create(
                         name=delegate_data['name'],
                         email=delegate_data['email'],
@@ -149,8 +142,12 @@ def roster(request, profile, context):
                 except:
                     pass
 
-
         return HttpResponse(status=200)
+
+    slots = DelegateSlot.objects.filter(assignment__school=profile.school).order_by('assignment__committee__name')
+    return render_to_response('roster_edit.html',
+                              {'slots' : slots},
+                              context_instance=context)
 
 
 # Display the advisor's attendance list.
