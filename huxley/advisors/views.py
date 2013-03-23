@@ -13,7 +13,6 @@ from huxley.shortcuts import render_template
 def dispatch(request, page='welcome'):
     """ Dispatch to the appropriate view per the request after checking
         for authentication and permissions. """
-    context = RequestContext(request)
     if not request.user.is_authenticated():
         return render_template(request, 'auth.html')
 
@@ -25,14 +24,14 @@ def dispatch(request, page='welcome'):
              'bugs': bugs}
 
     try:
-        return views[page](request, request.user.advisor_profile, context)
+        return views[page](request, request.user.advisor_profile)
     except KeyError:
         return HttpResponseNotFound()
     except AdvisorProfile.DoesNotExist:
         return HttpResponseForbidden()
 
 
-def welcome(request, profile, context):
+def welcome(request, profile):
     """ Display and/or edit the advisor's profile information. """
     school = profile.school
     if request.method == 'GET':
@@ -62,7 +61,7 @@ def welcome(request, profile, context):
         return HttpResponse()    
 
 
-def preferences(request, profile, context):
+def preferences(request, profile):
     """ Display and/or update the advisor's country and committee
         preferences. """
     school = profile.school
@@ -110,7 +109,7 @@ def preferences(request, profile, context):
                             'committeeprefs':committeeprefs})
 
 
-def roster(request, profile, context):
+def roster(request, profile):
     """ Display the advisor's editable roster, or update information as
         necessary. """
     if request.method == 'POST':
@@ -140,7 +139,7 @@ def roster(request, profile, context):
     return render_template(request, 'roster_edit.html', {'slots' : slots})
 
 
-def attendance(request, profile, context):
+def attendance(request, profile):
     """ Display the advisor's attendance list. """
     delegate_slots = DelegateSlot.objects.filter(
         assignment__school=profile.school)
@@ -148,13 +147,13 @@ def attendance(request, profile, context):
                            {'delegate_slots': delegate_slots})
 
 
-def help(request, profile, context):
+def help(request, profile):
     """ Display a FAQ view. """
     questions = {category.name : HelpQuestion.objects.filter(category=category)
                  for category in HelpCategory.objects.all()}
     return render_template(request, 'help.html', {'categories': questions})
 
 
-def bugs(request, profile, context):
+def bugs(request, profile):
     """ Display a bug reporting view. """
     return render_template(request, 'bugs.html')
