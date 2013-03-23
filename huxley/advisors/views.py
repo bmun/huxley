@@ -1,3 +1,6 @@
+# Copyright (c) 2011-2013 Kunal Mehta. All rights reserved.
+# Use of this source code is governed by a BSD License found in README.md.
+
 from django.contrib.auth.models import User
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponseForbidden
 from django.shortcuts import render_to_response
