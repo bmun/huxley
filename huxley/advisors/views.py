@@ -59,7 +59,7 @@ def welcome(request, profile, context):
         school.maxdelegationsize = request.POST.get('maxDel')
         school.save();
         
-        return HttpResponse(status=200)    
+        return HttpResponse()    
 
 
 def preferences(request, profile, context):
@@ -67,20 +67,20 @@ def preferences(request, profile, context):
         preferences. """
     school = profile.school
 
-    if request.method == 'POST':        
-        seen = set()
-        new_country_ids = []
-        for index in range(1, 11):
-            country_id = int(request.POST['CountryPref%d' % index])
-            if country_id and country_id not in seen:
-                new_country_ids.append(country_id)
+    if request.method == 'POST':
+        country_ids = request.POST.getlist('CountryPrefs')
+        country_ids = [country_ids[i] for i in range(0,10,2)] + \
+                      [country_ids[j] for j in range(1,11,2)]
         
-        # Clear and reset country preferences.
+        # Clear and reset country preferences, discounting duplicates.
         school.countrypreferences.clear()
-        for rank, country_id in enumerate(new_country_ids, start=1):
-            CountryPreference.objects.create(school=school,
-                                             country_id=country_id,
-                                             rank=rank)
+        seen = set()
+        for rank, country_id in enumerate(country_ids, start=1):
+            if country_id and country_id not in seen:
+                seen.add(country_id)
+                CountryPreference.objects.create(school=school,
+                                                 country_id=country_id,
+                                                 rank=rank)
         
         # Clear and reset committee preferences.
         school.committeepreferences.clear()
@@ -91,14 +91,18 @@ def preferences(request, profile, context):
         school.save()
         return HttpResponse()
 
+    # Interleave the country preferences for double-columning in the template.
     countries = Country.objects.filter(special=False).order_by('name')
-    countryprefs = school.countrypreferences.all() \
-                         .order_by("countrypreference__rank")
+    ctyprefs = list(school.countrypreferences.all()
+                    .order_by("countrypreference__rank"))
+    ctyprefs += [None]*(10 - len(ctyprefs)) # Pad the list to length 10.
+    countryprefs = [(i+1, ctyprefs[i], ctyprefs[i+5]) for i in range(0, 5)]
     
     # Split the committees into pairs for double-columning in the template.
     committees = Committee.objects.filter(special=True)
     committees = [committees[i:i+2] for i in range(0, len(committees), 2)]
     committeeprefs = school.committeepreferences.all()
+    
     return render_template(request, 'preferences.html',
                            {'countryprefs': countryprefs,
                             'countries': countries,
@@ -139,8 +143,7 @@ def roster(request, profile, context):
 def attendance(request, profile, context):
     """ Display the advisor's attendance list. """
     delegate_slots = DelegateSlot.objects.filter(
-        assignment__school=profile.school
-    )
+        assignment__school=profile.school)
     return render_template(request, 'check-attendance.html',
                            {'delegate_slots': delegate_slots})
 
