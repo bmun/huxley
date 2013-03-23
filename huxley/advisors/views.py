@@ -3,7 +3,6 @@
 
 from django.contrib.auth.models import User
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponseForbidden
-from django.template import RequestContext
 from django.utils import simplejson
 
 from huxley.core.models import *
