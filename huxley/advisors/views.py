@@ -8,6 +8,7 @@ from django.template import RequestContext
 from django.utils import simplejson
 
 from huxley.core.models import *
+from huxley.shortcuts import render_template
 
 
 def dispatch(request, page='welcome'):
@@ -36,9 +37,8 @@ def welcome(request, profile, context):
     """ Display and/or edit the advisor's profile information. """
     school = profile.school
     if request.method == 'GET':
-        return render_to_response('welcome.html',
-                                  {'school': school},
-                                  context_instance=context)
+        return render_template(request, 'welcome.html', {'school': school})
+
     elif request.method == 'POST':
         # TODO (wchieng): refactor this into a Django form.
         request.user.first_name = request.POST.get('firstname')
@@ -67,22 +67,8 @@ def preferences(request, profile, context):
     """ Display and/or update the advisor's country and committee
         preferences. """
     school = profile.school
-    if request.method == 'GET':
-        countries = Country.objects.filter(special=False).order_by('name')
-        countryprefs = school.countrypreferences.all() \
-                             .order_by("countrypreference__rank")
-        
-        # Split the committees into pairs for double-columning in the template.
-        committees = Committee.objects.filter(special=True)
-        committees = [committees[i:i+2] for i in range(0, len(committees), 2)]
-        committeeprefs = school.committeepreferences.all()
-        return render_to_response('preferences.html',
-                                  {'countryprefs': countryprefs,
-                                   'countries': countries,
-                                   'committees': committees,
-                                   'committeeprefs':committeeprefs},
-                                  context_instance=context)
-    elif request.method == 'POST':        
+    
+    if request.method == 'POST':        
         seen = set()
         new_country_ids = []
         for index in range(1, 11):
@@ -104,7 +90,21 @@ def preferences(request, profile, context):
                 school.committeepreferences.add(committee)
             
         school.save()
-        return HttpResponse(status=200)
+        return HttpResponse()
+
+    countries = Country.objects.filter(special=False).order_by('name')
+    countryprefs = school.countrypreferences.all() \
+                         .order_by("countrypreference__rank")
+    
+    # Split the committees into pairs for double-columning in the template.
+    committees = Committee.objects.filter(special=True)
+    committees = [committees[i:i+2] for i in range(0, len(committees), 2)]
+    committeeprefs = school.committeepreferences.all()
+    return render_template(request, 'preferences.html',
+                           {'countryprefs': countryprefs,
+                            'countries': countries,
+                            'committees': committees,
+                            'committeeprefs':committeeprefs})
 
 
 def roster(request, profile, context):
@@ -121,24 +121,20 @@ def roster(request, profile, context):
                     delegate.email = delegate_data['email']
                     delegate.save()
                 except Delegate.DoesNotExist:
-                    Delegate.objects.create(
-                        name=delegate_data['name'],
-                        email=delegate_data['email'],
-                        delegateslot=slot
-                    )
+                    Delegate.objects.create(name=delegate_data['name'],
+                                            email=delegate_data['email'],
+                                            delegateslot=slot)
             else:
                 try:
                     slot.delegate.delete()
                 except:
                     pass
 
-        return HttpResponse(status=200)
+        return HttpResponse()
 
     slots = DelegateSlot.objects.filter(assignment__school=profile.school) \
                                 .order_by('assignment__committee__name')
-    return render_to_response('roster_edit.html',
-                              {'slots' : slots},
-                              context_instance=context)
+    return render_template(request, 'roster_edit.html', {'slots' : slots})
 
 
 def attendance(request, profile, context):
@@ -146,20 +142,17 @@ def attendance(request, profile, context):
     delegate_slots = DelegateSlot.objects.filter(
         assignment__school=profile.school
     )
-    return render_to_response('check-attendance.html',
-                              {'delegate_slots': delegate_slots},
-                              context_instance=context)
+    return render_template(request, 'check-attendance.html',
+                           {'delegate_slots': delegate_slots})
 
 
 def help(request, profile, context):
     """ Display a FAQ view. """
     questions = {category.name : HelpQuestion.objects.filter(category=category)
                  for category in HelpCategory.objects.all()}
-    return render_to_response('help.html',
-                              {'categories': questions},
-                              context_instance=context)
+    return render_template(request, 'help.html', {'categories': questions})
 
 
 def bugs(request, profile, context):
     """ Display a bug reporting view. """
-    return render_to_response('bugs.html', context_instance=context)
+    return render_template(request, 'bugs.html')
