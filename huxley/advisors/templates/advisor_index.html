@@ -2,7 +2,7 @@
 
 {% block title %}Loading...{% endblock title %}
 
-{% block default-hash %}{% url 'advisor' 'welcome' %}{% endblock default-hash %}
+{% block default-hash %}{% url 'advisor_welcome' %}{% endblock default-hash %}
 
 {% block usertype %}
 <span class="bold" usertype="advisor">Advisors</span>
@@ -10,11 +10,11 @@
 
 {% block navmenu %}
 <ul id="navmenu">
-    <li><a class="nav default" href="{% url 'advisor' 'welcome' %}">Welcome!</a></li>
-    <li><a class="nav" href="{% url 'advisor' 'roster' %}">Edit Roster</a></li>
-    <li><a class="nav" href="{% url 'advisor' 'preferences' %}">Edit Preferences</a></li>
-    <li><a class="nav" href="{% url 'advisor' 'attendance' %}">Check Attendance</a></li>
-    <li><a class="nav" href="{% url 'advisor' 'help' %}">Need Help?</a></li>
+    <li><a class="nav default" href="{% url 'advisor_welcome' %}">Welcome!</a></li>
+    <li><a class="nav" href="{% url 'advisor_roster' %}">Edit Roster</a></li>
+    <li><a class="nav" href="{% url 'advisor_preferences' %}">Edit Preferences</a></li>
+    <li><a class="nav" href="{% url 'advisor_attendance' %}">Check Attendance</a></li>
+    <li><a class="nav" href="{% url 'advisor_help' %}">Need Help?</a></li>
 </ul>
 {% endblock navmenu %}
 

@@ -5,34 +5,14 @@ from django.contrib.auth.models import User
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponseForbidden
 from django.utils import simplejson
 
+from huxley.advisors.decorators import enforce_advisor
 from huxley.core.models import *
 from huxley.shortcuts import render_template
 
-
-def dispatch(request, page='welcome'):
-    """ Dispatch to the appropriate view per the request after checking
-        for authentication and permissions. """
-    if not request.user.is_authenticated():
-        return render_template(request, 'auth.html')
-
-    views = {'welcome': welcome,
-             'preferences': preferences,
-             'roster': roster,
-             'attendance': attendance,
-             'help': help,
-             'bugs': bugs}
-
-    try:
-        return views[page](request, request.user.advisor_profile)
-    except KeyError:
-        return HttpResponseNotFound()
-    except AdvisorProfile.DoesNotExist:
-        return HttpResponseForbidden()
-
-
-def welcome(request, profile):
+@enforce_advisor()
+def welcome(request):
     """ Display and/or edit the advisor's profile information. """
-    school = profile.school
+    school = request.profile.school
     if request.method == 'GET':
         return render_template(request, 'welcome.html', {'school': school})
 
@@ -60,10 +40,11 @@ def welcome(request, profile):
         return HttpResponse()    
 
 
-def preferences(request, profile):
+@enforce_advisor()
+def preferences(request):
     """ Display and/or update the advisor's country and committee
         preferences. """
-    school = profile.school
+    school = request.profile.school
 
     if request.method == 'POST':
         country_ids = request.POST.getlist('CountryPrefs')
@@ -108,7 +89,8 @@ def preferences(request, profile):
                             'committeeprefs':committeeprefs})
 
 
-def roster(request, profile):
+@enforce_advisor()
+def roster(request):
     """ Display the advisor's editable roster, or update information as
         necessary. """
     if request.method == 'POST':
@@ -133,26 +115,30 @@ def roster(request, profile):
 
         return HttpResponse()
 
-    slots = DelegateSlot.objects.filter(assignment__school=profile.school) \
+    school = request.profile.school
+    slots = DelegateSlot.objects.filter(assignment__school=school) \
                                 .order_by('assignment__committee__name')
     return render_template(request, 'roster_edit.html', {'slots' : slots})
 
 
-def attendance(request, profile):
+@enforce_advisor()
+def attendance(request):
     """ Display the advisor's attendance list. """
     delegate_slots = DelegateSlot.objects.filter(
-        assignment__school=profile.school)
+        assignment__school=request.profile.school)
     return render_template(request, 'check-attendance.html',
                            {'delegate_slots': delegate_slots})
 
 
-def help(request, profile):
+@enforce_advisor()
+def help(request):
     """ Display a FAQ view. """
     questions = {category.name : HelpQuestion.objects.filter(category=category)
                  for category in HelpCategory.objects.all()}
     return render_template(request, 'help.html', {'categories': questions})
 
 
-def bugs(request, profile):
+@enforce_advisor()
+def bugs(request):
     """ Display a bug reporting view. """
     return render_template(request, 'bugs.html')
