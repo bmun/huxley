@@ -119,6 +119,19 @@ class DelegateSlot(models.Model):
         return self.assignment.committee
     def get_school(self):
         return self.assignment.school
+    def update_or_create_delegate(self, name, email):
+        try:
+            delegate = self.delegate
+            delegate.name = name
+            delegate.email = email
+            delegate.save()
+        except Delegate.DoesNotExist:
+            Delegate.objects.create(name=name, email=email, delegateslot=self)
+    def delete_delegate_if_exists(self):
+        try:
+            self.delegate.delete()
+        except Delegate.DoesNotExist:
+            pass
 
 
 class Delegate(models.Model):
