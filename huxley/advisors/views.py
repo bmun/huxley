@@ -98,11 +98,10 @@ def roster(request):
         for slot_id, delegate_data in slot_data.items():
             slot = DelegateSlot.objects.get(id=slot_id)
             if 'name' in delegate_data and 'email' in delegate_data:
-                slot.update_or_create_delegate(delegate_data['name'],
-                                               delegate_data['email'])
+                slot.update_or_create_delegate(delegate_data)
             else:
                 slot.delete_delegate_if_exists()
-        
+
         return HttpResponse()
 
     school = request.profile.school
