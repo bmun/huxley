@@ -94,6 +94,12 @@ class School(models.Model):
                 CountryPreference.objects.create(school=self,
                                                  country_id=country_id,
                                                  rank=rank)
+    def refresh_committee_preferences(self, committee_ids):
+        """ Refreshes a school's committee preferences. """
+        self.committeepreferences.clear()
+        self.committeepreferences = committee_ids
+        self.save()
+
 
 
 class Assignment(models.Model):

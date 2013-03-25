@@ -61,13 +61,15 @@
 	{% for pair in committees %}
 		<tr>
       		{% for committee in pair %}
-			<td class='field'>
-				{% if committee in committeeprefs %}
-				<label><input type="checkbox" checked = "checked" name="{{ committee.name }}" value="{{ committee.id }}">{{ committee.fullname }} </input></label>
-				{% else %}
-				<label><input type="checkbox" name="{{ committee.name }}" value="{{ committee.id }}">{{ committee.fullname }} </input></label>
+      			{% if committee %}
+					<td class='field'>
+						{% if committee in committeeprefs %}
+							<label><input class="select" type="checkbox" checked ="checked" name="{{ "CommitteePrefs" }}" value="{{ committee.id }}">{{ committee.fullname }} </input></label>
+						{% else %}
+							<label><input class="select" type="checkbox" name="{{ "CommitteePrefs" }}" value="{{ committee.id }}">{{ committee.fullname }} </input></label>
+						{% endif %}
+					</td>
 				{% endif %}
-			</td>
 			{% endfor %}
 		</tr>
 	{% endfor %}
