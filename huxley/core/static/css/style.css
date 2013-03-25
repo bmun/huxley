@@ -380,7 +380,11 @@ a.acc_topic.active {
 }
 
 .preferencestable label, .preferencestable input{
-	margin: 0px 10px;
+	margin: 0px 5px;
+}
+
+.preferencestable input[type=checkbox] {
+    margin: 0px 10px 0px 0px;
 }
 
 /* ATTENDANCE */

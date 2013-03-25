@@ -48,15 +48,10 @@ def preferences(request):
 
     if request.method == 'POST':
         country_ids = request.POST.getlist('CountryPrefs')
+        committee_ids = request.POST.getlist('CommitteePrefs')
         school.refresh_country_preferences(country_ids)
+        school.refresh_committee_preferences(committee_ids)
         
-        # Clear and reset committee preferences.
-        school.committeepreferences.clear()
-        for committee in Committee.objects.filter(special=True):
-            if committee.name in request.POST:
-                school.committeepreferences.add(committee)
-            
-        school.save()
         return HttpResponse()
 
     # Interleave the country preferences for double-columning in the template.
