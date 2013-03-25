@@ -81,6 +81,19 @@ class School(models.Model):
         db_table = u'School'
     def __unicode__(self):
         return self.name
+    def refresh_country_preferences(self, country_ids):
+        """ Refreshes a school's country preferences. Note that the order
+            of country_ids is [1, 6, 2, 7, 3, 8, ...] due to double-columns
+            in the html, and that duplicates are ignored. """
+        self.countrypreferences.clear()
+        country_ids = CountryPreference.unshuffle(country_ids)
+        seen = set()
+        for rank, country_id in enumerate(country_ids):
+            if country_id and country_id not in seen:
+                seen.add(country_id)
+                CountryPreference.objects.create(school=self,
+                                                 country_id=country_id,
+                                                 rank=rank)
 
 
 class Assignment(models.Model):
@@ -101,6 +114,10 @@ class CountryPreference(models.Model):
         db_table = u'CountryPreference'
     def __unicode__(self):
         return self.school.name + " : " + self.country.name + " (" + str(self.rank) + ")"
+    @staticmethod
+    def unshuffle(country_ids):
+        """ Returns a list of country ids in correct, unshuffled order. """
+        return country_ids[0::2] + country_ids[1::2]
 
 
 class DelegateSlot(models.Model):

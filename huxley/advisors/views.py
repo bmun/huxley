@@ -7,7 +7,7 @@ from django.utils import simplejson
 
 from huxley.advisors.decorators import enforce_advisor
 from huxley.core.models import *
-from huxley.shortcuts import render_template
+from huxley.shortcuts import pairwise, render_template
 
 @enforce_advisor()
 def welcome(request):
@@ -48,18 +48,7 @@ def preferences(request):
 
     if request.method == 'POST':
         country_ids = request.POST.getlist('CountryPrefs')
-        country_ids = [country_ids[i] for i in range(0,10,2)] + \
-                      [country_ids[j] for j in range(1,11,2)]
-        
-        # Clear and reset country preferences, discounting duplicates.
-        school.countrypreferences.clear()
-        seen = set()
-        for rank, country_id in enumerate(country_ids, start=1):
-            if country_id and country_id not in seen:
-                seen.add(country_id)
-                CountryPreference.objects.create(school=school,
-                                                 country_id=country_id,
-                                                 rank=rank)
+        school.refresh_country_preferences(country_ids)
         
         # Clear and reset committee preferences.
         school.committeepreferences.clear()
@@ -78,8 +67,7 @@ def preferences(request):
     countryprefs = [(i+1, ctyprefs[i], ctyprefs[i+5]) for i in range(0, 5)]
     
     # Split the committees into pairs for double-columning in the template.
-    committees = Committee.objects.filter(special=True)
-    committees = [committees[i:i+2] for i in range(0, len(committees), 2)]
+    committees = pairwise(Committee.objects.filter(special=True))
     committeeprefs = school.committeepreferences.all()
     
     return render_template(request, 'preferences.html',
