@@ -31,7 +31,7 @@ class EnforceUserTypeMiddleware:
             return
 
         if not request.user.is_authenticated():
-            return render_template('auth.html')
+            return render_template(request, 'auth.html')
 
         try:
             request.profile = getattr(request.user, attr)

@@ -16,7 +16,7 @@ urlpatterns = patterns('huxley.core.views',
 )
 
 urlpatterns += patterns('',
-    url(r'^chair/(?P<page>\w+)', 'huxley.chairs.views.dispatch', name='chair'),
+    url(r'^chair/', include('huxley.chairs.urls', app_name='chairs')),
     url(r'^advisor/', include('huxley.advisors.urls', app_name='advisors')),
     url(r'^admin/', include(admin.site.urls)),
 )
