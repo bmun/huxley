@@ -6,6 +6,7 @@ from django.core.urlresolvers import resolve
 from django.http import HttpRequest, HttpResponseForbidden
 
 from huxley.core.models import *
+from huxley.shortcuts import render_template
 
 class LatestConferenceMiddleware:
     """ Sets request.conference to the latest instance of Conference. """
@@ -28,6 +29,9 @@ class EnforceUserTypeMiddleware:
             profile_class, attr = SecretariatProfile, 'secretariat_profile'
         else:
             return
+
+        if not request.user.is_authenticated():
+            return render_template('auth.html')
 
         try:
             request.profile = getattr(request.user, attr)
