@@ -155,6 +155,13 @@ class DelegateSlot(models.Model):
             self.delegate.delete()
         except Delegate.DoesNotExist:
             pass
+    def update_delegate_attendance(self, slot_data):
+        self.attended_session1 = slot_data['session1']
+        self.attended_session2 = slot_data['session2']
+        self.attended_session3 = slot_data['session3']
+        self.attended_session4 = slot_data['session4']
+        self.save()
+
 
 
 class Delegate(models.Model):

@@ -55,10 +55,10 @@ def login_user(request):
                 response = {"success": False, "error": error}
             elif SecretariatProfile.objects.filter(user=user).exists():
                 response = {"success": True,
-                            "redirect": reverse('chair', args=['attendance'])}
+                            "redirect": reverse('chair_attendance')}
             else:
                 response = {"success": True,
-                            "redirect": reverse('advisor', args=['welcome'])}
+                            "redirect": reverse('advisor_welcome')}
             
             return HttpResponse(simplejson.dumps(response),
                                 mimetype='application/json')
