@@ -9,7 +9,7 @@ from huxley.advisors.decorators import enforce_advisor
 from huxley.core.models import *
 from huxley.shortcuts import pairwise, render_template
 
-@enforce_advisor()
+
 def welcome(request):
     """ Display and/or edit the advisor's profile information. """
     school = request.profile.school
@@ -40,7 +40,6 @@ def welcome(request):
         return HttpResponse()    
 
 
-@enforce_advisor()
 def preferences(request):
     """ Display and/or update the advisor's country and committee
         preferences. """
@@ -72,7 +71,6 @@ def preferences(request):
                             'committeeprefs':committeeprefs})
 
 
-@enforce_advisor()
 def roster(request):
     """ Display the advisor's editable roster, or update information as
         necessary. """
@@ -93,7 +91,6 @@ def roster(request):
     return render_template(request, 'roster_edit.html', {'slots' : slots})
 
 
-@enforce_advisor()
 def attendance(request):
     """ Display the advisor's attendance list. """
     delegate_slots = DelegateSlot.objects.filter(
@@ -102,7 +99,6 @@ def attendance(request):
                            {'delegate_slots': delegate_slots})
 
 
-@enforce_advisor()
 def help(request):
     """ Display a FAQ view. """
     questions = {category.name : HelpQuestion.objects.filter(category=category)
@@ -110,7 +106,6 @@ def help(request):
     return render_template(request, 'help.html', {'categories': questions})
 
 
-@enforce_advisor()
 def bugs(request):
     """ Display a bug reporting view. """
     return render_template(request, 'bugs.html')
