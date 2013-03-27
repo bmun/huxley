@@ -2,8 +2,7 @@
 # Use of this source code is governed by a BSD License found in README.md.
 
 from django.contrib.auth.models import User
-from django.core.exceptions import ObjectDoesNotExist
-from django.http import HttpResponse, HttpResponseNotFound
+from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from django.utils import simplejson
 
