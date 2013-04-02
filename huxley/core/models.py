@@ -48,8 +48,8 @@ class Committee(models.Model):
 class School(models.Model):
     
     PROGRAM_TYPE_OPTIONS = (
-	('club', 'Club'),
-	('class', 'Class'),
+    ('club', 'Club'),
+    ('class', 'Class'),
     )
     
     dateregistered = models.DateTimeField(null=False, blank=False, db_column='DateRegistered', auto_now_add=True)
@@ -233,16 +233,16 @@ class SecretariatProfile(models.Model):
 
 def create_delegate_slots(sender, **kwargs):
     if kwargs["created"]:
-    	asmt = kwargs["instance"]
-    	num_slots = asmt.committee.delegatesperdelegation
-    	for slot in range(0, num_slots):
-    	    DelegateSlot(assignment=asmt).save()
+        asmt = kwargs["instance"]
+        num_slots = asmt.committee.delegatesperdelegation
+        for slot in range(0, num_slots):
+            DelegateSlot(assignment=asmt).save()
 
-"""	
+""" 
 def delete_delegate_slots(sender, **kwargs):
     asmt = kwargs["instance"]
     for slot in DelegateSlot.objects.filter(assignment=asmt):
-	   slot.delete()
+       slot.delete()
 """
 
 post_save.connect(create_delegate_slots, sender=Assignment)
