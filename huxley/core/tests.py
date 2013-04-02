@@ -4,8 +4,8 @@
 from django.test import TestCase
 from django.utils import unittest
 
+from huxley.accounts.forms.registration import RegistrationForm
 from huxley.core.models import *
-from huxley.core.forms.registration import RegistrationForm
 
 import re
 
