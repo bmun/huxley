@@ -17,20 +17,24 @@ class Conference(models.Model):
     registrationend = models.DateField(db_column='RegistrationEnd')
     minattendance = models.IntegerField(db_column='MinAttendance', default=0)
     maxattendance = models.IntegerField(db_column='MaxAttendance', default=0)
+    
+    def __unicode__(self):
+        return 'BMUN ' + str(self.session)
+    
     class Meta:
         db_table = u'Conference'
         get_latest_by = 'startdate'
-    def __unicode__(self):
-        return 'BMUN ' + str(self.session)
 
 
 class Country(models.Model):
     name = models.CharField(max_length=765, db_column='name', null=False, blank=True)
     special = models.BooleanField(null=False, blank=False, db_column="special", default=False)
-    class Meta:
-        db_table = u'Country'
+    
     def __unicode__(self):
         return self.name
+
+    class Meta:
+        db_table = u'Country'
 
 
 class Committee(models.Model):
@@ -39,17 +43,19 @@ class Committee(models.Model):
     countries = models.ManyToManyField(Country, through='Assignment')
     delegatesperdelegation = models.IntegerField(db_column='delegatesperdelegation', default=2, blank=False, null=False)
     special = models.BooleanField(null=False, blank=False, db_column="special", default=False)
-    class Meta:
-        db_table = u'Committee'
+
     def __unicode__(self):
         return self.name
+    
+    class Meta:
+        db_table = u'Committee'
 
 
 class School(models.Model):
     
     PROGRAM_TYPE_OPTIONS = (
-    ('club', 'Club'),
-    ('class', 'Class'),
+        ('club', 'Club'),
+        ('class', 'Class'),
     )
     
     dateregistered = models.DateTimeField(null=False, blank=False, db_column='DateRegistered', auto_now_add=True)
@@ -77,10 +83,10 @@ class School(models.Model):
     delegationowed = models.DecimalField(max_digits=6, decimal_places=2, db_column='DelegationOwed', default=0) 
     delegationnet = models.DecimalField(max_digits=6, decimal_places=2, db_column='DelegationNet', default=0) 
     international = models.BooleanField(null=False, db_column='International', default=False)
-    class Meta:
-        db_table = u'School'
+    
     def __unicode__(self):
         return self.name
+    
     def refresh_country_preferences(self, country_ids):
         """ Refreshes a school's country preferences. Note that the order
             of country_ids is [1, 6, 2, 7, 3, 8, ...] due to double-columns
@@ -94,11 +100,15 @@ class School(models.Model):
                 CountryPreference.objects.create(school=self,
                                                  country_id=country_id,
                                                  rank=rank)
+    
     def refresh_committee_preferences(self, committee_ids):
         """ Refreshes a school's committee preferences. """
         self.committeepreferences.clear()
         self.committeepreferences = committee_ids
         self.save()
+
+    class Meta:
+        db_table = u'School'
 
 
 
@@ -106,24 +116,29 @@ class Assignment(models.Model):
     committee = models.ForeignKey(Committee)
     country = models.ForeignKey(Country)
     school = models.ForeignKey(School, null=True, blank=True, default=None)
-    class Meta:
-        db_table = u'Assignment'
+
     def __unicode__(self):
         return self.committee.name + " : " + self.country.name
+
+    class Meta:
+        db_table = u'Assignment'
 
 
 class CountryPreference(models.Model):
     school = models.ForeignKey(School)
     country = models.ForeignKey(Country, limit_choices_to={'special':False})
     rank = models.IntegerField(db_column='rank', null=False, blank=False, default=1)
-    class Meta:
-        db_table = u'CountryPreference'
+    
     def __unicode__(self):
         return self.school.name + " : " + self.country.name + " (" + str(self.rank) + ")"
+    
     @staticmethod
     def unshuffle(country_ids):
         """ Returns a list of country ids in correct, unshuffled order. """
         return country_ids[0::2] + country_ids[1::2]
+
+    class Meta:
+        db_table = u'CountryPreference'
 
 
 class DelegateSlot(models.Model):
@@ -132,16 +147,19 @@ class DelegateSlot(models.Model):
     attended_session2 = models.BooleanField(default=False)
     attended_session3 = models.BooleanField(default=False)
     attended_session4 = models.BooleanField(default=False)
-    class Meta:
-        db_table = u'DelegateSlot'
+    
     def __unicode__(self):
         return self.assignment.__str__()
+    
     def get_country(self):
         return self.assignment.country
+    
     def get_committee(self):
         return self.assignment.committee
+    
     def get_school(self):
         return self.assignment.school
+    
     def update_or_create_delegate(self, delegate_data):
         try:
             delegate = self.delegate
@@ -150,11 +168,13 @@ class DelegateSlot(models.Model):
             delegate.save()
         except Delegate.DoesNotExist:
             Delegate.objects.create(delegateslot=self, **delegate_data)
+    
     def delete_delegate_if_exists(self):
         try:
             self.delegate.delete()
         except Delegate.DoesNotExist:
             pass
+    
     def update_delegate_attendance(self, slot_data):
         self.attended_session1 = slot_data['session1']
         self.attended_session2 = slot_data['session2']
@@ -162,6 +182,8 @@ class DelegateSlot(models.Model):
         self.attended_session4 = slot_data['session4']
         self.save()
 
+    class Meta:
+        db_table = u'DelegateSlot'
 
 
 class Delegate(models.Model):
@@ -169,47 +191,55 @@ class Delegate(models.Model):
     email = models.EmailField(max_length=765, db_column='Email', blank=True) 
     delegateslot = models.OneToOneField(DelegateSlot, related_name='delegate', null=True, default=None, unique=True)
     created_at = models.DateTimeField(null=True, auto_now_add=True)
-    class Meta:
-        db_table = u'Delegate'
+    
     def __unicode__(self):
         return self.name
+    
     def get_country(self):
         return self.delegateslot.get_country()
+    
     def get_committee(self):
         return self.delegateslot.get_committee()
+    
     def get_school(self):
         return self.delegateslot.get_school()
-    def attended_session(self, num):
-        session = "session%d" % (num)
-        field = getattr(self, session)
-        return field
+
+    class Meta:
+        db_table = u'Delegate'
 
 
 class HelpCategory(models.Model):
     name = models.CharField(unique=True, max_length=255, db_column="Name")
-    class Meta:
-        db_table = u'HelpCategory'
+    
     def __unicode__(self):
         return self.name
+
+    class Meta:
+        db_table = u'HelpCategory'
+
 
 
 class HelpQuestion(models.Model):
     category = models.ForeignKey(HelpCategory)
     question = models.CharField(max_length=255, db_column='Question')
     answer = models.TextField(db_column='Answer')
-    class Meta:
-        db_table = u'HelpQuestion'
+    
     def __unicode__(self):
         return self.question
+
+    class Meta:
+        db_table = u'HelpQuestion'
 
 
 class AdvisorProfile(models.Model):
     user = models.OneToOneField(User, blank=True, related_name='advisor_profile')
     school = models.ForeignKey(School, related_name='advisor_profile')
-    class Meta:
-        db_table = u'AdvisorProfile'
+    
     def __unicode__(self):
         return self.user.username
+
+    class Meta:
+        db_table = u'AdvisorProfile'
 
 
 class SecretariatProfile(models.Model):
@@ -223,6 +253,7 @@ class SecretariatProfile(models.Model):
     is_outreach = models.BooleanField(default=False)
     is_publication = models.BooleanField(default=False)
     is_research = models.BooleanField(default=False)
+    
     class Meta:
         db_table = u'SecretariatProfile'
 
