@@ -20,9 +20,9 @@ class DelegateAdmin(admin.ModelAdmin):
         for delegate in Delegate.objects.all().order_by('delegateslot__assignment__school__name'):
             writer.writerow([
                 delegate,
-                delegate.get_committee(),
-                delegate.get_country(),
-                delegate.get_school()
+                delegate.committee,
+                delegate.country,
+                delegate.school
             ])
 
         return roster
