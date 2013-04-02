@@ -251,7 +251,6 @@ post_save.connect(create_delegate_slots, sender=Assignment)
 def net_registration_fee(sender, **kwargs):
    school = kwargs["instance"]
    school.registrationnet = school.registrationowed - school.registrationpaid
-   print school.registrationnet
 
 pre_save.connect(net_registration_fee, sender=School)
 
