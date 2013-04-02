@@ -3,10 +3,6 @@
 
 from django.contrib.auth.models import User
 from django.db import models
-from django.db.models.signals import pre_save, post_save, pre_delete, post_delete
-
-from datetime import datetime
-from decimal import Decimal
 
 class Conference(models.Model):
     session =  models.IntegerField(db_column='Session', default=0)
