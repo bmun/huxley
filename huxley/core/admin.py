@@ -13,6 +13,9 @@ from huxley.core.models import *
 
 class DelegateAdmin(admin.ModelAdmin):
     def roster(self, request):
+        """ Returns a CSV file representing the entire roster of
+            registered delegates, including their committee, country,
+            and school. """
         roster = HttpResponse(content_type='text/csv')
         roster['Content-Disposition'] = 'attachment; filename="delegateroster.csv"'
         writer = csv.writer(roster)
@@ -36,11 +39,13 @@ class DelegateAdmin(admin.ModelAdmin):
                 name='core_delegate_roster',
             ),
         )
-        return my_urls + urls
+        return urls
 
 
 class AssignmentAdmin(admin.ModelAdmin):
     def list(self, request):
+        """ Returns a CSV file containing the current set of
+            country assignments. """
         assignments = HttpResponse(content_type='text/csv')
         assignments['Content-Disposition'] = 'attachment; filename="assignments.csv"'
         writer = csv.writer(assignments)
