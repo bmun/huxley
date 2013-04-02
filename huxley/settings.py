@@ -113,7 +113,7 @@ MIDDLEWARE_CLASSES = (
 
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
-    'huxley.core.backends.LoginAsUserBackend'
+    'huxley.accounts.backends.LoginAsUserBackend'
 )
 
 ROOT_URLCONF = 'huxley.urls'

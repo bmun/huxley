@@ -5,6 +5,7 @@
 
 import csv
 
+from django.conf.urls import patterns, url
 from django.contrib import admin
 from django.http import HttpResponse
 
@@ -27,7 +28,6 @@ class DelegateAdmin(admin.ModelAdmin):
         return roster
 
     def get_urls(self):
-        from django.conf.urls.defaults import *
         urls = super(DelegateAdmin, self).get_urls()
         my_urls = patterns('',
             url(
@@ -51,7 +51,6 @@ class AssignmentAdmin(admin.ModelAdmin):
         return assignments
 
     def get_urls(self):
-        from django.conf.urls.defaults import *
         urls = super(AssignmentAdmin, self).get_urls()
         my_urls = patterns('',
             url(
