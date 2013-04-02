@@ -84,9 +84,6 @@ class School(models.Model):
     delegationnet = models.DecimalField(max_digits=6, decimal_places=2, db_column='DelegationNet', default=0) 
     international = models.BooleanField(null=False, db_column='International', default=False)
     
-    def __unicode__(self):
-        return self.name
-    
     def refresh_country_preferences(self, country_ids):
         """ Refreshes a school's country preferences. Note that the order
             of country_ids is [1, 6, 2, 7, 3, 8, ...] due to double-columns
@@ -107,9 +104,11 @@ class School(models.Model):
         self.committeepreferences = committee_ids
         self.save()
 
+    def __unicode__(self):
+        return self.name
+
     class Meta:
         db_table = u'School'
-
 
 
 class Assignment(models.Model):
@@ -129,13 +128,13 @@ class CountryPreference(models.Model):
     country = models.ForeignKey(Country, limit_choices_to={'special':False})
     rank = models.IntegerField(db_column='rank', null=False, blank=False, default=1)
     
-    def __unicode__(self):
-        return self.school.name + " : " + self.country.name + " (" + str(self.rank) + ")"
-    
     @staticmethod
     def unshuffle(country_ids):
         """ Returns a list of country ids in correct, unshuffled order. """
         return country_ids[0::2] + country_ids[1::2]
+
+    def __unicode__(self):
+        return self.school.name + " : " + self.country.name + " (" + str(self.rank) + ")"
 
     class Meta:
         db_table = u'CountryPreference'
@@ -148,19 +147,9 @@ class DelegateSlot(models.Model):
     attended_session3 = models.BooleanField(default=False)
     attended_session4 = models.BooleanField(default=False)
     
-    def __unicode__(self):
-        return self.assignment.__str__()
-    
-    def get_country(self):
-        return self.assignment.country
-    
-    def get_committee(self):
-        return self.assignment.committee
-    
-    def get_school(self):
-        return self.assignment.school
-    
     def update_or_create_delegate(self, delegate_data):
+        """ Updates this slot's delegate object, or creates one if
+            the slot has no delegate. """
         try:
             delegate = self.delegate
             for attr, value in delegate_data.items():
@@ -170,17 +159,34 @@ class DelegateSlot(models.Model):
             Delegate.objects.create(delegateslot=self, **delegate_data)
     
     def delete_delegate_if_exists(self):
+        """ Deletes this slot's delegate or fails silently. """
         try:
             self.delegate.delete()
         except Delegate.DoesNotExist:
             pass
     
     def update_delegate_attendance(self, slot_data):
+        """ Updates this slot's attendance information. """
         self.attended_session1 = slot_data['session1']
         self.attended_session2 = slot_data['session2']
         self.attended_session3 = slot_data['session3']
         self.attended_session4 = slot_data['session4']
         self.save()
+
+    @property
+    def country(self):
+        return self.assignment.country
+    
+    @property
+    def committee(self):
+        return self.assignment.committee
+    
+    @property
+    def school(self):
+        return self.assignment.school
+
+    def __unicode__(self):
+        return self.assignment.__str__()
 
     class Meta:
         db_table = u'DelegateSlot'
@@ -195,14 +201,17 @@ class Delegate(models.Model):
     def __unicode__(self):
         return self.name
     
-    def get_country(self):
-        return self.delegateslot.get_country()
+    @property
+    def country(self):
+        return self.delegateslot.country
     
-    def get_committee(self):
-        return self.delegateslot.get_committee()
+    @property
+    def committee(self):
+        return self.delegateslot.committee
     
-    def get_school(self):
-        return self.delegateslot.get_school()
+    @property
+    def school(self):
+        return self.delegateslot.school
 
     class Meta:
         db_table = u'Delegate'
@@ -216,7 +225,6 @@ class HelpCategory(models.Model):
 
     class Meta:
         db_table = u'HelpCategory'
-
 
 
 class HelpQuestion(models.Model):
@@ -256,67 +264,3 @@ class SecretariatProfile(models.Model):
     
     class Meta:
         db_table = u'SecretariatProfile'
-
-
-# --------------------
-# Signals and Handlers
-# --------------------
-
-def create_delegate_slots(sender, **kwargs):
-    if kwargs["created"]:
-        asmt = kwargs["instance"]
-        num_slots = asmt.committee.delegatesperdelegation
-        for slot in range(0, num_slots):
-            DelegateSlot(assignment=asmt).save()
-
-""" 
-def delete_delegate_slots(sender, **kwargs):
-    asmt = kwargs["instance"]
-    for slot in DelegateSlot.objects.filter(assignment=asmt):
-       slot.delete()
-"""
-
-post_save.connect(create_delegate_slots, sender=Assignment)
-#pre_delete.connect(delete_delegate_slots, sender=Assignment)
-
-def net_registration_fee(sender, **kwargs):
-   school = kwargs["instance"]
-   school.registrationnet = school.registrationowed - school.registrationpaid
-
-pre_save.connect(net_registration_fee, sender=School)
-
-# Add and subtract delegate fees from a school when delegates are added
-# and deleted.
-"""
-def add_delegate_fee(sender, **kwargs):
-    if kwargs["created"]:
-        early_deadline = datetime(2013, 2, 12)
-        regular_deadline = datetime(2013, 2, 26)
-        delegate = kwargs["instance"]
-        school = delegate.get_school()
-        
-        if delegate.created_at < early_deadline:
-            school.delegationowed += Decimal.from_float(40.00)
-        elif delegate.created_at < regular_deadline:
-            school.delegationowed += Decimal.from_float(50.00)
-        else:
-            school.delegationowed += Decimal.from_float(55.00)
-        school.save()
-
-def subtract_delegate_fee(sender, **kwargs):
-    early_deadline = datetime(2013, 2, 12)
-    regular_deadline = datetime(2013, 2, 26)
-    delegate = kwargs["instance"]
-    school = delegate.get_school()
-
-    if delegate.created_at < early_deadline:
-        school.delegationowed -= Decimal.from_float(40.00)
-    elif delegate.created_at < regular_deadline:
-        school.delegationowed -= Decimal.from_float(50.00)
-    else:
-        school.delegationowed -= Decimal.from_float(55.00)
-    school.save()
-
-post_save.connect(add_delegate_fee, sender=Delegate)
-post_delete.connect(subtract_delegate_fee, sender=Delegate)
-"""
