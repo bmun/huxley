@@ -122,9 +122,6 @@ LOGIN_URL = '/login/'
 
 TEMPLATE_DIRS = (
     '%s/templates/' % FILEPATH,
-    '%s/advisors/templates/' % FILEPATH,
-    '%s/chairs/templates/' % FILEPATH,
-    '%s/core/templates/' % FILEPATH,
 )
 
 INSTALLED_APPS = (
