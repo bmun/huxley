@@ -56,10 +56,10 @@ $(function() {
     $.validator.addMethod("uniqueUser", function(value, element) {
         var unique = false;
         $.ajax({
-            type: 'POST',
+            type: 'GET',
             async: false,
             url: 'uniqueuser/',
-            data: $("#registration").serializeArray(),
+            data: {'username' : $("#registration input.username").val()},
             success: function(data, status, jq) {
                 unique = (status == "success");
             }
