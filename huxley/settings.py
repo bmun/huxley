@@ -107,8 +107,8 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'huxley.core.middleware.EnforceUserTypeMiddleware',
     'huxley.core.middleware.LatestConferenceMiddleware',
+    'huxley.core.middleware.EnforceUserTypeMiddleware',
 )
 
 AUTHENTICATION_BACKENDS = (
@@ -136,6 +136,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.admin',
     'huxley.core',
+    'huxley.accounts',
     'huxley.advisors',
     'huxley.chairs',
     'pipeline',
