@@ -29,7 +29,7 @@ class DelegateAdmin(admin.ModelAdmin):
 
     def get_urls(self):
         urls = super(DelegateAdmin, self).get_urls()
-        my_urls = patterns('',
+        urls += patterns('',
             url(
                 r'roster',
                 self.admin_site.admin_view(self.roster),
@@ -46,20 +46,25 @@ class AssignmentAdmin(admin.ModelAdmin):
         writer = csv.writer(assignments)
 
         for assignment in Assignment.objects.all().order_by('school__name', 'committee__name'):
-            writer.writerow([assignment.school, assignment.committee, assignment.country])
+            writer.writerow([
+                assignment.school,
+                assignment.committee,
+                assignment.country
+            ])
 
         return assignments
 
     def get_urls(self):
         urls = super(AssignmentAdmin, self).get_urls()
-        my_urls = patterns('',
+        urls += patterns('',
             url(
                 r'list',
                 self.admin_site.admin_view(self.list),
                 name='core_assignment_list'
             ),
         )
-        return my_urls + urls
+        return urls
+
 
 admin.site.register(Conference)
 admin.site.register(Country)
