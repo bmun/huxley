@@ -12,6 +12,6 @@ def render_template(request, template, context=None):
                               context_instance=RequestContext(request))
 
 def pairwise(iterable):
-	""" s -> (s0, s1), (s2, s3), ... """
-	i = iter(iterable)
-	return izip_longest(i, i)
+    """ s -> (s0, s1), (s2, s3), ... """
+    i = iter(iterable)
+    return izip_longest(i, i)
