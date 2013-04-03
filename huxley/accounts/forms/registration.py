@@ -13,8 +13,8 @@ countries = Country.objects.filter(special=False).order_by('name')
 country_choices = [(country.id, country.name) for country in countries]
 country_choices.insert(0, (0, "No Preference"))
 
-special_committees = Committee.objects.filter(special=True).order_by('fullname')
-special_committees_choices = [(committee.id, committee.fullname) for committee in special_committees]
+special_committees = Committee.objects.filter(special=True).order_by('full_name')
+special_committees_choices = [(committee.id, committee.full_name) for committee in special_committees]
 
 class RegistrationForm(forms.Form):
     # By default, fields are required unless you specify required=False
@@ -36,7 +36,7 @@ class RegistrationForm(forms.Form):
     SchoolCountry = forms.CharField(label="Country", widget=forms.TextInput(attrs={'class':'showhide'}), required=False)
 
     # Program Information
-    programtype = forms.ChoiceField(label="What category best describes your program?", widget=forms.RadioSelect, choices=(('club', 'Club'), ('class', 'Class')), initial="club")
+    program_type = forms.ChoiceField(label="What category best describes your program?", widget=forms.RadioSelect, choices=School.PROGRAM_TYPE_OPTIONS, initial=School.TYPE_CLUB)
     howmany = forms.IntegerField(label="# of BMUN Sessions Attended", widget=forms.TextInput(attrs={'class':'third required IntegersOnly'}))
     MinDelegation = forms.IntegerField(label="Min. Delegation Size", widget=forms.TextInput(attrs={'class':'third required IntegersOnly'}))
     MaxDelegation = forms.IntegerField(label="Max. Delegation Size", widget=forms.TextInput(attrs={'class':'third required IntegersOnly'}))
@@ -83,61 +83,37 @@ class RegistrationForm(forms.Form):
 
 
     def create_school(self):
-        try:
-            registration_fee = 40.00 if date.today() < date(2012, 10, 20) else 50.00
-            new_school = School.objects.create(name=self.cleaned_data['SchoolName'],
-                                               address=self.cleaned_data['SchoolAddress'],
-                                               city=self.cleaned_data['SchoolCity'],
-                                               state=self.cleaned_data['SchoolState'],
-                                               zip=self.cleaned_data['SchoolZip'],
-                                               primaryname = self.cleaned_data['PrimaryName'],
-                                               primaryemail = self.cleaned_data['PrimaryEmail'],
-                                               primaryphone = self.cleaned_data['PrimaryPhone'],
-                                               secondaryname = self.cleaned_data['SecondaryName'],
-                                               secondaryemail = self.cleaned_data['SecondaryEmail'],
-                                               secondaryphone = self.cleaned_data['SecondaryPhone'],
-                                               programtype = self.cleaned_data['programtype'],
-                                               timesattended = self.cleaned_data['howmany'],
-                                               mindelegationsize = self.cleaned_data['MinDelegation'],
-                                               maxdelegationsize = self.cleaned_data['MaxDelegation'],
-                                               international = self.cleaned_data['us_or_int'] == 'international',
-                                               registrationowed = registration_fee)
-            new_school.save()
-            return new_school
-        except:
-            print "> ERROR WHILE CREATING SCHOOL. REMEMBER TO VALIDATE FIRST."
-            return None
-
+        registration_fee = 40.00 if date.today() < date(2012, 10, 20) else 50.00
+        new_school = School.objects.create(name=self.cleaned_data['SchoolName'],
+                                           address=self.cleaned_data['SchoolAddress'],
+                                           city=self.cleaned_data['SchoolCity'],
+                                           state=self.cleaned_data['SchoolState'],
+                                           zip_code=self.cleaned_data['SchoolZip'],
+                                           primary_name = self.cleaned_data['PrimaryName'],
+                                           primary_email = self.cleaned_data['PrimaryEmail'],
+                                           primary_phone = self.cleaned_data['PrimaryPhone'],
+                                           secondary_name = self.cleaned_data['SecondaryName'],
+                                           secondary_email = self.cleaned_data['SecondaryEmail'],
+                                           secondary_phone = self.cleaned_data['SecondaryPhone'],
+                                           program_type = int(self.cleaned_data['program_type']),
+                                           times_attended = self.cleaned_data['howmany'],
+                                           min_delegation_size = self.cleaned_data['MinDelegation'],
+                                           max_delegation_size = self.cleaned_data['MaxDelegation'],
+                                           international = self.cleaned_data['us_or_int'] == 'international',
+                                           registration_fee = registration_fee)
+        new_school.save()
+        return new_school
 
     def add_country_preferences(self, school):
-        try:
-            rank = 1
-            for i in xrange(1,11):
-                country_id = int(self.cleaned_data['CountryPref'+str(i)])
-                if country_id == 0:
-                    continue
-                country = Country.objects.get(id=country_id)
-                country_pref = CountryPreference.objects.create(school=school, country=country, rank=rank)
-                country_pref.save()
-                rank += 1
-            return True
-        except:
-            print "> ERROR WHILE ADDING COUNTRY PREFERENCES. REMEMBER TO VALIDATE FIRST."
-            return False
+        country_ids = [int(self.cleaned_data['CountryPref%d' % i]) for i in xrange(1, 11)]
+        school.refresh_country_preferences(country_ids)
+        return True
 
 
     def add_committee_preferences(self, school):
-        try:
-            committees = self.cleaned_data["CommitteePrefs"]
-            for committee_id in committees:
-                committee = Committee.objects.get(id=int(committee_id))
-                school.committeepreferences.add(committee)
-            school.save()
-            return True
-        except:
-            print "> ERROR WHILE ADDING COMMITTEE PREFERENCES. REMEMBER TO VALIDATE FIRST."
-            return False
-
+        committee_ids = self.cleaned_data["CommitteePrefs"]
+        school.refresh_committee_preferences(committee_ids)
+        return True
 
     def create_advisor_profile(self, user, school):
         try:

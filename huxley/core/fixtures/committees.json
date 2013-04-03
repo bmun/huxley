@@ -1,0 +1,192 @@
+[
+{
+    "pk": 1, 
+    "model": "core.committee", 
+    "fields": {
+        "full_name": "Disarmament and International Security", 
+        "name": "DISC", 
+        "special": false, 
+        "delegation_size": 2
+    }
+},
+{
+    "pk": 2, 
+    "model": "core.committee", 
+    "fields": {
+        "full_name": "Social, Cultural, and Humanitarian ", 
+        "name": "SOCHUM", 
+        "special": false, 
+        "delegation_size": 2
+    }
+},
+{
+    "pk": 3, 
+    "model": "core.committee", 
+    "fields": {
+        "full_name": "Special Political and Decolonization", 
+        "name": "SPD", 
+        "special": false, 
+        "delegation_size": 2
+    }
+},
+{
+    "pk": 4, 
+    "model": "core.committee", 
+    "fields": {
+        "full_name": "Legal", 
+        "name": "LEGAL", 
+        "special": false, 
+        "delegation_size": 2
+    }
+},
+{
+    "pk": 5, 
+    "model": "core.committee", 
+    "fields": {
+        "full_name": "World Health Organization", 
+        "name": "WHO", 
+        "special": false, 
+        "delegation_size": 2
+    }
+},
+{
+    "pk": 6, 
+    "model": "core.committee", 
+    "fields": {
+        "full_name": "United Nations Environmental Programme", 
+        "name": "UNEP", 
+        "special": false, 
+        "delegation_size": 2
+    }
+},
+{
+    "pk": 7, 
+    "model": "core.committee", 
+    "fields": {
+        "full_name": "International Monetary Fund", 
+        "name": "IMF", 
+        "special": false, 
+        "delegation_size": 2
+    }
+},
+{
+    "pk": 8, 
+    "model": "core.committee", 
+    "fields": {
+        "full_name": "Food and Agriculture Organization", 
+        "name": "FAO", 
+        "special": false, 
+        "delegation_size": 2
+    }
+},
+{
+    "pk": 9, 
+    "model": "core.committee", 
+    "fields": {
+        "full_name": "United Nations Office on Drugs and Crime", 
+        "name": "UNODC", 
+        "special": false, 
+        "delegation_size": 2
+    }
+},
+{
+    "pk": 10, 
+    "model": "core.committee", 
+    "fields": {
+        "full_name": "United Nations High Commissioner for Refugees", 
+        "name": "UNHCR (Refugees)", 
+        "special": false, 
+        "delegation_size": 2
+    }
+},
+{
+    "pk": 11, 
+    "model": "core.committee", 
+    "fields": {
+        "full_name": "United Nations Human Rights Council", 
+        "name": "UNHRC (Human Rights)", 
+        "special": false, 
+        "delegation_size": 2
+    }
+},
+{
+    "pk": 12, 
+    "model": "core.committee", 
+    "fields": {
+        "full_name": "African Union", 
+        "name": "AU", 
+        "special": false, 
+        "delegation_size": 2
+    }
+},
+{
+    "pk": 13, 
+    "model": "core.committee", 
+    "fields": {
+        "full_name": "North Atlantic Treaty Organization", 
+        "name": "NATO", 
+        "special": true, 
+        "delegation_size": 2
+    }
+},
+{
+    "pk": 14, 
+    "model": "core.committee", 
+    "fields": {
+        "full_name": "Organization of American States", 
+        "name": "OAS", 
+        "special": true, 
+        "delegation_size": 2
+    }
+},
+{
+    "pk": 15, 
+    "model": "core.committee", 
+    "fields": {
+        "full_name": "Security Council", 
+        "name": "SC", 
+        "special": true, 
+        "delegation_size": 2
+    }
+},
+{
+    "pk": 16, 
+    "model": "core.committee", 
+    "fields": {
+        "full_name": "Press Corp.", 
+        "name": "PRESS", 
+        "special": true, 
+        "delegation_size": 2
+    }
+},
+{
+    "pk": 17, 
+    "model": "core.committee", 
+    "fields": {
+        "full_name": "Historical Security Council", 
+        "name": "HSC", 
+        "special": true, 
+        "delegation_size": 2
+    }
+},
+{
+    "pk": 18, 
+    "model": "core.committee", 
+    "fields": {
+        "full_name": "International Court of Justice", 
+        "name": "ICJ", 
+        "special": true, 
+        "delegation_size": 2
+    }
+},
+{
+    "pk": 19, 
+    "model": "core.committee", 
+    "fields": {
+        "full_name": "Crisis Simulation", 
+        "name": "CRISIS", 
+        "special": true, 
+        "delegation_size": 1
+    }
+}
+]

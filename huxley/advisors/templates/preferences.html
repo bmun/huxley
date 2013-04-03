@@ -64,9 +64,9 @@
       			{% if committee %}
 					<td class='field'>
 						{% if committee in committeeprefs %}
-							<label><input class="select" type="checkbox" checked ="checked" name="{{ "CommitteePrefs" }}" value="{{ committee.id }}">{{ committee.fullname }} </input></label>
+							<label><input class="select" type="checkbox" checked ="checked" name="{{ "CommitteePrefs" }}" value="{{ committee.id }}">{{ committee.full_name }} </input></label>
 						{% else %}
-							<label><input class="select" type="checkbox" name="{{ "CommitteePrefs" }}" value="{{ committee.id }}">{{ committee.fullname }} </input></label>
+							<label><input class="select" type="checkbox" name="{{ "CommitteePrefs" }}" value="{{ committee.id }}">{{ committee.full_name }} </input></label>
 						{% endif %}
 					</td>
 				{% endif %}

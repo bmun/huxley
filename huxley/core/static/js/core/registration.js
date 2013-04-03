@@ -107,7 +107,7 @@ $(function() {
                 Password2: {
                     equalTo:"#id_Password"
                 },
-                programtype: {
+                program_type: {
                     minlength:1
                 },
                 us_or_int: {

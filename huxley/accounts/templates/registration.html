@@ -104,8 +104,8 @@
 
 <fieldset>
 	<legend>Program Information</legend>
-	<p class="instructions"> {{ form.programtype.label }} </p> {{ form.programtype }} 
-	{% for error in form.errors.programtype %}
+	<p class="instructions"> {{ form.program_type.label }} </p> {{ form.program_type }} 
+	{% for error in form.errors.program_type %}
 		<label class="error"> {{ error|escape }} </label>
 	{% endfor %}
 	<p class="instructions">Please tell us a bit more about your delegation this year.</p>

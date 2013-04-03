@@ -5,89 +5,90 @@ from django.contrib.auth.models import User
 from django.db import models
 
 class Conference(models.Model):
-    session =  models.IntegerField(db_column='Session', default=0)
-    startdate = models.DateField(db_column='StartDate')
-    enddate = models.DateField(db_column='EndDate')
-    registrationstart = models.DateField(db_column='RegistrationStart')
-    earlyregistrationend = models.DateField(db_column='EarlyRegistrationEnd')
-    registrationend = models.DateField(db_column='RegistrationEnd')
-    minattendance = models.IntegerField(db_column='MinAttendance', default=0)
-    maxattendance = models.IntegerField(db_column='MaxAttendance', default=0)
+    session         = models.PositiveSmallIntegerField(default=0)
+    start_date      = models.DateField()
+    end_date        = models.DateField()
+    reg_open        = models.DateField()
+    early_reg_close = models.DateField()
+    reg_close       = models.DateField()
+    min_attendance  = models.PositiveSmallIntegerField(default=0)
+    max_attendance  = models.PositiveSmallIntegerField(default=0)
     
     def __unicode__(self):
-        return 'BMUN ' + str(self.session)
+        return 'BMUN %d' % self.session
     
     class Meta:
-        db_table = u'Conference'
-        get_latest_by = 'startdate'
+        db_table = u'conference'
+        get_latest_by = 'start_date'
 
 
 class Country(models.Model):
-    name = models.CharField(max_length=765, db_column='name', null=False, blank=True)
-    special = models.BooleanField(null=False, blank=False, db_column="special", default=False)
+    name    = models.CharField(max_length=128)
+    special = models.BooleanField(default=False)
     
     def __unicode__(self):
         return self.name
 
     class Meta:
-        db_table = u'Country'
+        db_table = u'country'
 
 
 class Committee(models.Model):
-    name = models.CharField(max_length=765, db_column='name', null=False, blank=True)
-    fullname = models.CharField(max_length=765, db_column='fullname', null=False, blank=True)
-    countries = models.ManyToManyField(Country, through='Assignment')
-    delegatesperdelegation = models.IntegerField(db_column='delegatesperdelegation', default=2, blank=False, null=False)
-    special = models.BooleanField(null=False, blank=False, db_column="special", default=False)
+    name            = models.CharField(max_length=8)
+    full_name       = models.CharField(max_length=128)
+    countries       = models.ManyToManyField(Country, through='Assignment')
+    delegation_size = models.PositiveSmallIntegerField(default=2)
+    special         = models.BooleanField(default=False)
 
     def __unicode__(self):
         return self.name
     
     class Meta:
-        db_table = u'Committee'
+        db_table = u'committee'
 
 
 class School(models.Model):
-    
+    TYPE_CLUB = 1
+    TYPE_CLASS = 2
     PROGRAM_TYPE_OPTIONS = (
-        ('club', 'Club'),
-        ('class', 'Class'),
+        (TYPE_CLUB, 'Club'),
+        (TYPE_CLASS, 'Class'),
     )
     
-    dateregistered = models.DateTimeField(null=False, blank=False, db_column='DateRegistered', auto_now_add=True)
-    name = models.CharField(max_length=765, db_column='SchoolName', blank=True) 
-    address = models.CharField(max_length=765, db_column='SchoolAddress', blank=True) 
-    city = models.CharField(max_length=765, db_column='SchoolCity', blank=True) 
-    state = models.CharField(max_length=765, db_column='SchoolState', blank=True) 
-    zip = models.CharField(max_length=765, db_column='SchoolZip', blank=True) 
-    primaryname = models.CharField(max_length=765, db_column='PrimaryName', blank=True) 
-    primaryemail = models.EmailField(max_length=765, db_column='PrimaryEmail', blank=True) 
-    primaryphone = models.CharField(max_length=765, db_column='PrimaryPhone', blank=True) 
-    secondaryname = models.CharField(max_length=765, db_column='SecondaryName', blank=True) 
-    secondaryemail = models.EmailField(max_length=765, db_column='SecondaryEmail', blank=True) 
-    secondaryphone = models.CharField(max_length=765, db_column='SecondaryPhone', blank=True) 
-    programtype = models.CharField(max_length=765, db_column='ProgramType', blank=True, choices=PROGRAM_TYPE_OPTIONS) 
-    timesattended = models.IntegerField(db_column='TimesAttended', default=0)
-    mindelegationsize = models.IntegerField(db_column='MinimumDelegationSize', default=0) 
-    maxdelegationsize = models.IntegerField(db_column='MaximumDelegationSize', default=0)
-    countrypreferences = models.ManyToManyField(Country, db_column='CountryPreferences', blank=True, default=None, through='CountryPreference')
-    committeepreferences = models.ManyToManyField(Committee, db_column='CommitteePreferences', limit_choices_to={'special':True}, blank=True, default=None)
-    registrationpaid = models.DecimalField(max_digits=6, decimal_places=2, db_column='RegistrationPaid', default=0) 
-    registrationowed = models.DecimalField(max_digits=6, decimal_places=2, db_column='RegistrationOwed', default=0) 
-    registrationnet = models.DecimalField(max_digits=6, decimal_places=2, db_column='RegistrationNet', default=0) 
-    delegationpaid = models.DecimalField(max_digits=6, decimal_places=2, db_column='DelegationPaid', default=0) 
-    delegationowed = models.DecimalField(max_digits=6, decimal_places=2, db_column='DelegationOwed', default=0) 
-    delegationnet = models.DecimalField(max_digits=6, decimal_places=2, db_column='DelegationNet', default=0) 
-    international = models.BooleanField(null=False, db_column='International', default=False)
+    registered          = models.DateTimeField(auto_now_add=True)
+    name                = models.CharField(max_length=128) 
+    address             = models.CharField(max_length=128) 
+    city                = models.CharField(max_length=128) 
+    state               = models.CharField(max_length=16) 
+    zip_code            = models.CharField(max_length=16) 
+    primary_name        = models.CharField(max_length=128) 
+    primary_email       = models.EmailField() 
+    primary_phone       = models.CharField(max_length=32) 
+    secondary_name      = models.CharField(max_length=128, blank=True) 
+    secondary_email     = models.EmailField(blank=True) 
+    secondary_phone     = models.CharField(max_length=32, blank=True) 
+    program_type        = models.PositiveSmallIntegerField(choices=PROGRAM_TYPE_OPTIONS)
+    times_attended      = models.PositiveSmallIntegerField(default=0)
+    min_delegation_size = models.PositiveSmallIntegerField(default=0) 
+    max_delegation_size = models.PositiveSmallIntegerField(default=0)
+    international       = models.BooleanField(default=False)
+    
+    countrypreferences   = models.ManyToManyField(Country, through='CountryPreference')
+    committeepreferences = models.ManyToManyField(Committee, limit_choices_to={'special':True})
+    
+    registration_fee         = models.DecimalField(max_digits=6, decimal_places=2, default=0)
+    registration_fee_paid    = models.DecimalField(max_digits=6, decimal_places=2, default=0)
+    registration_fee_balance = models.DecimalField(max_digits=6, decimal_places=2, default=0)
+    delegation_fee           = models.DecimalField(max_digits=6, decimal_places=2, default=0)
+    delegation_fee_paid      = models.DecimalField(max_digits=6, decimal_places=2, default=0)
+    delegation_fee_balance   = models.DecimalField(max_digits=6, decimal_places=2, default=0)
     
     def refresh_country_preferences(self, country_ids):
-        """ Refreshes a school's country preferences. Note that the order
-            of country_ids is [1, 6, 2, 7, 3, 8, ...] due to double-columns
-            in the html, and that duplicates are ignored. """
+        """ Refreshes a school's country preferences, given a list of
+            country IDs. """
         self.countrypreferences.clear()
-        country_ids = CountryPreference.unshuffle(country_ids)
         seen = set()
-        for rank, country_id in enumerate(country_ids):
+        for rank, country_id in enumerate(country_ids, start=1):
             if country_id and country_id not in seen:
                 seen.add(country_id)
                 CountryPreference.objects.create(school=self,
@@ -104,25 +105,25 @@ class School(models.Model):
         return self.name
 
     class Meta:
-        db_table = u'School'
+        db_table = u'school'
 
 
 class Assignment(models.Model):
     committee = models.ForeignKey(Committee)
-    country = models.ForeignKey(Country)
-    school = models.ForeignKey(School, null=True, blank=True, default=None)
+    country   = models.ForeignKey(Country)
+    school    = models.ForeignKey(School, null=True, blank=True, default=None)
 
     def __unicode__(self):
         return self.committee.name + " : " + self.country.name
 
     class Meta:
-        db_table = u'Assignment'
+        db_table = u'assignment'
 
 
 class CountryPreference(models.Model):
-    school = models.ForeignKey(School)
+    school  = models.ForeignKey(School)
     country = models.ForeignKey(Country, limit_choices_to={'special':False})
-    rank = models.IntegerField(db_column='rank', null=False, blank=False, default=1)
+    rank    = models.PositiveSmallIntegerField()
     
     @staticmethod
     def unshuffle(country_ids):
@@ -130,14 +131,14 @@ class CountryPreference(models.Model):
         return country_ids[0::2] + country_ids[1::2]
 
     def __unicode__(self):
-        return self.school.name + " : " + self.country.name + " (" + str(self.rank) + ")"
+        return "%s : %s (%d)" % self.school.name, self.country.name, self.rank
 
     class Meta:
-        db_table = u'CountryPreference'
+        db_table = u'country_preference'
 
 
 class DelegateSlot(models.Model):
-    assignment = models.ForeignKey(Assignment)
+    assignment        = models.ForeignKey(Assignment)
     attended_session1 = models.BooleanField(default=False)
     attended_session2 = models.BooleanField(default=False)
     attended_session3 = models.BooleanField(default=False)
@@ -152,7 +153,7 @@ class DelegateSlot(models.Model):
                 setattr(delegate, attr, value)
             delegate.save()
         except Delegate.DoesNotExist:
-            Delegate.objects.create(delegateslot=self, **delegate_data)
+            Delegate.objects.create(delegate_slot=self, **delegate_data)
     
     def delete_delegate_if_exists(self):
         """ Deletes this slot's delegate or fails silently. """
@@ -182,81 +183,76 @@ class DelegateSlot(models.Model):
         return self.assignment.school
 
     def __unicode__(self):
-        return self.assignment.__str__()
+        return str(self.assignment)
 
     class Meta:
-        db_table = u'DelegateSlot'
+        db_table = u'delegate_slot'
 
 
 class Delegate(models.Model):
-    name = models.CharField(max_length=765, db_column='Name', blank=True) 
-    email = models.EmailField(max_length=765, db_column='Email', blank=True) 
-    delegateslot = models.OneToOneField(DelegateSlot, related_name='delegate', null=True, default=None, unique=True)
-    created_at = models.DateTimeField(null=True, auto_now_add=True)
+    name          = models.CharField(max_length=64, blank=True) 
+    email         = models.EmailField(blank=True) 
+    delegate_slot = models.OneToOneField(DelegateSlot, related_name='delegate', null=True, default=None)
+    created_at    = models.DateTimeField(auto_now_add=True)
     
     def __unicode__(self):
         return self.name
     
     @property
     def country(self):
-        return self.delegateslot.country
+        return self.delegate_slot.country
     
     @property
     def committee(self):
-        return self.delegateslot.committee
+        return self.delegate_slot.committee
     
     @property
     def school(self):
-        return self.delegateslot.school
+        return self.delegate_slot.school
 
     class Meta:
-        db_table = u'Delegate'
+        db_table = u'delegate'
 
 
 class HelpCategory(models.Model):
-    name = models.CharField(unique=True, max_length=255, db_column="Name")
+    name = models.CharField(max_length=128, unique=True)
     
     def __unicode__(self):
         return self.name
 
     class Meta:
-        db_table = u'HelpCategory'
+        db_table = u'help_category'
 
 
 class HelpQuestion(models.Model):
     category = models.ForeignKey(HelpCategory)
-    question = models.CharField(max_length=255, db_column='Question')
-    answer = models.TextField(db_column='Answer')
+    question = models.CharField(max_length=255)
+    answer   = models.TextField()
     
     def __unicode__(self):
         return self.question
 
     class Meta:
-        db_table = u'HelpQuestion'
+        db_table = u'help_question'
 
 
 class AdvisorProfile(models.Model):
-    user = models.OneToOneField(User, blank=True, related_name='advisor_profile')
+    user   = models.OneToOneField(User, related_name='advisor_profile')
     school = models.ForeignKey(School, related_name='advisor_profile')
     
     def __unicode__(self):
         return self.user.username
 
     class Meta:
-        db_table = u'AdvisorProfile'
+        db_table = u'advisor_profile'
 
 
 class SecretariatProfile(models.Model):
-    user = models.OneToOneField(User, blank=True, related_name='secretariat_profile')
+    user      = models.OneToOneField(User, related_name='secretariat_profile')
     committee = models.ForeignKey(Committee, related_name='secretariat_profile')
-    is_sg = models.BooleanField(default=False)
-    is_staff = models.BooleanField(default=False)
-    is_tech = models.BooleanField(default=False)
-    is_internal = models.BooleanField(default=False)
-    is_external = models.BooleanField(default=False)
-    is_outreach = models.BooleanField(default=False)
-    is_publication = models.BooleanField(default=False)
-    is_research = models.BooleanField(default=False)
+
+    def __unicode__(self):
+        return self.user.username
     
     class Meta:
-        db_table = u'SecretariatProfile'
+        db_table = u'secretariat_profile'

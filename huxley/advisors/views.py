@@ -24,17 +24,17 @@ def welcome(request):
         school.name = request.POST.get('schoolname')
         school.address = request.POST.get('address')
         school.city = request.POST.get('city')
-        school.zip = request.POST.get('zip')
-        school.programtype = request.POST.get('programtype')
-        school.timesattended = request.POST.get('attendance')
-        school.primaryname = request.POST.get('primaryname')
-        school.primaryemail = request.POST.get('primaryemail')
-        school.primaryphone = request.POST.get('primaryphone')
-        school.secondaryname = request.POST.get('secname')
-        school.secondaryemail = request.POST.get('secemail')
-        school.secondaryphone = request.POST.get('secphone')
-        school.mindelegationsize = request.POST.get('minDel')
-        school.maxdelegationsize = request.POST.get('maxDel')
+        school.zip_code = request.POST.get('zip_code')
+        school.program_type = request.POST.get('program_type')
+        school.times_attended = request.POST.get('attendance')
+        school.primary_name = request.POST.get('primary_name')
+        school.primary_email = request.POST.get('primary_email')
+        school.primary_phone = request.POST.get('primary_phone')
+        school.secondary_name = request.POST.get('secname')
+        school.secondary_email = request.POST.get('secemail')
+        school.secondary_phone = request.POST.get('secphone')
+        school.min_delegation_size = request.POST.get('minDel')
+        school.max_delegation_size = request.POST.get('maxDel')
         school.save();
         
         return HttpResponse()    
@@ -48,7 +48,8 @@ def preferences(request):
     if request.method == 'POST':
         country_ids = request.POST.getlist('CountryPrefs')
         committee_ids = request.POST.getlist('CommitteePrefs')
-        school.refresh_country_preferences(country_ids)
+        school.refresh_country_preferences(
+            CountryPreference.unshuffle(country_ids))
         school.refresh_committee_preferences(committee_ids)
         
         return HttpResponse()
