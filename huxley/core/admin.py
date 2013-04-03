@@ -20,7 +20,7 @@ class DelegateAdmin(admin.ModelAdmin):
         roster['Content-Disposition'] = 'attachment; filename="delegateroster.csv"'
         writer = csv.writer(roster)
 
-        for delegate in Delegate.objects.all().order_by('delegateslot__assignment__school__name'):
+        for delegate in Delegate.objects.all().order_by('delegate_slot__assignment__school__name'):
             writer.writerow([
                 delegate,
                 delegate.committee,

@@ -2,7 +2,6 @@
 # Use of this source code is governed by a BSD License found in README.md.
 
 from django.test import TestCase
-from django.utils import unittest
 
 from huxley.accounts.forms.registration import RegistrationForm
 from huxley.core.models import *
@@ -10,14 +9,16 @@ from huxley.core.models import *
 import re
 
 
-class RegistrationTest(unittest.TestCase):
+class RegistrationTest(TestCase):
+
+    fixtures = ['countries.json', 'committees.json']
 
     valid_params = {"FirstName": "Taeyeon", "LastName": "Kim", 
                     "Username": "taengoo", "Password": "girlsgeneration", 
                     "Password2": "girlsgeneration", "us_or_int":"us",
                     "SchoolName": "SNSD", "SchoolAddress": "123 SNSD Way",
                     "SchoolCity": "Seoul", "SchoolState": "Seoul",
-                    "SchoolZip":12345, "programtype": "club", 
+                    "SchoolZip":12345, "program_type": School.TYPE_CLUB, 
                     "howmany":9, "MinDelegation":9, "MaxDelegation":9,
                     "PrimaryName":"Manager", "PrimaryEmail":"kimtaeyon@snsd.com",
                     "PrimaryPhone":"(123) 435-7543", "CountryPref1": 1,
@@ -28,23 +29,16 @@ class RegistrationTest(unittest.TestCase):
                     "CountryPref10": 10}
 
     def test_sanity(self):
-        """ Simple test case that makes sure a form with all valid data works """
-
+        """ Makes sure a form with all valid data works. """
         params = self.valid_params.copy()
 
         form = RegistrationForm(params)
-        if not form.is_valid():
-            print "----- Test: test_sanity ----------------------------------------------------------------------------"
-            for name, errors in form.errors.items():
-                for error in errors:
-                    print "> [Field: %s] Validation Error: %s" % (name, error)
-            print "----------------------------------------------------------------------------------------------------"
         self.assertTrue(form.is_valid())
 
 
     def test_required(self):
-        """ Simple test case to make sure all fields except for the optional ones are required """
-
+        """ Make sure all fields except for the optional ones are present
+            in the parameters. """
         params = {"FirstName":""} # Empty string is not valid
         form = RegistrationForm(params)
 
@@ -64,7 +58,7 @@ class RegistrationTest(unittest.TestCase):
 
 
     def test_username_len(self):
-        """ Tests for: minimum length """
+        """ Tests for minimum username length. """
 
         # Too short (len: 3)
         params = self.valid_params.copy()
@@ -250,14 +244,14 @@ class RegistrationTest(unittest.TestCase):
         self.assertEqual(school.address, params["SchoolAddress"])
         self.assertEqual(school.city, params["SchoolCity"])
         self.assertEqual(school.state, params["SchoolState"])
-        self.assertEqual(school.zip, str(params["SchoolZip"]))
-        self.assertEqual(school.primaryname, params["PrimaryName"])
-        self.assertEqual(school.primaryemail, params["PrimaryEmail"])
-        self.assertEqual(school.primaryphone, params["PrimaryPhone"])
-        self.assertEqual(school.programtype, params["programtype"])
-        self.assertEqual(school.timesattended, params["howmany"])
-        self.assertEqual(school.mindelegationsize, params["MinDelegation"])
-        self.assertEqual(school.maxdelegationsize, params["MaxDelegation"])
+        self.assertEqual(school.zip_code, str(params["SchoolZip"]))
+        self.assertEqual(school.primary_name, params["PrimaryName"])
+        self.assertEqual(school.primary_email, params["PrimaryEmail"])
+        self.assertEqual(school.primary_phone, params["PrimaryPhone"])
+        self.assertEqual(school.program_type, params["program_type"])
+        self.assertEqual(school.times_attended, params["howmany"])
+        self.assertEqual(school.min_delegation_size, params["MinDelegation"])
+        self.assertEqual(school.max_delegation_size, params["MaxDelegation"])
         self.assertFalse(school.international)
 
         # Make sure state isn't an empty string, or a string of spaces
@@ -266,11 +260,11 @@ class RegistrationTest(unittest.TestCase):
         self.assertTrue(matches is None)
 
         if "SecondaryName" in params:
-            self.assertEqual(school.secondaryname, params["SecondaryName"])
+            self.assertEqual(school.secondary_name, params["SecondaryName"])
         if "SecondaryEmail" in params:
-            self.assertEqual(school.secondaryemail, params["SecondaryEmail"])
+            self.assertEqual(school.secondary_email, params["SecondaryEmail"])
         if "SecondaryPhone" in params:
-            self.assertEqual(school.secondaryphone, params["SecondaryPhone"])
+            self.assertEqual(school.secondary_phone, params["SecondaryPhone"])
 
         # Check to see that it's in the database as well
         schools_in_db = School.objects.filter(name=params["SchoolName"])
@@ -289,25 +283,25 @@ class RegistrationTest(unittest.TestCase):
         self.assertEqual(school.name, params["SchoolName"])
         self.assertEqual(school.address, params["SchoolAddress"])
         self.assertEqual(school.city, params["SchoolCity"])
-        self.assertEqual(school.zip, str(params["SchoolZip"]))
-        self.assertEqual(school.country, params["SchoolCountry"])
-        self.assertEqual(school.primaryname, params["PrimaryName"])
-        self.assertEqual(school.primaryemail, params["PrimaryEmail"])
-        self.assertEqual(school.primaryphone, params["PrimaryPhone"])
-        self.assertEqual(school.programtype, params["programtype"])
-        self.assertEqual(school.timesattended, params["howmany"])
-        self.assertEqual(school.mindelegationsize, params["MinDelegation"])
-        self.assertEqual(school.maxdelegationsize, params["MaxDelegation"])
+        self.assertEqual(school.zip_code, str(params["SchoolZip"]))
+        #self.assertEqual(school.country, params["SchoolCountry"]) TODO
+        self.assertEqual(school.primary_name, params["PrimaryName"])
+        self.assertEqual(school.primary_email, params["PrimaryEmail"])
+        self.assertEqual(school.primary_phone, params["PrimaryPhone"])
+        self.assertEqual(school.program_type, params["program_type"])
+        self.assertEqual(school.times_attended, params["howmany"])
+        self.assertEqual(school.min_delegation_size, params["MinDelegation"])
+        self.assertEqual(school.max_delegation_size, params["MaxDelegation"])
         self.assertTrue(school.international)
 
         if "SchoolState" in params:
             self.assertEqual(school.state, params["SchoolState"])
         if "SecondaryName" in params:
-            self.assertEqual(school.secondaryname, params["SecondaryName"])
+            self.assertEqual(school.secondary_name, params["SecondaryName"])
         if "SecondaryEmail" in params:
-            self.assertEqual(school.secondaryemail, params["SecondaryEmail"])
+            self.assertEqual(school.secondary_email, params["SecondaryEmail"])
         if "SecondaryPhone" in params:
-            self.assertEqual(school.secondaryphone, params["SecondaryPhone"])
+            self.assertEqual(school.secondary_phone, params["SecondaryPhone"])
 
         # Check to see that it's in the database as well
         schools_in_db = School.objects.filter(name=params["SchoolName"])
@@ -371,16 +365,9 @@ class RegistrationTest(unittest.TestCase):
         prefs = CountryPreference.objects.filter(school=school)
         self.assertEqual(len(prefs), 3)
 
-        for pref in prefs:
-            self.assertIn(pref.rank, (1,2,3))
-            if pref.rank == 1:
-                self.assertEqual(pref.country.id, params["CountryPref1"])
-            elif pref.rank == 2:
-                self.assertEqual(pref.country.id, params["CountryPref3"])
-            elif pref.rank == 3:
-                self.assertEqual(pref.country.id, params["CountryPref7"])
-            else:
-                self.assertTrue(False)
+        self.assertEqual(prefs[0].country.id, params['CountryPref1'])
+        self.assertEqual(prefs[1].country.id, params['CountryPref3'])
+        self.assertEqual(prefs[2].country.id, params['CountryPref7'])
 
 
     def test_country_preferences(self):
