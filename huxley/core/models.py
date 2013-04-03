@@ -83,9 +83,13 @@ class School(models.Model):
     delegation_fee_paid      = models.DecimalField(max_digits=6, decimal_places=2, default=0)
     delegation_fee_balance   = models.DecimalField(max_digits=6, decimal_places=2, default=0)
     
-    def refresh_country_preferences(self, country_ids):
+    def refresh_country_preferences(self, country_ids, shuffled=False):
         """ Refreshes a school's country preferences, given a list of
-            country IDs. """
+            country IDs. If shuffled is True, then the country_ids are 
+            ordered [1, 6, 2, 7, 3, 8, ...] due to double columning in
+            the template. """
+        if shuffled:
+            country_ids = CountryPreference.unshuffle(country_ids)
         self.countrypreferences.clear()
         seen = set()
         for rank, country_id in enumerate(country_ids, start=1):
