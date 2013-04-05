@@ -48,8 +48,8 @@ def preferences(request):
     if request.method == 'POST':
         country_ids = request.POST.getlist('CountryPrefs')
         committee_ids = request.POST.getlist('CommitteePrefs')
-        school.refresh_country_preferences(country_ids, shuffled=True)
-        school.refresh_committee_preferences(committee_ids)
+        school.update_country_preferences(country_ids, shuffled=True)
+        school.update_committee_preferences(committee_ids)
         
         return HttpResponse()
 
@@ -66,29 +66,21 @@ def preferences(request):
 def roster(request):
     """ Display the advisor's editable roster, or update information as
         necessary. """
+    school = request.profile.school
     if request.method == 'POST':
         slot_data = simplejson.loads(request.POST['delegates'])
-        for slot_id, delegate_data in slot_data.items():
-            slot = DelegateSlot.objects.get(id=slot_id)
-            if 'name' in delegate_data and 'email' in delegate_data:
-                slot.update_or_create_delegate(delegate_data)
-            else:
-                slot.delete_delegate_if_exists()
-
+        school.update_delegate_slots(slot_data)
+        
         return HttpResponse()
 
-    school = request.profile.school
-    slots = DelegateSlot.objects.filter(assignment__school=school) \
-                                .order_by('assignment__committee__name')
+    slots = school.get_delegate_slots()
     return render_template(request, 'roster_edit.html', {'slots' : slots})
 
 
 def attendance(request):
     """ Display the advisor's attendance list. """
-    delegate_slots = DelegateSlot.objects.filter(
-        assignment__school=request.profile.school)
-    return render_template(request, 'check-attendance.html',
-                           {'delegate_slots': delegate_slots})
+    context = {'delegate_slots': request.profile.school.get_delegate_slots()}
+    return render_template(request, 'check-attendance.html', context)
 
 
 def help(request):

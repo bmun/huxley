@@ -106,12 +106,12 @@ class RegistrationForm(forms.Form):
 
     def add_country_preferences(self, school):
         country_ids = [int(self.cleaned_data['CountryPref%d' % i]) for i in xrange(1, 11)]
-        school.refresh_country_preferences(country_ids)
+        school.update_country_preferences(country_ids)
         return True
 
     def add_committee_preferences(self, school):
         committee_ids = self.cleaned_data["CommitteePrefs"]
-        school.refresh_committee_preferences(committee_ids)
+        school.update_committee_preferences(committee_ids)
         return True
 
     def create_advisor_profile(self, user, school):
