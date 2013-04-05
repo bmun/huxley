@@ -83,7 +83,7 @@ class School(models.Model):
     delegation_fee_paid      = models.DecimalField(max_digits=6, decimal_places=2, default=0)
     delegation_fee_balance   = models.DecimalField(max_digits=6, decimal_places=2, default=0)
     
-    def refresh_country_preferences(self, country_ids, shuffled=False):
+    def update_country_preferences(self, country_ids, shuffled=False):
         """ Refreshes a school's country preferences, given a list of
             country IDs. If shuffled is True, then the country_ids are 
             ordered [1, 6, 2, 7, 3, 8, ...] due to double columning in
@@ -99,11 +99,21 @@ class School(models.Model):
                                                  country_id=country_id,
                                                  rank=rank)
     
-    def refresh_committee_preferences(self, committee_ids):
+    def update_committee_preferences(self, committee_ids):
         """ Refreshes a school's committee preferences. """
         self.committeepreferences.clear()
         self.committeepreferences = committee_ids
         self.save()
+
+    def update_delegate_slots(self, slot_data):
+        """ Adds, deletes, or updates delegates attached to this school's
+            delegate slots. """
+        for slot_id, delegate_data in slot_data:
+            slot = DelegateSlot.objects.get(id=slot_id)
+            if 'name' in delegate_data and 'email' in delegate_data:
+                slot.update_or_create_delegate(delegate_data)
+            else:
+                slot.delete_delegate_if_exists()
 
     def get_country_preferences(self):
         """ Returns a list of this school's country preferences,
@@ -111,6 +121,12 @@ class School(models.Model):
             not CountryPreference objects."""
         return list(self.countrypreferences.all()
                         .order_by('countrypreference__rank'))
+
+    def get_delegate_slots(self):
+        """ Returns a list of this school's delegate slots,
+            ordered by committee name. """
+        return list(DelegateSlots.objects.filter(assignment__school=self)
+                                 .order_by('assignment__committee__name'))
 
     def __unicode__(self):
         return self.name
