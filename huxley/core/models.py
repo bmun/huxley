@@ -105,6 +105,13 @@ class School(models.Model):
         self.committeepreferences = committee_ids
         self.save()
 
+    def get_country_preferences(self):
+        """ Returns a list of this school's country preferences,
+            ordered by rank. Note that these are Country objects,
+            not CountryPreference objects."""
+        return list(self.countrypreferences.all()
+                        .order_by('countrypreference__rank'))
+
     def __unicode__(self):
         return self.name
 
@@ -130,15 +137,26 @@ class CountryPreference(models.Model):
     rank    = models.PositiveSmallIntegerField()
     
     @staticmethod
-    def unshuffle(country_ids):
-        """ Returns a list of country ids in correct, unshuffled order. """
-        return country_ids[0::2] + country_ids[1::2]
+    def unshuffle(countries):
+        """ Returns a list of countries (or IDs) in correct,
+            unshuffled order. """
+        return countries[0::2] + countries[1::2]
+
+    @staticmethod
+    def shuffle(countries):
+        """ Returns a list of countries (or IDs) in shuffled order
+            for double columning, i.e. [1, 6, 2, 7, 3, 8, ...]. Before
+            shuffling, the list is padded to length 10. """
+        countries += [None]*(10 - len(countries))
+        c1, c2 = countries[:5], countries[5:]
+        return [country for pair in zip(c1, c2) for country in pair]
 
     def __unicode__(self):
         return "%s : %s (%d)" % self.school.name, self.country.name, self.rank
 
     class Meta:
         db_table = u'country_preference'
+        ordering = ['rank']
 
 
 class DelegateSlot(models.Model):

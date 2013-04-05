@@ -53,14 +53,8 @@ def preferences(request):
         
         return HttpResponse()
 
-    # Interleave the country preferences for double-columning in the template.
     countries = Country.objects.filter(special=False).order_by('name')
-    ctyprefs = list(school.countrypreferences.all()
-                    .order_by("countrypreference__rank"))
-    ctyprefs += [None]*(10 - len(ctyprefs)) # Pad the list to length 10.
-    countryprefs = [(i+1, ctyprefs[i], ctyprefs[i+5]) for i in range(0, 5)]
-    
-    # Split the committees into pairs for double-columning in the template.
+    countryprefs = CountryPreference.shuffle(school.get_country_preferences())
     committees = pairwise(Committee.objects.filter(special=True))
     committeeprefs = school.committeepreferences.all()
     

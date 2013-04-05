@@ -109,7 +109,6 @@ class RegistrationForm(forms.Form):
         school.refresh_country_preferences(country_ids)
         return True
 
-
     def add_committee_preferences(self, school):
         committee_ids = self.cleaned_data["CommitteePrefs"]
         school.refresh_committee_preferences(committee_ids)
