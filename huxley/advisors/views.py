@@ -53,16 +53,14 @@ def preferences(request):
         
         return HttpResponse()
 
-    countries = Country.objects.filter(special=False).order_by('name')
-    countryprefs = CountryPreference.shuffle(school.get_country_preferences())
-    committees = pairwise(Committee.objects.filter(special=True))
-    committeeprefs = school.committeepreferences.all()
+    context = {
+        'countries': Country.objects.filter(special=False).order_by('name'),
+        'countryprefs': CountryPreference.shuffle(school.get_country_preferences()),
+        'committees': pairwise(Committee.objects.filter(special=True)),
+        'committeeprefs': school.committeepreferences.all()
+    }
     
-    return render_template(request, 'preferences.html',
-                           {'countryprefs': countryprefs,
-                            'countries': countries,
-                            'committees': committees,
-                            'committeeprefs':committeeprefs})
+    return render_template(request, 'preferences.html', context)
 
 
 def roster(request):
