@@ -5,7 +5,6 @@ from django.contrib.auth.models import User
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponseForbidden
 from django.utils import simplejson
 
-from huxley.advisors.decorators import enforce_advisor
 from huxley.core.models import *
 from huxley.shortcuts import pairwise, render_template
 
