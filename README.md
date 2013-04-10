@@ -11,39 +11,7 @@ Huxley was initially conceived as a way to abstract away database access from cl
 Huxley's built with [Django](http://www.djangoproject.com), a web development framework written in [Python](http://www.python.org). The frontend is simple HTML and CSS, and makes heavy use of [jQuery](http://jquery.com/).
 
 ## Contribute
-We'd love for you to contribute to Huxley! Here's some stuff you'll find useful:
-
-### Getting Started
-
-**Create a Fork and Clone the Repo**
-
-Create a fork of this repository by going to the top-right of this repository page and click "Fork" (read Github's [guide](http://help.github.com/forking/) for a refresher on forking). Then, clone the repository with `git clone https://yourusername@github.com/yourusername/huxley.git`.
-
-**Install Django and Dependencies**
-
-Before proceeding, remember to set up a Python [virtualenv](http://www.virtualenv.org/en/latest/) to separate your packages from the rest of the system. Installing these packages is as simple as
-
-	pip install django
-	pip install south
-	pip install django-pipeline
-	pip install yuicompressor
-
-Before proceeding with the installation of Ruby dependencies, make sure you have [rvm](https://rvm.io/) installed. Then, create a Huxley gemset (it may already be created for you from the .rvmrc file).
-
-	rvm use --create @huxley
-	gem install sass
-
-**Initial Setup**
-
-- Set up the database schema with `python manage.py syncdb`. Make a superuser if prompted.
-- Then, update the migration history to reflect this with `python manage.py migrate --fake`.
-- Compile static assets with `python manage.py collectstatic --noinput`.
-- Run the server with `python manage.py runserver`. You'll now be able to access Huxley at localhost:8000.
-- With that, you're ready to go; start hacking!
-
-
-### Submitting a Patch
-
+We'd love for you to contribute to Huxley! Read up on how to set up Huxley locally and submit patches in [**CONTRIBUTE.md**](https://github.com/kmeht/huxley/blob/master/CONTRIBUTE.md).
 
 ### BSD License
 Copyright (c) 2011-2013, Kunal Mehta.
