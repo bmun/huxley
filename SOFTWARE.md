@@ -1,4 +1,4 @@
-Huxley Dependencies
+# Huxley Dependencies
 Huxley uses the following software:
 - [Django](http://djangoproject.org): A web development framework built in Python.
 - [South](http://south.aeracode.org): A Django utility for managing schema migrations
