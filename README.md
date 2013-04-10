@@ -13,13 +13,6 @@ Huxley's built with [Django](http://www.djangoproject.com), a web development fr
 ## Contribute
 We'd love for you to contribute to Huxley! Here's some stuff you'll find useful:
 
-### Dependencies
-Huxley has the following dependencies:
-- [South](http://south.aeracode.org): A Django utility for managing schema migrations
-- [Pipeline](http://django-pipeline.readthedocs.org/en/latest): A Django utility for managing and compressing static files
-- [SASS](http://sass-lang.com/): A CSS extension that allows for more expressive stylesheets
-- [YUI Compressor](http://yui.github.com/yuicompressor/): A utility used for compressing JavaScript and CSS files
-
 ### Getting Started
 
 **Create a Fork and Clone the Repo**
