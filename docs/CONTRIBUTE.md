@@ -19,6 +19,7 @@ Install the Python dependencies as follows:
 	pip install django
 	pip install south
 	pip install django-pipeline
+	pip install coverage
 	pip install yuicompressor
 
 Then, create a Huxley gemset (it may already be created for you from the .rvmrc file) and install SASS:

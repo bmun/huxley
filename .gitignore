@@ -28,3 +28,6 @@ will_settings.py
 
 # Fabfile
 fabfile.py
+
+# Coverage Report
+.coverage
