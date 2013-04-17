@@ -31,12 +31,21 @@ This is the proposed timeline for future development of the Huxley application. 
 	- **Country Assignments**: An officer assigns countries to each school on a per-committee basis.
 	- **Waitlist Processing**: Add and remove schools from the waitlist.
 - General
-	- **None**
+	- **TBD**
 
 ### Architecture
 
 ## BMUN 63 (2.0): March 2015
 ### Features
+- Advisors
+	- **Conference Feed**: Real-time feed of delegate activity from around the conference.
+- Secretariat
+	- **Grading Upgrade**: Expanded set of actions available, to produce content for the conference feed.
+- Officers
+	- **TBD**
+- General
+	- **TBD**
+
 ### Architecture
 
 ## BMUN 64 (3.0): March 2016
