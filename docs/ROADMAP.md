@@ -50,4 +50,13 @@ This is the proposed timeline for future development of the Huxley application. 
 
 ## BMUN 64 (3.0): March 2016
 ### Features
+- Advisors
+	- **Mobile App**: Huxley 2.0 Functionality available on iOS and/or Android.
+- Secretariat
+	- **TBD**
+- Officers
+	- **TBD**
+- General
+	- **TBD**
+
 ### Architecture
