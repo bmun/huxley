@@ -1,7 +1,7 @@
 # Huxley Development Roadmap
 This is the proposed timeline for future development of the Huxley application. Versions will be numbered based on each annual session of the BMUN conference, where 1.0 begins at BMUN 61. This roadmap will be revised and updated throughout development.
 
-## BMUN 61 (beta)
+## BMUN 61 (beta): March 2013
 ### Features
 - Advisors
 	- **Registration**: Advisors should be able to register their schools for the confeence.
@@ -18,14 +18,27 @@ This is the proposed timeline for future development of the Huxley application. 
 
 ### Architecture
 
-## BMUN 62 (1.0)
+
+## BMUN 62 (1.0): March 2014
+### Features
+- Advisors
+	- **Waitlist**: Schools that register after the deadline are placed on a waitlist.
+	- **Registration Caps**: Advisors have a limit to the min/max range of delegates they can register for the conference.
+- Secretariat
+	- **Grading**: Committee chairs can grade delegates in their committee.
+- Officers
+	- **Edit Committees/Countries**: An officer edits the countries and committees for the upcoming BMUN session.
+	- **Country Assignments**: An officer assigns countries to each school on a per-committee basis.
+	- **Waitlist Processing**: Add and remove schools from the waitlist.
+- General
+	- **None**
+
+### Architecture
+
+## BMUN 63 (2.0): March 2015
 ### Features
 ### Architecture
 
-## BMUN 63 (2.0)
-### Features
-### Architecture
-
-## BMUN 64 (3.0)
+## BMUN 64 (3.0): March 2016
 ### Features
 ### Architecture
