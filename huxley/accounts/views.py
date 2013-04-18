@@ -5,18 +5,16 @@ from django.conf import settings
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
-from django.core.validators import email_re
 from django.http import HttpResponse, HttpResponseRedirect, \
                         HttpResponseNotAllowed, HttpResponseNotFound, \
                         HttpResponseForbidden
-from django.shortcuts import render_to_response
-from django.template import RequestContext
 from django.utils import simplejson
 from django.views.decorators.http import require_POST, require_GET
 
 from huxley.accounts.forms.registration import RegistrationForm
 from huxley.accounts.forms.forgot_password import ForgotPasswordForm
 from huxley.core.models import *
+from huxley.shortcuts import render_template
 
 import re
 
@@ -53,13 +51,11 @@ def login_user(request):
             return HttpResponse(simplejson.dumps(response),
                                 mimetype='application/json')
         elif error:
-            c = RequestContext(request, {'state':error})
-            return render_to_response('auth.html', c)
+            return render_template(request, 'auth.html', {'state': error})
         else:
             return HttpResponseRedirect(reverse('index'))
-        
-    c = RequestContext(request)
-    return render_to_response('auth.html', c)
+
+    return render_template(request, 'auth.html')
 
 
 def login_as_user(request, uid):
@@ -91,9 +87,9 @@ def register(request):
     """ Registers a new user and school. """
 
     # Registration is closed.
-    return render_to_response('registration_closed.html', context_instance=RequestContext(request))
+    return render_template(request, 'registration_closed.html')
 
-    if request.POST:
+    if request.method =='POST':
         form = RegistrationForm(request.POST)
         if form.is_valid():
             new_user = form.create_user()                    
@@ -110,19 +106,19 @@ def register(request):
                                 "info@bmun.org. See you soon!\n\nBest,\n\nNishita Agarwal"
                                 "\nUSG of External Relations, BMUN 61" % new_school.name,
                                 "info@bmun.org")            
-            return render_to_response('thanks.html', context_instance=RequestContext(request))    
+            return render_template(request, 'thanks.html')    
     else:
         # Accessing for the first time
         form = RegistrationForm()
 
-    countries = Country.objects.filter(special=False).order_by('name')
-    committees = Committee.objects.filter(special=True)
+    context = {
+        'form': form,
+        'state': '',
+        'countries': Country.objects.filter(special=False).order_by('name'),
+        'committees': Committee.objects.filter(special=True)
+    }
 
-    return render_to_response('registration.html', 
-                                {'form': form, 'state':'', 
-                                 'countries': countries,
-                                 'committees': committees},
-                                context_instance=RequestContext(request))
+    return render_template(request, 'registration.html', context) 
 
 
 @require_POST
@@ -153,7 +149,6 @@ def change_password(request):
 
 def forgot_password(request):
     """ Resets a user's password. """
-    context = RequestContext(request)
     if request.method == 'POST':
         form = ForgotPasswordForm(request.POST)
         if form.is_valid():
@@ -163,13 +158,13 @@ def forgot_password(request):
                             "Your password has been reset to %s.\nThank you for using Huxley!" % (new_pass),
                             from_email="no-reply@bmun.org")
 
-            return render_to_response('reset_success.html',
-                                      context_instance=context)
+            return render_template(request, 'reset_success.html')
+
     else:
         form = ForgotPasswordForm()
 
-    return render_to_response('forgot_password.html', {"form":form},
-                              context_instance=context)
+    return render_template(request, 'forgot_password.html', {'form': form})
+
 
 @require_GET
 def validate_unique_user(request):
