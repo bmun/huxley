@@ -6,12 +6,10 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect, \
-                        HttpResponseNotAllowed, HttpResponseNotFound, \
-                        HttpResponseForbidden
+                        HttpResponseNotFound, HttpResponseForbidden
 from django.views.decorators.http import require_POST, require_GET
 
-from huxley.accounts.forms.registration import RegistrationForm
-from huxley.accounts.forms.forgot_password import ForgotPasswordForm
+from huxley.accounts.forms import ForgotPasswordForm, RegistrationForm
 from huxley.core.models import *
 from huxley.shortcuts import render_template, render_json
 
