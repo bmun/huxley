@@ -8,17 +8,15 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect, \
                         HttpResponseNotAllowed, HttpResponseNotFound, \
                         HttpResponseForbidden
-from django.utils import simplejson
 from django.views.decorators.http import require_POST, require_GET
 
 from huxley.accounts.forms.registration import RegistrationForm
 from huxley.accounts.forms.forgot_password import ForgotPasswordForm
 from huxley.core.models import *
-from huxley.shortcuts import render_template
+from huxley.shortcuts import render_template, render_json
 
 import re
 
-# Logs in a user or renders the login template.
 def login_user(request):
     """ Logs in a user or renders the login template. """
     if request.method == "POST":    
@@ -48,8 +46,8 @@ def login_user(request):
                 response = {"success": True,
                             "redirect": reverse('advisor_welcome')}
             
-            return HttpResponse(simplejson.dumps(response),
-                                mimetype='application/json')
+            return render_json(response)
+
         elif error:
             return render_template(request, 'auth.html', {'state': error})
         else:
