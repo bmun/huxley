@@ -10,6 +10,7 @@ from django.http import HttpResponse, HttpResponseRedirect, \
 from django.views.decorators.http import require_POST, require_GET
 
 from huxley.accounts.forms import ForgotPasswordForm, RegistrationForm
+from huxley.accounts.models import HuxleyUser
 from huxley.core.models import *
 from huxley.shortcuts import render_template, render_json
 
@@ -82,7 +83,7 @@ def logout_user(request):
 def register(request):
     """ Registers a new user and school. """
 
-    # Registration is closed.
+    # Registration is closed. TODO: Implement the waitlist.
     return render_template(request, 'registration_closed.html')
 
     if request.method =='POST':
@@ -120,27 +121,15 @@ def register(request):
 @require_POST
 def change_password(request):
     """ Attempts to change the user's password, or returns an error. """
-    oldpass = request.POST.get('oldpassword')
-    newpass = request.POST.get('newpassword')
-    newpass2 = request.POST.get('newpassword2')
-    
     if not request.user.is_authenticated():
         return HttpResponse(status=401)
-    elif not (oldpass or newpass or newpass2):
-        return HttpResponse("One or more fields is blank.")
-    elif newpass != newpass2:
-        return HttpResponse("New passwords must match.")
-    elif len(newpass) < 6:
-        return HttpResponse("New password must be at least 6 characters long.")
-    elif not re.match("^[A-Za-z0-9\_\.!@#\$%\^&\*\(\)~\-=\+`\?]+$", newpass):
-        return HttpResponse("New password must have only alphanumeric "
-                            "characters and symbols (above letters)")
-    elif not request.user.check_password(oldpass):
-        return HttpResponse("Incorrect password.")
-    else:
-        request.user.set_password(newpass)
-        request.user.save();
-        return HttpResponse('OK')
+
+    old = request.POST.get('oldpassword')
+    new = request.POST.get('newpassword')
+    new2 = request.POST.get('newpassword2')
+
+    success, error = HuxleyUser.change_password(request.user, old, new, new2)
+    return HttpResponse('OK') if success else HttpResponse(error)
 
 
 def forgot_password(request):
