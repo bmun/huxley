@@ -7,3 +7,8 @@ class ChangePasswordErrors:
 	PASSWORD_TOO_SHORT = 'New password must be at least 6 characters long.'
 	INVALID_CHARACTERS = 'New password can only consist of alphanumeric characters and symbols (above numbers).'
 	INCORRECT_PASSWORD = 'Incorrect password.'
+
+class AuthenticationErrors:
+	MISSING_FIELDS = "Woops! One or more of the fields is blank."
+	INVALID_LOGIN = "Sorry! The login you provided was invalid."
+	INACTIVE_ACCOUNT = "We're sorry, but your account is inactive."
