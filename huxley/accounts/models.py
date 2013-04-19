@@ -24,7 +24,6 @@ class HuxleyUser(User):
             return None, AuthenticationErrors.MISSING_FIELDS
 
         user = authenticate(username=username, password=password)
-
         if user is None:
             return None, AuthenticationErrors.INVALID_LOGIN
         if not user.is_active:
