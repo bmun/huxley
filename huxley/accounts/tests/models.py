@@ -9,7 +9,7 @@ from huxley.accounts.models import *
 
 class HuxleyUserTest(TestCase):
 
-    def test_authenticate_user(self):
+    def test_authenticate(self):
         """ Tests that the function correctly authenticates and returns a
             user, or returns an error message. """
         kunal = User.objects.create(username='kunal', email='kunal@lol.lol')

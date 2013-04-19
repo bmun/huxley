@@ -33,7 +33,7 @@ class HuxleyUser(User):
         return user, None
 
     @staticmethod
-    def login_user(request, user):
+    def login(request, user):
         """ Logs in a user and returns a redirect url based on whether they're
             an advisor or chair. """
         login(request, user)
