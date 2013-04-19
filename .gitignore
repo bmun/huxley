@@ -31,3 +31,4 @@ fabfile.py
 
 # Coverage Report
 .coverage
+htmlcov/
