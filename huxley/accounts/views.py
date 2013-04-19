@@ -49,7 +49,9 @@ def login_as_user(request, uid):
 
 
 def logout_user(request):
-    """ Logs out the current user. """
+    """ Logs out the current user. Although we'll only be supporting AJAX,
+        we're leaving the standard logout here in case of a heinous bug that
+        prevents normal logout."""
     logout(request)
     if request.is_ajax():
         return HttpResponse(reverse('login'))
@@ -81,10 +83,8 @@ def register(request):
                                 "\nUSG of External Relations, BMUN 61" % new_school.name,
                                 "info@bmun.org")            
             return render_template(request, 'thanks.html')    
-    else:
-        # Accessing for the first time
-        form = RegistrationForm()
-
+    
+    form = RegistrationForm()
     context = {
         'form': form,
         'state': '',
@@ -119,7 +119,6 @@ def forgot_password(request):
             user.email_user("Huxley Password Reset",
                             "Your password has been reset to %s.\nThank you for using Huxley!" % (new_pass),
                             from_email="no-reply@bmun.org")
-
             return render_template(request, 'reset_success.html')
 
     form = ForgotPasswordForm()
