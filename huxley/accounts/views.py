@@ -18,39 +18,16 @@ import re
 
 def login_user(request):
     """ Logs in a user or renders the login template. """
-    if request.method == "POST":    
+    if request.method == 'POST':    
         username = request.POST.get('username')
         password = request.POST.get('password')
-        user = authenticate(username=username, password=password)
-        error = ""
-        
-        # Determine if the login is valid.
-        if not (username and password):
-            error = "Woops! One or more of the fields is blank."
-        elif user is None:
-            error = "Sorry! The login you provided was invalid."
-        elif not user.is_active:
-            error = "We're sorry, but your account is inactive."
-        else:
-            login(request, user)
-        
-        # Determine the appropriate response.
-        if request.is_ajax():
-            if error:
-                response = {"success": False, "error": error}
-            elif SecretariatProfile.objects.filter(user=user).exists():
-                response = {"success": True,
-                            "redirect": reverse('chair_attendance')}
-            else:
-                response = {"success": True,
-                            "redirect": reverse('advisor_welcome')}
-            
-            return render_json(response)
 
-        elif error:
-            return render_template(request, 'auth.html', {'state': error})
-        else:
-            return HttpResponseRedirect(reverse('index'))
+        user, error = HuxleyUser.authenticate(username, password)
+        if error:
+            return render_json({'success': False, 'error': error})
+
+        redirect = HuxleyUser.login(request, user)
+        return render_json({'success': True, 'redirect': redirect})
 
     return render_template(request, 'auth.html')
 
@@ -145,9 +122,7 @@ def forgot_password(request):
 
             return render_template(request, 'reset_success.html')
 
-    else:
-        form = ForgotPasswordForm()
-
+    form = ForgotPasswordForm()
     return render_template(request, 'forgot_password.html', {'form': form})
 
 
