@@ -56,7 +56,6 @@ Install the Python dependencies as follows:
 
 Then, install SASS:
 
-	$ rvm use --create @huxley
 	$ gem install sass
 
 ### Initial Setup
