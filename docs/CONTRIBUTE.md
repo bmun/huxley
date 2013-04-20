@@ -40,10 +40,11 @@ Afterward, create a Huxley gemset (it will automatically be used when you enter 
 	$ rvm use --create @huxley
 
 ### Create a Fork and Clone
-Begin by creating a fork of this repository. Go to the top-right of this repository page and click "Fork" (read Github's [guide](http://help.github.com/forking/) for a refresher on forking). Then, clone your repository and `cd` into it:
+Begin by creating a fork of this repository. Go to the top-right of this repository page and click "Fork" (read Github's [guide](http://help.github.com/forking/) for a refresher on forking). Then, clone your repository, `cd` into it, and add this one as an upstream remote:
 
 	$ git clone git@github.com/yourusername/huxley.git
 	$ cd huxley
+	$ git remote add upstream https://github.com/kmeht/huxley.git
 
 ### Install Dependencies
 Install the Python dependencies as follows:
