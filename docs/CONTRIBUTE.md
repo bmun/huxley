@@ -79,12 +79,12 @@ With that, you're ready to go; start hacking!
 
 
 ## Submitting a Patch
-1. Create a new topic branch. Make the name short and descriptive: `git checkout -tb my-branch-name`.
+1. Create a new topic branch. Make the name short and descriptive: `git checkout -tb my-branch-name origin/master`.
 2. Make your changes! Feel free to commit often. When it comes time to submit your changes, squash them into one commit with `git rebase -i`.
-3. Update your local master branch with `git pull upstream/master master`
-4. Switch to your master branch and merge your changes with `git merge my-branch-name`.
+3. Update your local master branch with `git pull upstream/master master`.
+4. Rebase your topic branch onto master: `git rebase --onto master`
 5. Push to your remote repository: `git push`.
-6. Make a pull request to request your changes be merged into the main repository.
+6. Make a pull request to request that your changes be merged into the main repository.
 
 ### Tips
 - **Use one topic branch per feature!** This will allow you to better track where your various changes are, and will make it easier for us to merge features into the main repository.
