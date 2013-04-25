@@ -72,7 +72,7 @@ $(function() {
             $("#changepassword-container").effect(
                 "shake",
                 {direction:"left", times:2, distance:2},
-                50
+                250
             );
         });
         

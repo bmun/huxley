@@ -80,7 +80,7 @@ $(function() {
             messages: {
                 FirstName: {required: "Please enter your first name."},
                 LastName: {required: "Please enter your last name."},
-                Username: {required: "Please enter your desired username."},
+                Username: {required: "Please enter a username."},
                 Password: {required: "Please enter a password."},
                 Password2: {
                         required: "Please enter a password.",

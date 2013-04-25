@@ -15,7 +15,7 @@ $(function() {
                 $("#app").effect(
                     "shake",
                     {direction:"up", times:2, distance:2},
-                    50
+                    250
                 );
             }
         });

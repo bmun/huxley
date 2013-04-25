@@ -125,7 +125,7 @@ class School(models.Model):
     def get_delegate_slots(self):
         """ Returns a list of this school's delegate slots,
             ordered by committee name. """
-        return list(DelegateSlots.objects.filter(assignment__school=self)
+        return list(DelegateSlot.objects.filter(assignment__school=self)
                                  .order_by('assignment__committee__name'))
 
     def __unicode__(self):
