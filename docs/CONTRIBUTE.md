@@ -82,7 +82,7 @@ With that, you're ready to go; start hacking!
 1. Create a new topic branch. Make the name short and descriptive: `git checkout -tb my-branch-name origin/master`.
 2. Make your changes! Feel free to commit often. When it comes time to submit your changes, squash them into one commit with `git rebase -i`.
 3. Update your local master branch with `git pull upstream/master master`.
-4. Rebase your topic branch onto master: `git rebase --onto master`
+4. Rebase your topic branch onto master: `git rebase master`
 5. Push to your remote repository: `git push`.
 6. Make a pull request to request that your changes be merged into the main repository.
 
