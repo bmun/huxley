@@ -59,9 +59,9 @@ To edit your information, just click on any of the highlighted fields and add yo
 	<tr>
 		<td class='fieldLabel'> Program Type </td>
 		<td class="field"> 
-		<input type="radio" class="other" name="program_type" value="class" {% if school.program_type == school.TYPE_CLASS %} checked="checked" {% endif %}><label> Class </label>
+		<input type="radio" class="other" name="program_type" value="{{ school.TYPE_CLASS}}" {% if school.program_type == school.TYPE_CLASS %} checked="checked" {% endif %}><label> Class </label>
 		&nbsp;&nbsp;
-		<input type="radio" name="program_type" value="club" {% if school.program_type == school.TYPE_CLUB %} checked="checked" {% endif %} ><label> Club </label>
+		<input type="radio" name="program_type" value="{{ school.TYPE_CLUB }}" {% if school.program_type == school.TYPE_CLUB %} checked="checked" {% endif %} ><label> Club </label>
 		</td>
 	</tr>
 	<tr>
