@@ -55,6 +55,48 @@
 }
 
 .table
-{
+{   
+    width: 700px;
+    margin: 10px auto 20px auto;
+    font-size: 13px;
+    font-weight: 400;
+    border-collapse: collapse;
+    background: #eee;
+
+    thead
+    {
+        font-size: 13px;
+
+        th
+        {
+            text-align:left;
+            color: #222;
+        }
+    }
+
+    tr
+    {
+        height:28px;
+        padding: 0px;
+        border-bottom: 1px solid #ddd;
+    }
+
+    input[type=text]
+    {
+        border: none;
+        background: none;
+        height: 20px;
+        margin: 0px;
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-weight: 300;
+        font-size: 13px;
+        color: #111;
+        text-shadow: 0px 1px #fff;
+        margin: 0;
+        padding: 0;
+        width: 200px;
+    }
+
+
 
 }

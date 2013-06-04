@@ -63,39 +63,6 @@ h1{ font-weight: 300; }
     padding: 0px 2px;
 }
 
-#appnavbar{
-    width: 760px;
-    letter-spacing:1px;
-    !text-align:left;
-    font-size: 12px;
-    font-weight:500;
-    opacity: 0.7;
-}
-
-#appnavbar ul{
-    list-style: none;
-}
-
-#appnavbar li{
-    display: inline;
-    padding: 0px 10px;
-}
-
-#appnavbar li a{
-    text-decoration: none;
-    color: #777;
-    padding: 3px;
-}
-
-#appnavbar li a:hover{
-    color: #eee;
-    text-shadow: 0px 1px #444;
-}
-
-#appnavbar li a.currentpage{
-    color: #fff;
-    text-shadow: 0px 1px #444;
-}
 /* ROSTER EDIT */
 
 #rostercontainer{
@@ -106,34 +73,6 @@ h1{ font-weight: 300; }
     border-bottom: 1px solid #fff;
     margin: 0px auto;
 }
-
-#roster {
-    width: 700px;
-    margin: 10px auto 20px auto;
-    font-size: 13px;
-    font-weight: 400;
-    border-collapse: collapse;
-    background: #eee;
-}
-
-#roster thead {
-    font-size: 13px;
-}
-
-#roster th{
-    text-align:left;
-    color: #222;
-}
-
-#roster tr{
-    height:28px;
-    padding: 0px;
-    !border-top: 1px solid #fff;
-    border-bottom: 1px solid #ddd;
-    !vertical-align: middle;
-}
-
-
 
 #roster .delegatename {
     width: 200px;
@@ -153,21 +92,6 @@ h1{ font-weight: 300; }
 #roster .delegatecommittee {
     width: 75px;
     padding-left: 5px;
-}
-
-#roster input[type=text]{
-    border: none;
-    background: none;
-    height: 20px;
-    margin: 0px;
-    font-family: Helvetica, Arial, sans-serif;
-    font-weight: 300;
-    font-size: 13px;
-    color: #111;
-    text-shadow: 0px 1px #fff;
-    margin: 0;
-    padding: 0;
-    width: 200px;
 }
 
 #roster .nodelegate {
@@ -212,43 +136,6 @@ h1{ font-weight: 300; }
 
 #edit #switch .active{
     background: url(/static/img/switch_over.png) center no-repeat;
-}
-
-
-#accordion{
-    margin: 5px auto 0px auto;
-    !border-bottom: 1px solid #ddd;
-}
-
-a.acc_topic {
-	background: #eee url(/static/img/triangle-hidden.png) left center no-repeat;
-        display: block;
-        padding: 2px 0px 2px 15px;
-        text-decoration: none;
-        font-weight: 700;
-        font-size: 12px;
-        border: 1px solid #eee;
-        border-radius:3px;
-}
-
-a.acc_topic:hover {
-    background-color: #dfdfdf;
-    text-decoration: none;
-}
-
-a.acc_topic.active {
-    background: #ddd url(/static/img/triangle-open.png) left center no-repeat;
-    border: 1px solid #ccc;
-}
-
-.acc_content {
-	margin: 0px 0px 0px 0px;
-	padding: 10px 10px 10px 16px;
-	overflow: hidden;
-	font-size: 12px;
-	clear: both;
-	border-bottom: 1px solid #e6e6e6;
-	display: none;
 }
 
 /* WELCOME */
