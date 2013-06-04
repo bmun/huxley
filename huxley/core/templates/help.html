@@ -9,10 +9,10 @@ Take a look at the questions below, and <span class="bold">click on a question t
 If you can't find what you're looking for, please contact us at <a href="mailto:info@bmun.org">info@bmun.org</a> for more information.</p>
 {% for cat, questions in categories.items %}
 <h3> {{ cat }} </h3>
-<div id="accordion">
+<div class="accordion">
     {% for ques in questions %}
-    <a class="acc_topic" href="#"> {{ ques.question }}</a>
-    <div class="acc_content">
+    <a class="accordion-topic" href="#"> {{ ques.question }}</a>
+    <div class="accordion-content">
         <p> {{ ques.answer }} </p>
     </div>
     {% endfor %}

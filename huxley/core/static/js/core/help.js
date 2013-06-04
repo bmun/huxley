@@ -1,13 +1,9 @@
 $(function() {
-
-    // Accordion Stuff
-    // Tutorial courtesy of:
-    // http://www.sohtanaka.com/web-design/simple-accordion-w-css-and-jquery/
-    $(document).on("click", ".acc_topic", function(){
+    $(document).on("click", ".accordion-topic", function() {
         if ($(this).next().is(':hidden')) {
-            $(".acc_topic").removeClass('active');
-            $(".acc_topic").next().children('p').fadeOut(150);
-            $(".acc_topic").next().slideUp(200);
+            $(".accordion-topic").removeClass('active');
+            $(".accordion-topic").next().children('p').fadeOut(150);
+            $(".accordion-topic").next().slideUp(200);
             $(this).next().children('p').fadeIn(150);
             $(this).toggleClass('active').next().slideDown(200);
         } else {
