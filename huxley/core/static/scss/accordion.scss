@@ -1,0 +1,39 @@
+.accordion
+{
+    margin: 5px auto 0px;
+
+    a.accordion-topic
+    {
+        background: #eee url(/static/img/triangle-hidden.png) left center no-repeat;
+        display: block;
+        padding: 2px 0px 2px 15px;
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 12px;
+        border: 1px solid #eee;
+        border-radius:3px;
+
+        &:hover
+        {
+            background-color: #dfdfdf;
+            text-decoration: none;
+        }
+
+        &.active
+        {
+            background: #ddd url(/static/img/triangle-open.png) left center no-repeat;
+            border: 1px solid #ccc;
+        }
+    }
+
+    .accordion-content
+    {
+        margin: 0px 0px 0px 0px;
+        padding: 10px 10px 10px 16px;
+        overflow: hidden;
+        font-size: 12px;
+        clear: both;
+        border-bottom: 1px solid #e6e6e6;
+        display: none;
+    }
+}
