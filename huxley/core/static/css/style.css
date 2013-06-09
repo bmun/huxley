@@ -138,14 +138,6 @@ h1{ font-weight: 300; }
     background: url(/static/img/switch_over.png) center no-repeat;
 }
 
-#changepassword label.success {
-	color: #00CC00;
-	font-size: 11px;
-    font-weight: 700;
-    padding: 7px 0px 5px 20px;
-    background: url(/static/img/tick.png) left center no-repeat;
-}
-
 /* PREFERENCES */
 #preferences {
     width: 740px;
