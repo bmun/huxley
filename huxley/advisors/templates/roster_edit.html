@@ -13,8 +13,8 @@ When you're done, <span class="bold">don't forget to save your changes!</span> <
 <div class="tablemenu header">
     Don't forget to <input class="saved button" type="submit" value="SAVE!"/>
 </div>
-<div id="rostercontainer">
-<table id="roster">
+<div id="rostercontainer" class="table-container">
+<table id="roster" class="table">
     <thead>
         <tr>
             <th></th>
@@ -27,9 +27,8 @@ When you're done, <span class="bold">don't forget to save your changes!</span> <
     {% if slots %}
         {% for slot in slots %}
         <tr class="rosterrow" slotid="{{ slot.id }}">
-            <td id="edit">
-                <div class="delegateoption button" id="delete"></div>
-                <!--<div class="delegateoption button" id="switch"></div>-->
+            <td class="edit">
+                <div class="delegateoption button delete"></div>
             </td>
             <td class="delegatename">
                 {% if slot.delegate %}
