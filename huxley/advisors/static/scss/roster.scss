@@ -1,0 +1,33 @@
+#roster
+{
+	.nodelegate
+	{
+		font-weight: 400;
+    	text-decoration: none;
+
+    	&:hover { text-decoration: none; }
+	}
+
+	input[type=text].empty { color: #999; }
+
+	.edit
+	{
+		
+		.delegateoption
+		{
+			display: block;
+    		float:left;
+    		margin: 0;
+    		padding: 5px 5px 5px 0px;
+		}
+
+		.delete
+		{
+			width: 10px;
+    		height: 10px;
+    		background: url(/static/img/delete.png) center no-repeat;
+
+    		&:hover { background: url(/static/img/delete_over.png) center no-repeat; }
+		}
+	}
+}
