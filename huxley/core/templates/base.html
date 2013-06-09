@@ -10,6 +10,7 @@
     {% endblock css %}
         
     {% block js %}
+        {% compressed_js 'jquery' %}
         {% compressed_js 'huxley' %}
         <script src="http://code.jquery.com/jquery-migrate-1.1.1.js"></script>
         <script type="text/javascript">
