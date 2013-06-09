@@ -54,6 +54,16 @@
     }
 }
 
+.table-container
+{
+    width: 740px;
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    border-top: 1px solid #fff;
+    border-bottom: 1px solid #fff;
+    margin: 0px auto;
+}
+
 .table
 {   
     width: 700px;
@@ -97,6 +107,8 @@
         width: 200px;
     }
 
-
-
+    &.highlight-cells td.field:hover
+    {
+        background: #E0E0E0;
+    }
 }
