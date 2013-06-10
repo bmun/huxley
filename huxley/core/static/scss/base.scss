@@ -1,0 +1,23 @@
+* { margin: 0px; padding: 0px; }
+
+html { overflow-y: scroll; }
+
+body
+{
+    background: #f0f0f0 url(/static/img/unga3.jpg) center top no-repeat fixed;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    text-align: center;
+
+    h1 { font-weight: 300; }
+}
+
+#app{ display: none; margin: 0px auto; }
+#wrapper{ width: 800px; margin: 0px auto 50px; }
+
+.rounded{ border-radius: 6px 6px 6px 6px; -moz-border-radius: 6px 6px 6px 6px; -webkit-border-radius: 6px 6px 6px 6px; behavior: url(/static/htc/PIE.htc) }
+.rounded-small{ border-radius: 3px 3px 3px 3px; -moz-border-radius: 3px 3px 3px 3px; -webkit-border-radius: 3px 3px 3px 3px; behavior: url(/static/htc/PIE.htc) }
+.rounded-top{ border-radius: 6px 6px 0px 0px; -moz-border-radius: 6px 6px 0px 0px; -webkit-border-radius: 6px 6px 0px 0px; behavior: url(/static/htc/PIE.htc) }
+.rounded-bottom{ border-radius: 0px 0px 6px 6px; -moz-border-radius: 0px 0px 6px 6px; -webkit-border-radius: 0px 0px 6px 6px; behavior: url(/static/htc/PIE.htc) }
+.transparent{ -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=90)"; /* IE8 */ filter: alpha(opacity=90); /* IE6/7 */ -moz-opacity: 0.9; /* Netscape? */ -khtml-opacity: 0.9; /* Safari 1.x */ opacity: 0.9; /* Not shitty browsers */ }
+.bold{font-weight: 700;}
+.ie-layout{ zoom: 1; }
