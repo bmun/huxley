@@ -11,15 +11,17 @@ label.error
 
 .content
 {
+    width: 740px;
     padding: 15px;
     margin: 0px auto 40px auto;
     background: #eee;
     font-size: 12px;
     font-weight: 400;
+    line-height: 18px;
     color: #555;
+    text-align: left;
     text-shadow: 0px 1px #fff;
     border-top: 1px solid #fff;
-    text-align: left;
 
     a
     {
@@ -28,6 +30,24 @@ label.error
         color: #333;
 
         &:hover { text-decoration: underline; }
+    }
+
+    h2 { padding-bottom: 10px; }
+
+    h3
+    {
+        color: #666;
+        margin-top: 15px;
+        padding-left: 2px;
+        border-bottom: 1px solid #ddd;
+        font-weight:500;
+        font-size: 11px;
+    }
+
+    img
+    {
+        margin-bottom: -1px;
+        padding: 0px 2px;
     }
 
     &.transparent
