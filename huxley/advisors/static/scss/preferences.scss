@@ -1,0 +1,16 @@
+#preferences
+{
+	td.fieldLabel
+	{
+		width: 250px;
+    	border-right: #f00;
+	}
+
+	.other { margin-left: 10px; }
+
+	select { min-width: 120px; }
+
+	label, input { margin: 0 5px; }
+
+	input[type=checkbox] { margin: 0 10px 0 0; }
+}
