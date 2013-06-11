@@ -71,15 +71,11 @@ class RegistrationForm(forms.Form):
     # Run these only if the form is valid.
     
     def create_user(self):
-        try:
-            new_user = User.objects.create_user(self.cleaned_data['Username'], self.cleaned_data['PrimaryEmail'], self.cleaned_data['Password'])
-            new_user.first_name = self.cleaned_data['FirstName']
-            new_user.last_name = self.cleaned_data['LastName']
-            new_user.save()
-            return new_user
-        except:
-            print "> ERROR WHILE CREATING USER. REMEMBER TO VALIDATE FIRST."
-            return None
+        new_user = User.objects.create_user(self.cleaned_data['Username'], self.cleaned_data['PrimaryEmail'], self.cleaned_data['Password'])
+        new_user.first_name = self.cleaned_data['FirstName']
+        new_user.last_name = self.cleaned_data['LastName']
+        new_user.save()
+        return new_user
 
 
     def create_school(self):
@@ -115,13 +111,9 @@ class RegistrationForm(forms.Form):
         return True
 
     def create_advisor_profile(self, user, school):
-        try:
-            new_profile = AdvisorProfile.objects.create(user=user, school=school)
-            new_profile.save()
-            return new_profile
-        except:
-            print "> ERROR WHILE MAKING ADVISOR PROFILE."
-            return None
+        new_profile = AdvisorProfile.objects.create(user=user, school=school)
+        new_profile.save()
+        return new_profile
 
 
     # ===== Validation ===============================================================================
