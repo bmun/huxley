@@ -74,14 +74,15 @@ def register(request):
             form.add_committee_preferences(new_school)
             form.create_advisor_profile(new_user, new_school)
             
-            new_user.email_user("Thanks for registering for BMUN 61!",
-                                "We're looking forward to seeing %s at BMUN 61. "
-                                "You can find information on deadlines and fees at "
-                                "http://bmun.org/bmun/timeline/. If you have any "
-                                "more questions, please feel free to email me at "
-                                "info@bmun.org. See you soon!\n\nBest,\n\nNishita Agarwal"
-                                "\nUSG of External Relations, BMUN 61" % new_school.name,
-                                "info@bmun.org")            
+            if not settings.DEBUG:
+                new_user.email_user("Thanks for registering for BMUN 61!",
+                                    "We're looking forward to seeing %s at BMUN 61. "
+                                    "You can find information on deadlines and fees at "
+                                    "http://bmun.org/bmun/timeline/. If you have any "
+                                    "more questions, please feel free to email me at "
+                                    "info@bmun.org. See you soon!\n\nBest,\n\nNishita Agarwal"
+                                    "\nUSG of External Relations, BMUN 61" % new_school.name,
+                                    "info@bmun.org")            
             return render_template(request, 'thanks.html')    
     
     form = RegistrationForm()
