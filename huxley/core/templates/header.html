@@ -1,0 +1,17 @@
+<div id="headerwrapper" class="transparent rounded-bottom">
+    <div id="header">
+        {% block header %}
+            <ul id="right">
+                <li>Logged in as <span class="advisorfirstname bold">{{ user.first_name }}</span>&nbsp;<span class="advisorlastname bold">{{ user.last_name }}</span></li>
+                <li><a id="changepassword-link" href="#">Change Password</a></li>
+                <li><a id="logout" class="topbarbutton" href="/logout/">LOGOUT</a><li>
+            </ul>
+            <div id="left">
+            <strong>HUXLEY</strong> &middot; A Conference Management Tool by BMUN &middot; <span class="usertype">for 
+            {% block usertype %}
+            {% endblock usertype %}
+            </span>
+            </div>
+        {% endblock header %}
+    </div>
+</div>
