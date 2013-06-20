@@ -3,57 +3,11 @@
 {% block title %} Index Template {% endblock title %}
 
 {% block body %}
-<div id="headerwrapper" class="transparent rounded-bottom">
-    <div id="header">
-        {% block header %}
-            <ul id="right">
-                <li>Logged in as <span class="advisorfirstname bold">{{ user.first_name }}</span>&nbsp;<span class="advisorlastname bold">{{ user.last_name }}</span></li>
-                <li><a id="changepassword-link" href="#">Change Password</a></li>
-                <li><a id="logout" class="topbarbutton" href="/logout/">LOGOUT</a><li>
-            </ul>
-            <div id="left">
-            <strong>HUXLEY</strong> &middot; A Conference Management Tool by BMUN &middot; <span class="usertype">for 
-            {% block usertype %}
-            {% endblock usertype %}
-            </span>
-            </div>
-        {% endblock header %}
-    </div>
-</div>
-<div id="changepassword-container" class="change-password rounded-bottom transparent">
-    <form id="changepassword" action="{% url 'change_password' %}">
-        {% csrf_token %}
-        <div class="input">
-            <label for="oldpassword">Current Password</label>
-            <input type="password" class="rounded-small" name="oldpassword" value="">
-        </div>
-        <div class="input">
-            <label for="newpassword">New Password</label>
-            <input type="password" class="rounded-small" name="newpassword" value="">
-        </div>
-        <div class="input">
-            <label for="newpassword">New Password (again)</label>
-            <input type="password" class="rounded-small" name="newpassword2" value="">
-        </div>
-        <div>
-            <button type="submit" class="rounded-small topbarbutton">Change Password!</button>
-        </div>
-        <div id="message">
-            <label class="error"> Woops! </label>
-        </div>
-    </form>
-</div>
-<div id="splash" class="rounded transparent">
-    {% block splash %}
-        <noscript>
-            <p>Hi there, {{ user.first_name }}! Thanks for your interest in using the Huxley.
-            Unfortunately, it seems that the browser you're using doesn't support JavaScript, which Huxley needs to run. If you're on a school
-            computer, it's likely that your administrator has disabled JavaScript. Please access Huxley with a browser with JavaScript enabled (
-            we recommend Google Chrome, it's awesome). See you soon!</p>
-            <a id="logout" href="/logout/">&larr; LOGOUT</a>
-        </noscript>
-    {% endblock splash %}
-</div>
+
+{% include "header.html" %}
+{% include "change-password.html" %}
+{% include "splash.html" %}
+
 <div id="app" class="application">
     <div id="appnavbar" class="titlebar rounded-top">
         {% block navmenu %}
@@ -70,36 +24,4 @@
     </div>
 </div>
 
-<div id = "modal" style = "display:none">
-	<table>
-		<tr>
-			<th> Error </th>
-		</tr>
-		<tr>
-			<td><p> You seem to have lost your way! Let me guide you. Just press "return". </p></td>
-		</tr>
-		<tr>
-			<td><a href = "/#/advisor/welcome" class="simplemodal-close"> Return </a></td>
-		</tr>
-		<tr>
-			<a href="http://www.prototypejs.org/ ">prototype</a>.
-		</tr>
-	</table>
-</div>
-
-<div id='container' style = "display:none">
-	<div id='logo'>
-		<h1>Simple<span>Modal</span></h1>
-		<span class='title'>A Modal Dialog Framework Plugin for jQuery</span>
-	</div>
-	<div id='content'>
-		<div id='osx-modal'>
-			<h3>Something seems to have gone wrong.</h3><br>
-			<p>Just hit the escape key to return to the previous page</p>
-			<p>And if you would like to let us know that you encountered a problem, report a bug on our <a href="http://www.huxley.bmun.org/bugs/ ">error page</a>.</p>
-			
-		</div>
-	
-		
-</div>
 {% endblock body %}
