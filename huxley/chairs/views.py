@@ -17,7 +17,7 @@ def grading(request):
 
 def attendance(request):
     """ Display a page allowing the chair to take attendance. """
-    committee = profile.committee
+    committee = request.profile.committee
     if request.method == 'POST':
         delegate_slots = simplejson.loads(request.POST['delegate_slots'])
         for slot_data in delegate_slots:

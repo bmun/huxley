@@ -65,7 +65,7 @@ tables from the models, bring South's migration history up to speed, and load so
 
 	$ python manage.py syncdb # Make a superuser if prompted.
 	$ python manage.py migrate --fake
-	$ python manage.py loaddata countries committees
+	$ python manage.py loaddata countries committees advisor chair
 
 We use Pipeline to collect, compile, and compress our static assets. It simply hooks into Django's `collectstatic` management command:
 
