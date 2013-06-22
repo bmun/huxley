@@ -40,7 +40,7 @@ Afterward, create a Huxley gemset (it will automatically be used when you enter 
 	$ rvm use --create @huxley
 
 ### Create a Fork and Clone
-Begin by creating a fork of this repository. Go to the top-right of this repository page and click "Fork" (read Github's [guide](http://help.github.com/forking/) for a refresher on forking). Then, clone your repository, `cd` into it, and add this one as an upstream remote:
+Begin by creating a fork of this repository. Go to the top-right of this repository page and click "Fork" (read Github's [guide](http://help.github.com/forking/) for a refresher on forking. If you're new to GitHub, remember to [set up SSH keys](https://help.github.com/articles/generating-ssh-keys) as well). Then, clone your repository, `cd` into it, and add this one as an upstream remote:
 
 	$ git clone git@github.com/yourusername/huxley.git
 	$ cd huxley
