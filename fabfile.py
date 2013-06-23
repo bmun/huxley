@@ -20,7 +20,7 @@ def review():
     local('git push origin %s' % branch_name)
     
     print "Issuing pull request..."
-    local('hub pull-request')
+    local('hub pull-request -b kmeht:master')
 
 def finish():
     branch_name = local('git rev-parse --abbrev-ref HEAD', capture=True)
