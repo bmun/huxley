@@ -116,6 +116,8 @@ AUTHENTICATION_BACKENDS = (
     'huxley.accounts.backends.LoginAsUserBackend'
 )
 
+AUTH_USER_MODEL = 'accounts.HuxleyUser'
+
 ROOT_URLCONF = 'huxley.urls'
 
 LOGIN_URL = '/login/'

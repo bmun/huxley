@@ -1,7 +1,7 @@
 [
   {
     "pk": 3, 
-    "model": "auth.user", 
+    "model": "accounts.huxleyuser", 
     "fields": {
       "username": "mikejones69", 
       "first_name": "Mike", 
@@ -14,7 +14,9 @@
       "user_permissions": [], 
       "password": "pbkdf2_sha256$10000$7G4kqZHdooUJ$irha9EHEH5SsIAr0AijxSZ9vTIMy2L9Y6gVStEyY0Es=", 
       "email": "mikejones69@bmun.org", 
-      "date_joined": "2013-06-09T16:24:11.178"
+      "date_joined": "2013-06-09T16:24:11.178",
+      "user_type": 1,
+      "school": 2
     }
   },
   {
@@ -45,14 +47,6 @@
       "times_attended": 0, 
       "secondary_name": "", 
       "registration_fee": "50"
-    }
-  },
-  {
-    "pk": 1, 
-    "model": "core.advisorprofile", 
-    "fields": {
-      "school": 2, 
-      "user": 3
     }
   }
 ]

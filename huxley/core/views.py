@@ -12,7 +12,7 @@ def index(request):
     context = RequestContext(request)
     if not request.user.is_authenticated():
         return render_to_response('auth.html', context)
-    elif SecretariatProfile.objects.filter(user=request.user).exists():
+    elif request.user.is_chair():
         return render_to_response('secretariat_index.html', context)
-    else:
+    elif request.user.is_advisor():
         return render_to_response('advisor_index.html', context)
