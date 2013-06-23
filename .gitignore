@@ -26,9 +26,6 @@ will_settings.py
 # CSV Files
 *.csv
 
-# Fabfile
-fabfile.py
-
 # Coverage Report
 .coverage
 htmlcov/
