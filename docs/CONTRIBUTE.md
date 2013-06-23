@@ -39,6 +39,11 @@ Afterward, create a Huxley gemset (it will automatically be used when you enter 
 
 	$ rvm use --create @huxley
 
+### Hub
+Hub is a command line interface to GitHub. Install it using Homebrew, with
+
+	$ brew install hub
+
 ### Create a Fork and Clone
 Begin by creating a fork of this repository. Go to the top-right of this repository page and click "Fork" (read Github's [guide](http://help.github.com/forking/) for a refresher on forking. If you're new to GitHub, remember to [set up SSH keys](https://help.github.com/articles/generating-ssh-keys) as well). Then, clone your repository, `cd` into it, and add this one as an upstream remote:
 
@@ -54,6 +59,7 @@ Install the Python dependencies as follows (remember to activate the `huxley` vi
 	$ pip install django-pipeline
 	$ pip install coverage
 	$ pip install yuicompressor
+	$ pip install fabric
 
 Then, install SASS:
 
@@ -79,11 +85,11 @@ With that, you're ready to go; start hacking!
 
 
 ## Submitting a Patch
-1. Create a new topic branch. Make the name short and descriptive: `git checkout -tb my-branch-name`.
-2. Make your changes! Feel free to commit often. When it comes time to submit your changes, squash them into one commit with `git rebase -i`.
-3. Update your local master branch with `git pull upstream/master --rebase`.
-4. Push the branch to your remote repository: `git push -u origin`.
-5. Make a pull request to request that your changes be merged into the main repository.
+1. Create a new topic branch. Make the name short and descriptive: `fab feature:my-branch-name`.
+2. Make your changes! Feel free to commit often.
+3. Update your topic branch with `fab update`.
+4. Request code review of your changes with `fab review`.
+5. After your pull request has been merged or closed, clean up your branches with `fab finish`.
 
 ### Tips
 - **Use one topic branch per feature!** This will allow you to better track where your various changes are, and will make it easier for us to merge features into the main repository.
