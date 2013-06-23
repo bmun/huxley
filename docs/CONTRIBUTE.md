@@ -52,13 +52,11 @@ Begin by creating a fork of this repository. Go to the top-right of this reposit
 	$ git remote add upstream https://github.com/kmeht/huxley.git
 
 ### Install Dependencies
-Install the Python dependencies with the provided requirements.txt (located in this directory) (remember to activate the `huxley` virtualenv!):
+Install the Python dependencies with the provided `requirements.txt` (remember to activate the `huxley` virtualenv!):
 
 	$ pip install -r requirements.txt
 
-This should install the necessary versions of Django, Django-pipeline, the Python fabric module, south, coverage, and yuicompressor.
-
-Then, install SASS:
+This will install the python dependences in your virtualenv. Then, install SASS:
 
 	$ gem install sass
 
