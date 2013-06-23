@@ -31,7 +31,7 @@ From now on, whenever you're going to work on Huxley, just remember to switch to
 	...hack...
 	$ deactivate # After you're done
 
-**RVM**: Installing RVM consists of just running the following command in terminal:
+**RVM**: Installing RVM consists of just running the following command in terminal (make sure you have the XCode Command Line Tools installed):
 
 	$ \curl -#L https://get.rvm.io | bash -s stable --autolibs=3 --ruby
 
