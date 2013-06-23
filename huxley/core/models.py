@@ -163,12 +163,9 @@ class CountryPreference(models.Model):
         """ Returns a list of countries (or IDs) in shuffled order
             for double columning, i.e. [1, 6, 2, 7, 3, 8, ...]. Before
             shuffling, the list is padded to length 10. """
-        """if len(countries) < 10:"""
         countries += [None]*(10 - len(countries))
         c1, c2 = countries[:5], countries[5:]
-        print( zip(c1, c2) )
         return zip(c1, c2)
-        """return [country for pair in zip(c1, c2) for country in pair]"""
 
     def __unicode__(self):
         return "%s : %s (%d)" % self.school.name, self.country.name, self.rank
