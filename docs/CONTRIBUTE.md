@@ -88,7 +88,8 @@ With that, you're ready to go; start hacking!
 1. Create a new topic branch. Make the name short and descriptive: `fab feature:my-branch-name`.
 2. Make your changes! Feel free to commit often.
 3. Update your topic branch with `fab update`.
-4. Request code review of your changes with `fab review`.
+4. Request code review of your changes with `fab submit`.
+5. Make changes and resubmit your code with `fab revise`.
 5. After your pull request has been merged or closed, clean up your branches with `fab finish`.
 
 ### Tips
