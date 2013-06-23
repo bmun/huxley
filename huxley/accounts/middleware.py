@@ -8,7 +8,7 @@ from huxley.shortcuts import render_template
 
 class EnforceUserTypeMiddleware:
     """ Enforces that users accessing URLs in the advisors or chairs app
-    are advisors or chairs, respectively. """
+    are advisors or chairs, respectively."""
     def process_request(self, request):
         app_name = resolve(request.path_info).app_name
         

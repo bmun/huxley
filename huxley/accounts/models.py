@@ -73,3 +73,4 @@ class HuxleyUser(AbstractUser):
 
     class Meta:
         db_table = 'huxley_user'
+        verbose_name = 'user'
