@@ -1,7 +1,6 @@
 # Copyright (c) 2011-2013 Kunal Mehta. All rights reserved.
 # Use of this source code is governed by a BSD License found in README.md.
 
-from django.contrib.auth.models import User
 from django.db import models
 
 class Conference(models.Model):
@@ -273,24 +272,3 @@ class HelpQuestion(models.Model):
     class Meta:
         db_table = u'help_question'
 
-
-class AdvisorProfile(models.Model):
-    user   = models.OneToOneField(User, related_name='advisor_profile')
-    school = models.ForeignKey(School, related_name='advisor_profile')
-    
-    def __unicode__(self):
-        return self.user.username
-
-    class Meta:
-        db_table = u'advisor_profile'
-
-
-class SecretariatProfile(models.Model):
-    user      = models.OneToOneField(User, related_name='secretariat_profile')
-    committee = models.ForeignKey(Committee, related_name='secretariat_profile')
-
-    def __unicode__(self):
-        return self.user.username
-    
-    class Meta:
-        db_table = u'secretariat_profile'

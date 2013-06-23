@@ -1,7 +1,6 @@
 # Copyright (c) 2011-2013 Kunal Mehta. All rights reserved.
 # Use of this source code is governed by a BSD License found in README.md.
 
-from django.contrib.auth.models import User
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponseForbidden
 from django.utils import simplejson
 
@@ -11,7 +10,7 @@ from huxley.shortcuts import pairwise, render_template
 
 def welcome(request):
     """ Display and/or edit the advisor's profile information. """
-    school = request.profile.school
+    school = request.user.school
     if request.method == 'GET':
         return render_template(request, 'welcome.html', {'school': school})
 
@@ -42,7 +41,7 @@ def welcome(request):
 def preferences(request):
     """ Display and/or update the advisor's country and committee
         preferences. """
-    school = request.profile.school
+    school = request.user.school
 
     if request.method == 'POST':
         country_ids = request.POST.getlist('CountryPrefs')
@@ -65,7 +64,7 @@ def preferences(request):
 def roster(request):
     """ Display the advisor's editable roster, or update information as
         necessary. """
-    school = request.profile.school
+    school = request.user.school
     if request.method == 'POST':
         slot_data = simplejson.loads(request.POST['delegates'])
         school.update_delegate_slots(slot_data)
@@ -78,7 +77,7 @@ def roster(request):
 
 def attendance(request):
     """ Display the advisor's attendance list. """
-    context = {'delegate_slots': request.profile.school.get_delegate_slots()}
+    context = {'delegate_slots': request.user.school.get_delegate_slots()}
     return render_template(request, 'check-attendance.html', context)
 
 

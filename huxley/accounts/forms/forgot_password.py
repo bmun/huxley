@@ -2,8 +2,8 @@
 # Use of this source code is governed by a BSD License found in README.md.
 
 from django import forms
-from django.contrib.auth.models import User
 
+from huxley.accounts.models import HuxleyUser
 from huxley.core.models import *
 
 import re
@@ -18,16 +18,16 @@ class ForgotPasswordForm(forms.Form):
         email = self.cleaned_data.get("email")
 
         if username and email:
-            return User.objects.get(username=username, email=email)
+            return HuxleyUser.objects.get(username=username, email=email)
         elif username:
-            return User.objects.get(username=username)
+            return HuxleyUser.objects.get(username=username)
         else:
-            return User.objects.get(email=email)
+            return HuxleyUser.objects.get(email=email)
 
 
     def reset_pass(self, user):
         """ Note: Remember to validate first! """
-        new_pass = User.objects.make_random_password(length=10)
+        new_pass = HuxleyUser.objects.make_random_password(length=10)
         user.set_password(new_pass)
         user.save()
         return new_pass
@@ -50,11 +50,11 @@ class ForgotPasswordForm(forms.Form):
         # Make sure user exists
         try:
             if username and email:
-                User.objects.get(username=username, email=email)
+                HuxleyUser.objects.get(username=username, email=email)
             elif username:
-                User.objects.get(username=username)
+                HuxleyUser.objects.get(username=username)
             else:
-                User.objects.get(email=email)
+                HuxleyUser.objects.get(email=email)
         except:
             message = "Invalid username and/or email. Please try again."
             if "all" in self._errors:

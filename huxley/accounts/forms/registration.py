@@ -2,8 +2,8 @@
 # Use of this source code is governed by a BSD License found in README.md.
 
 from django import forms
-from django.contrib.auth.models import User
 
+from huxley.accounts.models import HuxleyUser
 from huxley.core.models import *
 
 from datetime import date
@@ -70,10 +70,11 @@ class RegistrationForm(forms.Form):
     # ===== DB Functions ====================================================================
     # Run these only if the form is valid.
     
-    def create_user(self):
-        new_user = User.objects.create_user(self.cleaned_data['Username'], self.cleaned_data['PrimaryEmail'], self.cleaned_data['Password'])
+    def create_user(self, school):
+        new_user = HuxleyUser.objects.create_user(self.cleaned_data['Username'], self.cleaned_data['PrimaryEmail'], self.cleaned_data['Password'])
         new_user.first_name = self.cleaned_data['FirstName']
         new_user.last_name = self.cleaned_data['LastName']
+        new_user.school = school
         new_user.save()
         return new_user
 
@@ -110,12 +111,6 @@ class RegistrationForm(forms.Form):
         school.update_committee_preferences(committee_ids)
         return True
 
-    def create_advisor_profile(self, user, school):
-        new_profile = AdvisorProfile.objects.create(user=user, school=school)
-        new_profile.save()
-        return new_profile
-
-
     # ===== Validation ===============================================================================
     # Format: clean_<field>
     def clean_SchoolName(self):
@@ -131,7 +126,7 @@ class RegistrationForm(forms.Form):
     def clean_Username(self):
         # Check for uniqueness
         username = self.cleaned_data['Username']
-        user_exists = User.objects.filter(username=username).exists()
+        user_exists = HuxleyUser.objects.filter(username=username).exists()
         if user_exists:
             raise forms.ValidationError("Username '%s' is already in use. Please choose another one." % (username))
         # Make sure the characters are valid

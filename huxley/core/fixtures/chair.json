@@ -1,9 +1,9 @@
 [
   {
     "pk": 4, 
-    "model": "auth.user", 
+    "model": "accounts.huxleyuser", 
     "fields": {
-      "username": "kwest", 
+      "username": "kanyewest", 
       "first_name": "Kanye", 
       "last_name": "West", 
       "is_active": true, 
@@ -14,15 +14,9 @@
       "user_permissions": [], 
       "password": "pbkdf2_sha256$10000$u2q2DeOnknUw$u2JVoH9ngZFmbuqVIy/6NuivH5e9EoVdJ3wm+tQKQS0=", 
       "email": "kanyewest@bmun.org", 
-      "date_joined": "2013-06-09T16:24:11.178"
-    }
-  },
-  {
-    "pk": 2, 
-    "model": "core.secretariatprofile", 
-    "fields": {
-      "committee": 3, 
-      "user": 4
+      "date_joined": "2013-06-09T16:24:11.178",
+      "user_type": 2,
+      "committee": 3
     }
   }
 ]

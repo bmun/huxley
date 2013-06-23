@@ -3,7 +3,6 @@
 
 from django.conf import settings
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect, \
                         HttpResponseNotFound, HttpResponseForbidden
@@ -38,13 +37,13 @@ def login_as_user(request, uid):
         if not request.user.is_superuser:
             return HttpResponseForbidden()
 
-        username = User.objects.get(id=uid).username
+        username = HuxleyUser.objects.get(id=uid).username
         user = authenticate(username=username, password=settings.ADMIN_SECRET)
         login(request, user)
         
         return HttpResponseRedirect(reverse('index'))
 
-    except User.DoesNotExist:
+    except HuxleyUser.DoesNotExist:
         return HttpResponseNotFound()
 
 
@@ -67,12 +66,11 @@ def register(request):
 
     if request.method =='POST':
         form = RegistrationForm(request.POST)
-        if form.is_valid():
-            new_user = form.create_user()                    
+        if form.is_valid():                   
             new_school = form.create_school()
+            new_user = form.create_user(new_school) 
             form.add_country_preferences(new_school)
             form.add_committee_preferences(new_school)
-            form.create_advisor_profile(new_user, new_school)
             
             if not settings.DEBUG:
                 new_user.email_user("Thanks for registering for BMUN 61!",
@@ -106,7 +104,7 @@ def change_password(request):
     new = request.POST.get('newpassword')
     new2 = request.POST.get('newpassword2')
 
-    success, error = HuxleyUser.change_password(request.user, old, new, new2)
+    success, error = request.user.change_password(old, new, new2)
     return HttpResponse('OK') if success else HttpResponse(error)
 
 
@@ -130,7 +128,7 @@ def forgot_password(request):
 def validate_unique_user(request):
     """ Checks that a potential username is unique. """
     username = request.GET['username']
-    if User.objects.filter(username=username).exists():
+    if HuxleyUser.objects.filter(username=username).exists():
         return HttpResponse(status=406)
     else:
         return HttpResponse(status=200)

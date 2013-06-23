@@ -1,7 +1,6 @@
 # Copyright (c) 2011-2013 Kunal Mehta. All rights reserved.
 # Use of this source code is governed by a BSD License found in README.md.
 
-from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from django.utils import simplejson
@@ -17,7 +16,7 @@ def grading(request):
 
 def attendance(request):
     """ Display a page allowing the chair to take attendance. """
-    committee = request.profile.committee
+    committee = request.user.committee
     if request.method == 'POST':
         delegate_slots = simplejson.loads(request.POST['delegate_slots'])
         for slot_data in delegate_slots:
