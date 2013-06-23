@@ -165,7 +165,7 @@ class CountryPreference(models.Model):
             shuffling, the list is padded to length 10. """
         countries += [None]*(10 - len(countries))
         c1, c2 = countries[:5], countries[5:]
-        return [country for pair in zip(c1, c2) for country in pair]
+        return zip(c1, c2)
 
     def __unicode__(self):
         return "%s : %s (%d)" % self.school.name, self.country.name, self.rank

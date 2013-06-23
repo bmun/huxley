@@ -22,14 +22,13 @@
 	</tr>
 	{% for row in countryprefs %}
 		<tr>
-			<td class="field">
-			<label>{{ row.0|leading_zeros:"2" }}</label>
+			<td class="field"><label>{{ forloop.counter|leading_zeros:"2" }}</label>
 			<select class="select" name="CountryPrefs" tabindex="{{ row.0 }}">
 				{% if not row.1 %}
 					<option value="0">Select a Country</option>
 				{% endif %}
 				{% for country in countries %}
-					{% if country == row.1 %}
+					{% if country == row.0 %}
 						<option value="{{ country.id }}" selected="selected">{{ country }}</option>
 					{% else %}
 						<option value="{{ country.id }}">{{ country }}</option>
@@ -37,14 +36,13 @@
 				{% endfor %}
 			</select>
 			</td>
-			<td class="field">
-			<label>{{ row.0|add:"5"|leading_zeros:"2" }}</label>
+			<td class="field"><label>{{ forloop.counter|add:"5"|leading_zeros:"2" }}</label>
 			<select class="select" name="CountryPrefs" tabindex="{{ row.0 }}">
 				{% if not row.2 %}
 					<option value="0">Select a Country</option>
 				{% endif %}
 				{% for country in countries %}
-					{% if country == row.2 %}
+					{% if country == row.1 %}
 						<option value="{{ country.id }}" selected="selected">{{ country }}</option>
 					{% else %}
 						<option value="{{ country.id }}">{{ country }}</option>
