@@ -28,7 +28,7 @@ var ContentManager = {
     
     // Fades the initial content into view.
     onPageLoad: function() {
-        if(!window.location.pathname) {
+        if(window.location.pathname == '/') {
             History.pushState({}, "", $("html").data("default-path")); 
         } else {
             $(window).trigger('statechange');
