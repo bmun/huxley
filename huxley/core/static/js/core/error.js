@@ -63,10 +63,9 @@ var Error = {
         Error._container.fadeOut(150, function() {
             $.modal.close();
             if ($(".content").hasClass('content-loading')) {
-                window.history.back();
+                History.back();
             } else if ($("#app").is(":hidden")) {
-                window.location.href = $("html").data("default-hash");
-                $(window).trigger('hashchange');
+                History.pushState({}, "", $("html").data("default-path"));
             }
         });
     }
