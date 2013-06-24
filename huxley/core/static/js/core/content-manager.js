@@ -1,7 +1,3 @@
-function hashify(path) {
-    return "/#" + path;
-}
-
 var ContentManager = {
     
     advisorManagers: [],
@@ -9,15 +5,16 @@ var ContentManager = {
     
     // Initializer function.
     init: function() {
-        $(window).bind('hashchange', function() {
+        History.Adapter.bind(window, 'statechange', function(){
+            var state = History.getState();
             var handler = $("#app").is(":hidden")
                 ? ContentManager.loadInitContent
                 : ContentManager.loadNewContent;
-            handler(window.location.hash.substring(1));
+            handler(state.url);
         });
         
         $(document).on("click", "a.nav", function() {
-            window.location.hash = $(this).attr('href');
+            History.pushState({}, $(this).text(), $(this).attr("href"));
             return false;
         });
         
@@ -31,26 +28,24 @@ var ContentManager = {
     
     // Fades the initial content into view.
     onPageLoad: function() {
-        if (!window.location.hash) {
-            window.location.href = (window.location.pathname === "/")
-                ? $("html").data("default-hash")
-                : hashify(window.location.pathname);
+        if(!window.location.pathname) {
+            History.pushState({}, "", $("html").data("default-path")); 
         } else {
-            $(window).trigger('hashchange');
+            $(window).trigger('statechange');
         }
     },
     
     // Loads initial content into the application content container.
-    loadInitContent: function(hash, data) {
+    loadInitContent: function(path, data) {
         ContentManager.initializeManagers();
         if ($("#splash").is(":visible")) {
             $.ajax({
-                url: hash,
+                url: path,
                 success: function(response) {
                     // Replace the title and content.
                     $("title").html(response.match(/<title>(.*?)<\/title>/)[1]);
                     $("#capsule").replaceWith($("#capsule", $(response)));
-                    $("#appnavbar a[href='" + window.location.hash.slice(1) + "']")
+                    $("#appnavbar a[href='" + window.location.pathname + "']")
                       .addClass('currentpage');
                     // Fade in.
                     $("#splash").delay(250).fadeOut(250, function() {
@@ -65,7 +60,7 @@ var ContentManager = {
             });
         } else {
             $.ajax({
-                url: hash, 
+                url: path, 
                 success: function(response) {
                   // Replace the title and content.
                   $("title").html(response.match(/<title>(.*?)<\/title>/)[1]);
@@ -79,14 +74,14 @@ var ContentManager = {
     },
     
     // Loads new content into the application content container.
-    loadNewContent: function(hash, data) {
+    loadNewContent: function(path, data) {
         $(".content").css('height', $(".content").height() + "px");
         $(".content #contentwrapper").fadeOut(150, function() {
             $(".content").addClass("loading");
             var method = data ? "POST" : "GET";
             $.ajax({
                 type: method,
-                url: hash,
+                url: path,
                 data: data,
                 success: function(data) {
                     // Replace the title and content.
@@ -119,7 +114,7 @@ var ContentManager = {
         $("#container").fadeOut(150, function() {
             $("#container").load(redirect + " #appcontainer", null, function() {
                 $("#container").fadeIn(fadetime, function() {
-                    window.location.href = "/#" + redirect;
+                    History.pushState({}, "", redirect);
                 });
             });
         });
