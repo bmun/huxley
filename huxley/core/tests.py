@@ -92,19 +92,6 @@ class AssignmentTest(TestCase):
 
 class CountryPreferenceTest(TestCase):
 
-    def test_shuffle(self):
-        """ Tests that the function correctly shuffles the list and pads it
-            to length 10. """
-        unshuffled = [1, 2, 3, 4, 5, 6]
-        correct = [1, 6, 2, None, 3, None, 4, None, 5, None]
-        self.assertEquals(correct, CountryPreference.shuffle(unshuffled))
-
-    def test_unshuffle(self):
-        """ Tests that the function correctly unshuffles the list. """
-        shuffled = [1, 4, 2, 5, 3, 6]
-        correct = [1, 2, 3, 4, 5, 6]
-        self.assertEquals(correct, CountryPreference.unshuffle(shuffled))
-
     def test_unicode(self):
         """ Tests that the object's __unicode__ outputs correctly. """
         pass
