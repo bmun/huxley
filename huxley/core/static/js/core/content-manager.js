@@ -1,8 +1,5 @@
 var ContentManager = {
-    
-    advisorManagers: [],
-    chairManagers: [],
-    
+
     // Initializer function.
     init: function() {
         History.Adapter.bind(window, 'statechange', function(){
@@ -37,7 +34,6 @@ var ContentManager = {
     
     // Loads initial content into the application content container.
     loadInitContent: function(path, data) {
-        ContentManager.initializeManagers();
         if ($("#splash").is(":visible")) {
             $.ajax({
                 url: path,
@@ -118,24 +114,6 @@ var ContentManager = {
                 });
             });
         });
-    },
-    
-    // Initializes all the managers in the advisorManagers array.
-    initializeManagers: function() {
-        var managers;
-        type = $("span.usertype span").attr("usertype");
-        
-        if (type == "advisor") {
-            managers = ContentManager.advisorManagers;
-        } else if (type == "chair") {
-            managers = ContentManager.chairManagers;
-        } else {
-            managers = [];
-        }
-        
-        for (var i = 0; i < managers.length; i++) {
-            managers[i].init();
-        }
     }
 };
 
