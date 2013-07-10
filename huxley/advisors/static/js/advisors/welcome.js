@@ -98,7 +98,7 @@ var WelcomeManager = {
                 },
             });
         }
-        return false;	
+        return false;   
     },
 
     toString: function(){
@@ -107,6 +107,10 @@ var WelcomeManager = {
 }
 
 ContentManager.advisorManagers.push(WelcomeManager);
+
+$(document).on("change", function() {
+            WelcomeManager.setUnsaved();
+        });
 
 $(function() {
 
@@ -119,3 +123,4 @@ $(function() {
         $(id).removeClass('good').addClass('negative');
     }
 });
+
