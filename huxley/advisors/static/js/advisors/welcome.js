@@ -107,7 +107,7 @@ var WelcomeManager = {
 }
 
 $(function() {
-    WelcomeManager.init()
+    WelcomeManager.init();
 
     // TODO: MOVE TO UI ----------------------------------------
     function setGreen(id) {
