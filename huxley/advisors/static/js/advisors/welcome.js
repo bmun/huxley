@@ -106,9 +106,8 @@ var WelcomeManager = {
     }
 }
 
-ContentManager.advisorManagers.push(WelcomeManager);
-
 $(function() {
+    WelcomeManager.init()
 
     // TODO: MOVE TO UI ----------------------------------------
     function setGreen(id) {
