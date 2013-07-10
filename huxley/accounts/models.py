@@ -28,6 +28,12 @@ class HuxleyUser(AbstractUser):
     def is_chair(self):
         return self.user_type == self.TYPE_CHAIR
 
+    def default_path(self):
+        if self.is_advisor():
+            return reverse('advisor_welcome')
+        elif self.is_chair():
+            return reverse('chair_attendance')
+
     @staticmethod
     def authenticate(username, password):
         """ Attempts to authenticate a user, given a username and password.
@@ -48,10 +54,7 @@ class HuxleyUser(AbstractUser):
         """ Logs in a user and returns a redirect url based on whether they're
         an advisor or chair. """
         login(request, user)
-        if user.is_chair():
-            return reverse('chair_attendance')
-        elif user.is_advisor():
-            return reverse('advisor_welcome')
+        return user.default_path()
 
     def change_password(self, old, new1, new2):
         """ Attempts to change the given user's password. Returns a 2-tuple

@@ -13,6 +13,8 @@ ADMIN_SECRET = 'OVERRIDE THIS IN PRODUCTION'
 SECRET_KEY = '+42lz(cp=6t#dzpkah^chn760l)rmu$p&f-#7ggsde2l3%fm-i'
 MANAGERS = ADMINS
 
+SITE_ID = 1
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
@@ -54,6 +56,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.messages.context_processors.messages',
     'huxley.core.context_processors.conference',
     'huxley.core.context_processors.user_type',
+    'huxley.core.context_processors.default_path',
 )
 
 TEMPLATE_LOADERS = (
