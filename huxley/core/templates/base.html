@@ -13,7 +13,7 @@
         {% compressed_js 'jquery' %}
         {% compressed_js 'huxley' %}
         <script type="text/javascript">
-          $("html").data("default-path", "/#{% block default-path %}{% endblock default-path %}"); 
+          $("html").data("default-path", "{{ default_path }}"); 
         </script>
     {% endblock js %}
 </head>
