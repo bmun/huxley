@@ -20,8 +20,7 @@ def submit():
     update()
     _push_to_remote_topic_branch()
     
-    print "Issuing pull request..."
-    local('hub pull-request -b kmeht:master')
+    print "Push to remote branch successful. Go to github.com to issue a pull request."
 
 def revise():
     _push_to_remote_topic_branch()
