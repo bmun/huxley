@@ -5,10 +5,8 @@ We're really excited for you to start contributing to Huxley. Below are the deta
 
 ## Getting Started
 
-### Virtualenv and RVM
-Virtualenv and RVM separate your project's Python and Ruby modules from the rest of your system to prevent conflicts.
-
-**Virtualenv**: First, we'll start out with virtualenv (and a useful utility built on top of it, virtualenvwrapper).
+### Virtualenv
+Virtualenv separates your project's Python modules from the rest of your system to prevent conflicts. We'll install virtualenv and a useful utility built on top of it, virtualenvwrapper.
 
 	$ sudo pip install virtualenv
 	$ sudo pip install virtualenvwrapper
@@ -31,14 +29,6 @@ From now on, whenever you're going to work on Huxley, just remember to switch to
 	...hack...
 	$ deactivate # After you're done
 
-**RVM**: Installing RVM consists of just running the following command in terminal (make sure you have the XCode Command Line Tools installed):
-
-	$ \curl -#L https://get.rvm.io | bash -s stable --autolibs=3 --ruby
-
-Afterward, create a Huxley gemset (it will automatically be used when you enter your huxley directory, unlike virtualenv):
-
-	$ rvm use --create @huxley
-
 ### Hub
 Hub is a command line interface to GitHub. Install it using Homebrew, with
 
@@ -55,10 +45,6 @@ Begin by creating a fork of this repository. Go to the top-right of this reposit
 Install the Python dependencies with the provided `requirements.txt` (remember to activate the `huxley` virtualenv!):
 
 	$ pip install -r requirements.txt
-
-This will install the python dependences in your virtualenv. Then, install SASS:
-
-	$ gem install sass
 
 ### Initial Setup
 The first is to prepare the database. Huxley uses South, a schema migration management tool for Django. We'll generate our database
