@@ -2,7 +2,7 @@
 # Use of this source code is governed by a BSD License found in README.md.
 
 PIPELINE_COMPILERS = (
-  'pipeline.compilers.sass.SASSCompiler',
+  'huxley.core.compilers.pyscss.PySCSSCompiler',
 )
 
 PIPELINE_CSS_COMPRESSOR = None

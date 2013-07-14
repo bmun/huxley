@@ -1,3 +1,6 @@
+# Copyright (c) 2011-2013 Kunal Mehta. All rights reserved.
+# Use of this source code is governed by a BSD License found in README.md.
+
 from fabric.api import run, local
 from fabric.contrib.console import confirm
 
@@ -47,3 +50,8 @@ def _push_to_remote_topic_branch():
     print "Pushing to remote topic branch..."
     branch_name = local('git rev-parse --abbrev-ref HEAD', capture=True)
     local('git push origin %s' % branch_name)
+
+
+def static():
+    local('python manage.py collectstatic --noinput')
+
