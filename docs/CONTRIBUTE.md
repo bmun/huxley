@@ -5,6 +5,14 @@ We're really excited for you to start contributing to Huxley. Below are the deta
 
 ## Getting Started
 
+Begin by creating a fork of this repository. Go to the top-right of this repository page and click "Fork" (read Github's [guide](http://help.github.com/forking/) for a refresher on forking. If you're new to GitHub, remember to [set up SSH keys](https://help.github.com/articles/generating-ssh-keys) as well).
+
+Then, if you're developing on Mac OS X, execute the following command:
+
+	$ \curl -L https://raw.github.com/bmun/huxley/master/scripts/setup.sh | bash
+
+And that's it! Everything wil be taken care of automatically. **This script assumes that you have virtualenv and virtualenv wrapper installed.** The following steps are given for reference, in case you'd like to customize your setup.
+
 ### Virtualenv
 Virtualenv separates your project's Python modules from the rest of your system to prevent conflicts. We'll install virtualenv and a useful utility built on top of it, virtualenvwrapper.
 
