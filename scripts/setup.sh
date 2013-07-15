@@ -10,7 +10,7 @@ function check_dependency {
         echo_red >&2 "$2 not found. Get it by running \`sudo pip install $2\`. Aborting setup."
         exit 1
     else
-    	echo_green "$2 found."
+        echo_green "$2 found."
     fi
 }
 
