@@ -155,7 +155,12 @@ class CountryPreference(models.Model):
     def unshuffle(countries):
         """ Returns a list of countries (or IDs) in correct,
             unshuffled order. """
-        return countries[0::2] + countries[1::2]
+        clist = []
+        for double in countries:
+            clist += double[0]
+        for double in countries:
+            clist += double[1]
+        return clist
 
     @staticmethod
     def shuffle(countries):
