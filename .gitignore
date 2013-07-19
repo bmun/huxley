@@ -1,31 +1,17 @@
-# Extraneous Files
 .DS_Store
 .idea
 .sass-cache
-huxley/*/static/scss/*.css
-
-# Compiled Python Files
+*~
 *.pyc
+*.csv
 
-# Local Database
-cmsdb
-huxdb
 *.db
 huxley/huxley.db
 
-# Static Directory
 huxley/static/*
+huxley/*/static/scss/*.css
 
-# Local Settings File
-local_settings.py
-will_settings.py
+huxley/settings/local.py
 
-# Temporary Files
-*~
-
-# CSV Files
-*.csv
-
-# Coverage Report
 .coverage
 htmlcov/
