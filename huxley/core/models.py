@@ -153,9 +153,10 @@ class CountryPreference(models.Model):
     
     @staticmethod
     def unshuffle(countries):
-        """ Returns a list of countries (or IDs) in correct,
+        """ Given a list of 2-tuples, Returns a list of countries (or IDs) in correct,
             unshuffled order. """
-        return countries[0::2] + countries[1::2]
+        countries = [list(t) for t in zip(*countries)]
+        return filter(None, countries[0] + countries[1])
 
     @staticmethod
     def shuffle(countries):
