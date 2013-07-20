@@ -20,18 +20,6 @@ PIPELINE_CSS = {
 }
 
 PIPELINE_JS = {
-    'jquery': {
-        'source_filenames': (
-            'js/jquery/*.js',
-        ),
-        'output_filename': 'js/jquery.js'
-    },
-    'jquery-plugins': {
-        'source_filenames': (
-            'js/jquery-plugins/*.js',
-        ),
-        'output_filename': 'js/jquery-plugins.js'
-    },
     'huxley': {
         'source_filenames': (
             'js/core/*.js',
