@@ -10,7 +10,13 @@
     {% endblock css %}
         
     {% block js %}
+        <script type="text/javascript" src="/static/js/jquery/jquery-2.0.0.min.js" charset="utf-8"></script>
+        <script type="text/javascript" src="/static/js/jquery-plugins/jquery-ui-1.10.2.custom.min.js" charset="utf-8"></script>
+        <script   type="text/javascript" src="/static/js/jquery-plugins/jquery.history.js" charset="utf-8"></script>
+        <script   type="text/javascript" src="/static/js/jquery-plugins/jquery.simplemodal.1.4.4.min.js" charset="utf-8"></script>
+        <script   type="text/javascript" src="/static/js/jquery-plugins/jquery.validate.min.js" charset="utf-8"></script>
         {% compressed_js 'jquery' %}
+        {% compressed_js 'jquery-plugins' %}
         {% compressed_js 'huxley' %}
         <script type="text/javascript">
           $("html").data("default-path", "{{ default_path }}"); 
