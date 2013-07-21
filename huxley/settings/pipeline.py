@@ -13,7 +13,9 @@ PIPELINE_CSS = {
     'huxley': {
         'source_filenames': (
             'css/*.css',
-            'scss/*.scss',
+            'scss/core/*.scss',
+            'scss/advisors/*.scss',
+            'scss/chairs/*.scss',
         ),
         'output_filename': 'css/huxley.css'
     },
