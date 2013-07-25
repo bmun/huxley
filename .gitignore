@@ -9,7 +9,7 @@
 huxley/huxley.db
 
 huxley/static/*
-huxley/*/static/scss/*.css
+huxley/*/static/scss/*/*.css
 
 huxley/settings/local.py
 
