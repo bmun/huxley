@@ -27,13 +27,13 @@ class RegistrationForm(forms.Form):
     Password2 = forms.CharField(label="Password (again)", widget=forms.PasswordInput(attrs={'class':'third required pass1 validChars'}))
 
     # School Information
-    us_or_int = forms.ChoiceField(label="Where is your school?", widget=forms.RadioSelect(attrs={'class':'int_check', 'name':'us_or_int'}), choices=(('us', 'United States'), ('international', 'International')), initial="us")
+    us_or_int = forms.ChoiceField(label="Where is your school?", widget=forms.RadioSelect(attrs={'class':'international-check', 'name':'us_or_int'}), choices=(('us', 'United States'), ('international', 'International')), initial="us")
     SchoolName = forms.CharField(label="Official School Name", widget=forms.TextInput(attrs={'class':'full required'}))
     SchoolAddress = forms.CharField(label="Address", widget=forms.TextInput(attrs={'class':'full required'}))
     SchoolCity = forms.CharField(label="City", widget=forms.TextInput(attrs={'class':'third required'}))
     SchoolState = forms.CharField(label="State", widget=forms.TextInput(attrs={'class':'third required'}), required=False)
     SchoolZip = forms.CharField(label="Zip", widget=forms.TextInput(attrs={'class':'third required zip'}), min_length=5)
-    SchoolCountry = forms.CharField(label="Country", widget=forms.TextInput(attrs={'class':'showhide'}), required=False)
+    SchoolCountry = forms.CharField(label="Country", widget=forms.TextInput(attrs={'class':'third', 'disabled': True, 'placeholder': 'United States of America'}), required=False)
 
     # Program Information
     program_type = forms.ChoiceField(label="What category best describes your program?", widget=forms.RadioSelect, choices=School.PROGRAM_TYPE_OPTIONS, initial=School.TYPE_CLUB)
@@ -204,4 +204,3 @@ class RegistrationForm(forms.Form):
                 
         # Always return cleaned_data
         return cleaned_data
-

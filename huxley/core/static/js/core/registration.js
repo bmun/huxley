@@ -2,15 +2,19 @@ $(function() {
 
     // Show/hide Country Field based on American/International
     // Change validation rules too
-    $(document).on("click", "#content-outer .int_check", function() {
+    $(document).on("click", "#registration .international-check", function() {
         if ($(this).val() == "international") {
-            $(".showhide").slideDown();
-            $(".showhide").addClass('required');
+            $('#country-row input')
+                .attr('disabled', false)
+                .attr('placeholder', null)
+                .addClass('required');
             $(".phoneVal").removeClass('phoneNum').addClass('intPhone');
             $("#id_SchoolState").removeClass('required');
         } else {
-            $(".showhide").slideUp();
-            $(".showhide").removeClass('required');
+            $('#country-row input')
+                .attr('disabled', true)
+                .attr('placeholder', 'United States of America')
+                .removeClass('required');
             $(".phoneVal").removeClass('intPhone').addClass('phoneNum');
             $("#id_SchoolState").addClass('required');
         }
