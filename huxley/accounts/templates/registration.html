@@ -93,13 +93,14 @@
 		{% endfor %}
 		</div>
 	</div>
-	<br>
-	<br>
-	<span class="showhide"> {{ form.SchoolCountry.label }} </span><br> 
-	{{ form.SchoolCountry }}
-	{% for error in form.errors.SchoolCountry %}
-		<label class="error"> {{ error|escape }} </label>
-	{% endfor %}
+	<div class="row" id="country-row">
+		<div class="block">
+			<span> {{ form.SchoolCountry.label }} </span> {{ form.SchoolCountry }}
+			{% for error in form.errors.SchoolCountry %}
+				<label class="error"> {{ error|escape }} </label>
+			{% endfor %}
+		</div>
+	</div>
 </fieldset>
 
 <fieldset>
