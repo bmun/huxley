@@ -5,9 +5,6 @@
 *.pyc
 *.csv
 
-manage.py
-fabfile.py
-
 *.db
 huxley/huxley.db
 
