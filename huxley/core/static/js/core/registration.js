@@ -6,14 +6,14 @@ $(function() {
         if ($(this).val() == "international") {
             $('#country-row input')
                 .attr('disabled', false)
-                .attr('placeholder', null)
+                .attr('value', null)
                 .addClass('required');
             $(".phoneVal").removeClass('phoneNum').addClass('intPhone');
             $("#id_SchoolState").removeClass('required');
         } else {
             $('#country-row input')
                 .attr('disabled', true)
-                .attr('placeholder', 'United States of America')
+                .attr('value', 'United States of America')
                 .removeClass('required');
             $(".phoneVal").removeClass('intPhone').addClass('phoneNum');
             $("#id_SchoolState").addClass('required');
