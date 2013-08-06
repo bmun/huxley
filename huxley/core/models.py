@@ -60,6 +60,7 @@ class School(models.Model):
     city                = models.CharField(max_length=128) 
     state               = models.CharField(max_length=16) 
     zip_code            = models.CharField(max_length=16) 
+    country             = models.CharField(max_length=64)
     primary_name        = models.CharField(max_length=128) 
     primary_email       = models.EmailField() 
     primary_phone       = models.CharField(max_length=32) 

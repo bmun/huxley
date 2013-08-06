@@ -273,7 +273,7 @@ class RegistrationTest(TestCase):
 
         # Test international school creation
         params["SchoolName"] = "GirlsGenerationInternational"
-        params["SchoolCountry"] = 10
+        params["SchoolCountry"] = '10'
         params["us_or_int"] = "international"
         form = RegistrationForm(params)
         self.assertTrue(form.is_valid())
@@ -284,7 +284,7 @@ class RegistrationTest(TestCase):
         self.assertEqual(school.address, params["SchoolAddress"])
         self.assertEqual(school.city, params["SchoolCity"])
         self.assertEqual(school.zip_code, str(params["SchoolZip"]))
-        #self.assertEqual(school.country, params["SchoolCountry"]) TODO
+        self.assertEqual(school.country, params["SchoolCountry"]) 
         self.assertEqual(school.primary_name, params["PrimaryName"])
         self.assertEqual(school.primary_email, params["PrimaryEmail"])
         self.assertEqual(school.primary_phone, params["PrimaryPhone"])

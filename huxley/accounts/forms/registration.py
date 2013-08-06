@@ -33,7 +33,7 @@ class RegistrationForm(forms.Form):
     SchoolCity = forms.CharField(label="City", widget=forms.TextInput(attrs={'class':'third required'}))
     SchoolState = forms.CharField(label="State", widget=forms.TextInput(attrs={'class':'third required'}), required=False)
     SchoolZip = forms.CharField(label="Zip", widget=forms.TextInput(attrs={'class':'third required zip'}), min_length=5)
-    SchoolCountry = forms.CharField(label="Country", widget=forms.TextInput(attrs={'class':'third', 'disabled': True, 'placeholder': 'United States of America'}), required=False)
+    SchoolCountry = forms.CharField(label="Country", widget=forms.TextInput(attrs={'class':'third'}), required=False)
 
     # Program Information
     program_type = forms.ChoiceField(label="What category best describes your program?", widget=forms.RadioSelect, choices=School.PROGRAM_TYPE_OPTIONS, initial=School.TYPE_CLUB)
@@ -86,6 +86,7 @@ class RegistrationForm(forms.Form):
                                            city=self.cleaned_data['SchoolCity'],
                                            state=self.cleaned_data['SchoolState'],
                                            zip_code=self.cleaned_data['SchoolZip'],
+                                           country=self.cleaned_data['SchoolCountry'],
                                            primary_name = self.cleaned_data['PrimaryName'],
                                            primary_email = self.cleaned_data['PrimaryEmail'],
                                            primary_phone = self.cleaned_data['PrimaryPhone'],
