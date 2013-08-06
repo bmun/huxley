@@ -54,6 +54,12 @@ Install the Python dependencies with the provided `requirements.txt` (remember t
 
 	$ pip install -r requirements.txt
 
+### Management Files
+A couple of management files need to be in the repository root directory. They're actually in the scripts directory, so we'll symlink them:
+	
+	$ sudo ln -s $(pwd)/scripts/manage/manage.py manage.py
+	$ sudo ln -s $(pwd)/scripts/manage/fabfile.py fabfile.py
+
 ### Initial Setup
 The first is to prepare the database. Huxley uses South, a schema migration management tool for Django. We'll generate our database
 tables from the models, bring South's migration history up to speed, and load some test data:

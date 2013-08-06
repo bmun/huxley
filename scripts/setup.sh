@@ -33,6 +33,10 @@ mkvirtualenv huxley
 workon huxley
 pip install -r requirements.txt
 
+# Link management files.
+sudo ln -s scripts/manage/manage.py manage.py
+sudo ln -s scripts/manage/fabfile.py fabfile.py
+
 # Initialize the database.
 python manage.py syncdb # Make a superuser if prompted.
 python manage.py migrate --fake
