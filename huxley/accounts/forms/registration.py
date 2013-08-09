@@ -1,4 +1,4 @@
-# Copyright (c) 2011-2013 Kunal Mehta. All rights reserved.
+    # Copyright (c) 2011-2013 Kunal Mehta. All rights reserved.
 # Use of this source code is governed by a BSD License found in README.md.
 
 from django import forms
@@ -33,7 +33,7 @@ class RegistrationForm(forms.Form):
     SchoolCity = forms.CharField(label="City", widget=forms.TextInput(attrs={'class':'third required'}))
     SchoolState = forms.CharField(label="State", widget=forms.TextInput(attrs={'class':'third required'}), required=False)
     SchoolZip = forms.CharField(label="Zip", widget=forms.TextInput(attrs={'class':'third required zip'}), min_length=5)
-    SchoolCountry = forms.CharField(label="Country", widget=forms.TextInput(attrs={'class':'third'}), required=False)
+    SchoolCountry = forms.CharField(label="Country", initial='United States of America', widget=forms.TextInput(attrs={'class':'third', 'disabled': True, 'placeholder': 'United States of America'}), required=False)
 
     # Program Information
     program_type = forms.ChoiceField(label="What category best describes your program?", widget=forms.RadioSelect, choices=School.PROGRAM_TYPE_OPTIONS, initial=School.TYPE_CLUB)
