@@ -38,7 +38,7 @@ From now on, whenever you're going to work on Huxley, just remember to switch to
 	$ deactivate # After you're done
 
 ### Hub
-Hub is a command line interface to GitHub. Install it using Homebrew, with
+Hub is a command line interface to GitHub. It's optional for Huxley, but it certainly makes issuing pull requests easier. Install it using Homebrew, with
 
 	$ brew install hub
 
