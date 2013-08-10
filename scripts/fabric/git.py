@@ -1,7 +1,7 @@
 # Copyright (c) 2011-2013 Kunal Mehta. All rights reserved.
 # Use of this source code is governed by a BSD License found in README.md.
 
-from fabric.api import hide, local
+from fabric.api import hide, local, settings
 from fabric.colors import red
 
 def master_guard(fn):
@@ -37,8 +37,13 @@ def pull(rebase=True):
     rebase_flag = '--rebase' if rebase else ''
     local('git pull %s' % rebase_flag)
 
+def hub_installed():
+    with hide('running', 'warnings', 'stdout', 'stderr'), settings(warn_only=True):
+        return local('hub').return_code != 127
+
 @master_guard
-def push(branch_name):
+def push(branch_name=None):
+    branch_name = branch_name or current_branch()
     local('git push origin %s --force' % branch_name)
 
 @master_guard
