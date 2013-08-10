@@ -1,7 +1,7 @@
 # Copyright (c) 2011-2013 Kunal Mehta. All rights reserved.
 # Use of this source code is governed by a BSD License found in README.md.
 
-from fabric.api import run, local
+from fabric.api import local
 from fabric.colors import green, red, yellow
 from fabric.contrib.console import confirm
 from scripts.fabric import git
@@ -20,11 +20,13 @@ def submit():
     first_submission = not git.remote_branch_exists()
     git.pull()
     git.push()
-    if first_submission:
-        print green('Push to remote branch successful. '
-                    'Go to github.com to issue a pull request.')
-    else:
+    if not first_submission:
         print green('Pull request sucessfully updated.')
+    elif git.hub_installed():
+        local('hub pull-request -b bmun:master')
+        print green('Pull request successfully issued.')
+    else:
+        print green('Branch successfully pushed. Go to GitHub to issue a pull request.')
 
 def finish():
     prompt = yellow('This will delete your local and remote topic branches. '
