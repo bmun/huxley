@@ -13,23 +13,37 @@ class RegistrationTest(TestCase):
 
     fixtures = ['countries.json', 'committees.json']
 
-    valid_params = {"FirstName": "Taeyeon", "LastName": "Kim", 
-                    "Username": "taengoo", "Password": "girlsgeneration", 
-                    "Password2": "girlsgeneration", "us_or_int":"us",
-                    "SchoolName": "SNSD", "SchoolAddress": "123 SNSD Way",
-                    "SchoolCity": "Seoul", "SchoolState": "Seoul",
-                    "SchoolZip":12345, "program_type": School.TYPE_CLUB, 
-                    "howmany":9, "MinDelegation":9, "MaxDelegation":9,
-                    "PrimaryName":"Manager", "PrimaryEmail":"kimtaeyon@snsd.com",
-                    "PrimaryPhone":"(123) 435-7543", "CountryPref1": 1,
-                    "CountryPref2": 2, "CountryPref3": 3, 
-                    "CountryPref4": 4, "CountryPref5": 5,
-                    "CountryPref6": 6, "CountryPref7": 7, 
-                    "CountryPref8": 8, "CountryPref9": 9,
-                    "CountryPref10": 10}
+    valid_params = {'first_name': 'Taeyeon',
+                    'last_name': 'Kim', 
+                    'username': 'taengoo',
+                    'password': 'girlsgeneration', 
+                    'password2': 'girlsgeneration',
+                    'school_location': School.LOCATION_USA,
+                    'school_name': 'SNSD',
+                    'school_address': '123 SNSD Way',
+                    'school_city': 'Seoul',
+                    'school_state': 'Seoul',
+                    'school_zip':12345,
+                    'program_type': School.TYPE_CLUB, 
+                    'times_attended':9,
+                    'min_delegation_size':9,
+                    'max_delegation_size':9,
+                    'primary_name':'Manager',
+                    'primary_email':'kimtaeyon@snsd.com',
+                    'primary_phone':'(123) 435-7543',
+                    'country_pref1': 1,
+                    'country_pref2': 2,
+                    'country_pref3': 3, 
+                    'country_pref4': 4,
+                    'country_pref5': 5,
+                    'country_pref6': 6,
+                    'country_pref7': 7, 
+                    'country_pref8': 8,
+                    'country_pref9': 9,
+                    'country_pref10': 10}
 
     def test_sanity(self):
-        """ Makes sure a form with all valid data works. """
+        """ Make sure a form with all valid data works. """
         params = self.valid_params.copy()
 
         form = RegistrationForm(params)
@@ -39,46 +53,44 @@ class RegistrationTest(TestCase):
     def test_required(self):
         """ Make sure all fields except for the optional ones are present
             in the parameters. """
-        params = {"FirstName":""} # Empty string is not valid
+        params = {'first_name':'', 'school_location': School.LOCATION_USA} # Empty string is not valid
         form = RegistrationForm(params)
 
         valid = form.is_valid()
         self.assertFalse(valid)
 
-        # Check that all required fields are in form.errors.
         for name, field in form.fields.items():
-            if field.required:
+            if field.required and name != 'school_location':
                 self.assertIn(name, form.errors)
+            elif name == 'school_state':
+                # State is only required if the school is in the US
+                self.assertIn('school_state', form.errors)
             else:
-                if name == "SchoolState":
-                    # State is only required if the school is in the US
-                    self.assertIn("SchoolState", form.errors)
-                else:
-                    self.assertNotIn(name, form.errors)
+                self.assertNotIn(name, form.errors)
 
 
-    def test_username_len(self):
+    def test_username_length(self):
         """ Tests for minimum username length. """
 
         # Too short (len: 3)
         params = self.valid_params.copy()
-        params["Username"] = "abc" # Too short, so invalid
+        params['username'] = 'abc' # Too short, so invalid
 
         form = RegistrationForm(params)
         self.assertFalse(form.is_valid())
 
         self.assertEqual(len(form.errors), 1)
-        self.assertIn("Username", form.errors)
+        self.assertIn('username', form.errors)
         # Make sure it's the only error (i.e. no other validation errors for usernames)
-        self.assertItemsEqual(form.errors["Username"], ["Ensure this value has at least 4 characters (it has 3)."])
+        self.assertItemsEqual(form.errors['username'], ['Ensure this value has at least 4 characters (it has 3).'])
 
         # Valid username, since it's at least 4 characters long
-        params["Username"] = "abcd"
+        params['username'] = 'abcd'
         form = RegistrationForm(params)
         self.assertTrue(form.is_valid())
 
         # Valid username, since it's at least 4 characters long
-        params["Username"] = "abcdesdfdsfasdf"
+        params['username'] = 'abcdesdfdsfasdf'
         form = RegistrationForm(params)
         self.assertTrue(form.is_valid())
 
@@ -88,34 +100,34 @@ class RegistrationTest(TestCase):
 
         # All invalid characters
         params = self.valid_params.copy()
-        params["Username"] = "!@#$"
+        params['username'] = '!@#$'
         form = RegistrationForm(params)
         self.assertFalse(form.is_valid())
 
         self.assertEqual(len(form.errors), 1)
-        self.assertIn("Username", form.errors)
-        self.assertItemsEqual(form.errors["Username"], ["Usernames must be alphanumeric, underscores, and/or hyphens only."])
+        self.assertIn('username', form.errors)
+        self.assertItemsEqual(form.errors['username'], ['Usernames must be alphanumeric, underscores, and/or hyphens only.'])
 
         # Mixture of valid and invalid characters
-        params["Username"] = "abc!defgh"
+        params['username'] = 'abc!defgh'
         form = RegistrationForm(params)
         self.assertFalse(form.is_valid())
 
         self.assertEqual(len(form.errors), 1)
-        self.assertIn("Username", form.errors)
-        self.assertItemsEqual(form.errors["Username"], ["Usernames must be alphanumeric, underscores, and/or hyphens only."])
+        self.assertIn('username', form.errors)
+        self.assertItemsEqual(form.errors['username'], ['Usernames must be alphanumeric, underscores, and/or hyphens only.'])
 
         # Looks valid but isn't
-        params["Username"] = "Rick Astley"
+        params['username'] = 'Rick Astley'
         form = RegistrationForm(params)
         self.assertFalse(form.is_valid())
 
         self.assertEqual(len(form.errors), 1)
-        self.assertIn("Username", form.errors)
-        self.assertItemsEqual(form.errors["Username"], ["Usernames must be alphanumeric, underscores, and/or hyphens only."])        
+        self.assertIn('username', form.errors)
+        self.assertItemsEqual(form.errors['username'], ['Usernames must be alphanumeric, underscores, and/or hyphens only.'])        
 
         # Just valid characters
-        params["Username"] = "RickAstley"
+        params['username'] = 'RickAstley'
         form = RegistrationForm(params)
         self.assertTrue(form.is_valid())
 
@@ -124,19 +136,19 @@ class RegistrationTest(TestCase):
         """ Tests parameters and db insertion """
 
         params = self.valid_params.copy()
-        params["Username"] = "ajummaTaeng"
+        params['username'] = 'ajummaTaeng'
         form = RegistrationForm(params)
 
         self.assertTrue(form.is_valid())
         user = form.create_user()
 
         # Check return value
-        self.assertEqual(user.username, params["Username"])
-        self.assertEqual(user.first_name, params["FirstName"])
-        self.assertEqual(user.last_name, params["LastName"])
+        self.assertEqual(user.username, params['username'])
+        self.assertEqual(user.first_name, params['first_name'])
+        self.assertEqual(user.last_name, params['last_name'])
 
         # Check to see that it's in the database as well
-        users_in_db = User.objects.filter(username=params["Username"])
+        users_in_db = User.objects.filter(username=params['username'])
         self.assertGreater(len(users_in_db), 0)
         self.assertEqual(users_in_db[0], user)
 
@@ -145,9 +157,9 @@ class RegistrationTest(TestCase):
         """ Tests for: uniqueness """
         
         params = self.valid_params.copy()
-        params["Username"] = "abcdef"
+        params['username'] = 'abcdef'
 
-        # This should be valid, as "abcdef" should be unique
+        # This should be valid, as 'abcdef' should be unique
         form = RegistrationForm(params)
         self.assertTrue(form.is_valid())
         form.create_user()
@@ -157,33 +169,33 @@ class RegistrationTest(TestCase):
         self.assertFalse(form.is_valid())
 
         self.assertEqual(len(form.errors), 1)
-        self.assertIn("Username", form.errors)
-        self.assertItemsEqual(form.errors["Username"], ["Username '%s' is already in use. Please choose another one." % (params["Username"])])
+        self.assertIn('username', form.errors)
+        self.assertItemsEqual(form.errors['username'], ['Username "%s" is already in use. Please choose another one.' % (params['username'])])
 
 
     def test_password_len(self):
         """ Tests for: minimum length """
         params = self.valid_params.copy()
         # Tests len < 6
-        params["Password"] = "abcde"
-        params["Password2"] = "abcde"
+        params['password'] = 'abcde'
+        params['password2'] = 'abcde'
 
         form = RegistrationForm(params)
         self.assertFalse(form.is_valid())
 
         self.assertEqual(len(form.errors), 1)
-        self.assertIn("Password", form.errors)
-        self.assertItemsEqual(form.errors["Password"], ["Ensure this value has at least 6 characters (it has 5)."])
+        self.assertIn('password', form.errors)
+        self.assertItemsEqual(form.errors['password'], ['Ensure this value has at least 6 characters (it has 5).'])
 
         # Tests len == 6
-        params["Password"] = "abcdef"
-        params["Password2"] = "abcdef"
+        params['password'] = 'abcdef'
+        params['password2'] = 'abcdef'
         form = RegistrationForm(params)
         self.assertTrue(form.is_valid())
 
         # Tests len > 6
-        params["Password"] = "abcdefgh"
-        params["Password2"] = "abcdefgh"
+        params['password'] = 'abcdefgh'
+        params['password2'] = 'abcdefgh'
         form = RegistrationForm(params)
         self.assertTrue(form.is_valid())
 
@@ -192,36 +204,36 @@ class RegistrationTest(TestCase):
         """ Tests that password and password2 match """
 
         params = self.valid_params.copy()
-        params["Password"] = "abcdef"
-        params["Password2"] = "abcdefg"
+        params['password'] = 'abcdef'
+        params['password2'] = 'abcdefg'
 
         form = RegistrationForm(params)
         self.assertFalse(form.is_valid())
 
         self.assertEqual(len(form.errors), 2)
-        self.assertIn("Password", form.errors)
-        self.assertIn("Password2", form.errors)
-        self.assertItemsEqual(form.errors["Password"], ["Passwords do not match!"])
-        self.assertItemsEqual(form.errors["Password2"], ["Passwords do not match!"])
+        self.assertIn('password', form.errors)
+        self.assertIn('password2', form.errors)
+        self.assertItemsEqual(form.errors['password'], ['Passwords do not match!'])
+        self.assertItemsEqual(form.errors['password2'], ['Passwords do not match!'])
 
 
     def test_password_chars(self):
         """ Tests that password contains only valid characters (alphanumeric, underscore, ., symbols on number keys) """
         # Invalid characters
         params = self.valid_params.copy()
-        params["Password"] = "~[]\[]]\[]\[\]"
-        params["Password2"] = "~[]\[]]\[]\[\]"
+        params['password'] = '~[]\[]]\[]\[\]'
+        params['password2'] = '~[]\[]]\[]\[\]'
 
         form = RegistrationForm(params)
         self.assertFalse(form.is_valid())
 
         self.assertEqual(len(form.errors), 1)
-        self.assertIn("Password", form.errors)
-        self.assertItemsEqual(form.errors["Password"], ["Password contains invalid characters."])
+        self.assertIn('password', form.errors)
+        self.assertItemsEqual(form.errors['password'], ['Password contains invalid characters.'])
 
         # Valid characters
-        params["Password"] = "abcdefg!@#$%^&*"
-        params["Password2"] = "abcdefg!@#$%^&*"
+        params['password'] = 'abcdefg!@#$%^&*'
+        params['password2'] = 'abcdefg!@#$%^&*'
 
         form = RegistrationForm(params)
         self.assertTrue(form.is_valid())
@@ -232,7 +244,7 @@ class RegistrationTest(TestCase):
 
         # Test that American schools are created properly
         params = self.valid_params.copy()
-        params["SchoolName"] = "GirlsGeneration"
+        params['school_name'] = 'GirlsGeneration'
 
         form = RegistrationForm(params)
         self.assertTrue(form.is_valid())
@@ -240,71 +252,71 @@ class RegistrationTest(TestCase):
         school = form.create_school()
         self.assertFalse(school is None)
 
-        self.assertEqual(school.name, params["SchoolName"])
-        self.assertEqual(school.address, params["SchoolAddress"])
-        self.assertEqual(school.city, params["SchoolCity"])
-        self.assertEqual(school.state, params["SchoolState"])
-        self.assertEqual(school.zip_code, str(params["SchoolZip"]))
-        self.assertEqual(school.primary_name, params["PrimaryName"])
-        self.assertEqual(school.primary_email, params["PrimaryEmail"])
-        self.assertEqual(school.primary_phone, params["PrimaryPhone"])
-        self.assertEqual(school.program_type, params["program_type"])
-        self.assertEqual(school.times_attended, params["howmany"])
-        self.assertEqual(school.min_delegation_size, params["MinDelegation"])
-        self.assertEqual(school.max_delegation_size, params["MaxDelegation"])
+        self.assertEqual(school.name, params['school_name'])
+        self.assertEqual(school.address, params['school_address'])
+        self.assertEqual(school.city, params['school_city'])
+        self.assertEqual(school.state, params['school_state'])
+        self.assertEqual(school.zip_code, str(params['school_zip']))
+        self.assertEqual(school.primary_name, params['primary_name'])
+        self.assertEqual(school.primary_email, params['primary_email'])
+        self.assertEqual(school.primary_phone, params['primary_phone'])
+        self.assertEqual(school.program_type, params['program_type'])
+        self.assertEqual(school.times_attended, params['times_attended'])
+        self.assertEqual(school.min_delegation_size, params['min_delegation_size'])
+        self.assertEqual(school.max_delegation_size, params['max_delegation_size'])
         self.assertFalse(school.international)
 
         # Make sure state isn't an empty string, or a string of spaces
         # Bit unnecessary though
-        matches = re.match("^\s*$", school.state)
+        matches = re.match('^\s*$', school.state)
         self.assertTrue(matches is None)
 
-        if "SecondaryName" in params:
-            self.assertEqual(school.secondary_name, params["SecondaryName"])
-        if "SecondaryEmail" in params:
-            self.assertEqual(school.secondary_email, params["SecondaryEmail"])
-        if "SecondaryPhone" in params:
-            self.assertEqual(school.secondary_phone, params["SecondaryPhone"])
+        if 'secondary_name' in params:
+            self.assertEqual(school.secondary_name, params['secondary_name'])
+        if 'secondary_email' in params:
+            self.assertEqual(school.secondary_email, params['secondary_email'])
+        if 'secondary_phone' in params:
+            self.assertEqual(school.secondary_phone, params['secondary_phone'])
 
         # Check to see that it's in the database as well
-        schools_in_db = School.objects.filter(name=params["SchoolName"])
+        schools_in_db = School.objects.filter(name=params['school_name'])
         self.assertGreater(len(schools_in_db), 0)
         self.assertEqual(schools_in_db[0], school)
 
         # Test international school creation
-        params["SchoolName"] = "GirlsGenerationInternational"
-        params["SchoolCountry"] = '10'
-        params["us_or_int"] = "international"
+        params['school_name'] = 'GirlsGenerationInternational'
+        params['school_country'] = '10'
+        params['school_location'] = School.LOCATION_INTERNATIONAL
         form = RegistrationForm(params)
         self.assertTrue(form.is_valid())
 
         school = form.create_school()
         self.assertFalse(school is None)
-        self.assertEqual(school.name, params["SchoolName"])
-        self.assertEqual(school.address, params["SchoolAddress"])
-        self.assertEqual(school.city, params["SchoolCity"])
-        self.assertEqual(school.zip_code, str(params["SchoolZip"]))
-        self.assertEqual(school.country, params["SchoolCountry"]) 
-        self.assertEqual(school.primary_name, params["PrimaryName"])
-        self.assertEqual(school.primary_email, params["PrimaryEmail"])
-        self.assertEqual(school.primary_phone, params["PrimaryPhone"])
-        self.assertEqual(school.program_type, params["program_type"])
-        self.assertEqual(school.times_attended, params["howmany"])
-        self.assertEqual(school.min_delegation_size, params["MinDelegation"])
-        self.assertEqual(school.max_delegation_size, params["MaxDelegation"])
+        self.assertEqual(school.name, params['school_name'])
+        self.assertEqual(school.address, params['school_address'])
+        self.assertEqual(school.city, params['school_city'])
+        self.assertEqual(school.zip_code, str(params['school_zip']))
+        self.assertEqual(school.country, params['school_country']) 
+        self.assertEqual(school.primary_name, params['primary_name'])
+        self.assertEqual(school.primary_email, params['primary_email'])
+        self.assertEqual(school.primary_phone, params['primary_phone'])
+        self.assertEqual(school.program_type, params['program_type'])
+        self.assertEqual(school.times_attended, params['times_attended'])
+        self.assertEqual(school.min_delegation_size, params['min_delegation_size'])
+        self.assertEqual(school.max_delegation_size, params['max_delegation_size'])
         self.assertTrue(school.international)
 
-        if "SchoolState" in params:
-            self.assertEqual(school.state, params["SchoolState"])
-        if "SecondaryName" in params:
-            self.assertEqual(school.secondary_name, params["SecondaryName"])
-        if "SecondaryEmail" in params:
-            self.assertEqual(school.secondary_email, params["SecondaryEmail"])
-        if "SecondaryPhone" in params:
-            self.assertEqual(school.secondary_phone, params["SecondaryPhone"])
+        if 'school_state' in params:
+            self.assertEqual(school.state, params['school_state'])
+        if 'secondary_name' in params:
+            self.assertEqual(school.secondary_name, params['secondary_name'])
+        if 'secondary_email' in params:
+            self.assertEqual(school.secondary_email, params['secondary_email'])
+        if 'secondary_phone' in params:
+            self.assertEqual(school.secondary_phone, params['secondary_phone'])
 
         # Check to see that it's in the database as well
-        schools_in_db = School.objects.filter(name=params["SchoolName"])
+        schools_in_db = School.objects.filter(name=params['school_name'])
         self.assertGreater(len(schools_in_db), 0)
         self.assertEqual(schools_in_db[0], school)
 
@@ -312,9 +324,9 @@ class RegistrationTest(TestCase):
     def test_school_uniqueness(self):
         """ Tests that the school name checks if it's unique """
         params = self.valid_params.copy()
-        params["SchoolName"] = "MySchool"
+        params['school_name'] = 'MySchool'
 
-        # This should be valid, as "abcdef" should be unique
+        # This should be valid, as 'abcdef' should be unique
         form = RegistrationForm(params)
         self.assertTrue(form.is_valid())
         form.create_school()
@@ -324,11 +336,11 @@ class RegistrationTest(TestCase):
         self.assertFalse(form.is_valid())
 
         self.assertEqual(len(form.errors), 1)
-        self.assertIn("SchoolName", form.errors)
-        self.assertItemsEqual(form.errors["SchoolName"], ["A school with the name '%s' has already been registered." % (params["SchoolName"])])
+        self.assertIn('school_name', form.errors)
+        self.assertItemsEqual(form.errors['school_name'], ['A school with the name "%s" has already been registered.' % (params['school_name'])])
 
         # Now try another valid one
-        params["SchoolName"] = "MySchool2"
+        params['school_name'] = 'MySchool2'
         form = RegistrationForm(params)
         self.assertTrue(form.is_valid())
 
@@ -338,10 +350,10 @@ class RegistrationTest(TestCase):
         # Initialization
         params = self.valid_params.copy()
         for i in xrange(1,11):
-            params["CountryPref" + str(i)] = 0
+            params['country_pref' + str(i)] = 0
 
         # No preferences at all
-        params["SchoolName"] = "CountryTest1"
+        params['school_name'] = 'CountryTest1'
         form = RegistrationForm(params)
 
         self.assertTrue(form.is_valid())
@@ -352,10 +364,10 @@ class RegistrationTest(TestCase):
         self.assertEqual(len(prefs), 0)
 
         # Couple of random preferences scattered around
-        params["SchoolName"] = "CountryTest2"
-        params["CountryPref1"] = 2
-        params["CountryPref3"] = 10
-        params["CountryPref7"] = 7
+        params['school_name'] = 'CountryTest2'
+        params['country_pref1'] = 2
+        params['country_pref3'] = 10
+        params['country_pref7'] = 7
         form = RegistrationForm(params)
 
         self.assertTrue(form.is_valid())
@@ -365,9 +377,9 @@ class RegistrationTest(TestCase):
         prefs = CountryPreference.objects.filter(school=school)
         self.assertEqual(len(prefs), 3)
 
-        self.assertEqual(prefs[0].country.id, params['CountryPref1'])
-        self.assertEqual(prefs[1].country.id, params['CountryPref3'])
-        self.assertEqual(prefs[2].country.id, params['CountryPref7'])
+        self.assertEqual(prefs[0].country.id, params['country_pref1'])
+        self.assertEqual(prefs[1].country.id, params['country_pref3'])
+        self.assertEqual(prefs[2].country.id, params['country_pref7'])
 
 
     def test_country_preferences(self):
@@ -375,16 +387,16 @@ class RegistrationTest(TestCase):
         # Initialization
         params = self.valid_params.copy()
         for i in xrange(1,11):
-            params["CountryPref" + str(i)] = 0
+            params['country_pref' + str(i)] = 0
 
         # Should be valid even with no country preferences
         form = RegistrationForm(params)
         self.assertTrue(form.is_valid())
 
         # Couple of unique country preferences; valid
-        params["CountryPref1"] = 1
-        params["CountryPref3"] = 10
-        params["CountryPref7"] = 7
+        params['country_pref1'] = 1
+        params['country_pref3'] = 10
+        params['country_pref7'] = 7
 
         form = RegistrationForm(params)
         self.assertTrue(form.is_valid())
@@ -393,7 +405,7 @@ class RegistrationTest(TestCase):
     def test_add_committee_preferences(self):
         """ Tests that adding committee preferences works """
         params = self.valid_params.copy()
-        params["SchoolName"] = "CommitteeTest1"
+        params['school_name'] = 'CommitteeTest1'
         form = RegistrationForm(params)
 
         # No committee preferences
@@ -403,8 +415,8 @@ class RegistrationTest(TestCase):
         self.assertEqual(len(school.committeepreferences.all()), 0)
 
         # Some preferences
-        params["CommitteePrefs"] = [13, 14, 19]
-        params["SchoolName"] = "CommitteeTest2"
+        params['committee_prefs'] = [13, 14, 19]
+        params['school_name'] = 'CommitteeTest2'
         form = RegistrationForm(params)
 
         self.assertTrue(form.is_valid())
@@ -413,14 +425,14 @@ class RegistrationTest(TestCase):
         self.assertEqual(len(school.committeepreferences.all()), 3)
 
         for committee in school.committeepreferences.all():
-            self.assertIn(committee.id, params["CommitteePrefs"])
+            self.assertIn(committee.id, params['committee_prefs'])
 
 
     def test_create_advisor_profile(self):
         """ Tests that an advisor profile for a user and a school is successfully created upon registration """
         params = self.valid_params.copy()
-        params["Username"] = "advisor_profile_test"
-        params["SchoolName"] = "advisor_profile_test"
+        params['username'] = 'advisor_profile_test'
+        params['school_name'] = 'advisor_profile_test'
         form = RegistrationForm(params)
         self.assertTrue(form.is_valid())
 
@@ -437,75 +449,75 @@ class RegistrationTest(TestCase):
     def test_us_phone_nums(self):
         """ Tests the US phone number validation code """
         params = self.valid_params.copy()
-        params["us_or_int"] = "us"
+        params['school_location'] = School.LOCATION_USA
 
         # (XXX) XXX-XXXX
-        params["PrimaryPhone"] = "(123) 456-7890"
+        params['primary_phone'] = '(123) 456-7890'
         form = RegistrationForm(params)
         self.assertTrue(form.is_valid())
 
         # (XXX) XXX-XXXX xXXXX (extension)
-        params["PrimaryPhone"] = "(123) 456-7890 x1234"
+        params['primary_phone'] = '(123) 456-7890 x1234'
         form = RegistrationForm(params)
         self.assertTrue(form.is_valid())
 
         # 123-456-7890 (invalid)
-        params["PrimaryPhone"] = "123-456-7890"
+        params['primary_phone'] = '123-456-7890'
         form = RegistrationForm(params)
         self.assertFalse(form.is_valid())
 
         self.assertEqual(len(form.errors), 1)
-        self.assertIn("PrimaryPhone", form.errors)
-        self.assertItemsEqual(form.errors["PrimaryPhone"], ["Phone in incorrect format."])
+        self.assertIn('primary_phone', form.errors)
+        self.assertItemsEqual(form.errors['primary_phone'], ['Phone in incorrect format.'])
         
         # (123) 12a-1231 (invalid)
-        params["PrimaryPhone"] = "(123) 12a-1231"
+        params['primary_phone'] = '(123) 12a-1231'
         form = RegistrationForm(params)
         self.assertFalse(form.is_valid())
 
         self.assertEqual(len(form.errors), 1)
-        self.assertIn("PrimaryPhone", form.errors)
-        self.assertItemsEqual(form.errors["PrimaryPhone"], ["Phone in incorrect format."])
+        self.assertIn('primary_phone', form.errors)
+        self.assertItemsEqual(form.errors['primary_phone'], ['Phone in incorrect format.'])
 
 
     def test_international_phone_nums(self):
         """ Tests the international phone number validation code """
         params = self.valid_params.copy()
-        params["us_or_int"] = "international"
-        params["SchoolCountry"] = "Japan"
+        params['school_location'] = School.LOCATION_INTERNATIONAL
+        params['school_country'] = 'Japan'
 
         # 1234534653465 (just numbers; valid)
-        params["PrimaryPhone"] = "123434645657"
+        params['primary_phone'] = '123434645657'
         form = RegistrationForm(params)
         self.assertTrue(form.is_valid())
 
         # 1-123-123-1234 (dashes; valid)
-        params["PrimaryPhone"] = "1-123-123-1234"
+        params['primary_phone'] = '1-123-123-1234'
         form = RegistrationForm(params)
         self.assertTrue(form.is_valid())        
 
         # US format (valid)
-        params["PrimaryPhone"] = "(123) 456-7890"
+        params['primary_phone'] = '(123) 456-7890'
         form = RegistrationForm(params)
         self.assertTrue(form.is_valid())
 
         # US format with invalid characters
-        params["PrimaryPhone"] = "(12a) 456-7890"
+        params['primary_phone'] = '(12a) 456-7890'
         form = RegistrationForm(params)
         self.assertFalse(form.is_valid())
 
         self.assertEqual(len(form.errors), 1)
-        self.assertIn("PrimaryPhone", form.errors)
-        self.assertItemsEqual(form.errors["PrimaryPhone"], ["Phone in incorrect format."])
+        self.assertIn('primary_phone', form.errors)
+        self.assertItemsEqual(form.errors['primary_phone'], ['Phone in incorrect format.'])
 
         # Numbers with invalid characters
-        params["PrimaryPhone"] = "1-234-4a3-as,f"
+        params['primary_phone'] = '1-234-4a3-as,f'
         form = RegistrationForm(params)
         self.assertFalse(form.is_valid())
 
         self.assertEqual(len(form.errors), 1)
-        self.assertIn("PrimaryPhone", form.errors)
-        self.assertItemsEqual(form.errors["PrimaryPhone"], ["Phone in incorrect format."])
+        self.assertIn('primary_phone', form.errors)
+        self.assertItemsEqual(form.errors['primary_phone'], ['Phone in incorrect format.'])
 
 
     def test_school_country(self):
@@ -513,27 +525,27 @@ class RegistrationTest(TestCase):
         params = self.valid_params.copy()
         
         # Try US first (no country specified)
-        params["us_or_int"] = "us"
+        params['school_location'] = School.LOCATION_USA
         form = RegistrationForm(params)
         self.assertTrue(form.is_valid())
 
         # Try US with a country (shouldn't matter)
-        params["SchoolCountry"] = "America"
+        params['school_country'] = 'America'
         form = RegistrationForm(params)
         self.assertTrue(form.is_valid())
 
         # Try international (with no country specified)
         params = self.valid_params.copy() 
-        params["us_or_int"] = "international"
+        params['school_location'] = School.LOCATION_INTERNATIONAL
         form = RegistrationForm(params)
         self.assertFalse(form.is_valid())
 
         self.assertEqual(len(form.errors), 1)
-        self.assertIn("SchoolCountry", form.errors)
-        self.assertItemsEqual(form.errors["SchoolCountry"], ["You must specify a country."])
+        self.assertIn('school_country', form.errors)
+        self.assertItemsEqual(form.errors['school_country'], ['International schools must provide a country.'])
 
         # Try international (with a country)
-        params["SchoolCountry"] = "Japan"
+        params['school_country'] = 'Japan'
         form = RegistrationForm(params)
         self.assertTrue(form.is_valid())
 
