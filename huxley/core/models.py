@@ -53,6 +53,13 @@ class School(models.Model):
         (TYPE_CLUB, 'Club'),
         (TYPE_CLASS, 'Class'),
     )
+
+    LOCATION_USA = 'location/usa'
+    LOCATION_INTERNATIONAL = 'location/international'
+    LOCATION_OPTIONS = (
+        (LOCATION_USA, 'United States of America'),
+        (LOCATION_INTERNATIONAL, 'International'),
+    )
     
     registered          = models.DateTimeField(auto_now_add=True)
     name                = models.CharField(max_length=128) 
