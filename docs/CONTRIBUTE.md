@@ -59,7 +59,7 @@ The first is to prepare the database. Huxley uses South, a schema migration mana
 tables from the models, bring South's migration history up to speed, and load some test data:
 
 	$ python manage.py syncdb # Make a superuser if prompted.
-	$ python manage.py migrate --fake
+	$ python manage.py migrate
 	$ python manage.py loaddata countries committees advisor chair
 
 We use Pipeline to collect, compile, and compress our static assets. It simply hooks into Django's `collectstatic` management command:
