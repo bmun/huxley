@@ -1,8 +1,7 @@
 .login-form
 {
-    input[type=text], input[type=password]
+    input.text
     {
-        width: 264px; 
         margin-bottom:10px;
         font-size: 18px;
 
@@ -11,15 +10,5 @@
         webkit-border-radius: 3px;
     }
 
-    .forgot
-    {
-        text-align: right;
-        vertical-align: bottom;
-
-        a { font-size: 9px; font-weight: 500; }
-    }
-
-    .register { text-align: right; }
-
-    button.submit { margin: 5px 0px; }
+    label.error { margin-top: 15px; }
 }

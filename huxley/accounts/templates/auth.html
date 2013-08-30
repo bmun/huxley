@@ -2,39 +2,26 @@
 
 {% block title %}Login{% endblock title %}
 
+{% block header %}
+	<div class="logo">
+		<hr />
+		<h1>Welcome to Huxley</h1>
+		<span class="help-text">Berkeley Model United Nations</span>
+	</div>
+{% endblock header %}
+
 {% block content %}
-	<div class="half-column left">
-		<h2> Introducing: Huxley!</h2>
-		<p>Huxley is a new system we're using to make your conference experience smoother than ever.</p>
-		<p>Log in to get started, or <a class="nav" href="/about">learn more about Huxley!</a></p>
+	<form id="login" class="login-form" action="{% url 'login' %}" method="post">
+		{% csrf_token %}
+		<div class="login-fields">
+			<input class="text empty" type="text" name="username" placeholder="Username">
+			<input class="text empty" type="password" name="password" placeholder="Password">
+		</div>
+		<button class="button button-blue rounded-small" type="submit">Log In</button>
+		<span class="help-text">or</span>
+		<a class="nav button button-green rounded-small" href="{% url 'register' %}">Register for BMUN</a>
 		<div id="errorcontainer">
 			{% if state %}<label class="error">{{ state }}</label>{% endif %}
-		</div>
-	</div>
-	<div class="half-column right">
-		<form id="login" class="login-form" action="{% url 'login' %}" method="post">
-			{% csrf_token %}
-			<table>
-				<tr>
-					<td>Username</td>
-				</tr>
-				<tr>
-					<td colspan="2"><input class="text empty" type="text" name="username" value="" tabindex="1"></td>
-				</tr>
-				<tr>
-					<td>Password</td>
-					<td class="forgot"><a href="{% url 'forgot_password' %}" class="nav" tabindex="5">Forgot your password?</a></td>
-				</tr>
-				<tr>
-					<td colspan="2"><input class="text empty" type="password" name="password" value="" tabindex="2"></td>
-				</tr>
-				<tr>
-					<td><button class="submit rounded-small" type="submit" tabindex="3">Log In!</button></td>
-					<td class="register">Not signed up? <a class="nav" href="{% url 'register' %}" tabindex="4">Register now!</a></td>
-				</tr>
-			</table>
-		</form>
-	</div>
+		</div>	
+	</form>
 {% endblock content %}
-
-

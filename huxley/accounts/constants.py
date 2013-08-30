@@ -9,6 +9,6 @@ class ChangePasswordErrors:
 	INCORRECT_PASSWORD = 'Incorrect password.'
 
 class AuthenticationErrors:
-	MISSING_FIELDS = "Woops! One or more of the fields is blank."
+	MISSING_FIELDS = "Whoops! One or more of the fields is blank."
 	INVALID_LOGIN = "Sorry! The login you provided was invalid."
 	INACTIVE_ACCOUNT = "We're sorry, but your account is inactive."

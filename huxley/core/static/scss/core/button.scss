@@ -1,0 +1,67 @@
+.content
+{
+    .button
+    {
+        padding: 5px 7px;
+        font: 14px "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-weight: 400;
+        box-shadow: 0px 1px 2px #ccc;
+        webkit-box-shadow: 0px 1px 2px #ccc;
+        moz-box-shadow: 0px 1px 2px #ccc;
+
+        &:hover
+        {
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        &:active
+        {
+            position: relative;
+            top: 1px;
+            box-shadow: none;
+        }
+
+        &.button-blue
+        {
+            background: #39f; 
+            border: 1px solid #28e;
+            color: #fff;
+            text-shadow: #28e 0px 1px;
+
+            &:hover
+            {
+                background: #40a0ff;
+                border-color: #09c;
+            }
+        }
+
+        &.button-green
+        {
+            background: #0c0; 
+            border: 1px solid #0b0;
+            color: #fff;
+            text-shadow: #0b0 0px 1px; 
+
+            &:hover
+            {
+                background: #00d000;
+                border-color: #0b0;
+            }
+        }
+
+        &.button-yellow
+        {
+            background: #dd0;
+            border: 1px solid #cc0;
+            color: #fff;
+            text-shadow: #cc0 0px 1px; 
+
+            &:hover
+            {
+                background: #e0e000;
+                border-color: #cc0;
+            }
+        }
+    }
+}
