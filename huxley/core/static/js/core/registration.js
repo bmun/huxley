@@ -79,7 +79,7 @@ $(function() {
     }, "Passwords may only contain letters, numbers, and certain symbols.");
 
     // Validates the form upon submit and POSTs if it's valid.
-    $(document).on("submit", "#content-outer #registration", function() {
+    $(document).on("submit", "#registration", function() {
         $("#registration").validate({
             messages: {
                 FirstName: {required: "Please enter your first name."},

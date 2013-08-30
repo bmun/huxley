@@ -9,8 +9,8 @@ from huxley.core.models import *
 import re
 
 class ForgotPasswordForm(forms.Form):
-    username = forms.CharField(label="Username", widget=forms.TextInput(attrs={'class':'text empty'}), required=False)
-    email = forms.EmailField(label="Email", widget=forms.TextInput(attrs={'class':'text empty'}), required=False)
+    username = forms.CharField(label="Username", widget=forms.TextInput(attrs={'class':'text empty', 'placeholder': 'Username'}), required=False)
+    email = forms.EmailField(label="Email", widget=forms.TextInput(attrs={'class':'text empty', 'placeholder': 'Email'}), required=False)
 
     def get_user(self):
         """ Note: Remember to validate first! """
