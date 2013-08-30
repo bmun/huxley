@@ -43,7 +43,7 @@ pip install -r requirements.txt
 
 echo "Then, we'll initialize your database and process static files..."
 python manage.py syncdb # Make a superuser if prompted.
-python manage.py migrate --fake
+python manage.py migrate
 python manage.py loaddata countries committees advisor chair
 python manage.py collectstatic --noinput
 
