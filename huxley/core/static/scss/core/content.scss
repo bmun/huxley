@@ -3,10 +3,22 @@
 label.error
 {
     color: #f30;
-    font-size: 11px;
-    font-weight: 700;
-    padding: 7px 0px 5px 20px;
+    font-size: 10px;
+    font-weight: 500;
+    padding-left: 20px;
     background: url(/static/img/exclamation.png) left center no-repeat;
+
+    @media
+    only screen and (-webkit-min-device-pixel-ratio: 2),
+    only screen and (   min--moz-device-pixel-ratio: 2),
+    only screen and (     -o-min-device-pixel-ratio: 2/1),
+    only screen and (        min-device-pixel-ratio: 2),
+    only screen and (                min-resolution: 192dpi),
+    only screen and (                min-resolution: 2dppx)
+    { 
+        background: url(/static/img/exclamation-2x.png) left center no-repeat;
+        background-size: 16px 16px;
+    }
 }
 
 .content
@@ -32,16 +44,24 @@ label.error
         &:hover { text-decoration: underline; }
     }
 
-    h2 { padding-bottom: 10px; }
+    h1
+    {
+        font-size: 24px;
+        font-weight: 300;
+        line-height: 26px;
+    }
+
+    h2
+    {
+        font-size: 20px;
+        font-weight: 400;
+    }
 
     h3
     {
-        color: #666;
-        margin-top: 15px;
+        font-size: 16px;
+        font-weight: 400;
         padding-left: 2px;
-        border-bottom: 1px solid #ddd;
-        font-weight:500;
-        font-size: 11px;
     }
 
     img
@@ -52,57 +72,23 @@ label.error
 
     &.transparent
     {
-        -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=90)"; /* IE8 */
-        filter: alpha(opacity=90); /* IE6/7 */
-        -moz-opacity: 0.9; /* Netscape? */
-        -khtml-opacity: 0.9; /* Safari 1.x */
-        opacity: 0.9; /* Not shitty browsers */
+        -moz-opacity: 0.95; /* Netscape? */
+        -khtml-opacity: 0.95; /* Safari 1.x */
+        opacity: 0.95; /* Not shitty browsers */
     }
 
     &.loading
     {
-        background-image: url(/static/img/loading.gif);
+        background-image: url(/static/img/loading3.gif);
         background-repeat: no-repeat;
         background-position: center 30px;
     }
 }
 
-#header-outer
+.content-outer
 {
-    width: 598px;
+    width: 300px;
     margin-top: 80px;
-
-    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=70)"; /* IE8 */
-    filter: alpha(opacity=70); /* IE6/7 */
-    -moz-opacity: 0.7; /* Netscape? */
-    -khtml-opacity: 0.7; /* Safari 1.x */
-    opacity: 0.7; /* Not shitty browsers */
-}
-
-#content-outer
-{
-    width: 580px;
-    min-height: 160px;
-
-    .half-column
-    {
-        width: 279px;
-        height: 160px;
-
-        &.left
-        {
-            float: left;
-            padding-right: 10px;
-            border-right: 1px solid #fff;
-        }
-
-        &.right
-        {
-            float: right;
-            padding-left: 10px;
-            border-left: 1px solid #ddd;
-        }
-    }
 
     a, p, span, label, h2, h3 { background-color: #eee; } /* Prevents ugliness during fadeout in IE. */
 
@@ -123,8 +109,6 @@ label.error
         font-smooth:always;
     }
 
-    h3 { margin-top: 15px; }
-
     ul { list-style: none; padding: 0px 10px; }
     li { padding: 5px 0px; }
 
@@ -132,14 +116,17 @@ label.error
 
     input[type=text], input[type=password]
     {
-        padding: 6px;
+        padding: 5px;
+        width: 288px;
         font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
         font-weight: 300; 
         color: #666;
         border: 1px solid #ccc;
+        
         box-shadow: inset 0 1px 5px rgba(0, 0, 0, 0.1);
         webkit-box-shadow: inset 0 1px 5px rgba(0, 0, 0, 0.1);
         moz-box-shadow: inset 0 1px 5px rgba(0, 0, 0, 0.1);
+        
         -webkit-transition: box-shadow linear 0.1s, border linear 0.05s;
         -moz-transition: box-shadow linear 0.1s, background linear 0.05s;
         -ms-transition: box-shadow linear 0.1s, background linear 0.05s;
@@ -150,25 +137,39 @@ label.error
         &:focus { border-color: #aaa; outline: 0; }
     }
 
-    button.submit
-    { 
-        background: #eee; 
-        width: 75px; 
-        height: 25px; 
-        border: 1px solid #ccc; 
-        font: 13px Helvetica, Arial, sans-serif; 
-        font-weight: 700; 
-        color: #003; 
-        text-shadow: #fff 0px 1px; 
-        box-shadow: 0px 1px 1px #ddd;
-        webkit-box-shadow: 0px 1px 1px #ddd;
-        moz-box-shadow: 0px 1px 1px #ddd;
-
-        &:hover { background: #e8e8e8; cursor: pointer; }
+    .help-text
+    {
+        padding: 0 5px;
+        font-style: italic;
+        color: #bbb;
     }
-}
 
-#content-inner
-{
+    .logo
+    {
+        padding-top: 202px;
+        background: url(/static/img/logo.png) center top no-repeat;
+        text-align: center;
 
+        @media
+        only screen and (-webkit-min-device-pixel-ratio: 2),
+        only screen and (   min--moz-device-pixel-ratio: 2),
+        only screen and (     -o-min-device-pixel-ratio: 2/1),
+        only screen and (        min-device-pixel-ratio: 2),
+        only screen and (                min-resolution: 192dpi),
+        only screen and (                min-resolution: 2dppx)
+        { 
+            background: url(/static/img/logo-2x.png) center top no-repeat;
+            background-size: 200px 202px;
+        }
+    }
+
+    hr
+    {
+        width: 328px;
+        margin: 15px 0 15px -15px;
+        border-top: 1px solid #ccc;
+        border-bottom: 1px solid #fff;
+        border-left: 1px solid #ddd;
+        border-right: 1px solid #ddd;
+    }
 }
