@@ -4,21 +4,16 @@
 {
     fieldset
     {
-        margin: 20px auto;
-        padding: 9px;
-        border: 1px solid #bbb;
-        border-radius: 3px;
-        moz-border-radius: 3px;
-        webkit-border-radius: 3px;
+        border: none;
 
         input[type=text], input[type=password]
         {
             font-size: 14px;
-            font-weight: 500;
             border-radius: 2px; 
             moz-border-radius: 2px;
             webkit-border-radius: 2px;
-            padding: 5px;
+            margin-top: 15px;
+
             &:focus
             {
                 border-color:#abc;
@@ -29,24 +24,16 @@
             }
         }
 
-        legend
-        {
-            font-size: 14px;
-            font-weight: 700;
-            padding: 0px 5px;
-            background: #eee;  
-        }
-
         ul
         {
             padding: 0;
 
             li
-            {
+            {   
                 list-style: none;
                 padding: 5px 0px;
 
-                input[type=radio], input[type=checkbox] { margin-right: 5px; }
+                input[type=radio], input[type=checkbox] { margin-right: 3px; }
 
                 select
                 {
@@ -62,17 +49,8 @@
             padding: 5px 0px;
         }
 
+        label.error { margin-top: 3px; }
+
         .instructions { font-weight: bold; }
-
-        .block
-        {
-            float: left;
-            margin-left: 10px;
-            &:first-child {float: left; margin-left: 0; }
-
-            input.full { width: 548px; }
-            input.half { width: 263px; }
-            input.third { width: 168px; }
-        }
     }
 }
