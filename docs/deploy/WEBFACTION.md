@@ -111,7 +111,7 @@ Finally, prepare your database:
 ```sh
 $ cd ~/webapps/huxley/huxley
 $ python manage.py syncdb
-$ python manage.py migrate --fake
+$ python manage.py migrate
 $ python manage.py collectstatic --noinput # Not really database-related, but whatever.
 $ ~/webapps/huxley/apache2/bin/restart # Restart the server process
 ```
