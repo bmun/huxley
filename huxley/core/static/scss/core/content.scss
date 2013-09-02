@@ -163,6 +163,25 @@ label.error
         }
     }
 
+    .logo-small
+    {
+        padding: 16px 0;
+        background: url(/static/img/logo-small.png) center center no-repeat;
+        text-align: center;
+
+        @media
+        only screen and (-webkit-min-device-pixel-ratio: 2),
+        only screen and (   min--moz-device-pixel-ratio: 2),
+        only screen and (     -o-min-device-pixel-ratio: 2/1),
+        only screen and (        min-device-pixel-ratio: 2),
+        only screen and (                min-resolution: 192dpi),
+        only screen and (                min-resolution: 2dppx)
+        { 
+            background: url(/static/img/logo-small-2x.png) center center no-repeat;
+            background-size: 32px 32px;
+        }
+    }
+
     hr
     {
         width: 328px;
