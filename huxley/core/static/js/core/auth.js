@@ -4,7 +4,11 @@ $(function() {
     $(document).on("submit", "form#login", function() {
         var credentials = $(this).serializeArray();
         var uri = $(this).attr("action");
+        var loginButton = $(this).find('.login-button');
+
+        loginButton.addClass('loading');
         $.post(uri, credentials, function(data) {
+            loginButton.removeClass('loading');
             if(data.success === true) {
                 ContentManager.onLoginLogout(data.redirect, 250);
             } else {

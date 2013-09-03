@@ -10,5 +10,31 @@
         webkit-border-radius: 3px;
     }
 
+    .login-button
+    {
+        &.loading
+        {
+            background-image: url(/static/img/login-loader.gif) center center no-repeat;
+            background-position: center center;
+            background-repeat: no-repeat;
+
+            @media
+            only screen and (-webkit-min-device-pixel-ratio: 2),
+            only screen and (   min--moz-device-pixel-ratio: 2),
+            only screen and (     -o-min-device-pixel-ratio: 2/1),
+            only screen and (        min-device-pixel-ratio: 2),
+            only screen and (                min-resolution: 192dpi),
+            only screen and (                min-resolution: 2dppx)
+            { 
+                background-image: url(/static/img/login-loader-2x.gif);
+                background-size: 20px 20px;
+            }
+
+            span { visibility: hidden; }
+        }
+
+        span { background: none; }
+    }
+
     label.error { margin-top: 15px; }
 }
