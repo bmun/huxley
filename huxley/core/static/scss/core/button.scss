@@ -24,14 +24,16 @@
 
         &.button-blue
         {
-            background: #39f; 
+            background-color: #39f;
             border: 1px solid #28e;
             color: #fff;
             text-shadow: #28e 0px 1px;
 
+            span { background: none; }
+
             &:hover
             {
-                background: #40a0ff;
+                background-color: #40a0ff;
                 border-color: #09c;
             }
         }
