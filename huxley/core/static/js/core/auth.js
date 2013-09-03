@@ -8,10 +8,10 @@ $(function() {
 
         loginButton.addClass('loading');
         $.post(uri, credentials, function(data) {
-            loginButton.removeClass('loading');
             if(data.success === true) {
                 ContentManager.onLoginLogout(data.redirect, 250);
             } else {
+                loginButton.removeClass('loading');
                 $("#errorcontainer")
                     .hide()
                     .html('<label class="error">' + data.error + '</label>')
