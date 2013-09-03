@@ -14,232 +14,223 @@
 
 <hr />
 
-<fieldset>
-	<h3>Account Information</h3>
-	{{ form.first_name }}
-	{% for error in form.errors.first_name %}
-		<label class="error"> {{ error|escape }} </label>
-	{% endfor %}
+<h3>Account Information</h3>
 
-	{{ form.last_name }}
-	{% for error in form.errors.last_name %}
-		<label class="error"> {{ error|escape }} </label>
-	{% endfor %}
+{{ form.first_name }}
+{% for error in form.errors.first_name %}
+	<label class="error"> {{ error|escape }} </label>
+{% endfor %}
 
-	{{ form.username }}
-	{% for error in form.errors.username %}
-		<label class="error"> {{ error|escape }} </label>
-	{% endfor %}
+{{ form.last_name }}
+{% for error in form.errors.last_name %}
+	<label class="error"> {{ error|escape }} </label>
+{% endfor %}
 
-	{{ form.password }}
-	{% for error in form.errors.password %}
-		<label class="error"> {{ error|escape }} </label>
-	{% endfor %}
+{{ form.username }}
+{% for error in form.errors.username %}
+	<label class="error"> {{ error|escape }} </label>
+{% endfor %}
 
-	{{ form.password2 }}
-	{% for error in form.errors.password2 %}
-		<label class="error"> {{ error|escape }} </label>
-	{% endfor %}
-</fieldset>
+{{ form.password }}
+{% for error in form.errors.password %}
+	<label class="error"> {{ error|escape }} </label>
+{% endfor %}
 
-<hr />
-
-<fieldset>
-	<h3>School Information</h3>
-	<p class="instructions"> {{ form.school_location.label }} </p>
-	{{ form.school_location }}
-	
-	{{ form.school_name }}
-	{% for error in form.errors.school_name %}
-		<label class="error"> {{ error|escape }} </label>
-	{% endfor %}
-
-	{{ form.school_address }}
-	{% for error in form.errors.school_address %}
-		<label class="error"> {{ error|escape }} </label>
-	{% endfor %}
-
-	{{ form.school_city }}
-	{% for error in form.errors.school_city %}
-		<label class="error"> {{ error|escape }} </label>
-	{% endfor %}
-
-	{{ form.school_state }}
-	{% for error in form.errors.school_state %}
-		<label class="error"> {{ error|escape }} </label>
-	{% endfor %}
-
-	{{ form.school_zip }}
-	{% for error in form.errors.school_zip %}
-		<label class="error"> {{ error|escape }} </label>
-	{% endfor %}
-
-	{{ form.school_country }}
-	{% for error in form.errors.school_country %}
-		<label class="error"> {{ error|escape }} </label>
-	{% endfor %}
-</fieldset>
+{{ form.password2 }}
+{% for error in form.errors.password2 %}
+	<label class="error"> {{ error|escape }} </label>
+{% endfor %}
 
 <hr />
 
-<fieldset>
-	<h3>Program Information</h3>
-	<p class="instructions"> {{ form.program_type.label }} </p> {{ form.program_type }} 
-	{% for error in form.errors.program_type %}
-		<label class="error"> {{ error|escape }} </label>
-	{% endfor %}
-	<p class="instructions">Please tell us a bit more about your delegation this year.</p>
+<h3>School Information</h3>
 
-	{{ form.times_attended }}
-	{% for error in form.errors.times_attended %}
-		<label class="error"> {{ error|escape }} </label>
-	{% endfor %}
-	
-	{{ form.min_delegation_size }}
-	{% for error in form.errors.min_delegation_size %}
-		<label class="error"> {{ error|escape }} </label>
-	{% endfor %}
-	
-	{{ form.max_delegation_size }}
-	{% for error in form.errors.max_delegation_size %}
-		<label class="error"> {{ error|escape }} </label>
-	{% endfor %}
-</fieldset>
+<p class="instructions"> {{ form.school_location.label }} </p>
+{{ form.school_location }}
 
-<hr />
+{{ form.school_name }}
+{% for error in form.errors.school_name %}
+	<label class="error"> {{ error|escape }} </label>
+{% endfor %}
 
-<fieldset id="primarycontact">
-	<h3>Primary Contact</h3>
-			
-	{{ form.primary_name }}
-	{% for error in form.errors.primary_name %}
-		<label class="error"> {{ error|escape }} </label>
-	{% endfor %}
-	
-	{{ form.primary_email}}
-	{% for error in form.errors.primary_email %}
-		<label class="error"> {{ error|escape }} </label>
-	{% endfor %}
-	
-	{{ form.primary_phone }}
-	{% for error in form.errors.primary_phone %}
-		<label class="error"> {{ error|escape }} </label>
-	{% endfor %}
-</fieldset>
+{{ form.school_address }}
+{% for error in form.errors.school_address %}
+	<label class="error"> {{ error|escape }} </label>
+{% endfor %}
+
+{{ form.school_city }}
+{% for error in form.errors.school_city %}
+	<label class="error"> {{ error|escape }} </label>
+{% endfor %}
+
+{{ form.school_state }}
+{% for error in form.errors.school_state %}
+	<label class="error"> {{ error|escape }} </label>
+{% endfor %}
+
+{{ form.school_zip }}
+{% for error in form.errors.school_zip %}
+	<label class="error"> {{ error|escape }} </label>
+{% endfor %}
+
+{{ form.school_country }}
+{% for error in form.errors.school_country %}
+	<label class="error"> {{ error|escape }} </label>
+{% endfor %}
 
 <hr />
 
-<fieldset id="secondarycontact">
-	<h3>Secondary Contact</h3>
-	{{ form.secondary_name }}
-	{% for error in form.errors.secondary_name %}
-		<label class="error"> {{ error|escape }} </label>
-	{% endfor %}
-	
-	{{ form.secondary_email }}
-	{% for error in form.errors.secondary_email %}
-		<label class="error"> {{ error|escape }} </label>
-	{% endfor %}
-	
-	{{ form.secondary_phone }}
-	{% for error in form.errors.secondary_phone %}
-		<label class="error"> {{ error|escape }} </label>
-	{% endfor %}
-</fieldset>
+<h3>Program Information</h3>
+
+<p class="instructions"> {{ form.program_type.label }} </p> {{ form.program_type }} 
+{% for error in form.errors.program_type %}
+	<label class="error"> {{ error|escape }} </label>
+{% endfor %}
+<p class="instructions">Please tell us a bit more about your delegation this year.</p>
+
+{{ form.times_attended }}
+{% for error in form.errors.times_attended %}
+	<label class="error"> {{ error|escape }} </label>
+{% endfor %}
+
+{{ form.min_delegation_size }}
+{% for error in form.errors.min_delegation_size %}
+	<label class="error"> {{ error|escape }} </label>
+{% endfor %}
+
+{{ form.max_delegation_size }}
+{% for error in form.errors.max_delegation_size %}
+	<label class="error"> {{ error|escape }} </label>
+{% endfor %}
 
 <hr />
 
-<fieldset>
-	<h3>Country Preferences</h3>
-	<p class="instructions">
-		Please choose 10 United Nations Member States or Observers your school would like to represent. A reference list of countries and their relation to committees is available online. Please diversify your selection.
-	</p>
-	<ul>
-		<li>
-			<label> {{ form.country_pref1.label }} </label>
-			{{ form.country_pref1 }}
-			{% for error in form.errors.country_pref1 %}
-				<label class="error"> {{ error|escape }} </label>
-			{% endfor %}
-		</li>
-		<li>
-			<label> {{ form.country_pref2.label }} </label>
-			{{ form.country_pref2 }}
-			{% for error in form.errors.country_pref2 %}
-				<label class="error"> {{ error|escape }} </label>
-			{% endfor %}
-		</li>
-		<li>
-			<label> {{ form.country_pref3.label }} </label>
-			{{ form.country_pref3 }}
-			{% for error in form.errors.country_pref3 %}
-				<label class="error"> {{ error|escape }} </label>
-			{% endfor %}
-		</li>
-		<li>
-			<label> {{ form.country_pref4.label }} </label>
-			{{ form.country_pref4 }}
-			{% for error in form.errors.country_pref4 %}
-				<label class="error"> {{ error|escape }} </label>
-			{% endfor %}
-		</li>
-		<li>
-			<label> {{ form.country_pref5.label }} </label>
-			{{ form.country_pref5 }}
-			{% for error in form.errors.country_pref5 %}
-				<label class="error"> {{ error|escape }} </label>
-			{% endfor %}
-		</li>	
-		<li>
-			<label> {{ form.country_pref6.label }} </label>
-			{{ form.country_pref6 }}
-			{% for error in form.errors.country_pref6 %}
-				<label class="error"> {{ error|escape }} </label>
-			{% endfor %}
-		</li>
-		<li>
-			<label> {{ form.country_pref7.label }} </label>
-			{{ form.country_pref7 }}
-			{% for error in form.errors.country_pref7 %}
-				<label class="error"> {{ error|escape }} </label>
-			{% endfor %}
-		</li>
-		<li>
-			<label> {{ form.country_pref8.label }} </label>
-			{{ form.country_pref8 }}
-			{% for error in form.errors.country_pref8 %}
-				<label class="error"> {{ error|escape }} </label>
-			{% endfor %}
-		</li>
-		<li>
-			<label> {{ form.country_pref9.label }} </label>
-			{{ form.country_pref9 }}
-			{% for error in form.errors.country_pref9 %}
-				<label class="error"> {{ error|escape }} </label>
-			{% endfor %}
-		</li>
-		<li>
-			<label> {{ form.country_pref10.label }} </label>
-			{{ form.country_pref10 }}
-			{% for error in form.errors.country_pref10 %}
-				<label class="error"> {{ error|escape }} </label>
-			{% endfor %}
-		</li>
-	</ul>
-</fieldset>
+<h3>Primary Contact</h3>
+		
+{{ form.primary_name }}
+{% for error in form.errors.primary_name %}
+	<label class="error"> {{ error|escape }} </label>
+{% endfor %}
+
+{{ form.primary_email}}
+{% for error in form.errors.primary_email %}
+	<label class="error"> {{ error|escape }} </label>
+{% endfor %}
+
+{{ form.primary_phone }}
+{% for error in form.errors.primary_phone %}
+	<label class="error"> {{ error|escape }} </label>
+{% endfor %}
 
 <hr />
 
-<fieldset>
-	<h3>Special Committee Preferences</h3>
-	<p class="instructions">
-		Would your delegation be interested in being represented in the following small/specialized committees? Positions are limited and we may not be able to accomodate all preferences. 
-	</p>
-	{{ form.committee_prefs }}
-	{% for error in form.errors.committee_prefs %}
-		<label class="error"> {{ error|escape }} </label>
-	{% endfor %}
-</fieldset>
+<h3>Secondary Contact</h3>
+{{ form.secondary_name }}
+{% for error in form.errors.secondary_name %}
+	<label class="error"> {{ error|escape }} </label>
+{% endfor %}
+
+{{ form.secondary_email }}
+{% for error in form.errors.secondary_email %}
+	<label class="error"> {{ error|escape }} </label>
+{% endfor %}
+
+{{ form.secondary_phone }}
+{% for error in form.errors.secondary_phone %}
+	<label class="error"> {{ error|escape }} </label>
+{% endfor %}
+
+<hr />
+
+<h3>Country Preferences</h3>
+
+<p class="instructions">
+	Please choose 10 United Nations Member States or Observers your school would like to represent. A reference list of countries and their relation to committees is available online. Please diversify your selection.
+</p>
+<ul>
+	<li>
+		<label> {{ form.country_pref1.label }} </label>
+		{{ form.country_pref1 }}
+		{% for error in form.errors.country_pref1 %}
+			<label class="error"> {{ error|escape }} </label>
+		{% endfor %}
+	</li>
+	<li>
+		<label> {{ form.country_pref2.label }} </label>
+		{{ form.country_pref2 }}
+		{% for error in form.errors.country_pref2 %}
+			<label class="error"> {{ error|escape }} </label>
+		{% endfor %}
+	</li>
+	<li>
+		<label> {{ form.country_pref3.label }} </label>
+		{{ form.country_pref3 }}
+		{% for error in form.errors.country_pref3 %}
+			<label class="error"> {{ error|escape }} </label>
+		{% endfor %}
+	</li>
+	<li>
+		<label> {{ form.country_pref4.label }} </label>
+		{{ form.country_pref4 }}
+		{% for error in form.errors.country_pref4 %}
+			<label class="error"> {{ error|escape }} </label>
+		{% endfor %}
+	</li>
+	<li>
+		<label> {{ form.country_pref5.label }} </label>
+		{{ form.country_pref5 }}
+		{% for error in form.errors.country_pref5 %}
+			<label class="error"> {{ error|escape }} </label>
+		{% endfor %}
+	</li>	
+	<li>
+		<label> {{ form.country_pref6.label }} </label>
+		{{ form.country_pref6 }}
+		{% for error in form.errors.country_pref6 %}
+			<label class="error"> {{ error|escape }} </label>
+		{% endfor %}
+	</li>
+	<li>
+		<label> {{ form.country_pref7.label }} </label>
+		{{ form.country_pref7 }}
+		{% for error in form.errors.country_pref7 %}
+			<label class="error"> {{ error|escape }} </label>
+		{% endfor %}
+	</li>
+	<li>
+		<label> {{ form.country_pref8.label }} </label>
+		{{ form.country_pref8 }}
+		{% for error in form.errors.country_pref8 %}
+			<label class="error"> {{ error|escape }} </label>
+		{% endfor %}
+	</li>
+	<li>
+		<label> {{ form.country_pref9.label }} </label>
+		{{ form.country_pref9 }}
+		{% for error in form.errors.country_pref9 %}
+			<label class="error"> {{ error|escape }} </label>
+		{% endfor %}
+	</li>
+	<li>
+		<label> {{ form.country_pref10.label }} </label>
+		{{ form.country_pref10 }}
+		{% for error in form.errors.country_pref10 %}
+			<label class="error"> {{ error|escape }} </label>
+		{% endfor %}
+	</li>
+</ul>
+
+<hr />
+
+<h3>Special Committee Preferences</h3>
+
+<p class="instructions">
+	Would your delegation be interested in being represented in the following small/specialized committees? Positions are limited and we may not be able to accomodate all preferences. 
+</p>
+{{ form.committee_prefs }}
+{% for error in form.errors.committee_prefs %}
+	<label class="error"> {{ error|escape }} </label>
+{% endfor %}
 
 <hr />
 
