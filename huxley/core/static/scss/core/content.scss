@@ -1,26 +1,5 @@
 /* Content */
 
-label.error
-{
-    color: #f30;
-    font-size: 10px;
-    font-weight: 500;
-    padding-left: 20px;
-    background: url(/static/img/exclamation.png) left center no-repeat;
-
-    @media
-    only screen and (-webkit-min-device-pixel-ratio: 2),
-    only screen and (   min--moz-device-pixel-ratio: 2),
-    only screen and (     -o-min-device-pixel-ratio: 2/1),
-    only screen and (        min-device-pixel-ratio: 2),
-    only screen and (                min-resolution: 192dpi),
-    only screen and (                min-resolution: 2dppx)
-    { 
-        background: url(/static/img/exclamation-2x.png) left center no-repeat;
-        background-size: 16px 16px;
-    }
-}
-
 .content
 {
     width: 740px;
@@ -123,6 +102,10 @@ label.error
         color: #666;
         border: 1px solid #ccc;
         
+        border-radius: 3px; 
+        moz-border-radius: 3px;
+        webkit-border-radius: 3px;
+
         box-shadow: inset 0 1px 5px rgba(0, 0, 0, 0.1);
         webkit-box-shadow: inset 0 1px 5px rgba(0, 0, 0, 0.1);
         moz-box-shadow: inset 0 1px 5px rgba(0, 0, 0, 0.1);
@@ -134,7 +117,16 @@ label.error
         transition: box-shadow linear 0.1s, background linear 0.05s;
 
         &:hover { border-color: #bbb; }
-        &:focus { border-color: #aaa; outline: 0; }
+
+        &:focus
+        {
+            border-color: #abc;
+            outline: 0;
+            
+            box-shadow: inset 0 1px 5px rgba(0, 85, 255, 0.15);
+            webkit-box-shadow: inset 0 1px 5px rgba(0, 85, 255, 0.15);
+            moz-box-shadow: inset 0 1px 5px rgba(0, 85, 255, 0.15);
+        }
     }
 
     .help-text
