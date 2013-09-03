@@ -1,69 +1,69 @@
-.content
+.content .button
 {
-    .button
+    padding: 5px 7px;
+    font: 400 14px "Segoe UI", "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    
+    box-shadow: 0px 1px 2px #ccc;
+    webkit-box-shadow: 0px 1px 2px #ccc;
+    moz-box-shadow: 0px 1px 2px #ccc;
+
+    &:hover
     {
-        padding: 5px 7px;
-        font: 14px "Segoe UI", "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-        font-weight: 400;
-        box-shadow: 0px 1px 2px #ccc;
-        webkit-box-shadow: 0px 1px 2px #ccc;
-        moz-box-shadow: 0px 1px 2px #ccc;
+        cursor: pointer;
+        text-decoration: none;
+    }
+
+    &:active
+    {
+        position: relative;
+        top: 1px;
+        
+        box-shadow: none;
+        webkit-box-shadow: none;
+        moz-box-shadow: none;
+    }
+
+    &.button-blue
+    {
+        background-color: #39f;
+        border: 1px solid #28e;
+        color: #fff;
+        text-shadow: #28e 0px 1px;
+
+        span { background-color: none; }
 
         &:hover
         {
-            cursor: pointer;
-            text-decoration: none;
+            background-color: #40a0ff;
+            border-color: #09c;
         }
+    }
 
-        &:active
+    &.button-green
+    {
+        background-color: #0c0; 
+        border: 1px solid #0b0;
+        color: #fff;
+        text-shadow: #0b0 0px 1px; 
+
+        &:hover
         {
-            position: relative;
-            top: 1px;
-            box-shadow: none;
+            background-color: #00d000;
+            border-color: #0b0;
         }
+    }
 
-        &.button-blue
+    &.button-yellow
+    {
+        background-color: #dd0;
+        border: 1px solid #cc0;
+        color: #fff;
+        text-shadow: #cc0 0px 1px; 
+
+        &:hover
         {
-            background-color: #39f;
-            border: 1px solid #28e;
-            color: #fff;
-            text-shadow: #28e 0px 1px;
-
-            span { background: none; }
-
-            &:hover
-            {
-                background-color: #40a0ff;
-                border-color: #09c;
-            }
-        }
-
-        &.button-green
-        {
-            background: #0c0; 
-            border: 1px solid #0b0;
-            color: #fff;
-            text-shadow: #0b0 0px 1px; 
-
-            &:hover
-            {
-                background: #00d000;
-                border-color: #0b0;
-            }
-        }
-
-        &.button-yellow
-        {
-            background: #dd0;
-            border: 1px solid #cc0;
-            color: #fff;
-            text-shadow: #cc0 0px 1px; 
-
-            &:hover
-            {
-                background: #e0e000;
-                border-color: #cc0;
-            }
+            background-color: #e0e000;
+            border-color: #cc0;
         }
     }
 }
