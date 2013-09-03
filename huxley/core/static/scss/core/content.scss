@@ -79,6 +79,8 @@
         padding: 6px 0;
         text-decoration: none;
 
+        &.nav { display: inline-block; }
+
         &:hover { text-shadow: 0px 0px 10px #fff; }
         &:active, &:visited { outline: 0; }
     }
