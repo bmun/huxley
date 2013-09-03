@@ -10,23 +10,12 @@
         &:focus { background-color: #f0f9ff; }
     }
 
-    ul
+    input[type=radio], input[type=checkbox] { margin-right: 3px; }
+
+    select
     {
-        padding: 0;
-
-        li
-        {   
-            list-style: none;
-            padding: 5px 0px;
-
-            input[type=radio], input[type=checkbox] { margin-right: 3px; }
-
-            select
-            {
-                width: 250px;
-                margin-left: 3px;
-            }
-        }
+        width: 250px;
+        margin-left: 3px;
     }
 
     label.error { margin-top: 3px; }
