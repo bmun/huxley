@@ -234,8 +234,11 @@
 
 <hr />
 
-<div style="text-align:right;">
-	<a style="float:left;" class="nav" href="{% url 'login' %}"> &larr; Back to Login</a> <span class="help-text">All done?</span><button class="button button-green rounded-small" type="submit">Register</button>
+<div class="right">
+	<span class="help-text">All done?</span>
+	<button class="button button-green rounded-small" type="submit">Register</button>
 </div>
+<a class="nav" href="{% url 'login' %}"> &larr; Back to Login</a>
+
 </form>
 {% endblock content %}

@@ -30,6 +30,10 @@ body
             background-size: 16px 16px;
         }
     }
+
+    .right { float: right; }
+
+    .left { float: left; }
 }
 
 #app{ display: none; margin: 0px auto; }
