@@ -17,11 +17,8 @@
 			<input class="text empty" type="text" name="username" placeholder="Username"/>
 			<input class="text empty" type="password" name="password" placeholder="Password">
 		</div>
-		<div class="right">
-			<span class="help-text">or</span>
-			<a class="nav button button-green rounded-small" href="{% url 'register' %}">Register for BMUN</a>
-		</div>
 		<button class="button button-blue login-button rounded-small" type="submit"><span>Log In<span></button>
+		<a class="nav button button-green rounded-small" href="{% url 'register' %}">Register for BMUN</a>
 		<div id="errorcontainer">
 			{% if state %}<label class="error">{{ state }}</label>{% endif %}
 		</div>	
