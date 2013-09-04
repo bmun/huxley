@@ -5,7 +5,7 @@
 
     .banner
     {
-        background-image: url(/static/img/ie50.png) left center no-repeat;
+        background: url(/static/img/ie50.png) left center no-repeat;
         color: #005;
         text-shadow: 0px 1px #8cf;
 
@@ -17,7 +17,7 @@
         only screen and (                min-resolution: 192dpi),
         only screen and (                min-resolution: 2dppx)
         { 
-            background: url(/static/img/ie-2x.png) left center no-repeat;
+            background-image: url(/static/img/ie-2x.png);
             background-size: 50px 50px;
         }
 

@@ -17,7 +17,7 @@
         only screen and (                min-resolution: 192dpi),
         only screen and (                min-resolution: 2dppx)
         { 
-            background: url(/static/img/js-2x.png) left center no-repeat;
+            background-image: url(/static/img/js-2x.png);
             background-size: 50px 50px;
         }
 
