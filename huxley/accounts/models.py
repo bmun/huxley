@@ -56,6 +56,22 @@ class HuxleyUser(AbstractUser):
         login(request, user)
         return user.default_path()
 
+    @classmethod
+    def reset_password(cls, username):
+        """ Reset and return a user's password, or return False if the user
+        doesn't exist. """
+        if not username:
+            return False
+        try:
+            user = cls.objects.get(models.Q(username=username) |
+                                   models.Q(email=username))
+            new_password = cls.objects.make_random_password(length=10)
+            user.set_password(new_password)
+            user.save()    
+            return new_password
+        except cls.DoesNotExist:
+            return False
+
     def change_password(self, old, new1, new2):
         """ Attempts to change the given user's password. Returns a 2-tuple
             of (bool) success, (str) error. """
