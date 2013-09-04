@@ -112,7 +112,6 @@ def reset_password(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         new_password = HuxleyUser.reset_password(username)
-        print new_password
         if new_password:
             if not settings.DEBUG:
                 user.email_user("Huxley Password Reset",
