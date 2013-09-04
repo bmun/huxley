@@ -8,7 +8,7 @@ from django.views.generic import RedirectView, TemplateView
 admin.autodiscover()
 
 urlpatterns = patterns('huxley.accounts.views',
-    url(r'^password/forgot', 'forgot_password', name='forgot_password'),
+    url(r'^password/reset', 'reset_password', name='reset_password'),
     url(r'^password/change', 'change_password', name='change_password'),
     url(r'^register', 'register', name='register'),
     url(r'^logout', 'logout_user', name='logout'),
