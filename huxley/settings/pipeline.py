@@ -14,6 +14,7 @@ PIPELINE_CSS = {
         'source_filenames': (
             'css/*.css',
             'scss/core/*.scss',
+            'scss/accounts/*.scss',
             'scss/advisors/*.scss',
             'scss/chairs/*.scss',
         ),
@@ -25,6 +26,7 @@ PIPELINE_JS = {
     'huxley': {
         'source_filenames': (
             'js/core/*.js',
+            'js/accounts/*.js',
             'js/advisors/*.js',
             'js/chairs/*.js',
         ),
