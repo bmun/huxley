@@ -39,9 +39,8 @@ body
 #app{ display: none; margin: 0px auto; }
 #wrapper{ width: 800px; margin: 0px auto 50px; }
 
-.rounded{ border-radius: 5px 5px 5px 5px; -moz-border-radius: 5px 5px 5px 5px; -webkit-border-radius: 5px 5px 5px 5px; behavior: url(/static/htc/PIE.htc) }
-.rounded-small{ border-radius: 3px 3px 3px 3px; -moz-border-radius: 3px 3px 3px 3px; -webkit-border-radius: 3px 3px 3px 3px; behavior: url(/static/htc/PIE.htc) }
-.rounded-top{ border-radius: 5px 5px 0px 0px; -moz-border-radius: 5px 5px 0px 0px; -webkit-border-radius: 5px 5px 0px 0px; behavior: url(/static/htc/PIE.htc) }
-.rounded-bottom{ border-radius: 0px 0px 5px 5px; -moz-border-radius: 0px 0px 5px 5px; -webkit-border-radius: 0px 0px 5px 5px; behavior: url(/static/htc/PIE.htc) }
+.rounded{ border-radius: 5px 5px 5px 5px; -moz-border-radius: 5px 5px 5px 5px; -webkit-border-radius: 5px 5px 5px 5px; }
+.rounded-small{ border-radius: 3px 3px 3px 3px; -moz-border-radius: 3px 3px 3px 3px; -webkit-border-radius: 3px 3px 3px 3px; }
+.rounded-top{ border-radius: 5px 5px 0px 0px; -moz-border-radius: 5px 5px 0px 0px; -webkit-border-radius: 5px 5px 0px 0px; }
+.rounded-bottom{ border-radius: 0px 0px 5px 5px; -moz-border-radius: 0px 0px 5px 5px; -webkit-border-radius: 0px 0px 5px 5px; }
 .bold{font-weight: 700;}
-.ie-layout{ zoom: 1; }
