@@ -26,7 +26,7 @@ var ContentManager = {
     // Fades the initial content into view.
     onPageLoad: function() {
         if(window.location.pathname == '/') {
-            History.pushState({}, "", $("html").data("default-path")); 
+            History.pushState({}, "", $("html").data("default-path"));
         } else {
             $(window).trigger('statechange');
         }
@@ -56,7 +56,7 @@ var ContentManager = {
             });
         } else {
             $.ajax({
-                url: path, 
+                url: path,
                 success: function(response) {
                   // Replace the title and content.
                   $("title").html(response.match(/<title>(.*?)<\/title>/)[1]);
