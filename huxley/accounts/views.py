@@ -8,12 +8,11 @@ from django.http import HttpResponse, HttpResponseRedirect, \
                         HttpResponseNotFound, HttpResponseForbidden
 from django.views.decorators.http import require_POST, require_GET
 
-from huxley.accounts.forms import ForgotPasswordForm, RegistrationForm
+from huxley.accounts.forms import RegistrationForm
 from huxley.accounts.models import HuxleyUser
 from huxley.core.models import *
 from huxley.shortcuts import render_template, render_json
 
-import re
 
 def login_user(request):
     """ Logs in a user or renders the login template. """
@@ -108,20 +107,22 @@ def change_password(request):
     return HttpResponse('OK') if success else HttpResponse(error)
 
 
-def forgot_password(request):
-    """ Resets a user's password. """
+def reset_password(request):
+    """ Reset a user's password. """
     if request.method == 'POST':
-        form = ForgotPasswordForm(request.POST)
-        if form.is_valid():
-            user = form.get_user()
-            new_pass = form.reset_pass(user)
-            user.email_user("Huxley Password Reset",
-                            "Your password has been reset to %s.\nThank you for using Huxley!" % (new_pass),
-                            from_email="no-reply@bmun.org")
-            return render_template(request, 'reset_success.html')
+        username = request.POST.get('username')
+        new_password = HuxleyUser.reset_password(username)
+        print new_password
+        if new_password:
+            if not settings.DEBUG:
+                user.email_user("Huxley Password Reset",
+                                "Your password has been reset to %s.\nThank you for using Huxley!" % (new_password),
+                                from_email="no-reply@bmun.org")
+            return render_template(request, 'password-reset-success.html')
+        else:
+            return render_template(request, 'password-reset.html', {'error': True})
 
-    form = ForgotPasswordForm()
-    return render_template(request, 'forgot_password.html', {'form': form})
+    return render_template(request, 'password-reset.html')
 
 
 @require_GET
