@@ -15,23 +15,26 @@
 
     .login-button
     {
+        /* Force image to be downloaded, but make it invisible. */
+        background-image: url(/static/img/login-loader.gif);
+        background-position: -9999px -9999px;
+        background-repeat: no-repeat;
+
+        @media
+        only screen and (-webkit-min-device-pixel-ratio: 2),
+        only screen and (   min--moz-device-pixel-ratio: 2),
+        only screen and (     -o-min-device-pixel-ratio: 2/1),
+        only screen and (        min-device-pixel-ratio: 2),
+        only screen and (                min-resolution: 192dpi),
+        only screen and (                min-resolution: 2dppx)
+        { 
+            background-image: url(/static/img/login-loader-2x.gif);
+            background-size: 20px 20px;
+        }
+
         &.loading
         {
-            background-image: url(/static/img/login-loader.gif) center center no-repeat;
             background-position: center center;
-            background-repeat: no-repeat;
-
-            @media
-            only screen and (-webkit-min-device-pixel-ratio: 2),
-            only screen and (   min--moz-device-pixel-ratio: 2),
-            only screen and (     -o-min-device-pixel-ratio: 2/1),
-            only screen and (        min-device-pixel-ratio: 2),
-            only screen and (                min-resolution: 192dpi),
-            only screen and (                min-resolution: 2dppx)
-            { 
-                background-image: url(/static/img/login-loader-2x.gif);
-                background-size: 20px 20px;
-            }
 
             span { visibility: hidden; }
         }
