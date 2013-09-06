@@ -46,6 +46,8 @@
         text-decoration: none;
         color: #333;
 
+        &[href^="mailto:"] { color: #39f; }
+
         &:hover { text-decoration: underline; }
     }
 
@@ -83,24 +85,23 @@
 
     a, p, span, label, h2, h3 { background-color: #eee; } /* Prevents ugliness during fadeout in IE. */
 
-    a
+    a.nav
     {
-        color: #333;
         display: inline-block;
         font-size: 14px;
         font-weight: 500;
         padding: 6px 0;
-        text-decoration: none;
 
-        &:hover { text-shadow: 0px 0px 10px #fff; }
         &:active, &:visited { outline: 0; }
     }
 
     p
     {
-        margin: 10px 0px;
+        margin: 10px 0 10px;
         text-rendering: optimizeLegibility;
         font-smooth:always;
+
+        &.address { margin-left: 50px; }
     }
 
     ul
