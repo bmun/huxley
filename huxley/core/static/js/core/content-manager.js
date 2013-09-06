@@ -10,12 +10,12 @@ var ContentManager = {
             handler(state.url);
         });
         
-        $(document).on("click", "a.nav", function() {
+        $(document).on("click", "a.js-nav", function() {
             History.pushState({}, $(this).text(), $(this).attr("href"));
             return false;
         });
         
-        $(document).on("click", "#appnavbar a.nav", function() {
+        $(document).on("click", "#appnavbar a.js-nav", function() {
             $("#appnavbar a.nav.currentpage").removeClass('currentpage');
             $(this).addClass('currentpage');
         });
