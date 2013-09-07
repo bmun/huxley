@@ -115,11 +115,17 @@ var ContentManager = {
     
     // Prepares the UI upon login/logout.
     onLoginLogout: function(redirect, fadetime) {
-        $('#container').fadeOut(150, function() {
-            $('#container').load(redirect + ' #appcontainer', null, function() {
-                $('#container').fadeIn(fadetime, function() {
-                    History.pushState({}, '', redirect);
-                });
+        var $container = $('#container');
+        var fadeout = $.Deferred(function(deferred) {
+            $container.fadeOut(150, function() {
+                deferred.resolve();
+            });
+        });
+
+        $.when($.get(redirect), fadeout).done(function(data) {
+            $('#appcontainer').replaceWith($('#appcontainer', $(data[0])));
+            $container.fadeIn(fadetime, function() {
+                History.pushState({}, '', redirect);
             });
         });
     }
