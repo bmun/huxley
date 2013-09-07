@@ -27,6 +27,8 @@ var ContentManager = {
     onPageLoad: function() {
         if(window.location.pathname == '/') {
             History.pushState({}, "", $("html").data("default-path"));
+        } else if (!document.getElementById('content-placeholder')) {
+            $('#app').fadeIn(500);
         } else {
             $(window).trigger('statechange');
         }
