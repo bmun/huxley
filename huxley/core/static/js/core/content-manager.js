@@ -2,14 +2,6 @@ var ContentManager = {
 
     // Initializer function.
     init: function() {
-        History.Adapter.bind(window, 'statechange', function(){
-            var state = History.getState();
-            var handler = $('#app').is(':hidden')
-                ? ContentManager.loadInitContent
-                : ContentManager.loadNewContent;
-            handler(state.url);
-        });
-        
         $(document).on('click', 'a.js-nav', function() {
             History.pushState({}, $(this).text(), $(this).attr('href'));
             return false;
@@ -19,55 +11,55 @@ var ContentManager = {
             $('#appnavbar a.js-nav.currentpage').removeClass('currentpage');
             $(this).addClass('currentpage');
         });
+
+        $(window).on('huxley.contentReady', ContentManager.onContentReady);
     
-        ContentManager.onPageLoad();
+        History.Adapter.bind(window, 'statechange', function(){
+            var state = History.getState();
+            var handler = $('#app').is(':hidden')
+                ? ContentManager.loadInitialContent
+                : ContentManager.loadNewContent;
+            handler(state.url);
+        });
+
+        // Trigger initial app state.
+        window.location.pathname == '/'
+            ? History.pushState({}, '', $('html').data('default-path'))
+            : History.Adapter.trigger(window, 'statechange');
     },
-    
-    // Fades the initial content into view.
-    onPageLoad: function() {
-        if(window.location.pathname == '/') {
-            History.pushState({}, '', $('html').data('default-path'));
-        } else if (!document.getElementById('content-placeholder')) {
-            $('#app').fadeIn(500);
-        } else {
-            $(window).trigger('statechange');
-        }
+
+    // Fades out the splash and fades in the app.
+    onContentReady: function() {
+        $.Deferred(function(deferred) {
+            $splash = $('#splash');
+            if ($splash.is(':visible')) {
+                $splash.delay(250).fadeOut(250, function() {
+                    deferred.resolve();
+                });
+            } else {
+                deferred.resolve();
+            }
+        }).then(function() {
+            $('#app').delay(250).fadeIn(500, function() {
+                $('#headerwrapper').slideDown(350, function() {
+                    $('#header').slideDown(350);
+                });
+            });
+        });
     },
     
     // Loads initial content into the application content container.
-    loadInitContent: function(path, data) {
-        if ($('#splash').is(':visible')) {
-            $.ajax({
-                url: path,
-                success: function(response) {
-                    // Replace the title and content.
-                    $('title').html(response.match(/<title>(.*?)<\/title>/)[1]);
-                    $('#capsule').replaceWith($('#capsule', $(response)));
-                    $('#appnavbar a[href="' + window.location.pathname + '"]')
+    loadInitialContent: function(path) {
+        if(document.getElementById('content-placeholder')) {
+            $.get(path, function(data) {
+                $('title').html(data.match(/<title>(.*?)<\/title>/)[1]);
+                $('#capsule').replaceWith($('#capsule', $(data)));
+                $('#appnavbar a[href="' + window.location.pathname + '"]')
                       .addClass('currentpage');
-                    // Fade in.
-                    $('#splash').delay(250).fadeOut(250, function() {
-                        $('#app').delay(250).fadeIn(500, function() {
-                            $('#headerwrapper').slideDown(350, function() {
-                                $('#header').slideDown(350);
-                            });
-                        });
-                    });
-                },
-                error: Error.show
+                $(window).trigger('huxley.contentReady');
             });
         } else {
-            $.ajax({
-                url: path,
-                success: function(response) {
-                  // Replace the title and content.
-                  $('title').html(response.match(/<title>(.*?)<\/title>/)[1]);
-                  $('#capsule').replaceWith($('#capsule', $(response)));
-                  // Fade in.
-                  $('#app').delay(250).fadeIn(500);
-                },
-                error: Error.show
-            });
+            $(window).trigger('huxley.contentReady');
         }
     },
     
