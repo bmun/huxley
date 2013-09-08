@@ -12,14 +12,61 @@ class Conference(models.Model):
     reg_close       = models.DateField()
     min_attendance  = models.PositiveSmallIntegerField(default=0)
     max_attendance  = models.PositiveSmallIntegerField(default=0)
-    
+
+    @staticmethod
+    def auto_country_assign(school):
+        '''Automatically assigns a school country and committee assignments based on
+           preference, and then by default order.'''
+        spots_left = school.max_delegation_size
+        print spots_left
+        spots_left = Conference.auto_assign(Country.objects.filter(special=True),
+                                            school.get_committee_preferences(),
+                                            school,
+                                            spots_left)
+        print spots_left
+        if spots_left:
+            spots_left = Conference.auto_assign(Country.objects.filter(special=False),
+                                                school.get_committee_preferences(),
+                                                school,
+                                                spots_left)
+        print spots_left
+        if spots_left:
+            spots_left = Conference.auto_assign(school.get_country_preferences(),
+                                                Committee.objects.filter(special=False),
+                                                school,
+                                                spots_left)
+        print spots_left
+        if spots_left:
+            spots_left = Conference.auto_assign(Country.objects.filter(special=False),
+                                                Committee.objects.filter(special=False),
+                                                school,
+                                                spots_left)
+        print spots_left
+
+    @staticmethod
+    def auto_assign(countries, committee_preferences, school, remaining_spots):
+        '''Helper method to auto_country_assign which assigns schools to Unassigned
+           Assignment objects based on a set of avaiable countries and committees.'''
+        for country_pref in countries:
+            for committee_pref in committee_preferences:
+                try:
+                    assignment_pref = Assignment.objects.get(committee=committee_pref, country=country_pref)
+                    if assignment_pref.school is None:
+                        assignment_pref.school = school
+                        remaining_spots -= committee_pref.delegation_size
+                        assignment_pref.save()
+                        if remaining_spots < 3:
+                            return 0
+                except Assignment.DoesNotExist:
+                    pass
+        return remaining_spots
+
     def __unicode__(self):
         return 'BMUN %d' % self.session
     
     class Meta:
         db_table = u'conference'
         get_latest_by = 'start_date'
-
 
 class Country(models.Model):
     name    = models.CharField(max_length=128)
@@ -129,6 +176,9 @@ class School(models.Model):
         return list(self.countrypreferences.all()
                         .order_by('countrypreference__rank'))
 
+    def get_committee_preferences(self):
+        return self.committeepreferences.all()
+
     def get_delegate_slots(self):
         """ Returns a list of this school's delegate slots,
             ordered by committee name. """
@@ -148,7 +198,7 @@ class Assignment(models.Model):
     school    = models.ForeignKey(School, null=True, blank=True, default=None)
 
     def __unicode__(self):
-        return self.committee.name + " : " + self.country.name
+        return self.committee.name + " : " + self.country.name + " : " + (self.school or "Unassigned")
 
     class Meta:
         db_table = u'assignment'
