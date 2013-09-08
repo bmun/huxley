@@ -33,9 +33,9 @@ class RegistrationForm(forms.Form):
     school_country  = forms.CharField(label="Country", initial='United States of America', widget=forms.TextInput(attrs={'disabled': True, 'placeholder': 'Country'}), required=False)
 
     program_type        = forms.ChoiceField(label="What category best describes your program?", widget=forms.RadioSelect, choices=School.PROGRAM_TYPE_OPTIONS, initial=School.TYPE_CLUB)
-    times_attended      = forms.IntegerField(label="Number of BMUN Sessions Attended", widget=forms.TextInput(attrs={'class':'required IntegersOnly', 'placeholder': 'Number of BMUN Sessions Attended'}))
-    min_delegation_size = forms.IntegerField(label="Minimum Delegation Size", widget=forms.TextInput(attrs={'class':'required IntegersOnly', 'placeholder': 'Minimum Delegation Size'}))
-    max_delegation_size = forms.IntegerField(label="Maximum Delegation Size", widget=forms.TextInput(attrs={'class':'required IntegersOnly', 'placeholder': 'Maximum Delegation Size'}))
+    times_attended      = forms.IntegerField(label="Number of BMUN Sessions Attended", widget=forms.TextInput(attrs={'class':'required positive-integer', 'placeholder': 'Number of BMUN Sessions Attended'}))
+    min_delegation_size = forms.IntegerField(label="Minimum Delegation Size", widget=forms.TextInput(attrs={'class':'required positive-integer', 'placeholder': 'Minimum Delegation Size'}))
+    max_delegation_size = forms.IntegerField(label="Maximum Delegation Size", widget=forms.TextInput(attrs={'class':'required positive-integer', 'placeholder': 'Maximum Delegation Size'}))
 
     primary_name    = forms.CharField(label="Name", widget=forms.TextInput(attrs={'class':'required', 'placeholder': 'Name'}))
     primary_email   = forms.EmailField(label="Email", widget=forms.TextInput(attrs={'class':'required email', 'placeholder': 'Email'}))
