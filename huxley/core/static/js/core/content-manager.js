@@ -35,7 +35,7 @@ var ContentManager = {
             });
             
             // Don't load new content if there's already content present.
-            if ($('#no-content').length === 0) {
+            if (!document.getElementById('no-content')) {
                 return;
             }
         }
