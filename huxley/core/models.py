@@ -12,14 +12,54 @@ class Conference(models.Model):
     reg_close       = models.DateField()
     min_attendance  = models.PositiveSmallIntegerField(default=0)
     max_attendance  = models.PositiveSmallIntegerField(default=0)
-    
+
+    @staticmethod
+    def auto_country_assign(school):
+        size = school.max_delegation_size
+        num_left = Conference.auto_assign(list(Country.objects.filter(special=True)), school.get_committee_preferences(), school, size)
+        if num_left == 0:
+            return
+        else:
+            size = num_left
+
+        num_left = Conference.auto_assign(list(Country.objects.filter(special=False)), school.get_committee_preferences(), school, size) 
+        if num_left == 0:
+            return
+        else:
+            size = num_left
+        print num_left, size
+
+        Conference.auto_assign(school.get_country_preferences(), list(Committee.objects.filter(special=False)), school, size)
+
+    @staticmethod
+    def auto_assign(countries, committees, this_school, size):
+        print countries
+        print committees
+        print size
+        for country_pref in countries:
+            for committee_pref in committees:
+                if Assignment.objects.filter(committee=committee_pref, country=country_pref).exists():
+                    assignment_pref = Assignment.objects.get(committee=committee_pref, country=country_pref)
+                    print assignment_pref
+                    print assignment_pref.country
+                    if (assignment_pref.school) is None:
+                        assignment_pref.school = this_school
+                        print assignment_pref
+                        size -= committee_pref.delegation_size
+                        assignment_pref.save()
+                        print assignment_pref
+                        if size < 3:
+                            return 0
+                else:
+                    continue
+        return size
+
     def __unicode__(self):
         return 'BMUN %d' % self.session
     
     class Meta:
         db_table = u'conference'
         get_latest_by = 'start_date'
-
 
 class Country(models.Model):
     name    = models.CharField(max_length=128)
@@ -129,6 +169,9 @@ class School(models.Model):
         return list(self.countrypreferences.all()
                         .order_by('countrypreference__rank'))
 
+    def get_committee_preferences(self):
+        return list(self.committeepreferences.all())
+
     def get_delegate_slots(self):
         """ Returns a list of this school's delegate slots,
             ordered by committee name. """
@@ -148,7 +191,7 @@ class Assignment(models.Model):
     school    = models.ForeignKey(School, null=True, blank=True, default=None)
 
     def __unicode__(self):
-        return self.committee.name + " : " + self.country.name
+        return self.committee.name + " : " + self.country.name + " : " + ("Unassigned" if (self.school is None) else self.school)
 
     class Meta:
         db_table = u'assignment'
