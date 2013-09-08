@@ -23,7 +23,8 @@ def submit():
     if not first_submission:
         print green('Pull request sucessfully updated.')
     elif git.hub_installed():
-        local('hub pull-request -b bmun:master -f')
+        current_branch = git.current_branch()
+        local('hub pull-request -b bmun:master -h origin:%s -f' % current_branch)
         print green('Pull request successfully issued.')
     else:
         print green('Branch successfully pushed. Go to GitHub to issue a pull request.')
