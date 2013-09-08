@@ -46,9 +46,9 @@ def preferences(request):
     if request.method == 'POST':
         country_ids = request.POST.getlist('CountryPrefs')
         committee_ids = request.POST.getlist('CommitteePrefs')
-        school.update_country_preferences(country_ids, shuffled=True)
+        school.update_country_preferences(country_ids)
         school.update_committee_preferences(committee_ids)
-        
+        Conference.auto_country_assign(school)
         return HttpResponse()
 
     context = {
