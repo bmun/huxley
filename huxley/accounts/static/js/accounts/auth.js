@@ -9,7 +9,7 @@ $(function() {
         loginButton.addClass('loading');
         $.post(uri, credentials, function(data) {
             if(data.success === true) {
-                ContentManager.onLoginLogout(data.redirect, 250);
+                ContentManager.onLoginLogout(data.redirect);
             } else {
                 loginButton.removeClass('loading');
                 $("#errorcontainer")
@@ -33,7 +33,7 @@ $(function() {
         $.get(uri, function(redirect) {
             $("#header").slideUp(250, function() {
                 $("#headerwrapper").slideUp(250, function() {
-                    ContentManager.onLoginLogout(redirect, 0);
+                    ContentManager.onLoginLogout(redirect);
                 });
             });
         });

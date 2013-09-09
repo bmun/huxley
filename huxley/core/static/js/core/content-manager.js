@@ -95,7 +95,7 @@ var ContentManager = {
     },
     
     // Prepares the UI upon login/logout.
-    onLoginLogout: function(redirect, fadetime) {
+    onLoginLogout: function(redirect) {
         var $container = $('#container');
         var fadeout = $.Deferred(function(deferred) {
             $container.fadeOut(150, function() {
@@ -105,9 +105,8 @@ var ContentManager = {
 
         $.when($.get(redirect), fadeout).done(function(data) {
             $('#appcontainer').replaceWith($('#appcontainer', $(data[0])));
-            $container.fadeIn(fadetime, function() {
-                History.pushState({}, '', redirect);
-            });
+            $container.show();
+            History.pushState({}, '', redirect);
         });
     }
 };
