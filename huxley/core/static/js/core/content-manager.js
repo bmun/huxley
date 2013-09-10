@@ -1,7 +1,7 @@
 var ContentManager = {
     init: function() {
         $(document).on('click', 'a.js-nav', function() {
-            History.pushState({}, $(this).text(), $(this).attr('href'));
+            History.pushState({}, 'Loading...', $(this).attr('href'));
             return false;
         });
     
@@ -104,9 +104,11 @@ var ContentManager = {
         });
 
         $.when($.get(redirect), fadeout).done(function(data) {
-            $('#appcontainer').replaceWith($('#appcontainer', $(data[0])));
+            var markup = data[0];
+            $('#appcontainer').replaceWith($('#appcontainer', $(markup)));
             $container.show();
             History.pushState({}, '', redirect);
+            $('title').html(markup.match(/<title>(.*?)<\/title>/)[1]);
         });
     }
 };
