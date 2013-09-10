@@ -45,7 +45,7 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
-STATICFILES_STORAGE = 'pipeline.storage.PipelineStorage'
+STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
 
 TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.debug',
