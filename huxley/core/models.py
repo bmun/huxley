@@ -27,32 +27,22 @@ class Conference(models.Model):
             return
         else:
             size = num_left
-        print num_left, size
 
         Conference.auto_assign(school.get_country_preferences(), list(Committee.objects.filter(special=False)), school, size)
 
     @staticmethod
-    def auto_assign(countries, committees, this_school, size):
-        print countries
-        print committees
-        print size
+    def auto_assign(countries, committee_preferences, school, remaining_spots):
         for country_pref in countries:
-            for committee_pref in committees:
+            for committee_pref in committee_preferences:
                 if Assignment.objects.filter(committee=committee_pref, country=country_pref).exists():
                     assignment_pref = Assignment.objects.get(committee=committee_pref, country=country_pref)
-                    print assignment_pref
-                    print assignment_pref.country
-                    if (assignment_pref.school) is None:
-                        assignment_pref.school = this_school
-                        print assignment_pref
-                        size -= committee_pref.delegation_size
+                    if assignment_pref.school is None:
+                        assignment_pref.school = school
+                        remaining_spots -= committee_pref.delegation_size
                         assignment_pref.save()
-                        print assignment_pref
-                        if size < 3:
+                        if remaining_spots < 3:
                             return 0
-                else:
-                    continue
-        return size
+        return remaining_spots
 
     def __unicode__(self):
         return 'BMUN %d' % self.session
@@ -170,7 +160,7 @@ class School(models.Model):
                         .order_by('countrypreference__rank'))
 
     def get_committee_preferences(self):
-        return list(self.committeepreferences.all())
+        return self.committeepreferences.all()
 
     def get_delegate_slots(self):
         """ Returns a list of this school's delegate slots,
@@ -191,7 +181,7 @@ class Assignment(models.Model):
     school    = models.ForeignKey(School, null=True, blank=True, default=None)
 
     def __unicode__(self):
-        return self.committee.name + " : " + self.country.name + " : " + ("Unassigned" if (self.school is None) else self.school)
+        return self.committee.name + " : " + self.country.name + " : " + (self.school or "Unassigned")
 
     class Meta:
         db_table = u'assignment'
