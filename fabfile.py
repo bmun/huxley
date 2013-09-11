@@ -16,8 +16,8 @@ def update():
     print 'Updating your local branch...'
     git.pull()
 
-def submit():
-    first_submission = not git.remote_branch_exists()
+def submit(remote='origin'):
+    first_submission = not git.remote_branch_exists(remote=remote)
     git.pull()
     git.push()
     if not first_submission:
