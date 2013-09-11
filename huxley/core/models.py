@@ -16,28 +16,35 @@ class Conference(models.Model):
     @staticmethod
     def auto_country_assign(school):
         spots_left = school.max_delegation_size
+        print spots_left
         spots_left = Conference.auto_assign(Country.objects.filter(special=True),
                                             school.get_committee_preferences(),
                                             school,
                                             spots_left)
+        print spots_left
         if spots_left:
             spots_left = Conference.auto_assign(Country.objects.filter(special=False),
                                                 school.get_committee_preferences(),
                                                 school,
                                                 spots_left)
+        print spots_left
         if spots_left:
             spots_left = Conference.auto_assign(school.get_country_preferences(),
                                    Committee.objects.filter(special=False),
                                    school,
                                    spots_left)
+        print spots_left
         if spots_left:
             spots_left = Conference.auto_assign(Country.objects.filter(special=False),
                                    Committee.objects.filter(special=False),
                                    school,
                                    spots_left)
+        print spots_left
 
     @staticmethod
     def auto_assign(countries, committee_preferences, school, remaining_spots):
+        print countries
+        print committee_preferences
         for country_pref in countries:
             for committee_pref in committee_preferences:
                 try:
@@ -48,7 +55,7 @@ class Conference(models.Model):
                         assignment_pref.save()
                         if remaining_spots < 3:
                             return 0
-                except ObjectDoesNotExist:
+                except:
                     continue
         return remaining_spots
 
