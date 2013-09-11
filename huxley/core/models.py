@@ -15,26 +15,32 @@ class Conference(models.Model):
 
     @staticmethod
     def auto_country_assign(school):
-        size = school.max_delegation_size
-        num_left = Conference.auto_assign(list(Country.objects.filter(special=True)), school.get_committee_preferences(), school, size)
-        if num_left == 0:
-            return
-        else:
-            size = num_left
-
-        num_left = Conference.auto_assign(list(Country.objects.filter(special=False)), school.get_committee_preferences(), school, size) 
-        if num_left == 0:
-            return
-        else:
-            size = num_left
-
-        Conference.auto_assign(school.get_country_preferences(), list(Committee.objects.filter(special=False)), school, size)
+        spots_left = school.max_delegation_size
+        spots_left = Conference.auto_assign(Country.objects.filter(special=True),
+                                            school.get_committee_preferences(),
+                                            school,
+                                            spots_left)
+        if spots_left:
+            spots_left = Conference.auto_assign(Country.objects.filter(special=False),
+                                                school.get_committee_preferences(),
+                                                school,
+                                                spots_left)
+        if spots_left:
+            spots_left = Conference.auto_assign(school.get_country_preferences(),
+                                   Committee.objects.filter(special=False),
+                                   school,
+                                   spots_left)
+        if spots_left:
+            spots_left = Conference.auto_assign(Country.objects.filter(special=False),
+                                   Committee.objects.filter(special=False),
+                                   school,
+                                   spots_left)
 
     @staticmethod
     def auto_assign(countries, committee_preferences, school, remaining_spots):
         for country_pref in countries:
             for committee_pref in committee_preferences:
-                if Assignment.objects.filter(committee=committee_pref, country=country_pref).exists():
+                try:
                     assignment_pref = Assignment.objects.get(committee=committee_pref, country=country_pref)
                     if assignment_pref.school is None:
                         assignment_pref.school = school
@@ -42,6 +48,8 @@ class Conference(models.Model):
                         assignment_pref.save()
                         if remaining_spots < 3:
                             return 0
+                except ObjectDoesNotExist:
+                    continue
         return remaining_spots
 
     def __unicode__(self):
