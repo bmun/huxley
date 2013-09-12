@@ -13,7 +13,10 @@ var ContentManager = {
 
         // Trigger initial app state.
         window.location.pathname == '/'
-            ? History.pushState({}, '', $('html').data('default-path'))
+            ? History.pushState(
+                {},
+                $('title').text(),
+                $('html').data('default-path'))
             : History.Adapter.trigger(window, 'statechange');
     },
 
