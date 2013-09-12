@@ -24,7 +24,7 @@ def submit(remote='origin'):
         print green('Pull request sucessfully updated.')
     elif git.hub_installed():
         current_branch = git.current_branch()
-        local('hub pull-request -b bmun:master -h origin:%s -f' % current_branch)
+        local('hub pull-request -b upstream:master -h %s:%s -f' % (origin, current_branch))
         print green('Pull request successfully issued.')
     else:
         print green('Branch successfully pushed. Go to GitHub to issue a pull request.')
