@@ -1,6 +1,8 @@
 import os
+import sys
 
-os.environ['PYTHONPATH'] = os.path.abspath('PYTHONPATH')
+os.environ['PYTHONPATH'] = os.path.abspath(os.path.dirname(__file__))
+sys.path.append(os.path.abspath(os.path.dirname(__file__)))
 os.environ['DJANGO_SETTINGS_MODULE'] = 'huxley.settings'
 
 from huxley.core.models import Country, Committee, Assignment
@@ -24,8 +26,8 @@ for row in range(2, country_range):
 			print s.cell(row, 0).value
 			print s.cell(row,col).value
 			print
-			country_name = Country.objects.get(name=s.cell(row, 0).value)
-			committee_name = Committee.objects.get(name=s.cell(1, col).value)
-			assignment = Assignment(committee=committee_name, country=country_name)
+			country = Country.objects.get(name=s.cell(row, 0).value)
+			committee = Committee.objects.get(name=s.cell(1, col).value)
+			assignment = Assignment(committee=committee, country=country)
 			assignment.save()
 
