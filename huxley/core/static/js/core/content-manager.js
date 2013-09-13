@@ -4,6 +4,11 @@ var ContentManager = {
             History.pushState({}, 'Loading...', $(this).attr('href'));
             return false;
         });
+
+        // Fake placeholders for IE9.
+        $(window).on('huxley/contentReady', function() {
+            $('input[type=text], input[type=password]').placeholder();
+        });
     
         History.Adapter.bind(
             window,
@@ -39,6 +44,7 @@ var ContentManager = {
             
             // Don't load new content if there's already content present.
             if (!document.getElementById('no-content')) {
+                $(window).trigger('huxley/contentReady');
                 return;
             }
         }
@@ -76,6 +82,8 @@ var ContentManager = {
                 var markup = responseData[0];
                 $('title').html(markup.match(/<title>(.*?)<\/title>/)[1]);
                 $('#capsule').replaceWith($('#capsule', $(markup)));
+                
+                $(window).trigger('huxley/contentReady');
 
                 $contentwrapper.css({
                     'visibility':'hidden',
