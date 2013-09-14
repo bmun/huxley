@@ -9,7 +9,7 @@ Begin by creating a fork of this repository. Go to the top-right of this reposit
 
 Then, if you're developing on Mac OS X, execute the following command:
 
-	$ \curl -L https://raw.github.com/bmun/huxley/master/scripts/setup.sh | bash
+	$ \curl -L -K https://raw.github.com/bmun/huxley/master/scripts/setup.sh | bash
 
 And that's it! Everything wil be taken care of automatically. **This script assumes that you have virtualenv and virtualenv wrapper installed.** The following steps are given for reference, in case you'd like to customize your setup.
 
