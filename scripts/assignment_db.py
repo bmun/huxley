@@ -1,8 +1,8 @@
-import os
+from os import environ
+from os.path import abspath, dirname
 import sys
 
-os.environ['PYTHONPATH'] = os.path.abspath(os.path.dirname(__file__))
-sys.path.append(os.path.abspath(os.path.dirname(__file__)))
+sys.path.append(abspath(dirname(dirname(__file__))))
 os.environ['DJANGO_SETTINGS_MODULE'] = 'huxley.settings'
 
 from huxley.core.models import Country, Committee, Assignment
