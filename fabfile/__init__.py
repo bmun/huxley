@@ -4,7 +4,7 @@
 from fabric.api import local
 from fabric.colors import green, red, yellow
 from fabric.contrib.console import confirm
-from utils import git
+from utils import git, get_username
 
 def feature(branch_name=None):
     if not branch_name:
@@ -24,7 +24,8 @@ def submit(remote='origin'):
         print green('Pull request sucessfully updated.')
     elif git.hub_installed():
         current_branch = git.current_branch()
-        local('hub pull-request -b bmun:master -h %s:%s -f' % (remote, current_branch))
+        username = get_username()
+        local('hub pull-request -b bmun:master -h bmun:%s -f' % current_branch)
         print green('Pull request successfully issued.')
     else:
         print green('Branch successfully pushed. Go to GitHub to issue a pull request.')
