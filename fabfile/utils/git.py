@@ -14,7 +14,7 @@ def master_guard(fn):
     return guarded_fn
 
 def new_branch(branch_name, remote='upstream'):
-    local('git fetch upstream')
+    local('git fetch %s' % remote)
     local('git checkout -tb %s %s/master' % (branch_name, remote))
 
 def current_branch():
