@@ -12,6 +12,7 @@ huxley/static/*
 huxley/*/static/scss/*/*.css
 
 huxley/settings/local.py
+scripts/fabric/deploy.py
 
 .coverage
 htmlcov/

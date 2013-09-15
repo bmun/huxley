@@ -6,6 +6,11 @@ from fabric.colors import green, red, yellow
 from fabric.contrib.console import confirm
 from scripts.fabric import git
 
+try:
+    from scripts.fabric.deploy import deploy
+except ImportError:
+    pass
+
 def feature(branch_name=None):
     if not branch_name:
         print red('No branch name given. Usage: fab feature:<branch_name>')
@@ -24,7 +29,7 @@ def submit(remote='origin'):
         print green('Pull request sucessfully updated.')
     elif git.hub_installed():
         current_branch = git.current_branch()
-        local('hub pull-request -b upstream:master -h %s:%s -f' % (origin, current_branch))
+        local('hub pull-request -b upstream:master -h %s:%s -f' % (remote, current_branch))
         print green('Pull request successfully issued.')
     else:
         print green('Branch successfully pushed. Go to GitHub to issue a pull request.')
