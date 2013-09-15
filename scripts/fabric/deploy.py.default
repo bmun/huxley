@@ -1,0 +1,25 @@
+# Copyright (c) 2011-2013 Kunal Mehta. All rights reserved.
+# Use of this source code is governed by a BSD License found in README.md.
+
+from fabric.api import cd, hosts, prefix, run
+
+source_paths = {
+    'prod': '/path/to/your/production/deployment',
+    'stage': '/path/to/your/staging/deployment',
+}
+
+virtualenvs = {
+    'prod': 'your_producton_virtualenv',
+    'stage': 'your_staging_virtualenv',
+}
+
+@hosts(['your.host.name'])
+def deploy(environment):
+    source_path = source_paths[environment]
+    virtualenv_prefix = 'workon %s' % virtualenvs[environment]
+    with cd(source_path):
+        with prefix(virtualenv_prefix):
+            run('git pull')
+            run('python manage.py migrate')
+            run('python manage.py collectstatic --noinput')
+            run('../apache2/bin/restart')
