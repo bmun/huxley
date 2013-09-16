@@ -19,25 +19,25 @@ class Conference(models.Model):
         based on preference, and then by default order.'''
         spots_left = school.max_delegation_size
         if spots_left:
-            spots_left = Conference.auto_assign(Country.objects.filter(special=True),
-                                                school.get_committee_preferences(),
+            spots_left = Conference.auto_assign(Country.objects.filter(special=True).order_by('?'),
+                                                school.get_committee_preferences().,
                                                 school,
                                                 spots_left,
-                                                (school.max_delegation_size/10)+1)
+                                                (school.max_delegation_size*.15)+1)
         if spots_left:
-            spots_left = Conference.auto_assign(Country.objects.filter(special=False),
+            spots_left = Conference.auto_assign(Country.objects.filter(special=False).order_by('?'),
                                                 school.get_committee_preferences(),
                                                 school,
                                                 spots_left,
-                                                (school.max_delegation_size/5)+1)
+                                                (school.max_delegation_size*.20)+1)
         if spots_left:
             spots_left = Conference.auto_assign(school.get_country_preferences(),
-                                                Committee.objects.filter(special=False),
+                                                Committee.objects.filter(special=False).order_by('?'),
                                                 school,
                                                 spots_left)
         if spots_left:
-            spots_left = Conference.auto_assign(Country.objects.filter(special=False),
-                                                Committee.objects.filter(special=False),
+            spots_left = Conference.auto_assign(Country.objects.filter(special=False).order_by('?'),
+                                                Committee.objects.filter(special=False).order_by('?'),
                                                 school,
                                                 spots_left)
 
