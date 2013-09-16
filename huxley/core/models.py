@@ -20,7 +20,7 @@ class Conference(models.Model):
         spots_left = school.max_delegation_size
         if spots_left:
             spots_left = Conference.auto_assign(Country.objects.filter(special=True).order_by('?'),
-                                                school.get_committee_preferences().,
+                                                school.get_committee_preferences(),
                                                 school,
                                                 spots_left,
                                                 (school.max_delegation_size*.15)+1)
@@ -53,7 +53,7 @@ class Conference(models.Model):
                     if assignment.school is None:
                         assignment.school = school
                         spots_left -= committee.delegation_size
-                        max_spots -= committee.delegation_size:
+                        max_spots -= committee.delegation_size
                         assignment.save()
                         if spots_left < 3:
                             return 0
@@ -201,7 +201,7 @@ class Assignment(models.Model):
     school    = models.ForeignKey(School, null=True, blank=True, default=None)
 
     def __unicode__(self):
-        return self.committee.name + " : " + self.country.name + " : " + (self.school or "Unassigned")
+        return self.committee.name + " : " + self.country.name + " : " + (self.school.name if self.school else "Unassigned")
 
     class Meta:
         db_table = u'assignment'
