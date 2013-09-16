@@ -5,14 +5,14 @@
 {% block content %}
 <h2> Welcome, <span class="advisorfirstname">{{ user.first_name }}!</span> </h2>
 
-<p>We're very excited to see <span class="schoolname">{{ school }}</span> at BMUN 61 this year!
+<p>We're very excited to see <span class="schoolname">{{ school }}</span> at BMUN 62 this year!
 Here, you can view and edit your registration information for the conference, edit your delegate roster, and find answers to frequently asked questions.
 To edit your information, just click on any of the highlighted fields and add your changes. Also, <span class="bold">don't forget to save any information you update!</span></p>
 <br>
 <p><strong>Important Note:</strong> Please mail all checks to <strong>P.O. Box 4306 Berkeley, CA 94704-0306.</strong> If you have any other further questions, please contact me at <a href="mailto:info@bmun.org">info@bmun.org</a> and I will respond to all requests efficiently. See you soon!</p>
 <br>
-<p class="bold">Nishita Agarwal</p>
-<p>Under-Secretary General of External Relations, 61st Session</p>
+<p class="bold">Shrey Goel</p>
+<p>Under-Secretary General of External Relations, 62nd Session</p>
 
 <form id = "welcomepage" method="post" action="{% url 'advisor_welcome' %}">
 {% csrf_token %}
