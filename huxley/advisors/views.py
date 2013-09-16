@@ -2,6 +2,7 @@
 # Use of this source code is governed by a BSD License found in README.md.
 
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponseForbidden
+from django.shortcuts import render_to_response
 from django.utils import simplejson
 
 from huxley.core.models import *
@@ -41,6 +42,7 @@ def welcome(request):
 def preferences(request):
     """ Display and/or update the advisor's country and committee
         preferences. """
+    return render_to_response('comingsoon.html')
     school = request.user.school
 
     if request.method == 'POST':
@@ -64,6 +66,7 @@ def preferences(request):
 def roster(request):
     """ Display the advisor's editable roster, or update information as
         necessary. """
+    return render_to_response('comingsoon.html')
     school = request.user.school
     if request.method == 'POST':
         slot_data = simplejson.loads(request.POST['delegates'])
@@ -77,6 +80,7 @@ def roster(request):
 
 def attendance(request):
     """ Display the advisor's attendance list. """
+    return render_to_response('comingsoon.html')
     context = {'delegate_slots': request.user.school.get_delegate_slots()}
     return render_template(request, 'check-attendance.html', context)
 
