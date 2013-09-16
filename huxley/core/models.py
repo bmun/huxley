@@ -22,12 +22,14 @@ class Conference(models.Model):
             spots_left = Conference.auto_assign(Country.objects.filter(special=True),
                                                 school.get_committee_preferences(),
                                                 school,
-                                                spots_left)
+                                                spots_left,
+                                                (school.max_delegation_size/10)+1)
         if spots_left:
             spots_left = Conference.auto_assign(Country.objects.filter(special=False),
                                                 school.get_committee_preferences(),
                                                 school,
-                                                spots_left)
+                                                spots_left,
+                                                (school.max_delegation_size/5)+1)
         if spots_left:
             spots_left = Conference.auto_assign(school.get_country_preferences(),
                                                 Committee.objects.filter(special=False),
@@ -40,7 +42,7 @@ class Conference(models.Model):
                                                 spots_left)
 
     @staticmethod
-    def auto_assign(countries, committees, school, spots_left):
+    def auto_assign(countries, committees, school, spots_left, max_spots=100):
         '''Assign schools to unassigned Assignment objects based on a set of
         available countries and committees.'''
         for country in countries:
@@ -51,9 +53,12 @@ class Conference(models.Model):
                     if assignment.school is None:
                         assignment.school = school
                         spots_left -= committee.delegation_size
+                        max_spots -= committee.delegation_size:
                         assignment.save()
                         if spots_left < 3:
                             return 0
+                        if max_spots < 0:
+                            break
                 except Assignment.DoesNotExist:
                     pass
         
