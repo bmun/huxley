@@ -79,7 +79,8 @@ def register(request):
                                     "more questions, please feel free to email me at "
                                     "info@bmun.org. See you soon!\n\nBest,\n\nShrey Goel"
                                     "\nUSG of External Relations, BMUN 62" % new_school.name,
-                                    "info@bmun.org")            
+                                    "info@bmun.org")
+            Conference.auto_country_assign(new_school)            
             return render_template(request, 'thanks.html')    
     
     form = RegistrationForm()
