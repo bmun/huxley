@@ -58,7 +58,7 @@ class Conference(models.Model):
                         if spots_left < 3:
                             return 0
                         if max_spots < 0:
-                            break
+                            return spots_left
                 except Assignment.DoesNotExist:
                     pass
         
