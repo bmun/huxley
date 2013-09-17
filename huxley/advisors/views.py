@@ -50,7 +50,6 @@ def preferences(request):
         committee_ids = request.POST.getlist('CommitteePrefs')
         school.update_country_preferences(country_ids)
         school.update_committee_preferences(committee_ids)
-        Conference.auto_country_assign(school)
         return HttpResponse()
 
     context = {
