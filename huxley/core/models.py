@@ -50,7 +50,10 @@ class Conference(models.Model):
                 try:
                     assignment = Assignment.objects.get(committee=committee,
                                                         country=country)
+<<<<<<< HEAD
                     print assignment
+=======
+>>>>>>> 0c129aa7722a28cae2cad9bbc4c44dd73c9f50ce
                     if assignment.school is None:
                         assignment.school = school
                         spots_left -= committee.delegation_size
@@ -62,6 +65,10 @@ class Conference(models.Model):
                             return spots_left
                 except Assignment.DoesNotExist:
                     pass
+<<<<<<< HEAD
+=======
+        
+>>>>>>> 0c129aa7722a28cae2cad9bbc4c44dd73c9f50ce
         return spots_left
 
     def __unicode__(self):
