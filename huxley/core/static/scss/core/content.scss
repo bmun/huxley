@@ -84,8 +84,6 @@
     width: 300px;
     margin-top: 80px;
 
-    a, p, span, label, h2, h3 { background-color: #eee; } /* Prevents ugliness during fadeout in IE. */
-
     a.outer-nav
     {
         display: inline-block;
