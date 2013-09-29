@@ -5,17 +5,15 @@
 {% block body %}
     {% include "ie-warning.html" %}
     {% include "js-warning.html" %}
-    <div id="app">
-        <div class="content content-outer transparent ie-layout rounded">
-            <div id="contentwrapper">
-                <div id="capsule">
-                    {% block header %}
-                        <div class="logo-small"></div>
-                    {% endblock header %}
-                    <hr />
-                    {% block content %}
-                    {% endblock content %}
-                </div>
+    <div class="content content-outer transparent ie-layout rounded">
+        <div id="contentwrapper">
+            <div id="capsule">
+                {% block header %}
+                    <div class="logo-small"></div>
+                {% endblock header %}
+                <hr />
+                {% block content %}
+                {% endblock content %}
             </div>
         </div>
     </div>
