@@ -2,7 +2,6 @@
 # Use of this source code is governed by a BSD License found in README.md.
 
 from django.core.urlresolvers import reverse
-from django.http import HttpRequest
 
 def conference(request):
     return {'conference' : request.conference}
