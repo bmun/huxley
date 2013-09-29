@@ -4,11 +4,8 @@
 {% block title %} Index Template {% endblock title %}
 
 {% block body %}
-
-{% include "header.html" %}
-{% include "change-password.html" %}
-
-<div id="app" class="application">
+    {% include "header.html" %}
+    {% include "change-password.html" %}
     <div id="appnavbar" class="titlebar rounded-top">
         <ul id="navmenu">
             {% block navmenu %}
@@ -35,6 +32,4 @@
             </div>
         </div>
     </div>
-</div>
-
 {% endblock body %}
