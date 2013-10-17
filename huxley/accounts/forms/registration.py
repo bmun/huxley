@@ -70,7 +70,7 @@ class RegistrationForm(forms.Form):
         return new_user
 
     def create_school(self):
-        registration_fee = 40.00 if date.today() < date(2012, 10, 20) else 50.00
+        registration_fee = 40.00 if date.today() < date(2013, 11, 01) else 50.00
         return School.objects.create(name=self.cleaned_data['school_name'],
                                      address=self.cleaned_data['school_address'],
                                      city=self.cleaned_data['school_city'],
