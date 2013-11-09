@@ -10,6 +10,6 @@ def index(request):
     '''Render the appropriate base tempate.'''
     context = RequestContext(request)
     if not request.user.is_authenticated():
-        return render_to_response('auth.html', context)
+        return render_to_response('login.html', context)
     else:
         return render_to_response('base-inner.html', context)

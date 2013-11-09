@@ -16,7 +16,7 @@ class EnforceUserTypeMiddleware:
             return
 
         if not request.user.is_authenticated():
-            return render_template(request, 'auth.html')
+            return render_template(request, 'login.html')
 
         if app_name == 'advisors' and not request.user.is_advisor():
             return HttpResponseForbidden()
