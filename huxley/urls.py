@@ -26,7 +26,7 @@ urlpatterns += patterns('',
 urlpatterns += patterns('',
     url(r'^favicon\.ico$', RedirectView.as_view(url='/static/img/favicon.ico')),
     url(r'^about', TemplateView.as_view(template_name='about.html'), name='about'),
-    url(r'^success', TemplateView.as_view(template_name='thanks.html'), name='register_success'),
+    url(r'^success', TemplateView.as_view(template_name='registration-success.html'), name='register_success'),
 )
 
 urlpatterns += patterns('',
