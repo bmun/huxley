@@ -10,11 +10,11 @@
         <ul id="navmenu">
             {% block navmenu %}
                 {% if user|is_advisor %}
-                    <li><a class="js-nav default" href="{% url 'advisor_welcome' %}">Welcome!</a></li>
-                    <li><a class="js-nav" href="{% url 'advisor_roster' %}">Edit Roster</a></li>
-                    <li><a class="js-nav" href="{% url 'advisor_preferences' %}">Edit Preferences</a></li>
-                    <li><a class="js-nav" href="{% url 'advisor_attendance' %}">Check Attendance</a></li>
-                    <li><a class="js-nav" href="{% url 'advisor_help' %}">Need Help?</a></li>
+                    <li><a class="js-nav default" href="{% url 'advisors:welcome' %}">Welcome!</a></li>
+                    <li><a class="js-nav" href="{% url 'advisors:roster' %}">Edit Roster</a></li>
+                    <li><a class="js-nav" href="{% url 'advisors:preferences' %}">Edit Preferences</a></li>
+                    <li><a class="js-nav" href="{% url 'advisors:attendance' %}">Check Attendance</a></li>
+                    <li><a class="js-nav" href="{% url 'advisors:help' %}">Need Help?</a></li>
                 {% elif user|is_chair %}
                     <li><a class="js-nav default" href="{% url 'chairs:grading' %}">Grading</a></li>
                     <li><a class="js-nav" href="{% url 'chairs:attendance' %}">Take Attendance</a></li>

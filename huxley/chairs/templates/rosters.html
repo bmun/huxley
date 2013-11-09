@@ -6,7 +6,7 @@
 <h2>View Rosters</h2>
 
 <p>Here, you can view the roster for all schools registered for BMUN. </p>
- <form id="theRoster" method="post" action="{% url 'advisor_roster' %}">
+ <form id="theRoster" method="post" action="{% url 'advisors:roster' %}">
 {% csrf_token %}
 <div class="tablemenu header">
     <select>
