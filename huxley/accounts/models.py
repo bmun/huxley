@@ -30,7 +30,7 @@ class HuxleyUser(AbstractUser):
 
     def default_path(self):
         if self.is_advisor():
-            return reverse('advisor_welcome')
+            return reverse('advisors:welcome')
         elif self.is_chair():
             return reverse('chairs:attendance')
 

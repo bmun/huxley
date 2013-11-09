@@ -4,9 +4,9 @@
 from django.conf.urls import patterns, url
 
 urlpatterns = patterns('huxley.advisors.views',
-	url(r'^welcome', 'welcome', name='advisor_welcome'),
-	url(r'^preferences', 'preferences', name='advisor_preferences'),
-	url(r'^roster', 'roster', name='advisor_roster'),
-	url(r'^attendance', 'attendance', name='advisor_attendance'),
-	url(r'^help', 'help', name='advisor_help'),
+	url(r'^welcome', 'welcome', name='welcome'),
+	url(r'^preferences', 'preferences', name='preferences'),
+	url(r'^roster', 'roster', name='roster'),
+	url(r'^attendance', 'attendance', name='attendance'),
+	url(r'^help', 'help', name='help'),
 )
