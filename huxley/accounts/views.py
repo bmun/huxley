@@ -27,7 +27,7 @@ def login_user(request):
         redirect = HuxleyUser.login(request, user)
         return render_json({'success': True, 'redirect': redirect})
 
-    return render_template(request, 'auth.html')
+    return render_template(request, 'login.html')
 
 
 def login_as_user(request, uid):
