@@ -52,7 +52,7 @@ def logout_user(request):
         prevents normal logout."""
     logout(request)
     if request.is_ajax():
-        return HttpResponse(reverse('login'))
+        return HttpResponse(reverse('accounts:login'))
     else:
         return HttpResponseRedirect(reverse('index'))
 

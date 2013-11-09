@@ -8,7 +8,7 @@ from django.views.generic import RedirectView, TemplateView
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    url(r'^', include('huxley.accounts.urls', app_name='accounts')),
+    url(r'^', include('huxley.accounts.urls', app_name='accounts', namespace='accounts')),
     url(r'^chair/', include('huxley.chairs.urls', app_name='chairs', namespace='chairs')),
     url(r'^advisor/', include('huxley.advisors.urls', app_name='advisors', namespace='advisors')),
     url(r'^admin/', include(admin.site.urls)),
