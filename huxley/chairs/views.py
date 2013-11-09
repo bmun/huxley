@@ -11,7 +11,7 @@ from huxley.shortcuts import render_template
 
 def grading(request):
     """ Display the grading page for chairs. """
-    return render_to_response('comingsoon.html')
+    return render_to_response('coming-soon.html')
 
 
 def attendance(request):
