@@ -81,7 +81,7 @@ def register(request):
                                     "\nUSG of External Relations, BMUN 62" % new_school.name,
                                     "info@bmun.org")
             Conference.auto_country_assign(new_school)            
-            return render_template(request, 'thanks.html')    
+            return render_template(request, 'registration-success.html')    
     
     form = RegistrationForm()
     context = {
