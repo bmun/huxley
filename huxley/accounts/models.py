@@ -32,7 +32,7 @@ class HuxleyUser(AbstractUser):
         if self.is_advisor():
             return reverse('advisor_welcome')
         elif self.is_chair():
-            return reverse('chair_attendance')
+            return reverse('chairs:attendance')
 
     @staticmethod
     def authenticate(username, password):

@@ -4,8 +4,8 @@
 from django.conf.urls import patterns, url
 
 urlpatterns = patterns('huxley.chairs.views',
-    url(r'^grading', 'grading', name='chair_grading'),
-    url(r'^attendance', 'attendance', name='chair_attendance'),
-    url(r'^help', 'help', name='chair_help'),
-    url(r'^bugs', 'bugs', name='chair_bugs'),
+    url(r'^grading', 'grading', name='grading'),
+    url(r'^attendance', 'attendance', name='attendance'),
+    url(r'^help', 'help', name='help'),
+    url(r'^bugs', 'bugs', name='bugs'),
 )
