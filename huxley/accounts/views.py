@@ -61,7 +61,7 @@ def register(request):
     """ Registers a new user and school. """
 
     # Registration is closed. TODO: Implement the waitlist.
-    #return render_template(request, 'registration_closed.html')
+    # return render_template(request, 'registration-closed.html')
 
     if request.method =='POST':
         form = RegistrationForm(request.POST)
