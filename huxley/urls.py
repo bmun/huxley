@@ -18,7 +18,7 @@ urlpatterns = patterns('huxley.accounts.views',
 )
 
 urlpatterns += patterns('',
-    url(r'^chair/', include('huxley.chairs.urls', app_name='chairs')),
+    url(r'^chair/', include('huxley.chairs.urls', app_name='chairs', namespace='chairs')),
     url(r'^advisor/', include('huxley.advisors.urls', app_name='advisors')),
     url(r'^admin/', include(admin.site.urls)),
 )

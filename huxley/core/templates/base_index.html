@@ -16,9 +16,9 @@
                     <li><a class="js-nav" href="{% url 'advisor_attendance' %}">Check Attendance</a></li>
                     <li><a class="js-nav" href="{% url 'advisor_help' %}">Need Help?</a></li>
                 {% elif user|is_chair %}
-                    <li><a class="js-nav default" href="{% url 'chair_grading' %}">Grading</a></li>
-                    <li><a class="js-nav" href="{% url 'chair_attendance' %}">Take Attendance</a></li>
-                    <li><a class="js-nav" href="{% url 'chair_help' %}">Need Help?</a></li>
+                    <li><a class="js-nav default" href="{% url 'chairs:grading' %}">Grading</a></li>
+                    <li><a class="js-nav" href="{% url 'chairs:attendance' %}">Take Attendance</a></li>
+                    <li><a class="js-nav" href="{% url 'chairs:help' %}">Need Help?</a></li>
                 {% endif %}
             {% endblock navmenu %}
         </ul>
