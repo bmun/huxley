@@ -12,4 +12,4 @@ def index(request):
     if not request.user.is_authenticated():
         return render_to_response('auth.html', context)
     else:
-        return render_to_response('base_index.html', context)
+        return render_to_response('base-inner.html', context)
