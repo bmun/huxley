@@ -62,7 +62,7 @@ class Conference(models.Model):
                         if spots_left < 3:
                             return 0
                         if num_delegations <= 0:
-                            pass
+                            continue
                         if max_spots < 0:
                             return spots_left
                 except Assignment.DoesNotExist:
