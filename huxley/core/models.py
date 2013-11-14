@@ -36,8 +36,8 @@ class Conference(models.Model):
             spots_left = Conference.auto_assign(school.get_country_preferences(),
                                                 Committee.objects.filter(special=False).order_by('?'),
                                                 school,
-                                                3, 
-                                                spots_left)
+                                                spots_left,
+                                                3)
         if spots_left:
             spots_left = Conference.auto_assign(Country.objects.filter(special=False).order_by('?'),
                                                 Committee.objects.filter(special=False).order_by('?'),
