@@ -36,8 +36,8 @@ class Conference(models.Model):
             spots_left = Conference.auto_assign(school.get_country_preferences(),
                                                 Committee.objects.filter(special=False).order_by('?'),
                                                 school,
-                                                3, 
-                                                spots_left)
+                                                spots_left,
+                                                3)
         if spots_left:
             spots_left = Conference.auto_assign(Country.objects.filter(special=False).order_by('?'),
                                                 Committee.objects.filter(special=False).order_by('?'),
@@ -48,8 +48,8 @@ class Conference(models.Model):
     def auto_assign(countries, committees, school, spots_left, num_delegations=100, max_spots=100):
         '''Assign schools to unassigned Assignment objects based on a set of
         available countries and committees.'''
-        for country in countries:
-            for committee in committees:
+        for committee in committees:
+            for country in countries:
                 try:
                     assignment = Assignment.objects.get(committee=committee,
                                                         country=country)
@@ -59,10 +59,10 @@ class Conference(models.Model):
                         max_spots -= committee.delegation_size
                         num_delegations -= 1
                         assignment.save()
-                        if spots_left < 3:
+                        if spots_left < 2:
                             return 0
                         if num_delegations <= 0:
-                            pass
+                            continue
                         if max_spots < 0:
                             return spots_left
                 except Assignment.DoesNotExist:
