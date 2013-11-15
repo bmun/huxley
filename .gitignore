@@ -16,5 +16,14 @@ fabfile/deploy.py
 
 .coverage
 htmlcov/
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
 
 wsgi.py
+=======
+>>>>>>> parent of 51b18a8... changes wsgi and updates models.py
+=======
+>>>>>>> parent of 51b18a8... changes wsgi and updates models.py
+=======
+>>>>>>> parent of 51b18a8... changes wsgi and updates models.py
