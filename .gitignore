@@ -17,4 +17,4 @@ fabfile/deploy.py
 .coverage
 htmlcov/
 
-*.py.default
+wsgi.py

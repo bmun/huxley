@@ -89,21 +89,7 @@ $ cd ~/webapps/huxley/huxley/huxley/settings
 $ cp local.py.default local.py
 ```
 
-Then, open `local.py` in your editor of choice and fill out the settings. Finally, you'll need to slightly modify your `wsgi.py` file to add your virtualenv to its python path:
-
-```python
-import os
-import sys
-
-os.environ['DJANGO_SETTINGS_MODULE'] = 'huxley.settings'
-
-# Add the following two lines:
-activate_this = os.path.expanduser("~/.virtualenvs/huxley/bin/activate_this.py")
-execfile(activate_this, dict(__file__=activate_this))
-
-from django.core.handlers.wsgi import WSGIHandler
-application = WSGIHandler()
-```
+Then, open `local.py` in your editor of choice and fill out the settings.
 
 ### Sync Database
 Finally, prepare your database:
