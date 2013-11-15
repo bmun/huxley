@@ -16,3 +16,5 @@ fabfile/deploy.py
 
 .coverage
 htmlcov/
+
+*.py.default

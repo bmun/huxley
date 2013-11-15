@@ -58,18 +58,16 @@ class Conference(models.Model):
                         assignment.school = school
                         spots_left -= committee.delegation_size
                         max_spots -= committee.delegation_size
-                        num_delegations -= 1
+                        num_del -= 1
                         assignment.save()
-                        if spots_left < 2:
-                            return 0
                         if num_del <= 0:
                             break
+                        if spots_left < 2:
+                            return 0
                         if max_spots < 0:
                             return spots_left
                 except Assignment.DoesNotExist:
                     pass
-            if num_del <= 0:
-                continue        
         return spots_left
 
     def __unicode__(self):
