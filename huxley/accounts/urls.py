@@ -9,6 +9,6 @@ urlpatterns = patterns('huxley.accounts.views',
     url(r'^register', 'register', name='register'),
     url(r'^logout', 'logout_user', name='logout'),
     url(r'^login/user/(?P<uid>\d+)$', 'login_as_user', name='login_as_user'),
-    url(r'^login', 'login_user', name='login'),
+    url(r'^login/$', 'login_user', name='login'),
     url(r'^uniqueuser/', 'validate_unique_user', name='unique_user'),
 )
