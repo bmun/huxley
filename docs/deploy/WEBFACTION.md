@@ -89,7 +89,7 @@ $ cd ~/webapps/huxley/huxley/huxley/settings
 $ cp local.py.default local.py
 ```
 
-Then, open `local.py` in your editor of choice and fill out the settings.
+Then, open `local.py` in your editor of choice and fill out the settings. Finally, run `mv wsgi.py wsgi.py.default` and add `wsgi.py` to `.gitignore`.
 
 ### Sync Database
 Finally, prepare your database:
