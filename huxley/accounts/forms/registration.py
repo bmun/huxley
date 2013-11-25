@@ -9,7 +9,7 @@ from huxley.core.models import *
 
 import re
 
-countries = Country.objects.filter(special=False).order_by('name')
+countries = Country.objects.filter(special=False).exclude(fully_assigned=True).order_by('name')
 country_choices = [(country.id, country.name) for country in countries]
 country_choices.insert(0, (0, "No Preference"))
 

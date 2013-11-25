@@ -62,6 +62,7 @@ class Conference(models.Model):
                         max_spots -= committee.delegation_size
                         num_delegations -= 1
                         assignment.save()
+                        assignment.Country.check_fully_assigned()
                         if spots_left < 2:
                             return 0
                         if num_del <= 0:
@@ -84,9 +85,15 @@ class Conference(models.Model):
 class Country(models.Model):
     name    = models.CharField(max_length=128)
     special = models.BooleanField(default=False)
+    fully_assigned = models.BooleanField(default=False)
     
     def __unicode__(self):
         return self.name
+
+    def check_fully_assigned(self):
+        assignment_list = Assignment.objects.filter(country= name).filter(school=None)
+        if len(assignment_list)==0:
+            fully_assigned= True
 
     class Meta:
         db_table = u'country'
