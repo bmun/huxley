@@ -91,7 +91,7 @@ def register(request):
         'committees': Committee.objects.filter(special=True)
     }
 
-    return render_template(request, 'registration.html', context) 
+    return render_template(request, 'registration-closed.html', context) 
 
 
 @require_POST
