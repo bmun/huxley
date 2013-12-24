@@ -36,12 +36,19 @@ class HuxleyUser(AbstractUser):
 
     @staticmethod
     def authenticate(username, password):
-        """ Attempts to authenticate a user, given a username and password.
-        Returns a 2-tuple of (User) user, (str) error. """
+        '''Attempt to authenticate a user, given a username (or email) and
+        password. Return a 2-tuple of (User) user, (str) error.'''
         if not (username and password):
             return None, AuthenticationErrors.MISSING_FIELDS
 
         user = authenticate(username=username, password=password)
+        if user is None:
+            try:
+                u = HuxleyUser.objects.get(email=username)
+                user = authenticate(username=u.username, password=password)
+            except HuxleyUser.DoesNotExist:
+                pass
+
         if user is None:
             return None, AuthenticationErrors.INVALID_LOGIN
         if not user.is_active:
