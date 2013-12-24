@@ -15,7 +15,7 @@ from huxley.shortcuts import render_template, render_json
 
 
 def login_user(request):
-    """ Logs in a user or renders the login template. """
+    '''Log in a user or render the login template.'''
     if request.method == 'POST':    
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -31,7 +31,7 @@ def login_user(request):
 
 
 def login_as_user(request, uid):
-    """ Logs in as a particular user (admin use only). """
+    '''Log in as a particular user (admin use only).'''
     try:
         if not request.user.is_superuser:
             return HttpResponseForbidden()
@@ -47,9 +47,9 @@ def login_as_user(request, uid):
 
 
 def logout_user(request):
-    """ Logs out the current user. Although we'll only be supporting AJAX,
-        we're leaving the standard logout here in case of a heinous bug that
-        prevents normal logout."""
+    '''Log out the current user. Although we'll only be supporting AJAX,
+    we're leaving the standard logout here in case of a heinous bug that
+    prevents normal logout.'''
     logout(request)
     if request.is_ajax():
         return HttpResponse(reverse('accounts:login'))
@@ -58,7 +58,7 @@ def logout_user(request):
 
 
 def register(request):
-    """ Registers a new user and school. """
+    '''Register a new user and school.'''
 
     # Registration is closed. TODO: Implement the waitlist.
     # return render_template(request, 'registration-closed.html')
@@ -96,7 +96,7 @@ def register(request):
 
 @require_POST
 def change_password(request):
-    """ Attempts to change the user's password, or returns an error. """
+    '''Attempt to change the user's password, or return an error.'''
     if not request.user.is_authenticated():
         return HttpResponse(status=401)
 
@@ -109,7 +109,7 @@ def change_password(request):
 
 
 def reset_password(request):
-    """ Reset a user's password. """
+    '''Reset a user's password.'''
     if request.method == 'POST':
         username = request.POST.get('username')
         new_password = HuxleyUser.reset_password(username)
@@ -127,7 +127,7 @@ def reset_password(request):
 
 @require_GET
 def validate_unique_user(request):
-    """ Checks that a potential username is unique. """
+    '''Check that a potential username is unique.'''
     username = request.GET['username']
     if HuxleyUser.objects.filter(username=username).exists():
         return HttpResponse(status=406)
