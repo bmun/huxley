@@ -60,17 +60,20 @@ def logout_user(request):
 def register(request):
     '''Register a new user and school.'''
 
-    # Registration is closed. TODO: Implement the waitlist.
-    # return render_template(request, 'registration-closed.html')
+    if not Conference.objects.get(session=62).open_reg:
+        return render_template(request, 'registration-closed.html')
 
     if request.method =='POST':
         form = RegistrationForm(request.POST)
-        if form.is_valid():                   
+        if form.is_valid():
             new_school = form.create_school()
             new_user = form.create_user(new_school) 
             form.add_country_preferences(new_school)
             form.add_committee_preferences(new_school)
             
+            if new_school.waitlist:
+                return render_template(request, 'registration-waitlist.html')
+
             if not settings.DEBUG:
                 new_user.email_user("Thanks for registering for BMUN 62!",
                                     "We're looking forward to seeing %s at BMUN 62. "
@@ -80,18 +83,19 @@ def register(request):
                                     "info@bmun.org. See you soon!\n\nBest,\n\nShrey Goel"
                                     "\nUSG of External Relations, BMUN 62" % new_school.name,
                                     "info@bmun.org")
-            Conference.auto_country_assign(new_school)            
-            return render_template(request, 'registration-success.html')    
-    
+            Conference.auto_country_assign(new_school) 
+            return render_template(request, 'registration-success.html')
+
     form = RegistrationForm()
     context = {
         'form': form,
         'state': '',
         'countries': Country.objects.filter(special=False).order_by('name'),
-        'committees': Committee.objects.filter(special=True)
+        'committees': Committee.objects.filter(special=True),
+        'waitlist': Conference.objects.get(session=62).waitlist_reg
     }
 
-    return render_template(request, 'registration-closed.html', context) 
+    return render_template(request, 'registration.html', context) 
 
 
 @require_POST

@@ -1,0 +1,39 @@
+{% extends 'base-outer.html' %}
+
+{% block title %} Registration Successful {% endblock title %}
+
+{% block content %}
+<div class="letter">
+	<h1>Thank You</h1>
+	<p>You have been added to the waitlist. Thank you for your interest in BMUN 62! You will be notified in the coming months of your country assignments, at which point they will be made available in your Huxley account. A summary of fees is listed below:<p>
+	<h3>School Registration Fee</h3>
+	<ul>
+		<li>$40 (if registered by November 1, 2013)</li>
+		<li>$50 (if registered after November 1, 2013)</li>
+	</ul>
+	<h3>Delegate Registration Fee</h3>
+	<ul>
+		<li>$40 per delegate (by February 10, 2014)</li>
+		<li>$50 per delegate (by February 24, 2014)</li>
+		<li>$55 per delegate (after February 24, 2014)</li>
+	</ul>
+	<h3>Payment Instructions</h3>
+	<p><strong>We ask that you compile delegate fees into ONE check</strong>&#8212;please do not have your students mail individual checks.</p>
+	<p>Please mail all checks out to:</p>
+	<div class="address">
+		<p><strong>Berkeley Model United Nations</strong>
+			<br />
+			P.O. Box #4306
+			<br />
+			Berkeley, CA 94704-0306
+		</p>
+	</div>
+	<p>If you have any questions or concerns, please feel free to contact me at <a href="mailto:info@bmun.org">info@bmun.org</a>. We look forward to seeing you in March!</p>
+	<p>Sincerely,</p>
+	<p class="sender"><strong>Shrey Goel</strong><br />
+	<span class="subtext">Under-Secretary General of External Relations<br />
+	Berkeley Model United Nations, 62nd Session</span></p>
+</div>
+<hr />
+<a class="js-nav outer-nav arrow-right" href="{% url 'accounts:login' %}"> Proceed to Login </a>
+{% endblock content %}
