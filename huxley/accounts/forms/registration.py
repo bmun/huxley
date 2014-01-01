@@ -88,6 +88,7 @@ class RegistrationForm(forms.Form):
                                      min_delegation_size=self.cleaned_data['min_delegation_size'],
                                      max_delegation_size=self.cleaned_data['max_delegation_size'],
                                      international=self.cleaned_data['school_location'] == School.LOCATION_INTERNATIONAL,
+                                     waitlist=True,
                                      registration_fee=registration_fee)
 
     def add_country_preferences(self, school):

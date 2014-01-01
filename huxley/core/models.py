@@ -12,6 +12,8 @@ class Conference(models.Model):
     reg_close       = models.DateField()
     min_attendance  = models.PositiveSmallIntegerField(default=0)
     max_attendance  = models.PositiveSmallIntegerField(default=0)
+    open_reg        = models.BooleanField(default=True)
+    waitlist_reg    = models.BooleanField(default=False)
 
     @staticmethod
     def auto_country_assign(school):
@@ -137,6 +139,7 @@ class School(models.Model):
     min_delegation_size = models.PositiveSmallIntegerField(default=0) 
     max_delegation_size = models.PositiveSmallIntegerField(default=0)
     international       = models.BooleanField(default=False)
+    waitlist            = models.BooleanField(default=False)
     
     countrypreferences   = models.ManyToManyField(Country, through='CountryPreference')
     committeepreferences = models.ManyToManyField(Committee, limit_choices_to={'special':True})
@@ -195,6 +198,14 @@ class School(models.Model):
             ordered by committee name. """
         return list(DelegateSlot.objects.filter(assignment__school=self)
                                  .order_by('assignment__committee__name'))
+
+    def remove_from_waitlist(self):
+        """ If a school is on the waitlist, remove it and
+            automatically generate country assignments. """
+        if self.waitlist:
+            self.waitlist = False
+            self.save()
+            Conference.auto_country_assign(self)
 
     def __unicode__(self):
         return self.name
