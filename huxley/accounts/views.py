@@ -60,8 +60,8 @@ def logout_user(request):
 def register(request):
     '''Register a new user and school.'''
 
-    # For when registration is closed. 
-    # return render_template(request, 'registration-closed.html')
+    if not Conference.objects.get(session=62).open_reg:
+        return render_template(request, 'registration-closed.html')
 
     if request.method =='POST':
         form = RegistrationForm(request.POST)
@@ -83,15 +83,16 @@ def register(request):
                                     "info@bmun.org. See you soon!\n\nBest,\n\nShrey Goel"
                                     "\nUSG of External Relations, BMUN 62" % new_school.name,
                                     "info@bmun.org")
-            Conference.auto_country_assign(new_school)            
-            return render_template(request, 'registration-success.html')    
-    
+            Conference.auto_country_assign(new_school) 
+            return render_template(request, 'registration-success.html')
+
     form = RegistrationForm()
     context = {
         'form': form,
         'state': '',
         'countries': Country.objects.filter(special=False).order_by('name'),
-        'committees': Committee.objects.filter(special=True)
+        'committees': Committee.objects.filter(special=True),
+        'waitlist': Conference.objects.get(session=62).waitlist_reg
     }
 
     return render_template(request, 'registration.html', context) 
