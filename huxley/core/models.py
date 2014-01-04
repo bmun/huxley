@@ -62,7 +62,7 @@ class Conference(models.Model):
                         max_spots -= committee.delegation_size
                         num_delegations -= 1
                         assignment.save()
-                        assignment.Country.check_fully_assigned()
+                        assignment.country.check_fully_assigned()
                         if spots_left < 2:
                             return 0
                         if num_del <= 0:
@@ -91,9 +91,11 @@ class Country(models.Model):
         return self.name
 
     def check_fully_assigned(self):
-        assignment_list = Assignment.objects.filter(country= name).filter(school=None)
+        """Checks to see if any of the instances of this country have None as the school 
+        and if there are zero it must mean that this country is completelu"""
+        assignment_list = Assignment.objects.filter(country__name= self.name).filter(school=None)
         if len(assignment_list)==0:
-            fully_assigned= True
+            self.fully_assigned = True
 
     class Meta:
         db_table = u'country'
