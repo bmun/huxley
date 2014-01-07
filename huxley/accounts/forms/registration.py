@@ -142,6 +142,15 @@ class RegistrationForm(forms.Form):
         
         return password
 
+    def clean_country_prefs(self):
+        big_five_country = 0
+        country_prefs = [(self.cleaned_data['country_pref%d' % i]) for i in xrange(1, 11)]
+        for pref in country_prefs:
+            if big_five_country >= 1:
+                raise forms.ValidationError("You can only select one big five country.")
+            elif pref in ('United States of America', 'United Kingdom', 'France', 'China', 'Russia'):
+                big_five_country += 1
+
     # Format: (123) 456-7890 || Note the space after the area code.
     def valid_phone_number(self, number, international):
         if international == School.LOCATION_INTERNATIONAL:
