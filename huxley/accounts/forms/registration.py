@@ -11,7 +11,7 @@ import re
 
 countries = Country.objects.filter(special=False).order_by('name')
 
-countries = filter(countries, check_fully_assigned)
+countries = filter(check_open, countries)
 
 country_choices = [(country.id, country.name) for country in countries]
 country_choices.insert(0, (0, "No Preference"))

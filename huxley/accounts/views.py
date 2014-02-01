@@ -95,7 +95,7 @@ def register(request):
         'waitlist': Conference.objects.get(session=62).waitlist_reg
     }
 
-    return render_template(request, 'registration-closed.html', context) 
+    return render_template(request, 'registration.html', context) 
 
 
 @require_POST

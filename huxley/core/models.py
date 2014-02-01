@@ -82,20 +82,21 @@ class Conference(models.Model):
         db_table = u'conference'
         get_latest_by = 'start_date'
 
+def check_open(countryname):
+        """Checks to see if any of the instances of this country have None as the school 
+        and if there are zero it must mean that this country is completelu"""
+        assignment_list = Assignment.objects.filter(country__name= countryname).filter(school=None)
+        if len(assignment_list)==0:
+            return False
+        else: 
+            return True
+
 class Country(models.Model):
     name    = models.CharField(max_length=128)
     special = models.BooleanField(default=False)
-    fully_assigned = models.BooleanField(default=False)
     
     def __unicode__(self):
         return self.name
-
-    def check_fully_assigned(self):
-        """Checks to see if any of the instances of this country have None as the school 
-        and if there are zero it must mean that this country is completelu"""
-        assignment_list = Assignment.objects.filter(country__name= self.name).filter(school=None)
-        if len(assignment_list)==0:
-            self.fully_assigned = True
 
     class Meta:
         db_table = u'country'
