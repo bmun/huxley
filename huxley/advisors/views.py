@@ -65,7 +65,6 @@ def preferences(request):
 def roster(request):
     """ Display the advisor's editable roster, or update information as
         necessary. """
-    return render_to_response('coming-soon.html')
     school = request.user.school
     if request.method == 'POST':
         slot_data = simplejson.loads(request.POST['delegates'])
