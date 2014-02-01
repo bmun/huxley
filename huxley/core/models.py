@@ -176,7 +176,7 @@ class School(models.Model):
     def update_delegate_slots(self, slot_data):
         """ Adds, deletes, or updates delegates attached to this school's
             delegate slots. """
-        for slot_id, delegate_data in slot_data:
+        for slot_id, delegate_data in slot_data.items():
             slot = DelegateSlot.objects.get(id=slot_id)
             if 'name' in delegate_data and 'email' in delegate_data:
                 slot.update_or_create_delegate(delegate_data)
