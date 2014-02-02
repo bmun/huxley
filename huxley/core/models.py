@@ -197,7 +197,7 @@ class School(models.Model):
         """ Returns a list of this school's delegate slots,
             ordered by committee name. """
         return list(DelegateSlot.objects.filter(assignment__school=self)
-                                 .order_by('assignment__committee__name'))
+                                                .order_by('assignment__committee__name'))
 
     def remove_from_waitlist(self):
         """ If a school is on the waitlist, remove it and
@@ -323,7 +323,7 @@ class Delegate(models.Model):
     @property
     def committee(self):
         return self.delegate_slot.committee
-    
+            
     @property
     def school(self):
         return self.delegate_slot.school
