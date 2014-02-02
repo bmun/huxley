@@ -12,6 +12,7 @@ huxley/static/*
 huxley/*/static/scss/*/*.css
 
 huxley/settings/local.py
+huxley/wsgi.py
 fabfile/deploy.py
 
 .coverage

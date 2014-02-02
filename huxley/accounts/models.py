@@ -30,18 +30,25 @@ class HuxleyUser(AbstractUser):
 
     def default_path(self):
         if self.is_advisor():
-            return reverse('advisor_welcome')
+            return reverse('advisors:welcome')
         elif self.is_chair():
-            return reverse('chair_attendance')
+            return reverse('chairs:attendance')
 
     @staticmethod
     def authenticate(username, password):
-        """ Attempts to authenticate a user, given a username and password.
-        Returns a 2-tuple of (User) user, (str) error. """
+        '''Attempt to authenticate a user, given a username (or email) and
+        password. Return a 2-tuple of (User) user, (str) error.'''
         if not (username and password):
             return None, AuthenticationErrors.MISSING_FIELDS
 
         user = authenticate(username=username, password=password)
+        if user is None:
+            try:
+                u = HuxleyUser.objects.get(email=username)
+                user = authenticate(username=u.username, password=password)
+            except HuxleyUser.DoesNotExist:
+                pass
+
         if user is None:
             return None, AuthenticationErrors.INVALID_LOGIN
         if not user.is_active:
@@ -51,15 +58,15 @@ class HuxleyUser(AbstractUser):
 
     @staticmethod
     def login(request, user):
-        """ Logs in a user and returns a redirect url based on whether they're
-        an advisor or chair. """
+        '''Log in a user and return a redirect url based on whether they're
+        an advisor or chair.'''
         login(request, user)
         return user.default_path()
 
     @classmethod
     def reset_password(cls, username):
-        """ Reset and return a user's password, or return False if the user
-        doesn't exist. """
+        '''Reset and return a user's password, or return False if the user
+        doesn't exist.'''
         if not username:
             return False
         try:
@@ -73,8 +80,8 @@ class HuxleyUser(AbstractUser):
             return False
 
     def change_password(self, old, new1, new2):
-        """ Attempts to change the given user's password. Returns a 2-tuple
-            of (bool) success, (str) error. """
+        '''Attempt to change the given user's password. Return a 2-tuple
+        of (bool) success, (str) error.'''
         if not (old and new1 and new2):
             return False, ChangePasswordErrors.MISSING_FIELDS
         if new1 != new2:

@@ -29,9 +29,11 @@
 <body>
     <div id="container">
         <div id="appcontainer">
-            {% block body %}
-            <h1> BODY </h1>
-            {% endblock body %}
+            <div id="app">
+                {% block body %}
+                <h1> BODY </h1>
+                {% endblock body %}
+            </div>
         </div>
     </div>
     <div id="error-overlay">

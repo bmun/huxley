@@ -15,7 +15,7 @@ def render_template(request, template, context=None):
 
 def render_json(data):
     '''Return an HttpResponse object containing json-encoded data.'''
-    return HttpResponse(simplejson.dumps(data), mimetype='application/json')
+    return HttpResponse(simplejson.dumps(data), content_type='application/json')
 
 def pairwise(iterable):
     '''Group the elements of the given interable into 2-tuples.'''

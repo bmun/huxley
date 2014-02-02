@@ -1,4 +1,4 @@
-{% extends "secretariat_index.html" %}
+{% extends 'base-inner.html' %}
 
 {% block title %} Take Attendance {% endblock title %}
 
@@ -7,7 +7,7 @@
 
 <p> Here you can take attendance. Simply place checkmarks to indicate attendance and save. </p>
 
-<form id="form-attendance" method="post" action="{% url 'chair_attendance' %}">
+<form id="form-attendance" method="post" action="{% url 'chairs:attendance' %}">
 {% csrf_token %}
 <div class="tablemenu header">
 	Don't forget to <input class="saved button" type="submit" value="SAVE!"/>

@@ -89,7 +89,16 @@ $ cd ~/webapps/huxley/huxley/huxley/settings
 $ cp local.py.default local.py
 ```
 
-Then, open `local.py` in your editor of choice and fill out the settings. Finally, you'll need to slightly modify your `wsgi.py` file to add your virtualenv to its python path:
+Then, open `local.py` in your editor of choice and fill out the settings.
+
+Finally, you'll need a `wsgi.py` file. We've provided a default one, so copy it and slightly modify it to add your virtualenv to its python path:
+
+```sh
+$ cd ~/webapps/huxley/huxley
+$ cp wsgi.py.default wsgi.py
+```
+
+And, in `wsgi.py`:
 
 ```python
 import os

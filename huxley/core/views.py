@@ -6,13 +6,10 @@ from django.template import RequestContext
 
 from huxley.core.models import *
 
-
-# Renders the appropriate base index template.
 def index(request):
+    '''Render the appropriate base tempate.'''
     context = RequestContext(request)
     if not request.user.is_authenticated():
-        return render_to_response('auth.html', context)
-    elif request.user.is_chair():
-        return render_to_response('secretariat_index.html', context)
-    elif request.user.is_advisor():
-        return render_to_response('advisor_index.html', context)
+        return render_to_response('login.html', context)
+    else:
+        return render_to_response('base-inner.html', context)
