@@ -2,7 +2,6 @@
 # Use of this source code is governed by a BSD License found in README.md.
 
 from django.core.urlresolvers import reverse
-from django.http import HttpRequest
 
 def conference(request):
     return {'conference' : request.conference}
@@ -17,5 +16,5 @@ def user_type(request):
 
 def default_path(request):
     if not request.user.is_authenticated():
-        return {'default_path': reverse('login')}
+        return {'default_path': reverse('accounts:login')}
     return {'default_path': request.user.default_path()}

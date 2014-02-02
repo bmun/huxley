@@ -15,7 +15,7 @@ from huxley.shortcuts import render_template, render_json
 
 
 def login_user(request):
-    """ Logs in a user or renders the login template. """
+    '''Log in a user or render the login template.'''
     if request.method == 'POST':    
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -27,11 +27,11 @@ def login_user(request):
         redirect = HuxleyUser.login(request, user)
         return render_json({'success': True, 'redirect': redirect})
 
-    return render_template(request, 'auth.html')
+    return render_template(request, 'login.html')
 
 
 def login_as_user(request, uid):
-    """ Logs in as a particular user (admin use only). """
+    '''Log in as a particular user (admin use only).'''
     try:
         if not request.user.is_superuser:
             return HttpResponseForbidden()
@@ -47,30 +47,33 @@ def login_as_user(request, uid):
 
 
 def logout_user(request):
-    """ Logs out the current user. Although we'll only be supporting AJAX,
-        we're leaving the standard logout here in case of a heinous bug that
-        prevents normal logout."""
+    '''Log out the current user. Although we'll only be supporting AJAX,
+    we're leaving the standard logout here in case of a heinous bug that
+    prevents normal logout.'''
     logout(request)
     if request.is_ajax():
-        return HttpResponse(reverse('login'))
+        return HttpResponse(reverse('accounts:login'))
     else:
         return HttpResponseRedirect(reverse('index'))
 
 
 def register(request):
-    """ Registers a new user and school. """
+    '''Register a new user and school.'''
 
-    # Registration is closed. TODO: Implement the waitlist.
-    #return render_template(request, 'registration_closed.html')
+    if not Conference.objects.get(session=62).open_reg:
+        return render_template(request, 'registration-closed.html')
 
     if request.method =='POST':
         form = RegistrationForm(request.POST)
-        if form.is_valid():                   
+        if form.is_valid():
             new_school = form.create_school()
             new_user = form.create_user(new_school) 
             form.add_country_preferences(new_school)
             form.add_committee_preferences(new_school)
             
+            if new_school.waitlist:
+                return render_template(request, 'registration-waitlist.html')
+
             if not settings.DEBUG:
                 new_user.email_user("Thanks for registering for BMUN 62!",
                                     "We're looking forward to seeing %s at BMUN 62. "
@@ -80,15 +83,16 @@ def register(request):
                                     "info@bmun.org. See you soon!\n\nBest,\n\nShrey Goel"
                                     "\nUSG of External Relations, BMUN 62" % new_school.name,
                                     "info@bmun.org")
-            Conference.auto_country_assign(new_school)            
-            return render_template(request, 'thanks.html')    
-    
+            Conference.auto_country_assign(new_school) 
+            return render_template(request, 'registration-success.html')
+
     form = RegistrationForm()
     context = {
         'form': form,
         'state': '',
         'countries': Country.objects.filter(special=False).order_by('name'),
-        'committees': Committee.objects.filter(special=True)
+        'committees': Committee.objects.filter(special=True),
+        'waitlist': Conference.objects.get(session=62).waitlist_reg
     }
 
     return render_template(request, 'registration.html', context) 
@@ -96,7 +100,7 @@ def register(request):
 
 @require_POST
 def change_password(request):
-    """ Attempts to change the user's password, or returns an error. """
+    '''Attempt to change the user's password, or return an error.'''
     if not request.user.is_authenticated():
         return HttpResponse(status=401)
 
@@ -109,7 +113,7 @@ def change_password(request):
 
 
 def reset_password(request):
-    """ Reset a user's password. """
+    '''Reset a user's password.'''
     if request.method == 'POST':
         username = request.POST.get('username')
         new_password = HuxleyUser.reset_password(username)
@@ -127,7 +131,7 @@ def reset_password(request):
 
 @require_GET
 def validate_unique_user(request):
-    """ Checks that a potential username is unique. """
+    '''Check that a potential username is unique.'''
     username = request.GET['username']
     if HuxleyUser.objects.filter(username=username).exists():
         return HttpResponse(status=406)

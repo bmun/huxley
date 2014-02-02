@@ -4,34 +4,34 @@
         switch1: undefined,
         switch2: undefined,
         opQueue: [],
-		init: function(){
-			
-			// Add new delegate.
-			$(document).on("click", "#roster .nodelegate", function() {
-	            var sid = $(this).closest('tr').attr('slotid');
-	            $(this).closest('tr').attr('delegateop', 'new');
-	            $("tr[slotid=" + sid + "] td.delegatename .nodelegate").fadeOut(150, function(){
-	                $("tr[slotid=" + sid + "] td.delegatename").html("<input type=\"text\" name=\"delegatename\" value=\"Delegate Name\" />").hide().fadeIn(150);
-	                $("tr[slotid=" + sid + "] td.delegateemail").html("<input type=\"text\" name=\"delegateemail\" value=\"delegate@site.com\" />").hide().fadeIn(150);  
-	            });
-	            Roster.opQueue.push({'op':'new', 'sid':sid});
-	            Roster.setUnsaved();
+        init: function(){
+            
+            // Add new delegate.
+            $(document).on("click", "#roster .nodelegate", function() {
+                var sid = $(this).closest('tr').attr('slotid');
+                $(this).closest('tr').attr('delegateop', 'new');
+                $("tr[slotid=" + sid + "] td.delegatename .nodelegate").fadeOut(150, function(){
+                    $("tr[slotid=" + sid + "] td.delegatename").html("<input type=\"text\" name=\"delegatename\" value=\"Delegate Name\" />").hide().fadeIn(150);
+                    $("tr[slotid=" + sid + "] td.delegateemail").html("<input type=\"text\" name=\"delegateemail\" value=\"delegate@site.com\" />").hide().fadeIn(150);  
+                });
+                Roster.opQueue.push({'op':'new', 'sid':sid});
+                Roster.setUnsaved();
 
                 return false;
-	        });
-        	
-			// Delete a delegate.
-			$(document).on("click", "#roster #delete.delegateoption", function() {
-				var sid = $(this).closest('tr').attr('slotid');
-				$(this).closest('tr').attr('delegateop', 'delete');
-				$("tr[slotid=" + sid + "] td input[type=text]").fadeOut(150, function(){
-				    $("tr[slotid=" + sid + "] td.delegatename").html("<a href=\"#\" class=\"nodelegate\"> Click here to add a Delegate.</span>").hide().fadeIn(150);
-				    $("tr[slotid=" + sid + "] td.delegateemail").html("")
-				});
-				Roster.opQueue.push({'op':'delete', 'sid':sid});
-				Roster.setUnsaved();
-			});
-		},
+            });
+            
+            // Delete a delegate.
+            $(document).on("click", "#roster .edit .button.delete", function() {
+                var sid = $(this).closest('tr').attr('slotid');
+                $(this).closest('tr').attr('delegateop', 'delete');
+                $("tr[slotid=" + sid + "] td input[type=text]").fadeOut(150, function(){
+                    $("tr[slotid=" + sid + "] td.delegatename").html("<a href=\"#\" class=\"nodelegate\"> Click here to add a Delegate.</span>").hide().fadeIn(150);
+                    $("tr[slotid=" + sid + "] td.delegateemail").html("")
+                });
+                Roster.opQueue.push({'op':'delete', 'sid':sid});
+                Roster.setUnsaved();
+            });
+        },
         getDelegateId: function(obj){
             return $(obj).closest('tr').attr('delegateid');
         },
@@ -57,12 +57,12 @@
     
     var aggregateData = function(){
         var payload = {};
-        payload['csrfmiddlewaretoken'] = $("input[name=csrfmiddlewaretoken]").attr('value');
+        payload['csrfmiddlewaretoken'] = $("input[name=csrfmiddlewaretoken]").val();
         delegates = {};
         $(".rosterrow").each(function(){
             delegates[$(this).attr('slotid')] = {
-                'name': $("input[name=delegatename]", $(this)).attr('value'),
-                'email': $("input[name=delegateemail]", $(this)).attr('value')
+                'name': $("input[name=delegatename]", $(this)).val(),
+                'email': $("input[name=delegateemail]", $(this)).val()
             }
         });
         payload['delegates'] = JSON.stringify(delegates);
@@ -135,15 +135,15 @@
         });
     
         $(document).on("mouseover", "#theRoster .button", function() {
-			$(this).css('cursor', 'pointer');
-		});
-		
-		$(document).on("mouseout", "#theRoster .button", function() {
-			$(this).css('cursor', 'auto');
-		});
+            $(this).css('cursor', 'pointer');
+        });
+        
+        $(document).on("mouseout", "#theRoster .button", function() {
+            $(this).css('cursor', 'auto');
+        });
         
         
         // NEW CODE BEYOND THIS POINT
-		Roster.init();
+        Roster.init();
         
     });

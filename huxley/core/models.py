@@ -12,29 +12,34 @@ class Conference(models.Model):
     reg_close       = models.DateField()
     min_attendance  = models.PositiveSmallIntegerField(default=0)
     max_attendance  = models.PositiveSmallIntegerField(default=0)
+    open_reg        = models.BooleanField(default=True)
+    waitlist_reg    = models.BooleanField(default=False)
 
     @staticmethod
     def auto_country_assign(school):
         '''Automatically assign a school country and committee assignments
         based on preference, and then by default order.'''
         spots_left = school.max_delegation_size
-        if spots_left:
+        if spots_left > 10:
             spots_left = Conference.auto_assign(Country.objects.filter(special=True).order_by('?'),
                                                 school.get_committee_preferences(),
                                                 school,
                                                 spots_left,
+                                                1,
                                                 (school.max_delegation_size*.15)+1)
-        if spots_left:
+        if spots_left > 10:
             spots_left = Conference.auto_assign(Country.objects.filter(special=False).order_by('?'),
                                                 school.get_committee_preferences(),
                                                 school,
                                                 spots_left,
+                                                1,
                                                 (school.max_delegation_size*.20)+1)
         if spots_left:
             spots_left = Conference.auto_assign(school.get_country_preferences(),
                                                 Committee.objects.filter(special=False).order_by('?'),
                                                 school,
-                                                spots_left)
+                                                spots_left,
+                                                3)
         if spots_left:
             spots_left = Conference.auto_assign(Country.objects.filter(special=False).order_by('?'),
                                                 Committee.objects.filter(special=False).order_by('?'),
@@ -42,33 +47,31 @@ class Conference(models.Model):
                                                 spots_left)
 
     @staticmethod
-    def auto_assign(countries, committees, school, spots_left, max_spots=100):
+    def auto_assign(countries, committees, school, spots_left, num_delegations=100, max_spots=100):
         '''Assign schools to unassigned Assignment objects based on a set of
         available countries and committees.'''
-        for country in countries:
-            for committee in committees:
+        for committee in committees:
+            num_del = num_delegations
+            for country in countries:
                 try:
                     assignment = Assignment.objects.get(committee=committee,
                                                         country=country)
-<<<<<<< HEAD
-                    print assignment
-=======
->>>>>>> 0c129aa7722a28cae2cad9bbc4c44dd73c9f50ce
                     if assignment.school is None:
                         assignment.school = school
                         spots_left -= committee.delegation_size
                         max_spots -= committee.delegation_size
+                        num_delegations -= 1
                         assignment.save()
-                        if spots_left < 3:
+                        if spots_left < 2:
                             return 0
+                        if num_del <= 0:
+                            break
                         if max_spots < 0:
                             return spots_left
                 except Assignment.DoesNotExist:
                     pass
-<<<<<<< HEAD
-=======
-        
->>>>>>> 0c129aa7722a28cae2cad9bbc4c44dd73c9f50ce
+            if num_del <= 0:
+                continue        
         return spots_left
 
     def __unicode__(self):
@@ -136,6 +139,7 @@ class School(models.Model):
     min_delegation_size = models.PositiveSmallIntegerField(default=0) 
     max_delegation_size = models.PositiveSmallIntegerField(default=0)
     international       = models.BooleanField(default=False)
+    waitlist            = models.BooleanField(default=False)
     
     countrypreferences   = models.ManyToManyField(Country, through='CountryPreference')
     committeepreferences = models.ManyToManyField(Committee, limit_choices_to={'special':True})
@@ -172,7 +176,7 @@ class School(models.Model):
     def update_delegate_slots(self, slot_data):
         """ Adds, deletes, or updates delegates attached to this school's
             delegate slots. """
-        for slot_id, delegate_data in slot_data:
+        for slot_id, delegate_data in slot_data.items():
             slot = DelegateSlot.objects.get(id=slot_id)
             if 'name' in delegate_data and 'email' in delegate_data:
                 slot.update_or_create_delegate(delegate_data)
@@ -193,7 +197,15 @@ class School(models.Model):
         """ Returns a list of this school's delegate slots,
             ordered by committee name. """
         return list(DelegateSlot.objects.filter(assignment__school=self)
-                                 .order_by('assignment__committee__name'))
+                                                .order_by('assignment__committee__name'))
+
+    def remove_from_waitlist(self):
+        """ If a school is on the waitlist, remove it and
+            automatically generate country assignments. """
+        if self.waitlist:
+            self.waitlist = False
+            self.save()
+            Conference.auto_country_assign(self)
 
     def __unicode__(self):
         return self.name
@@ -311,7 +323,7 @@ class Delegate(models.Model):
     @property
     def committee(self):
         return self.delegate_slot.committee
-    
+            
     @property
     def school(self):
         return self.delegate_slot.school

@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load account_tags %}
+
+{% block title %} Inner Content Template {% endblock title %}
+
+{% block body %}
+    {% include "header.html" %}
+    {% include "change-password.html" %}
+    <div id="appnavbar" class="titlebar rounded-top">
+        <ul id="navmenu">
+            {% block navmenu %}
+                {% if user|is_advisor %}
+                    <li><a class="js-nav default" href="{% url 'advisors:welcome' %}">Welcome!</a></li>
+                    <li><a class="js-nav" href="{% url 'advisors:roster' %}">Edit Roster</a></li>
+                    <li><a class="js-nav" href="{% url 'advisors:preferences' %}">Edit Preferences</a></li>
+                    <li><a class="js-nav" href="{% url 'advisors:attendance' %}">Check Attendance</a></li>
+                    <li><a class="js-nav" href="{% url 'advisors:help' %}">Need Help?</a></li>
+                {% elif user|is_chair %}
+                    <li><a class="js-nav default" href="{% url 'chairs:grading' %}">Grading</a></li>
+                    <li><a class="js-nav" href="{% url 'chairs:attendance' %}">Take Attendance</a></li>
+                    <li><a class="js-nav" href="{% url 'chairs:help' %}">Need Help?</a></li>
+                {% endif %}
+            {% endblock navmenu %}
+        </ul>
+    </div>
+    <div id="appcontent" class="content transparent ie-layout rounded-bottom">
+        <div id="contentwrapper">
+            <div id="capsule">
+                {% block content %}
+                    <span id='no-content'></span>
+                {% endblock content %}
+            </div>
+        </div>
+    </div>
+{% endblock body %}
