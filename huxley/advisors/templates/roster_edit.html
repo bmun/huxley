@@ -7,7 +7,7 @@
 <!--<p> Here you can edit your roster. To change a delegate's name, simply click on it. To <span class="bold">erase</span> a delegate, click the <img src="/static/img/delete_over.png"> button.
 To <span class="bold">switch</span> delegates, click the <img src="/static/img/switch_over.png"> button of the first delegate, and then the corresponding button of the second delegate.
 When you're done, <span class="bold">don't forget to save your changes!</span> </p>-->
-<p>Here, you can view and edit your roster for BMUN 62. <strong>To add a delegate</strong>: simply click a table row where indicated. <strong>To delete a delegate</strong>: click the <img src="/static/img/delete_over.png"> button. A yellow "save" button indicates that you have unsaved changes. <strong>Don't forget to save when you're done!</strong></p>
+<p>Here, you can view and edit your roster for BMUN 62. <strong>To add a delegate</strong>: simply click a table row where indicated. <strong>To delete a delegate</strong>: click the <img src="/static/img/delete_over.png"> button. For double delegation committees, please separate the names of the delegates by a semicolon; you need only enter one delegate email. A yellow "save" button indicates that you have unsaved changes. <strong>Don't forget to save when you're done!</strong></p>
 <form id="theRoster" method="post" action="{% url 'advisors:roster' %}">
 {% csrf_token %}
 <div class="tablemenu header">
