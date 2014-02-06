@@ -31,10 +31,10 @@ $(function() {
         return (this.optional(element))
             ? (/^$/i.test(value) || /^[0-9\s\-]+$/i.test(value))
             : /^[0-9\s\-]+$/i.test(value);
-    }, 'Zip codes may only contain numbers, spaces, and dashes.');
+    }, 'Zip codes may only contain numbers, spaces, and dashes');
 
     // U.S. phone number.
-    $.validator.addMethod('phoneNum', function(value, element){
+    $.validator.addMethod('phoneNum', function(value, element) {
         var PHONE_REGEX =
             /^\(?([0-9]{3})\)?\s([0-9]{3})-([0-9]{4})(\sx[0-9]{1,5})?$/i;
         if (!PHONE_REGEX.test(value)) {
@@ -76,6 +76,15 @@ $(function() {
         return this.optional(element) ||
             /^[A-Za-z0-9\_\.!@#\$%\^&\*\(\)~\-=\+`\?]+$/i.test(value);
     }, 'Passwords may only contain letters, numbers, and certain symbols.');
+
+    // Country Preferences.
+    var big5count = 0
+    $.validator.addMethod('oneBig5', function(value, element) {
+        if (int(value) in (36, 185, 184, 60, 143)) {
+            big5count += 1
+            return big5count <= 1};
+        return true
+        }, 'You may only select one big 5 nation.');
 
     // Validates the form upon submit and POSTs if it's valid.
     $(document).on('submit', '#registration', function() {
