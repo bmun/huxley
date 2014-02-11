@@ -6,4 +6,5 @@ from huxley.accounts.models import HuxleyUser
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = HuxleyUser
-        fields = ('id', 'user_type', 'school', 'committee')
+        fields = ('id', 'first_name', 'last_name', 'user_type', 'school',
+                  'committee')

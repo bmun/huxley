@@ -94,6 +94,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.admin',
     'huxley.core',
+    'huxley.api',
     'huxley.accounts',
     'huxley.advisors',
     'huxley.chairs',
