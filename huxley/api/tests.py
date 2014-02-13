@@ -1,3 +1,4 @@
+from django.core.urlresolvers import reverse
 from django.test import TestCase
 from django.test.client import Client
 
@@ -20,7 +21,8 @@ class UserDetailTestCase(TestCase):
         user.school_id = 1
         user.save()
 
-        response = self.client.get('/api/users/%d' % user.id)
+        url = reverse('api:user_detail', args=(user.id,))
+        response = self.client.get(url)
         data = json.loads(response.content)
 
         self.assertEqual(data['id'], 1)
