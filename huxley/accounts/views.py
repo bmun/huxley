@@ -118,7 +118,7 @@ def reset_password(request):
         username = request.POST.get('username')
         new_password = HuxleyUser.reset_password(username)
         if new_password:
-            if not settings.DEBUG:
+            if True:
                 user.email_user("Huxley Password Reset",
                                 "Your password has been reset to %s.\nThank you for using Huxley!" % (new_password),
                                 from_email="no-reply@bmun.org")
