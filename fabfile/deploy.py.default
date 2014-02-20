@@ -20,6 +20,7 @@ def deploy(environment):
     with cd(source_path):
         with prefix(virtualenv_prefix):
             run('git pull')
+            run('pip install -r requirements.txt')
             run('python manage.py migrate')
             run('python manage.py collectstatic --noinput')
             run('../apache2/bin/restart')
