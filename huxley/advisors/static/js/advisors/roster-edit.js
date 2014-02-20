@@ -21,7 +21,7 @@
             });
             
             // Delete a delegate.
-            $(document).on("click", "#roster .edit .button.delete", function() {
+            /*$(document).on("click", "#roster .edit .button.delete", function() {
                 var sid = $(this).closest('tr').attr('slotid');
                 $(this).closest('tr').attr('delegateop', 'delete');
                 $("tr[slotid=" + sid + "] td input[type=text]").fadeOut(150, function(){
@@ -30,7 +30,7 @@
                 });
                 Roster.opQueue.push({'op':'delete', 'sid':sid});
                 Roster.setUnsaved();
-            });
+            });*/ 
         },
         getDelegateId: function(obj){
             return $(obj).closest('tr').attr('delegateid');
