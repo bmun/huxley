@@ -85,7 +85,11 @@ def register(request):
                                     "info@bmun.org")
             Conference.auto_country_assign(new_school) 
             return render_template(request, 'registration-success.html')
-
+        else:
+            context = {
+                'form': form
+            }
+            return render_template(request, 'registration.html', context)
     form = RegistrationForm()
     context = {
         'form': form,
@@ -94,7 +98,6 @@ def register(request):
         'committees': Committee.objects.filter(special=True),
         'waitlist': Conference.objects.get(session=62).waitlist_reg
     }
-
     return render_template(request, 'registration.html', context) 
 
 

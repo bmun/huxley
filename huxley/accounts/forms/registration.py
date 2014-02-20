@@ -17,7 +17,6 @@ special_committees = Committee.objects.filter(special=True).order_by('full_name'
 special_committees_choices = [(committee.id, committee.full_name) for committee in special_committees]
 
 class RegistrationForm(forms.Form):
-
     first_name = forms.CharField(widget=forms.TextInput(attrs={'class':'required', 'placeholder': 'First Name'}), label="First Name")
     last_name  = forms.CharField(widget=forms.TextInput(attrs={'class':'required', 'placeholder': 'Last Name'}), label="Last Name")
     username   = forms.CharField(widget=forms.TextInput(attrs={'class':'required uniqueUser username', 'placeholder': 'Username'}), min_length=4, label="Username")
@@ -44,20 +43,19 @@ class RegistrationForm(forms.Form):
     secondary_email = forms.EmailField(label="Email", widget=forms.TextInput(attrs={'class':'email', 'placeholder': 'Email'}), required=False)
     secondary_phone = forms.CharField(label="Phone", widget=forms.TextInput(attrs={'class':'phoneNum phoneVal', 'placeholder': 'Phone Number'}), required=False)
 
-    country_pref1  = forms.ChoiceField(label="01", widget=forms.Select(), choices=country_choices, required=False, initial=0)
-    country_pref2  = forms.ChoiceField(label="02", widget=forms.Select(), choices=country_choices, required=False, initial=0)
-    country_pref3  = forms.ChoiceField(label="03", widget=forms.Select(), choices=country_choices, required=False, initial=0)
-    country_pref4  = forms.ChoiceField(label="04", widget=forms.Select(), choices=country_choices, required=False, initial=0)
-    country_pref5  = forms.ChoiceField(label="05", widget=forms.Select(), choices=country_choices, required=False, initial=0)
-    country_pref6  = forms.ChoiceField(label="06", widget=forms.Select(), choices=country_choices, required=False, initial=0)
-    country_pref7  = forms.ChoiceField(label="07", widget=forms.Select(), choices=country_choices, required=False, initial=0)
-    country_pref8  = forms.ChoiceField(label="08", widget=forms.Select(), choices=country_choices, required=False, initial=0)
-    country_pref9  = forms.ChoiceField(label="09", widget=forms.Select(), choices=country_choices, required=False, initial=0)
-    country_pref10 = forms.ChoiceField(label="10", widget=forms.Select(), choices=country_choices, required=False, initial=0)
+    country_pref1  = forms.ChoiceField(label="01", widget=forms.Select(attrs={'class':'oneBig5'}), choices=country_choices, required=False, initial=0)
+    country_pref2  = forms.ChoiceField(label="02", widget=forms.Select(attrs={'class':'oneBig5'}), choices=country_choices, required=False, initial=0)
+    country_pref3  = forms.ChoiceField(label="03", widget=forms.Select(attrs={'class':'oneBig5'}), choices=country_choices, required=False, initial=0)
+    country_pref4  = forms.ChoiceField(label="04", widget=forms.Select(attrs={'class':'oneBig5'}), choices=country_choices, required=False, initial=0)
+    country_pref5  = forms.ChoiceField(label="05", widget=forms.Select(attrs={'class':'oneBig5'}), choices=country_choices, required=False, initial=0)
+    country_pref6  = forms.ChoiceField(label="06", widget=forms.Select(attrs={'class':'oneBig5'}), choices=country_choices, required=False, initial=0)
+    country_pref7  = forms.ChoiceField(label="07", widget=forms.Select(attrs={'class':'oneBig5'}), choices=country_choices, required=False, initial=0)
+    country_pref8  = forms.ChoiceField(label="08", widget=forms.Select(attrs={'class':'oneBig5'}), choices=country_choices, required=False, initial=0)
+    country_pref9  = forms.ChoiceField(label="09", widget=forms.Select(attrs={'class':'oneBig5'}), choices=country_choices, required=False, initial=0)
+    country_pref10 = forms.ChoiceField(label="10", widget=forms.Select(attrs={'class':'oneBig5'}), choices=country_choices, required=False, initial=0)
 
     committee_prefs = forms.MultipleChoiceField(label="Special Committee Preferences", widget=forms.CheckboxSelectMultiple(),choices=special_committees_choices, required=False)
 
-    
     # The following functions create the User and School entries in the
     # database. Run these only if the form is valid.
     
@@ -140,7 +138,88 @@ class RegistrationForm(forms.Form):
         if re.match("^[A-Za-z0-9\_\.!@#\$%\^&\*\(\)~\-=\+`\?]+$", password) is None:
             raise forms.ValidationError("Password contains invalid characters.")
         
-        return password
+        return password 
+
+    big_five_country = 0
+    def clean_country_pref1(self):
+        country_pref1 = self.cleaned_data['country_pref1']
+        if int(country_pref1) in (36, 185, 184, 60, 143):
+            self.big_five_country += 1
+            if self.big_five_country > 1:
+                raise forms.ValidationError('You can only select one big five nation.')
+        return country_pref1
+
+    def clean_country_pref2(self):
+        country_pref2 = self.cleaned_data['country_pref2']
+        if int(country_pref2) in (36, 185, 184, 60, 143):
+            self.big_five_country += 1
+            if self.big_five_country > 1:
+                raise forms.ValidationError('You can only select one big five nation.')
+        return country_pref2
+
+    def clean_country_pref3(self):
+        country_pref3 = self.cleaned_data['country_pref3']
+        if int(country_pref3) in (36, 185, 184, 60, 143):
+            self.big_five_country += 1
+            if self.big_five_country > 1:
+                raise forms.ValidationError('You can only select one big five nation.')
+        return country_pref3
+
+    def clean_country_pref4(self):
+        country_pref4 = self.cleaned_data['country_pref4']
+        if int(country_pref4) in (36, 185, 184, 60, 143):
+            self.big_five_country += 1
+            if self.big_five_country > 1:
+                raise forms.ValidationError('You can only select one big five nation.')
+        return country_pref4
+
+    def clean_country_pref5(self):
+        country_pref5 = self.cleaned_data['country_pref5']
+        if int(country_pref5) in (36, 185, 184, 60, 143):
+            self.big_five_country += 1
+            if self.big_five_country > 1:
+                raise forms.ValidationError('You can only select one big five nation.')
+        return country_pref5
+
+    def clean_country_pref6(self):
+        country_pref6 = self.cleaned_data['country_pref6']
+        if int(country_pref6) in (36, 185, 184, 60, 143):
+            self.big_five_country += 1
+            if self.big_five_country > 1:
+                raise forms.ValidationError('You can only select one big five nation.')
+        return country_pref6
+
+    def clean_country_pref7(self):
+        country_pref7 = self.cleaned_data['country_pref7']
+        if int(country_pref7) in (36, 185, 184, 60, 143):
+            self.big_five_country += 1
+            if self.big_five_country > 1:
+                raise forms.ValidationError('You can only select one big five nation.')
+        return country_pref7
+
+    def clean_country_pref8(self):
+        country_pref8 = self.cleaned_data['country_pref8']
+        if int(country_pref8) in (36, 185, 184, 60, 143):
+            self.big_five_country += 1
+            if self.big_five_country > 1:
+                raise forms.ValidationError('You can only select one big five nation.')
+        return country_pref8
+
+    def clean_country_pref9(self):
+        country_pref9 = self.cleaned_data['country_pref9']
+        if int(country_pref9) in (36, 185, 184, 60, 143):
+            self.big_five_country += 1
+            if self.big_five_country > 1:
+                raise forms.ValidationError('You can only select one big five nation.')
+        return country_pref9
+
+    def clean_country_pref10(self):
+        country_pref10 = self.cleaned_data['country_pref10']
+        if int(country_pref10) in (36, 185, 184, 60, 143):
+            self.big_five_country += 1
+            if self.big_five_country > 1:
+                raise forms.ValidationError('You can only select one big five nation.')
+        return country_pref10
 
     # Format: (123) 456-7890 || Note the space after the area code.
     def valid_phone_number(self, number, international):
@@ -159,7 +238,7 @@ class RegistrationForm(forms.Form):
         secondary_phone = cleaned_data.get('secondary_phone')
         state = cleaned_data.get('school_state')
         country = cleaned_data.get('school_country')
-
+        
         # Check to see if passwords match
         if password and password2 and password != password2:
             message = "Passwords do not match!"
@@ -192,6 +271,6 @@ class RegistrationForm(forms.Form):
             if not country or re.match("^\s*$", country) is not None:
                 message = "You must specify a country."
                 self._errors["school_country"] = self.error_class([message])
-                
+        
         # Always return cleaned_data
         return cleaned_data
