@@ -11,4 +11,8 @@ urlpatterns = patterns('',
     url(r'^users/(?P<pk>[0-9]+)/?$', views.UserDetail.as_view(), name='user_detail'),
 )
 
+urlpatterns += patterns('',
+    url(r'^committees/?$', views.CommitteeList.as_view(), name='committee_list'),
+)
+
 urlpatterns = format_suffix_patterns(urlpatterns)

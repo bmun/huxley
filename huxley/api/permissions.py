@@ -3,6 +3,14 @@
 
 from rest_framework import permissions
 
+class IsSuperuserOrReadOnly(permissions.BasePermission):
+    '''Allow writes if superuser, read-only otherwise.'''
+
+    def has_permission(self, request, view):
+        return (request.user.is_superuser or
+                request.method in permissions.SAFE_METHODS)
+
+
 class IsUserOrSuperuser(permissions.BasePermission):
     '''Accept only the users themselves or superusers.'''
 
