@@ -5,8 +5,9 @@ from rest_framework import generics
 
 from huxley.accounts.models import HuxleyUser
 from huxley.api.permissions import IsSuperuserOrReadOnly, IsUserOrSuperuser
-from huxley.api.serializers import CommitteeSerializer, UserSerializer
-from huxley.core.models import Committee
+from huxley.api.serializers import (CommitteeSerializer, CountrySerializer,
+                                    UserSerializer)
+from huxley.core.models import Committee, Country
 
 class UserList(generics.ListCreateAPIView):
     queryset = HuxleyUser.objects.all()
@@ -25,4 +26,14 @@ class CommitteeList(generics.ListCreateAPIView):
 class CommitteeDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Committee.objects.all()
     serializer_class = CommitteeSerializer
+    permission_classes = (IsSuperuserOrReadOnly,)
+
+class CountryList(generics.ListCreateAPIView):
+    queryset = Country.objects.all()
+    serializer_class = CountrySerializer
+    permission_classes = (IsSuperuserOrReadOnly,)
+
+class CountryDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Country.objects.all()
+    serializer_class = CountrySerializer
     permission_classes = (IsSuperuserOrReadOnly,)
