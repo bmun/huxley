@@ -16,4 +16,9 @@ urlpatterns += patterns('',
     url(r'^committees/(?P<pk>[0-9]+)/?$', views.CommitteeDetail.as_view(), name='committee_detail'),
 )
 
+urlpatterns += patterns('',
+    url(r'^countries/?$', views.CountryList.as_view(), name='country_list'),
+    url(r'^countries/(?P<pk>[0-9]+)/?$', views.CountryDetail.as_view(), name='country_detail'),
+)
+
 urlpatterns = format_suffix_patterns(urlpatterns)
