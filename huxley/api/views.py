@@ -2,6 +2,7 @@
 # Use of this source code is governed by a BSD License found in README.md.
 
 from rest_framework import generics
+from rest_framework.authentication import SessionAuthentication
 
 from huxley.accounts.models import HuxleyUser
 from huxley.api.permissions import IsSuperuserOrReadOnly, IsUserOrSuperuser
@@ -14,6 +15,7 @@ class UserList(generics.ListCreateAPIView):
     serializer_class = UserSerializer
 
 class UserDetail(generics.RetrieveUpdateDestroyAPIView):
+    authentication_classes = (SessionAuthentication,)
     queryset = HuxleyUser.objects.all()
     serializer_class = UserSerializer
     permission_classes = (IsUserOrSuperuser,)
