@@ -21,3 +21,8 @@ class CommitteeList(generics.ListCreateAPIView):
     queryset = Committee.objects.all()
     serializer_class = CommitteeSerializer
     permission_classes = (IsSuperuserOrReadOnly,)
+
+class CommitteeDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Committee.objects.all()
+    serializer_class = CommitteeSerializer
+    permission_classes = (IsSuperuserOrReadOnly,)
