@@ -3,6 +3,7 @@ from django.test import TestCase
 from django.test.client import Client
 
 from huxley.accounts.models import HuxleyUser
+from huxley.utils.test import TestUsers
 
 import json
 import unittest
@@ -11,24 +12,29 @@ class UserDetailTestCase(TestCase):
     def setUp(self):
         self.client = Client()
 
+    def get_url(self, user_id):
+        return reverse('api:user_detail', args=(user_id,))
+
+    def get_response(self, url):
+        return json.loads(self.client.get(url).content)
+
     def test_sanity(self):
         '''It should return the correct fields for a single user.'''
-        user = HuxleyUser.objects.create_user(username='kunal',
-                                              email='kunal@lol.com',
-                                              password='helloworld')
-        user.first_name = 'Kunal'
-        user.last_name = 'Mehta'
-        user.school_id = 1
-        user.save()
+        user = TestUsers.new_user(username='lol', password='lol', school_id=1)
+        url = self.get_url(user.id)
 
-        url = reverse('api:user_detail', args=(user.id,))
-        response = self.client.get(url)
-        data = json.loads(response.content)
+        data = self.get_response(url)
+        self.assertEquals(
+            data['detail'],
+            u'Authentication credentials were not provided.')
 
-        self.assertEqual(data['id'], 1)
-        self.assertEqual(data['first_name'], 'Kunal')
-        self.assertEqual(data['last_name'], 'Mehta')
+        self.client.login(username='lol', password='lol')
+        data = self.get_response(url)
+
+        self.assertEqual(data['id'], user.id)
+        self.assertEqual(data['first_name'], user.first_name)
+        self.assertEqual(data['last_name'], user.last_name)
         self.assertEqual(data['user_type'], HuxleyUser.TYPE_ADVISOR)
-        self.assertEqual(data['school'], 1)
-        self.assertEqual(data['committee'], None)
+        self.assertEqual(data['school'], user.school_id)
+        self.assertEqual(data['committee'], user.committee_id)
 
