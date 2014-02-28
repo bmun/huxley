@@ -1,0 +1,38 @@
+{%extends 'base-inner.html' %}
+
+{% block title %} Delegate Summaries {% endblock title %}
+
+{% block content %}
+
+<h2>Delegate Summaries</h2>
+
+<p>Here you can provide a brief a summary of each delegate and their performace over the conference weekend.</p>
+
+<form id="form-summaries" method="post" action="{% url 'chairs:summaries' %}">
+{% csrf_token %}
+<div class="tablemenu header">
+	Don't forget to <input class="saved button" type="submit" value="SAVE!"/>
+</div>
+<div id = "summaries">
+	<table class = "table">
+		<thead>
+			<th class="country"> Country </th>
+			<th class="name"> Delegate </th>
+			<th class="summary"> Summary </th>
+		</thead>
+		<tbody>
+			{% for slot in delegate_slots %}
+				<tr class="delegateinfo" data-slot-id="{{ slot.id }}">
+					<td class="country" style="width:25%" value="{{ slot.assignment.country }}">{{ slot.assignment.country }}</td>
+					<td class="name" style="width:25%" value="{{ slot.delegate }}">{% if slot.delegate.name %}{{ slot.delegate }}{% else %}N/A{% endif %}</td>
+					<td class="summary"> <textarea id="summary" rows="4" cols="50" style="background-color: transparent;">{{ slot.delegate.summary }}</textarea></td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+</div>
+<div class="tablemenu footer">
+	Don't forget to <input class="saved button" type="submit" value="SAVE!"/>
+</div>
+</form>
+{% endblock content %}
