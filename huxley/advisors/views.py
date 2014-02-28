@@ -35,8 +35,8 @@ def welcome(request):
         school.min_delegation_size = request.POST.get('minDel')
         school.max_delegation_size = request.POST.get('maxDel')
         school.save();
-        
-        return HttpResponse()    
+
+        return HttpResponse()
 
 
 def preferences(request):
@@ -58,7 +58,7 @@ def preferences(request):
         'committees': pairwise(Committee.objects.filter(special=True)),
         'committeeprefs': school.committeepreferences.all()
     }
-    
+
     return render_template(request, 'preferences.html', context)
 
 
@@ -69,7 +69,7 @@ def roster(request):
     if request.method == 'POST':
         slot_data = simplejson.loads(request.POST['delegates'])
         school.update_delegate_slots(slot_data)
-        
+
         return HttpResponse()
 
     slots = school.get_delegate_slots()
@@ -78,10 +78,13 @@ def roster(request):
 
 def attendance(request):
     """ Display the advisor's attendance list. """
-    return render_to_response('coming-soon.html')
+    #return render_to_response('coming-soon.html')
     context = {'delegate_slots': request.user.school.get_delegate_slots()}
     return render_template(request, 'check-attendance.html', context)
 
+def summaries_advisors(request):
+    context = {'delegate_slots': request.user.school.get_delegate_slots()}
+    return render_template(request, 'summaries_advisors.html', context)
 
 def help(request):
     """ Display a FAQ view. """

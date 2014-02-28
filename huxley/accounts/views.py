@@ -16,14 +16,13 @@ from huxley.shortcuts import render_template, render_json
 
 def login_user(request):
     '''Log in a user or render the login template.'''
-    if request.method == 'POST':    
+    if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
 
         user, error = HuxleyUser.authenticate(username, password)
         if error:
             return render_json({'success': False, 'error': error})
-
         redirect = HuxleyUser.login(request, user)
         return render_json({'success': True, 'redirect': redirect})
 
@@ -39,7 +38,7 @@ def login_as_user(request, uid):
         username = HuxleyUser.objects.get(id=uid).username
         user = authenticate(username=username, password=settings.ADMIN_SECRET)
         login(request, user)
-        
+
         return HttpResponseRedirect(reverse('index'))
 
     except HuxleyUser.DoesNotExist:
@@ -67,13 +66,12 @@ def register(request):
         form = RegistrationForm(request.POST)
         if form.is_valid():
             new_school = form.create_school()
-            new_user = form.create_user(new_school) 
+            new_user = form.create_user(new_school)
             form.add_country_preferences(new_school)
             form.add_committee_preferences(new_school)
-            
+
             if new_school.waitlist:
                 return render_template(request, 'registration-waitlist.html')
-
             if not settings.DEBUG:
                 new_user.email_user("Thanks for registering for BMUN 62!",
                                     "We're looking forward to seeing %s at BMUN 62. "
@@ -83,7 +81,7 @@ def register(request):
                                     "info@bmun.org. See you soon!\n\nBest,\n\nShrey Goel"
                                     "\nUSG of External Relations, BMUN 62" % new_school.name,
                                     "info@bmun.org")
-            Conference.auto_country_assign(new_school) 
+            Conference.auto_country_assign(new_school)
             return render_template(request, 'registration-success.html')
 
     form = RegistrationForm()
@@ -95,7 +93,7 @@ def register(request):
         'waitlist': Conference.objects.get(session=62).waitlist_reg
     }
 
-    return render_template(request, 'registration.html', context) 
+    return render_template(request, 'registration.html', context)
 
 
 @require_POST

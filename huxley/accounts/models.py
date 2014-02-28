@@ -74,7 +74,7 @@ class HuxleyUser(AbstractUser):
                                    models.Q(email=username))
             new_password = cls.objects.make_random_password(length=10)
             user.set_password(new_password)
-            user.save()    
+            user.save()
             return new_password
         except cls.DoesNotExist:
             return False
@@ -92,7 +92,7 @@ class HuxleyUser(AbstractUser):
             return False, ChangePasswordErrors.INVALID_CHARACTERS
         if not self.check_password(old):
             return False, ChangePasswordErrors.INCORRECT_PASSWORD
-        
+
         self.set_password(new1)
         self.save();
         return True, None
