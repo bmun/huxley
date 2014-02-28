@@ -17,13 +17,13 @@ $(function() {
     // On submission...
     $(document).on("submit", "#form-attendance", function() {
         var uri = $(this).attr("action");
-        
+
         var data = [];
         $('tr.delegateinfo').each(function() {
             row = {};
             row['id'] = $(this).data('slotId');
             $(this).find('td.session input').each(function() {
-                row[$(this).attr('name')] = $(this).attr('checked') == 'checked';
+                row[$(this).attr('name')] = $(this).prop('checked') == true;
             });
             data.push(row);
         });
@@ -32,7 +32,6 @@ $(function() {
             'delegate_slots' : JSON.stringify(data),
             'csrfmiddlewaretoken' : $("input[name=csrfmiddlewaretoken]").attr('value')
         };
-
         $.ajax({
             type: "POST",
             url: uri,

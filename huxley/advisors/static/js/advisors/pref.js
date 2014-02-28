@@ -1,4 +1,4 @@
-$(function() {	
+$(function() {
 
     // Sets the Save button to unsaved state.
     function setUnsaved(){
