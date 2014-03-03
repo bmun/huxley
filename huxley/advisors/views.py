@@ -78,7 +78,6 @@ def roster(request):
 
 def attendance(request):
     """ Display the advisor's attendance list. """
-    #return render_to_response('coming-soon.html')
     context = {'delegate_slots': request.user.school.get_delegate_slots()}
     return render_template(request, 'check-attendance.html', context)
 
