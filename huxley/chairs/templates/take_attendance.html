@@ -12,8 +12,8 @@
 <div class="tablemenu header">
 	Don't forget to <input class="saved button" type="submit" value="SAVE!"/>
 </div>
-<div id = "div-attendance">
-	<table class = "table-attendance">
+<div id = "attendance">
+	<table class = "table">
 		<thead>
 			<th class="session"> 1 </th>
 			<th class="session"> 2 </th>
@@ -25,32 +25,32 @@
 		<tbody>
 			{% for slot in delegate_slots %}
 				<tr class="delegateinfo" data-slot-id="{{ slot.id }}">
-					<td class="session" data-session="1">
+					<td class="session" style="width:7%" data-session="1">
 						<input type="checkbox" name="session1" {% if slot.attended_session1 %} checked="true" {% endif %}></input>
 					</td>
-					<td class="session" data-session="2">
+					<td class="session" style="width:7%" data-session="2">
 						<input type="checkbox" name="session2"{% if slot.attended_session2 %} checked="true" {% endif %}></input>
 					</td>
-					<td class="session" data-session="3">
+					<td class="session" style="width:7%" data-session="3">
 						<input type="checkbox" name="session3"{% if slot.attended_session3 %} checked="true" {% endif %}></input>
 					</td>
-					<td class="session" data-session="4">
+					<td class="session" style="width:7%" data-session="4">
 						<input type="checkbox" name="session4"{% if slot.attended_session4 %} checked="true" {% endif %}></input>
 					</td>
-					<td class="country">{{ slot.assignment.country }}</td>
-					<td class="name">
-						{% if slot.delegate %}
+					<td class="country" style="width:36%">{{ slot.assignment.country }}</td>
+					<td class="name" style="width:36%">
+						{% if slot.delegate.name %}
 							{{ slot.delegate }}
 						{% else %}
-							Delegate Unregistered
+							N/A
 						{% endif %}
 					</td>
 			{% endfor %}
 		</tbody>
 	</table>
-</div>	
+</div>
 <div class="tablemenu footer">
 	Don't forget to <input class="saved button" type="submit" value="SAVE!"/>
 </div>
-</form>    
+</form>
 {% endblock content %}
