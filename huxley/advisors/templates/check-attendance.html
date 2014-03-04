@@ -12,6 +12,8 @@
 	<table class="table">
 		<tr>
 			<th class="name"> Delegate </th>
+			<th class="country"> Country </th>
+			<th class="committee"> Committee </th>
 			<th class="session"> 1 </th>
 			<th class="session"> 2 </th>
 			<th class="session"> 3 </th>
@@ -26,16 +28,22 @@
 						Delegate Unregistered
 					{% endif %}
 				</td>
-				<td class="session"> 
+				<td class="country">
+					{{ slot.assignment.country }}
+				</td>
+				<td class="committee">
+					{{ slot.assignment.committee }}
+				</td>
+				<td class="session" style="width:7%">
 					<input type="checkbox" disabled="true" {% if slot.attended_session1 %} checked="true" {% endif %} ></input>
 				</td>
-				<td class="session"> 
+				<td class="session" style="width:7%">
 					<input type="checkbox" disabled="true" {% if slot.attended_session2 %} checked="true" {% endif %} ></input>
 				</td>
-				<td class="session"> 
+				<td class="session" style="width:7%">
 					<input type="checkbox" disabled="true" {% if slot.attended_session3 %} checked="true" {% endif %} ></input>
 				</td>
-				<td class="session"> 
+				<td class="session" style="width:7%">
 					<input type="checkbox" disabled="true" {% if slot.attended_session4 %} checked="true" {% endif %} ></input>
 				</td>
 			</tr>

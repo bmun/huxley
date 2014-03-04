@@ -4,13 +4,15 @@
 
 	.name
 	{
-		text-align: left;
-		width: 100%;
+		text-align: center;
+
 	}
 
 	.session { text-align: center; }
 
-	.country { padding: 0 10px; }
+	.country { padding: 0 10px; text-align: center; }
+
+	.committee { text-align: center; }
 
 	input { margin: 0px 10px; }
 }

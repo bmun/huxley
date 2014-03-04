@@ -1,0 +1,40 @@
+{%extends 'base-inner.html' %}
+
+{% block title %} Delegate Summaries {% endblock title %}
+
+{% block content %}
+
+<h2>Delegate Summaries</h2>
+
+<p>Here you can see a summary of the performances of all your delegates given by your delegates' chairs.</p>
+
+<form id="form-summaries_advisors" method="post" action="{% url 'advisors:summaries_advisors' %}">
+{% csrf_token %}
+<div id = "summaries-advisors">
+	<table class = "table">
+		<thead>
+			<th class="country"> Country </th>
+			<th class="name"> Delegate </th>
+			<th class="summary"> Summary </th>
+		</thead>
+		<tbody>
+			{% for slot in delegate_slots %}
+				<tr>
+					<td class="country" style="width:25%">{{ slot.assignment.country }}
+					</td>
+					<td class="name" style="width:25%">
+						{% if slot.delegate %}
+							{{ slot.delegate }}
+						{% else %}
+							Delegate Unregistered
+						{% endif %}
+					</td>
+					<td class="summary"> <textarea readonly id="summary" rows="4" cols="50" style="background-color: transparent;", > {{ slot.delegate.summary }}</textarea>
+					</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+</div>
+</form>
+{% endblock content %}
