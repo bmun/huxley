@@ -257,10 +257,10 @@ class CountryPreference(models.Model):
 
 class DelegateSlot(models.Model):
     assignment        = models.ForeignKey(Assignment)
-    attended_session1 = models.BooleanField(default=False)
-    attended_session2 = models.BooleanField(default=False)
-    attended_session3 = models.BooleanField(default=False)
-    attended_session4 = models.BooleanField(default=False)
+    attended_session1 = models.PositiveSmallIntegerField(default=0)
+    attended_session2 = models.PositiveSmallIntegerField(default=0)
+    attended_session3 = models.PositiveSmallIntegerField(default=0)
+    attended_session4 = models.PositiveSmallIntegerField(default=0)
 
     def update_or_create_delegate(self, delegate_data):
         """ Updates this slot's delegate object, or creates one if

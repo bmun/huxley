@@ -22,8 +22,8 @@ $(function() {
         $('tr.delegateinfo').each(function() {
             row = {};
             row['id'] = $(this).data('slotId');
-            $(this).find('td.session input').each(function() {
-                row[$(this).attr('name')] = $(this).prop('checked') == true;
+            $(this).find('td.session select').each(function() {
+                row[$(this).attr('name')] = $(this).val();
             });
             data.push(row);
         });
@@ -56,7 +56,7 @@ $(function() {
     });
 
     // Sets the state to unsaved upon checking or unchecking boxes.
-    $(document).on("change", "#form-attendance input[type=checkbox]", function() {
+    $(document).on("change", "#form-attendance select", function() {
         setUnsaved();
     });
 });
