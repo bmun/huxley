@@ -26,16 +26,32 @@
 			{% for slot in delegate_slots %}
 				<tr class="delegateinfo" data-slot-id="{{ slot.id }}">
 					<td class="session" style="width:7%" data-session="1">
-						<input type="checkbox" name="session1" {% if slot.attended_session1 %} checked="true" {% endif %}></input>
+						<select name="session1">
+							<option value=0 {% if slot.attended_session1 == 0 %} selected {% endif %}>Absent</option>
+							<option value=1 {% if slot.attended_session1 == 1 %} selected {% endif %}>Present</option>
+							<option value=2 {% if slot.attended_session1 == 2 %} selected {% endif %}>Voting</option>
+						</select>
 					</td>
 					<td class="session" style="width:7%" data-session="2">
-						<input type="checkbox" name="session2"{% if slot.attended_session2 %} checked="true" {% endif %}></input>
+						<select name="session2">
+							<option value=0 {% if slot.attended_session2 == 0 %} selected {% endif %}>Absent</option>
+							<option value=1 {% if slot.attended_session2 == 1 %} selected {% endif %}>Present</option>
+							<option value=2 {% if slot.attended_session2 == 2 %} selected {% endif %}>Voting</option>
+						</select>
 					</td>
 					<td class="session" style="width:7%" data-session="3">
-						<input type="checkbox" name="session3"{% if slot.attended_session3 %} checked="true" {% endif %}></input>
+						<select name="session3">
+							<option value=0 {% if slot.attended_session3 == 0 %} selected {% endif %}>Absent</option>
+							<option value=1 {% if slot.attended_session3 == 1 %} selected {% endif %}>Present</option>
+							<option value=2 {% if slot.attended_session3 == 2 %} selected {% endif %}>Voting</option>
+						</select>
 					</td>
 					<td class="session" style="width:7%" data-session="4">
-						<input type="checkbox" name="session4"{% if slot.attended_session4 %} checked="true" {% endif %}></input>
+						<select name="session4">
+							<option value=0 {% if slot.attended_session4 == 0 %} selected {% endif %}>Absent</option>
+							<option value=1 {% if slot.attended_session4 == 1 %} selected {% endif %}>Present</option>
+							<option value=2 {% if slot.attended_session4 == 2 %} selected {% endif %}>Voting</option>
+						</select>
 					</td>
 					<td class="country" style="width:36%">{{ slot.assignment.country }}</td>
 					<td class="name" style="width:36%">
