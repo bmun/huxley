@@ -19,8 +19,7 @@ def summaries(request):
             delegate.summary = slot_data['textfield']
             delegate.save()
         return HttpResponse()
-
-    delegate_slots = DelegateSlot.objects.filter(assignment__committee=com).order_by('assignment__country')
+    delegate_slots = DelegateSlot.objects.filter(assignment__committee=com)
     return render_template(request, 'summaries.html', {'delegate_slots': delegate_slots})
 
 
@@ -35,8 +34,7 @@ def attendance(request):
         return HttpResponse()
 
     delegate_slots = DelegateSlot.objects \
-                                 .filter(assignment__committee=committee) \
-                                 .order_by('assignment__country')
+                                 .filter(assignment__committee=committee)
 
     return render_template(request,
                            'take_attendance.html',
