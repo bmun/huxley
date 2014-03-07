@@ -19,13 +19,13 @@ def summaries(request):
             delegate.summary = slot_data['textfield']
             delegate.save()
         return HttpResponse()
-    delegate_slots = DelegateSlot.objects.filter(assignment__committee=com)
+    delegate_slots = DelegateSlot.objects.filter(assignment__committee=com).order_by('assignment__country__name')
     return render_template(request, 'summaries.html', {'delegate_slots': delegate_slots})
 
 
 def attendance(request):
     """ Display a page allowing the chair to take attendance. """
-    committee = request.user.committee
+    com = request.user.committee
     if request.method == 'POST':
         delegate_slots = simplejson.loads(request.POST['delegate_slots'])
         for slot_data in delegate_slots:
@@ -33,8 +33,7 @@ def attendance(request):
             slot.update_delegate_attendance(slot_data)
         return HttpResponse()
 
-    delegate_slots = DelegateSlot.objects \
-                                 .filter(assignment__committee=committee)
+    delegate_slots = DelegateSlot.objects.filter(assignment__committee=com).order_by('assignment__country__name')
 
     return render_template(request,
                            'take_attendance.html',
