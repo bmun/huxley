@@ -282,7 +282,6 @@ class DelegateSlot(models.Model):
 
     def update_delegate_attendance(self, slot_data):
         """ Updates this slot's attendance information. """
-        print(slot_data)
         self.attended_session1 = slot_data['session1']
         self.attended_session2 = slot_data['session2']
         self.attended_session3 = slot_data['session3']
