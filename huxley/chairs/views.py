@@ -28,7 +28,10 @@ def attendance(request):
     committee = request.user.committee
     if request.method == 'POST':
         delegate_slots = simplejson.loads(request.POST['delegate_slots'])
+        print(delegate_slots)
         for slot_data in delegate_slots:
+            print('slot data')
+            print(slot_data)
             slot = DelegateSlot.objects.get(id=slot_data['id'])
             slot.update_delegate_attendance(slot_data)
         return HttpResponse()

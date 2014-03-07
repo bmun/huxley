@@ -35,16 +35,16 @@
 					{{ slot.assignment.committee }}
 				</td>
 				<td class="session" style="width:7%">
-					<input type="checkbox" disabled="true" {% if slot.attended_session1 %} checked="true" {% endif %} ></input>
+					<input type="checkbox" disabled="true" {% if slot.attended_session1 == 1 or slot.attended_session1 == 2 %} checked="true" {% endif %} ></input>
 				</td>
 				<td class="session" style="width:7%">
-					<input type="checkbox" disabled="true" {% if slot.attended_session2 %} checked="true" {% endif %} ></input>
+					<input type="checkbox" disabled="true" {% if slot.attended_session2 == 1 or slot.attended_session2 == 2 %} checked="true" {% endif %} ></input>
 				</td>
 				<td class="session" style="width:7%">
-					<input type="checkbox" disabled="true" {% if slot.attended_session3 %} checked="true" {% endif %} ></input>
+					<input type="checkbox" disabled="true" {% if slot.attended_session3 == 1 or slot.attended_session3 == 2 %} checked="true" {% endif %} ></input>
 				</td>
 				<td class="session" style="width:7%">
-					<input type="checkbox" disabled="true" {% if slot.attended_session4 %} checked="true" {% endif %} ></input>
+					<input type="checkbox" disabled="true" {% if slot.attended_session4 == 1 or slot.attended_session4 == 2 %} checked="true" {% endif %} ></input>
 				</td>
 			</tr>
 		{% endfor %}
