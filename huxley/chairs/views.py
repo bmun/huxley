@@ -19,9 +19,7 @@ def summaries(request):
             delegate.summary = slot_data['textfield']
             delegate.save()
         return HttpResponse()
-    print(DelegateSlot.objects.filter(assignment__committee=com))
     delegate_slots = DelegateSlot.objects.filter(assignment__committee=com)
-    print(delegate_slots)
     return render_template(request, 'summaries.html', {'delegate_slots': delegate_slots})
 
 
