@@ -305,6 +305,7 @@ class DelegateSlot(models.Model):
 
     class Meta:
         db_table = u'delegate_slot'
+        ordering = ['assignment__country']
 
 
 class Delegate(models.Model):
