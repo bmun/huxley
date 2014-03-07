@@ -35,10 +35,7 @@ def attendance(request):
 
     delegate_slots = DelegateSlot.objects.filter(assignment__committee=committee).order_by('assignment__country__name')
 
-    return render_template(request,
-                           'take_attendance.html',
-                           {'delegate_slots': delegate_slots,
-                            'committee': committee})
+    return render_template(request, 'take_attendance.html', {'delegate_slots': delegate_slots})
 
 
 def help(request):
