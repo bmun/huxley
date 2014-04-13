@@ -1,4 +1,4 @@
-# Copyright (c) 2011-2013 Kunal Mehta. All rights reserved.
+# Copyright (c) 2011-2014 Berkeley Model United Nations. All rights reserved.
 # Use of this source code is governed by a BSD License found in README.md.
 
 from django.core.urlresolvers import resolve
@@ -11,7 +11,7 @@ class EnforceUserTypeMiddleware:
     are advisors or chairs, respectively."""
     def process_request(self, request):
         app_name = resolve(request.path_info).app_name
-        
+
         if not app_name in ('advisors', 'chairs'):
             return
 

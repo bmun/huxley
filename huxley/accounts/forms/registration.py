@@ -1,4 +1,4 @@
-# Copyright (c) 2011-2013 Kunal Mehta. All rights reserved.
+# Copyright (c) 2011-2014 Berkeley Model United Nations. All rights reserved.
 # Use of this source code is governed by a BSD License found in README.md.
 
 from datetime import date
@@ -57,10 +57,10 @@ class RegistrationForm(forms.Form):
 
     committee_prefs = forms.MultipleChoiceField(label="Special Committee Preferences", widget=forms.CheckboxSelectMultiple(),choices=special_committees_choices, required=False)
 
-    
+
     # The following functions create the User and School entries in the
     # database. Run these only if the form is valid.
-    
+
     def create_user(self, school):
         new_user = HuxleyUser.objects.create_user(self.cleaned_data['username'], self.cleaned_data['primary_email'], self.cleaned_data['password'])
         new_user.first_name = self.cleaned_data['first_name']
@@ -101,7 +101,7 @@ class RegistrationForm(forms.Form):
         school.update_committee_preferences(committee_ids)
         return True
 
-    
+
     # Validation functions of the form clean_<field>. They return "cleaned"
     # versions of data supplied by the user.
 
@@ -109,7 +109,7 @@ class RegistrationForm(forms.Form):
         school_name = self.cleaned_data['school_name']
         if School.objects.filter(name=school_name).exists():
             raise forms.ValidationError('A school with the name "%s" has already been registered.' % (school_name))
-        
+
         return school_name
 
     def clean_school_state(self):
@@ -132,14 +132,14 @@ class RegistrationForm(forms.Form):
             raise forms.ValidationError("Usernames must be alphanumeric, underscores, and/or hyphens only.")
         elif HuxleyUser.objects.filter(username=username).exists():
             raise forms.ValidationError("Username '%s' is already in use. Please choose another one." % (username))
-        
+
         return username
 
     def clean_password(self):
         password = self.cleaned_data['password']
         if re.match("^[A-Za-z0-9\_\.!@#\$%\^&\*\(\)~\-=\+`\?]+$", password) is None:
             raise forms.ValidationError("Password contains invalid characters.")
-        
+
         return password
 
     # Format: (123) 456-7890 || Note the space after the area code.
@@ -192,6 +192,6 @@ class RegistrationForm(forms.Form):
             if not country or re.match("^\s*$", country) is not None:
                 message = "You must specify a country."
                 self._errors["school_country"] = self.error_class([message])
-                
+
         # Always return cleaned_data
         return cleaned_data

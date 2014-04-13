@@ -1,4 +1,4 @@
-# Copyright (c) 2011-2013 Kunal Mehta. All rights reserved.
+# Copyright (c) 2011-2014 Berkeley Model United Nations. All rights reserved.
 # Use of this source code is governed by a BSD License found in README.md.
 
 from django.http import HttpResponse
@@ -10,7 +10,7 @@ from itertools import izip_longest
 
 def render_template(request, template, context=None):
     '''Wrap render_to_response with the context_instance argument set.'''
-    return render_to_response(template, context, 
+    return render_to_response(template, context,
                               context_instance=RequestContext(request))
 
 def render_json(data):

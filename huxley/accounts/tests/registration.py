@@ -1,4 +1,4 @@
-# Copyright (c) 2011-2013 Kunal Mehta. All rights reserved.
+# Copyright (c) 2011-2014 Berkeley Model United Nations. All rights reserved.
 # Use of this source code is governed by a BSD License found in README.md.
 
 from django.test import TestCase
@@ -14,9 +14,9 @@ class RegistrationTest(TestCase):
     fixtures = ['countries.json', 'committees.json']
 
     valid_params = {'first_name': 'Taeyeon',
-                    'last_name': 'Kim', 
+                    'last_name': 'Kim',
                     'username': 'taengoo',
-                    'password': 'girlsgeneration', 
+                    'password': 'girlsgeneration',
                     'password2': 'girlsgeneration',
                     'school_location': School.LOCATION_USA,
                     'school_name': 'SNSD',
@@ -24,7 +24,7 @@ class RegistrationTest(TestCase):
                     'school_city': 'Seoul',
                     'school_state': 'Seoul',
                     'school_zip':12345,
-                    'program_type': School.TYPE_CLUB, 
+                    'program_type': School.TYPE_CLUB,
                     'times_attended':9,
                     'min_delegation_size':9,
                     'max_delegation_size':9,
@@ -33,11 +33,11 @@ class RegistrationTest(TestCase):
                     'primary_phone':'(123) 435-7543',
                     'country_pref1': 1,
                     'country_pref2': 2,
-                    'country_pref3': 3, 
+                    'country_pref3': 3,
                     'country_pref4': 4,
                     'country_pref5': 5,
                     'country_pref6': 6,
-                    'country_pref7': 7, 
+                    'country_pref7': 7,
                     'country_pref8': 8,
                     'country_pref9': 9,
                     'country_pref10': 10}
@@ -124,7 +124,7 @@ class RegistrationTest(TestCase):
 
         self.assertEqual(len(form.errors), 1)
         self.assertIn('username', form.errors)
-        self.assertItemsEqual(form.errors['username'], ['Usernames must be alphanumeric, underscores, and/or hyphens only.'])        
+        self.assertItemsEqual(form.errors['username'], ['Usernames must be alphanumeric, underscores, and/or hyphens only.'])
 
         # Just valid characters
         params['username'] = 'RickAstley'
@@ -155,7 +155,7 @@ class RegistrationTest(TestCase):
 
     def test_username_unique(self):
         """ Tests for: uniqueness """
-        
+
         params = self.valid_params.copy()
         params['username'] = 'abcdef'
 
@@ -296,7 +296,7 @@ class RegistrationTest(TestCase):
         self.assertEqual(school.address, params['school_address'])
         self.assertEqual(school.city, params['school_city'])
         self.assertEqual(school.zip_code, str(params['school_zip']))
-        self.assertEqual(school.country, params['school_country']) 
+        self.assertEqual(school.country, params['school_country'])
         self.assertEqual(school.primary_name, params['primary_name'])
         self.assertEqual(school.primary_email, params['primary_email'])
         self.assertEqual(school.primary_phone, params['primary_phone'])
@@ -401,7 +401,7 @@ class RegistrationTest(TestCase):
         form = RegistrationForm(params)
         self.assertTrue(form.is_valid())
 
-        
+
     def test_add_committee_preferences(self):
         """ Tests that adding committee preferences works """
         params = self.valid_params.copy()
@@ -469,7 +469,7 @@ class RegistrationTest(TestCase):
         self.assertEqual(len(form.errors), 1)
         self.assertIn('primary_phone', form.errors)
         self.assertItemsEqual(form.errors['primary_phone'], ['Phone in incorrect format.'])
-        
+
         # (123) 12a-1231 (invalid)
         params['primary_phone'] = '(123) 12a-1231'
         form = RegistrationForm(params)
@@ -494,7 +494,7 @@ class RegistrationTest(TestCase):
         # 1-123-123-1234 (dashes; valid)
         params['primary_phone'] = '1-123-123-1234'
         form = RegistrationForm(params)
-        self.assertTrue(form.is_valid())        
+        self.assertTrue(form.is_valid())
 
         # US format (valid)
         params['primary_phone'] = '(123) 456-7890'
@@ -523,7 +523,7 @@ class RegistrationTest(TestCase):
     def test_school_country(self):
         """ Tests that school country is filled out when it's an international school """
         params = self.valid_params.copy()
-        
+
         # Try US first (no country specified)
         params['school_location'] = School.LOCATION_USA
         form = RegistrationForm(params)
@@ -535,7 +535,7 @@ class RegistrationTest(TestCase):
         self.assertTrue(form.is_valid())
 
         # Try international (with no country specified)
-        params = self.valid_params.copy() 
+        params = self.valid_params.copy()
         params['school_location'] = School.LOCATION_INTERNATIONAL
         form = RegistrationForm(params)
         self.assertFalse(form.is_valid())
