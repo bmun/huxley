@@ -1,5 +1,5 @@
 # Copyright (c) 2011-2013 Berkeley Model United Nations. All rights reserved.
-# Use of this source code is governed by a BSD License found in README.md.
+# Use of this source code is governed by a BSD License (see LICENSE).
 
 # These are the settings that will be different for your production deployment.
 # Fill in these values and rename copy the file into local.py.
