@@ -1,5 +1,5 @@
 Django==1.5.3
-Fabric==1.7.0
+Fabric==1.8.3
 South==0.8.1
 coverage==3.6
 cssmin==0.1.4
