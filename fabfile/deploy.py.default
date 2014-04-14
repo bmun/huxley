@@ -13,6 +13,7 @@ virtualenvs = {
     'stage': 'your_staging_virtualenv',
 }
 
+@task
 @hosts(['your.host.name'])
 def deploy(environment):
     source_path = source_paths[environment]
