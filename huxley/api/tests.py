@@ -9,7 +9,6 @@ from huxley.accounts.models import HuxleyUser
 from huxley.utils.test import TestUsers
 
 import json
-import unittest
 
 class UserDetailTestCase(TestCase):
     def setUp(self):
