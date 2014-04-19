@@ -21,4 +21,9 @@ urlpatterns += patterns('',
     url(r'^countries/(?P<pk>[0-9]+)/?$', views.CountryDetail.as_view(), name='country_detail'),
 )
 
+urlpatterns += patterns('',
+    url(r'^schools/?$', views.SchoolList.as_view(), name='school_list'),
+    url(r'^schools/(?P<pk>[0-9]+)/?$', views.SchoolDetail.as_view(), name='school_detail'),
+)
+
 urlpatterns = format_suffix_patterns(urlpatterns)

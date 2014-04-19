@@ -5,10 +5,11 @@ from rest_framework import generics
 from rest_framework.authentication import SessionAuthentication
 
 from huxley.accounts.models import HuxleyUser
-from huxley.api.permissions import IsSuperuserOrReadOnly, IsUserOrSuperuser
+from huxley.api.permissions import (IsSuperuserOrReadOnly, IsUserOrSuperuser,
+                                    IsAdvisorOrSuperuser)
 from huxley.api.serializers import (CommitteeSerializer, CountrySerializer,
-                                    UserSerializer)
-from huxley.core.models import Committee, Country
+                                    UserSerializer, SchoolSerializer)
+from huxley.core.models import Committee, Country, School
 
 class UserList(generics.ListCreateAPIView):
     queryset = HuxleyUser.objects.all()
@@ -39,3 +40,14 @@ class CountryDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Country.objects.all()
     serializer_class = CountrySerializer
     permission_classes = (IsSuperuserOrReadOnly,)
+
+class SchoolList(generics.ListCreateAPIView):
+    authentication_classes = (SessionAuthentication,)
+    queryset = School.objects.all()
+    serializer_class = SchoolSerializer
+
+class SchoolDetail(generics.RetrieveUpdateDestroyAPIView):
+    authentication_classes = (SessionAuthentication,)
+    queryset = School.objects.all()
+    serializer_class = SchoolSerializer
+    permission_classes = (IsAdvisorOrSuperuser,)
