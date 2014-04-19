@@ -1,7 +1,7 @@
 # Copyright (c) 2011-2014 Berkeley Model United Nations. All rights reserved.
 # Use of this source code is governed by a BSD License (see LICENSE).
 
-from fabric.api import local, task
+from fabric.api import hide, local, settings, task
 from fabric.colors import green, red, yellow
 from fabric.contrib.console import confirm
 from utils import git
@@ -21,8 +21,25 @@ def update():
     git.pull()
 
 @task
-def submit(remote='origin'):
+def test(*args):
+    '''Run the project's test suite, with optionally specified apps.'''
+    with hide('aborts', 'warnings'):
+        return local('python manage.py test %s' % ' '.join(args))
+
+@task
+def submit(remote='origin', skip_tests=False):
     '''Push the current feature branch and create/update pull request.'''
+    if not skip_tests:
+        with settings(warn_only=True):
+            if test().failed:
+                if confirm(yellow('Tests failed. Continue anyway?')):
+                    print yellow('Ignoring failed tests. Be careful.')
+                else:
+                    print red('Terminating due to failed tests.')
+                    return
+            else:
+                print green('Tests OK!')
+
     first_submission = not git.remote_branch_exists(remote=remote)
     git.pull()
     git.push()
