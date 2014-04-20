@@ -33,8 +33,8 @@ echo -n "GitHub username: "
 read username
 
 git clone git@github.com:$(username)/huxley.git
-cd huxley           
-hub remote add upstream https://github.com/bmun/huxley.git
+cd huxley
+git remote add upstream https://github.com/bmun/huxley.git
 
 echo "Okay, next we'll install the Python dependencies from requirements.txt..."
 mkvirtualenv huxley
