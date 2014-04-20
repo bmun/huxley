@@ -32,11 +32,21 @@ echo "Looks good! Now we'll need to clone your repo. For that, I'll need your Gi
 echo -n "GitHub username: "
 read username
 
-git clone git@github.com:$(username)/huxley.git
+git clone "git@github.com:${username}/huxley.git"
 cd huxley
 git remote add upstream https://github.com/bmun/huxley.git
 
+echo "Let's set up the author information for this repo."
+echo -n "Your name, as it appears on GitHub (in quotes): "
+read fullname
+git config user.name $fullname
+
+echo -n "A GitHub confirmed email: "
+read email
+git config user.email $email
+
 echo "Okay, next we'll install the Python dependencies from requirements.txt..."
+source `which virtualenvwrapper.sh`
 mkvirtualenv huxley
 workon huxley
 pip install -r requirements.txt
@@ -63,5 +73,5 @@ if ! binary_exists hub; then
 fi
 
 echo_green "And with that, you're ready to go!"
-echo_green "Start the server with \`python manage.py runserver\`, and get hacking!"
+echo_green "Activate your virtualenv with \`workon huxley\`, start the server with \`python manage.py runserver\`, and get hacking!"
 echo_green "(Read the \"Submitting a Patch\" section in CONTRIBUTE when you're ready to submit your code."

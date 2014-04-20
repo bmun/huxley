@@ -49,6 +49,11 @@ Begin by creating a fork of this repository. Go to the top-right of this reposit
 	$ cd huxley
 	$ git remote add upstream https://github.com/kmeht/huxley.git
 
+Next, configure your author information. Use your name and email as they appear on GitHub:
+
+	$ git config user.name "Your Name"
+	$ git config user.email "your@github.email"
+
 ### Install Dependencies
 Install the Python dependencies with the provided `requirements.txt` (remember to activate the `huxley` virtualenv!):
 
