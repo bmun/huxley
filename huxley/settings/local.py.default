@@ -8,6 +8,12 @@ DEBUG = False
 
 ALLOWED_HOSTS = ['.yourdomain.com']
 
+# Generate a random string. Example command: `openssl rand -base64 32`
+SECRET_KEY = 'OVERRIDE THIS'
+
+# Admin password to log into accounts.
+ADMIN_SECRET = 'OVERRIDE THIS'
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
@@ -24,5 +30,5 @@ STATIC_ROOT = 'static_root' # Where your static files will be collected.
 EMAIL_HOST = 'email_host'                   # Mail server hostname.
 EMAIL_HOST_USER = 'email_host_user'         # Username for the mail server.
 EMAIL_HOST_PASSWORD = 'email_host_password' # Password
-DEFAULT_FROM_EMAIL = 'default_from_email'   # Default address for the From: field.
+DEFAULT_FROM_EMAIL = 'default_from_email'   # Default email for the From: field.
 SERVER_EMAIL = 'server_email'               # Inbox on the server.

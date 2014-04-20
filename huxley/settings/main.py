@@ -8,9 +8,11 @@ HUXLEY_ROOT = dirname(dirname(__file__))
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
+# IMPORTANT: Override this in local settings!
+SECRET_KEY = '+42lz(cp=6t#dzpkah^chn760l)rmu$p&f-#7ggsde2l3%fm-i'
+
 ADMINS = (('BMUN Tech Officer', 'tech@bmun.org'))
 ADMIN_SECRET = 'OVERRIDE THIS IN PRODUCTION'
-SECRET_KEY = '+42lz(cp=6t#dzpkah^chn760l)rmu$p&f-#7ggsde2l3%fm-i'
 MANAGERS = ADMINS
 
 SITE_ID = 1
