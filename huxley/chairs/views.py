@@ -6,7 +6,7 @@ from django.shortcuts import render_to_response
 from django.utils import simplejson
 
 from huxley.core.models import *
-from huxley.shortcuts import render_template
+from huxley.utils.shortcuts import render_template
 
 
 def summaries(request):

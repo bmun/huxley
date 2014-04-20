@@ -11,7 +11,7 @@ from django.views.decorators.http import require_POST, require_GET
 from huxley.accounts.forms import RegistrationForm
 from huxley.accounts.models import HuxleyUser
 from huxley.core.models import *
-from huxley.shortcuts import render_template, render_json
+from huxley.utils.shortcuts import render_template, render_json
 
 
 def login_user(request):

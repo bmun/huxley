@@ -4,7 +4,7 @@
 from django.core.urlresolvers import resolve
 from django.http import HttpResponseForbidden
 
-from huxley.shortcuts import render_template
+from huxley.utils.shortcuts import render_template
 
 class EnforceUserTypeMiddleware:
     """ Enforces that users accessing URLs in the advisors or chairs app
