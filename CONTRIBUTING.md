@@ -1,8 +1,6 @@
 # Contribute to Huxley
 
-We're really excited for you to start contributing to Huxley. Below are the  steps to help you get started and submit a patch.
-
-**NOTE**: These instructions assume you're developing on Mac OS X. If you're on another platform, please consult the setup guides (coming soon!).
+We're really excited for you to start contributing to Huxley. Below are the  steps to help you get started and submit a patch. **NOTE**: These instructions assume you're developing on Mac OS X. If you're on another platform, please consult the setup guides (coming soon!).
 
 ## Getting Started
 Begin by creating a fork of this repository. Go to the top-right of this repository page and click "Fork" (read Github's [guide](http://help.github.com/forking/) for a refresher on forking. If you're new to GitHub, remember to [set up SSH keys](https://help.github.com/articles/generating-ssh-keys) as well).

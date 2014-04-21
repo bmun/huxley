@@ -23,7 +23,7 @@ And of course, Huxley should be **delightful to use.** We're aiming to provide t
 Huxley's built with [Django](http://www.djangoproject.com), a web development framework written in [Python](http://www.python.org). The frontend is simple HTML and CSS, and makes heavy use of [jQuery](http://jquery.com/).
 
 ## Contribute
-We'd love for you to contribute to Huxley! First, make sure you read (and agree with) our [**Vision**](https://github.com/kmeht/huxley/blob/master/README.md#vision) statement. Then, discover how to set up Huxley locally and submit patches in [**CONTRIBUTE.md**](https://github.com/kmeht/huxley/blob/master/docs/CONTRIBUTE.md).
+We'd love for you to contribute to Huxley! First, make sure you read (and agree with) our [**Vision**](README.md#vision) statement. Then, discover how to set up Huxley locally and submit patches in [**CONTRIBUTING.md**](CONTRIBUTING.md).
 
 ### License
 Use of this source code is governed by a BSD License found in the file `LICENSE`.
