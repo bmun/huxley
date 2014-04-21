@@ -1,10 +1,13 @@
 # Copyright (c) 2011-2014 Berkeley Model United Nations. All rights reserved.
 # Use of this source code is governed by a BSD License (see LICENSE).
 
-from fabric.api import hide, local, settings, task
+from fabric.api import env, hide, local, settings, task
 from fabric.colors import green, red, yellow
 from fabric.contrib.console import confirm
+from os.path import abspath, dirname, join
 from utils import git
+
+env.huxley_root = abspath(dirname(dirname(__file__)))
 
 @task
 def feature(branch_name=None):
@@ -27,6 +30,16 @@ def test(*args):
         return local('python manage.py test %s' % ' '.join(args))
 
 @task
+def authors():
+    '''Update the AUTHORS file.'''
+    authors = join(env.huxley_root, 'AUTHORS')
+    with hide('running'):
+        local('git log --format="%aN <%aE>" | sort -u > {0}'.format(authors))
+        if local('git diff --name-only AUTHORS', capture=True):
+            print green('Automatically updating the authors file...')
+            local('git commit -m "Update AUTHORS." {0}'.format(authors))
+
+@task
 def submit(remote='origin', skip_tests=False):
     '''Push the current feature branch and create/update pull request.'''
     if not skip_tests:
@@ -42,7 +55,9 @@ def submit(remote='origin', skip_tests=False):
 
     first_submission = not git.remote_branch_exists(remote=remote)
     git.pull()
+    authors()
     git.push()
+
     if not first_submission:
         print green('Pull request sucessfully updated.')
     elif git.hub_installed():
