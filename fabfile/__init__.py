@@ -38,6 +38,8 @@ def authors():
         if local('git diff --name-only AUTHORS', capture=True):
             print green('Automatically updating the authors file...')
             local('git commit -m "Update AUTHORS." {0}'.format(authors))
+        else:
+            print green('No change to AUTHORS.')
 
 @task
 def submit(remote='origin', skip_tests=False):
