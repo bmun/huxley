@@ -7,23 +7,23 @@ from rest_framework.urlpatterns import format_suffix_patterns
 from huxley.api import views
 
 urlpatterns = patterns('',
-    url(r'^users/?$', views.UserList.as_view(), name='user_list'),
-    url(r'^users/(?P<pk>[0-9]+)/?$', views.UserDetail.as_view(), name='user_detail'),
+    url(r'^users/?$', views.user.UserList.as_view(), name='user_list'),
+    url(r'^users/(?P<pk>[0-9]+)/?$', views.user.UserDetail.as_view(), name='user_detail'),
 )
 
 urlpatterns += patterns('',
-    url(r'^committees/?$', views.CommitteeList.as_view(), name='committee_list'),
-    url(r'^committees/(?P<pk>[0-9]+)/?$', views.CommitteeDetail.as_view(), name='committee_detail'),
+    url(r'^committees/?$', views.committee.CommitteeList.as_view(), name='committee_list'),
+    url(r'^committees/(?P<pk>[0-9]+)/?$', views.committee.CommitteeDetail.as_view(), name='committee_detail'),
 )
 
 urlpatterns += patterns('',
-    url(r'^countries/?$', views.CountryList.as_view(), name='country_list'),
-    url(r'^countries/(?P<pk>[0-9]+)/?$', views.CountryDetail.as_view(), name='country_detail'),
+    url(r'^countries/?$', views.country.CountryList.as_view(), name='country_list'),
+    url(r'^countries/(?P<pk>[0-9]+)/?$', views.country.CountryDetail.as_view(), name='country_detail'),
 )
 
 urlpatterns += patterns('',
-    url(r'^schools/?$', views.SchoolList.as_view(), name='school_list'),
-    url(r'^schools/(?P<pk>[0-9]+)/?$', views.SchoolDetail.as_view(), name='school_detail'),
+    url(r'^schools/?$', views.school.SchoolList.as_view(), name='school_list'),
+    url(r'^schools/(?P<pk>[0-9]+)/?$', views.school.SchoolDetail.as_view(), name='school_detail'),
 )
 
 urlpatterns = format_suffix_patterns(urlpatterns)
