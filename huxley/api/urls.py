@@ -9,6 +9,7 @@ from huxley.api import views
 urlpatterns = patterns('',
     url(r'^users/?$', views.user.UserList.as_view(), name='user_list'),
     url(r'^users/(?P<pk>[0-9]+)/?$', views.user.UserDetail.as_view(), name='user_detail'),
+    url(r'^users/me/?$', views.user.CurrentUser.as_view(), name='current_user'),
 )
 
 urlpatterns += patterns('',

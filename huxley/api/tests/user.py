@@ -158,3 +158,59 @@ class UserDetailDeleteTestCase(TestCase):
         self.assertFalse(HuxleyUser.objects.filter(id=user1.id).exists())
 
 
+class CurrentUserTestCase(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.url = reverse('api:current_user')
+
+    def get_data(self, url):
+        return json.loads(self.client.get(url).content)
+
+    def test_login(self):
+        user = TestUsers.new_user(username='lol', password='lol')
+        user2 = TestUsers.new_user(username='bunny', password='bunny')
+
+        credentials = {'username': 'lol', 'password': 'lol'}
+        response = self.client.post(self.url,
+                                    data=json.dumps(credentials),
+                                    content_type='application/json')
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(self.client.session['_auth_user_id'], user.id)
+
+
+        credentials = {'username': 'bunny', 'password': 'bunny'}
+        response = self.client.post(self.url,
+                                    data=json.dumps(credentials),
+                                    content_type='application/json')
+        self.assertEqual(self.client.session['_auth_user_id'], user.id)
+
+        data = json.loads(response.content)
+        self.assertEqual(data['detail'],
+                         'Another user is currently logged in.')
+
+    def test_logout(self):
+        user = TestUsers.new_user(username='lol', password='lol')
+
+        self.client.login(username='lol', password='lol')
+        self.assertEqual(self.client.session['_auth_user_id'], user.id)
+
+        response = self.client.delete(self.url)
+        self.assertEqual(response.status_code, 204)
+        self.assertTrue('_auth_user_id' not in self.client.session)
+
+    def test_get(self):
+        data = self.get_data(self.url)
+
+        self.assertEqual(len(data.keys()), 1)
+        self.assertEqual(data['detail'], 'Not found')
+
+        user = TestUsers.new_user(username='lol', password='lol', school_id=1)
+        self.client.login(username='lol', password='lol')
+
+        data = self.get_data(self.url)
+        self.assertEqual(len(data.keys()), 6)
+        self.assertEqual(data['id'], user.id)
+        self.assertEqual(data['first_name'], user.first_name)
+        self.assertEqual(data['last_name'], user.last_name)
+        self.assertEqual(data['user_type'], HuxleyUser.TYPE_ADVISOR)
+        self.assertEqual(data['school'], user.school_id)
