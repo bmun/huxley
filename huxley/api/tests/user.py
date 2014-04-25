@@ -10,7 +10,8 @@ from huxley.utils.test import TestUsers
 
 import json
 
-class UserDetailTestCase(TestCase):
+
+class UserDetailGetTestCase(TestCase):
     def setUp(self):
         self.client = Client()
 
@@ -92,5 +93,68 @@ class UserDetailTestCase(TestCase):
         self.assertEqual(data['user_type'], HuxleyUser.TYPE_CHAIR)
         self.assertEqual(data['school'], user.school_id)
         self.assertEqual(data['committee'], user.committee_id)
+
+
+class UserDetailDeleteTestCase(TestCase):
+    def setUp(self):
+        self.client = Client()
+
+    def get_url(self, user_id):
+        return reverse('api:user_detail', args=(user_id,))
+
+    def get_response(self, url):
+        return self.client.delete(url)
+
+    def get_data(self, url):
+        return json.loads(self.get_response(url).content)
+
+    def test_anonymous_user(self):
+        '''It should reject the request from an anonymous user.'''
+        user = TestUsers.new_user()
+        url = self.get_url(user.id)
+        data = self.get_data(url)
+
+        self.assertEqual(len(data.keys()), 1)
+        self.assertEqual(data['detail'],
+                         u'Authentication credentials were not provided.')
+        self.assertTrue(HuxleyUser.objects.filter(id=user.id).exists())
+
+    def test_other_user(self):
+        '''It should reject the request from another user.'''
+        username = 'user1'
+        user1 = TestUsers.new_user(username=username)
+        user2 = TestUsers.new_user(username='user2', password='user2')
+        url = self.get_url(user1.id)
+
+        self.client.login(username='user2', password='user2')
+        data = self.get_data(url)
+
+        self.assertEqual(len(data.keys()), 1)
+        self.assertEqual(data['detail'],
+                         u'You do not have permission to perform this action.')
+        self.assertTrue(HuxleyUser.objects.filter(id=user1.id).exists())
+
+    def test_self(self):
+        '''It should allow a user to delete themself.'''
+        user = TestUsers.new_user(username='lol', password='lol', school_id=1)
+        url = self.get_url(user.id)
+
+        self.client.login(username='lol', password='lol')
+        response = self.get_response(url)
+
+        self.assertEqual(response.status_code, 204)
+        self.assertFalse(HuxleyUser.objects.filter(id=user.id).exists())
+
+    def test_superuser(self):
+        '''It should allow a superuser to delete a user.'''
+        user1 = TestUsers.new_user(username='user1')
+        user2 = TestUsers.new_superuser(username='user2', password='user2')
+        url = self.get_url(user1.id)
+
+        self.client.login(username='user2', password='user2')
+        response = self.get_response(url)
+
+        self.assertEqual(response.status_code, 204)
+        self.assertFalse(HuxleyUser.objects.filter(id=user1.id).exists())
 
 
