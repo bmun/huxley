@@ -8,7 +8,7 @@ from huxley.utils.test import TestCommittee
 import json
 import unittest
 
-class CommitteeDetailTestCase(TestCase):
+class CommitteeDetailTestCase(unittest.TestCase):
     def setUp(self):
         self.client = Client()
 
@@ -27,4 +27,15 @@ class CommitteeDetailTestCase(TestCase):
         self.assertEquals(
             data['detail'],
             u'Authentication credentials were not provided.')
+    
+    def test_self(self){
+        '''A basic test to check if this is a committee objects'''
+         committee = TestCommittee.new_committee(name="IAmATestCommittee", delegation_size=20, special=True)
+        url = self.get_url(committee.id)
+
+        data = self.get_response(url)
+        self.assertEquals(
+            data['detail'],
+            u'Authentication credentials were not provided.')
+    
 
