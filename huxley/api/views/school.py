@@ -4,7 +4,7 @@
 from rest_framework import generics
 from rest_framework.authentication import SessionAuthentication
 
-from huxley.api.permissions import IsAdvisorOrSuperuser
+from huxley.api.permissions import IsAdvisorOrSuperuser, IsPostOrSuperuserOnly
 from huxley.api.serializers import SchoolSerializer
 from huxley.core.models import School
 
@@ -13,6 +13,7 @@ class SchoolList(generics.ListCreateAPIView):
     authentication_classes = (SessionAuthentication,)
     queryset = School.objects.all()
     serializer_class = SchoolSerializer
+    permission_classes = (IsPostOrSuperuserOnly,)
 
 
 class SchoolDetail(generics.RetrieveUpdateDestroyAPIView):

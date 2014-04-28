@@ -3,6 +3,7 @@
 
 from rest_framework import permissions
 
+
 class IsSuperuserOrReadOnly(permissions.BasePermission):
     '''Allow writes if superuser, read-only otherwise.'''
 
@@ -23,3 +24,10 @@ class IsAdvisorOrSuperuser(permissions.BasePermission):
 
     def has_object_permission(self, request, view, obj):
         return request.user.is_superuser or request.user == obj.advisor
+
+
+class IsPostOrSuperuserOnly(permissions.BasePermission):
+    '''Accept POST (create) requests, superusers-only otherwise.'''
+
+    def has_object_permissions(self, request, view, obj):
+        return request.method == 'POST' or request.user.is_superuser
