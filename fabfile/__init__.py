@@ -38,12 +38,12 @@ def test(*args):
 @task
 def authors():
     '''Update the AUTHORS file.'''
-    authors = join(env.huxley_root, 'AUTHORS')
+    authors_path = join(env.huxley_root, 'AUTHORS')
     with hide('running'):
-        local('git log --format="%aN <%aE>" | sort -u > {0}'.format(authors))
+        local('git log --format="%%aN <%%aE>" | sort -u > %s' % authors_path)
         if local('git diff --name-only AUTHORS', capture=True):
             print green('Automatically updating the authors file...')
-            local('git commit -m "Update AUTHORS." {0}'.format(authors))
+            local('git commit -m "Update AUTHORS." %s' % authors_path)
         else:
             print green('No change to AUTHORS.')
 
