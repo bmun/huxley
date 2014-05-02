@@ -9,25 +9,31 @@ from utils import git
 
 env.huxley_root = abspath(dirname(dirname(__file__)))
 
+
 @task
 def feature(branch_name=None):
     '''Create a new feature branch.'''
-    if not branch_name:
+    if branch_name:
+        git.new_branch(branch_name)
+        dependencies()
+    else:
         print red('No branch name given. Usage: fab feature:<branch_name>')
-        return
-    git.new_branch(branch_name)
+
 
 @task
 def update():
     '''Rebase the current feature branch onto the latest version of upstream.'''
     print 'Updating your local branch...'
     git.pull()
+    dependencies()
+
 
 @task
 def test(*args):
     '''Run the project's test suite, with optionally specified apps.'''
     with hide('aborts', 'warnings'):
         return local('python manage.py test %s' % ' '.join(args))
+
 
 @task
 def authors():
@@ -40,6 +46,42 @@ def authors():
             local('git commit -m "Update AUTHORS." {0}'.format(authors))
         else:
             print green('No change to AUTHORS.')
+
+
+@task
+def dependencies():
+    '''Check the installed dependencies against requirements.txt.'''
+    print 'Checking dependencies...'
+    with open('%s/requirements.txt' % env.huxley_root) as f:
+        requirements = f.read()
+    with hide('running'):
+        installed = local('pip freeze', capture=True)
+
+    def parse(text):
+        pairs = map(lambda l: l.split('=='), text.strip().split('\n'))
+        return {pair[0]: pair[1] for pair in pairs}
+
+    expected, actual = parse(requirements), parse(installed)
+    if all(actual.get(mod) == version for mod, version in expected.items()):
+        print green('Dependencies are up-to-date.')
+        return
+    else:
+        print red('Dependencies are out of date!')
+
+    row_format ="{:<21}" * 3
+    print '\n', row_format.format('module', 'required', 'installed')
+    print row_format.format('------', '--------', '---------')
+
+    for module in sorted(expected.keys()):
+        expected_version = expected[module]
+        actual_version = actual.get(module, yellow('none'))
+        if expected_version != actual_version:
+            print row_format.format(module, expected_version, actual_version)
+
+    print row_format.format('------', '--------', '---------'), '\n'
+    print yellow('You might want to '
+                 '`pip install -r requirements.txt` to update.')
+
 
 @task
 def submit(remote='origin', skip_tests=False):
@@ -68,6 +110,7 @@ def submit(remote='origin', skip_tests=False):
         print green('Pull request successfully issued.')
     else:
         print green('Branch successfully pushed. Go to GitHub to issue a pull request.')
+
 
 @task
 def finish():
