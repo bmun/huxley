@@ -18,7 +18,7 @@ class CommitteeDetailTestCase(unittest.TestCase):
     def get_response(self, url):
         return json.loads(self.client.get(url).content)
 
-    def test_sanity(self):
+    def test_anonymous_user(self):
         '''It should return the correct fields for a committee.'''
         committee = TestCommittee.new_committee(name="IAmATestCommittee", delegation_size=20, special=True)
         url = self.get_url(committee.id)
