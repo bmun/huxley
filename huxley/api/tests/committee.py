@@ -24,18 +24,9 @@ class CommitteeDetailTestCase(unittest.TestCase):
         url = self.get_url(committee.id)
 
         data = self.get_response(url)
-        self.assertEquals(
-            data['detail'],
-            u'Authentication credentials were not provided.')
-    
-    def test_self(self){
-        '''A basic test to check if this is a committee objects'''
-         committee = TestCommittee.new_committee(name="IAmATestCommittee", delegation_size=20, special=True)
-        url = self.get_url(committee.id)
-
-        data = self.get_response(url)
-        self.assertEquals(
-            data['detail'],
-            u'Authentication credentials were not provided.')
-    
+        self.assertEqual(data['delegation_size'], 20)
+        self.assertEqual(data['special'], True)
+        self.assertEqual(data['id'], 1)
+        self.assertEqual(data['full_name'], u'testCommittee')
+        self.assertEqual(data['name'], u'IAmATestCommittee')
 
