@@ -6,11 +6,12 @@ from django.test import TestCase
 from huxley.accounts.constants import *
 from huxley.accounts.models import *
 
-class HuxleyUserTest(TestCase):
+
+class HuxleyUserTestCase(TestCase):
 
     def test_authenticate(self):
-        """ Tests that the function correctly authenticates and returns a
-            user, or returns an error message. """
+        '''It should correctly authenticate and return a user, or return an
+        error message.'''
         kunal = HuxleyUser.objects.create(username='kunal', email='kunal@lol.lol')
         kunal.set_password('kunalmehta')
         kunal.save()
@@ -32,8 +33,7 @@ class HuxleyUserTest(TestCase):
         self.assertIsNone(error)
 
     def test_change_password(self):
-        """ Tests that the function correctly changes a user's password, or
-            returns an error message. """
+        '''It should correctly change a user's password or return an error.'''
         user = HuxleyUser.objects.create(username='adavis', email='lol@lol.lol')
         user.set_password('mr_davis')
 
