@@ -60,7 +60,7 @@ class TestSchools():
         TestUsers.new_user(school=s)
         return s
 
-class TestCommittee():
+class TestCommittees():
     @staticmethod
     def new_committee(**kwargs):
         c = Committee(
