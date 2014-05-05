@@ -4,7 +4,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-from django.utils import simplejson
+import json
 
 from itertools import izip_longest
 
@@ -15,7 +15,7 @@ def render_template(request, template, context=None):
 
 def render_json(data):
     '''Return an HttpResponse object containing json-encoded data.'''
-    return HttpResponse(simplejson.dumps(data), content_type='application/json')
+    return HttpResponse(json.dumps(data), content_type='application/json')
 
 def pairwise(iterable):
     '''Group the elements of the given interable into 2-tuples.'''
