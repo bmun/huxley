@@ -2,13 +2,12 @@ from django.core.urlresolvers import reverse
 from django.test import TestCase
 from django.test.client import Client
 
-from huxley.core.models import Committee
 from huxley.utils.test import TestCommittees
 
 import json
-import unittest
 
-class CommitteeDetailTestCase(unittest.TestCase):
+
+class CommitteeDetailGetTestCase(TestCase):
     def setUp(self):
         self.client = Client()
 
@@ -29,4 +28,3 @@ class CommitteeDetailTestCase(unittest.TestCase):
         self.assertEqual(data['id'], c.id)
         self.assertEqual(data['full_name'], c.full_name)
         self.assertEqual(data['name'], c.name)
-
