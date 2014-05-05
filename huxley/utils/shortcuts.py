@@ -4,7 +4,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-from django.utils import simplejson
+import json
 
 from itertools import izip_longest
 
