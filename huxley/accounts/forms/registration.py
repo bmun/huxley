@@ -61,7 +61,7 @@ class RegistrationForm(forms.Form):
     # The following functions create the User and School entries in the
     # database. Run these only if the form is valid.
 
-    def create_user(self, school):
+    def create_user(self, school=None):
         new_user = HuxleyUser.objects.create_user(self.cleaned_data['username'], self.cleaned_data['primary_email'], self.cleaned_data['password'])
         new_user.first_name = self.cleaned_data['first_name']
         new_user.last_name = self.cleaned_data['last_name']

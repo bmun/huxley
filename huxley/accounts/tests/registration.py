@@ -4,6 +4,7 @@
 from django.test import TestCase
 
 from huxley.accounts.forms.registration import RegistrationForm
+from huxley.accounts.models import HuxleyUser
 from huxley.core.models import *
 
 import re
@@ -148,9 +149,7 @@ class RegistrationTest(TestCase):
         self.assertEqual(user.last_name, params['last_name'])
 
         # Check to see that it's in the database as well
-        users_in_db = User.objects.filter(username=params['username'])
-        self.assertGreater(len(users_in_db), 0)
-        self.assertEqual(users_in_db[0], user)
+        self.assertTrue(HuxleyUser.objects.filter(id=user.id).exists())
 
 
     def test_username_unique(self):
@@ -170,7 +169,7 @@ class RegistrationTest(TestCase):
 
         self.assertEqual(len(form.errors), 1)
         self.assertIn('username', form.errors)
-        self.assertItemsEqual(form.errors['username'], ['Username "%s" is already in use. Please choose another one.' % (params['username'])])
+        self.assertItemsEqual(form.errors['username'], ['Username \'%s\' is already in use. Please choose another one.' % (params['username'])])
 
 
     def test_password_len(self):
@@ -426,24 +425,6 @@ class RegistrationTest(TestCase):
 
         for committee in school.committeepreferences.all():
             self.assertIn(committee.id, params['committee_prefs'])
-
-
-    def test_create_advisor_profile(self):
-        """ Tests that an advisor profile for a user and a school is successfully created upon registration """
-        params = self.valid_params.copy()
-        params['username'] = 'advisor_profile_test'
-        params['school_name'] = 'advisor_profile_test'
-        form = RegistrationForm(params)
-        self.assertTrue(form.is_valid())
-
-        user = form.create_user()
-        school = form.create_school()
-
-        profile = form.create_advisor_profile(user, school)
-        self.assertFalse(profile is None)
-
-        self.assertEqual(profile.user, user)
-        self.assertEqual(profile.school, school)
 
 
     def test_us_phone_nums(self):
