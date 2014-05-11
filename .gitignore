@@ -17,3 +17,5 @@ fabfile/deploy.py
 
 .coverage
 htmlcov/
+
+node_modules/

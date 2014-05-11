@@ -1,0 +1,14 @@
+{
+  "name": "huxley",
+  "version": "0.0.0",
+  "description": "conference management system for Berkeley Model United Nations",
+  "main": "huxley.browserify.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "BSD",
+  "dependencies": {
+    "browserify": "~4.1.2"
+  }
+}
