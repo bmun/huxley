@@ -1,9 +1,8 @@
 # Copyright (c) 2011-2014 Berkeley Model United Nations. All rights reserved.
 # Use of this source code is governed by a BSD License (see LICENSE).
 
-from os.path import dirname
+from roots import HUXLEY_ROOT
 
-HUXLEY_ROOT = dirname(dirname(__file__))
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG

@@ -4,6 +4,7 @@
 *~
 *.pyc
 *.csv
+*.browserified.js
 
 *.db
 huxley/huxley.db

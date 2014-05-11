@@ -1,8 +1,13 @@
 # Copyright (c) 2011-2014 Berkeley Model United Nations. All rights reserved.
 # Use of this source code is governed by a BSD License (see LICENSE).
 
+from os.path import join
+from roots import JS_ROOT
+
+
 PIPELINE_COMPILERS = (
-  'huxley.core.compilers.pyscss.PySCSSCompiler',
+    'huxley.core.compilers.pyscss.PySCSSCompiler',
+    'pipeline_browserify.compiler.BrowserifyCompiler',
 )
 
 PIPELINE_CSS_COMPRESSOR = 'pipeline.compressors.cssmin.CSSMinCompressor'
@@ -31,5 +36,13 @@ PIPELINE_JS = {
             'js/chairs/*.js',
         ),
         'output_filename': 'js/huxley.js'
+    },
+    'www': {
+        'source_filenames': (
+            'js/huxley.browserify.js',
+        ),
+        'output_filename': 'js/huxley_www.js'
     }
 }
+
+PIPELINE_BROWSERIFY_BINARY = join(JS_ROOT, 'node_modules/.bin/browserify')
