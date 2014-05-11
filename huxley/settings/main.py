@@ -100,6 +100,7 @@ INSTALLED_APPS = (
     'huxley.accounts',
     'huxley.advisors',
     'huxley.chairs',
+    'huxley.www',
     'pipeline',
     'south',
 )

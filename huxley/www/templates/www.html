@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <title>Huxley, by BMUN</title>
+    <meta charset="utf8" />
+    <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" href="/static/img/favicon.png" />
+
+    {% load compressed %}
+    {% block css %}
+        {% compressed_css 'huxley' %}
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,700,600,400,300' rel='stylesheet' type='text/css'>
+    {% endblock css %}
+    {% block js %}
+        {% compressed_js 'huxley' %}
+    {% endblock js %}
+</head>
+<body>
+hello world
+</body>
+</html>
