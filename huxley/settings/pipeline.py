@@ -46,3 +46,5 @@ PIPELINE_JS = {
 }
 
 PIPELINE_BROWSERIFY_BINARY = join(JS_ROOT, 'node_modules/.bin/browserify')
+
+PIPELINE_BROWSERIFY_ARGUMENTS = '-t reactify'

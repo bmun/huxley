@@ -5,7 +5,13 @@
   "main": "huxley.browserify.js",
   "license": "BSD",
   "dependencies": {
-    "browserify": "4.1.x"
+    "browserify": "4.1.x",
+    "envify": "~1.2.1",
+    "react": "~0.10.0",
+    "reactify": "~0.13.1",
+    "react-async": "~0.9.2",
+    "react-router-component": "~0.18.3",
+    "jquery": "~2.1.1"
   },
   "private": true
 }
