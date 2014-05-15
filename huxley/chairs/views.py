@@ -1,9 +1,10 @@
 # Copyright (c) 2011-2014 Berkeley Model United Nations. All rights reserved.
 # Use of this source code is governed by a BSD License (see LICENSE).
 
+import json
+
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
-from django.utils import simplejson
 
 from huxley.core.models import *
 from huxley.utils.shortcuts import render_template
@@ -13,7 +14,7 @@ def summaries(request):
     """ Display the summaries page for chairs. """
     com = request.user.committee
     if request.method == 'POST':
-        delegate_slots = simplejson.loads(request.POST['delegate_slots'])
+        delegate_slots = json.loads(request.POST['delegate_slots'])
         for slot_data in delegate_slots:
             delegate = Delegate.objects.get(delegate_slot=DelegateSlot.objects.get(id=slot_data['id']))
             delegate.summary = slot_data['textfield']
@@ -27,7 +28,7 @@ def attendance(request):
     """ Display a page allowing the chair to take attendance. """
     committee = request.user.committee
     if request.method == 'POST':
-        delegate_slots = simplejson.loads(request.POST['delegate_slots'])
+        delegate_slots = json.loads(request.POST['delegate_slots'])
         for slot_data in delegate_slots:
             slot = DelegateSlot.objects.get(id=slot_data['id'])
             slot.update_delegate_attendance(slot_data)

@@ -1,9 +1,10 @@
 # Copyright (c) 2011-2014 Berkeley Model United Nations. All rights reserved.
 # Use of this source code is governed by a BSD License (see LICENSE).
 
+import json
+
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponseForbidden
 from django.shortcuts import render_to_response
-from django.utils import simplejson
 
 from huxley.core.models import *
 from huxley.utils.shortcuts import pairwise, render_template
@@ -67,7 +68,7 @@ def roster(request):
         necessary. """
     school = request.user.school
     if request.method == 'POST':
-        slot_data = simplejson.loads(request.POST['delegates'])
+        slot_data = json.loads(request.POST['delegates'])
         school.update_delegate_slots(slot_data)
 
         return HttpResponse()
