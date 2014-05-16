@@ -6,10 +6,11 @@ from django.http import Http404
 
 from rest_framework import generics, status
 from rest_framework.authentication import SessionAuthentication
-from rest_framework.exceptions import APIException
+from rest_framework.exceptions import AuthenticationFailed, PermissionDenied
 from rest_framework.response import Response
 
 from huxley.accounts.models import HuxleyUser
+from huxley.accounts.exceptions import AuthenticationError
 from huxley.api.permissions import IsPostOrSuperuserOnly, IsUserOrSuperuser
 from huxley.api.serializers import UserSerializer
 
@@ -40,13 +41,13 @@ class CurrentUser(generics.GenericAPIView):
     def post(self, request, *args, **kwargs):
         '''Log in a new user.'''
         if request.user.is_authenticated():
-            raise APIException('Another user is currently logged in.')
+            raise PermissionDenied('Another user is currently logged in.')
 
-        data = request.DATA
-        user, error = HuxleyUser.authenticate(data['username'],
-                                              data['password'])
-        if error:
-            raise APIException(error)
+        try:
+            data = request.DATA
+            user = HuxleyUser.authenticate(data['username'], data['password'])
+        except AuthenticationError as e:
+            raise AuthenticationFailed(str(e))
 
         login(request, user)
         return Response(UserSerializer(user).data,

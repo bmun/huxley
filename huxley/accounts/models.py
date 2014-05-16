@@ -7,6 +7,7 @@ from django.core.urlresolvers import reverse
 from django.db import models
 
 from huxley.accounts.constants import *
+from huxley.accounts.exceptions import AuthenticationError
 from huxley.core.models import *
 
 import re
@@ -37,9 +38,9 @@ class HuxleyUser(AbstractUser):
     @staticmethod
     def authenticate(username, password):
         '''Attempt to authenticate a user, given a username (or email) and
-        password. Return a 2-tuple of (User) user, (str) error.'''
+        password. Return the user or raise AuthenticationError.'''
         if not (username and password):
-            return None, AuthenticationErrors.MISSING_FIELDS
+            raise AuthenticationError.missing_fields()
 
         user = authenticate(username=username, password=password)
         if user is None:
@@ -50,11 +51,11 @@ class HuxleyUser(AbstractUser):
                 pass
 
         if user is None:
-            return None, AuthenticationErrors.INVALID_LOGIN
+            raise AuthenticationError.invalid_credentials()
         if not user.is_active:
-            return None, AuthenticationErrors.INACTIVE_ACCOUNT
+            raise AuthenticationError.inactive_account()
 
-        return user, None
+        return user
 
     @staticmethod
     def login(request, user):

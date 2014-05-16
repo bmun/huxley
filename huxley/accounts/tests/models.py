@@ -4,6 +4,7 @@
 from django.test import TestCase
 
 from huxley.accounts.constants import *
+from huxley.accounts.exceptions import AuthenticationError
 from huxley.accounts.models import *
 
 
@@ -13,24 +14,29 @@ class HuxleyUserTestCase(TestCase):
         '''It should correctly authenticate and return a user, or return an
         error message.'''
         kunal = HuxleyUser.objects.create(username='kunal', email='kunal@lol.lol')
-        kunal.set_password('kunalmehta')
+        kunal.set_password('mehta')
+        kunal.is_active = False
         kunal.save()
 
-        user, error = HuxleyUser.authenticate('kunal', '')
-        self.assertIsNone(user)
-        self.assertEqual(error, AuthenticationErrors.MISSING_FIELDS)
+        def assert_raises(username, password, message):
+            with self.assertRaises(AuthenticationError):
+                try:
+                    HuxleyUser.authenticate(username, password)
+                except AuthenticationError as e:
+                    self.assertEqual(str(e), message)
+                    raise
 
-        user, error = HuxleyUser.authenticate('', 'kunalmehta')
-        self.assertIsNone(user)
-        self.assertEqual(error, AuthenticationErrors.MISSING_FIELDS)
+        assert_raises('kunal', '', AuthenticationError.MISSING_FIELDS)
+        assert_raises('', 'mehta', AuthenticationError.MISSING_FIELDS)
+        assert_raises('kunal', 'm', AuthenticationError.INVALID_CREDENTIALS)
+        assert_raises('k', 'mehta', AuthenticationError.INVALID_CREDENTIALS)
+        assert_raises('kunal', 'mehta', AuthenticationError.INACTIVE_ACCOUNT)
 
-        user, error = HuxleyUser.authenticate('roflrofl', 'roflrofl')
-        self.assertIsNone(user)
-        self.assertEqual(error, AuthenticationErrors.INVALID_LOGIN)
+        kunal.is_active = True
+        kunal.save();
 
-        user, error = HuxleyUser.authenticate('kunal', 'kunalmehta')
+        user = HuxleyUser.authenticate('kunal', 'mehta')
         self.assertEqual(user, kunal)
-        self.assertIsNone(error)
 
     def test_change_password(self):
         '''It should correctly change a user's password or return an error.'''

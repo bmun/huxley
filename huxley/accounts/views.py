@@ -10,6 +10,7 @@ from django.views.decorators.http import require_POST, require_GET
 
 from huxley.accounts.forms import RegistrationForm
 from huxley.accounts.models import HuxleyUser
+from huxley.accounts.exceptions import AuthenticationError
 from huxley.core.models import *
 from huxley.utils.shortcuts import render_template, render_json
 
@@ -20,9 +21,11 @@ def login_user(request):
         username = request.POST.get('username')
         password = request.POST.get('password')
 
-        user, error = HuxleyUser.authenticate(username, password)
-        if error:
-            return render_json({'success': False, 'error': error})
+        try:
+            user = HuxleyUser.authenticate(username, password)
+        except AuthenticationError as e:
+            return render_json({'success': False, 'error': str(e)})
+
         redirect = HuxleyUser.login(request, user)
         return render_json({'success': True, 'redirect': redirect})
 
