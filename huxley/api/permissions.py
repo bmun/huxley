@@ -29,5 +29,5 @@ class IsAdvisorOrSuperuser(permissions.BasePermission):
 class IsPostOrSuperuserOnly(permissions.BasePermission):
     '''Accept POST (create) requests, superusers-only otherwise.'''
 
-    def has_object_permissions(self, request, view, obj):
+    def has_permission(self, request, view):
         return request.method == 'POST' or request.user.is_superuser
