@@ -53,8 +53,9 @@ class UserDetailGetTestCase(TestCase):
         self.client.login(username='user2', password='user2')
         data = self.get_response(url)
 
-        self.assertEqual(len(data.keys()), 6)
+        self.assertEqual(len(data.keys()), 7)
         self.assertEqual(data['id'], user1.id)
+        self.assertEqual(data['username'], user1.username)
         self.assertEqual(data['first_name'], user1.first_name)
         self.assertEqual(data['last_name'], user1.last_name)
         self.assertEqual(data['user_type'], HuxleyUser.TYPE_ADVISOR)
@@ -69,8 +70,9 @@ class UserDetailGetTestCase(TestCase):
         self.client.login(username='lol', password='lol')
         data = self.get_response(url)
 
-        self.assertEqual(len(data.keys()), 6)
+        self.assertEqual(len(data.keys()), 7)
         self.assertEqual(data['id'], user.id)
+        self.assertEqual(data['username'], user.username)
         self.assertEqual(data['first_name'], user.first_name)
         self.assertEqual(data['last_name'], user.last_name)
         self.assertEqual(data['user_type'], HuxleyUser.TYPE_ADVISOR)
@@ -86,8 +88,9 @@ class UserDetailGetTestCase(TestCase):
         self.client.login(username='testuser', password='test')
         data = self.get_response(url)
 
-        self.assertEqual(len(data.keys()), 6)
+        self.assertEqual(len(data.keys()), 7)
         self.assertEqual(data['id'], user.id)
+        self.assertEqual(data['username'], user.username)
         self.assertEqual(data['first_name'], user.first_name)
         self.assertEqual(data['last_name'], user.last_name)
         self.assertEqual(data['user_type'], HuxleyUser.TYPE_CHAIR)
@@ -158,6 +161,75 @@ class UserDetailDeleteTestCase(TestCase):
         self.assertFalse(HuxleyUser.objects.filter(id=user1.id).exists())
 
 
+class UserListPostTestCase(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.url = reverse('api:user_list')
+        self.params = {'username': 'Kunal',
+                       'password': 'pass',
+                       'first_name': 'Kunal',
+                       'last_name': 'Mehta'}
+
+    def get_params(self, **kwargs):
+        params = self.params.copy()
+        for param, value in kwargs.items():
+            params[param] = value
+        return params
+
+    def do_post(self, data):
+        return self.client.post(self.url, json.dumps(data),
+                                content_type='application/json')
+
+    def get_response(self, data):
+        return json.loads(self.do_post(data).content)
+
+    def test_valid(self):
+        params = self.get_params()
+        response = self.get_response(params)
+        self.assertTrue(HuxleyUser.objects.filter(id=response['id']).exists())
+
+        user = HuxleyUser.objects.get(id=response['id'])
+        self.assertEqual(len(response.keys()), 6)
+        self.assertEqual(response['id'], user.id)
+        self.assertEqual(response['username'], user.username)
+        self.assertEqual(response['first_name'], user.first_name)
+        self.assertEqual(response['last_name'], user.last_name)
+        self.assertEqual(response['user_type'], HuxleyUser.TYPE_ADVISOR)
+        self.assertEqual(response['school'], user.school_id)
+
+    def test_empty_username(self):
+        response = self.get_response(self.get_params(username=''))
+        self.assertEqual(len(response.keys()), 1)
+        self.assertEqual(response['username'],
+                        ['This field is required.'])
+
+    def test_taken_username(self):
+        TestUsers.new_user(username='_Kunal', password='pass')
+        response = self.get_response(self.get_params(username='_Kunal'))
+        self.assertEqual(len(response.keys()), 1)
+        self.assertEqual(response['username'],
+                        ['This username is already taken.'])
+
+    def test_invalid_username(self):
+        response = self.get_response(self.get_params(username='>Kunal'))
+        self.assertEqual(len(response.keys()), 1)
+        self.assertEqual(response['username'],
+                        ['Usernames may contain alphanumerics, underscores, '
+                         'and/or hyphens only.'])
+
+    def test_empty_password(self):
+        response = self.get_response(self.get_params(password=''))
+        self.assertEqual(len(response.keys()), 1)
+        self.assertEqual(response['password'],
+                        ['This field is required.'])
+
+    def test_invalid_password(self):
+        response = self.get_response(self.get_params(password='>pass'))
+        self.assertEqual(len(response.keys()), 1)
+        self.assertEqual(response['password'],
+                        ['Password contains invalid characters.'])
+
+
 class CurrentUserTestCase(TestCase):
     def setUp(self):
         self.client = Client()
@@ -208,8 +280,9 @@ class CurrentUserTestCase(TestCase):
         self.client.login(username='lol', password='lol')
 
         data = self.get_data(self.url)
-        self.assertEqual(len(data.keys()), 6)
+        self.assertEqual(len(data.keys()), 7)
         self.assertEqual(data['id'], user.id)
+        self.assertEqual(data['username'], user.username)
         self.assertEqual(data['first_name'], user.first_name)
         self.assertEqual(data['last_name'], user.last_name)
         self.assertEqual(data['user_type'], HuxleyUser.TYPE_ADVISOR)

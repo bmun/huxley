@@ -12,14 +12,18 @@ from rest_framework.response import Response
 from huxley.accounts.models import HuxleyUser
 from huxley.accounts.exceptions import AuthenticationError
 from huxley.api.permissions import IsPostOrSuperuserOnly, IsUserOrSuperuser
-from huxley.api.serializers import UserSerializer
+from huxley.api.serializers import CreateUserSerializer, UserSerializer
 
 
 class UserList(generics.ListCreateAPIView):
     authentication_classes = (SessionAuthentication,)
     queryset = HuxleyUser.objects.all()
-    serializer_class = UserSerializer
     permission_classes = (IsPostOrSuperuserOnly,)
+
+    def get_serializer_class(self):
+        if self.request.method == 'POST':
+            return CreateUserSerializer
+        return UserSerializer
 
 
 class UserDetail(generics.RetrieveUpdateDestroyAPIView):
