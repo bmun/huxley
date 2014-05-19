@@ -57,7 +57,7 @@ class TestSchools():
                 setattr(s, attr, value)
 
         s.save()
-        TestUsers.new_user(school=s)
+        TestUsers.new_user(school=s, committee=TestCommittees.new_committee())
         return s
 
 class TestCommittees():
