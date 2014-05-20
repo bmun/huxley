@@ -12,25 +12,19 @@ from huxley.utils.test import TestCountries
 
 
 class CountryDetailGetTestCase(TestCase):
-	def setUp(self):
-		self.client = Client()
+    def setUp(self):
+        self.client = Client()
 
-	def get_url(self, country_id):
-		return reverse('api:country_detail', args=(country_id,))
+    def get_url(self, country_id):
+        return reverse('api:country_detail', args=(country_id,))
 
-	def get_response(self, url):
-		return json.loads(self.client.get(url).content)
+    def get_response(self, url):
+        return json.loads(self.client.get(url).content)
 
-	def test_anonymous_user(self):
-		'''Fields for this country should be returned'''
-		country = TestCountries.new_country()
-		url = self.get_url(country.id)
-		response = self.get_response(url)
-		self.assertEqual(response['name'], country.name)
-		self.assertEqual(response['special'], country.special)
-
-
-
-
-
-
+    def test_anonymous_user(self):
+        '''Fields for this country should be returned'''
+        country = TestCountries.new_country()
+        url = self.get_url(country.id)
+        response = self.get_response(url)
+        self.assertEqual(response['name'], country.name)
+        self.assertEqual(response['special'], country.special)
