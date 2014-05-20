@@ -10,6 +10,7 @@ from django.test.client import Client
 from huxley.core.models import Country
 from huxley.utils.test import TestCountries
 
+
 class CountryDetailGetTestCase(TestCase):
 	def setUp(self):
 		self.client = Client()
@@ -25,7 +26,6 @@ class CountryDetailGetTestCase(TestCase):
 		country = TestCountries.new_country()
 		url = self.get_url(country.id)
 		response = self.get_response(url)
-
 		self.assertEqual(response['name'], country.name)
 		self.assertEqual(response['special'], country.special)
 
