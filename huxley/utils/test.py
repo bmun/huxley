@@ -74,8 +74,7 @@ class TestCommittees():
 class TestCountries():
     @staticmethod
     def new_country(**kwargs):
-        c = Country(
-                name=kwargs.get('name', 'TestCountry'),
-                special=kwargs.get('special', False))
+        c = Country(name=kwargs.get('name', 'TestCountry'),
+                    special=kwargs.get('special', False))
         c.save()
         return c
