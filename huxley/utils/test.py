@@ -2,7 +2,7 @@
 # Use of this source code is governed by a BSD License (see LICENSE).
 
 from huxley.accounts.models import HuxleyUser
-from huxley.core.models import School, Committee
+from huxley.core.models import School, Committee, Country
 
 class TestUsers():
     @staticmethod

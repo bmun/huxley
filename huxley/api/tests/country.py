@@ -26,8 +26,10 @@ class CountryDetailGetTestCase(TestCase):
 		url = self.get_url(country.id)
 		response = self.get_response(url)
 
-		assertEqual(response['name'], country.name)
-		assertEqual(response['special'], country.special)
+		self.assertEqual(response['name'], country.name)
+		self.assertEqual(response['special'], country.special)
+
+
 
 
 
