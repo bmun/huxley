@@ -1,7 +1,10 @@
 # Copyright (c) 2011-2014 Berkeley Model United Nations. All rights reserved.
 # Use of this source code is governed by a BSD License (see LICENSE).
 
-from fabric.api import env, hide, local, settings, task
+import json
+import urllib2
+
+from fabric.api import abort, env, hide, local, settings, task
 from fabric.colors import green, red, yellow
 from fabric.contrib.console import confirm
 from os.path import abspath, dirname, join
@@ -81,6 +84,34 @@ def dependencies():
     print row_format.format('------', '--------', '---------'), '\n'
     print yellow('You might want to '
                  '`pip install -r requirements.txt` to update.')
+
+
+@task
+def pr(number):
+    url = 'https://api.github.com/repos/bmun/huxley/pulls/%s' % number
+    pr = json.loads(urllib2.urlopen(url).read())
+    author = pr['head']['user']['login']
+    repo = pr['head']['repo']['clone_url']
+    branch = pr['head']['ref']
+
+    print green('Checking out %s from %s...' % (branch, author))
+    local('git fetch %s %s:%s' % (repo, branch, branch))
+    local('git checkout %s' % branch)
+
+    print green('Changes checked out. Rebasing and squashing...')
+    local('git fetch origin; git rebase origin/master')
+    commits_ahead = git.commits_ahead('origin')
+    local('git rebase -i HEAD~%d' % commits_ahead)
+
+    if not confirm(yellow('Changes squashed. Push?')):
+        abort('Push canceled.')
+
+    local('git checkout master; git merge %s --ff-only' % branch)
+    local('git pull --rebase')
+    local('git push')
+
+    print green('Changes pushed! Deleting branch...')
+    local('git branch -d %s' branch)
 
 
 @task
