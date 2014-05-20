@@ -2,7 +2,7 @@
 # Use of this source code is governed by a BSD License (see LICENSE).
 
 from huxley.accounts.models import HuxleyUser
-from huxley.core.models import School, Committee
+from huxley.core.models import School, Committee, Country
 
 class TestUsers():
     @staticmethod
@@ -68,5 +68,13 @@ class TestCommittees():
                 full_name=kwargs.get('fullName', 'testCommittee'),
                 delegation_size=kwargs.get('delegation_size', 10),
                 special=kwargs.get('special', False))
+        c.save()
+        return c
+
+class TestCountries():
+    @staticmethod
+    def new_country(**kwargs):
+        c = Country(name=kwargs.get('name', 'TestCountry'),
+                    special=kwargs.get('special', False))
         c.save()
         return c
