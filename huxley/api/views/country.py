@@ -9,14 +9,14 @@ from huxley.api.serializers import CountrySerializer
 from huxley.core.models import Country
 
 
-class CountryList(generics.ListCreateAPIView):
+class CountryList(generics.ListAPIView):
     authentication_classes = (SessionAuthentication,)
     queryset = Country.objects.all()
     serializer_class = CountrySerializer
     permission_classes = (IsSuperuserOrReadOnly,)
 
 
-class CountryDetail(generics.RetrieveUpdateDestroyAPIView):
+class CountryDetail(generics.RetrieveAPIView):
     authentication_classes = (SessionAuthentication,)
     queryset = Country.objects.all()
     serializer_class = CountrySerializer
