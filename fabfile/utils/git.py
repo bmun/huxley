@@ -47,11 +47,12 @@ def push(branch_name=None):
     local('git push origin %s --force' % branch_name)
 
 @master_guard
-def cleanup(branch_name=None):
+def cleanup(branch_name=None, remote='upstream'):
     branch_name = branch_name or current_branch()
 
-    print "Deleting remote branch..."
-    local('git push origin :%s' % branch_name)
+    if remote_branch_exists(branch_name, remote):
+        print "Deleting remote branch..."
+        local('git push origin :%s' % branch_name)
 
     print "Deleting local branch..."
     local('git checkout master')

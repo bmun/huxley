@@ -145,16 +145,16 @@ def submit(remote='origin', skip_tests=False):
 
 
 @task
-def finish():
+def finish(branch_name=None, remote='origin'):
     '''Delete the current feature branch.'''
     prompt = yellow('This will delete your local and remote topic branches. '
                     'Make sure your pull request has been merged or closed. '
                     'Are you sure you want to finish this branch?')
     if not confirm(prompt):
-        print red('Aborting.')
-        return
+        abort('Branch deletion canceled.')
 
-    print green('Branch %s successfully cleaned up.' % git.cleanup())
+    print green('Branch %s successfully cleaned up.' % git.cleanup(branch_name,
+                                                                   remote))
 
 try:
     from deploy import deploy
