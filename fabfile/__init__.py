@@ -111,7 +111,7 @@ def pr(number):
     local('git push')
 
     print green('Changes pushed! Deleting branch...')
-    local('git branch -d %s' branch)
+    local('git branch -d %s' % branch)
 
 
 @task
