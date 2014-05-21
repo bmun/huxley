@@ -88,6 +88,7 @@ def dependencies():
 
 @task
 def pr(number):
+    '''Prepare and push a pull request.'''
     url = 'https://api.github.com/repos/bmun/huxley/pulls/%s' % number
     pr = json.loads(urllib2.urlopen(url).read())
     author = pr['head']['user']['login']
@@ -111,7 +112,7 @@ def pr(number):
     local('git push')
 
     print green('Changes pushed! Deleting branch...')
-    local('git branch -d %s' branch)
+    local('git branch -d %s' % branch)
 
 
 @task
