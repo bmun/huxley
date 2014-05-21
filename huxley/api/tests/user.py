@@ -186,8 +186,10 @@ class UserDetailPatchTestCase(TestCase):
         data = self.get_data(url)
 
         self.assertEqual(len(response.keys()), 1)
-        self.assertEqual(response['detail'], u'Authentication credentials were not provided.')
+        self.assertEqual(response['detail'],
+            u'Authentication credentials were not provided.')
         self.assertTrue(HuxleyUser.objects.filter(id=user.id).exists())
+        user = HuxleyUser.objects.get(id=user.id)
         self.assertEqual(user.first_name, 'Test')
         self.assertEqual(user.last_name, 'User')
 
@@ -204,8 +206,10 @@ class UserDetailPatchTestCase(TestCase):
         response = self.get_patch_response(url, json.dumps(fields))
 
         self.assertEqual(len(response.keys()), 1)
-        self.assertEqual(response['detail'], u'You do not have permission to perform this action.')
+        self.assertEqual(response['detail'],
+            u'You do not have permission to perform this action.')
         self.assertTrue(HuxleyUser.objects.filter(id=user1.id).exists())
+        user1 = HuxleyUser.objects.get(id=user1.id)
         self.assertEqual(user1.first_name, 'Test')
         self.assertEqual(user1.last_name, 'User')
 
