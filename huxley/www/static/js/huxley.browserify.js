@@ -5,12 +5,22 @@
  * @jsx React.DOM
  */
 
+require('jquery.cookie');
+
 var $ = require('jquery');
 var React = require('react');
 
+var LoginView = require('./huxley/components/LoginForm');
+
+$.ajaxSetup({
+  beforeSend: function(xhr, settings) {
+    if (/^(GET|HEAD|OPTIONS|TRACE)$/.test(settings.type)) {
+      // TODO: check that it's same origin.
+      xhr.setRequestHeader('X-CSRFToken', $.cookie('csrftoken'));
+    }
+  }
+});
+
 $(function() {
-  React.renderComponent(
-    <div>Hello World!</div>,
-    document.body
-  );
+  React.renderComponent(<LoginView />, document.body);
 });
