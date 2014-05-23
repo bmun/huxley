@@ -40,7 +40,11 @@ def update():
 def test(*args):
     '''Run the project's test suite, with optionally specified apps.'''
     with hide('aborts', 'warnings'):
-        return local('python manage.py test ./huxley/%s' % ' '.join(args))
+        result = []
+        for arg in args:
+            result.append(join('./huxley/', arg))
+        result = ' '.join(result)
+        return local('python manage.py test '+result)
 
 
 @task
