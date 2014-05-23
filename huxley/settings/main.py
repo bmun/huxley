@@ -103,5 +103,3 @@ INSTALLED_APPS = (
     'pipeline',
     'south',
 )
-
-TEST_RUNNER = 'django.test.simple.DjangoTestSuiteRunner'
