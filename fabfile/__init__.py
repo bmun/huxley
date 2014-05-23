@@ -4,13 +4,18 @@
 import json
 import urllib2
 
+from os.path import abspath, dirname, join
+
 from fabric.api import abort, env, hide, local, settings, task
 from fabric.colors import green, red, yellow
 from fabric.contrib.console import confirm
-from os.path import abspath, dirname, join
-from utils import git
+
+from . import dependencies
+from .utils import git
+
 
 env.huxley_root = abspath(dirname(dirname(__file__)))
+env.js_root = join(env.huxley_root, 'huxley/www/static/js')
 
 
 @task
@@ -18,7 +23,7 @@ def feature(branch_name=None):
     '''Create a new feature branch.'''
     if branch_name:
         git.new_branch(branch_name)
-        dependencies()
+        dependencies.check()
     else:
         print red('No branch name given. Usage: fab feature:<branch_name>')
 
@@ -28,7 +33,7 @@ def update():
     '''Rebase the current feature branch onto the latest version of upstream.'''
     print 'Updating your local branch...'
     git.pull()
-    dependencies()
+    dependencies.check()
 
 
 @task
@@ -49,41 +54,6 @@ def authors():
             local('git commit -m "Update AUTHORS." %s' % authors_path)
         else:
             print green('No change to AUTHORS.')
-
-
-@task
-def dependencies():
-    '''Check the installed dependencies against requirements.txt.'''
-    print 'Checking dependencies...'
-    with open('%s/requirements.txt' % env.huxley_root) as f:
-        requirements = f.read()
-    with hide('running'):
-        installed = local('pip freeze', capture=True)
-
-    def parse(text):
-        pairs = map(lambda l: l.split('=='), text.strip().split('\n'))
-        return {pair[0]: pair[1] for pair in pairs}
-
-    expected, actual = parse(requirements), parse(installed)
-    if all(actual.get(mod) == version for mod, version in expected.items()):
-        print green('Dependencies are up-to-date.')
-        return
-    else:
-        print red('Dependencies are out of date!')
-
-    row_format ="{:<21}" * 3
-    print '\n', row_format.format('module', 'required', 'installed')
-    print row_format.format('------', '--------', '---------')
-
-    for module in sorted(expected.keys()):
-        expected_version = expected[module]
-        actual_version = actual.get(module, yellow('none'))
-        if expected_version != actual_version:
-            print row_format.format(module, expected_version, actual_version)
-
-    print row_format.format('------', '--------', '---------'), '\n'
-    print yellow('You might want to '
-                 '`pip install -r requirements.txt` to update.')
 
 
 @task
