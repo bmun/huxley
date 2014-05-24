@@ -9,14 +9,14 @@ from huxley.api.serializers import CommitteeSerializer
 from huxley.core.models import Committee
 
 
-class CommitteeList(generics.ListCreateAPIView):
+class CommitteeList(generics.ListAPIView):
     authentication_classes = (SessionAuthentication,)
     queryset = Committee.objects.all()
     serializer_class = CommitteeSerializer
     permission_classes = (IsSuperuserOrReadOnly,)
 
 
-class CommitteeDetail(generics.RetrieveUpdateDestroyAPIView):
+class CommitteeDetail(generics.RetrieveAPIView):
     authentication_classes = (SessionAuthentication,)
     queryset = Committee.objects.all()
     serializer_class = CommitteeSerializer
