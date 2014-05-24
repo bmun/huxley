@@ -66,8 +66,8 @@ def check_js():
         required = package['dependencies']
     with lcd(env.js_root), hide('running'):
         npm_list = json.loads(local('npm list --json', capture=True))
-        installed = {name: info['version'] for name, info
-                                           in npm_list['dependencies'].items()}
+        modules = npm_list.get('dependencies', {}).items()
+        installed = {name: info['version'] for name, info in modules}
 
     if not check_versions(required, installed):
         if confirm('Update dependencies?'):
