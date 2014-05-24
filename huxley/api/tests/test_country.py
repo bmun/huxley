@@ -7,27 +7,21 @@ from django.core.urlresolvers import reverse
 from django.test import TestCase
 from django.test.client import Client
 
+from huxley.api.tests import GetAPITestCase
 from huxley.core.models import Country
 from huxley.utils.test import TestCountries, TestUsers
 
 
-class CountryDetailGetTestCase(TestCase):
-    def setUp(self):
-        self.client = Client()
-
-    def get_url(self, country_id):
-        return reverse('api:country_detail', args=(country_id,))
-
-    def get_response(self, url):
-        return json.loads(self.client.get(url).content)
+class CountryDetailGetTestCase(GetAPITestCase):
+    url_name = 'api:country_detail'
 
     def test_anonymous_user(self):
         '''Fields should be returned when accessed by any user.'''
         country = TestCountries.new_country()
-        url = self.get_url(country.id)
-        response = self.get_response(url)
-        self.assertEqual(response['name'], country.name)
-        self.assertEqual(response['special'], country.special)
+        response = self.get_response(country.id)
+        self.assertEqual(response, {'id': country.id,
+                                    'name': country.name,
+                                    'special': country.special})
 
 
 class CountryListGetTestCase(TestCase):
