@@ -10,6 +10,7 @@ from django.test.client import Client
 from huxley.api.tests import GetAPITestCase
 from huxley.utils.test import TestCommittees, TestUsers
 
+
 class CommitteeDetailGetTestCase(GetAPITestCase):
     url_name = 'api:committee_detail'
 
@@ -23,6 +24,7 @@ class CommitteeDetailGetTestCase(GetAPITestCase):
                                 'full_name': c.full_name,
                                 'delegation_size': c.delegation_size,
                                 'special': c.special})
+
 
 class CommitteeDetailPutTestCase(TestCase):
     def setUp(self):
@@ -57,6 +59,7 @@ class CommitteeDetailPutTestCase(TestCase):
         response = self.get_response(self.params)
         self.assertEqual(response['detail'], "Method 'PUT' not allowed.")
 
+
 class CommitteeDetailPatchTestCase(TestCase):
     def setUp(self):
         self.client = Client()
@@ -90,6 +93,7 @@ class CommitteeDetailPatchTestCase(TestCase):
         response = self.get_response(self.params)
         self.assertEqual(response['detail'], "Method 'PATCH' not allowed.")
 
+
 class CommitteeDetailDeleteTestCase(TestCase):
     def setUp(self):
         self.client = Client()
@@ -120,6 +124,7 @@ class CommitteeDetailDeleteTestCase(TestCase):
         response = self.get_response()
         self.assertEqual(response['detail'], 'Method 'DELETE' not allowed.')
 
+
 class CommitteeListGetTestCase(TestCase):
     def setUp(self):
         self.client = Client()
@@ -134,7 +139,6 @@ class CommitteeListGetTestCase(TestCase):
         c1 = TestCommittees.new_committee(name='DISC', delegation_size=100)
         c2 = TestCommittees.new_committee(name='JCC', special=True,
                                              delegation_size=30)
-
 
         data = self.get_data()
         self.assertTrue(type(data) is list)
@@ -151,6 +155,7 @@ class CommitteeListGetTestCase(TestCase):
                           'id': c2.id,
                           'full_name': c2.full_name,
                           'name': c2.name})
+
 
 class CommitteeListPostTestCase(GetAPITestCase):
     def setUp(self):
