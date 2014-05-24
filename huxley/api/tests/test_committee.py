@@ -60,7 +60,6 @@ class CommitteeDetailPutTestCase(TestCase):
         self.assertEqual(response['detail'], "Method 'PUT' not allowed.")
 
 
-
 class CommitteeDetailPatchTestCase(TestCase):
     def setUp(self):
         self.client = Client()
@@ -95,9 +94,6 @@ class CommitteeDetailPatchTestCase(TestCase):
         self.assertEqual(response['detail'], "Method 'PATCH' not allowed.")
 
 
-
-
-
 class CommitteeDetailDeleteTestCase(TestCase):
     def setUp(self):
         self.client = Client()
@@ -128,6 +124,7 @@ class CommitteeDetailDeleteTestCase(TestCase):
         response = self.get_response()
         self.assertEqual(response['detail'], "Method 'DELETE' not allowed.")
 
+
 class CommitteeListGetTestCase(TestCase):
     def setUp(self):
         self.client = Client()
@@ -157,7 +154,6 @@ class CommitteeListGetTestCase(TestCase):
                           'id': c2.id,
                           'full_name': c2.full_name,
                           'name': c2.name})
-
 
 
 class CommitteeListPostTestCase(GetAPITestCase):
