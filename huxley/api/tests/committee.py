@@ -50,9 +50,8 @@ class CommitteeDetailPatchTestCase(TestCase):
 class CommitteeDetailDeleteTestCase(TestCase):
     def setUp(self):
         self.client = Client()
-
-    def get_url(self, committee_id):
-        return reverse('api:committee_detail', args=(committee_id,))
+        self.committee = TestCommittees.new_committee()
+        self.url = reverse('api:committee_detail', args=(self.committee.id,))
 
 class CommitteeListGetTestCase(TestCase):
     def setUp(self):
