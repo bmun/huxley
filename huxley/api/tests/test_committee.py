@@ -40,7 +40,7 @@ class CommitteeDetailPutTestCase(TestCase):
         '''Unauthenticated users should not be able to update committees.'''
         response = self.get_response(self.params)
         self.assertEqual(response['detail'],
-                                  u'Authentication credentials were not provided.')
+                            u'Authentication credentials were not provided.')
 
     def test_self(self):
         '''Authenticated users shouldn't have permission to update committees.'''
@@ -73,7 +73,7 @@ class CommitteeDetailPatchTestCase(TestCase):
         '''Unauthenticated users should not be able to update committees.'''
         response = self.get_response(self.params)
         self.assertEqual(response['detail'],
-                                  u'Authentication credentials were not provided.')
+                            u'Authentication credentials were not provided.')
 
     def test_self(self):
         '''Authenticated users shouldn't have permission to update committees.'''
@@ -132,7 +132,8 @@ class CommitteeListGetTestCase(TestCase):
         '''It should return the correct list of committees.
         Anyone can access committee list.'''
         c1 = TestCommittees.new_committee(name='DISC', delegation_size=100)
-        c2 = TestCommittees.new_committee(name='JCC', special=True, delegation_size=30)
+        c2 = TestCommittees.new_committee(name='JCC', special=True,
+                                             delegation_size=30)
 
 
         data = self.get_data()
