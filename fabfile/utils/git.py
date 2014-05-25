@@ -33,9 +33,12 @@ def commits_ahead(remote='upstream'):
         commit_list = local('git rev-list --left-right %s/master...HEAD' % remote, capture=True)
     return len(commit_list.split('\n'))
 
-def pull(rebase=True):
-    rebase_flag = '--rebase' if rebase else ''
-    local('git pull %s' % rebase_flag)
+def pull(remote='upstream', rebase=True):
+    if current_branch() == 'master':
+        local('git fetch %s; git rebase %s/master' % (remote, remote))
+    else:
+        rebase_flag = '--rebase' if rebase else ''
+        local('git pull %s' % rebase_flag)
 
 def hub_installed():
     with hide('running', 'warnings', 'stdout', 'stderr'), settings(warn_only=True):
