@@ -4,5 +4,6 @@
 from django.conf.urls import patterns, url
 
 urlpatterns = patterns('huxley.www.views',
-    url(r'^/?$', 'index', name='index'),
+    # Match any URL and let the client take care of routing.
+    url(r'', 'index', name='index'),
 )

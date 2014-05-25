@@ -9,8 +9,23 @@ require('jquery.cookie');
 
 var $ = require('jquery');
 var React = require('react');
+var Router = require('react-router-component');
 
 var LoginView = require('./huxley/components/LoginForm');
+var RegistrationView = require('./huxley/components/RegistrationView');
+
+var Locations = Router.Locations;
+var Location = Router.Location;
+
+$(function() {
+  React.renderComponent(
+    <Locations>
+      <Location path="/www/" handler={LoginView} />
+      <Location path="/www/register" handler={RegistrationView} />
+    </Locations>,
+    document.body
+  );
+});
 
 $.ajaxSetup({
   beforeSend: function(xhr, settings) {
@@ -19,8 +34,4 @@ $.ajaxSetup({
       xhr.setRequestHeader('X-CSRFToken', $.cookie('csrftoken'));
     }
   }
-});
-
-$(function() {
-  React.renderComponent(<LoginView />, document.body);
 });

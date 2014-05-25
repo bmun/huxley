@@ -8,6 +8,7 @@
 var console = require('console');
 
 var $ = require('jquery');
+var Link = require('react-router-component').Link;
 var React = require('react/addons');
 
 var OuterView = require('./OuterView');
@@ -63,11 +64,11 @@ var LoginForm = React.createClass({
               type="submit">
               <span>Log In</span>
             </button>
-            <a
+            <Link
               className="js-nav button button-green rounded-small"
-              href="#">
+              href="/www/register">
               Register for BMUN
-            </a>
+            </Link>
           </div>
           <a className="js-nav" href="#">
             Forgot your password?
