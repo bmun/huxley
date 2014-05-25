@@ -11,7 +11,7 @@ var $ = require('jquery');
 var React = require('react');
 var Router = require('react-router-component');
 
-var LoginView = require('./huxley/components/LoginForm');
+var LoginView = require('./huxley/components/LoginView');
 var RegistrationView = require('./huxley/components/RegistrationView');
 
 var Locations = Router.Locations;

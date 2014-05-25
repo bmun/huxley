@@ -16,7 +16,7 @@ var OuterView = require('./OuterView');
 require('jquery-ui/effect-shake');
 
 
-var LoginForm = React.createClass({
+var LoginView = React.createClass({
   mixins: [React.addons.LinkedStateMixin],
 
   getInitialState: function() {
@@ -144,4 +144,4 @@ var LoginForm = React.createClass({
   }
 });
 
-module.exports = LoginForm;
+module.exports = LoginView;
