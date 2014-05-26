@@ -11,6 +11,7 @@ var $ = require('jquery');
 var Link = require('react-router-component').Link;
 var React = require('react/addons');
 
+var CurrentUserActions = require('../actions/CurrentUserActions');
 var OuterView = require('./OuterView');
 
 require('jquery-ui/effect-shake');
@@ -118,11 +119,8 @@ var LoginView = React.createClass({
   },
 
   _handleSuccess: function(data, status, jqXHR) {
-    console.log(jqXHR.responseText);
-    this.setState({
-      error: null,
-      loading: false
-    });
+    //console.log(jqXHR.responseText);
+    CurrentUserActions.login(jqXHR.responseJSON);
   },
 
   _handleError: function(jqXHR, status, error) {

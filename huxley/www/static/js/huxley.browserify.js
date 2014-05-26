@@ -11,6 +11,7 @@ var $ = require('jquery');
 var React = require('react');
 var Router = require('react-router-component');
 
+var CurrentUserStore = require('./huxley/stores/CurrentUserStore');
 var LoginView = require('./huxley/components/LoginView');
 var RegistrationView = require('./huxley/components/RegistrationView');
 
@@ -25,11 +26,15 @@ $(function() {
     </Locations>,
     document.body
   );
+
+  CurrentUserStore.addChangeListener(function() {
+    console.log(CurrentUserStore.getCurrentUser());
+  });
 });
 
 $.ajaxSetup({
   beforeSend: function(xhr, settings) {
-    if (/^(GET|HEAD|OPTIONS|TRACE)$/.test(settings.type)) {
+    if (!/^(GET|HEAD|OPTIONS|TRACE)$/.test(settings.type)) {
       // TODO: check that it's same origin.
       xhr.setRequestHeader('X-CSRFToken', $.cookie('csrftoken'));
     }
