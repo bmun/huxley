@@ -18,9 +18,9 @@ class UserDetailGetTestCase(RetrieveAPITestCase):
     def test_anonymous_user(self):
         '''It should reject request from an anonymous user.'''
         user = TestUsers.new_user()
-        data = self.get_response(user.id)
+        response = self.get_response(user.id)
 
-        self.assertEqual(data, {
+        self.assertEqual(response.data, {
             'detail': u'Authentication credentials were not provided.'})
 
     def test_other_user(self):
@@ -29,9 +29,9 @@ class UserDetailGetTestCase(RetrieveAPITestCase):
         user2 = TestUsers.new_user(username='user2', password='user2')
 
         self.client.login(username='user2', password='user2')
-        data = self.get_response(user1.id)
+        response = self.get_response(user1.id)
 
-        self.assertEqual(data, {
+        self.assertEqual(response.data, {
             'detail': u'You do not have permission to perform this action.'})
 
     def test_superuser(self):
@@ -40,9 +40,9 @@ class UserDetailGetTestCase(RetrieveAPITestCase):
         user2 = TestUsers.new_superuser(username='user2', password='user2')
 
         self.client.login(username='user2', password='user2')
-        data = self.get_response(user1.id)
+        response = self.get_response(user1.id)
 
-        self.assertEqual(data, {
+        self.assertEqual(response.data, {
             'id': user1.id,
             'username': user1.username,
             'first_name': user1.first_name,
@@ -55,9 +55,9 @@ class UserDetailGetTestCase(RetrieveAPITestCase):
         '''It should return the correct fields for a single user.'''
         user = TestUsers.new_user(username='lol', password='lol', school_id=1)
         self.client.login(username='lol', password='lol')
-        data = self.get_response(user.id)
+        response = self.get_response(user.id)
 
-        self.assertEqual(data, {
+        self.assertEqual(response.data, {
             'id': user.id,
             'username': user.username,
             'first_name': user.first_name,
@@ -71,9 +71,9 @@ class UserDetailGetTestCase(RetrieveAPITestCase):
         user = TestUsers.new_user(user_type=HuxleyUser.TYPE_CHAIR,
                                   committee_id=4)
         self.client.login(username='testuser', password='test')
-        data = self.get_response(user.id)
+        response = self.get_response(user.id)
 
-        self.assertEqual(data, {
+        self.assertEqual(response.data, {
             'id': user.id,
             'username': user.username,
             'first_name': user.first_name,
@@ -309,13 +309,13 @@ class UserListPostTestCase(CreateAPITestCase):
         self.assertTrue(user_query.exists())
 
         user = HuxleyUser.objects.get(id=response.data['id'])
-        self.assertEqual(response.data,
-                 {'id': user.id,
-                  'username': user.username,
-                  'first_name': user.first_name,
-                  'last_name': user.last_name,
-                  'user_type': HuxleyUser.TYPE_ADVISOR,
-                  'school': user.school_id})
+        self.assertEqual(response.data, {
+            'id': user.id,
+            'username': user.username,
+            'first_name': user.first_name,
+            'last_name': user.last_name,
+            'user_type': HuxleyUser.TYPE_ADVISOR,
+            'school': user.school_id})
 
     def test_empty_username(self):
         response = self.get_response(self.get_params(username=''))

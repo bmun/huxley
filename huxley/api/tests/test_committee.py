@@ -17,13 +17,13 @@ class CommitteeDetailGetTestCase(RetrieveAPITestCase):
     def test_anonymous_user(self):
         '''It should return the correct fields for a committee.'''
         c = TestCommittees.new_committee()
-
-        data = self.get_response(c.id)
-        self.assertEqual(data, {'id': c.id,
-                                'name': c.name,
-                                'full_name': c.full_name,
-                                'delegation_size': c.delegation_size,
-                                'special': c.special})
+        response = self.get_response(c.id)
+        self.assertEqual(response.data, {
+            'id': c.id,
+            'name': c.name,
+            'full_name': c.full_name,
+            'delegation_size': c.delegation_size,
+            'special': c.special})
 
 
 class CommitteeDetailPutTestCase(TestCase):

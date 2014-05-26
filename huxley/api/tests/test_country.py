@@ -8,7 +8,6 @@ from django.test import TestCase
 from django.test.client import Client
 
 from huxley.api.tests import CreateAPITestCase, RetrieveAPITestCase
-from huxley.core.models import Country
 from huxley.utils.test import TestCountries, TestUsers
 
 
@@ -19,9 +18,10 @@ class CountryDetailGetTestCase(RetrieveAPITestCase):
         '''Fields should be returned when accessed by any user.'''
         country = TestCountries.new_country()
         response = self.get_response(country.id)
-        self.assertEqual(response, {'id': country.id,
-                                    'name': country.name,
-                                    'special': country.special})
+        self.assertEqual(response.data, {
+            'id': country.id,
+            'name': country.name,
+            'special': country.special})
 
 
 class CountryListGetTestCase(TestCase):

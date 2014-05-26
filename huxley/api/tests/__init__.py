@@ -22,7 +22,7 @@ class RetrieveAPITestCase(APITestCase):
 
     def get_response(self, object_id):
         url = self.get_url(object_id)
-        return json.loads(self.client.get(url).content)
+        return self.client.get(url)
 
 
 class CreateAPITestCase(APITestCase):
