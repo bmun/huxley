@@ -7,7 +7,7 @@ from django.core.urlresolvers import reverse
 from django.test import TestCase
 from django.test.client import Client
 
-from huxley.api.tests import GetAPITestCase
+from huxley.api.tests import GetAPITestCase, PostAPITestCase
 from huxley.core.models import Country
 from huxley.utils.test import TestCountries, TestUsers
 
@@ -117,37 +117,31 @@ class CountryDetailPatchTestCase(TestCase):
         self.assertEqual(response['detail'], "Method 'PATCH' not allowed.")
 
 
-class CountryListPostTestCase(TestCase):
-    def setUp(self):
-        self.client = Client()
-        self.url = reverse('api:country_list')
-        self.params = {'name': 'USA',
-                       'special': False}
-
-    def get_response(self, data):
-        return json.loads(self.client.post(self.url, data=data,
-            content_type='application/json').content)
+class CountryListPostTestCase(PostAPITestCase):
+    url_name = 'api:country_list'
+    params = {'name': 'USA',
+              'special': False}
 
     def test_anonymous_user(self):
-        '''Unauthenticated user should not be able to create a country.'''
-        params = self.params
-        response = self.get_response(json.dumps(params))
-        self.assertEqual(response['detail'],
-            'Authentication credentials were not provided.')
+        '''Unauthenticated users shouldn't be able to create countries.'''
+        response = self.get_response(self.params)
+        self.assertEqual(response.data, {
+            'detail': u'Authentication credentials were not provided.'})
 
     def test_self(self):
         '''Authenticated users shouldn't be able to create countries.'''
-        user = TestUsers.new_user(username='user', password='user')
+        TestUsers.new_user(username='user', password='user')
         self.client.login(username='user', password='user')
-        params = self.params
-        response = self.get_response(json.dumps(params))
-        self.assertEqual(response['detail'],
-            'You do not have permission to perform this action.')
+
+        response = self.get_response(self.params)
+        self.assertEqual(response.data, {
+            'detail': u'You do not have permission to perform this action.'})
 
     def test_super_user(self):
-        '''Countries should not be able to be created'''
-        user = TestUsers.new_superuser(username='user', password='user')
+        '''Superusers shouldn't be able to create countries.'''
+        TestUsers.new_superuser(username='user', password='user')
         self.client.login(username='user', password='user')
-        params = self.params
-        response = self.get_response(json.dumps(params))
-        self.assertEqual(response['detail'], "Method 'POST' not allowed.")
+
+        response = self.get_response(self.params)
+        self.assertEqual(response.data, {
+            'detail': u"Method 'POST' not allowed."})

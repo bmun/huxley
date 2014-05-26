@@ -7,7 +7,7 @@ from django.core.urlresolvers import reverse
 from django.test import TestCase
 from django.test.client import Client
 
-from huxley.api.tests import GetAPITestCase
+from huxley.api.tests import GetAPITestCase, PostAPITestCase
 from huxley.utils.test import TestCommittees, TestUsers
 
 
@@ -122,7 +122,7 @@ class CommitteeDetailDeleteTestCase(TestCase):
         user = TestUsers.new_superuser(username='user', password='user')
         self.client.login(username='user', password='user')
         response = self.get_response()
-        self.assertEqual(response['detail'], 'Method 'DELETE' not allowed.')
+        self.assertEqual(response['detail'], "Method 'DELETE' not allowed.")
 
 
 class CommitteeListGetTestCase(TestCase):
@@ -157,36 +157,32 @@ class CommitteeListGetTestCase(TestCase):
                           'name': c2.name})
 
 
-class CommitteeListPostTestCase(GetAPITestCase):
-    def setUp(self):
-        self.client = Client()
-        self.url = reverse("api:committee_list")
-        self.params = {'name': 'DISC',
-                       'delegation_size': 100}
-
-    def get_response(self, data):
-        return json.loads(self.client.post(self.url, data=data,
-                          content_type='application/json').content)
+class CommitteeListPostTestCase(PostAPITestCase):
+    url_name = 'api:committee_list'
+    params = {'name': 'DISC',
+              'full_name': 'Disarmament and International Security',
+              'delegation_size': 100}
 
     def test_anonymous_user(self):
-        '''Unauthenticated users should not be able to post.'''
-        response = self.get_response(json.dumps(self.params))
-        self.assertEqual(response['detail'],
-            u'Authentication credentials were not provided.')
+        '''Unauthenticated users shouldn't be able to create committees.'''
+        response = self.get_response(self.params)
+        self.assertEqual(response.data, {
+            'detail': u'Authentication credentials were not provided.'})
 
-    def test_self(self):
+    def test_authenticated_user(self):
         '''Authenticated users shouldn't be able to create committees.'''
-        user= TestUsers.new_user(username='user', password='user')
+        TestUsers.new_user(username='user', password='user')
         self.client.login(username='user', password='user')
 
-        response = self.get_response(json.dumps(self.params))
-        self.assertEqual(response['detail'],
-            u'You do not have permission to perform this action.')
+        response = self.get_response(self.params)
+        self.assertEqual(response.data, {
+            'detail': u'You do not have permission to perform this action.'})
 
     def test_superuser(self):
-        '''Post action is not exposed to a superuser.'''
-        user= TestUsers.new_superuser(username='user', password='user')
+        '''Superusers shouldn't be able to create committees.'''
+        TestUsers.new_superuser(username='user', password='user')
         self.client.login(username='user', password='user')
 
-        response = self.get_response(json.dumps(self.params))
-        self.assertEqual(response['detail'], "Method 'POST' not allowed.")
+        response = self.get_response(self.params)
+        self.assertEqual(response.data, {
+            'detail': u"Method 'POST' not allowed."})
