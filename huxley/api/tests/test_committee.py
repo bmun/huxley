@@ -7,11 +7,11 @@ from django.core.urlresolvers import reverse
 from django.test import TestCase
 from django.test.client import Client
 
-from huxley.api.tests import GetAPITestCase, PostAPITestCase
+from huxley.api.tests import CreateAPITestCase, RetrieveAPITestCase
 from huxley.utils.test import TestCommittees, TestUsers
 
 
-class CommitteeDetailGetTestCase(GetAPITestCase):
+class CommitteeDetailGetTestCase(RetrieveAPITestCase):
     url_name = 'api:committee_detail'
 
     def test_anonymous_user(self):
@@ -157,7 +157,7 @@ class CommitteeListGetTestCase(TestCase):
                           'name': c2.name})
 
 
-class CommitteeListPostTestCase(PostAPITestCase):
+class CommitteeListPostTestCase(CreateAPITestCase):
     url_name = 'api:committee_list'
     params = {'name': 'DISC',
               'full_name': 'Disarmament and International Security',

@@ -7,12 +7,12 @@ from django.core.urlresolvers import reverse
 from django.test import TestCase
 from django.test.client import Client
 
-from huxley.api.tests import GetAPITestCase, PostAPITestCase
+from huxley.api.tests import CreateAPITestCase, RetrieveAPITestCase
 from huxley.core.models import Country
 from huxley.utils.test import TestCountries, TestUsers
 
 
-class CountryDetailGetTestCase(GetAPITestCase):
+class CountryDetailGetTestCase(RetrieveAPITestCase):
     url_name = 'api:country_detail'
 
     def test_anonymous_user(self):
@@ -117,7 +117,7 @@ class CountryDetailPatchTestCase(TestCase):
         self.assertEqual(response['detail'], "Method 'PATCH' not allowed.")
 
 
-class CountryListPostTestCase(PostAPITestCase):
+class CountryListPostTestCase(CreateAPITestCase):
     url_name = 'api:country_list'
     params = {'name': 'USA',
               'special': False}

@@ -8,11 +8,11 @@ from django.test import TestCase
 from django.test.client import Client
 
 from huxley.accounts.models import HuxleyUser
-from huxley.api.tests import GetAPITestCase, PostAPITestCase
+from huxley.api.tests import CreateAPITestCase, RetrieveAPITestCase
 from huxley.utils.test import TestSchools, TestUsers
 
 
-class UserDetailGetTestCase(GetAPITestCase):
+class UserDetailGetTestCase(RetrieveAPITestCase):
     url_name = 'api:user_detail'
 
     def test_anonymous_user(self):
@@ -294,7 +294,7 @@ class UserListGetTestCase(TestCase):
                           'committee': user2.committee_id})
 
 
-class UserListPostTestCase(PostAPITestCase):
+class UserListPostTestCase(CreateAPITestCase):
     url_name = 'api:user_list'
     params = {'username': 'Kunal',
               'password': 'pass',

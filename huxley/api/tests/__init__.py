@@ -7,12 +7,11 @@ from django.core.urlresolvers import reverse
 from rest_framework.test import APITestCase
 
 
-class GetAPITestCase(APITestCase):
-    '''Provides a base implementation to test GET APIs.
+class RetrieveAPITestCase(APITestCase):
+    '''Provides a base implementation to test Retrieve APIs.
 
     Classes that extend this must define a url_name class member, and can
-    then use the get_response method to make a GET request and get the
-    JSON response.'''
+    then use the get_response method to make a GET request.'''
 
     url_name = None
 
@@ -26,8 +25,8 @@ class GetAPITestCase(APITestCase):
         return json.loads(self.client.get(url).content)
 
 
-class PostAPITestCase(APITestCase):
-    '''Provides a base implementation to test POST APIs.
+class CreateAPITestCase(APITestCase):
+    '''Provides a base implementation to test Create APIs.
 
     Classes that extend this must define a url_name class member, and can
     then use the get_response method to make a POST request.
