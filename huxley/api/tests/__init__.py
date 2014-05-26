@@ -51,3 +51,21 @@ class CreateAPITestCase(APITestCase):
     def get_response(self, params):
         return self.client.post(self.get_url(), json.dumps(params),
                                 content_type='application/json')
+
+
+class ListAPITestCase(APITestCase):
+    '''Provides a base implementation to test List APIs.
+
+    Classes that extend this must define a url_name class member, and can
+    then use the get_response method to make a GET request.'''
+
+    url_name = None
+
+    def get_url(self):
+        if not self.url_name:
+            raise NotImplementedError('url_name not defined.')
+        return reverse(self.url_name)
+
+    def get_response(self):
+        url = self.get_url()
+        return self.client.get(url)

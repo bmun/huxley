@@ -8,7 +8,8 @@ from django.test import TestCase
 from django.test.client import Client
 
 from huxley.accounts.models import HuxleyUser
-from huxley.api.tests import CreateAPITestCase, RetrieveAPITestCase
+from huxley.api.tests import (CreateAPITestCase, ListAPITestCase,
+                              RetrieveAPITestCase)
 from huxley.utils.test import TestSchools, TestUsers
 
 
@@ -236,62 +237,50 @@ class UserDetailPatchTestCase(TestCase):
         self.assertEqual(response['last_name'], user1.last_name)
 
 
-class UserListGetTestCase(TestCase):
-    def setUp(self):
-        self.client = Client()
-        self.url = reverse('api:user_list')
-
-    def get_data(self):
-        return json.loads(self.client.get(self.url).content)
+class UserListGetTestCase(ListAPITestCase):
+    url_name = 'api:user_list'
 
     def test_anonymous_user(self):
         '''It should reject the request from an anonymous user.'''
         TestUsers.new_user(username='user1')
         TestUsers.new_user(username='user2')
 
-        data = self.get_data()
-        self.assertTrue(type(data) is dict)
-        self.assertEqual(len(data.keys()), 1)
-        self.assertEqual(data['detail'],
-                         u'Authentication credentials were not provided.')
+        response = self.get_response()
+        self.assertEqual(response.data, {
+            'detail': u'Authentication credentials were not provided.'})
 
     def test_user(self):
         '''It should reject the request from a regular user.'''
         TestUsers.new_user(username='user1', password='user1')
         TestUsers.new_user(username='user2')
-
         self.client.login(username='user1', password='user1')
-        data = self.get_data()
-        self.assertTrue(type(data) is dict)
-        self.assertEqual(len(data.keys()), 1)
-        self.assertEqual(data['detail'],
-                         u'You do not have permission to perform this action.')
+
+        response = self.get_response()
+        self.assertEqual(response.data, {
+            'detail': u'You do not have permission to perform this action.'})
 
     def test_superuser(self):
         '''It should allow a superuser to list all users.'''
         user1 = TestUsers.new_superuser(username='user1', password='user1')
         user2 = TestUsers.new_user(username='user2')
-
         self.client.login(username='user1', password='user1')
-        data = self.get_data()
-        self.assertTrue(type(data) is list)
-        self.assertEqual(len(data), 2)
-        self.assertEqual(data[0],
-                         {'id': user1.id,
-                          'username': user1.username,
-                          'first_name': user1.first_name,
-                          'last_name': user1.last_name,
-                          'user_type': user1.user_type,
-                          'school': user1.school_id,
-                          'committee': user1.committee_id})
-        self.assertEqual(data[1],
-                         {'id': user2.id,
-                          'username': user2.username,
-                          'first_name': user2.first_name,
-                          'last_name': user2.last_name,
-                          'user_type': user2.user_type,
-                          'school': user2.school_id,
-                          'committee': user2.committee_id})
+
+        response = self.get_response()
+        self.assertEqual(response.data, [
+            {'id': user1.id,
+             'username': user1.username,
+             'first_name': user1.first_name,
+             'last_name': user1.last_name,
+             'user_type': user1.user_type,
+             'school': user1.school_id,
+             'committee': user1.committee_id},
+            {'id': user2.id,
+             'username': user2.username,
+             'first_name': user2.first_name,
+             'last_name': user2.last_name,
+             'user_type': user2.user_type,
+             'school': user2.school_id,
+             'committee': user2.committee_id}])
 
 
 class UserListPostTestCase(CreateAPITestCase):

@@ -7,7 +7,8 @@ from django.core.urlresolvers import reverse
 from django.test import TestCase
 from django.test.client import Client
 
-from huxley.api.tests import CreateAPITestCase, RetrieveAPITestCase
+from huxley.api.tests import (CreateAPITestCase, ListAPITestCase,
+                              RetrieveAPITestCase)
 from huxley.utils.test import TestCommittees, TestUsers
 
 
@@ -125,36 +126,27 @@ class CommitteeDetailDeleteTestCase(TestCase):
         self.assertEqual(response['detail'], "Method 'DELETE' not allowed.")
 
 
-class CommitteeListGetTestCase(TestCase):
-    def setUp(self):
-        self.client = Client()
-        self.url = reverse('api:committee_list')
-
-    def get_data(self):
-        return json.loads(self.client.get(self.url).content)
+class CommitteeListGetTestCase(ListAPITestCase):
+    url_name = 'api:committee_list'
 
     def test_anonymous_user(self):
-        '''It should return the correct list of committees.
-        Anyone can access committee list.'''
+        '''Anyone should be able to access a list of all the committees.'''
         c1 = TestCommittees.new_committee(name='DISC', delegation_size=100)
         c2 = TestCommittees.new_committee(name='JCC', special=True,
-                                             delegation_size=30)
+                                          delegation_size=30)
 
-        data = self.get_data()
-        self.assertTrue(type(data) is list)
-        self.assertEqual(len(data), 2)
-        self.assertEqual(data[0],
-                         {'delegation_size': c1.delegation_size,
-                          'special': c1.special,
-                          'id': c1.id,
-                          'full_name': c1.full_name,
-                          'name': c1.name})
-        self.assertEqual(data[1],
-                         {'delegation_size': c2.delegation_size,
-                          'special': c2.special,
-                          'id': c2.id,
-                          'full_name': c2.full_name,
-                          'name': c2.name})
+        response = self.get_response()
+        self.assertEqual(response.data, [
+            {'delegation_size': c1.delegation_size,
+             'special': c1.special,
+             'id': c1.id,
+             'full_name': c1.full_name,
+             'name': c1.name},
+            {'delegation_size': c2.delegation_size,
+             'special': c2.special,
+             'id': c2.id,
+             'full_name': c2.full_name,
+             'name': c2.name}])
 
 
 class CommitteeListPostTestCase(CreateAPITestCase):

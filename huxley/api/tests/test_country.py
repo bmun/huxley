@@ -7,7 +7,8 @@ from django.core.urlresolvers import reverse
 from django.test import TestCase
 from django.test.client import Client
 
-from huxley.api.tests import CreateAPITestCase, RetrieveAPITestCase
+from huxley.api.tests import (CreateAPITestCase, ListAPITestCase,
+                              RetrieveAPITestCase)
 from huxley.utils.test import TestCountries, TestUsers
 
 
@@ -24,32 +25,26 @@ class CountryDetailGetTestCase(RetrieveAPITestCase):
             'special': country.special})
 
 
-class CountryListGetTestCase(TestCase):
-    def setUp(self):
-        self.client = Client()
-        self.url = reverse('api:country_list')
-
-    def get_data(self):
-        return json.loads(self.client.get(self.url).content)
+class CountryListGetTestCase(ListAPITestCase):
+    url_name = 'api:country_list'
 
     def test_anonymous_user(self):
         '''Anyone should be able to access a list of all the countries.'''
         country1 = TestCountries.new_country(name='USA')
         country2 = TestCountries.new_country(name='China')
         country3 = TestCountries.new_country(name='Barbara Boxer', special=True)
-        data = self.get_data()
-        self.assertEqual(data[0],
-                         {'id': country1.id,
-                          'special': country1.special,
-                          'name': country1.name})
-        self.assertEqual(data[1],
-                         {'id': country2.id,
-                          'special': country2.special,
-                          'name': country2.name})
-        self.assertEqual(data[2],
-                         {'id': country3.id,
-                          'special': country3.special,
-                          'name': country3.name})
+
+        response = self.get_response()
+        self.assertEqual(response.data, [
+            {'id': country1.id,
+             'special': country1.special,
+             'name': country1.name},
+            {'id': country2.id,
+             'special': country2.special,
+             'name': country2.name},
+            {'id': country3.id,
+             'special': country3.special,
+             'name': country3.name}])
 
 
 class CountryDetailDeleteTestCase(TestCase):
