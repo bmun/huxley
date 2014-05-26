@@ -11,9 +11,7 @@ var $ = require('jquery');
 var React = require('react');
 var Router = require('react-router-component');
 
-var CurrentUserStore = require('./huxley/stores/CurrentUserStore');
-var LoginView = require('./huxley/components/LoginView');
-var RegistrationView = require('./huxley/components/RegistrationView');
+var Huxley = require('./huxley/Huxley');
 
 var Locations = Router.Locations;
 var Location = Router.Location;
@@ -21,15 +19,10 @@ var Location = Router.Location;
 $(function() {
   React.renderComponent(
     <Locations>
-      <Location path="/www/" handler={LoginView} />
-      <Location path="/www/register" handler={RegistrationView} />
+      <Location path="/www/*" handler={Huxley} />
     </Locations>,
     document.body
   );
-
-  CurrentUserStore.addChangeListener(function() {
-    console.log(CurrentUserStore.getCurrentUser());
-  });
 });
 
 $.ajaxSetup({

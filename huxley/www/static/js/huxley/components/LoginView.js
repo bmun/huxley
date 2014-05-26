@@ -67,7 +67,7 @@ var LoginView = React.createClass({
             </button>
             <Link
               className="js-nav button button-green rounded-small"
-              href="/www/register">
+              href="/register">
               Register for BMUN
             </Link>
           </div>
