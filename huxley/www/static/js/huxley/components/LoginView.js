@@ -124,7 +124,7 @@ var LoginView = React.createClass({
   },
 
   _handleError: function(jqXHR, status, error) {
-    response = jqXHR.responseJSON;
+    var response = jqXHR.responseJSON;
     if (!response.detail) {
       return;
     }

@@ -9,12 +9,26 @@ var EventEmitter = require('events').EventEmitter;
 var merge = require('react/lib/merge');
 
 var CHANGE_EVENT = 'change';
+var TYPE_ADVISOR = 1;
+var TYPE_CHAIR = 2;
 
 var _currentUser = {};
 
 var CurrentUserStore = merge(EventEmitter.prototype, {
   getCurrentUser: function() {
     return _currentUser;
+  },
+
+  isUserLoggedIn: function() {
+    return !!_currentUser.id;
+  },
+
+  isUserAdvisor: function() {
+    return _currentUser.user_type === TYPE_ADVISOR;
+  },
+
+  isUserChair: function() {
+    return _currentUser.user_type === TYPE_CHAIR;
   },
 
   emitChange: function() {
