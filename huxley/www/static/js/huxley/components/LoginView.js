@@ -5,6 +5,8 @@
  * @jsx React.DOM
  */
 
+ 'use strict';
+
 var console = require('console');
 
 var $ = require('jquery');

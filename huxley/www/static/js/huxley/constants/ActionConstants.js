@@ -3,6 +3,8 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
+ 'use strict';
+
 var keyMirror = require('react/lib/keyMirror');
 
 module.exports = keyMirror({
