@@ -7,8 +7,8 @@ from django.core.urlresolvers import reverse
 from django.test import TestCase
 from django.test.client import Client
 
-from huxley.api.tests import (CreateAPITestCase, ListAPITestCase,
-                              RetrieveAPITestCase)
+from huxley.api.tests import (CreateAPITestCase, DestroyAPITestCase,
+                              ListAPITestCase, RetrieveAPITestCase)
 from huxley.utils.test import TestCountries, TestUsers
 
 
@@ -47,35 +47,35 @@ class CountryListGetTestCase(ListAPITestCase):
              'name': country3.name}])
 
 
-class CountryDetailDeleteTestCase(TestCase):
-    def setUp(self):
-        self.client = Client()
-        self.country = TestCountries.new_country()
-        self.url = reverse('api:country_detail', args=(self.country.id,))
+class CountryDetailDeleteTestCase(DestroyAPITestCase):
+    url_name = 'api:country_detail'
 
-    def get_response(self):
-        return json.loads(self.client.delete(self.url).content)
+    def setUp(self):
+        self.country = TestCountries.new_country()
 
     def test_anonymous_user(self):
         '''Unauthenticated users should not be able to delete countries.'''
-        response = self.get_response()
-        self.assertEqual(response['detail'],
-            'Authentication credentials were not provided.')
+        response = self.get_response(self.country.id)
+        self.assertEqual(response.data, {
+            'detail':  u'Authentication credentials were not provided.'})
 
     def test_self(self):
         '''Authenticated users shouldn't have permission to delete countries.'''
-        user = TestUsers.new_user(username='user', password='user')
+        TestUsers.new_user(username='user', password='user')
         self.client.login(username='user', password='user')
-        response = self.get_response()
-        self.assertEqual(response['detail'],
-            'You do not have permission to perform this action.')
+
+        response = self.get_response(self.country.id)
+        self.assertEqual(response.data, {
+            'detail':  u'You do not have permission to perform this action.'})
 
     def test_super_user(self):
         '''Countries should not be able to be deleted'''
-        user = TestUsers.new_superuser(username='user', password='user')
+        TestUsers.new_superuser(username='user', password='user')
         self.client.login(username='user', password='user')
-        response = self.get_response()
-        self.assertEqual(response['detail'], "Method 'DELETE' not allowed.")
+
+        response = self.get_response(self.country.id)
+        self.assertEqual(response.data, {
+            'detail':  u"Method 'DELETE' not allowed."})
 
 
 class CountryDetailPatchTestCase(TestCase):

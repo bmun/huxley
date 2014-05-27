@@ -53,6 +53,24 @@ class CreateAPITestCase(APITestCase):
                                 content_type='application/json')
 
 
+class DestroyAPITestCase(APITestCase):
+    '''Provides a base implementation to test Destroy APIs.
+
+    Classes that extend this must define a url_name class member, and can
+    then use the get_response method to make a DELETE request.'''
+
+    url_name = None
+
+    def get_url(self, object_id):
+        if not self.url_name:
+            raise NotImplementedError('url_name not defined.')
+        return reverse(self.url_name, args=(object_id,))
+
+    def get_response(self, object_id):
+        url = self.get_url(object_id)
+        return self.client.delete(url)
+
+
 class ListAPITestCase(APITestCase):
     '''Provides a base implementation to test List APIs.
 
