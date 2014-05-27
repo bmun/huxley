@@ -87,3 +87,34 @@ class ListAPITestCase(APITestCase):
     def get_response(self):
         url = self.get_url()
         return self.client.get(url)
+
+
+class UpdateAPITestCase(APITestCase):
+    '''Provides a base implementation to test Update APIs.
+
+    Classes that extend this must define a url_name class member, and can
+    then use the get_response method to make a PUT/PATCH request based on
+    the partial class member.
+
+    They can optionally specify a params class member to define default
+    params and then use get_params to override certain properties.'''
+
+    url_name = None
+    params = {}
+    partial = True
+
+    def get_url(self, object_id):
+        if not self.url_name:
+            raise NotImplementedError('url_name not defined.')
+        return reverse(self.url_name, args=(object_id,))
+
+    def get_params(self, **kwargs):
+        params = self.params.copy()
+        for param, value in kwargs.items():
+            params[param] = value
+        return params
+
+    def get_response(self, object_id, params):
+        func = self.client.patch if self.partial else self.client.put
+        return func(self.get_url(object_id), json.dumps(params),
+                    content_type='application/json')

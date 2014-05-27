@@ -9,8 +9,9 @@ from django.test.client import Client
 
 from huxley.accounts.models import HuxleyUser
 from huxley.api.tests import (CreateAPITestCase, DestroyAPITestCase,
-                              ListAPITestCase, RetrieveAPITestCase)
-from huxley.utils.test import TestSchools, TestUsers
+                              ListAPITestCase, RetrieveAPITestCase,
+                              UpdateAPITestCase)
+from huxley.utils.test import TestUsers
 
 
 class UserDetailGetTestCase(RetrieveAPITestCase):
@@ -126,94 +127,55 @@ class UserDetailDeleteTestCase(DestroyAPITestCase):
         self.assertFalse(HuxleyUser.objects.filter(id=self.user.id).exists())
 
 
-class UserDetailPatchTestCase(TestCase):
+class UserDetailPatchTestCase(UpdateAPITestCase):
+    url_name = 'api:user_detail'
+    params = {'first_name': 'first',
+              'last_name': 'last'}
+
     def setUp(self):
-        self.client = Client()
-
-    def get_url(self, user_id):
-        return reverse('api:user_detail', args=(user_id,))
-
-    def get_data(self, url):
-        return json.loads(self.client.get(url).content)
-
-    def get_patch_response(self, url, data):
-        response = self.client.patch(url, data=data, content_type='application/json')
-        return json.loads(response.content)
+        self.user = TestUsers.new_user(username='user1', password='user1')
 
     def test_anonymous_user(self):
         '''An anonymous user should not be able to change information.'''
-        school = TestSchools.new_school()
-        user = school.advisor
-        url = self.get_url(user.id)
-        fields = {'first_name': 'first',
-                  'last_name': 'last'}
+        response = self.get_response(self.user.id, params=self.params)
+        self.assertEqual(response.data, {
+            'detail': u'Authentication credentials were not provided.'})
 
-        response = self.get_patch_response(url, json.dumps(fields))
-        data = self.get_data(url)
-
-        self.assertEqual(len(response.keys()), 1)
-        self.assertEqual(response['detail'],
-            u'Authentication credentials were not provided.')
-        self.assertTrue(HuxleyUser.objects.filter(id=user.id).exists())
-        user = HuxleyUser.objects.get(id=user.id)
+        user = HuxleyUser.objects.get(id=self.user.id)
         self.assertEqual(user.first_name, 'Test')
         self.assertEqual(user.last_name, 'User')
 
     def test_other_user(self):
         '''Another user should not be able to change information about any other user.'''
-        user1 = TestUsers.new_user(username='user1', password='user1')
-        user2 = TestUsers.new_user(username='user2', password='user2')
-        url = self.get_url(user1.id)
-
+        TestUsers.new_user(username='user2', password='user2')
         self.client.login(username='user2', password='user2')
-        fields = {'first_name': 'first',
-                  'last_name': 'last'}
 
-        response = self.get_patch_response(url, json.dumps(fields))
+        response = self.get_response(self.user.id, params=self.params)
+        self.assertEqual(response.data, {
+            'detail': u'You do not have permission to perform this action.'})
 
-        self.assertEqual(len(response.keys()), 1)
-        self.assertEqual(response['detail'],
-            u'You do not have permission to perform this action.')
-        self.assertTrue(HuxleyUser.objects.filter(id=user1.id).exists())
-        user1 = HuxleyUser.objects.get(id=user1.id)
-        self.assertEqual(user1.first_name, 'Test')
-        self.assertEqual(user1.last_name, 'User')
+        user = HuxleyUser.objects.get(id=self.user.id)
+        self.assertEqual(user.first_name, 'Test')
+        self.assertEqual(user.last_name, 'User')
 
     def test_self(self):
         '''A User should be allowed to change information about himself.'''
-        school = TestSchools.new_school()
-        user = school.advisor
-        url = self.get_url(user.id)
+        self.client.login(username='user1', password='user1')
 
-        self.client.login(username='testuser', password='test')
-        data = self.get_data(url)
-
-        fields = {'first_name': 'first',
-                  'last_name': 'last'}
-
-        response = self.get_patch_response(url, json.dumps(fields))
-        user = HuxleyUser.objects.get(id=user.id)
-
-        self.assertEqual(response['first_name'], user.first_name)
-        self.assertEqual(response['last_name'], user.last_name)
+        response = self.get_response(self.user.id, params=self.params)
+        user = HuxleyUser.objects.get(id=self.user.id)
+        self.assertEqual(response.data['first_name'], user.first_name)
+        self.assertEqual(response.data['last_name'], user.last_name)
 
     def test_superuser(self):
         '''A superuser should be allowed to change information about a user.'''
-        school = TestSchools.new_school()
-        user1 = school.advisor
-        user2 = TestUsers.new_superuser(username='user2', password='user2')
-        url = self.get_url(user1.id)
-
+        TestUsers.new_superuser(username='user2', password='user2')
         self.client.login(username='user2', password='user2')
 
-        fields = {'first_name': 'first',
-                  'last_name': 'last'}
-
-        response = self.get_patch_response(url, json.dumps(fields))
-        user1 = HuxleyUser.objects.get(id=user1.id)
-
-        self.assertEqual(response['first_name'], user1.first_name)
-        self.assertEqual(response['last_name'], user1.last_name)
+        response = self.get_response(self.user.id, params=self.params)
+        user = HuxleyUser.objects.get(id=self.user.id)
+        self.assertEqual(response.data['first_name'], user.first_name)
+        self.assertEqual(response.data['last_name'], user.last_name)
 
 
 class UserListGetTestCase(ListAPITestCase):

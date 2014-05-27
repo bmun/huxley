@@ -8,7 +8,8 @@ from django.test import TestCase
 from django.test.client import Client
 
 from huxley.api.tests import (CreateAPITestCase, DestroyAPITestCase,
-                              ListAPITestCase, RetrieveAPITestCase)
+                              ListAPITestCase, RetrieveAPITestCase,
+                              UpdateAPITestCase)
 from huxley.utils.test import TestCommittees, TestUsers
 
 
@@ -27,72 +28,71 @@ class CommitteeDetailGetTestCase(RetrieveAPITestCase):
             'special': c.special})
 
 
-class CommitteeDetailPutTestCase(TestCase):
-    def setUp(self):
-        self.client = Client()
-        self.committee = TestCommittees.new_committee()
-        self.url = reverse('api:committee_detail', args=(self.committee.id,))
-        self.params = {'name':'DISC',
-                       'special':True}
+class CommitteeDetailPutTestCase(UpdateAPITestCase):
+    url_name = 'api:committee_detail'
+    params = {'name':'DISC',
+              'special':True}
+    partial = False
 
-    def get_response(self, data):
-        return json.loads(self.client.put(self.url, data=data,
-            content_type='application/json').content)
+    def setUp(self):
+        self.committee = TestCommittees.new_committee()
 
     def test_anonymous_user(self):
-        '''Unauthenticated users should not be able to update committees.'''
-        response = self.get_response(self.params)
-        self.assertEqual(response['detail'],
-                            u'Authentication credentials were not provided.')
+        '''Unauthenticated users shouldn't be able to update committees.'''
+        response = self.get_response(self.committee.id, params=self.params)
+        self.assertEqual(response.data, {
+            'detail': u'Authentication credentials were not provided.'})
 
-    def test_self(self):
-        '''Authenticated users shouldn't have permission to update committees.'''
-        user = TestUsers.new_user(username='user', password='user')
+    def test_authenticated_user(self):
+        '''Authenticated users shouldn't be able to update committees.'''
+        TestUsers.new_user(username='user', password='user')
         self.client.login(username='user', password='user')
-        response = self.get_response(self.params)
-        self.assertEqual(response['detail'],
-            'You do not have permission to perform this action.')
 
-    def test_super_user(self):
-        '''Committees should not be able to be updated.'''
-        user = TestUsers.new_superuser(username='user', password='user')
+        response = self.get_response(self.committee.id, params=self.params)
+        self.assertEqual(response.data, {
+            'detail': u'You do not have permission to perform this action.'})
+
+    def test_superuser(self):
+        '''Superusers shouldn't be able to update committees.'''
+        TestUsers.new_superuser(username='user', password='user')
         self.client.login(username='user', password='user')
-        response = self.get_response(self.params)
-        self.assertEqual(response['detail'], "Method 'PUT' not allowed.")
+
+        response = self.get_response(self.committee.id, params=self.params)
+        self.assertEqual(response.data, {
+            'detail': u"Method 'PUT' not allowed."})
 
 
-class CommitteeDetailPatchTestCase(TestCase):
+class CommitteeDetailPatchTestCase(UpdateAPITestCase):
+    url_name = 'api:committee_detail'
+    params = {'name':'DISC',
+              'special':True}
+
     def setUp(self):
-        self.client = Client()
         self.committee = TestCommittees.new_committee()
-        self.url = reverse('api:committee_detail', args=(self.committee.id,))
-        self.params = {'name':'DISC',
-                       'special':True}
-
-    def get_response(self, data):
-        return json.loads(self.client.patch(self.url, data=data,
-            content_type='application/json').content)
 
     def test_anonymous_user(self):
-        '''Unauthenticated users should not be able to update committees.'''
-        response = self.get_response(self.params)
-        self.assertEqual(response['detail'],
-                            u'Authentication credentials were not provided.')
+        '''Unauthenticated users shouldn't be able to update committees.'''
+        response = self.get_response(self.committee.id, params=self.params)
+        self.assertEqual(response.data, {
+            'detail': u'Authentication credentials were not provided.'})
 
-    def test_self(self):
-        '''Authenticated users shouldn't have permission to update committees.'''
-        user = TestUsers.new_user(username='user', password='user')
+    def test_authenticated_user(self):
+        '''Authenticated users shouldn't be able to update committees.'''
+        TestUsers.new_user(username='user', password='user')
         self.client.login(username='user', password='user')
-        response = self.get_response(self.params)
-        self.assertEqual(response['detail'],
-            'You do not have permission to perform this action.')
 
-    def test_super_user(self):
-        '''Committees should not be able to be updated.'''
-        user = TestUsers.new_superuser(username='user', password='user')
+        response = self.get_response(self.committee.id, params=self.params)
+        self.assertEqual(response.data, {
+            'detail': u'You do not have permission to perform this action.'})
+
+    def test_superuser(self):
+        '''Superusers shouldn't be able to update committees.'''
+        TestUsers.new_superuser(username='user', password='user')
         self.client.login(username='user', password='user')
-        response = self.get_response(self.params)
-        self.assertEqual(response['detail'], "Method 'PATCH' not allowed.")
+
+        response = self.get_response(self.committee.id, params=self.params)
+        self.assertEqual(response.data, {
+            'detail': u"Method 'PATCH' not allowed."})
 
 
 class CommitteeDetailDeleteTestCase(DestroyAPITestCase):

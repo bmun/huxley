@@ -1,14 +1,9 @@
 # Copyright (c) 2011-2014 Berkeley Model United Nations. All rights reserved.
 # Use of this source code is governed by a BSD License (see LICENSE).
 
-import json
-
-from django.core.urlresolvers import reverse
-from django.test import TestCase
-from django.test.client import Client
-
 from huxley.api.tests import (CreateAPITestCase, DestroyAPITestCase,
-                              ListAPITestCase, RetrieveAPITestCase)
+                              ListAPITestCase, RetrieveAPITestCase,
+                              UpdateAPITestCase)
 from huxley.utils.test import TestCountries, TestUsers
 
 
@@ -78,38 +73,37 @@ class CountryDetailDeleteTestCase(DestroyAPITestCase):
             'detail':  u"Method 'DELETE' not allowed."})
 
 
-class CountryDetailPatchTestCase(TestCase):
-    def setUp(self):
-        self.client = Client()
-        self.country = TestCountries.new_country(name='USA', special=False)
-        self.url = reverse('api:country_detail', args=(self.country.id,))
-        self.params = {'name': 'Barbara Boxer',
-                       'special': True}
+class CountryDetailPatchTestCase(UpdateAPITestCase):
+    url_name = 'api:country_detail'
+    params = {'name': 'Barbara Boxer',
+              'special': True}
 
-    def get_response(self, data):
-        return json.loads(self.client.patch(self.url, data=data,
-            content_type='application/json').content)
+    def setUp(self):
+        self.country = TestCountries.new_country(name='USA', special=False)
 
     def test_anonymous_user(self):
-        '''Unauthenticated users should not be able to update countries.'''
-        response = self.get_response(json.dumps(self.params))
-        self.assertEqual(response['detail'],
-            'Authentication credentials were not provided.')
+        '''Unauthenticated users shouldn't be able to update countries.'''
+        response = self.get_response(self.country.id, params=self.params)
+        self.assertEqual(response.data, {
+            'detail': u'Authentication credentials were not provided.'})
 
-    def test_self(self):
-        '''Authenticated users shouldn't have permission to update countries.'''
-        user = TestUsers.new_user(username='user', password='user')
+    def test_authenticated_user(self):
+        '''Authenticated users shouldn't be able to update countries.'''
+        TestUsers.new_user(username='user', password='user')
         self.client.login(username='user', password='user')
-        response = self.get_response(json.dumps(self.params))
-        self.assertEqual(response['detail'],
-            'You do not have permission to perform this action.')
 
-    def test_super_user(self):
-        '''Countries should not be able to be updated'''
-        user = TestUsers.new_superuser(username='user', password='user')
+        response = self.get_response(self.country.id, params=self.params)
+        self.assertEqual(response.data, {
+            'detail': u'You do not have permission to perform this action.'})
+
+    def test_superuser(self):
+        '''Superusers shouldn't be able to update countries.'''
+        TestUsers.new_superuser(username='user', password='user')
         self.client.login(username='user', password='user')
-        response = self.get_response(json.dumps(self.params))
-        self.assertEqual(response['detail'], "Method 'PATCH' not allowed.")
+
+        response = self.get_response(self.country.id, params=self.params)
+        self.assertEqual(response.data, {
+            'detail': u"Method 'PATCH' not allowed."})
 
 
 class CountryListPostTestCase(CreateAPITestCase):
