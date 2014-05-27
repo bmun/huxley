@@ -1,15 +1,9 @@
 # Copyright (c) 2011-2014 Berkeley Model United Nations. All rights reserved.
 # Use of this source code is governed by a BSD License (see LICENSE).
 
-import json
-
-from django.core.urlresolvers import reverse
-from django.test import TestCase
-from django.test.client import Client
-
 from huxley.api.tests import (CreateAPITestCase, DestroyAPITestCase,
-                              ListAPITestCase, RetrieveAPITestCase,
-                              UpdateAPITestCase)
+                              ListAPITestCase, PartialUpdateAPITestCase,
+                              RetrieveAPITestCase, UpdateAPITestCase)
 from huxley.utils.test import TestCommittees, TestUsers
 
 
@@ -32,7 +26,6 @@ class CommitteeDetailPutTestCase(UpdateAPITestCase):
     url_name = 'api:committee_detail'
     params = {'name':'DISC',
               'special':True}
-    partial = False
 
     def setUp(self):
         self.committee = TestCommittees.new_committee()
@@ -62,7 +55,7 @@ class CommitteeDetailPutTestCase(UpdateAPITestCase):
             'detail': u"Method 'PUT' not allowed."})
 
 
-class CommitteeDetailPatchTestCase(UpdateAPITestCase):
+class CommitteeDetailPatchTestCase(PartialUpdateAPITestCase):
     url_name = 'api:committee_detail'
     params = {'name':'DISC',
               'special':True}

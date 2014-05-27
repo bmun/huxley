@@ -7,40 +7,29 @@ from django.core.urlresolvers import reverse
 from rest_framework.test import APITestCase
 
 
-class RetrieveAPITestCase(APITestCase):
-    '''Provides a base implementation to test Retrieve APIs.
+class AbstractAPITestCase(APITestCase):
+    '''Provides a base implementation to test REST APIs, with concrete
+    children for each of the REST methods.
 
-    Classes that extend this must define a url_name class member, and can
-    then use the get_response method to make a GET request.'''
-
-    url_name = None
-
-    def get_url(self, object_id):
-        if not self.url_name:
-            raise NotImplementedError('url_name not defined.')
-        return reverse(self.url_name, args=(object_id,))
-
-    def get_response(self, object_id):
-        url = self.get_url(object_id)
-        return self.client.get(url)
-
-
-class CreateAPITestCase(APITestCase):
-    '''Provides a base implementation to test Create APIs.
-
-    Classes that extend this must define a url_name class member, and can
-    then use the get_response method to make a POST request.
+    Classes that extend the concrete children ust define a url_name class
+    member, and can then use the get_response() method to make a request.
 
     They can optionally specify a params class member to define default
-    params and then use get_params to override certain properties.'''
+    params and then use get_params() to override certain properties.'''
 
     url_name = None
     params = {}
+    method = None
+    is_resource = None
 
-    def get_url(self):
-        if not self.url_name:
-            raise NotImplementedError('url_name not defined.')
-        return reverse(self.url_name)
+    def get_url(self, object_id=None):
+        if self.url_name is None:
+            raise NotImplementedError('Must define url_name class member.')
+        if self.is_resource is None:
+            raise NotImplementedError('Must define is_resource class member.')
+
+        args = (object_id,) if self.is_resource else ()
+        return reverse(self.url_name, args=args)
 
     def get_params(self, **kwargs):
         params = self.params.copy()
@@ -48,73 +37,44 @@ class CreateAPITestCase(APITestCase):
             params[param] = value
         return params
 
-    def get_response(self, params):
-        return self.client.post(self.get_url(), json.dumps(params),
-                                content_type='application/json')
+    def get_response(self, object_id=None, params=None):
+        if self.method is None:
+            raise NotImplementedError('Must define method class member.')
 
+        params = params or self.params
+        if self.method != 'get':
+            params = json.dumps(params)
 
-class DestroyAPITestCase(APITestCase):
-    '''Provides a base implementation to test Destroy APIs.
-
-    Classes that extend this must define a url_name class member, and can
-    then use the get_response method to make a DELETE request.'''
-
-    url_name = None
-
-    def get_url(self, object_id):
-        if not self.url_name:
-            raise NotImplementedError('url_name not defined.')
-        return reverse(self.url_name, args=(object_id,))
-
-    def get_response(self, object_id):
+        request = getattr(self.client, self.method)
         url = self.get_url(object_id)
-        return self.client.delete(url)
+        return request(url, params, content_type='application/json')
 
 
-class ListAPITestCase(APITestCase):
-    '''Provides a base implementation to test List APIs.
-
-    Classes that extend this must define a url_name class member, and can
-    then use the get_response method to make a GET request.'''
-
-    url_name = None
-
-    def get_url(self):
-        if not self.url_name:
-            raise NotImplementedError('url_name not defined.')
-        return reverse(self.url_name)
-
-    def get_response(self):
-        url = self.get_url()
-        return self.client.get(url)
+class CreateAPITestCase(AbstractAPITestCase):
+    method = 'post'
+    is_resource = False
 
 
-class UpdateAPITestCase(APITestCase):
-    '''Provides a base implementation to test Update APIs.
+class ListAPITestCase(AbstractAPITestCase):
+    method = 'get'
+    is_resource = False
 
-    Classes that extend this must define a url_name class member, and can
-    then use the get_response method to make a PUT/PATCH request based on
-    the partial class member.
 
-    They can optionally specify a params class member to define default
-    params and then use get_params to override certain properties.'''
+class RetrieveAPITestCase(AbstractAPITestCase):
+    method = 'get'
+    is_resource = True
 
-    url_name = None
-    params = {}
-    partial = True
 
-    def get_url(self, object_id):
-        if not self.url_name:
-            raise NotImplementedError('url_name not defined.')
-        return reverse(self.url_name, args=(object_id,))
+class UpdateAPITestCase(AbstractAPITestCase):
+    method = 'put'
+    is_resource = True
 
-    def get_params(self, **kwargs):
-        params = self.params.copy()
-        for param, value in kwargs.items():
-            params[param] = value
-        return params
 
-    def get_response(self, object_id, params):
-        func = self.client.patch if self.partial else self.client.put
-        return func(self.get_url(object_id), json.dumps(params),
-                    content_type='application/json')
+class PartialUpdateAPITestCase(AbstractAPITestCase):
+    method = 'patch'
+    is_resource = True
+
+
+class DestroyAPITestCase(AbstractAPITestCase):
+    method = 'delete'
+    is_resource = True

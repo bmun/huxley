@@ -9,8 +9,8 @@ from django.test.client import Client
 
 from huxley.accounts.models import HuxleyUser
 from huxley.api.tests import (CreateAPITestCase, DestroyAPITestCase,
-                              ListAPITestCase, RetrieveAPITestCase,
-                              UpdateAPITestCase)
+                              ListAPITestCase, PartialUpdateAPITestCase,
+                              RetrieveAPITestCase)
 from huxley.utils.test import TestUsers
 
 
@@ -127,7 +127,7 @@ class UserDetailDeleteTestCase(DestroyAPITestCase):
         self.assertFalse(HuxleyUser.objects.filter(id=self.user.id).exists())
 
 
-class UserDetailPatchTestCase(UpdateAPITestCase):
+class UserDetailPatchTestCase(PartialUpdateAPITestCase):
     url_name = 'api:user_detail'
     params = {'first_name': 'first',
               'last_name': 'last'}
@@ -248,29 +248,29 @@ class UserListPostTestCase(CreateAPITestCase):
             'school': user.school_id})
 
     def test_empty_username(self):
-        response = self.get_response(self.get_params(username=''))
+        response = self.get_response(params=self.get_params(username=''))
         self.assertEqual(response.data, {
             'username': ['This field is required.']})
 
     def test_taken_username(self):
         TestUsers.new_user(username='_Kunal', password='pass')
-        response = self.get_response(self.get_params(username='_Kunal'))
+        response = self.get_response(params=self.get_params(username='_Kunal'))
         self.assertEqual(response.data, {
             'username': ['This username is already taken.']})
 
     def test_invalid_username(self):
-        response = self.get_response(self.get_params(username='>Kunal'))
+        response = self.get_response(params=self.get_params(username='>Kunal'))
         self.assertEqual(response.data, {
             'username': ['Usernames may contain alphanumerics, underscores, '
                          'and/or hyphens only.']})
 
     def test_empty_password(self):
-        response = self.get_response(self.get_params(password=''))
+        response = self.get_response(params=self.get_params(password=''))
         self.assertEqual(response.data, {
             'password': ['This field is required.']})
 
     def test_invalid_password(self):
-        response = self.get_response(self.get_params(password='>pass'))
+        response = self.get_response(params=self.get_params(password='>pass'))
         self.assertEqual(response.data, {
             'password': ['Password contains invalid characters.']})
 

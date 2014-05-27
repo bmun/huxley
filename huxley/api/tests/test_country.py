@@ -2,8 +2,8 @@
 # Use of this source code is governed by a BSD License (see LICENSE).
 
 from huxley.api.tests import (CreateAPITestCase, DestroyAPITestCase,
-                              ListAPITestCase, RetrieveAPITestCase,
-                              UpdateAPITestCase)
+                              ListAPITestCase, PartialUpdateAPITestCase,
+                              RetrieveAPITestCase)
 from huxley.utils.test import TestCountries, TestUsers
 
 
@@ -73,7 +73,7 @@ class CountryDetailDeleteTestCase(DestroyAPITestCase):
             'detail':  u"Method 'DELETE' not allowed."})
 
 
-class CountryDetailPatchTestCase(UpdateAPITestCase):
+class CountryDetailPatchTestCase(PartialUpdateAPITestCase):
     url_name = 'api:country_detail'
     params = {'name': 'Barbara Boxer',
               'special': True}
