@@ -22,7 +22,6 @@ var Huxley = React.createClass({
   mixins: [Router.NavigatableMixin],
 
   componentDidMount: function() {
-    console.log(this.context.router);
     CurrentUserStore.addChangeListener(function() {
       if (!CurrentUserStore.isUserLoggedIn()) {
         this.navigate('/www/login');
