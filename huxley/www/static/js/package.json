@@ -13,7 +13,14 @@
     "react-router-component": "0.18.3",
     "jquery": "2.1.1",
     "jquery.cookie": "1.4.1",
-    "jquery-ui": "1.10.5"
+    "jquery-ui": "1.10.5",
+    "jest-cli": "0.1.13"
+  },
+  "scripts": {
+    "test": "jest"
+  },
+  "jest": {
+    "unmockedModulePathPatterns": ["<rootDir>/node_modules/react"]
   },
   "private": true
 }
