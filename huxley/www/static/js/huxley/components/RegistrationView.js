@@ -5,7 +5,7 @@
  * @jsx React.DOM
  */
 
- 'use strict';
+'use strict';
 
 var Link = require('react-router-component').Link;
 var React = require('react/addons');
