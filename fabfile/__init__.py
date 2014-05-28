@@ -10,7 +10,7 @@ from fabric.api import abort, env, hide, local, settings, task
 from fabric.colors import green, red, yellow
 from fabric.contrib.console import confirm
 
-from . import dependencies
+from . import dependencies, test
 from .utils import git
 
 
@@ -34,14 +34,6 @@ def update():
     print 'Updating your local branch...'
     git.pull()
     dependencies.check()
-
-
-@task
-def test(*args):
-    '''Run the project's test suite, with optionally specified apps.'''
-    with hide('aborts', 'warnings'):
-        result = [join(env.huxley_root, 'huxley', arg) for arg in args]
-        return local('python manage.py test ' + ' '.join(result))
 
 
 @task
@@ -91,7 +83,7 @@ def submit(remote='origin', skip_tests=False):
     '''Push the current feature branch and create/update pull request.'''
     if not skip_tests:
         with settings(warn_only=True):
-            if test().failed:
+            if test.run().failed:
                 if confirm(yellow('Tests failed. Continue anyway?')):
                     print yellow('Ignoring failed tests. Be careful.')
                 else:
