@@ -17,7 +17,6 @@ var CurrentUserActions = require('../actions/CurrentUserActions');
 var OuterView = require('./OuterView');
 
 require('jquery-ui/effect-shake');
-console.log("Is this coming up?");
 
 var LoginView = React.createClass({
   mixins: [React.addons.LinkedStateMixin],
