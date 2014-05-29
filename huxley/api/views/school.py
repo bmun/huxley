@@ -9,7 +9,7 @@ from huxley.api.serializers import SchoolSerializer
 from huxley.core.models import School
 
 
-class SchoolList(generics.ListCreateAPIView):
+class SchoolList(generics.CreateAPIView):
     authentication_classes = (SessionAuthentication,)
     queryset = School.objects.all()
     serializer_class = SchoolSerializer
