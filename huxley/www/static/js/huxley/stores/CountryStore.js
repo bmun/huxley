@@ -7,12 +7,9 @@
 
 var $ = require('jquery');
 
-var EventEmitter = require('events').EventEmitter;
-var merge = require('react/lib/merge');
-
 var _countryRequest = null;
 
-var CountryStore = merge(EventEmitter.prototype, {
+var CountryStore = {
   getCountries: function(callback) {
     if (!_countryRequest) {
       _countryRequest = $.ajax({
@@ -25,6 +22,6 @@ var CountryStore = merge(EventEmitter.prototype, {
       callback(jqXHR.responseJSON);
     });
   }
-});
+};
 
 module.exports = CountryStore;
