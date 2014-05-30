@@ -1,18 +1,12 @@
 # Copyright (c) 2011-2014 Berkeley Model United Nations. All rights reserved.
 # Use of this source code is governed by a BSD License (see LICENSE).
 
-import json
-
-from django.core.urlresolvers import reverse
-from django.test import TestCase
-from django.test.client import Client
-
-from huxley.core.models import School
-from huxley.utils.test import TestSchools, TestUsers
+from huxley.accounts.models import HuxleyUser
 from huxley.api.tests import (CreateAPITestCase, DestroyAPITestCase,
                               ListAPITestCase, PartialUpdateAPITestCase,
                               RetrieveAPITestCase)
-from huxley.accounts.models import HuxleyUser
+from huxley.core.models import School
+from huxley.utils.test import TestSchools, TestUsers
 
 
 class SchoolDetailGetTestCase(RetrieveAPITestCase):
