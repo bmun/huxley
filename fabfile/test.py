@@ -8,11 +8,10 @@ from fabric.api import env, hide, lcd, local, task
 
 @task(default=True)
 def run():
-    '''Run the project's python and JS test suites.'''
+    '''Run the test suites and return a boolean indicating success.'''
     # TODO: Only run a language's tests if there have been changes in that
     # language.
-    python()
-    js()
+    return python() and js()
 
 
 @task
@@ -20,11 +19,11 @@ def python(*args):
     '''Run the python test suite, with optionally specified apps.'''
     with hide('aborts', 'warnings'), lcd(env.huxley_root):
         dirs = [join(env.huxley_root, 'huxley', arg) for arg in args]
-        return local('python manage.py test ' + ' '.join(dirs))
+        return not local('python manage.py test ' + ' '.join(dirs)).failed
 
 
 @task
 def js():
     '''Run the JS test suite.'''
     with hide('aborts', 'warnings'), lcd(env.js_root):
-        return local('npm test')
+        return not local('npm test').failed

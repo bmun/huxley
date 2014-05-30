@@ -83,7 +83,7 @@ def submit(remote='origin', skip_tests=False):
     '''Push the current feature branch and create/update pull request.'''
     if not skip_tests:
         with settings(warn_only=True):
-            if test.run().failed:
+            if not test.run():
                 if confirm(yellow('Tests failed. Continue anyway?')):
                     print yellow('Ignoring failed tests. Be careful.')
                 else:
