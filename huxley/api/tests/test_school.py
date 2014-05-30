@@ -9,7 +9,9 @@ from django.test.client import Client
 
 from huxley.core.models import School
 from huxley.utils.test import TestSchools, TestUsers
-from huxley.api.tests.__init__ import *
+from huxley.api.tests import (CreateAPITestCase, DestroyAPITestCase,
+                              ListAPITestCase, PartialUpdateAPITestCase,
+                              RetrieveAPITestCase)
 from huxley.accounts.models import HuxleyUser
 
 
