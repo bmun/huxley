@@ -9,7 +9,8 @@ from django.test.client import Client
 
 from huxley.core.models import School
 from huxley.utils.test import TestSchools, TestUsers
-from huxley.api.tests import *
+from huxley.api.tests.__init__ import *
+from huxley.accounts.models import HuxleyUser
 
 
 class SchoolDetailGetTestCase(RetrieveAPITestCase):
@@ -107,9 +108,12 @@ class SchoolDetailPatchTestCase(PartialUpdateAPITestCase):
     def test_anonymous_user(self):
         '''Should not be able to update with an anonymous user.'''
         response = self.get_response(self.school.id)
+        updated_school = School.objects.get(id=self.school.id)
 
         self.assertEqual(response.data, {
             'detail': u'Authentication credentials were not provided.'})
+        self.assertEqual(updated_school.name, self.school.name)
+        self.assertEqual(updated_school.city, self.school.city)
 
     def test_self(self):
         '''You should be able to update with an anonymous user.'''
@@ -121,14 +125,19 @@ class SchoolDetailPatchTestCase(PartialUpdateAPITestCase):
         self.assertEqual(response.data['city'], self.school.city)
 
     def test_other_user(self):
+        '''Should not allow another user to change a school's data'''
         user2 = TestUsers.new_user(username='user2', password='user2')
         self.client.login(username='user2', password='user2')
         response = self.get_response(self.school.id, params=self.params)
+        updated_school = School.objects.get(id=self.school.id)
 
         self.assertEqual(response.data, {
             u'detail': u'You do not have permission to perform this action.'})
+        self.assertEqual(updated_school.name, self.school.name)
+        self.assertEqual(updated_school.city, self.school.city)
 
     def test_superuser(self):
+        '''This this allow  a superuser to change school data.'''
         user2 = TestUsers.new_superuser(username='user2', password='user2')
         self.client.login(username='user2', password='user2')
         response = self.get_response(self.school.id, params=self.params)
@@ -151,6 +160,7 @@ class SchoolDetailDeleteTestCase(DestroyAPITestCase):
 
         self.assertEqual(response.data, {
             'detail': u'Authentication credentials were not provided.'})
+        self.assertTrue(School.objects.filter(id=self.school.id).exists())
 
     def test_self(self):
         '''One user should be able to delete their own account.'''
@@ -158,6 +168,7 @@ class SchoolDetailDeleteTestCase(DestroyAPITestCase):
         response = self.get_response(self.school.id)
 
         self.assertEqual(response.data, None)
+        self.assertFalse(School.objects.filter(id=self.school.id).exists())
 
     def test_other_user(self):
         '''One user should not be able to delete another user.'''
@@ -167,6 +178,7 @@ class SchoolDetailDeleteTestCase(DestroyAPITestCase):
 
         self.assertEqual(response.data, {
             u'detail': u'You do not have permission to perform this action.'})
+        self.assertTrue(School.objects.filter(id=self.school.id).exists())
 
     def test_superuser(self):
         '''A superuser should not be able to delete an account.'''
@@ -176,14 +188,18 @@ class SchoolDetailDeleteTestCase(DestroyAPITestCase):
 
         self.assertEqual(response.data, {
             u'detail': u'You do not have permission to perform this action.'})
+        self.assertTrue(School.objects.filter(id=self.school.id).exists())
 
 
 class SchoolListGetTestCase(ListAPITestCase):
     url_name = 'api:school_list'
 
+    def setUp(self):
+        self.school = TestSchools.new_school()
+        self.user = self.school.advisor
+
     def test_anonymous_user(self):
         '''It should reject an anonymous user.'''
-        school = TestSchools.new_school()
         response = self.get_response()
 
         self.assertEqual(response.data, {
@@ -191,9 +207,6 @@ class SchoolListGetTestCase(ListAPITestCase):
 
     def test_self(self):
         '''It should reject a request from an unauthorized user.'''
-        school = TestSchools.new_school()
-        user = school.advisor
-
         self.client.login(username='testuser', password='test')
         response = self.get_response()
 
@@ -202,10 +215,9 @@ class SchoolListGetTestCase(ListAPITestCase):
 
     def test_superuser(self):
         '''It should reject a request from a superuser.'''
-        school = TestSchools.new_school()
         user = TestUsers.new_superuser(username='user', password='user')
-        self.client.login(username='user', password='user')
 
+        self.client.login(username='user', password='user')
         response = self.get_response()
 
         self.assertEqual(response.data, {
@@ -223,7 +235,7 @@ class SchoolListPostTestCase(CreateAPITestCase):
             'primary_name': 'Kunal Mehta',
             'primary_email': 'KunalMehta@huxley.org',
             'primary_phone': '9999999999',
-            'program_type': 1}
+            'program_type': HuxleyUser.TYPE_ADVISOR}
 
     def test_empty_fields(self):
         '''This should not allow for required fields to be empty.'''
