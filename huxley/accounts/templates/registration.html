@@ -89,7 +89,7 @@
 
 <h3>Program Information</h3>
 
-<p class="instructions"> {{ form.program_type.label }} </p> {{ form.program_type }} 
+<p class="instructions"> {{ form.program_type.label }} </p> {{ form.program_type }}
 {% for error in form.errors.program_type %}
 	<label class="error"> {{ error|escape }} </label>
 {% endfor %}
@@ -113,7 +113,7 @@
 <hr />
 
 <h3>Primary Contact</h3>
-		
+
 {{ form.primary_name }}
 {% for error in form.errors.primary_name %}
 	<label class="error"> {{ error|escape }} </label>
@@ -189,7 +189,7 @@
 		{% for error in form.errors.country_pref5 %}
 			<label class="error"> {{ error|escape }} </label>
 		{% endfor %}
-	</li>	
+	</li>
 	<li>
 		<label> {{ form.country_pref6.label }} </label>
 		{{ form.country_pref6 }}
@@ -232,7 +232,7 @@
 <h3>Special Committee Preferences</h3>
 
 <p class="instructions">
-	Would your delegation be interested in being represented in the following small/specialized committees? Positions are limited and we may not be able to accomodate all preferences. 
+	Would your delegation be interested in being represented in the following small/specialized committees? Positions are limited and we may not be able to accomodate all preferences.
 </p>
 {{ form.committee_prefs }}
 {% for error in form.errors.committee_prefs %}
