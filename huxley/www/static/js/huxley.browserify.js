@@ -21,7 +21,7 @@ $(function() {
     <Locations>
       <Location path="/www/*" handler={Huxley} />
     </Locations>,
-    document.body
+    document.getElementById('huxley-app')
   );
 });
 
