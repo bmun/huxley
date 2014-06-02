@@ -24,7 +24,6 @@ var RegistrationView = React.createClass({
 
   getInitialState: function() {
     return {
-      error: null,
       countries: [],
       first_name: null,
       last_name: null,
@@ -46,33 +45,25 @@ var RegistrationView = React.createClass({
       secondary_name: null,
       secondary_email: null,
       secondary_phone: null,
-      country_pref1: null,
-      country_pref2: null,
-      country_pref3: null,
-      country_pref4: null,
-      country_pref5: null,
-      country_pref6: null,
-      country_pref7: null,
-      country_pref8: null,
-      country_pref9: null,
-      country_pref10: null,
+      country_pref1: 0,
+      country_pref2: 0,
+      country_pref3: 0,
+      country_pref4: 0,
+      country_pref5: 0,
+      country_pref6: 0,
+      country_pref7: 0,
+      country_pref8: 0,
+      country_pref9: 0,
+      country_pref10: 0,
       committee_prefs: null,
       loading: false
     };
   },
 
-  countryOption: function(currentValue, index, array) {
-    var option = document.createElement('OPTION');
-    option.text = currentValue.name;
-    return option;
-  },
-
-  addOption: function(array, number) {
-    for (var x = 0; x<array.length; x++) {
-      array[x].value='country_pref'+String(number);
-      array[x] = React.DOM.option(array[x]);
-    }
-    return array
+  renderOptions: function() {
+    return this.state.countries.map(function(country) {
+      return <option value={country.id}>{country.name}</option>
+    });
   },
 
   componentDidMount: function() {
@@ -143,14 +134,14 @@ var RegistrationView = React.createClass({
               className="choice"
               type="radio"
               name="school_location"
-              valueLink={this.linkState("United States of America")}
+              valueLink={this.linkState('school_location')}
               checked="true"
             /> United States of America <br></br>
             <input
               className="choice"
               type="radio"
               name="school_location"
-              valueLink={this.linkState("International")}
+              valueLink={this.linkState('school_location')}
             /> International <br></br>
             <input
               className="text"
@@ -201,13 +192,13 @@ var RegistrationView = React.createClass({
               type="radio"
               name="program_type"
               checked="true"
-              valueLink={this.linkState("Club")}
+              valueLink={this.linkState('program_type')}
             /> Club <br></br>
             <input
               className="choice"
               type="radio"
               name="program_type"
-              valueLink={this.linkState("Class")}
+              valueLink={this.linkState('program_type')}
             /> Class <br></br>
             <p className="instructions">Please tell us a bit more about your delegation this
               year.</p>
@@ -284,72 +275,72 @@ var RegistrationView = React.createClass({
             <ul>
               <li>
                 <label>01</label>
-                <select name="country_pref1">
-                  <option selected="true">No Preference</option>
-                  {this.addOption(this.state.countries.map(this.countryOption), 1)}
+                <select name="country_pref1" valueLink={this.linkState('country_pref1')} defaultValue="0">
+                  <option> No Preference</option>
+                  {this.renderOptions()}
                 </select>
               </li>
               <li>
                 <label>02</label>
-                <select name="country_pref2">
-                  <option selected="true"> No Preference</option>
-                  {this.addOption(this.state.countries.map(this.countryOption), 2)}
+                <select name="country_pref2" valueLink={this.linkState('country_pref2')} defaultValue="0">
+                  <option> No Preference</option>
+                  {this.renderOptions()}
                 </select>
               </li>
               <li>
                 <label>03</label>
-                <select name="country_pref2">
-                  <option selected="true"> No Preference</option>
-                  {this.addOption(this.state.countries.map(this.countryOption), 3)}
+                <select name="country_pref3" valueLink={this.linkState('country_pref3')} defaultValue="0">
+                  <option> No Preference</option>
+                  {this.renderOptions()}
                 </select>
               </li>
               <li>
                 <label>04</label>
-                <select name="country_pref2">
-                  <option selected="true"> No Preference</option>
-                  {this.addOption(this.state.countries.map(this.countryOption), 4)}
+                <select name="country_pref4" valueLink={this.linkState('country_pref4')} defaultValue="0">
+                  <option> No Preference</option>
+                  {this.renderOptions()}
                 </select>
               </li>
               <li>
                 <label>05</label>
-                <select name="country_pref2">
-                  <option selected="true"> No Preference</option>
-                  {this.addOption(this.state.countries.map(this.countryOption), 5)}
+                <select name="country_pref5" valueLink={this.linkState('country_pref5')} defaultValue="0">
+                  <option> No Preference</option>
+                  {this.renderOptions()}
                 </select>
               </li>
               <li>
                 <label>06</label>
-                <select name="country_pref2">
-                  <option selected="true"> No Preference</option>
-                  {this.addOption(this.state.countries.map(this.countryOption), 6)}
+                <select name="country_pref6" valueLink={this.linkState('country_pref6')} defaultValue="0">
+                  <option> No Preference</option>
+                  {this.renderOptions()}
                 </select>
               </li>
               <li>
                 <label>07</label>
-                <select name="country_pref2">
-                  <option selected="true"> No Preference</option>
-                  {this.addOption(this.state.countries.map(this.countryOption), 7)}
+                <select name="country_pref7" valueLink={this.linkState('country_pref7')} defaultValue="0">
+                  <option> No Preference</option>
+                  {this.renderOptions()}
                 </select>
               </li>
               <li>
                 <label>08</label>
-                <select name="country_pref2">
-                  <option selected="true"> No Preference</option>
-                  {this.addOption(this.state.countries.map(this.countryOption), 8)}
+                <select name="country_pref8" valueLink={this.linkState('country_pref8')} defaultValue="0">
+                  <option> No Preference</option>
+                  {this.renderOptions()}
                 </select>
               </li>
               <li>
                 <label>09</label>
-                <select name="country_pref2">
-                  <option selected="true"> No Preference</option>
-                  {this.addOption(this.state.countries.map(this.countryOption), 9)}
+                <select name="country_pref9" valueLink={this.linkState('country_pref9')} defaultValue="0">
+                  <option> No Preference</option>
+                  {this.renderOptions()}
                 </select>
               </li>
               <li>
                 <label>10</label>
-                <select name="country_pref2">
-                  <option selected="true"> No Preference</option>
-                  {this.addOption(this.state.countries.map(this.countryOption), 10)}
+                <select name="country_pref10" valueLink={this.linkState('country_pref10')} defaultValue="0">
+                  <option> No Preference</option>
+                  {this.renderOptions()}
                 </select>
               </li>
             </ul>
@@ -361,43 +352,43 @@ var RegistrationView = React.createClass({
               className="choice"
               type="checkbox"
               name="committee_prefs"
-              valueLink={this.linkState('Crisis Simulation')}
+              valueLink={this.linkState('committee_prefs')}
             /> Crisis Simulation <br></br>
             <input
               className="choice"
               type="checkbox"
               name="committee_prefs"
-              valueLink={this.linkState('Historical Security Council')}
+              valueLink={this.linkState('committee_prefs')}
             /> Historical Security Council <br></br>
             <input
               className="choice"
               type="checkbox"
               name="committee_prefs"
-              valueLink={this.linkState('International Court of Justice')}
+              valueLink={this.linkState('committee_prefs')}
             /> International Court of Justice <br></br>
             <input
               className="choice"
               type="checkbox"
               name="committee_prefs"
-              valueLink={this.linkState('North Atlantic Treaty Organization')}
+              valueLink={this.linkState('committee_prefs')}
             /> North Atlantic Treaty Organization <br></br>
             <input
               className="choice"
               type="checkbox"
               name="committee_prefs"
-              valueLink={this.linkState('Organization of American States')}
+              valueLink={this.linkState('committee_prefs')}
             /> Organization of American States <br></br>
             <input
               className="choice"
               type="checkbox"
               name="committee_prefs"
-              valueLink={this.linkState('Press Corp.')}
+              valueLink={this.linkState('committee_prefs')}
             /> Press Corp. <br></br>
             <input
               className="choice"
               type="checkbox"
               name="committee_prefs"
-              valueLink={this.linkState('Security Council')}
+              valueLink={this.linkState('committee_prefs')}
             /> Security Council <br></br>
             <hr></hr>
               <Link
@@ -410,7 +401,8 @@ var RegistrationView = React.createClass({
                 className={cx({
                   'button':true,
                   'button-green':true,
-                  'rounded-small':true
+                  'rounded-small':true,
+                  'loading': this.state.loading
                 })}
                 type="submit">
                 <span>Register</span>
@@ -425,38 +417,42 @@ var RegistrationView = React.createClass({
     this.setState({loading: true});
     $.ajax({
       type: 'POST',
-      url: '/api/users/me',
+      url: '/api/users',
       data: {
         first_name: this.state.first_name,
         last_name: this.state.last_name,
         username: this.state.username,
         password: this.state.password,
         password2: this.state.password2,
-        school_name: this.state.school_name,
-        school_address: this.state.school_address,
-        school_state: this.state.school_state,
-        school_zip: this.state.school_zip,
-        school_country: this.state.school_country,
-        program_type: this.state.program_type,
-        times_attended: this.state.times_attended,
-        min_delegation_size: this.state.min_delegation_size,
-        max_delegation_size: this.state.max_delegation_size,
-        primary_name: this.state.primary_name,
-        primary_email: this.state.primary_email,
-        primary_phone: this.state.primary_phone,
-        secondary_name: this.state.secondary_name,
-        secondary_email: this.state.secondary_email,
-        secondary_phone: this.state.secondary_phone,
-        country_pref1: this.state.country_pref1,
-        country_pref2: this.state.country_pref2,
-        country_pref3: this.state.country_pref3,
-        country_pref4: this.state.country_pref4,
-        country_pref5: this.state.country_pref5,
-        country_pref6: this.state.country_pref6,
-        country_pref7: this.state.country_pref7,
-        country_pref8: this.state.country_pref8,
-        country_pref9: this.state.country_pref9,
-        country_pref10: this.state.country_pref10,
+        school: {
+          name: this.state.school_name,
+          address: this.state.school_address,
+          state: this.state.school_state,
+          zip: this.state.school_zip,
+          country: this.state.school_country,
+          program_type: this.state.program_type,
+          times_attended: this.state.times_attended,
+          min_delegation_size: this.state.min_delegation_size,
+          max_delegation_size: this.state.max_delegation_size,
+          primary_name: this.state.primary_name,
+          primary_email: this.state.primary_email,
+          primary_phone: this.state.primary_phone,
+          secondary_name: this.state.secondary_name,
+          secondary_email: this.state.secondary_email,
+          secondary_phone: this.state.secondary_phone
+        },
+        country_prefs: [
+          this.state.country_pref1,
+          this.state.country_pref2,
+          this.state.country_pref3,
+          this.state.country_pref4,
+          this.state.country_pref5,
+          this.state.country_pref6,
+          this.state.country_pref7,
+          this.state.country_pref8,
+          this.state.country_pref9,
+          this.state.country_pref10
+        ],
         committee_prefs: this.state.committee_prefs
       },
       success: this._handleSuccess,
@@ -467,7 +463,7 @@ var RegistrationView = React.createClass({
   },
 
   _handleSuccess: function(data, status, jqXHR) {
-    CurrentUserActions.login(jqXHR.responseJSON);
+    console.log(jqXHR.responseJSON);
   },
 
   _handleError: function(jqXHR, status, error) {
