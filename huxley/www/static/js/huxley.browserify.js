@@ -8,6 +8,7 @@
 require('jquery.cookie');
 
 var $ = require('jquery');
+var CurrentUserStore = require('./huxley/stores/CurrentUserStore');
 var React = require('react');
 var Router = require('react-router-component');
 
@@ -15,6 +16,8 @@ var Huxley = require('./huxley/Huxley');
 
 var Locations = Router.Locations;
 var Location = Router.Location;
+
+CurrentUserStore.bootstrap();
 
 $(function() {
   React.renderComponent(

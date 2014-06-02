@@ -120,7 +120,6 @@ var LoginView = React.createClass({
   },
 
   _handleSuccess: function(data, status, jqXHR) {
-    //console.log(jqXHR.responseText);
     CurrentUserActions.login(jqXHR.responseJSON);
   },
 

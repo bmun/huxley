@@ -1,7 +1,16 @@
 # Copyright (c) 2011-2014 Berkeley Model United Nations. All rights reserved.
 # Use of this source code is governed by a BSD License (see LICENSE).
 
-from django.shortcuts import render_to_response
+import json
+
+from huxley.api.serializers import UserSerializer
+from huxley.utils.shortcuts import render_template
+
 
 def index(request):
-    return render_to_response('www.html')
+    user_dict = {};
+    if request.user.is_authenticated():
+        user_dict = UserSerializer(request.user).data
+
+    context = {'user_json': json.dumps(user_dict)}
+    return render_template(request, 'www.html', context)

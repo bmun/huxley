@@ -13,6 +13,9 @@
         <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,700,600,400,300' rel='stylesheet' type='text/css'>
     {% endblock css %}
     {% block js %}
+        <script type="text/javascript">
+            currentUser = {{ user_json|safe }};
+        </script>
         {% compressed_js 'www' %}
     {% endblock js %}
 </head>

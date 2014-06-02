@@ -8,40 +8,72 @@
 var ActionConstants = require('../constants/ActionConstants');
 var Dispatcher = require('../dispatcher/Dispatcher');
 var EventEmitter = require('events').EventEmitter;
+
+var invariant = require('react/lib/invariant');
 var merge = require('react/lib/merge');
 
 var CHANGE_EVENT = 'change';
 var TYPE_ADVISOR = 1;
 var TYPE_CHAIR = 2;
 
-var _currentUser = {};
+var _currentUser = null;
+var _bootstrapped = false;
+
+function _assertBootstrapped() {
+  invariant(
+    _bootstrapped,
+    'CurrentUserStore must be bootstrapped before being used.'
+  );
+}
 
 var CurrentUserStore = merge(EventEmitter.prototype, {
+  bootstrap: function() {
+    invariant(
+      !_bootstrapped,
+      'CurrentUserStore can only be bootstrapped once.'
+    );
+    invariant(
+      global.currentUser !== undefined,
+      'currentUser must be defined to bootstrap CurrentUserStore.'
+    );
+
+    _currentUser = global.currentUser;
+    delete global.currentUser;
+    _bootstrapped = true;
+  },
+
   getCurrentUser: function() {
+    _assertBootstrapped();
     return _currentUser;
   },
 
   isUserLoggedIn: function() {
+    _assertBootstrapped();
     return !!_currentUser.id;
   },
 
   isUserAdvisor: function() {
+    _assertBootstrapped();
     return _currentUser.user_type === TYPE_ADVISOR;
   },
 
   isUserChair: function() {
+    _assertBootstrapped();
     return _currentUser.user_type === TYPE_CHAIR;
   },
 
   emitChange: function() {
+    _assertBootstrapped();
     this.emit(CHANGE_EVENT);
   },
 
   addChangeListener: function(callback) {
+    _assertBootstrapped();
     this.on(CHANGE_EVENT, callback);
   },
 
   removeChangeListener: function(callback) {
+    _assertBootstrapped();
     this.removeListener(CHANGE_EVENT, callback);
   }
 });
