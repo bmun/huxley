@@ -10,7 +10,7 @@
 var console = require('console');
 
 var $ = require('jquery');
-var Link = require('react-router-component').Link;
+var Link = require('rrouter').Link;
 var React = require('react/addons');
 
 var CurrentUserActions = require('../actions/CurrentUserActions');
@@ -68,7 +68,7 @@ var LoginView = React.createClass({
             </button>
             <Link
               className="js-nav button button-green rounded-small"
-              href="/register">
+              href="/www/register">
               Register for BMUN
             </Link>
           </div>

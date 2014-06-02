@@ -5,28 +5,45 @@
  * @jsx React.DOM
  */
 
+'use strict';
+
 require('jquery.cookie');
 
 var $ = require('jquery');
-var CurrentUserStore = require('./huxley/stores/CurrentUserStore');
 var React = require('react');
-var Router = require('react-router-component');
+var RRouter = require('rrouter');
 
+var CurrentUserStore = require('./huxley/stores/CurrentUserStore');
 var Huxley = require('./huxley/Huxley');
 
-var Locations = Router.Locations;
-var Location = Router.Location;
+var AdvisorProfileView = require('./huxley/components/AdvisorProfileView');
+var LoginView = require('./huxley/components/LoginView');
+var RedirectView = require('./huxley/components/RedirectView');
+var RegistrationView = require('./huxley/components/RegistrationView');
 
-CurrentUserStore.bootstrap();
+var Routes = RRouter.Routes;
+var Route = RRouter.Route;
+
+var routes = (
+  <Routes>
+    <Route name="www" path="/www" view={RedirectView}>
+      <Route path="/login" view={LoginView} />
+      <Route path="/register" view={RegistrationView} />
+      <Route path="/advisor/profile" view={AdvisorProfileView} />
+    </Route>
+  </Routes>
+);
 
 $(function() {
-  React.renderComponent(
-    <Locations>
-      <Location path="/www/*" handler={Huxley} />
-    </Locations>,
-    document.getElementById('huxley-app')
-  );
+  RRouter.start(routes, function(view) {
+    React.renderComponent(
+      <Huxley view={view} />,
+      document.getElementById('huxley-app')
+    );
+  });
 });
+
+CurrentUserStore.bootstrap();
 
 $.ajaxSetup({
   beforeSend: function(xhr, settings) {

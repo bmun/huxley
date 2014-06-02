@@ -8,20 +8,14 @@
 'use strict';
 
 var React = require('react');
-var Router = require('react-router-component');
-
-var AdvisorProfileView = require('./components/AdvisorProfileView');
+var RRouter = require('rrouter');
 var CurrentUserStore = require('./stores/CurrentUserStore');
-var LoginView = require('./components/LoginView');
-var RegistrationView = require('./components/RegistrationView');
 
-var Locations = Router.Locations;
-var Location = Router.Location;
 
 var Huxley = React.createClass({
-  mixins: [Router.NavigatableMixin],
+  mixins: [RRouter.RoutingContextMixin],
 
-  componentDidMount: function() {
+  componentWillMount: function() {
     CurrentUserStore.addChangeListener(function() {
       if (!CurrentUserStore.isUserLoggedIn()) {
         this.navigate('/www/login');
@@ -32,13 +26,7 @@ var Huxley = React.createClass({
   },
 
   render: function() {
-    return (
-      <Locations contextual>
-        <Location path="/login" handler={LoginView} />
-        <Location path="/register" handler={RegistrationView} />
-        <Location path="/advisor/profile" handler={AdvisorProfileView} />
-      </Locations>
-    );
+    return this.props.view;
   }
 });
 
