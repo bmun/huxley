@@ -33,8 +33,7 @@ class CommitteeDetailPutTestCase(UpdateAPITestCase):
     def test_anonymous_user(self):
         '''Unauthenticated users shouldn't be able to update committees.'''
         response = self.get_response(self.committee.id, params=self.params)
-        self.assertEqual(response.data, {
-            'detail': u'Authentication credentials were not provided.'})
+        self.assertNotAuthenticated(response)
 
     def test_authenticated_user(self):
         '''Authenticated users shouldn't be able to update committees.'''
@@ -42,8 +41,7 @@ class CommitteeDetailPutTestCase(UpdateAPITestCase):
         self.client.login(username='user', password='user')
 
         response = self.get_response(self.committee.id, params=self.params)
-        self.assertEqual(response.data, {
-            'detail': u'You do not have permission to perform this action.'})
+        self.assertPermissionDenied(response)
 
     def test_superuser(self):
         '''Superusers shouldn't be able to update committees.'''
@@ -51,8 +49,7 @@ class CommitteeDetailPutTestCase(UpdateAPITestCase):
         self.client.login(username='user', password='user')
 
         response = self.get_response(self.committee.id, params=self.params)
-        self.assertEqual(response.data, {
-            'detail': u"Method 'PUT' not allowed."})
+        self.assertMethodNotAllowed(response, 'PUT')
 
 
 class CommitteeDetailPatchTestCase(PartialUpdateAPITestCase):
@@ -66,8 +63,7 @@ class CommitteeDetailPatchTestCase(PartialUpdateAPITestCase):
     def test_anonymous_user(self):
         '''Unauthenticated users shouldn't be able to update committees.'''
         response = self.get_response(self.committee.id, params=self.params)
-        self.assertEqual(response.data, {
-            'detail': u'Authentication credentials were not provided.'})
+        self.assertNotAuthenticated(response)
 
     def test_authenticated_user(self):
         '''Authenticated users shouldn't be able to update committees.'''
@@ -75,8 +71,7 @@ class CommitteeDetailPatchTestCase(PartialUpdateAPITestCase):
         self.client.login(username='user', password='user')
 
         response = self.get_response(self.committee.id, params=self.params)
-        self.assertEqual(response.data, {
-            'detail': u'You do not have permission to perform this action.'})
+        self.assertPermissionDenied(response)
 
     def test_superuser(self):
         '''Superusers shouldn't be able to update committees.'''
@@ -84,8 +79,7 @@ class CommitteeDetailPatchTestCase(PartialUpdateAPITestCase):
         self.client.login(username='user', password='user')
 
         response = self.get_response(self.committee.id, params=self.params)
-        self.assertEqual(response.data, {
-            'detail': u"Method 'PATCH' not allowed."})
+        self.assertMethodNotAllowed(response, 'PATCH')
 
 
 class CommitteeDetailDeleteTestCase(DestroyAPITestCase):
@@ -97,8 +91,7 @@ class CommitteeDetailDeleteTestCase(DestroyAPITestCase):
     def test_anonymous_user(self):
         '''Unauthenticated users should not be able to delete committees.'''
         response = self.get_response(self.committee.id)
-        self.assertEqual(response.data, {
-            'detail':  u'Authentication credentials were not provided.'})
+        self.assertNotAuthenticated(response)
 
     def test_self(self):
         '''Authenticated users shouldn't have permission to delete committees.'''
@@ -106,8 +99,7 @@ class CommitteeDetailDeleteTestCase(DestroyAPITestCase):
         self.client.login(username='user', password='user')
 
         response = self.get_response(self.committee.id)
-        self.assertEqual(response.data, {
-            'detail':  u'You do not have permission to perform this action.'})
+        self.assertPermissionDenied(response)
 
     def test_super_user(self):
         '''Countries should not be able to be deleted'''
@@ -115,8 +107,7 @@ class CommitteeDetailDeleteTestCase(DestroyAPITestCase):
         self.client.login(username='user', password='user')
 
         response = self.get_response(self.committee.id)
-        self.assertEqual(response.data, {
-            'detail':  u"Method 'DELETE' not allowed."})
+        self.assertMethodNotAllowed(response, 'DELETE')
 
 
 class CommitteeListGetTestCase(ListAPITestCase):
@@ -151,8 +142,7 @@ class CommitteeListPostTestCase(CreateAPITestCase):
     def test_anonymous_user(self):
         '''Unauthenticated users shouldn't be able to create committees.'''
         response = self.get_response(self.params)
-        self.assertEqual(response.data, {
-            'detail': u'Authentication credentials were not provided.'})
+        self.assertNotAuthenticated(response)
 
     def test_authenticated_user(self):
         '''Authenticated users shouldn't be able to create committees.'''
@@ -160,8 +150,7 @@ class CommitteeListPostTestCase(CreateAPITestCase):
         self.client.login(username='user', password='user')
 
         response = self.get_response(self.params)
-        self.assertEqual(response.data, {
-            'detail': u'You do not have permission to perform this action.'})
+        self.assertPermissionDenied(response)
 
     def test_superuser(self):
         '''Superusers shouldn't be able to create committees.'''
@@ -169,5 +158,4 @@ class CommitteeListPostTestCase(CreateAPITestCase):
         self.client.login(username='user', password='user')
 
         response = self.get_response(self.params)
-        self.assertEqual(response.data, {
-            'detail': u"Method 'POST' not allowed."})
+        self.assertMethodNotAllowed(response, 'POST')

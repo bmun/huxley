@@ -49,6 +49,18 @@ class AbstractAPITestCase(APITestCase):
         url = self.get_url(object_id)
         return request(url, params, content_type='application/json')
 
+    def assertPermissionDenied(self, response):
+        self.assertEqual(response.data, {
+            'detail': u'You do not have permission to perform this action.'})
+
+    def assertMethodNotAllowed(self, response, method):
+        self.assertEqual(response.data, {
+            'detail':  u"Method '"+method+"' not allowed."})
+
+    def assertNotAuthenticated(self, response):
+        self.assertEqual(response.data, {
+            'detail':  u'Authentication credentials were not provided.'})
+
 
 class CreateAPITestCase(AbstractAPITestCase):
     method = 'post'
