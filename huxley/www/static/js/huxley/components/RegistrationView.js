@@ -93,14 +93,15 @@ var RegistrationView = React.createClass({
             <p>Please fill out the following information to register your school
             for BMUN 63. All fields are required except for Secondary Contact
             information.</p>
-              <Link
-                className="outer-nav arrow-left"
-                href="/login">
-                Back to Login
-              </Link>
+            <Link
+              className="outer-nav arrow-left"
+              href="/login">
+              Back to Login
+            </Link>
           </div>
           <div className="registration-fields">
-            <hr><h3>Account Information</h3></hr>
+            <hr />
+            <h3>Account Information</h3>
             <input
               className="text"
               type="text"
@@ -500,16 +501,16 @@ var RegistrationView = React.createClass({
           secondary_email: this.state.secondary_email,
           secondary_phone: this.state.secondary_phone,
           country_prefs: [
-          this.state.country_pref1,
-          this.state.country_pref2,
-          this.state.country_pref3,
-          this.state.country_pref4,
-          this.state.country_pref5,
-          this.state.country_pref6,
-          this.state.country_pref7,
-          this.state.country_pref8,
-          this.state.country_pref9,
-          this.state.country_pref10
+            this.state.country_pref1,
+            this.state.country_pref2,
+            this.state.country_pref3,
+            this.state.country_pref4,
+            this.state.country_pref5,
+            this.state.country_pref6,
+            this.state.country_pref7,
+            this.state.country_pref8,
+            this.state.country_pref9,
+            this.state.country_pref10
           ],
           committee_prefs: this.state.committee_prefs
         }
