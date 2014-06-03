@@ -4,8 +4,8 @@
 import json
 
 from django.core.urlresolvers import reverse
-from rest_framework.test import APITestCase
 from rest_framework import status
+from rest_framework.test import APITestCase
 
 
 class AbstractAPITestCase(APITestCase):
@@ -53,17 +53,17 @@ class AbstractAPITestCase(APITestCase):
     def assertPermissionDenied(self, response):
         self.assertEqual(response.data, {
             'detail': u'You do not have permission to perform this action.'})
-        return status.HTTP_403_FORBIDDEN
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def assertMethodNotAllowed(self, response, method):
         self.assertEqual(response.data, {
             'detail':  u"Method '%s' not allowed." % method})
-        return status.HTTP_405_METHOD_NOT_ALLOWED
+        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
 
     def assertNotAuthenticated(self, response):
         self.assertEqual(response.data, {
             'detail':  u'Authentication credentials were not provided.'})
-        return status.HTTP_401_UNAUTHORIZED
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
 
 class CreateAPITestCase(AbstractAPITestCase):
