@@ -7,26 +7,30 @@
 
 'use strict';
 
-var React = require('react');
+var React = require('react/addons');
 var RRouter = require('rrouter');
 var CurrentUserStore = require('./stores/CurrentUserStore');
 
+var cloneWithProps = React.addons.cloneWithProps;
 
 var Huxley = React.createClass({
   mixins: [RRouter.RoutingContextMixin],
 
   componentWillMount: function() {
     CurrentUserStore.addChangeListener(function() {
-      if (!CurrentUserStore.isUserLoggedIn()) {
+      var user = CurrentUserStore.getCurrentUser();
+      if (user.isAnonymous()) {
         this.navigate('/www/login');
-      } else if (CurrentUserStore.isUserAdvisor()) {
+      } else if (user.isAdvisor()) {
         this.navigate('/www/advisor/profile');
       }
     }.bind(this));
   },
 
   render: function() {
-    return this.props.view;
+    return cloneWithProps(this.props.view, {
+      user: CurrentUserStore.getCurrentUser()
+    });
   }
 });
 

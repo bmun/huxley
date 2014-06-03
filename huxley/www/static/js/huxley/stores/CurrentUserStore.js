@@ -8,13 +8,12 @@
 var ActionConstants = require('../constants/ActionConstants');
 var Dispatcher = require('../dispatcher/Dispatcher');
 var EventEmitter = require('events').EventEmitter;
+var User = require('../User');
 
 var invariant = require('react/lib/invariant');
 var merge = require('react/lib/merge');
 
 var CHANGE_EVENT = 'change';
-var TYPE_ADVISOR = 1;
-var TYPE_CHAIR = 2;
 
 var _currentUser = null;
 var _bootstrapped = false;
@@ -37,7 +36,7 @@ var CurrentUserStore = merge(EventEmitter.prototype, {
       'currentUser must be defined to bootstrap CurrentUserStore.'
     );
 
-    _currentUser = global.currentUser;
+    _currentUser = new User(global.currentUser);
     delete global.currentUser;
     _bootstrapped = true;
   },
@@ -45,21 +44,6 @@ var CurrentUserStore = merge(EventEmitter.prototype, {
   getCurrentUser: function() {
     _assertBootstrapped();
     return _currentUser;
-  },
-
-  isUserLoggedIn: function() {
-    _assertBootstrapped();
-    return !!_currentUser.id;
-  },
-
-  isUserAdvisor: function() {
-    _assertBootstrapped();
-    return _currentUser.user_type === TYPE_ADVISOR;
-  },
-
-  isUserChair: function() {
-    _assertBootstrapped();
-    return _currentUser.user_type === TYPE_CHAIR;
   },
 
   emitChange: function() {
@@ -81,10 +65,11 @@ var CurrentUserStore = merge(EventEmitter.prototype, {
 Dispatcher.register(function(action) {
   switch (action.actionType) {
     case ActionConstants.LOGIN:
-      _currentUser = action.user;
+      _currentUser && _currentUser.destroy();
+      _currentUser = new User(action.user);
       break;
     case ActionConstants.LOGOUT:
-      _currentUser = {};
+      _currentUser = new User();
       break;
   }
 

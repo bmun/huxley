@@ -10,16 +10,16 @@
 var React = require('react');
 var RRouter = require('rrouter');
 
-var CurrentUserStore = require('../stores/CurrentUserStore');
 var OuterView = require('./OuterView');
 
 var RedirectView = React.createClass({
   mixins: [RRouter.RoutingContextMixin],
 
   componentWillMount: function() {
-    if (!CurrentUserStore.isUserLoggedIn()) {
+    console.log(this.props.user.isAnonymous());
+    if (this.props.user.isAnonymous()) {
       this.navigate('/www/login');
-    } else if (CurrentUserStore.isUserAdvisor()) {
+    } else if (this.props.user.isAdvisor()) {
       this.navigate('/www/advisor/profile');
     }
   },
