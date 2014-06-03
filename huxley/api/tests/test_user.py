@@ -22,8 +22,7 @@ class UserDetailGetTestCase(RetrieveAPITestCase):
         user = TestUsers.new_user()
         response = self.get_response(user.id)
 
-        self.assertEqual(response.data, {
-            'detail': u'Authentication credentials were not provided.'})
+        self.assertNotAuthenticated(response)
 
     def test_other_user(self):
         '''It should reject request from another user.'''
@@ -33,8 +32,7 @@ class UserDetailGetTestCase(RetrieveAPITestCase):
         self.client.login(username='user2', password='user2')
         response = self.get_response(user1.id)
 
-        self.assertEqual(response.data, {
-            'detail': u'You do not have permission to perform this action.'})
+        self.assertPermissionDenied(response)
 
     def test_superuser(self):
         '''It should return the correct fields for a superuser.'''
@@ -95,8 +93,7 @@ class UserDetailDeleteTestCase(DestroyAPITestCase):
         '''It should reject the request from an anonymous user.'''
         response = self.get_response(self.user.id)
 
-        self.assertEqual(response.data, {
-            'detail': u'Authentication credentials were not provided.'})
+        self.assertNotAuthenticated(response)
         self.assertTrue(HuxleyUser.objects.filter(id=self.user.id).exists())
 
     def test_other_user(self):
@@ -105,8 +102,7 @@ class UserDetailDeleteTestCase(DestroyAPITestCase):
         self.client.login(username='user2', password='user2')
 
         response = self.get_response(self.user.id)
-        self.assertEqual(response.data, {
-            'detail': u'You do not have permission to perform this action.'})
+        self.assertPermissionDenied(response)
         self.assertTrue(HuxleyUser.objects.filter(id=self.user.id).exists())
 
     def test_self(self):
@@ -138,8 +134,7 @@ class UserDetailPatchTestCase(PartialUpdateAPITestCase):
     def test_anonymous_user(self):
         '''An anonymous user should not be able to change information.'''
         response = self.get_response(self.user.id, params=self.params)
-        self.assertEqual(response.data, {
-            'detail': u'Authentication credentials were not provided.'})
+        self.assertNotAuthenticated(response)
 
         user = HuxleyUser.objects.get(id=self.user.id)
         self.assertEqual(user.first_name, 'Test')
@@ -151,8 +146,7 @@ class UserDetailPatchTestCase(PartialUpdateAPITestCase):
         self.client.login(username='user2', password='user2')
 
         response = self.get_response(self.user.id, params=self.params)
-        self.assertEqual(response.data, {
-            'detail': u'You do not have permission to perform this action.'})
+        self.assertPermissionDenied(response)
 
         user = HuxleyUser.objects.get(id=self.user.id)
         self.assertEqual(user.first_name, 'Test')
@@ -187,8 +181,7 @@ class UserListGetTestCase(ListAPITestCase):
         TestUsers.new_user(username='user2')
 
         response = self.get_response()
-        self.assertEqual(response.data, {
-            'detail': u'Authentication credentials were not provided.'})
+        self.assertNotAuthenticated(response)
 
     def test_user(self):
         '''It should reject the request from a regular user.'''
@@ -197,8 +190,7 @@ class UserListGetTestCase(ListAPITestCase):
         self.client.login(username='user1', password='user1')
 
         response = self.get_response()
-        self.assertEqual(response.data, {
-            'detail': u'You do not have permission to perform this action.'})
+        self.assertPermissionDenied(response)
 
     def test_superuser(self):
         '''It should allow a superuser to list all users.'''

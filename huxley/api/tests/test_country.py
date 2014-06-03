@@ -51,8 +51,7 @@ class CountryDetailDeleteTestCase(DestroyAPITestCase):
     def test_anonymous_user(self):
         '''Unauthenticated users should not be able to delete countries.'''
         response = self.get_response(self.country.id)
-        self.assertEqual(response.data, {
-            'detail':  u'Authentication credentials were not provided.'})
+        self.assertNotAuthenticated(response)
 
     def test_self(self):
         '''Authenticated users shouldn't have permission to delete countries.'''
@@ -60,8 +59,7 @@ class CountryDetailDeleteTestCase(DestroyAPITestCase):
         self.client.login(username='user', password='user')
 
         response = self.get_response(self.country.id)
-        self.assertEqual(response.data, {
-            'detail':  u'You do not have permission to perform this action.'})
+        self.assertPermissionDenied(response)
 
     def test_super_user(self):
         '''Countries should not be able to be deleted'''
@@ -69,8 +67,7 @@ class CountryDetailDeleteTestCase(DestroyAPITestCase):
         self.client.login(username='user', password='user')
 
         response = self.get_response(self.country.id)
-        self.assertEqual(response.data, {
-            'detail':  u"Method 'DELETE' not allowed."})
+        self.assertMethodNotAllowed(response, 'DELETE')
 
 
 class CountryDetailPatchTestCase(PartialUpdateAPITestCase):
@@ -84,8 +81,7 @@ class CountryDetailPatchTestCase(PartialUpdateAPITestCase):
     def test_anonymous_user(self):
         '''Unauthenticated users shouldn't be able to update countries.'''
         response = self.get_response(self.country.id, params=self.params)
-        self.assertEqual(response.data, {
-            'detail': u'Authentication credentials were not provided.'})
+        self.assertNotAuthenticated(response)
 
     def test_authenticated_user(self):
         '''Authenticated users shouldn't be able to update countries.'''
@@ -93,8 +89,7 @@ class CountryDetailPatchTestCase(PartialUpdateAPITestCase):
         self.client.login(username='user', password='user')
 
         response = self.get_response(self.country.id, params=self.params)
-        self.assertEqual(response.data, {
-            'detail': u'You do not have permission to perform this action.'})
+        self.assertPermissionDenied(response)
 
     def test_superuser(self):
         '''Superusers shouldn't be able to update countries.'''
@@ -102,8 +97,7 @@ class CountryDetailPatchTestCase(PartialUpdateAPITestCase):
         self.client.login(username='user', password='user')
 
         response = self.get_response(self.country.id, params=self.params)
-        self.assertEqual(response.data, {
-            'detail': u"Method 'PATCH' not allowed."})
+        self.assertMethodNotAllowed(response, 'PATCH')
 
 
 class CountryListPostTestCase(CreateAPITestCase):
@@ -114,8 +108,7 @@ class CountryListPostTestCase(CreateAPITestCase):
     def test_anonymous_user(self):
         '''Unauthenticated users shouldn't be able to create countries.'''
         response = self.get_response(self.params)
-        self.assertEqual(response.data, {
-            'detail': u'Authentication credentials were not provided.'})
+        self.assertNotAuthenticated(response)
 
     def test_self(self):
         '''Authenticated users shouldn't be able to create countries.'''
@@ -123,8 +116,7 @@ class CountryListPostTestCase(CreateAPITestCase):
         self.client.login(username='user', password='user')
 
         response = self.get_response(self.params)
-        self.assertEqual(response.data, {
-            'detail': u'You do not have permission to perform this action.'})
+        self.assertPermissionDenied(response)
 
     def test_super_user(self):
         '''Superusers shouldn't be able to create countries.'''
@@ -132,5 +124,4 @@ class CountryListPostTestCase(CreateAPITestCase):
         self.client.login(username='user', password='user')
 
         response = self.get_response(self.params)
-        self.assertEqual(response.data, {
-            'detail': u"Method 'POST' not allowed."})
+        self.assertMethodNotAllowed(response, 'POST')

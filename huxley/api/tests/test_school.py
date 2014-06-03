@@ -17,8 +17,7 @@ class SchoolDetailGetTestCase(RetrieveAPITestCase):
         school = TestSchools.new_school()
         response = self.get_response(school.id)
 
-        self.assertEqual(response.data, {
-            'detail': u'Authentication credentials were not provided.'})
+        self.assertNotAuthenticated(response)
 
     def test_self(self):
         '''It should allow the get request from the user.'''
@@ -59,8 +58,7 @@ class SchoolDetailGetTestCase(RetrieveAPITestCase):
         self.client.login(username='user2', password='user2')
         response = self.get_response(school.id)
 
-        self.assertEqual(response.data, {
-            'detail': u'You do not have permission to perform this action.'})
+        self.assertPermissionDenied(response)
 
     def test_superuser(self):
         '''it should allow a get request from a superuser.'''
@@ -106,8 +104,7 @@ class SchoolDetailPatchTestCase(PartialUpdateAPITestCase):
         response = self.get_response(self.school.id)
         updated_school = School.objects.get(id=self.school.id)
 
-        self.assertEqual(response.data, {
-            'detail': u'Authentication credentials were not provided.'})
+        self.assertNotAuthenticated(response)
         self.assertEqual(updated_school.name, self.school.name)
         self.assertEqual(updated_school.city, self.school.city)
 
@@ -127,8 +124,7 @@ class SchoolDetailPatchTestCase(PartialUpdateAPITestCase):
         response = self.get_response(self.school.id, params=self.params)
         updated_school = School.objects.get(id=self.school.id)
 
-        self.assertEqual(response.data, {
-            u'detail': u'You do not have permission to perform this action.'})
+        self.assertPermissionDenied(response)
         self.assertEqual(updated_school.name, self.school.name)
         self.assertEqual(updated_school.city, self.school.city)
 
@@ -154,8 +150,7 @@ class SchoolDetailDeleteTestCase(DestroyAPITestCase):
         '''Should not be able to delete anonymously.'''
         response = self.get_response(self.school.id)
 
-        self.assertEqual(response.data, {
-            'detail': u'Authentication credentials were not provided.'})
+        self.assertNotAuthenticated(response)
         self.assertTrue(School.objects.filter(id=self.school.id).exists())
 
     def test_self(self):
@@ -172,8 +167,7 @@ class SchoolDetailDeleteTestCase(DestroyAPITestCase):
         self.client.login(username='user2', password='user2')
         response = self.get_response(self.school.id)
 
-        self.assertEqual(response.data, {
-            u'detail': u'You do not have permission to perform this action.'})
+        self.assertPermissionDenied(response)
         self.assertTrue(School.objects.filter(id=self.school.id).exists())
 
     def test_superuser(self):
@@ -182,8 +176,7 @@ class SchoolDetailDeleteTestCase(DestroyAPITestCase):
         self.client.login(username='user2', password='user2')
         response = self.get_response(self.school.id)
 
-        self.assertEqual(response.data, {
-            u'detail': u'You do not have permission to perform this action.'})
+        self.assertPermissionDenied(response)
         self.assertTrue(School.objects.filter(id=self.school.id).exists())
 
 
@@ -198,16 +191,14 @@ class SchoolListGetTestCase(ListAPITestCase):
         '''It should reject an anonymous user.'''
         response = self.get_response()
 
-        self.assertEqual(response.data, {
-            'detail': u'Authentication credentials were not provided.'})
+        self.assertNotAuthenticated(response)
 
     def test_self(self):
         '''It should reject a request from an unauthorized user.'''
         self.client.login(username='testuser', password='test')
         response = self.get_response()
 
-        self.assertEqual(response.data, {
-            'detail': u'You do not have permission to perform this action.'})
+        self.assertPermissionDenied(response)
 
     def test_superuser(self):
         '''It should reject a request from a superuser.'''
@@ -216,8 +207,7 @@ class SchoolListGetTestCase(ListAPITestCase):
         self.client.login(username='user', password='user')
         response = self.get_response()
 
-        self.assertEqual(response.data, {
-            'detail': u"Method 'GET' not allowed."})
+        self.assertMethodNotAllowed(response, 'GET')
 
 
 class SchoolListPostTestCase(CreateAPITestCase):
