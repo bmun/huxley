@@ -456,17 +456,19 @@ var RegistrationView = React.createClass({
                 href="/login">
                 Back to Login
               </Link>
-              <span className="help-text"><em>All done?</em></span>
-              <button
-                className={cx({
-                  'button':true,
-                  'button-green':true,
-                  'rounded-small':true,
-                  'loading': this.state.loading
-                })}
-                type="submit">
-                <span>Register</span>
-              </button>
+              <div className="right">
+                <span className="help-text"><em>All done?</em></span>
+                <button
+                  className={cx({
+                    'button':true,
+                    'button-green':true,
+                    'rounded-small':true,
+                    'loading': this.state.loading
+                  })}
+                  type="submit">
+                  <span>Register</span>
+                </button>
+              </div>
           </div>
         </form>
       </OuterView>
