@@ -95,7 +95,7 @@ var RegistrationView = React.createClass({
             information.</p>
             <Link
               className="outer-nav arrow-left"
-              href="/login">
+              href="/www/login">
               Back to Login
             </Link>
           </div>
@@ -453,7 +453,7 @@ var RegistrationView = React.createClass({
             <hr />
               <Link
                 className="outer-nav arrow-left"
-                href="/login">
+                href="/www/login">
                 Back to Login
               </Link>
               <div className="right">
