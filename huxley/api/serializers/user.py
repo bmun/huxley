@@ -11,11 +11,14 @@ from huxley.api.serializers.school import SchoolSerializer
 
 
 class UserSerializer(ModelSerializer):
+    school = SchoolSerializer(required=False, read_only=True)
+
     class Meta:
         model = HuxleyUser
         fields = ('id', 'username', 'first_name', 'last_name', 'user_type',
                   'school', 'committee',)
-        read_only_fields = tuple(fields)
+        read_only_fields = ('id', 'username', 'first_name', 'last_name',
+                            'user_type', 'committee',)
 
 
 class CreateUserSerializer(ModelSerializer):

@@ -7,6 +7,8 @@ from huxley.core.models import School
 
 
 class SchoolSerializer(serializers.ModelSerializer):
+    registered = serializers.DateTimeField(format='iso-8601', required=False)
+
     class Meta:
         model = School
         # TODO: country/committee preferences

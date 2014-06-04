@@ -11,7 +11,7 @@ from huxley.accounts.models import HuxleyUser
 from huxley.api.tests import (CreateAPITestCase, DestroyAPITestCase,
                               ListAPITestCase, PartialUpdateAPITestCase,
                               RetrieveAPITestCase)
-from huxley.utils.test import TestUsers
+from huxley.utils.test import TestSchools, TestUsers
 
 
 class UserDetailGetTestCase(RetrieveAPITestCase):
@@ -53,8 +53,9 @@ class UserDetailGetTestCase(RetrieveAPITestCase):
 
     def test_self(self):
         '''It should return the correct fields for a single user.'''
-        user = TestUsers.new_user(username='lol', password='lol', school_id=1)
-        self.client.login(username='lol', password='lol')
+        school = TestSchools.new_school()
+        user = school.advisor
+        self.client.login(username='testuser', password='test')
         response = self.get_response(user.id)
 
         self.assertEqual(response.data, {
@@ -63,7 +64,26 @@ class UserDetailGetTestCase(RetrieveAPITestCase):
             'first_name': user.first_name,
             'last_name': user.last_name,
             'user_type': user.user_type,
-            'school': user.school_id,
+            'school': {'id': school.id,
+                       'registered': school.registered.isoformat(),
+                       'name': school.name,
+                       'address': school.address,
+                       'city': school.city,
+                       'state': school.state,
+                       'zip_code': school.zip_code,
+                       'country': school.country,
+                       'primary_name': school.primary_name,
+                       'primary_email': school.primary_email,
+                       'primary_phone': school.primary_phone,
+                       'secondary_name': school.secondary_name,
+                       'secondary_email': school.secondary_email,
+                       'secondary_phone': school.secondary_phone,
+                       'program_type': school.program_type,
+                       'times_attended': school.times_attended,
+                       'min_delegation_size': school.min_delegation_size,
+                       'max_delegation_size': school.max_delegation_size,
+                       'international': school.international,
+                       'waitlist': school.waitlist},
             'committee': user.committee_id})
 
     def test_chair(self):
@@ -313,8 +333,9 @@ class CurrentUserTestCase(TestCase):
         self.assertEqual(len(data.keys()), 1)
         self.assertEqual(data['detail'], 'Not found')
 
-        user = TestUsers.new_user(username='lol', password='lol', school_id=1)
-        self.client.login(username='lol', password='lol')
+        school = TestSchools.new_school()
+        user = school.advisor
+        self.client.login(username='testuser', password='test')
 
         data = self.get_data(self.url)
         self.assertEqual(len(data.keys()), 7)
@@ -323,5 +344,25 @@ class CurrentUserTestCase(TestCase):
         self.assertEqual(data['first_name'], user.first_name)
         self.assertEqual(data['last_name'], user.last_name)
         self.assertEqual(data['user_type'], HuxleyUser.TYPE_ADVISOR)
-        self.assertEqual(data['school'], user.school_id)
+        self.assertEqual(data['school'], {
+            'id': school.id,
+            'registered': school.registered.isoformat(),
+            'name': school.name,
+            'address': school.address,
+            'city': school.city,
+            'state': school.state,
+            'zip_code': school.zip_code,
+            'country': school.country,
+            'primary_name': school.primary_name,
+            'primary_email': school.primary_email,
+            'primary_phone': school.primary_phone,
+            'secondary_name': school.secondary_name,
+            'secondary_email': school.secondary_email,
+            'secondary_phone': school.secondary_phone,
+            'program_type': school.program_type,
+            'times_attended': school.times_attended,
+            'min_delegation_size': school.min_delegation_size,
+            'max_delegation_size': school.max_delegation_size,
+            'international': school.international,
+            'waitlist': school.waitlist})
 
