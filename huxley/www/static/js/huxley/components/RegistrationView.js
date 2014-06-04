@@ -61,26 +61,6 @@ var RegistrationView = React.createClass({
     };
   },
 
-  renderOptions: function() {
-    return this.state.countries.map(function(country) {
-      return <option key={country.id} value={country.id}>{country.name}</option>
-    });
-  },
-
-  renderCommittees: function() {
-    return this.state.committees.map(function(committee) {
-      return <li>
-                <label name="committee_prefs">
-                  <input
-                    className="choice"
-                    type="checkbox"
-                    name="committee_prefs"
-                  /> {committee.full_name}
-                </label>
-              </li>
-    });
-  },
-
   componentDidMount: function() {
     CountryStore.getCountries(function(countries) {
       this.setState({countries: countries});
@@ -419,6 +399,29 @@ var RegistrationView = React.createClass({
         </form>
       </OuterView>
     );
+  },
+
+  renderCommittees: function() {
+    return this.state.committees.map(function(committee) {
+      return (
+        <li>
+          <label name="committee_prefs">
+            <input
+              className="choice"
+              type="checkbox"
+              name="committee_prefs"
+            />
+            {committee.full_name}
+          </label>
+        </li>
+      );
+    });
+  },
+
+  renderOptions: function() {
+    return this.state.countries.map(function(country) {
+      return <option key={country.id} value={country.id}>{country.name}</option>
+    });
   },
 
   _handleSubmit: function(event) {
