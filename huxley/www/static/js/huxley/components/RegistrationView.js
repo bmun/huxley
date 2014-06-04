@@ -61,16 +61,6 @@ var RegistrationView = React.createClass({
     };
   },
 
-  renderOptions: function() {
-    return this.state.countries.map(function(country) {
-      return <option key={country.id} value={country.id}>{country.name}</option>
-    });
-  },
-
-  renderCommittees: function(index) {
-    return this.state.committees[index];
-  },
-
   componentDidMount: function() {
     CountryStore.getCountries(function(countries) {
       this.setState({countries: countries});
@@ -384,71 +374,7 @@ var RegistrationView = React.createClass({
             in the following small/specialized committees? Positions are limited
             and we may not be able to accomodate all preferences.</p>
             <ul>
-              <li>
-                <label name="committee_prefs">
-                  <input
-                    className="choice"
-                    type="checkbox"
-                    name="committee_prefs"
-                  /> {this.renderCommittees(6)}
-                </label>
-              </li>
-              <li>
-                <label name="committee_prefs">
-                  <input
-                    className="choice"
-                    type="checkbox"
-                    name="committee_prefs"
-                  /> {this.renderCommittees(4)}
-                </label>
-              </li>
-              <li>
-                <label name="committee_prefs">
-                  <input
-                    className="choice"
-                    type="checkbox"
-                    name="committee_prefs"
-                  /> {this.renderCommittees(5)}
-                </label>
-              </li>
-              <li>
-                <label name="committee_prefs">
-                  <input
-                    className="choice"
-                    type="checkbox"
-                    name="committee_prefs"
-                  /> {this.renderCommittees(0)}
-                </label>
-              </li>
-              <li>
-                <label name="committee_prefs">
-                  <input
-                    className="choice"
-                    type="checkbox"
-                    name="committee_prefs"
-                    valueLink={this.linkState('committee_prefs')}
-                  /> {this.renderCommittees(1)}
-                </label>
-              </li>
-              <li>
-                <label name="committee_prefs">
-                  <input
-                    className="choice"
-                    type="checkbox"
-                    name="committee_prefs"
-                  /> {this.renderCommittees(3)}
-                </label>
-              </li>
-              <li>
-                <label name="committee_prefs">
-                  <input
-                    className="choice"
-                    type="checkbox"
-                    name="committee_prefs"
-                    valueLink={this.linkState('committee_prefs')}
-                  /> {this.renderCommittees(2)}
-                </label>
-              </li>
+              {this.renderCommittees()}
             </ul>
             <hr />
               <Link
@@ -473,6 +399,29 @@ var RegistrationView = React.createClass({
         </form>
       </OuterView>
     );
+  },
+
+  renderCommittees: function() {
+    return this.state.committees.map(function(committee) {
+      return (
+        <li>
+          <label name="committee_prefs">
+            <input
+              className="choice"
+              type="checkbox"
+              name="committee_prefs"
+            />
+            {committee.full_name}
+          </label>
+        </li>
+      );
+    });
+  },
+
+  renderOptions: function() {
+    return this.state.countries.map(function(country) {
+      return <option key={country.id} value={country.id}>{country.name}</option>
+    });
   },
 
   _handleSubmit: function(event) {
