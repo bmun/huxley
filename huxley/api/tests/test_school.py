@@ -29,7 +29,7 @@ class SchoolDetailGetTestCase(RetrieveAPITestCase):
 
         self.assertEqual(response.data, {
             'id': school.id,
-            'registered': school.registered,
+            'registered': school.registered.isoformat(),
             'name': school.name,
             'address': school.address,
             'city': school.city,
@@ -70,7 +70,7 @@ class SchoolDetailGetTestCase(RetrieveAPITestCase):
 
         self.assertEqual(response.data, {
             'id': school.id,
-            'registered': school.registered,
+            'registered': school.registered.isoformat(),
             'name': school.name,
             'address': school.address,
             'city': school.city,
@@ -257,7 +257,7 @@ class SchoolListPostTestCase(CreateAPITestCase):
         school = School.objects.get(id=response.data['id'])
         self.assertEqual(response.data, {
             'id': school.id,
-            'registered': school.registered,
+            'registered': school.registered.isoformat(),
             'name': school.name,
             'address': school.address,
             'city': school.city,
