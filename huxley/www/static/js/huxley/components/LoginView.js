@@ -13,12 +13,11 @@ var $ = require('jquery');
 var React = require('react/addons');
 var RRouter = require('rrouter');
 
+var Button = require('./Button');
 var CurrentUserActions = require('../actions/CurrentUserActions');
 var OuterView = require('./OuterView');
 
 require('jquery-ui/effect-shake');
-
-var Link = RRouter.Link;
 
 var LoginView = React.createClass({
   mixins: [
@@ -69,22 +68,15 @@ var LoginView = React.createClass({
             />
           </div>
           <div className="login-register">
-            <button
-              className={cx({
-                'button': true,
-                'button-blue': true,
-                'login-button': true,
-                'rounded-small': true,
-                'loading': this.state.loading
-              })}
+            <Button
+              color="blue"
+              loading={this.state.loading}
               type="submit">
-              <span>Log In</span>
-            </button>
-            <Link
-              className="js-nav button button-green rounded-small"
-              href="/www/register">
+              Log In
+            </Button>
+            <Button color="green" href="/www/register">
               Register for BMUN
-            </Link>
+            </Button>
           </div>
           <a className="js-nav" href="#">
             Forgot your password?

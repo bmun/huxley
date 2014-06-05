@@ -8,8 +8,9 @@
 'use strict';
 
 var $ = require('jquery');
-var React = require('react/addons');
+var React = require('react');
 
+var Button = require('./Button');
 var CurrentUserActions = require('../actions/CurrentUserActions');
 
 var LogoutButton = React.createClass({
@@ -18,19 +19,13 @@ var LogoutButton = React.createClass({
   },
 
   render: function() {
-    var cx = React.addons.classSet;
     return (
-      <a
-        className={cx({
-          'button': true,
-          'button-blue': true,
-          'login-button': true,
-          'rounded-small': true,
-          'loading': this.state.loggingOut
-        })}
+      <Button
+        color="blue"
+        loading={this.state.loggingOut}
         onClick={this._handleLogout}>
         Log Out
-      </a>
+      </Button>
     );
   },
 

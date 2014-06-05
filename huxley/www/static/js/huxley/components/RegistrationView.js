@@ -13,9 +13,10 @@ var $ = require('jquery');
 var Link = require('rrouter').Link;
 var React = require('react/addons');
 
-var OuterView = require('./OuterView');
+var Button = require('./Button');
 var CountryStore = require('../stores/CountryStore');
 var CommitteeStore = require('../stores/CommitteeStore');
+var OuterView = require('./OuterView');
 
 require('jquery-ui/effect-shake');
 
@@ -384,16 +385,12 @@ var RegistrationView = React.createClass({
               </Link>
               <div className="right">
                 <span className="help-text"><em>All done?</em></span>
-                <button
-                  className={cx({
-                    'button':true,
-                    'button-green':true,
-                    'rounded-small':true,
-                    'loading': this.state.loading
-                  })}
+                <Button
+                  color="green"
+                  loading={this.state.loading}
                   type="submit">
-                  <span>Register</span>
-                </button>
+                  Register
+                </Button>
               </div>
           </div>
         </form>
