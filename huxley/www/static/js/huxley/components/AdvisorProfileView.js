@@ -9,12 +9,15 @@
 
 var React = require('react/addons');
 
+var console = require('console');
+
 var CurrentUserActions = require('../actions/CurrentUserActions');
 var InnerView = require('./InnerView');
 var LogoutButton = require('./LogoutButton');
 
 var AdvisorProfileView = React.createClass({
   render: function() {
+    console.log(this.props.user._user);
     return (
       <InnerView>
         <p>This is the advisor profile view. It does not do anything yet.</p>
