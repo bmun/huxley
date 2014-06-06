@@ -15,6 +15,7 @@ var RRouter = require('rrouter');
 
 var Button = require('./Button');
 var CurrentUserActions = require('../actions/CurrentUserActions');
+var NavLink = require('./NavLink');
 var OuterView = require('./OuterView');
 
 require('jquery-ui/effect-shake');
@@ -78,9 +79,9 @@ var LoginView = React.createClass({
               Register for BMUN
             </Button>
           </div>
-          <a className="js-nav" href="#">
+          <NavLink direction="left" href="/www/password">
             Forgot your password?
-          </a>
+          </NavLink>
           {this.renderError()}
         </form>
       </OuterView>
