@@ -29,6 +29,10 @@ mergeInto(User.prototype, {
 
   destroy: function() {
     delete this._user;
+  },
+
+  getData: function() {
+    return this._user;
   }
 });
 
