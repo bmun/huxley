@@ -17,8 +17,33 @@ var TYPE_CLUB = 1;
 var TYPE_CLASS = 2;
 
 var AdvisorProfileView = React.createClass({
+  mixins: [React.addons.LinkedStateMixin],
+
   propTypes: {
     user: React.PropTypes.instanceOf(User).isRequired
+  },
+
+  getInitialState: function() {
+    var user = this.props.user.getData();
+    var school = user.school;
+    return {
+      first_name: user.first_name,
+      last_name: user.last_name,
+      school_name: school.name,
+      school_address: school.address,
+      school_city: school.city,
+      school_zip_code: school.zip_code,
+      program_type: school.program_type,
+      times_attended: school.times_attended,
+      min_delegation_size: school.min_delegation_size,
+      max_delegation_size: school.max_delegation_size,
+      primary_name: school.primary_name,
+      primary_email: school.primary_email,
+      primary_phone: school.primary_phone,
+      secondary_name: school.secondary_name,
+      secondary_email: school.secondary_email,
+      secondary_phone: school.secondary_phone
+    }
   },
 
   render: function() {
@@ -57,7 +82,7 @@ var AdvisorProfileView = React.createClass({
                 <td className="field">
                   <input
                     type="text"
-                    value={user.first_name}
+                    valueLink={this.linkState('first_name')}
                   />
                 </td>
               </tr>
@@ -66,7 +91,7 @@ var AdvisorProfileView = React.createClass({
                 <td className="field">
                   <input
                     type="text"
-                    value={user.last_name}
+                    valueLink={this.linkState('last_name')}
                   />
                 </td>
               </tr>
@@ -78,7 +103,7 @@ var AdvisorProfileView = React.createClass({
                 <td className="field">
                   <input
                     type="text"
-                    value={school.name}
+                    valueLink={this.linkState('school_name')}
                   />
                 </td>
               </tr>
@@ -87,7 +112,7 @@ var AdvisorProfileView = React.createClass({
                 <td className="field">
                   <input
                     type="text"
-                    value={school.address}
+                    valueLink={this.linkState('school_address')}
                   />
                 </td>
               </tr>
@@ -96,7 +121,7 @@ var AdvisorProfileView = React.createClass({
                 <td className="field">
                   <input
                     type="text"
-                    value={school.city}
+                    valueLink={this.linkState('school_city')}
                   />
                 </td>
               </tr>
@@ -105,7 +130,7 @@ var AdvisorProfileView = React.createClass({
                 <td className="field">
                   <input
                     type="text"
-                    value={school.zip_code}
+                    valueLink={this.linkState('school_zip_code')}
                   />
                 </td>
               </tr>
@@ -118,7 +143,7 @@ var AdvisorProfileView = React.createClass({
                   <input
                     type="radio"
                     name="program_type"
-                    value={TYPE_CLASS}
+                    valueLink={this.linkState('program_type')}
                     checked={TYPE_CLASS === school.program_type}
                   />
                   <label>Class</label>
@@ -126,7 +151,7 @@ var AdvisorProfileView = React.createClass({
                   <input
                     type="radio"
                     name="program_type"
-                    value={TYPE_CLUB}
+                    valueLink={this.linkState('program_type')}
                     checked={TYPE_CLUB === school.program_type}
                   />
                   <label>Club</label>
@@ -137,7 +162,7 @@ var AdvisorProfileView = React.createClass({
                 <td className="field">
                   <input
                     type="text"
-                    value={school.times_attended}
+                    valueLink={this.linkState('times_attended')}
                   />
                 </td>
               </tr>
@@ -146,7 +171,7 @@ var AdvisorProfileView = React.createClass({
                 <td className="field">
                   <input
                     type="text"
-                    value={school.min_delegation_size}
+                    valueLink={this.linkState('min_delegation_size')}
                   />
                 </td>
               </tr>
@@ -155,7 +180,7 @@ var AdvisorProfileView = React.createClass({
                 <td className="field">
                   <input
                     type="text"
-                    value={school.max_delegation_size}
+                    valueLink={this.linkState('max_delegation_size')}
                   />
                 </td>
               </tr>
@@ -167,7 +192,7 @@ var AdvisorProfileView = React.createClass({
                 <td className="field">
                   <input
                     type="text"
-                    value={school.primary_name}
+                    valueLink={this.linkState('primary_name')}
                   />
                 </td>
               </tr>
@@ -176,7 +201,7 @@ var AdvisorProfileView = React.createClass({
                 <td className="field">
                   <input
                     type="text"
-                    value={school.primary_email}
+                    valueLink={this.linkState('primary_email')}
                   />
                 </td>
               </tr>
@@ -185,7 +210,7 @@ var AdvisorProfileView = React.createClass({
                 <td className="field">
                   <input
                     type="text"
-                    value={school.primary_phone}
+                    valueLink={this.linkState('primary_phone')}
                   />
                 </td>
               </tr>
@@ -197,7 +222,7 @@ var AdvisorProfileView = React.createClass({
                 <td className="field">
                   <input
                     type="text"
-                    value={school.secondary_name}
+                    valueLink={this.linkState('secondary_name')}
                   />
                 </td>
               </tr>
@@ -206,7 +231,7 @@ var AdvisorProfileView = React.createClass({
                 <td className="field">
                   <input
                     type="text"
-                    value={school.secondary_email}
+                    valueLink={this.linkState('secondary_email')}
                   />
                 </td>
               </tr>
@@ -215,7 +240,7 @@ var AdvisorProfileView = React.createClass({
                 <td className="field">
                   <input
                     type="text"
-                    value={school.secondary_phone}
+                    valueLink={this.linkState('secondary_phone')}
                   />
                 </td>
               </tr>
