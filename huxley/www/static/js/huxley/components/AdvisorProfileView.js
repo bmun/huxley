@@ -11,11 +11,15 @@ var React = require('react/addons');
 
 var InnerView = require('./InnerView');
 var LogoutButton = require('./LogoutButton');
+var User = require('../User');
 
 var TYPE_CLUB = 1;
 var TYPE_CLASS = 2;
 
 var AdvisorProfileView = React.createClass({
+  propTypes: {
+    user: React.PropTypes.instanceOf(User).isRequired
+  },
 
   render: function() {
     var user = this.props.user.getData();
@@ -46,7 +50,7 @@ var AdvisorProfileView = React.createClass({
           <div id="welcomeinfocontainer" className="table-container">
             <table id="welcomeinfo" className="table highlight-cells">
               <tr>
-                <th colSpan='2'>Advisor Information</th>
+                <th colSpan="2">Advisor Information</th>
               </tr>
               <tr>
                 <td className="fieldLabel">First Name</td>
@@ -114,15 +118,16 @@ var AdvisorProfileView = React.createClass({
                   <input
                     type="radio"
                     name="program_type"
-                    value="2"
-                    checked={TYPE_CLASS===school.program_type ? "true": "false"}
+                    value={TYPE_CLASS}
+                    checked={TYPE_CLASS === school.program_type}
                   />
                   <label>Class</label>
+                  &nbsp;&nbsp;&nbsp;&nbsp;
                   <input
                     type="radio"
                     name="program_type"
-                    value="1"
-                    checked={TYPE_CLUB===school.program_type ? "true": "false"}
+                    value={TYPE_CLUB}
+                    checked={TYPE_CLUB === school.program_type}
                   />
                   <label>Club</label>
                 </td>
