@@ -10,12 +10,12 @@
 var console = require('console');
 
 var $ = require('jquery');
-var Link = require('rrouter').Link;
 var React = require('react/addons');
 
 var Button = require('./Button');
 var CountryStore = require('../stores/CountryStore');
 var CommitteeStore = require('../stores/CommitteeStore');
+var NavLink = require('./NavLink');
 var OuterView = require('./OuterView');
 
 require('jquery-ui/effect-shake');
@@ -84,11 +84,9 @@ var RegistrationView = React.createClass({
             <p>Please fill out the following information to register your school
             for BMUN 63. All fields are required except for Secondary Contact
             information.</p>
-            <Link
-              className="outer-nav arrow-left"
-              href="/www/login">
+            <NavLink direction="left" href="/www/login">
               Back to Login
-            </Link>
+            </NavLink>
           </div>
           <div className="registration-fields">
             <hr />
@@ -378,11 +376,9 @@ var RegistrationView = React.createClass({
               {this.renderCommittees()}
             </ul>
             <hr />
-              <Link
-                className="outer-nav arrow-left"
-                href="/www/login">
+              <NavLink direction="left" href="/www/login">
                 Back to Login
-              </Link>
+              </NavLink>
               <div className="right">
                 <span className="help-text"><em>All done?</em></span>
                 <Button
