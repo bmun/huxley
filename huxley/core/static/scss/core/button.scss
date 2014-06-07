@@ -12,6 +12,11 @@
     webkit-box-shadow: 0px 1px 2px #ccc;
     moz-box-shadow: 0px 1px 2px #ccc;
 
+    span
+    {
+        background-color: none;
+    }
+
     &:hover
     {
         cursor: pointer;
@@ -32,13 +37,16 @@
     {
         background-position: center center;
 
-        span { visibility: hidden; }
+        span
+        {
+            visibility: hidden;
+        }
     }
 
     &.button-blue
     {
         background-color: #39f;
-        background-image: url(/static/img/login-loader.gif);
+        background-image: url(/static/img/button-loading-blue.gif);
         border: 1px solid #28e;
         color: #fff;
         text-shadow: #28e 0px 1px;
@@ -51,11 +59,9 @@
         only screen and (                min-resolution: 192dpi),
         only screen and (                min-resolution: 2dppx)
         {
-            background-image: url(/static/img/login-loader-2x.gif);
+            background-image: url(/static/img/button-loading-blue-2x.gif);
             background-size: 20px 20px;
         }
-
-        span { background-color: none; }
 
         &:hover
         {
@@ -67,9 +73,22 @@
     &.button-green
     {
         background-color: #0c0;
+        background-image: url(/static/img/button-loading-green.gif);
         border: 1px solid #0b0;
         color: #fff;
         text-shadow: #0b0 0px 1px;
+
+        @media
+        only screen and (-webkit-min-device-pixel-ratio: 2),
+        only screen and (   min--moz-device-pixel-ratio: 2),
+        only screen and (     -o-min-device-pixel-ratio: 2/1),
+        only screen and (        min-device-pixel-ratio: 2),
+        only screen and (                min-resolution: 192dpi),
+        only screen and (                min-resolution: 2dppx)
+        {
+            background-image: url(/static/img/button-loading-green-2x.gif);
+            background-size: 20px 20px;
+        }
 
         &:hover
         {
@@ -96,4 +115,7 @@
 /* This is effectively a 10px margin. Elements with display: inline-block
  * by default have a 4px right margin if there's any whitespace after them,
  * including new lines. */
-.button + .button { margin-left: 6px; }
+.button + .button
+{
+    margin-left: 6px;
+}
