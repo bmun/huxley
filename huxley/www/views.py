@@ -12,5 +12,5 @@ def index(request):
     if request.user.is_authenticated():
         user_dict = UserSerializer(request.user).data
 
-    context = {'user_json': json.dumps(user_dict)}
+    context = {'user_json': json.dumps(user_dict).replace('</', '<\\/')}
     return render_template(request, 'www.html', context)
