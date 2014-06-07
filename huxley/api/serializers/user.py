@@ -63,3 +63,4 @@ class CreateUserSerializer(ModelSerializer):
             raise ValidationError('Password contains invalid characters.')
 
         return attrs
+
