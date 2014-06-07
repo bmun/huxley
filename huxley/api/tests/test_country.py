@@ -51,7 +51,7 @@ class CountryDetailDeleteTestCase(DestroyAPITestCase):
     def test_anonymous_user(self):
         '''Unauthenticated users should not be able to delete countries.'''
         response = self.get_response(self.country.id)
-        self.assertNotAuthenticated(response)
+        self.assertMethodNotAllowed(response, 'DELETE')
 
     def test_self(self):
         '''Authenticated users shouldn't have permission to delete countries.'''
@@ -59,7 +59,7 @@ class CountryDetailDeleteTestCase(DestroyAPITestCase):
         self.client.login(username='user', password='user')
 
         response = self.get_response(self.country.id)
-        self.assertPermissionDenied(response)
+        self.assertMethodNotAllowed(response, 'DELETE')
 
     def test_super_user(self):
         '''Countries should not be able to be deleted'''
@@ -81,7 +81,7 @@ class CountryDetailPatchTestCase(PartialUpdateAPITestCase):
     def test_anonymous_user(self):
         '''Unauthenticated users shouldn't be able to update countries.'''
         response = self.get_response(self.country.id, params=self.params)
-        self.assertNotAuthenticated(response)
+        self.assertMethodNotAllowed(response, 'PATCH')
 
     def test_authenticated_user(self):
         '''Authenticated users shouldn't be able to update countries.'''
@@ -89,7 +89,7 @@ class CountryDetailPatchTestCase(PartialUpdateAPITestCase):
         self.client.login(username='user', password='user')
 
         response = self.get_response(self.country.id, params=self.params)
-        self.assertPermissionDenied(response)
+        self.assertMethodNotAllowed(response, 'PATCH')
 
     def test_superuser(self):
         '''Superusers shouldn't be able to update countries.'''
@@ -108,7 +108,7 @@ class CountryListPostTestCase(CreateAPITestCase):
     def test_anonymous_user(self):
         '''Unauthenticated users shouldn't be able to create countries.'''
         response = self.get_response(self.params)
-        self.assertNotAuthenticated(response)
+        self.assertMethodNotAllowed(response, 'POST')
 
     def test_self(self):
         '''Authenticated users shouldn't be able to create countries.'''
@@ -116,7 +116,7 @@ class CountryListPostTestCase(CreateAPITestCase):
         self.client.login(username='user', password='user')
 
         response = self.get_response(self.params)
-        self.assertPermissionDenied(response)
+        self.assertMethodNotAllowed(response, 'POST')
 
     def test_super_user(self):
         '''Superusers shouldn't be able to create countries.'''

@@ -22,7 +22,6 @@ class SchoolDetailGetTestCase(RetrieveAPITestCase):
     def test_self(self):
         '''It should allow the get request from the user.'''
         school = TestSchools.new_school()
-        user = school.advisor
 
         self.client.login(username='testuser', password='test')
         response = self.get_response(school.id)
@@ -52,8 +51,7 @@ class SchoolDetailGetTestCase(RetrieveAPITestCase):
     def test_other_user(self):
         '''it should not allow a get request from another user.'''
         school = TestSchools.new_school()
-        user1 = school.advisor
-        user2 = TestUsers.new_user(username='user2', password='user2')
+        TestUsers.new_user(username='user2', password='user2')
 
         self.client.login(username='user2', password='user2')
         response = self.get_response(school.id)
@@ -63,7 +61,7 @@ class SchoolDetailGetTestCase(RetrieveAPITestCase):
     def test_superuser(self):
         '''it should allow a get request from a superuser.'''
         school = TestSchools.new_school()
-        user = TestUsers.new_superuser(username='user1', password='user1')
+        TestUsers.new_superuser(username='user1', password='user1')
 
         self.client.login(username='user1', password='user1')
         response = self.get_response(school.id)
@@ -119,7 +117,7 @@ class SchoolDetailPatchTestCase(PartialUpdateAPITestCase):
 
     def test_other_user(self):
         '''Should not allow another user to change a school's data'''
-        user2 = TestUsers.new_user(username='user2', password='user2')
+        TestUsers.new_user(username='user2', password='user2')
         self.client.login(username='user2', password='user2')
         response = self.get_response(self.school.id, params=self.params)
         updated_school = School.objects.get(id=self.school.id)
@@ -130,7 +128,7 @@ class SchoolDetailPatchTestCase(PartialUpdateAPITestCase):
 
     def test_superuser(self):
         '''This this allow  a superuser to change school data.'''
-        user2 = TestUsers.new_superuser(username='user2', password='user2')
+        TestUsers.new_superuser(username='user2', password='user2')
         self.client.login(username='user2', password='user2')
         response = self.get_response(self.school.id, params=self.params)
         self.school = School.objects.get(id=self.school.id)
@@ -163,7 +161,7 @@ class SchoolDetailDeleteTestCase(DestroyAPITestCase):
 
     def test_other_user(self):
         '''One user should not be able to delete another user.'''
-        user2 = TestUsers.new_user(username='user2', password='user2')
+        TestUsers.new_user(username='user2', password='user2')
         self.client.login(username='user2', password='user2')
         response = self.get_response(self.school.id)
 
@@ -172,7 +170,7 @@ class SchoolDetailDeleteTestCase(DestroyAPITestCase):
 
     def test_superuser(self):
         '''A superuser should not be able to delete an account.'''
-        user2 = TestUsers.new_user(username='user2', password='user2')
+        TestUsers.new_user(username='user2', password='user2')
         self.client.login(username='user2', password='user2')
         response = self.get_response(self.school.id)
 
@@ -191,18 +189,18 @@ class SchoolListGetTestCase(ListAPITestCase):
         '''It should reject an anonymous user.'''
         response = self.get_response()
 
-        self.assertNotAuthenticated(response)
+        self.assertMethodNotAllowed(response, 'GET')
 
     def test_self(self):
         '''It should reject a request from an unauthorized user.'''
         self.client.login(username='testuser', password='test')
         response = self.get_response()
 
-        self.assertPermissionDenied(response)
+        self.assertMethodNotAllowed(response, 'GET')
 
     def test_superuser(self):
         '''It should reject a request from a superuser.'''
-        user = TestUsers.new_superuser(username='user', password='user')
+        TestUsers.new_superuser(username='user', password='user')
 
         self.client.login(username='user', password='user')
         response = self.get_response()
