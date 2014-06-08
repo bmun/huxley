@@ -61,3 +61,23 @@ class CurrentUser(generics.GenericAPIView):
         '''Log out the currently logged-in user.'''
         logout(request)
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class UserPassword(generics.GenericAPIView):
+    authentication_classes = (SessionAuthentication,)
+
+    def put(self, request, *args, **kwargs):
+        '''Change the authenticated user's password.'''
+        if not request.user.is_authenticated():
+            raise PermissionDenied()
+
+        user = request.user
+        data = request.DATA
+        password, new_password = data['password'], data['new_password']
+
+        if not user.check_password(password):
+            raise AuthenticationFailed()
+
+        user.set_password(new_password)
+        user.save()
+        return Response(status=status.HTTP_200_OK)

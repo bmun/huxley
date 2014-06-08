@@ -365,4 +365,3 @@ class CurrentUserTestCase(TestCase):
             'max_delegation_size': school.max_delegation_size,
             'international': school.international,
             'waitlist': school.waitlist})
-

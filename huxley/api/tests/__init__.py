@@ -50,6 +50,9 @@ class AbstractAPITestCase(APITestCase):
         url = self.get_url(object_id)
         return request(url, params, content_type='application/json')
 
+    def assertOK(self, response):
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
     def assertPermissionDenied(self, response):
         self.assertEqual(response.data, {
             'detail': u'You do not have permission to perform this action.'})
@@ -64,6 +67,12 @@ class AbstractAPITestCase(APITestCase):
         self.assertEqual(response.data, {
             'detail':  u'Authentication credentials were not provided.'})
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def assertAuthenticationFailed(self, response):
+        self.assertEqual(response.data, {
+            'detail':  u'Incorrect authentication credentials.'})
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
 
 
 class CreateAPITestCase(AbstractAPITestCase):
