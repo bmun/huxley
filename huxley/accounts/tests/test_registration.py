@@ -4,7 +4,7 @@
 from django.test import TestCase
 
 from huxley.accounts.forms.registration import RegistrationForm
-from huxley.accounts.models import HuxleyUser
+from huxley.accounts.models import User
 from huxley.core.models import *
 
 import re
@@ -149,7 +149,7 @@ class RegistrationTest(TestCase):
         self.assertEqual(user.last_name, params['last_name'])
 
         # Check to see that it's in the database as well
-        self.assertTrue(HuxleyUser.objects.filter(id=user.id).exists())
+        self.assertTrue(User.objects.filter(id=user.id).exists())
 
 
     def test_username_unique(self):

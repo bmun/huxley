@@ -8,12 +8,12 @@ from huxley.accounts.exceptions import AuthenticationError
 from huxley.accounts.models import *
 
 
-class HuxleyUserTestCase(TestCase):
+class UserTestCase(TestCase):
 
     def test_authenticate(self):
         '''It should correctly authenticate and return a user, or return an
         error message.'''
-        kunal = HuxleyUser.objects.create(username='kunal', email='kunal@lol.lol')
+        kunal = User.objects.create(username='kunal', email='kunal@lol.lol')
         kunal.set_password('mehta')
         kunal.is_active = False
         kunal.save()
@@ -21,7 +21,7 @@ class HuxleyUserTestCase(TestCase):
         def assert_raises(username, password, message):
             with self.assertRaises(AuthenticationError):
                 try:
-                    HuxleyUser.authenticate(username, password)
+                    User.authenticate(username, password)
                 except AuthenticationError as e:
                     self.assertEqual(str(e), message)
                     raise
@@ -35,12 +35,12 @@ class HuxleyUserTestCase(TestCase):
         kunal.is_active = True
         kunal.save();
 
-        user = HuxleyUser.authenticate('kunal', 'mehta')
+        user = User.authenticate('kunal', 'mehta')
         self.assertEqual(user, kunal)
 
     def test_change_password(self):
         '''It should correctly change a user's password or return an error.'''
-        user = HuxleyUser.objects.create(username='adavis', email='lol@lol.lol')
+        user = User.objects.create(username='adavis', email='lol@lol.lol')
         user.set_password('mr_davis')
 
         success, error = user.change_password('', 'lololol', 'lololol')

@@ -7,7 +7,7 @@ from django.core.urlresolvers import reverse
 from django.test import TestCase
 from django.test.client import Client
 
-from huxley.accounts.models import HuxleyUser
+from huxley.accounts.models import User
 from huxley.api.tests import (CreateAPITestCase, DestroyAPITestCase,
                               ListAPITestCase, PartialUpdateAPITestCase,
                               RetrieveAPITestCase)
@@ -88,7 +88,7 @@ class UserDetailGetTestCase(RetrieveAPITestCase):
 
     def test_chair(self):
         '''It should have the correct fields for chairs.'''
-        user = TestUsers.new_user(user_type=HuxleyUser.TYPE_CHAIR,
+        user = TestUsers.new_user(user_type=User.TYPE_CHAIR,
                                   committee_id=4)
         self.client.login(username='testuser', password='test')
         response = self.get_response(user.id)
@@ -114,7 +114,7 @@ class UserDetailDeleteTestCase(DestroyAPITestCase):
         response = self.get_response(self.user.id)
 
         self.assertNotAuthenticated(response)
-        self.assertTrue(HuxleyUser.objects.filter(id=self.user.id).exists())
+        self.assertTrue(User.objects.filter(id=self.user.id).exists())
 
     def test_other_user(self):
         '''It should reject the request from another user.'''
@@ -123,7 +123,7 @@ class UserDetailDeleteTestCase(DestroyAPITestCase):
 
         response = self.get_response(self.user.id)
         self.assertPermissionDenied(response)
-        self.assertTrue(HuxleyUser.objects.filter(id=self.user.id).exists())
+        self.assertTrue(User.objects.filter(id=self.user.id).exists())
 
     def test_self(self):
         '''It should allow a user to delete themself.'''
@@ -131,7 +131,7 @@ class UserDetailDeleteTestCase(DestroyAPITestCase):
 
         response = self.get_response(self.user.id)
         self.assertEqual(response.status_code, 204)
-        self.assertFalse(HuxleyUser.objects.filter(id=self.user.id).exists())
+        self.assertFalse(User.objects.filter(id=self.user.id).exists())
 
     def test_superuser(self):
         '''It should allow a superuser to delete a user.'''
@@ -140,7 +140,7 @@ class UserDetailDeleteTestCase(DestroyAPITestCase):
 
         response = self.get_response(self.user.id)
         self.assertEqual(response.status_code, 204)
-        self.assertFalse(HuxleyUser.objects.filter(id=self.user.id).exists())
+        self.assertFalse(User.objects.filter(id=self.user.id).exists())
 
 
 class UserDetailPatchTestCase(PartialUpdateAPITestCase):
@@ -156,7 +156,7 @@ class UserDetailPatchTestCase(PartialUpdateAPITestCase):
         response = self.get_response(self.user.id, params=self.params)
         self.assertNotAuthenticated(response)
 
-        user = HuxleyUser.objects.get(id=self.user.id)
+        user = User.objects.get(id=self.user.id)
         self.assertEqual(user.first_name, 'Test')
         self.assertEqual(user.last_name, 'User')
 
@@ -168,7 +168,7 @@ class UserDetailPatchTestCase(PartialUpdateAPITestCase):
         response = self.get_response(self.user.id, params=self.params)
         self.assertPermissionDenied(response)
 
-        user = HuxleyUser.objects.get(id=self.user.id)
+        user = User.objects.get(id=self.user.id)
         self.assertEqual(user.first_name, 'Test')
         self.assertEqual(user.last_name, 'User')
 
@@ -177,7 +177,7 @@ class UserDetailPatchTestCase(PartialUpdateAPITestCase):
         self.client.login(username='user1', password='user1')
 
         response = self.get_response(self.user.id, params=self.params)
-        user = HuxleyUser.objects.get(id=self.user.id)
+        user = User.objects.get(id=self.user.id)
         self.assertEqual(response.data['first_name'], user.first_name)
         self.assertEqual(response.data['last_name'], user.last_name)
 
@@ -187,7 +187,7 @@ class UserDetailPatchTestCase(PartialUpdateAPITestCase):
         self.client.login(username='user2', password='user2')
 
         response = self.get_response(self.user.id, params=self.params)
-        user = HuxleyUser.objects.get(id=self.user.id)
+        user = User.objects.get(id=self.user.id)
         self.assertEqual(response.data['first_name'], user.first_name)
         self.assertEqual(response.data['last_name'], user.last_name)
 
@@ -247,16 +247,16 @@ class UserListPostTestCase(CreateAPITestCase):
         params = self.get_params()
         response = self.get_response(params)
 
-        user_query = HuxleyUser.objects.filter(id=response.data['id'])
+        user_query = User.objects.filter(id=response.data['id'])
         self.assertTrue(user_query.exists())
 
-        user = HuxleyUser.objects.get(id=response.data['id'])
+        user = User.objects.get(id=response.data['id'])
         self.assertEqual(response.data, {
             'id': user.id,
             'username': user.username,
             'first_name': user.first_name,
             'last_name': user.last_name,
-            'user_type': HuxleyUser.TYPE_ADVISOR,
+            'user_type': User.TYPE_ADVISOR,
             'school': user.school_id})
 
     def test_empty_username(self):
@@ -343,7 +343,7 @@ class CurrentUserTestCase(TestCase):
         self.assertEqual(data['username'], user.username)
         self.assertEqual(data['first_name'], user.first_name)
         self.assertEqual(data['last_name'], user.last_name)
-        self.assertEqual(data['user_type'], HuxleyUser.TYPE_ADVISOR)
+        self.assertEqual(data['user_type'], User.TYPE_ADVISOR)
         self.assertEqual(data['school'], {
             'id': school.id,
             'registered': school.registered.isoformat(),

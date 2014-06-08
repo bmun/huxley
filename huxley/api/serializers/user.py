@@ -5,8 +5,7 @@ import re
 
 from rest_framework.serializers import ModelSerializer, ValidationError
 
-from huxley.accounts.models import HuxleyUser
-from huxley.api.serializers.committee import CommitteeSerializer
+from huxley.accounts.models import User
 from huxley.api.serializers.school import SchoolSerializer
 
 
@@ -14,7 +13,7 @@ class UserSerializer(ModelSerializer):
     school = SchoolSerializer(required=False, read_only=True)
 
     class Meta:
-        model = HuxleyUser
+        model = User
         fields = ('id', 'username', 'first_name', 'last_name', 'user_type',
                   'school', 'committee',)
         read_only_fields = ('id', 'username', 'first_name', 'last_name',
@@ -25,7 +24,7 @@ class CreateUserSerializer(ModelSerializer):
     school = SchoolSerializer(required=False) # TODO: CreateSchoolSerializer
 
     class Meta:
-        model = HuxleyUser
+        model = User
         fields = ('id', 'username', 'password', 'first_name', 'last_name',
                   'user_type', 'school',)
         read_only_fields = ('user_type',)
@@ -40,7 +39,7 @@ class CreateUserSerializer(ModelSerializer):
         if 'password' in original_attrs:
             user.set_password(original_attrs['password'])
         if 'school' in original_attrs:
-            user.user_type = HuxleyUser.TYPE_ADVISOR
+            user.user_type = User.TYPE_ADVISOR
 
         return user
 
@@ -51,7 +50,7 @@ class CreateUserSerializer(ModelSerializer):
             raise ValidationError('Usernames may contain alphanumerics, '
                                   'underscores, and/or hyphens only.')
 
-        if HuxleyUser.objects.filter(username=username).exists():
+        if User.objects.filter(username=username).exists():
             raise ValidationError('This username is already taken.')
 
         return attrs

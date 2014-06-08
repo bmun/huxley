@@ -12,7 +12,7 @@ from huxley.core.models import *
 
 import re
 
-class HuxleyUser(AbstractUser):
+class User(AbstractUser):
 
     TYPE_ADVISOR = 1
     TYPE_CHAIR = 2
@@ -45,9 +45,9 @@ class HuxleyUser(AbstractUser):
         user = authenticate(username=username, password=password)
         if user is None:
             try:
-                u = HuxleyUser.objects.get(email=username)
+                u = User.objects.get(email=username)
                 user = authenticate(username=u.username, password=password)
-            except HuxleyUser.DoesNotExist:
+            except User.DoesNotExist:
                 pass
 
         if user is None:

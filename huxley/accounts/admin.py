@@ -4,6 +4,6 @@
 # Use of this source code is governed by a BSD License (see LICENSE).
 
 from django.contrib import admin
-from huxley.accounts.models import HuxleyUser
+from huxley.accounts.models import User
 
-admin.site.register(HuxleyUser)
+admin.site.register(User)

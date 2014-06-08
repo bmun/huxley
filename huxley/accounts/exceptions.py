@@ -2,7 +2,7 @@
 # Use of this source code is governed by a BSD License (see LICENSE).
 
 class AuthenticationError(LookupError):
-    '''Error raised when a user fails to authenticate a HuxleyUser.'''
+    '''Error raised when a user fails to authenticate a User.'''
 
     INVALID_CREDENTIALS = 'The credentials you provided are invalid.'
     MISSING_FIELDS = 'One or more of the fields is blank.'

@@ -84,7 +84,7 @@ AUTHENTICATION_BACKENDS = (
     'huxley.accounts.backends.LoginAsUserBackend'
 )
 
-AUTH_USER_MODEL = 'accounts.HuxleyUser'
+AUTH_USER_MODEL = 'accounts.User'
 
 INSTALLED_APPS = (
     'django.contrib.auth',

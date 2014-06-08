@@ -9,7 +9,7 @@ from django.http import HttpResponse, HttpResponseRedirect, \
 from django.views.decorators.http import require_POST, require_GET
 
 from huxley.accounts.forms import RegistrationForm
-from huxley.accounts.models import HuxleyUser
+from huxley.accounts.models import User
 from huxley.accounts.exceptions import AuthenticationError
 from huxley.core.models import *
 from huxley.utils.shortcuts import render_template, render_json
@@ -22,11 +22,11 @@ def login_user(request):
         password = request.POST.get('password')
 
         try:
-            user = HuxleyUser.authenticate(username, password)
+            user = User.authenticate(username, password)
         except AuthenticationError as e:
             return render_json({'success': False, 'error': str(e)})
 
-        redirect = HuxleyUser.login(request, user)
+        redirect = User.login(request, user)
         return render_json({'success': True, 'redirect': redirect})
 
     return render_template(request, 'login.html')
@@ -38,13 +38,13 @@ def login_as_user(request, uid):
         if not request.user.is_superuser:
             return HttpResponseForbidden()
 
-        username = HuxleyUser.objects.get(id=uid).username
+        username = User.objects.get(id=uid).username
         user = authenticate(username=username, password=settings.ADMIN_SECRET)
         login(request, user)
 
         return HttpResponseRedirect(reverse('index'))
 
-    except HuxleyUser.DoesNotExist:
+    except User.DoesNotExist:
         return HttpResponseNotFound()
 
 
@@ -117,7 +117,7 @@ def reset_password(request):
     '''Reset a user's password.'''
     if request.method == 'POST':
         username = request.POST.get('username')
-        new_password = HuxleyUser.reset_password(username)
+        new_password = User.reset_password(username)
         if new_password:
             if True:
                 user.email_user("Huxley Password Reset",
@@ -134,7 +134,7 @@ def reset_password(request):
 def validate_unique_user(request):
     '''Check that a potential username is unique.'''
     username = request.GET['username']
-    if HuxleyUser.objects.filter(username=username).exists():
+    if User.objects.filter(username=username).exists():
         return HttpResponse(status=406)
     else:
         return HttpResponse(status=200)

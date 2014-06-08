@@ -9,7 +9,7 @@ from rest_framework.authentication import SessionAuthentication
 from rest_framework.exceptions import AuthenticationFailed, PermissionDenied
 from rest_framework.response import Response
 
-from huxley.accounts.models import HuxleyUser
+from huxley.accounts.models import User
 from huxley.accounts.exceptions import AuthenticationError
 from huxley.api.permissions import IsPostOrSuperuserOnly, IsUserOrSuperuser
 from huxley.api.serializers import CreateUserSerializer, UserSerializer
@@ -17,7 +17,7 @@ from huxley.api.serializers import CreateUserSerializer, UserSerializer
 
 class UserList(generics.ListCreateAPIView):
     authentication_classes = (SessionAuthentication,)
-    queryset = HuxleyUser.objects.all()
+    queryset = User.objects.all()
     permission_classes = (IsPostOrSuperuserOnly,)
 
     def get_serializer_class(self):
@@ -28,7 +28,7 @@ class UserList(generics.ListCreateAPIView):
 
 class UserDetail(generics.RetrieveUpdateDestroyAPIView):
     authentication_classes = (SessionAuthentication,)
-    queryset = HuxleyUser.objects.all()
+    queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = (IsUserOrSuperuser,)
 
@@ -49,7 +49,7 @@ class CurrentUser(generics.GenericAPIView):
 
         try:
             data = request.DATA
-            user = HuxleyUser.authenticate(data['username'], data['password'])
+            user = User.authenticate(data['username'], data['password'])
         except AuthenticationError as e:
             raise AuthenticationFailed(str(e))
 

@@ -3,17 +3,20 @@
 
 from django.conf import settings
 
+from huxley.accounts.models import User
+
+
 class LoginAsUserBackend:
     def authenticate(self, username=None, password=None):
         if settings.ADMIN_SECRET and password == settings.ADMIN_SECRET:
             try:
-                return HuxleyUser.objects.get(username=username)
+                return User.objects.get(username=username)
             except:
                 pass
         return None
 
     def get_user(self, user_id):
         try:
-            return HuxleyUser.objects.get(pk=user_id)
+            return User.objects.get(pk=user_id)
         except:
             return None

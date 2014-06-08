@@ -4,7 +4,7 @@
 from datetime import date
 from django import forms
 
-from huxley.accounts.models import HuxleyUser
+from huxley.accounts.models import User
 from huxley.core.models import *
 
 import re
@@ -62,7 +62,7 @@ class RegistrationForm(forms.Form):
     # database. Run these only if the form is valid.
 
     def create_user(self, school=None):
-        new_user = HuxleyUser.objects.create_user(self.cleaned_data['username'], self.cleaned_data['primary_email'], self.cleaned_data['password'])
+        new_user = User.objects.create_user(self.cleaned_data['username'], self.cleaned_data['primary_email'], self.cleaned_data['password'])
         new_user.first_name = self.cleaned_data['first_name']
         new_user.last_name = self.cleaned_data['last_name']
         new_user.school = school
@@ -130,7 +130,7 @@ class RegistrationForm(forms.Form):
         username = self.cleaned_data['username']
         if re.match("^[A-Za-z0-9\_\-]+$", username) is None:
             raise forms.ValidationError("Usernames must be alphanumeric, underscores, and/or hyphens only.")
-        elif HuxleyUser.objects.filter(username=username).exists():
+        elif User.objects.filter(username=username).exists():
             raise forms.ValidationError("Username '%s' is already in use. Please choose another one." % (username))
 
         return username
