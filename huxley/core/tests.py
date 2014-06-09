@@ -1,9 +1,15 @@
 # Copyright (c) 2011-2014 Berkeley Model United Nations. All rights reserved.
 # Use of this source code is governed by a BSD License (see LICENSE).
 
+import csv
+
+from django.core.urlresolvers import reverse
+from django.http import HttpRequest
 from django.test import TestCase
 
+from huxley.core.admin import CommitteeAdmin
 from huxley.core.models import *
+from huxley.utils.test import TestUsers
 
 from datetime import date
 from mock import Mock
@@ -137,4 +143,28 @@ class DelegateTest(TestCase):
     def test_unicode(self):
         """ Tests that the object's __unicode__ outputs correctly. """
         pass
+
+class CommitteeAdminTest(TestCase):
+    """ Tests that the admin panel can import committees. """
+    def test_superuser(self):
+        f = open('test_data.csv', 'w')
+        writer = csv.writer(f)
+        writer.writerow([
+            'SPD',
+            'Special Political and Decolonization',
+            200,
+            ''
+        ])
+        f.close()
+        user = TestUsers.new_superuser()
+        self.client.login(username='testuser', password='test')
+        with open('test_data.csv') as fp:
+            self.client.post(reverse('admin:core_committee_load'),
+                {'name': 'committees', 'csv': fp})
+        query = Committee.objects.filter(
+            name='SPD',
+            full_name='Special Political and Decolonization',
+            delegation_size=200,
+            special=False).exists()
+        self.assertTrue(query)
 

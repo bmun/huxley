@@ -6,8 +6,9 @@
 import csv
 
 from django.conf.urls import patterns, url
+from django.core.urlresolvers import reverse
 from django.contrib import admin
-from django.http import HttpResponse
+from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 
 from huxley.core.models import *
 
@@ -71,10 +72,36 @@ class AssignmentAdmin(admin.ModelAdmin):
         return urls
 
 
+class CommitteeAdmin(admin.ModelAdmin):
+    def load(self, request):
+        '''Import a CSV file containing committees.'''
+        committees = request.FILES
+        reader = csv.reader(committees['csv'])
+        for row in reader:
+            com = Committee(name=row[0],
+                            full_name=row[1],
+                            delegation_size=row[2],
+                            special=row[3],)
+            com.save()
+
+        return HttpResponseRedirect(reverse('admin:core_committee_changelist'))
+
+    def get_urls(self):
+        urls = super(CommitteeAdmin, self).get_urls()
+        urls += patterns('',
+            url(
+                r'load',
+                self.admin_site.admin_view(self.load),
+                name='core_committee_load'
+            ),
+        )
+        return urls
+
+
 admin.site.register(Conference)
 admin.site.register(Country)
 admin.site.register(School)
-admin.site.register(Committee)
+admin.site.register(Committee, CommitteeAdmin)
 admin.site.register(Assignment, AssignmentAdmin)
 admin.site.register(CountryPreference)
 admin.site.register(HelpQuestion)
