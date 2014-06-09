@@ -73,6 +73,9 @@ class AbstractAPITestCase(APITestCase):
             'detail':  u'Incorrect authentication credentials.'})
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
+    def assertNotFound(self, response):
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
 
 
 class CreateAPITestCase(AbstractAPITestCase):

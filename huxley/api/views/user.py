@@ -67,6 +67,14 @@ class CurrentUser(generics.GenericAPIView):
 class UserPassword(generics.GenericAPIView):
     authentication_classes = (SessionAuthentication,)
 
+    def post(self, request, *args, **kwargs):
+        '''Reset a user's password and email it to them.'''
+        try:
+            User.reset_password(request.DATA.get('username'))
+            return Response(status=status.HTTP_201_CREATED)
+        except User.DoesNotExist:
+            raise Http404
+
     def put(self, request, *args, **kwargs):
         '''Change the authenticated user's password.'''
         if not request.user.is_authenticated():

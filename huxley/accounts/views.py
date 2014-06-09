@@ -119,10 +119,6 @@ def reset_password(request):
         username = request.POST.get('username')
         new_password = User.reset_password(username)
         if new_password:
-            if True:
-                user.email_user("Huxley Password Reset",
-                                "Your password has been reset to %s.\nThank you for using Huxley!" % (new_password),
-                                from_email="no-reply@bmun.org")
             return render_template(request, 'password-reset-success.html')
         else:
             return render_template(request, 'password-reset.html', {'error': True})

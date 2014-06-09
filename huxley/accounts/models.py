@@ -1,6 +1,7 @@
 # Copyright (c) 2011-2014 Berkeley Model United Nations. All rights reserved.
 # Use of this source code is governed by a BSD License (see LICENSE).
 
+from django.conf import settings
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import AbstractUser
 from django.core.urlresolvers import reverse
@@ -66,19 +67,20 @@ class User(AbstractUser):
 
     @classmethod
     def reset_password(cls, username):
-        '''Reset and return a user's password, or return False if the user
-        doesn't exist.'''
-        if not username:
-            return False
-        try:
-            user = cls.objects.get(models.Q(username=username) |
-                                   models.Q(email=username))
-            new_password = cls.objects.make_random_password(length=10)
-            user.set_password(new_password)
-            user.save()
-            return new_password
-        except cls.DoesNotExist:
-            return False
+        '''Reset a user's password and email it to them, or raise if the
+        user doesn't exist.'''
+        query = models.Q(username=username) | models.Q(email=username)
+        user = cls.objects.get(query)
+
+        new_password = cls.objects.make_random_password(length=10)
+        user.set_password(new_password)
+        user.save()
+
+        if not settings.DEBUG:
+            user.email_user('Huxley Password Reset',
+                            'Your password has been reset to %s.\n'
+                            'Thank you for using Huxley!' % (new_password),
+                            from_email="no-reply@bmun.org")
 
     def change_password(self, old_password, new_password):
         '''Change the user's password, or raise PasswordChangeFailed.'''
