@@ -70,11 +70,39 @@ class AssignmentAdmin(admin.ModelAdmin):
         )
         return urls
 
+class CommitteeAdmin(admin.ModelAdmin):
+    def load(self, request):
+        """ Imports a CSV file containing committeess. """
+        committees = HttpResponse(content_type='text/csv')
+        reader = csv.reader(committees)
+
+        for row in reader:
+            com = Committee(name=row[0],
+                            full_name=row[1],
+                            countries=row[2],
+                            delegation_size=row[3],
+                            special=row[4],)
+            com.save()
+
+        return committees
+
+    def get_urls(self):
+        urls = super(CommitteeAdmin, self).get_urls()
+        urls += patterns('',
+            url(
+                r'load',
+                self.admin_site.admin_view(self.load),
+                name='core_committee_load'
+            ),
+        )
+        return urls
+
+
 
 admin.site.register(Conference)
 admin.site.register(Country)
 admin.site.register(School)
-admin.site.register(Committee)
+admin.site.register(Committee, CommitteeAdmin)
 admin.site.register(Assignment, AssignmentAdmin)
 admin.site.register(CountryPreference)
 admin.site.register(HelpQuestion)
