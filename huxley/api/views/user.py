@@ -6,11 +6,12 @@ from django.http import Http404
 
 from rest_framework import generics, status
 from rest_framework.authentication import SessionAuthentication
-from rest_framework.exceptions import AuthenticationFailed, PermissionDenied
+from rest_framework.exceptions import (APIException, AuthenticationFailed,
+                                       PermissionDenied)
 from rest_framework.response import Response
 
 from huxley.accounts.models import User
-from huxley.accounts.exceptions import AuthenticationError
+from huxley.accounts.exceptions import AuthenticationError, PasswordChangeFailed
 from huxley.api.permissions import IsPostOrSuperuserOnly, IsUserOrSuperuser
 from huxley.api.serializers import CreateUserSerializer, UserSerializer
 
@@ -71,13 +72,11 @@ class UserPassword(generics.GenericAPIView):
         if not request.user.is_authenticated():
             raise PermissionDenied()
 
-        user = request.user
         data = request.DATA
-        password, new_password = data['password'], data['new_password']
+        password, new_password = data.get('password'), data.get('new_password')
 
-        if not user.check_password(password):
-            raise AuthenticationFailed()
-
-        user.set_password(new_password)
-        user.save()
-        return Response(status=status.HTTP_200_OK)
+        try:
+            request.user.change_password(password, new_password)
+            return Response(status=status.HTTP_200_OK)
+        except PasswordChangeFailed as e:
+            raise APIException(str(e))

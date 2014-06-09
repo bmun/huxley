@@ -22,3 +22,31 @@ class AuthenticationError(LookupError):
     @classmethod
     def inactive_account(cls):
         return cls(cls.INACTIVE_ACCOUNT)
+
+
+class PasswordChangeFailed(Exception):
+    '''Error raised when a user fails to change their password.'''
+
+    MISSING_FIELDS = 'One or more fields is blank.'
+    PASSWORD_TOO_SHORT = 'New password must be at least 6 characters long.'
+    INVALID_CHARACTERS = 'New password can only consist of alphanumeric characters and symbols (above numbers).'
+    INCORRECT_PASSWORD = 'Incorrect password.'
+
+    def __init__(self, message):
+        super(PasswordChangeFailed, self).__init__(message)
+
+    @classmethod
+    def missing_fields(cls):
+        return cls(cls.MISSING_FIELDS)
+
+    @classmethod
+    def password_too_short(cls):
+        return cls(cls.PASSWORD_TOO_SHORT)
+
+    @classmethod
+    def invalid_characters(cls):
+        return cls(cls.INVALID_CHARACTERS)
+
+    @classmethod
+    def incorrect_password(cls):
+        return cls(cls.INCORRECT_PASSWORD)

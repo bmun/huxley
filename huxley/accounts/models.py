@@ -7,7 +7,7 @@ from django.core.urlresolvers import reverse
 from django.db import models
 
 from huxley.accounts.constants import *
-from huxley.accounts.exceptions import AuthenticationError
+from huxley.accounts.exceptions import AuthenticationError, PasswordChangeFailed
 from huxley.core.models import *
 
 import re
@@ -80,23 +80,21 @@ class User(AbstractUser):
         except cls.DoesNotExist:
             return False
 
-    def change_password(self, old, new1, new2):
-        '''Attempt to change the given user's password. Return a 2-tuple
-        of (bool) success, (str) error.'''
-        if not (old and new1 and new2):
-            return False, ChangePasswordErrors.MISSING_FIELDS
-        if new1 != new2:
-            return False, ChangePasswordErrors.MISMATCHED_PASSWORDS
-        if len(new1) < 6:
-            return False, ChangePasswordErrors.PASSWORD_TOO_SHORT
-        if not re.match("^[A-Za-z0-9\_\.!@#\$%\^&\*\(\)~\-=\+`\?]+$", new1):
-            return False, ChangePasswordErrors.INVALID_CHARACTERS
-        if not self.check_password(old):
-            return False, ChangePasswordErrors.INCORRECT_PASSWORD
+    def change_password(self, old_password, new_password):
+        '''Change the user's password, or raise PasswordChangeFailed.'''
+        valid_regex = "^[A-Za-z0-9\_\.!@#\$%\^&\*\(\)~\-=\+`\?]+$"
 
-        self.set_password(new1)
-        self.save();
-        return True, None
+        if not (old_password and new_password):
+            raise PasswordChangeFailed.missing_fields()
+        if len(new_password) < 6:
+            raise PasswordChangeFailed.password_too_short()
+        if not re.match(valid_regex, new_password):
+            raise PasswordChangeFailed.invalid_characters()
+        if not self.check_password(old_password):
+            raise PasswordChangeFailed.incorrect_password()
+
+        self.set_password(new_password)
+        self.save()
 
     class Meta:
         db_table = 'huxley_user'

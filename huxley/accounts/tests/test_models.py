@@ -4,7 +4,7 @@
 from django.test import TestCase
 
 from huxley.accounts.constants import *
-from huxley.accounts.exceptions import AuthenticationError
+from huxley.accounts.exceptions import AuthenticationError, PasswordChangeFailed
 from huxley.accounts.models import *
 
 
@@ -39,38 +39,30 @@ class UserTestCase(TestCase):
         self.assertEqual(user, kunal)
 
     def test_change_password(self):
-        '''It should correctly change a user's password or return an error.'''
+        '''It should correctly change a user's password or raise an error.'''
         user = User.objects.create(username='adavis', email='lol@lol.lol')
-        user.set_password('mr_davis')
+        user.set_password('old&busted')
+        user.save()
 
-        success, error = user.change_password('', 'lololol', 'lololol')
-        self.assertFalse(success)
-        self.assertEquals(ChangePasswordErrors.MISSING_FIELDS, error)
+        def assert_raises(old_password, new_password, message):
+            with self.assertRaises(PasswordChangeFailed):
+                try:
+                    user.change_password(old_password, new_password)
+                except PasswordChangeFailed as e:
+                    self.assertEqual(str(e), message)
+                    self.assertTrue(user.check_password('old&busted'))
+                    raise
 
-        success, error = user.change_password('mr_davis', '', 'lololol')
-        self.assertFalse(success)
-        self.assertEquals(ChangePasswordErrors.MISSING_FIELDS, error)
+        assert_raises('', 'newhotness',
+                      PasswordChangeFailed.MISSING_FIELDS)
+        assert_raises('old&busted', '',
+                      PasswordChangeFailed.MISSING_FIELDS)
+        assert_raises('old&busted', 'a',
+                      PasswordChangeFailed.PASSWORD_TOO_SHORT)
+        assert_raises('old&busted', 'invalid>hotness',
+                      PasswordChangeFailed.INVALID_CHARACTERS)
+        assert_raises('wrong&busted', 'newhotness',
+                      PasswordChangeFailed.INCORRECT_PASSWORD)
 
-        success, error = user.change_password('mr_davis', 'lololol', '')
-        self.assertFalse(success)
-        self.assertEquals(ChangePasswordErrors.MISSING_FIELDS, error)
-
-        success, error = user.change_password('mr_davis', 'lololol', 'roflrofl')
-        self.assertFalse(success)
-        self.assertEquals(ChangePasswordErrors.MISMATCHED_PASSWORDS, error)
-
-        success, error = user.change_password('mr_davis', 'lol', 'lol')
-        self.assertFalse(success)
-        self.assertEquals(ChangePasswordErrors.PASSWORD_TOO_SHORT, error)
-
-        success, error = user.change_password('mr_davis', 'lololol<', 'lololol<')
-        self.assertFalse(success)
-        self.assertEquals(ChangePasswordErrors.INVALID_CHARACTERS, error)
-
-        success, error = user.change_password('roflrofl', 'lololol', 'lololol')
-        self.assertFalse(success)
-        self.assertEquals(ChangePasswordErrors.INCORRECT_PASSWORD, error)
-
-        success, error = user.change_password('mr_davis', 'lololol', 'lololol')
-        self.assertTrue(success)
-        self.assertTrue(user.check_password('lololol'))
+        user.change_password('old&busted', 'newhotness')
+        self.assertTrue(user.check_password('newhotness'))
