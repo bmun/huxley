@@ -100,13 +100,8 @@
 	<label class="error"> {{ error|escape }} </label>
 {% endfor %}
 
-{{ form.min_delegation_size }}
-{% for error in form.errors.min_delegation_size %}
-	<label class="error"> {{ error|escape }} </label>
-{% endfor %}
-
-{{ form.max_delegation_size }}
-{% for error in form.errors.max_delegation_size %}
+{{ form.delegation_size }}
+{% for error in form.errors.delegation_size %}
 	<label class="error"> {{ error|escape }} </label>
 {% endfor %}
 

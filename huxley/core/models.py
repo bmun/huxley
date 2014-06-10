@@ -136,8 +136,7 @@ class School(models.Model):
     secondary_phone     = models.CharField(max_length=32, blank=True)
     program_type        = models.PositiveSmallIntegerField(choices=PROGRAM_TYPE_OPTIONS)
     times_attended      = models.PositiveSmallIntegerField(default=0)
-    min_delegation_size = models.PositiveSmallIntegerField(default=0)
-    max_delegation_size = models.PositiveSmallIntegerField(default=0)
+    delegation_size     = models.PositiveSmallIntegerField(default=0)
     international       = models.BooleanField(default=False)
     waitlist            = models.BooleanField(default=False)
 

@@ -35,8 +35,7 @@ var AdvisorProfileView = React.createClass({
       school_zip_code: school.zip_code,
       program_type: school.program_type,
       times_attended: school.times_attended,
-      min_delegation_size: school.min_delegation_size,
-      max_delegation_size: school.max_delegation_size,
+      delegation_size: school.delegation_size,
       primary_name: school.primary_name,
       primary_email: school.primary_email,
       primary_phone: school.primary_phone,
@@ -167,20 +166,11 @@ var AdvisorProfileView = React.createClass({
                 </td>
               </tr>
               <tr>
-                <td className="fieldLabel">Minimum Delegation</td>
+                <td className="fieldLabel">Delegation Size</td>
                 <td className="field">
                   <input
                     type="text"
-                    valueLink={this.linkState('min_delegation_size')}
-                  />
-                </td>
-              </tr>
-              <tr>
-                <td className="fieldLabel">Maximun Delegation</td>
-                <td className="field">
-                  <input
-                    type="text"
-                    valueLink={this.linkState('max_delegation_size')}
+                    valueLink={this.linkState('delegation_size')}
                   />
                 </td>
               </tr>

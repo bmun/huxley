@@ -44,14 +44,12 @@ class TestSchools():
                    secondary_phone=kwargs.get('secondary_phone', ''),
                    program_type=kwargs.get('program_type', School.TYPE_CLUB),
                    times_attended=kwargs.get('times_attended', 0),
-                   min_delegation_size=kwargs.get('min_delegation_size', 0),
-                   max_delegation_size=kwargs.get('max_delegation_size', 0))
+                   delegation_size=kwargs.get('delegation_size', 0))
 
         skip = {'name', 'address', 'city', 'state', 'zip_code', 'country',
                 'primary_name', 'primary_email', 'primary_phone',
                 'secondary_name', 'secondary_email', 'secondary_phone',
-                'program_type', 'times_attended', 'min_delegation_size',
-                'max_delegation_size'}
+                'program_type', 'times_attended', 'delegation_size'}
         for attr, value in kwargs.items():
             if attr not in skip:
                 setattr(s, attr, value)

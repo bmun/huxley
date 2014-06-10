@@ -27,8 +27,7 @@ class RegistrationTest(TestCase):
                     'school_zip':12345,
                     'program_type': School.TYPE_CLUB,
                     'times_attended':9,
-                    'min_delegation_size':9,
-                    'max_delegation_size':9,
+                    'delegation_size': 9,
                     'primary_name':'Manager',
                     'primary_email':'kimtaeyon@snsd.com',
                     'primary_phone':'(123) 435-7543',
@@ -261,8 +260,7 @@ class RegistrationTest(TestCase):
         self.assertEqual(school.primary_phone, params['primary_phone'])
         self.assertEqual(school.program_type, params['program_type'])
         self.assertEqual(school.times_attended, params['times_attended'])
-        self.assertEqual(school.min_delegation_size, params['min_delegation_size'])
-        self.assertEqual(school.max_delegation_size, params['max_delegation_size'])
+        self.assertEqual(school.delegation_size, params['delegation_size'])
         self.assertFalse(school.international)
 
         # Make sure state isn't an empty string, or a string of spaces
@@ -301,8 +299,7 @@ class RegistrationTest(TestCase):
         self.assertEqual(school.primary_phone, params['primary_phone'])
         self.assertEqual(school.program_type, params['program_type'])
         self.assertEqual(school.times_attended, params['times_attended'])
-        self.assertEqual(school.min_delegation_size, params['min_delegation_size'])
-        self.assertEqual(school.max_delegation_size, params['max_delegation_size'])
+        self.assertEqual(school.delegation_size, params['delegation_size'])
         self.assertTrue(school.international)
 
         if 'school_state' in params:

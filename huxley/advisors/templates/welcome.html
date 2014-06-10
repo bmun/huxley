@@ -62,7 +62,7 @@ org</a> and I will respond to all requests efficiently. See you soon!</p>
 	</tr>
 	<tr>
 		<td class='fieldLabel'> Program Type </td>
-		<td class="field"> 
+		<td class="field">
 		<input type="radio" class="other" name="program_type" value="{{ school.TYPE_CLASS}}" {% if school.program_type == school.TYPE_CLASS %} checked="checked" {% endif %}><label> Class </label>
 		&nbsp;&nbsp;
 		<input type="radio" name="program_type" value="{{ school.TYPE_CLUB }}" {% if school.program_type == school.TYPE_CLUB %} checked="checked" {% endif %} ><label> Club </label>
@@ -74,11 +74,7 @@ org</a> and I will respond to all requests efficiently. See you soon!</p>
 	</tr>
 	<tr>
 		<td class='fieldLabel'> Minimum Delegation </td>
-		<td class='field'> <input type="text" name="minDel" value="{{ school.min_delegation_size }}" class="required IntegersOnly" </td>
-	</tr>
-	<tr>
-		<td class='fieldLabel'> Maximum Delegation </td>
-		<td class='field'> <input type="text" name="maxDel" value="{{ school.max_delegation_size }}" class="required IntegersOnly" </td>
+		<td class='field'> <input type="text" name="delegation_size" value="{{ school.delegation_size }}" class="required IntegersOnly" </td>
 	</tr>
 	<tr>
 		<th colspan=2> Primary Contact Information </th>

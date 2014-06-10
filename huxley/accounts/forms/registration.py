@@ -34,8 +34,7 @@ class RegistrationForm(forms.Form):
 
     program_type        = forms.ChoiceField(label="What category best describes your program?", widget=forms.RadioSelect, choices=School.PROGRAM_TYPE_OPTIONS, initial=School.TYPE_CLUB)
     times_attended      = forms.IntegerField(label="Number of BMUN Sessions Attended", widget=forms.TextInput(attrs={'class':'required positive-integer', 'placeholder': 'Number of BMUN Sessions Attended'}))
-    min_delegation_size = forms.IntegerField(label="Minimum Delegation Size", widget=forms.TextInput(attrs={'class':'required positive-integer', 'placeholder': 'Minimum Delegation Size'}))
-    max_delegation_size = forms.IntegerField(label="Maximum Delegation Size", widget=forms.TextInput(attrs={'class':'required positive-integer', 'placeholder': 'Maximum Delegation Size'}))
+    delegation_size     = forms.IntegerField(label="Delegation Size", widget=forms.TextInput(attrs={'class':'required positive-integer', 'placeholder': 'Delegation Size'}))
 
     primary_name    = forms.CharField(label="Name", widget=forms.TextInput(attrs={'class':'required', 'placeholder': 'Name'}))
     primary_email   = forms.EmailField(label="Email", widget=forms.TextInput(attrs={'class':'required email', 'placeholder': 'Email'}))
@@ -85,8 +84,7 @@ class RegistrationForm(forms.Form):
                                      secondary_phone=self.cleaned_data['secondary_phone'],
                                      program_type=int(self.cleaned_data['program_type']),
                                      times_attended=self.cleaned_data['times_attended'],
-                                     min_delegation_size=self.cleaned_data['min_delegation_size'],
-                                     max_delegation_size=self.cleaned_data['max_delegation_size'],
+                                     delegation_size=self.cleaned_data['delegation_size'],
                                      international=self.cleaned_data['school_location'] == School.LOCATION_INTERNATIONAL,
                                      waitlist=True,
                                      registration_fee=registration_fee)

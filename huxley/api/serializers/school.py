@@ -16,5 +16,4 @@ class SchoolSerializer(serializers.ModelSerializer):
                   'zip_code', 'country', 'primary_name', 'primary_email',
                   'primary_phone', 'secondary_name', 'secondary_email',
                   'secondary_phone', 'program_type', 'times_attended',
-                  'min_delegation_size', 'max_delegation_size',
-                  'international', 'waitlist')
+                  'delegation_size', 'international', 'waitlist')

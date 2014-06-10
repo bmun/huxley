@@ -39,8 +39,7 @@ var RegistrationView = React.createClass({
       school_country: "United States of America",
       program_type: "Club",
       times_attended: null,
-      min_delegation_size: null,
-      max_delegation_size: null,
+      delegation_size: null,
       primary_name: null,
       primary_email: null,
       primary_phone: null,
@@ -232,16 +231,9 @@ var RegistrationView = React.createClass({
             <input
               className="text"
               type="text"
-              name="min_delegation_size"
-              placeholder="Minimum Delegation Size"
-              valueLink={this.linkState('min_delegation_size')}
-            />
-            <input
-              className="text"
-              type="text"
-              name="max_delegation_size"
-              placeholder="Maximum Delegation Size"
-              valueLink={this.linkState('max_delegation_size')}
+              name="delegation_size"
+              placeholder="Tentative Delegation Size"
+              valueLink={this.linkState('delegation_size')}
             />
             <hr />
             <h3>Primary Contact</h3>
@@ -436,8 +428,7 @@ var RegistrationView = React.createClass({
           country: this.state.school_country,
           program_type: this.state.program_type,
           times_attended: this.state.times_attended,
-          min_delegation_size: this.state.min_delegation_size,
-          max_delegation_size: this.state.max_delegation_size,
+          delegation_size: this.state.delegation_size,
           primary_name: this.state.primary_name,
           primary_email: this.state.primary_email,
           primary_phone: this.state.primary_phone,

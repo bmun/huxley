@@ -43,8 +43,7 @@ class SchoolDetailGetTestCase(RetrieveAPITestCase):
             'secondary_phone': school.secondary_phone,
             'program_type': school.program_type,
             'times_attended': school.times_attended,
-            'min_delegation_size': school.min_delegation_size,
-            'max_delegation_size': school.max_delegation_size,
+            'delegation_size': school.delegation_size,
             'international': school.international,
             'waitlist': school.waitlist})
 
@@ -83,8 +82,7 @@ class SchoolDetailGetTestCase(RetrieveAPITestCase):
             'secondary_phone': school.secondary_phone,
             'program_type': school.program_type,
             'times_attended': school.times_attended,
-            'min_delegation_size': school.min_delegation_size,
-            'max_delegation_size': school.max_delegation_size,
+            'delegation_size': school.delegation_size,
             'international': school.international,
             'waitlist': school.waitlist})
 
@@ -270,9 +268,6 @@ class SchoolListPostTestCase(CreateAPITestCase):
             'secondary_phone': school.secondary_phone,
             'program_type': school.program_type,
             'times_attended': school.times_attended,
-            'min_delegation_size': school.min_delegation_size,
-            'max_delegation_size': school.max_delegation_size,
+            'delegation_size': school.delegation_size,
             'international': school.international,
             'waitlist': school.waitlist})
-
-

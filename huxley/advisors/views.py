@@ -33,8 +33,7 @@ def welcome(request):
         school.secondary_name = request.POST.get('secname')
         school.secondary_email = request.POST.get('secemail')
         school.secondary_phone = request.POST.get('secphone')
-        school.min_delegation_size = request.POST.get('minDel')
-        school.max_delegation_size = request.POST.get('maxDel')
+        school.delegate_size = request.POST.get('delegation_size')
         school.save();
 
         return HttpResponse()
