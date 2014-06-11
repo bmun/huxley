@@ -61,4 +61,11 @@ class SchoolSerializer(serializers.ModelSerializer):
         return attrs
 
     def validate_phone(self, attrs, source):
+        international = attrs['international']
+        number = attrs[source]
+
+        if international == School.LOCATION_INTERNATIONAL:
+            return bool(re.match("^[0-9\-x\s\+\(\)]+$", number))
+        else:
+            return bool(re.match("^\(?([0-9]{3})\)?\s([0-9]{3})-([0-9]{4})(\sx[0-9]{1,5})?$", number))
 
