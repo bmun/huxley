@@ -7,14 +7,21 @@
 
 'use strict';
 
+var $ = require('jquery');
 var React = require('react/addons');
+var RRouter = require('rrouter');
 
 var Button = require('./Button');
 var NavLink = require('./NavLink');
 var OuterView = require('./OuterView');
 
+require('jquery-ui/effect-shake');
+
 var ForgotPasswordView = React.createClass({
-  mixins: [React.addons.LinkedStateMixin],
+  mixins: [
+    React.addons.LinkedStateMixin,
+    RRouter.RoutingContextMixin
+  ],
 
   getInitialState: function() {
     return {
@@ -72,10 +79,40 @@ var ForgotPasswordView = React.createClass({
   },
 
   _handleSubmit: function(event) {
-    // TODO: build the reset password API and hook it up here.
     this.setState({loading: true});
+    $.ajax({
+      type: 'POST',
+      url: '/api/users/me/password',
+      data: {
+        username: this.state.username
+      },
+      success: this._handleSuccess,
+      error: this._handleError
+    });
     event.preventDefault();
-  }
+  },
+
+  _handleSuccess: function(data, status, jqXHR) {
+    this.navigate('/www/password/reset');
+  },
+
+  _handleError: function(jqXHR, status, error) {
+    var response = jqXHR.responseJSON;
+    if (!response.detail) {
+      return;
+    }
+
+    this.setState({
+      error: "Sorry, we couldn't find a user with that username.",
+      loading: false
+    }, function() {
+      $(this.getDOMNode()).effect(
+        'shake',
+        {direction: 'up', times: 2, distance: 2},
+        250
+      );
+    }.bind(this));
+  },
 });
 
 module.exports = ForgotPasswordView;
