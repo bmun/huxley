@@ -7,7 +7,7 @@ import csv
 
 from django.conf.urls import patterns, url
 from django.contrib import admin
-from django.http import HttpResponse
+from django.http import HttpRequest, HttpResponse
 
 from huxley.core.models import *
 
@@ -73,18 +73,16 @@ class AssignmentAdmin(admin.ModelAdmin):
 class CommitteeAdmin(admin.ModelAdmin):
     def load(self, request):
         """ Imports a CSV file containing committeess. """
-        committees = HttpResponse(content_type='text/csv')
-        reader = csv.reader(committees)
+        committees = request.POST
+        self.createCommittee(committees)
+        return HttpResponse(request.path)
 
+    def create_committee(self, csv_data):
+        reader = csv.reader(csv_data)
         for row in reader:
             com = Committee(name=row[0],
-                            full_name=row[1],
-                            countries=row[2],
-                            delegation_size=row[3],
-                            special=row[4],)
+                            full_name=row[1],)
             com.save()
-
-        return committees
 
     def get_urls(self):
         urls = super(CommitteeAdmin, self).get_urls()

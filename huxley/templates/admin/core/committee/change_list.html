@@ -14,9 +14,10 @@
           </a>
         </li>
         <li>
-          <a href="{% url cl.opts|admin_urlname:'load' %}">
+          <form action="{% url cl.opts|admin_urlname:'load' %}" method="post">
             Import Committee and Countries
-          </a>
+            <input type="file" accept="csv" />
+          </form>
         </li>
       {% endblock %}
     </ul>

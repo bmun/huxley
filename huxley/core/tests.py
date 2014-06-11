@@ -1,9 +1,14 @@
 # Copyright (c) 2011-2014 Berkeley Model United Nations. All rights reserved.
 # Use of this source code is governed by a BSD License (see LICENSE).
 
+import csv
+
+from django.http import HttpRequest
 from django.test import TestCase
 
 from huxley.core.models import *
+from huxley.core.admin import CommitteeAdmin
+from huxley.utils.test import TestUsers
 
 from datetime import date
 from mock import Mock
@@ -138,3 +143,25 @@ class DelegateTest(TestCase):
         """ Tests that the object's __unicode__ outputs correctly. """
         pass
 
+class CommitteeAdminTest(TestCase):
+    """ Tests that the admin panel can import committees. """
+
+    def test_create_committee(self):
+        """Tests the functionality of importing a committee. """
+        csv_data = [
+            'DISC,Disarmament and International Security',
+            'WHO,World Health Organization',
+            'USS,United States Senate'
+        ]
+        c = CommitteeAdmin(Committee, None)
+        c.create_committee(csv_data)
+        com1 = Committee.objects.get(name='DISC')
+        com2 = Committee.objects.get(name='WHO')
+        com3 = Committee.objects.get(name='USS')
+        self.assertEquals(com1.name,'DISC')
+        self.assertEquals(com1.full_name,
+            'Disarmament and International Security')
+        self.assertEquals(com2.name, 'WHO')
+        self.assertEquals(com2.full_name, 'World Health Organization')
+        self.assertEquals(com3.name, 'USS')
+        self.assertEquals(com3.full_name, 'United States Senate')
