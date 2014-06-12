@@ -154,7 +154,7 @@ class CommitteeAdminTest(TestCase):
             'USS,United States Senate'
         ]
         c = CommitteeAdmin(Committee, None)
-        c.create_committee(csv_data)
+        c.create_committees(csv_data)
         com1 = Committee.objects.get(name='DISC')
         com2 = Committee.objects.get(name='WHO')
         com3 = Committee.objects.get(name='USS')
