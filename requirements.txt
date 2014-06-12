@@ -1,5 +1,5 @@
 Django==1.6.5
-Fabric==1.8.3
+Fabric==1.9.0
 South==0.8.4
 coverage==3.7.1
 cssmin==0.1.4
@@ -10,7 +10,7 @@ ecdsa==0.11
 futures==2.1.4
 jsmin==2.0.3
 mock==1.0.1
-paramiko==1.12.3
+paramiko==1.14.0
 pyScss==1.1.5
 pycrypto==2.6.1
 wsgiref==0.1.2
