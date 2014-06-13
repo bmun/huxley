@@ -16,7 +16,7 @@
         <li>
           <form action="{% url cl.opts|admin_urlname:'load' %}" enctype="multipart/form-data" method="post">
             {% csrf_token %}
-            Import Committee and Countries
+            Import Committees
             <input type="file" name="csv" />
             <input type="submit" />
           </form>

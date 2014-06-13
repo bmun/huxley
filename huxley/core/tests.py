@@ -3,6 +3,7 @@
 
 import csv
 
+from django.core.urlresolvers import reverse
 from django.http import HttpRequest
 from django.test import TestCase
 
@@ -149,9 +150,9 @@ class CommitteeAdminTest(TestCase):
     def test_create_committee(self):
         """Tests the functionality of importing a committee. """
         csv_data = [
-            'DISC,Disarmament and International Security',
-            'WHO,World Health Organization',
-            'USS,United States Senate'
+            'DISC,Disarmament and International Security,200,',
+            'WHO,World Health Organization,200,',
+            'USS,United States Senate,100,True'
         ]
         c = CommitteeAdmin(Committee, None)
         c.create_committees(csv_data)
@@ -161,7 +162,35 @@ class CommitteeAdminTest(TestCase):
         self.assertEquals(com1.name,'DISC')
         self.assertEquals(com1.full_name,
             'Disarmament and International Security')
+        self.assertEquals(com1.delegation_size, 200)
+        self.assertEquals(com1.special, False)
         self.assertEquals(com2.name, 'WHO')
         self.assertEquals(com2.full_name, 'World Health Organization')
+        self.assertEquals(com2.delegation_size, 200)
+        self.assertEquals(com2.special, False)
         self.assertEquals(com3.name, 'USS')
         self.assertEquals(com3.full_name, 'United States Senate')
+        self.assertEquals(com3.delegation_size, 100)
+        self.assertEquals(com3.special, True)
+
+    def test_superuser(self):
+        f = open('test_data.csv', 'w')
+        writer = csv.writer(f)
+        writer.writerow([
+            'SPD',
+            'Special Political and Decolonization',
+            200,
+            False
+        ])
+        f.close()
+        user = TestUsers.new_superuser()
+        self.client.login(username='testuser', password='test')
+        with open('test_data.csv') as fp:
+            self.client.post(reverse('admin:core_committee_load'),
+                {'name': 'csv', 'attachment': fp})
+        com = Committee.objects.get(name='SPD')
+        self.assertEquals(com.name, 'SPD')
+        self.assertEquals(com.full_name, 'Special Political and Decolonization')
+        self.assertEquals(com.delegation_size, 200)
+        self.assertEquals(com.special, False)
+

@@ -73,6 +73,7 @@ class AssignmentAdmin(admin.ModelAdmin):
 class CommitteeAdmin(admin.ModelAdmin):
     def load(self, request):
         """ Imports a CSV file containing committeess. """
+        print("loading")
         committees = request.FILES
         self.create_committees(committees['csv'])
         return HttpResponseRedirect('/admin/core/committee/')
@@ -81,7 +82,9 @@ class CommitteeAdmin(admin.ModelAdmin):
         reader = csv.reader(csv_data)
         for row in reader:
             com = Committee(name=row[0],
-                            full_name=row[1],)
+                            full_name=row[1],
+                            delegation_size=row[2],
+                            special=row[3],)
             com.save()
 
     def get_urls(self):
