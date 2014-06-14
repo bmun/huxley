@@ -13,15 +13,13 @@
             {% blocktrans with cl.opts.verbose_name as name %}Add {{ name }}{% endblocktrans %}
           </a>
         </li>
-        <li>
-          <form action="{% url cl.opts|admin_urlname:'load' %}" enctype="multipart/form-data" method="post">
-            {% csrf_token %}
-            Import Committees
-            <input type="file" name="csv" />
-            <input type="submit" />
-          </form>
-        </li>
       {% endblock %}
     </ul>
+    <form action="{% url cl.opts|admin_urlname:'load' %}" enctype="multipart/form-data" method="post">
+      {% csrf_token %}
+      Import Committees
+      <input type="file" name="csv" />
+      <input type="submit" />
+    </form>
   {% endif %}
 {% endblock %}

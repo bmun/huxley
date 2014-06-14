@@ -146,33 +146,6 @@ class DelegateTest(TestCase):
 
 class CommitteeAdminTest(TestCase):
     """ Tests that the admin panel can import committees. """
-
-    def test_create_committee(self):
-        """Tests the functionality of importing a committee. """
-        csv_data = [
-            'DISC,Disarmament and International Security,200,',
-            'WHO,World Health Organization,200,',
-            'USS,United States Senate,100,True'
-        ]
-        c = CommitteeAdmin(Committee, None)
-        c.create_committees(csv_data)
-        com1 = Committee.objects.get(name='DISC')
-        com2 = Committee.objects.get(name='WHO')
-        com3 = Committee.objects.get(name='USS')
-        self.assertEquals(com1.name,'DISC')
-        self.assertEquals(com1.full_name,
-            'Disarmament and International Security')
-        self.assertEquals(com1.delegation_size, 200)
-        self.assertEquals(com1.special, False)
-        self.assertEquals(com2.name, 'WHO')
-        self.assertEquals(com2.full_name, 'World Health Organization')
-        self.assertEquals(com2.delegation_size, 200)
-        self.assertEquals(com2.special, False)
-        self.assertEquals(com3.name, 'USS')
-        self.assertEquals(com3.full_name, 'United States Senate')
-        self.assertEquals(com3.delegation_size, 100)
-        self.assertEquals(com3.special, True)
-
     def test_superuser(self):
         f = open('test_data.csv', 'w')
         writer = csv.writer(f)
@@ -188,9 +161,10 @@ class CommitteeAdminTest(TestCase):
         with open('test_data.csv') as fp:
             self.client.post(reverse('admin:core_committee_load'),
                 {'name': 'committees', 'csv': fp})
-        com = Committee.objects.get(name='SPD')
-        self.assertEquals(com.name, 'SPD')
-        self.assertEquals(com.full_name, 'Special Political and Decolonization')
-        self.assertEquals(com.delegation_size, 200)
-        self.assertEquals(com.special, False)
+        query = Committee.objects.filter(
+            name='SPD',
+            full_name='Special Political and Decolonization',
+            delegation_size=200,
+            special=False).exists()
+        self.assertTrue(query)
 
