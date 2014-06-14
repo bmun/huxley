@@ -7,8 +7,8 @@ from django.core.urlresolvers import reverse
 from django.http import HttpRequest
 from django.test import TestCase
 
-from huxley.core.models import *
 from huxley.core.admin import CommitteeAdmin
+from huxley.core.models import *
 from huxley.utils.test import TestUsers
 
 from datetime import date

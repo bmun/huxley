@@ -6,6 +6,7 @@
 import csv
 
 from django.conf.urls import patterns, url
+from django.core.urlresolvers import reverse
 from django.contrib import admin
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 
@@ -70,9 +71,10 @@ class AssignmentAdmin(admin.ModelAdmin):
         )
         return urls
 
+
 class CommitteeAdmin(admin.ModelAdmin):
     def load(self, request):
-        '''Imports a CSV file containing committeess.'''
+        '''Import a CSV file containing committees.'''
         committees = request.FILES
         reader = csv.reader(committees['csv'])
         for row in reader:
@@ -82,7 +84,7 @@ class CommitteeAdmin(admin.ModelAdmin):
                             special=row[3],)
             com.save()
 
-        return HttpResponseRedirect('/admin/core/committee/')
+        return HttpResponseRedirect(reverse('admin:core_committee_changelist'))
 
     def get_urls(self):
         urls = super(CommitteeAdmin, self).get_urls()
@@ -94,7 +96,6 @@ class CommitteeAdmin(admin.ModelAdmin):
             ),
         )
         return urls
-
 
 
 admin.site.register(Conference)
