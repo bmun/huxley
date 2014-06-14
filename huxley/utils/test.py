@@ -24,6 +24,7 @@ class TestUsers():
     @staticmethod
     def new_superuser(*args, **kwargs):
         kwargs['is_superuser'] = True
+        kwargs['is_staff'] = True
         return TestUsers.new_user(**kwargs)
 
 

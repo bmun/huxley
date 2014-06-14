@@ -180,14 +180,14 @@ class CommitteeAdminTest(TestCase):
             'SPD',
             'Special Political and Decolonization',
             200,
-            False
+            ''
         ])
         f.close()
         user = TestUsers.new_superuser()
         self.client.login(username='testuser', password='test')
         with open('test_data.csv') as fp:
             self.client.post(reverse('admin:core_committee_load'),
-                {'name': 'csv', 'attachment': fp})
+                {'name': 'committees', 'csv': fp})
         com = Committee.objects.get(name='SPD')
         self.assertEquals(com.name, 'SPD')
         self.assertEquals(com.full_name, 'Special Political and Decolonization')
