@@ -4,20 +4,19 @@
 from huxley.accounts.models import User
 from huxley.core.models import School, Committee, Country
 
+
 class TestUsers():
     @staticmethod
     def new_user(**kwargs):
-        u = User(username=kwargs.get('username', 'testuser'),
-                 email=kwargs.get('email', 'test@user.in'))
-        u.set_password(kwargs.get('password', 'test'))
+        u = User(username=kwargs.pop('username', 'testuser'),
+                 email=kwargs.pop('email', 'test@user.in'))
+        u.set_password(kwargs.pop('password', 'test'))
 
-        u.first_name = kwargs.get('first_name', 'Test')
-        u.last_name = kwargs.get('last_name', 'User')
+        u.first_name = kwargs.pop('first_name', 'Test')
+        u.last_name = kwargs.pop('last_name', 'User')
 
-        skip = {'username', 'email', 'password', 'first_name', 'last_name'}
         for attr, value in kwargs.items():
-            if attr not in skip:
-                setattr(u, attr, value)
+            setattr(u, attr, value)
 
         u.save()
         return u
@@ -27,52 +26,50 @@ class TestUsers():
         kwargs['is_superuser'] = True
         return TestUsers.new_user(**kwargs)
 
+
 class TestSchools():
     @staticmethod
     def new_school(**kwargs):
-        s = School(name=kwargs.get('name', 'Test School'),
-                   address=kwargs.get('address', '1 Schoolhouse Road'),
-                   city=kwargs.get('city', 'Berkeley'),
-                   state=kwargs.get('state', 'CA'),
-                   zip_code=kwargs.get('zip_code', '94024'),
-                   country=kwargs.get('country', 'United States of America'),
-                   primary_name=kwargs.get('primary_name', ''),
-                   primary_email=kwargs.get('primary_email', ''),
-                   primary_phone=kwargs.get('primary_phone', ''),
-                   secondary_name=kwargs.get('secondary_name', ''),
-                   secondary_email=kwargs.get('secondary_email', ''),
-                   secondary_phone=kwargs.get('secondary_phone', ''),
-                   program_type=kwargs.get('program_type', School.TYPE_CLUB),
-                   times_attended=kwargs.get('times_attended', 0),
-                   delegation_size=kwargs.get('delegation_size', 0))
+        s = School(name=kwargs.pop('name', 'Test School'),
+                   address=kwargs.pop('address', '1 Schoolhouse Road'),
+                   city=kwargs.pop('city', 'Berkeley'),
+                   state=kwargs.pop('state', 'CA'),
+                   zip_code=kwargs.pop('zip_code', '94024'),
+                   country=kwargs.pop('country', 'United States of America'),
+                   primary_name=kwargs.pop('primary_name', ''),
+                   primary_email=kwargs.pop('primary_email', ''),
+                   primary_phone=kwargs.pop('primary_phone', ''),
+                   secondary_name=kwargs.pop('secondary_name', ''),
+                   secondary_email=kwargs.pop('secondary_email', ''),
+                   secondary_phone=kwargs.pop('secondary_phone', ''),
+                   program_type=kwargs.pop('program_type', School.TYPE_CLUB),
+                   times_attended=kwargs.pop('times_attended', 0),
+                   delegation_size=kwargs.pop('delegation_size', 0))
 
-        skip = {'name', 'address', 'city', 'state', 'zip_code', 'country',
-                'primary_name', 'primary_email', 'primary_phone',
-                'secondary_name', 'secondary_email', 'secondary_phone',
-                'program_type', 'times_attended', 'delegation_size'}
         for attr, value in kwargs.items():
-            if attr not in skip:
-                setattr(s, attr, value)
+            setattr(s, attr, value)
 
         s.save()
         TestUsers.new_user(school=s, committee=TestCommittees.new_committee())
         return s
 
+
 class TestCommittees():
     @staticmethod
     def new_committee(**kwargs):
         c = Committee(
-                name=kwargs.get('name', 'testCommittee'),
-                full_name=kwargs.get('fullName', 'testCommittee'),
-                delegation_size=kwargs.get('delegation_size', 10),
-                special=kwargs.get('special', False))
+                name=kwargs.pop('name', 'testCommittee'),
+                full_name=kwargs.pop('fullName', 'testCommittee'),
+                delegation_size=kwargs.pop('delegation_size', 10),
+                special=kwargs.pop('special', False))
         c.save()
         return c
+
 
 class TestCountries():
     @staticmethod
     def new_country(**kwargs):
-        c = Country(name=kwargs.get('name', 'TestCountry'),
-                    special=kwargs.get('special', False))
+        c = Country(name=kwargs.pop('name', 'TestCountry'),
+                    special=kwargs.pop('special', False))
         c.save()
         return c
