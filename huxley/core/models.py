@@ -114,11 +114,29 @@ class School(models.Model):
         (TYPE_CLASS, 'Class'),
     )
 
+    TYPE_STUDENT = 1
+    TYPE_FACULTY = 2
+    CONTACT_TYPE_OPTIONS = (
+        (TYPE_FACULTY, 'Faculty'),
+        (TYPE_STUDENT, 'Student'),
+    )
+
     LOCATION_USA = 'location/usa'
     LOCATION_INTERNATIONAL = 'location/international'
     LOCATION_OPTIONS = (
         (LOCATION_USA, 'United States of America'),
         (LOCATION_INTERNATIONAL, 'International'),
+    )
+
+    GENDER_MALE = 1
+    GENDER_FEMALE = 2
+    GENDER_OTHER = 3
+    GENDER_UNSPECIFIED = 4
+    GENDER_OPTIONS = (
+        (GENDER_MALE, 'Male'),
+        (GENDER_FEMALE, 'Female'),
+        (GENDER_OTHER, 'Other'),
+        (GENDER_UNSPECIFIED, 'Unspecified'),
     )
 
     registered          = models.DateTimeField(auto_now_add=True)
@@ -129,11 +147,15 @@ class School(models.Model):
     zip_code            = models.CharField(max_length=16)
     country             = models.CharField(max_length=64)
     primary_name        = models.CharField(max_length=128)
+    primary_gender      = models.PositiveSmallIntegerField(choices=GENDER_OPTIONS, default=GENDER_UNSPECIFIED)
     primary_email       = models.EmailField()
     primary_phone       = models.CharField(max_length=32)
+    primary_type        = models.PositiveSmallIntegerField(choices=CONTACT_TYPE_OPTIONS, default=TYPE_FACULTY)
     secondary_name      = models.CharField(max_length=128, blank=True)
+    secondary_gender    = models.PositiveSmallIntegerField(choices=GENDER_OPTIONS, blank=True, default=GENDER_UNSPECIFIED)
     secondary_email     = models.EmailField(blank=True)
     secondary_phone     = models.CharField(max_length=32, blank=True)
+    secondary_type      = models.PositiveSmallIntegerField(choices=CONTACT_TYPE_OPTIONS, blank=True, default=TYPE_FACULTY)
     program_type        = models.PositiveSmallIntegerField(choices=PROGRAM_TYPE_OPTIONS)
     times_attended      = models.PositiveSmallIntegerField(default=0)
     delegation_size     = models.PositiveSmallIntegerField(default=0)

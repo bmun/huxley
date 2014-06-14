@@ -37,11 +37,15 @@ class RegistrationForm(forms.Form):
     delegation_size     = forms.IntegerField(label="Delegation Size", widget=forms.TextInput(attrs={'class':'required positive-integer', 'placeholder': 'Delegation Size'}))
 
     primary_name    = forms.CharField(label="Name", widget=forms.TextInput(attrs={'class':'required', 'placeholder': 'Name'}))
+    primary_gender  = forms.ChoiceField(label="Gender", widget=forms.Select(), choices=School.GENDER_OPTIONS, initial=School.GENDER_MALE)
     primary_email   = forms.EmailField(label="Email", widget=forms.TextInput(attrs={'class':'required email', 'placeholder': 'Email'}))
     primary_phone   = forms.CharField(label="Phone", widget=forms.TextInput(attrs={'class':'required phoneNum phoneVal', 'placeholder': 'Phone Number'}))
+    primary_type    = forms.ChoiceField(label="Type", widget=forms.Select(), choices=School.CONTACT_TYPE_OPTIONS, initial=School.TYPE_FACULTY)
     secondary_name  = forms.CharField(label="Name", widget=forms.TextInput(attrs={'class': 'third', 'placeholder': 'Name'}), required=False)
+    secondary_gender= forms.ChoiceField(label="Gender", widget=forms.Select(), choices=School.GENDER_OPTIONS, initial=School.GENDER_MALE, required=False)
     secondary_email = forms.EmailField(label="Email", widget=forms.TextInput(attrs={'class':'email', 'placeholder': 'Email'}), required=False)
     secondary_phone = forms.CharField(label="Phone", widget=forms.TextInput(attrs={'class':'phoneNum phoneVal', 'placeholder': 'Phone Number'}), required=False)
+    secondary_type  = forms.ChoiceField(label="Type", widget=forms.Select(), choices=School.CONTACT_TYPE_OPTIONS, initial=School.TYPE_FACULTY, required=False)
 
     country_pref1  = forms.ChoiceField(label="01", widget=forms.Select(), choices=country_choices, required=False, initial=0)
     country_pref2  = forms.ChoiceField(label="02", widget=forms.Select(), choices=country_choices, required=False, initial=0)
@@ -77,11 +81,15 @@ class RegistrationForm(forms.Form):
                                      zip_code=self.cleaned_data['school_zip'],
                                      country=self.cleaned_data['school_country'],
                                      primary_name=self.cleaned_data['primary_name'],
+                                     primary_gender=self.cleaned_data['primary_gender'],
                                      primary_email=self.cleaned_data['primary_email'],
                                      primary_phone=self.cleaned_data['primary_phone'],
+                                     primary_type=self.cleaned_data['primary_type'],
                                      secondary_name=self.cleaned_data['secondary_name'],
+                                     secondary_gender=self.cleaned_data['secondary_gender'] or 0,
                                      secondary_email=self.cleaned_data['secondary_email'],
                                      secondary_phone=self.cleaned_data['secondary_phone'],
+                                     secondary_type=self.cleaned_data['secondary_type'] or 0,
                                      program_type=int(self.cleaned_data['program_type']),
                                      times_attended=self.cleaned_data['times_attended'],
                                      delegation_size=self.cleaned_data['delegation_size'],

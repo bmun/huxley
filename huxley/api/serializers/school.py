@@ -12,8 +12,28 @@ class SchoolSerializer(serializers.ModelSerializer):
     class Meta:
         model = School
         # TODO: country/committee preferences
-        fields = ('id', 'registered', 'name', 'address', 'city', 'state',
-                  'zip_code', 'country', 'primary_name', 'primary_email',
-                  'primary_phone', 'secondary_name', 'secondary_email',
-                  'secondary_phone', 'program_type', 'times_attended',
-                  'delegation_size', 'international', 'waitlist')
+        fields = (
+            'id',
+            'registered',
+            'name',
+            'address',
+            'city',
+            'state',
+            'zip_code',
+            'country',
+            'primary_name',
+            'primary_gender',
+            'primary_email',
+            'primary_phone',
+            'primary_type',
+            'secondary_name',
+            'secondary_gender',
+            'secondary_email',
+            'secondary_phone',
+            'secondary_type',
+            'program_type',
+            'times_attended',
+            'delegation_size',
+            'international',
+            'waitlist',
+        )
