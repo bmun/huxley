@@ -1,6 +1,9 @@
 # Copyright (c) 2011-2014 Berkeley Model United Nations. All rights reserved.
 # Use of this source code is governed by a BSD License (see LICENSE).
 
+import csv
+import StringIO
+
 from huxley.accounts.models import User
 from huxley.core.models import School, Committee, Country
 
@@ -78,3 +81,19 @@ class TestCountries():
                     special=kwargs.pop('special', False))
         c.save()
         return c
+
+
+class TestFiles():
+    @staticmethod
+    def new_csv(content=[], filename='test.csv'):
+        f = StringIO.StringIO()
+        f.name = filename
+
+        writer = csv.writer(f)
+        for row in content:
+            writer.writerow(row)
+        f.seek(0)
+
+        return f
+
+

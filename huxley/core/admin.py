@@ -80,8 +80,8 @@ class CommitteeAdmin(admin.ModelAdmin):
         for row in reader:
             com = Committee(name=row[0],
                             full_name=row[1],
-                            delegation_size=row[2],
-                            special=row[3],)
+                            delegation_size=int(row[2]),
+                            special=bool(row[3]))
             com.save()
 
         return HttpResponseRedirect(reverse('admin:core_committee_changelist'))
