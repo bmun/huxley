@@ -151,7 +151,8 @@ class CommitteeAdminTest(TestCase):
         self.client.login(username='testuser', password='test')
 
         f = TestFiles.new_csv([
-            ['SPD', 'Special Pôlitical and Decolonization', 2, '']
+            ['SPD', 'Special Pôlitical and Decolonization', 2, ''],
+            ['USS', 'United States Senate', 2, True]
         ])
 
         with closing(f) as f:
@@ -162,4 +163,10 @@ class CommitteeAdminTest(TestCase):
             full_name='Special Pôlitical and Decolonization',
             delegation_size=2,
             special=False
+        ).exists())
+        self.assertTrue(Committee.objects.filter(
+            name='USS',
+            full_name='United States Senate',
+            delegation_size=2,
+            special=True
         ).exists())
