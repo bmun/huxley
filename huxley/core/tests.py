@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # Copyright (c) 2011-2014 Berkeley Model United Nations. All rights reserved.
 # Use of this source code is governed by a BSD License (see LICENSE).
 
@@ -150,7 +151,7 @@ class CommitteeAdminTest(TestCase):
         self.client.login(username='testuser', password='test')
 
         f = TestFiles.new_csv([
-            ['SPD', 'Special Political and Decolonization', 2, '']
+            ['SPD', 'Special Pôlitical and Decolonization', 2, '']
         ])
 
         with closing(f) as f:
@@ -158,7 +159,7 @@ class CommitteeAdminTest(TestCase):
 
         self.assertTrue(Committee.objects.filter(
             name='SPD',
-            full_name='Special Political and Decolonization',
+            full_name='Special Pôlitical and Decolonization',
             delegation_size=2,
             special=False
         ).exists())
