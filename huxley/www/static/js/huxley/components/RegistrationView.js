@@ -292,70 +292,70 @@ var RegistrationView = React.createClass({
                 <label>01</label>
                 <select name="country_pref1" valueLink={this.linkState('country_pref1')} defaultValue="0">
                   <option value="0">No Preference</option>
-                  {this.renderOptions()}
+                  {this.renderCommitteeOptions()}
                 </select>
               </li>
               <li>
                 <label>02</label>
                 <select name="country_pref2" valueLink={this.linkState('country_pref2')} defaultValue="0">
                   <option value="0">No Preference</option>
-                  {this.renderOptions()}
+                  {this.renderCommitteeOptions()}
                 </select>
               </li>
               <li>
                 <label>03</label>
                 <select name="country_pref3" valueLink={this.linkState('country_pref3')} defaultValue="0">
                   <option value="0">No Preference</option>
-                  {this.renderOptions()}
+                  {this.renderCommitteeOptions()}
                 </select>
               </li>
               <li>
                 <label>04</label>
                 <select name="country_pref4" valueLink={this.linkState('country_pref4')} defaultValue="0">
                   <option value="0">No Preference</option>
-                  {this.renderOptions()}
+                  {this.renderCommitteeOptions()}
                 </select>
               </li>
               <li>
                 <label>05</label>
                 <select name="country_pref5" valueLink={this.linkState('country_pref5')} defaultValue="0">
                   <option value="0">No Preference</option>
-                  {this.renderOptions()}
+                  {this.renderCommitteeOptions()}
                 </select>
               </li>
               <li>
                 <label>06</label>
                 <select name="country_pref6" valueLink={this.linkState('country_pref6')} defaultValue="0">
                   <option value="0">No Preference</option>
-                  {this.renderOptions()}
+                  {this.renderCommitteeOptions()}
                 </select>
               </li>
               <li>
                 <label>07</label>
                 <select name="country_pref7" valueLink={this.linkState('country_pref7')} defaultValue="0">
                   <option value="0">No Preference</option>
-                  {this.renderOptions()}
+                  {this.renderCommitteeOptions()}
                 </select>
               </li>
               <li>
                 <label>08</label>
                 <select name="country_pref8" valueLink={this.linkState('country_pref8')} defaultValue="0">
                   <option value="0">No Preference</option>
-                  {this.renderOptions()}
+                  {this.renderCommitteeOptions()}
                 </select>
               </li>
               <li>
                 <label>09</label>
                 <select name="country_pref9" valueLink={this.linkState('country_pref9')} defaultValue="0">
                   <option value="0">No Preference</option>
-                  {this.renderOptions()}
+                  {this.renderCommitteeOptions()}
                 </select>
               </li>
               <li>
                 <label>10</label>
                 <select name="country_pref10" valueLink={this.linkState('country_pref10')} defaultValue="0">
                   <option value="0">No Preference</option>
-                  {this.renderOptions()}
+                  {this.renderCommitteeOptions()}
                 </select>
               </li>
             </ul>
@@ -403,7 +403,7 @@ var RegistrationView = React.createClass({
     });
   },
 
-  renderOptions: function() {
+  renderCommitteeOptions: function() {
     return this.state.countries.map(function(country) {
       return <option key={country.id} value={country.id}>{country.name}</option>
     });
