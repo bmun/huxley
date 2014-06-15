@@ -41,11 +41,15 @@ var RegistrationView = React.createClass({
       times_attended: null,
       delegation_size: null,
       primary_name: null,
+      primary_gender: 4,
       primary_email: null,
       primary_phone: null,
+      primary_type: 2,
       secondary_name: null,
+      secondary_gender: 4,
       secondary_email: null,
       secondary_phone: null,
+      secondary_type: 2,
       country_pref1: 0,
       country_pref2: 0,
       country_pref3: 0,
@@ -237,6 +241,7 @@ var RegistrationView = React.createClass({
             />
             <hr />
             <h3>Primary Contact</h3>
+            {this.renderContactGenderField('primary_gender')}
             <input
               className="text"
               type="text"
@@ -258,8 +263,10 @@ var RegistrationView = React.createClass({
               placeholder="Phone Number"
               valueLink={this.linkState('primary_phone')}
             />
+            {this.renderContactTypeField('primary_type')}
             <hr />
             <h3>Secondary Contact</h3>
+            {this.renderContactGenderField('secondary_gender')}
             <input
               className="text"
               type="text"
@@ -281,6 +288,7 @@ var RegistrationView = React.createClass({
               placeholder="Phone Number"
               valueLink={this.linkState('secondary_phone')}
             />
+            {this.renderContactTypeField('secondary_type')}
             <hr />
             <h3>Country Preferences></h3>
             <p className="instructions">Please choose 10 United Nations Member States or
@@ -409,6 +417,26 @@ var RegistrationView = React.createClass({
     });
   },
 
+  renderContactGenderField: function(name) {
+    return (
+      <select valueLink={this.linkState(name)}>
+        <option key={4} value={4}>Unspecified</option>
+        <option key={1} value={1}>Mr.</option>
+        <option key={2} value={2}>Mrs./Ms.</option>
+        <option key={3} value={3}>Other</option>
+      </select>
+    );
+  },
+
+  renderContactTypeField: function(name) {
+    return (
+      <select valueLink={this.linkState(name)}>
+        <option key={1} value={1}>Student</option>
+        <option key={2} value={2}>Faculty</option>
+      </select>
+    );
+  },
+
   _handleSubmit: function(event) {
     this.setState({loading: true});
     $.ajax({
@@ -430,11 +458,15 @@ var RegistrationView = React.createClass({
           times_attended: this.state.times_attended,
           delegation_size: this.state.delegation_size,
           primary_name: this.state.primary_name,
+          primary_gender: this.state.primary_gender,
           primary_email: this.state.primary_email,
           primary_phone: this.state.primary_phone,
+          primary_type: this.state.primary_type,
           secondary_name: this.state.secondary_name,
+          secondary_gender: this.state.secondary_gender,
           secondary_email: this.state.secondary_email,
           secondary_phone: this.state.secondary_phone,
+          secondary_type: this.state.secondary_type,
           country_prefs: [
             this.state.country_pref1,
             this.state.country_pref2,
