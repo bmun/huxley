@@ -6,6 +6,7 @@ import re
 from rest_framework import serializers
 
 from huxley.core.models import School
+from huxley.api import validators
 
 
 class SchoolSerializer(serializers.ModelSerializer):
@@ -18,7 +19,7 @@ class SchoolSerializer(serializers.ModelSerializer):
                   'zip_code', 'country', 'primary_name', 'primary_email',
                   'primary_phone', 'secondary_name', 'secondary_email',
                   'secondary_phone', 'program_type', 'times_attended',
-                  'min_delegation_size', 'max_delegation_size',
+                  'delegation_size',
                   'international', 'waitlist')
 
     def validate_school_name(self, attrs, source):
@@ -29,8 +30,7 @@ class SchoolSerializer(serializers.ModelSerializer):
                 'A school with the name "%s" has already been registered.'
                 % (school_name))
 
-        if re.match("^[A-Za-z0-9\s]+$", school_name) is None:
-            raise ValidationError(
+            validate_alphanumerical(school_name,
                 'A school name may only contain alphanumeric characters.')
 
         return attrs
@@ -42,9 +42,8 @@ class SchoolSerializer(serializers.ModelSerializer):
             raise forms.ValidationError(
                 'You must provide a state for a school in the United States.')
 
-        if re.match("^[A-Za-z\s]+$", school_state) is None:
-            raise ValidationError(
-                'States may only contain alphabetical characters.')
+        validate_alphabetical(school_state,
+            'States may only contain alphabetical characters.')
 
         return attrs
 
@@ -54,9 +53,8 @@ class SchoolSerializer(serializers.ModelSerializer):
         if attrs['school_location'] == School.LOCATION_INTERNATIONAL and not school_country:
             raise forms.ValidationError('International schools must provide a country.')
 
-        if re.match("^[A-Za-z\s]+$", school_state) is None:
-            raise ValidationError(
-                'Countries may only contain alphabetical characters.')
+        validate_alphabetical(school_country,
+            'Countries may only contain alphabetical characters.')
 
         return attrs
 
@@ -69,3 +67,83 @@ class SchoolSerializer(serializers.ModelSerializer):
         else:
             return bool(re.match("^\(?([0-9]{3})\)?\s([0-9]{3})-([0-9]{4})(\sx[0-9]{1,5})?$", number))
 
+    def validate_school_address(self, attrs, source):
+        school_address = attrs[source]
+
+        validate_alphanumerical(school_address,
+            'School address should be alphanumeric.')
+
+        return attrs
+
+    def validate_school_city(self, attrs, source):
+        school_city = attrs[source]
+
+        validate_alphabetical(school_city,
+            'School city should be validate_alphabetical.')
+
+        return attrs
+
+    def validate_school_zip(self, attrs, source):
+        school_zip = attrs[source]
+
+        validate_numerical(school_zip,
+            'School zip should be numerical.')
+
+        return attrs
+
+    def validate_times_attended(self, attrs, source):
+        if(attrs != None):
+            times_attended = attrs[source]
+
+            validate_numerical(times_attended,
+                'Times attended must be numerical')
+
+            return attrs
+
+        else:
+            pass
+
+
+    def validate_delegation_size(self, attrs, source):
+        if(attrs != None):
+            delegation_size = attrs[source]
+
+            validate_numerical(delegation_size,
+                'Delegation size must be numerical.')
+
+            return attrs
+
+        else:
+            pass
+
+    def validate_primary_name(self, attrs, source):
+        primary_name = attrs[source]
+
+        validators.validate_alphabetical(primary_name,
+            'Primary name must be alphanumeric.')
+
+        return attrs
+
+    '''def validate_primary_email(self, attrs, source):
+        if(attrs != None):
+            primary_email = attrs[source]
+
+            validators.validate_email(primary_email,
+                'Email can only contain ')
+
+            return attrs
+
+        else:
+            pass'''
+
+    def validate_primary_phone(self, attrs, source):
+        pass
+
+    def validate_secondary_name(self, attrs, source):
+        pass
+
+    def validate_secondary_email(self, attrs, source):
+        pass
+
+    def validate_secondary_phone(self, attrs, source):
+        pass
