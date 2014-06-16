@@ -6,7 +6,7 @@ from roots import JS_ROOT
 
 
 PIPELINE_COMPILERS = (
-    'huxley.core.compilers.pyscss.PySCSSCompiler',
+    'huxley.utils.pipeline.PySCSSCompiler',
     'pipeline_browserify.compiler.BrowserifyCompiler',
 )
 

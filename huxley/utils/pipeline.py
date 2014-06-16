@@ -1,9 +1,13 @@
 # Copyright (c) 2011-2014 Berkeley Model United Nations. All rights reserved.
 # Use of this source code is governed by a BSD License (see LICENSE).
 
-from django.conf import settings
+from __future__ import absolute_import
+
 from os.path import dirname
+
+from django.conf import settings
 from pipeline.compilers import SubProcessCompiler
+
 
 class PySCSSCompiler(SubProcessCompiler):
     output_extension = 'css'
