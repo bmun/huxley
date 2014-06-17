@@ -21,7 +21,6 @@ describe('CurrentUserStore', function() {
       user_type: 1
     });
     CurrentUserStore.bootstrap()
-    var user = CurrentUserStore.getCurrentUser();
     expect(global.currentUser).toBeUndefined();
   });
 });
