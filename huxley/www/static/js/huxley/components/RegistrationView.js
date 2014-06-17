@@ -13,6 +13,7 @@ var $ = require('jquery');
 var React = require('react/addons');
 
 var Button = require('./Button');
+var ContactTypes = require('../constants/ContactTypes');
 var CountryStore = require('../stores/CountryStore');
 var CommitteeStore = require('../stores/CommitteeStore');
 var GenderConstants = require('../constants/GenderConstants');
@@ -45,12 +46,12 @@ var RegistrationView = React.createClass({
       primary_gender: GenderConstants.UNSPECFIED,
       primary_email: null,
       primary_phone: null,
-      primary_type: 2,
+      primary_type: ContactTypes.FACULTY,
       secondary_name: null,
       secondary_gender: GenderConstants.UNSPECFIED,
       secondary_email: null,
       secondary_phone: null,
-      secondary_type: 2,
+      secondary_type: ContactTypes.FACULTY,
       country_pref1: 0,
       country_pref2: 0,
       country_pref3: 0,
@@ -448,8 +449,16 @@ var RegistrationView = React.createClass({
   renderContactTypeField: function(name) {
     return (
       <select valueLink={this.linkState(name)}>
-        <option key={1} value={1}>Student</option>
-        <option key={2} value={2}>Faculty</option>
+        <option
+          key={ContactTypes.STUDENT}
+          value={ContactTypes.STUDENT}>
+          Student
+        </option>
+        <option
+          key={ContactTypes.FACULTY}
+          value={ContactTypes.FACULTY}>
+          Faculty
+        </option>
       </select>
     );
   },
