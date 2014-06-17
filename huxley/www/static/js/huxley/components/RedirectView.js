@@ -15,8 +15,7 @@ var OuterView = require('./OuterView');
 var RedirectView = React.createClass({
   mixins: [RRouter.RoutingContextMixin],
 
-  componentWillMount: function() {
-    console.log(this.props.user.isAnonymous());
+  componentDidMount: function() {
     if (this.props.user.isAnonymous()) {
       this.navigate('/www/login');
     } else if (this.props.user.isAdvisor()) {
