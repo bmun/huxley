@@ -17,10 +17,13 @@ describe('CurrentUserStore', function() {
   });
 
   it('deletes the reference to the global user object', function() {
-    global.currentUser = new User({
-      user_type: 1
-    });
+    global.currentUser = { user_type: 1 }
     CurrentUserStore.bootstrap()
     expect(global.currentUser).toBeUndefined();
+  });
+
+  it('subscribes to the dispatcher', function() {
+    var Dispatcher = require('../../dispatcher/Dispatcher');
+    expect(Dispatcher.register.mock.calls.length).toEqual(1);
   });
 });
