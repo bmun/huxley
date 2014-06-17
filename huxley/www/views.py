@@ -4,6 +4,7 @@
 import json
 
 from huxley.api.serializers import UserSerializer
+from huxley.core.constants import ContactGender
 from huxley.utils.shortcuts import render_template
 
 
@@ -12,5 +13,8 @@ def index(request):
     if request.user.is_authenticated():
         user_dict = UserSerializer(request.user).data
 
-    context = {'user_json': json.dumps(user_dict).replace('</', '<\\/')}
+    context = {
+        'user_json': json.dumps(user_dict).replace('</', '<\\/'),
+        'gender_constants': ContactGender.to_json(),
+    }
     return render_template(request, 'www.html', context)

@@ -15,6 +15,7 @@
     {% block js %}
         <script type="text/javascript">
             currentUser = {{ user_json|safe }};
+            GenderConstants = {{ gender_constants|safe }};
         </script>
         {% compressed_js 'www' %}
     {% endblock js %}

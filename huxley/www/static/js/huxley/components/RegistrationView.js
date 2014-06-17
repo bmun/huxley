@@ -15,6 +15,7 @@ var React = require('react/addons');
 var Button = require('./Button');
 var CountryStore = require('../stores/CountryStore');
 var CommitteeStore = require('../stores/CommitteeStore');
+var GenderConstants = require('../constants/GenderConstants');
 var NavLink = require('./NavLink');
 var OuterView = require('./OuterView');
 
@@ -41,12 +42,12 @@ var RegistrationView = React.createClass({
       times_attended: null,
       delegation_size: null,
       primary_name: null,
-      primary_gender: 4,
+      primary_gender: GenderConstants.UNSPECFIED,
       primary_email: null,
       primary_phone: null,
       primary_type: 2,
       secondary_name: null,
-      secondary_gender: 4,
+      secondary_gender: GenderConstants.UNSPECFIED,
       secondary_email: null,
       secondary_phone: null,
       secondary_type: 2,
@@ -420,10 +421,26 @@ var RegistrationView = React.createClass({
   renderContactGenderField: function(name) {
     return (
       <select valueLink={this.linkState(name)}>
-        <option key={4} value={4}>Unspecified</option>
-        <option key={1} value={1}>Mr.</option>
-        <option key={2} value={2}>Mrs./Ms.</option>
-        <option key={3} value={3}>Other</option>
+        <option
+          key={GenderConstants.UNSPECFIED}
+          value={GenderConstants.UNSPECFIED}>
+          Unspecified
+        </option>
+        <option
+          key={GenderConstants.MALE}
+          value={GenderConstants.MALE}>
+          Mr.
+        </option>
+        <option
+          key={GenderConstants.FEMALE}
+          value={GenderConstants.FEMALE}>
+          Mrs./Ms.
+        </option>
+        <option
+          key={GenderConstants.OTHER}
+          value={GenderConstants.OTHER}>
+          Other
+        </option>
       </select>
     );
   },
