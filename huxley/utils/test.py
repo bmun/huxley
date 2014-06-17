@@ -5,6 +5,7 @@ import csv
 import StringIO
 
 from huxley.accounts.models import User
+from huxley.core.constants import ContactGender, ContactType
 from huxley.core.models import School, Committee, Country
 
 
@@ -41,15 +42,15 @@ class TestSchools():
                    zip_code=kwargs.pop('zip_code', '94024'),
                    country=kwargs.pop('country', 'United States of America'),
                    primary_name=kwargs.pop('primary_name', ''),
-                   primary_gender=kwargs.pop('primary_gender', School.GENDER_MALE),
+                   primary_gender=kwargs.pop('primary_gender', ContactGender.MALE),
                    primary_email=kwargs.pop('primary_email', ''),
                    primary_phone=kwargs.pop('primary_phone', ''),
-                   primary_type=kwargs.pop('primary_type', School.TYPE_FACULTY),
+                   primary_type=kwargs.pop('primary_type', ContactType.FACULTY),
                    secondary_name=kwargs.pop('secondary_name', ''),
-                   secondary_gender=kwargs.pop('secondary_gender', School.GENDER_MALE),
+                   secondary_gender=kwargs.pop('secondary_gender', ContactGender.MALE),
                    secondary_email=kwargs.pop('secondary_email', ''),
                    secondary_phone=kwargs.pop('secondary_phone', ''),
-                   secondary_type=kwargs.pop('secondary_type', School.TYPE_FACULTY),
+                   secondary_type=kwargs.pop('secondary_type', ContactType.FACULTY),
                    program_type=kwargs.pop('program_type', School.TYPE_CLUB),
                    times_attended=kwargs.pop('times_attended', 0),
                    delegation_size=kwargs.pop('delegation_size', 0))
