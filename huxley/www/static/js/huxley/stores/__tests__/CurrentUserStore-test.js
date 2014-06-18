@@ -5,22 +5,23 @@
 
 'use strict';
 
-jest.dontMock('../CurrentUserStore')
-jest.dontMock('../../User')
-jest.dontMock('events')
+jest.dontMock('../CurrentUserStore');
+jest.dontMock('../../User');
+jest.dontMock('events');
 
 describe('CurrentUserStore', function() {
-  var ActionConstants
+  var ActionConstants;
   var CurrentUserStore;
   var Dispatcher;
-  var registerCallBack;
+
+  var registerCallback;
 
   beforeEach(function() {
     ActionConstants = require('../../constants/ActionConstants');
     CurrentUserStore = require('../CurrentUserStore');
     Dispatcher = require('../../dispatcher/Dispatcher');
 
-    registerCallBack = Dispatcher.register.mock.calls[0][0];
+    registerCallback = Dispatcher.register.mock.calls[0][0];
     global.currentUser = {id: 1, user_type: 1};
     CurrentUserStore.bootstrap();
   });
@@ -39,16 +40,18 @@ describe('CurrentUserStore', function() {
 
   it('sets a new user on login', function() {
     var user = CurrentUserStore.getCurrentUser();
-    registerCallBack({
+    registerCallback({
       actionType: ActionConstants.LOGIN,
-      user: user
+      user: {id: 1, user_type: 1}
     });
     var mockUser = CurrentUserStore.getCurrentUser();
     expect(user).not.toBe(mockUser);
+    expect(mockUser.getData().id).toEqual(1);
+    expect(mockUser.getData().user_type).toEqual(1);
   });
 
   it('sets an anonymous user on logout', function() {
-    registerCallBack({
+    registerCallback({
       actionType: ActionConstants.LOGOUT,
     });
     var mockUser = CurrentUserStore.getCurrentUser();
@@ -59,7 +62,7 @@ describe('CurrentUserStore', function() {
     var callback = jest.genMockFunction();
     CurrentUserStore.addChangeListener(callback);
     expect(callback).not.toBeCalled();
-    registerCallBack({
+    registerCallback({
       actionType: ActionConstants.LOGIN,
       user: {id: 1, user_type: 1}
     });
