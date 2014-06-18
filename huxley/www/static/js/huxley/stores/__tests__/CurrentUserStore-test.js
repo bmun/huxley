@@ -42,11 +42,11 @@ describe('CurrentUserStore', function() {
     var user = CurrentUserStore.getCurrentUser();
     registerCallback({
       actionType: ActionConstants.LOGIN,
-      user: {id: 1, user_type: 1}
+      user: {id: 2, user_type: 1}
     });
     var mockUser = CurrentUserStore.getCurrentUser();
     expect(user).not.toBe(mockUser);
-    expect(mockUser.getData().id).toEqual(1);
+    expect(mockUser.getData().id).toEqual(2);
     expect(mockUser.getData().user_type).toEqual(1);
   });
 
