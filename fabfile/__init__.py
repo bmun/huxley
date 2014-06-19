@@ -10,7 +10,7 @@ from fabric.api import abort, env, hide, local, settings, task
 from fabric.colors import green, red, yellow
 from fabric.contrib.console import confirm
 
-from . import dependencies, test
+from . import dependencies, migrations, test
 from .utils import git
 
 
@@ -24,6 +24,7 @@ def feature(branch_name=None):
     if branch_name:
         git.new_branch(branch_name)
         dependencies.check()
+        migrations.check()
     else:
         print red('No branch name given. Usage: fab feature:<branch_name>')
 
@@ -34,6 +35,7 @@ def update():
     print 'Updating your local branch...'
     git.pull()
     dependencies.check()
+    migrations.check()
 
 
 @task
