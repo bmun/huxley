@@ -3,7 +3,7 @@
 
 from django.db import models
 
-from huxley.core.constants import ContactGender, ContactType
+from huxley.core.constants import ContactGender, ContactType, DelegationType
 
 
 class Conference(models.Model):
@@ -136,6 +136,14 @@ class School(models.Model):
         (ContactGender.UNSPECIFIED, 'Unspecified'),
     )
 
+    DELEGATION_SIZE_OPTIONS = (
+        (DelegationType.BEGINNER, 'Beginner'),
+        (DelegationType.INTERMEDIATE, 'Intermediate'),
+        (DelegationType.ADVANCED, 'Advanced'),
+        (DelegationType.SPANISH_SPEAKING, 'Spanish Speaking'),
+        (DelegationType.UNSPECIFIED, 'Unspecified'),
+    )
+
     registered          = models.DateTimeField(auto_now_add=True)
     name                = models.CharField(max_length=128)
     address             = models.CharField(max_length=128)
@@ -155,7 +163,7 @@ class School(models.Model):
     secondary_type      = models.PositiveSmallIntegerField(choices=CONTACT_TYPE_OPTIONS, blank=True, default=ContactType.FACULTY)
     program_type        = models.PositiveSmallIntegerField(choices=PROGRAM_TYPE_OPTIONS)
     times_attended      = models.PositiveSmallIntegerField(default=0)
-    delegation_size     = models.PositiveSmallIntegerField(default=0)
+    delegation_size     = models.PositiveSmallIntegerField(choices=DELEGATION_SIZE_OPTIONS, blank=True, default=DelegationType.UNSPECIFIED)
     international       = models.BooleanField(default=False)
     waitlist            = models.BooleanField(default=False)
 
