@@ -63,6 +63,7 @@ var RegistrationView = React.createClass({
       country_pref9: 0,
       country_pref10: 0,
       committee_prefs: [],
+      registration_comments: null,
       loading: false
     };
   },
@@ -378,6 +379,16 @@ var RegistrationView = React.createClass({
               {this.renderCommittees()}
             </ul>
             <hr />
+            <h3>Comments</h3>
+            <p className="comment_box">Anything else you want us to know?</p>
+            <textarea
+              className="text"
+              name="registration_comments"
+              cols="40"
+              rows="7"
+              valueLink={this.linkState('registration_comments')}
+            />
+            <hr />
               <NavLink direction="left" href="/www/login">
                 Back to Login
               </NavLink>
@@ -505,7 +516,8 @@ var RegistrationView = React.createClass({
             this.state.country_pref9,
             this.state.country_pref10
           ],
-          committee_prefs: this.state.committee_prefs
+          committee_prefs: this.state.committee_prefs,
+          registration_comments: this.state.registration_comments
         }
       },
       success: this._handleSuccess,
