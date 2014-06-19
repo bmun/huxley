@@ -15,12 +15,35 @@ class SchoolSerializer(serializers.ModelSerializer):
     class Meta:
         model = School
         # TODO: country/committee preferences
-        fields = ('id', 'registered', 'name', 'address', 'city', 'state',
-                  'zip_code', 'country', 'primary_name', 'primary_email',
-                  'primary_phone', 'primary_gender', 'primary_type',
-                  'secondary_name', 'secondary_email', 'secondary_gender',
-                  'secondary_phone','secondary_type', 'program_type',
-                  'times_attended','delegation_size','international', 'waitlist')
+        fields = fields = (
+            'id',
+            'registered',
+            'name',
+            'address',
+            'city',
+            'state',
+            'zip_code',
+            'country',
+            'primary_name',
+            'primary_gender',
+            'primary_email',
+            'primary_phone',
+            'primary_type',
+            'secondary_name',
+            'secondary_gender',
+            'secondary_email',
+            'secondary_phone',
+            'secondary_type',
+            'program_type',
+            'times_attended',
+            'international',
+            'waitlist',
+            'beginner_delegates',
+            'intermediate_delegates',
+            'advanced_delegates',
+            'spanish_speaking_delegates',
+            'registration_comments',
+        )
 
     def validate_name(self, attrs, source):
         school_name = attrs[source]
