@@ -380,7 +380,10 @@ var RegistrationView = React.createClass({
             </ul>
             <hr />
             <h3>Comments</h3>
-            <p className="comment_box">Anything else you want us to know?</p>
+            <p className="instructions">If there are any further details you
+            would like us to know about your participation in BMUN this year or
+            general feedback about the registration process, please comment
+            below.</p>
             <textarea
               className="text"
               name="registration_comments"
