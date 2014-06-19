@@ -53,7 +53,10 @@ class TestSchools():
                    secondary_type=kwargs.pop('secondary_type', ContactType.FACULTY),
                    program_type=kwargs.pop('program_type', School.TYPE_CLUB),
                    times_attended=kwargs.pop('times_attended', 0),
-                   delegation_size=kwargs.pop('delegation_size', 0),
+                   beginner_delegates=kwargs.pop('beginner_delegates', 0),
+                   intermediate_delegates=kwargs.pop('intermediate_delegates', 0),
+                   advanced_delegates=kwargs.pop('advanced_delegates', 0),
+                   spanish_speaking_delegates=kwargs.pop('spanish_speaking_delegates', 0),
                    registration_comments=kwargs.pop('registration_comments', ''))
 
         for attr, value in kwargs.items():

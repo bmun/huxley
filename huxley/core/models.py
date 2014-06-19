@@ -155,9 +155,13 @@ class School(models.Model):
     secondary_type      = models.PositiveSmallIntegerField(choices=CONTACT_TYPE_OPTIONS, blank=True, default=ContactType.FACULTY)
     program_type        = models.PositiveSmallIntegerField(choices=PROGRAM_TYPE_OPTIONS)
     times_attended      = models.PositiveSmallIntegerField(default=0)
-    delegation_size     = models.PositiveSmallIntegerField(default=0)
     international       = models.BooleanField(default=False)
     waitlist            = models.BooleanField(default=False)
+
+    beginner_delegates         = models.PositiveSmallIntegerField(default=0)
+    intermediate_delegates     = models.PositiveSmallIntegerField(default=0)
+    advanced_delegates         = models.PositiveSmallIntegerField(default=0)
+    spanish_speaking_delegates = models.PositiveSmallIntegerField(default=0)
 
     countrypreferences   = models.ManyToManyField(Country, through='CountryPreference')
     committeepreferences = models.ManyToManyField(Committee, limit_choices_to={'special':True})

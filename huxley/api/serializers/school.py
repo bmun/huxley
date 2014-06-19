@@ -33,8 +33,11 @@ class SchoolSerializer(serializers.ModelSerializer):
             'secondary_type',
             'program_type',
             'times_attended',
-            'delegation_size',
             'international',
             'waitlist',
+            'beginner_delegates',
+            'intermediate_delegates',
+            'advanced_delegates',
+            'spanish_speaking_delegates',
             'registration_comments',
         )
