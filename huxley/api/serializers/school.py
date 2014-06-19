@@ -22,114 +22,79 @@ class SchoolSerializer(serializers.ModelSerializer):
                   'secondary_phone','secondary_type', 'program_type',
                   'times_attended','delegation_size','international', 'waitlist')
 
-    def validate_school_name(self, attrs, source):
+    def validate_name(self, attrs, source):
         school_name = attrs[source]
 
         if School.objects.filter(name=school_name).exists():
-            raise forms.ValidationError(
+            raise serializers.ValidationError(
                 'A school with the name "%s" has already been registered.'
                 % (school_name))
 
-            validate_alphanumerical(school_name,
-                'A school name may only contain alphanumeric characters.')
+            validators.alphanumeric(school_name, 'name')
 
         return attrs
 
-    def validate_school_state(self, attrs, source):
+    def validate_state(self, attrs, source):
         school_state = attrs[source]
 
-        if attrs['school_location'] == School.LOCATION_USA and not school_state:
-            raise forms.ValidationError(
-                'You must provide a state for a school in the United States.')
-
-        validate_alphabetical(school_state,
-            'State contains invalid characters.')
+        validators.alphabetical(school_state, 'state')
 
         return attrs
 
-    def validate_school_country(self, attrs, source):
+    def validate_country(self, attrs, source):
         school_country = attrs[source]
 
-        if attrs['school_location'] == School.LOCATION_INTERNATIONAL and not school_country:
-            raise forms.ValidationError('International schools must provide a country.')
-
-        validate_alphabetical(school_country,
-            'Country contains invalid characters.')
+        validators.alphabetical(school_country, 'country')
 
         return attrs
 
-    def validate_phone(self, attrs, source):
+    def validate_primary_phone(self, attrs, source):
         international = attrs['international']
         number = attrs[source]
 
         if international == School.LOCATION_INTERNATIONAL:
-            return bool(re.match("^[0-9\-x\s\+\(\)]+$", number))
+            if(bool(re.match("^[0-9\-x\s\+\(\)]+$", number))):
+                return attrs
+            else:
+               raise serializers.ValidationError('primary_phone contains invalid characters.')
         else:
-            return bool(re.match("^\(?([0-9]{3})\)?\s([0-9]{3})-([0-9]{4})(\sx[0-9]{1,5})?$", number))
+            if(bool(re.match("^\(?([0-9]{3})\)?\s([0-9]{3})-([0-9]{4})(\sx[0-9]{1,5})?$", number))):
+                return attrs
+            else:
+                raise serializers.ValidationError('primary_phone contains invalid characters.')
 
-    def validate_school_address(self, attrs, source):
+    def validate_address(self, attrs, source):
         school_address = attrs[source]
 
-        validators.validate_alphanumerical(school_address,
-            'School address contains invalid characters.')
+        validators.alphanumeric(school_address, 'address')
 
         return attrs
 
-    def validate_school_city(self, attrs, source):
+    def validate_city(self, attrs, source):
         school_city = attrs[source]
 
-        validators.validate_alphabetical(school_city,
-            'School city contains invalid characters.')
+        validators.alphabetical(school_city, 'city')
 
         return attrs
 
-    def validate_school_zip(self, attrs, source):
+    def validate_zip(self, attrs, source):
         school_zip = attrs[source]
 
-        validators.validate_numerical(school_zip,
-            'School zip contains invalid characters.')
-
-        return attrs
-
-    def validate_times_attended(self, attrs, source):
-        times_attended = attrs[source]
-
-        print(type(times_attended))
-
-        validators.validate_numerical(times_attended,
-            'Times attended contains invalid characters.')
-
-        return attrs
-
-    def validate_delegation_size(self, attrs, source):
-        delegation_size = attrs[source]
-
-        validators.validate_numerical(delegation_size,
-            'Delegation size contains invalid characters.')
+        validators.numerical(school_zip, 'zip')
 
         return attrs
 
     def validate_primary_name(self, attrs, source):
         primary_name = attrs[source]
 
-        validators.validate_alphabetical(primary_name,
-            'Primary name contains invalid characters.')
+        validators.alphabetical(primary_name, 'primary_name')
 
         return attrs
 
     def validate_primary_email(self, attrs, source):
         primary_email = attrs[source]
 
-        validators.validate_email(primary_email,
-            'Primary email contains invalid characters.')
-
-        return attrs
-
-    def validate_primary_phone(self, attrs, source):
-        primary_phone = attrs[source]
-
-        validators.validate_numerical(primary_phone,
-            'Primary phone contains invalid characters.')
+        validators.email(primary_email, 'primary_email')
 
         return attrs
 
@@ -137,8 +102,7 @@ class SchoolSerializer(serializers.ModelSerializer):
         secondary_name = attrs.get(source, '')
 
         if(secondary_name != ''):
-            validators.validate_alphabetical(secondary_name,
-                'Secondary name contains invalid characters.')
+            validators.alphabetical(secondary_name, 'secondary_name')
 
         return attrs
 
@@ -146,8 +110,7 @@ class SchoolSerializer(serializers.ModelSerializer):
         secondary_email = attrs.get(source, '')
 
         if(secondary_email != ''):
-            validators.validate_email(secondary_email,
-                'Secondary email contains invalid characters.')
+            validators.email(secondary_email, 'secondary_email')
 
         return attrs
 
@@ -155,7 +118,6 @@ class SchoolSerializer(serializers.ModelSerializer):
         secondary_phone = attrs.get(source, '')
 
         if(secondary_phone != ''):
-            validators.validate_numerical(secondary_phone,
-                'Secondary phone contains invalid characters.')
+            validators.numerical(secondary_phone, 'secondary_phone')
 
         return attrs

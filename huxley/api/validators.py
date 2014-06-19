@@ -3,24 +3,21 @@
 
 import re
 
-from django.core.validators import validate_email
-
 from rest_framework import serializers
 
-def validate_alphanumeric(string, error):
+def alphanumeric(string, error):
     if re.match("^[A-Za-z0-9\s]+$", string) is None:
-        raise serializers.ValidationError(error)
+        raise serializers.ValidationError(error+' contains invalid characters.')
 
-
-def validate_alphabetical(string, error):
+def alphabetical(string, error):
     if re.match("^[A-Za-z\s]+$", string) is None:
-        return serializers.ValidationError(error)
+        raise serializers.ValidationError(error+' contains invalid characters.')
 
-def validate_numerical(string, error):
+def numerical(string, error):
     if re.match("^[0-9\s]+$", string) is None:
-        return serializers.ValidationError(error)
+        raise serializers.ValidationError(error+' contains invalid characters.')
 
-def validate_email(string, error):
+def email(string, error):
     if re.match("^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$", string) is None:
-        return serializers.ValidationError(error)
+        raise serializers.ValidationError(error+' contains invalid characters.')
 

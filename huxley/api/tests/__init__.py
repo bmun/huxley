@@ -76,6 +76,11 @@ class AbstractAPITestCase(APITestCase):
     def assertNotFound(self, response):
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
+    def assertInvalidCharacters(self, response, field):
+        self.assertEqual(response.data, {
+            "%s" % field: [u"%s contains invalid characters." % field]})
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
 
 
 class CreateAPITestCase(AbstractAPITestCase):
