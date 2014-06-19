@@ -17,10 +17,10 @@ class SchoolSerializer(serializers.ModelSerializer):
         # TODO: country/committee preferences
         fields = ('id', 'registered', 'name', 'address', 'city', 'state',
                   'zip_code', 'country', 'primary_name', 'primary_email',
-                  'primary_phone', 'secondary_name', 'secondary_email',
-                  'secondary_phone', 'program_type', 'times_attended',
-                  'delegation_size',
-                  'international', 'waitlist')
+                  'primary_phone', 'primary_gender', 'primary_type',
+                  'secondary_name', 'secondary_email', 'secondary_gender',
+                  'secondary_phone','secondary_type', 'program_type',
+                  'times_attended','delegation_size','international', 'waitlist')
 
     def validate_school_name(self, attrs, source):
         school_name = attrs[source]
@@ -43,7 +43,7 @@ class SchoolSerializer(serializers.ModelSerializer):
                 'You must provide a state for a school in the United States.')
 
         validate_alphabetical(school_state,
-            'States may only contain alphabetical characters.')
+            'State contains invalid characters.')
 
         return attrs
 
@@ -54,7 +54,7 @@ class SchoolSerializer(serializers.ModelSerializer):
             raise forms.ValidationError('International schools must provide a country.')
 
         validate_alphabetical(school_country,
-            'Countries may only contain alphabetical characters.')
+            'Country contains invalid characters.')
 
         return attrs
 
@@ -70,80 +70,92 @@ class SchoolSerializer(serializers.ModelSerializer):
     def validate_school_address(self, attrs, source):
         school_address = attrs[source]
 
-        validate_alphanumerical(school_address,
-            'School address should be alphanumeric.')
+        validators.validate_alphanumerical(school_address,
+            'School address contains invalid characters.')
 
         return attrs
 
     def validate_school_city(self, attrs, source):
         school_city = attrs[source]
 
-        validate_alphabetical(school_city,
-            'School city should be validate_alphabetical.')
+        validators.validate_alphabetical(school_city,
+            'School city contains invalid characters.')
 
         return attrs
 
     def validate_school_zip(self, attrs, source):
         school_zip = attrs[source]
 
-        validate_numerical(school_zip,
-            'School zip should be numerical.')
+        validators.validate_numerical(school_zip,
+            'School zip contains invalid characters.')
 
         return attrs
 
     def validate_times_attended(self, attrs, source):
-        if(attrs != None):
-            times_attended = attrs[source]
+        times_attended = attrs[source]
 
-            validate_numerical(times_attended,
-                'Times attended must be numerical')
+        print(type(times_attended))
 
-            return attrs
+        validators.validate_numerical(times_attended,
+            'Times attended contains invalid characters.')
 
-        else:
-            pass
-
+        return attrs
 
     def validate_delegation_size(self, attrs, source):
-        if(attrs != None):
-            delegation_size = attrs[source]
+        delegation_size = attrs[source]
 
-            validate_numerical(delegation_size,
-                'Delegation size must be numerical.')
+        validators.validate_numerical(delegation_size,
+            'Delegation size contains invalid characters.')
 
-            return attrs
-
-        else:
-            pass
+        return attrs
 
     def validate_primary_name(self, attrs, source):
         primary_name = attrs[source]
 
         validators.validate_alphabetical(primary_name,
-            'Primary name must be alphanumeric.')
+            'Primary name contains invalid characters.')
 
         return attrs
 
-    '''def validate_primary_email(self, attrs, source):
-        if(attrs != None):
-            primary_email = attrs[source]
+    def validate_primary_email(self, attrs, source):
+        primary_email = attrs[source]
 
-            validators.validate_email(primary_email,
-                'Email can only contain ')
+        validators.validate_email(primary_email,
+            'Primary email contains invalid characters.')
 
-            return attrs
-
-        else:
-            pass'''
+        return attrs
 
     def validate_primary_phone(self, attrs, source):
-        pass
+        primary_phone = attrs[source]
+
+        validators.validate_numerical(primary_phone,
+            'Primary phone contains invalid characters.')
+
+        return attrs
 
     def validate_secondary_name(self, attrs, source):
-        pass
+        secondary_name = attrs.get(source, '')
+
+        if(secondary_name != ''):
+            validators.validate_alphabetical(secondary_name,
+                'Secondary name contains invalid characters.')
+
+        return attrs
 
     def validate_secondary_email(self, attrs, source):
-        pass
+        secondary_email = attrs.get(source, '')
+
+        if(secondary_email != ''):
+            validators.validate_email(secondary_email,
+                'Secondary email contains invalid characters.')
+
+        return attrs
 
     def validate_secondary_phone(self, attrs, source):
-        pass
+        secondary_phone = attrs.get(source, '')
+
+        if(secondary_phone != ''):
+            validators.validate_numerical(secondary_phone,
+                'Secondary phone contains invalid characters.')
+
+        return attrs

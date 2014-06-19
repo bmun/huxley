@@ -140,7 +140,7 @@ class SchoolDetailPatchTestCase(PartialUpdateAPITestCase):
         self.assertEqual(updated_school.city, self.school.city)
 
     def test_superuser(self):
-        '''This this allow  a superuser to change school data.'''
+        '''This should allow  a superuser to change school data.'''
         TestUsers.new_superuser(username='user2', password='user2')
         self.client.login(username='user2', password='user2')
         response = self.get_response(self.school.id, params=self.params)
