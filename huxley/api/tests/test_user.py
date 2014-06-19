@@ -84,9 +84,13 @@ class UserDetailGetTestCase(RetrieveAPITestCase):
                        'secondary_type': school.secondary_type,
                        'program_type': school.program_type,
                        'times_attended': school.times_attended,
-                       'delegation_size': school.delegation_size,
                        'international': school.international,
                        'waitlist': school.waitlist,
+                       'beginner_delegates': school.beginner_delegates,
+                       'intermediate_delegates': school.intermediate_delegates,
+                       'advanced_delegates': school.advanced_delegates,
+                       'spanish_speaking_delegates':
+                            school.spanish_speaking_delegates,
                        'registration_comments': school.registration_comments},
             'committee': user.committee_id})
 
@@ -369,7 +373,10 @@ class CurrentUserTestCase(TestCase):
             'secondary_type': school.secondary_type,
             'program_type': school.program_type,
             'times_attended': school.times_attended,
-            'delegation_size': school.delegation_size,
             'international': school.international,
             'waitlist': school.waitlist,
+            'beginner_delegates': school.beginner_delegates,
+            'intermediate_delegates': school.intermediate_delegates,
+            'advanced_delegates': school.advanced_delegates,
+            'spanish_speaking_delegates': school.spanish_speaking_delegates,
             'registration_comments': school.registration_comments})
