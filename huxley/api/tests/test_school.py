@@ -25,7 +25,6 @@ class SchoolDetailGetTestCase(RetrieveAPITestCase):
 
         self.client.login(username='testuser', password='test')
         response = self.get_response(school.id)
-
         self.assertEqual(response.data, {
             'id': school.id,
             'registered': school.registered.isoformat(),
@@ -49,7 +48,8 @@ class SchoolDetailGetTestCase(RetrieveAPITestCase):
             'times_attended': school.times_attended,
             'delegation_size': school.delegation_size,
             'international': school.international,
-            'waitlist': school.waitlist})
+            'waitlist': school.waitlist,
+            'registration_comments': school.registration_comments})
 
     def test_other_user(self):
         '''it should not allow a get request from another user.'''
@@ -92,7 +92,8 @@ class SchoolDetailGetTestCase(RetrieveAPITestCase):
             'times_attended': school.times_attended,
             'delegation_size': school.delegation_size,
             'international': school.international,
-            'waitlist': school.waitlist})
+            'waitlist': school.waitlist,
+            'registration_comments': school.registration_comments})
 
 
 class SchoolDetailPatchTestCase(PartialUpdateAPITestCase):
@@ -284,4 +285,5 @@ class SchoolListPostTestCase(CreateAPITestCase):
             'times_attended': school.times_attended,
             'delegation_size': school.delegation_size,
             'international': school.international,
-            'waitlist': school.waitlist})
+            'waitlist': school.waitlist,
+            'registration_comments': school.registration_comments})
