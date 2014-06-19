@@ -28,3 +28,11 @@ class ContactType(Constants):
     '''Whether a school's primary/secondary contact is a student or faculty.'''
     STUDENT = 1
     FACULTY = 2
+
+class DelegationType(Constants):
+    '''Delegation ability and language capability.'''
+    BEGINNER = 1
+    INTERMEDIATE = 2
+    ADVANCED = 3
+    SPANISH_SPEAKING = 4
+    UNSPECIFIED = 5
