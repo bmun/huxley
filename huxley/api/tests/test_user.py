@@ -86,7 +86,8 @@ class UserDetailGetTestCase(RetrieveAPITestCase):
                        'times_attended': school.times_attended,
                        'delegation_size': school.delegation_size,
                        'international': school.international,
-                       'waitlist': school.waitlist},
+                       'waitlist': school.waitlist,
+                       'registration_comments': school.registration_comments},
             'committee': user.committee_id})
 
     def test_chair(self):
@@ -370,4 +371,5 @@ class CurrentUserTestCase(TestCase):
             'times_attended': school.times_attended,
             'delegation_size': school.delegation_size,
             'international': school.international,
-            'waitlist': school.waitlist})
+            'waitlist': school.waitlist,
+            'registration_comments': school.registration_comments})

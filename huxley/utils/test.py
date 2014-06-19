@@ -41,10 +41,10 @@ class TestSchools():
                    state=kwargs.pop('state', 'CA'),
                    zip_code=kwargs.pop('zip_code', '94024'),
                    country=kwargs.pop('country', 'United States of America'),
-                   primary_name=kwargs.pop('primary_name', ''),
+                   primary_name=kwargs.pop('primary_name', 'first'),
                    primary_gender=kwargs.pop('primary_gender', ContactGender.MALE),
-                   primary_email=kwargs.pop('primary_email', ''),
-                   primary_phone=kwargs.pop('primary_phone', ''),
+                   primary_email=kwargs.pop('primary_email', 'e@mail.com'),
+                   primary_phone=kwargs.pop('primary_phone', '1234567890'),
                    primary_type=kwargs.pop('primary_type', ContactType.FACULTY),
                    secondary_name=kwargs.pop('secondary_name', ''),
                    secondary_gender=kwargs.pop('secondary_gender', ContactGender.MALE),
@@ -53,7 +53,8 @@ class TestSchools():
                    secondary_type=kwargs.pop('secondary_type', ContactType.FACULTY),
                    program_type=kwargs.pop('program_type', School.TYPE_CLUB),
                    times_attended=kwargs.pop('times_attended', 0),
-                   delegation_size=kwargs.pop('delegation_size', 0))
+                   delegation_size=kwargs.pop('delegation_size', 0),
+                   registration_comments=kwargs.pop('registration_comments', ''))
 
         for attr, value in kwargs.items():
             setattr(s, attr, value)

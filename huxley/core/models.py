@@ -162,6 +162,8 @@ class School(models.Model):
     countrypreferences   = models.ManyToManyField(Country, through='CountryPreference')
     committeepreferences = models.ManyToManyField(Committee, limit_choices_to={'special':True})
 
+    registration_comments = models.TextField(default='', blank=True)
+
     registration_fee         = models.DecimalField(max_digits=6, decimal_places=2, default=0)
     registration_fee_paid    = models.DecimalField(max_digits=6, decimal_places=2, default=0)
     registration_fee_balance = models.DecimalField(max_digits=6, decimal_places=2, default=0)

@@ -36,4 +36,5 @@ class SchoolSerializer(serializers.ModelSerializer):
             'delegation_size',
             'international',
             'waitlist',
+            'registration_comments',
         )
