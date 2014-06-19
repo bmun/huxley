@@ -1,3 +1,6 @@
+# Copyright (c) 2011-2014 Berkeley Model United Nations. All rights reserved.
+# Use of this source code is governed by a BSD License (see LICENSE).
+
 from fabric.api import env, hide, lcd, local, task
 from fabric.colors import cyan, green, yellow
 
@@ -19,4 +22,3 @@ def check():
         print yellow('To apply migrations, '
                      'run `python manage.py migrate <appname>`.\n'
                      '(For us, <appname> is usually core.)')
-
