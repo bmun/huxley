@@ -41,7 +41,10 @@ var RegistrationView = React.createClass({
       school_country: "United States of America",
       program_type: "Club",
       times_attended: null,
-      delegation_size: null,
+      beginner_delegates: null,
+      intermediate_delegates: null,
+      advanced_delegates: null,
+      spanish_speaking_delegates: null,
       primary_name: null,
       primary_gender: GenderConstants.UNSPECFIED,
       primary_email: null,
@@ -238,9 +241,30 @@ var RegistrationView = React.createClass({
             <input
               className="text"
               type="text"
-              name="delegation_size"
-              placeholder="Tentative Delegation Size"
-              valueLink={this.linkState('delegation_size')}
+              name="beginner_delegates"
+              placeholder="Number of Beginner Delegates"
+              valueLink={this.linkState('beginner_delegates')}
+            />
+            <input
+              className="text"
+              type="text"
+              name="intermediate_delegates"
+              placeholder="Number of Intermediate Delegates"
+              valueLink={this.linkState('intermediate_delegates')}
+            />
+            <input
+              className="text"
+              type="text"
+              name="advanced_delegates"
+              placeholder="Number of Advanced Delegates"
+              valueLink={this.linkState('advanced_delegates')}
+            />
+            <input
+              className="text"
+              type="text"
+              name="spanish_speaking_delegates"
+              placeholder="Number of Spanish Speaking Delegates"
+              valueLink={this.linkState('spanish_speaking_delegates')}
             />
             <hr />
             <h3>Primary Contact</h3>
@@ -496,7 +520,10 @@ var RegistrationView = React.createClass({
           country: this.state.school_country,
           program_type: this.state.program_type,
           times_attended: this.state.times_attended,
-          delegation_size: this.state.delegation_size,
+          beginner_delegates: this.state.beginner_delegates,
+          intermediate_delegates: this.state.intermediate_delegates,
+          advanced_delegates: this.state.advanced_delegates,
+          spanish_speaking_delegates: this.spanish_speaking_delegates,
           primary_name: this.state.primary_name,
           primary_gender: this.state.primary_gender,
           primary_email: this.state.primary_email,
