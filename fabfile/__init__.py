@@ -7,11 +7,10 @@ import urllib2
 from os.path import abspath, dirname, join
 
 from fabric.api import abort, env, hide, local, settings, task
-from fabric.colors import green, red, yellow
 from fabric.contrib.console import confirm
 
 from . import dependencies, migrations, test
-from .utils import git
+from .utils import git, ui
 
 
 env.huxley_root = abspath(dirname(dirname(__file__)))
@@ -26,13 +25,13 @@ def feature(branch_name=None):
         dependencies.check()
         migrations.check()
     else:
-        print red('No branch name given. Usage: fab feature:<branch_name>')
+        print ui.error('No branch name given. Usage: fab feature:<branch_name>')
 
 
 @task
 def update():
     '''Rebase the current feature branch onto the latest version of upstream.'''
-    print 'Updating your local branch...'
+    print ui.info('Updating your local branch...')
     git.pull()
     dependencies.check()
     migrations.check()
@@ -45,10 +44,10 @@ def authors():
     with hide('running'):
         local('git log --format="%%aN <%%aE>" | sort -u > %s' % authors_path)
         if local('git diff --name-only AUTHORS', capture=True):
-            print green('Automatically updating the authors file...')
+            print ui.info('Automatically updating the authors file...')
             local('git commit -m "Update AUTHORS." %s' % authors_path)
         else:
-            print green('No change to AUTHORS.')
+            print ui.success('No change to AUTHORS.')
 
 
 @task
@@ -60,23 +59,23 @@ def pr(number):
     repo = pr['head']['repo']['clone_url']
     branch = pr['head']['ref']
 
-    print green('Checking out %s from %s...' % (branch, author))
+    print ui.info('Checking out %s from %s...' % (branch, author))
     local('git fetch %s %s:%s' % (repo, branch, branch))
     local('git checkout %s' % branch)
 
-    print green('Changes checked out. Rebasing and squashing...')
+    print ui.info('Changes checked out. Rebasing and squashing...')
     local('git fetch origin; git rebase origin/master')
     commits_ahead = git.commits_ahead('origin')
     local('git rebase -i HEAD~%d' % commits_ahead)
 
-    if not confirm(yellow('Changes squashed. Push?')):
+    if not confirm(ui.warning('Changes squashed. Push?')):
         abort('Push canceled.')
 
     local('git checkout master; git merge %s --ff-only' % branch)
     local('git pull --rebase')
     local('git push')
 
-    print green('Changes pushed! Deleting branch...')
+    print ui.success('Changes pushed! Deleting branch...')
     local('git branch -d %s' % branch)
 
 
@@ -86,13 +85,13 @@ def submit(remote='origin', skip_tests=False):
     if not skip_tests:
         with settings(warn_only=True):
             if not test.run():
-                if confirm(yellow('Tests failed. Continue anyway?')):
-                    print yellow('Ignoring failed tests. Be careful.')
+                if confirm(ui.warning('Tests failed. Continue anyway?')):
+                    print ui.warning('Ignoring failed tests. Be careful.')
                 else:
-                    print red('Terminating due to failed tests.')
+                    print ui.error('Terminating due to failed tests.')
                     return
             else:
-                print green('Tests OK!')
+                print ui.success('Tests OK!')
 
     first_submission = not git.remote_branch_exists(remote=remote)
     git.pull()
@@ -100,25 +99,25 @@ def submit(remote='origin', skip_tests=False):
     git.push()
 
     if not first_submission:
-        print green('Pull request sucessfully updated.')
+        print ui.success('Pull request sucessfully updated.')
     elif git.hub_installed():
         current_branch = git.current_branch()
         local('hub pull-request -b bmun:master -h %s -f' % current_branch)
-        print green('Pull request successfully issued.')
+        print ui.success('Pull request successfully issued.')
     else:
-        print green('Branch successfully pushed. Go to GitHub to issue a pull request.')
+        print ui.success('Branch successfully pushed. Go to GitHub to issue a pull request.')
 
 
 @task
 def finish(branch_name=None, remote='origin'):
     '''Delete the current feature branch.'''
-    prompt = yellow('This will delete your local and remote topic branches. '
-                    'Make sure your pull request has been merged or closed. '
-                    'Are you sure you want to finish this branch?')
+    prompt = ui.warning('This will delete your local and remote topic branches. '
+                        'Make sure your pull request has been merged or closed. '
+                        'Are you sure you want to finish this branch?')
     if not confirm(prompt):
         abort('Branch deletion canceled.')
 
-    print green('Branch %s successfully cleaned up.' % git.cleanup(branch_name,
+    print ui.success('Branch %s successfully cleaned up.' % git.cleanup(branch_name,
                                                                    remote))
 
 try:

@@ -2,23 +2,24 @@
 # Use of this source code is governed by a BSD License (see LICENSE).
 
 from fabric.api import env, hide, lcd, local, task
-from fabric.colors import cyan, green, yellow
+
+from .utils import ui
 
 
 @task
 def check():
     with lcd(env.huxley_root), hide('running'):
-        print cyan('Checking migration status...')
+        print ui.info('Checking migration status...')
         rows = local('./manage.py migrate --list', capture=True).split('\n')
         unapplied = filter(lambda r: r.startswith('  ( '), rows)
 
         if not unapplied:
-            print green('Migrations are up-to-date.')
+            print ui.success('Migrations are up-to-date.')
             return
 
-        print yellow('Unapplied Migrations:')
+        print ui.warning('Unapplied Migrations:')
         for migration in unapplied:
             print migration[5:]
-        print yellow('To apply migrations, '
+        print ui.warning('To apply migrations, '
                      'run `python manage.py migrate <appname>`.\n'
                      '(For us, <appname> is usually core.)')
