@@ -3,40 +3,40 @@
 
 import re
 
-from rest_framework import serializers
+from rest_framework.serializers import ValidationError
 
 
-def alphanumeric(string, error):
-    '''Raises a ValidationError if @param 'string' is not alphanumeric.'''
-    if re.match("^[A-Za-z0-9\s]+$", string) is None:
-        raise serializers.ValidationError(error+' contains invalid characters.')
+def alphanumeric(value, field):
+    '''Raises a ValidationError if @param 'value' is not alphanumeric.'''
+    if re.match("^[A-Za-z0-9\s]+$", value) is None:
+        raise ValidationError('%s contains invalid characters.' % field)
 
 
-def alphabetical(string, error):
-    '''Raises a ValidationError if @param 'string' is not alphabetical.'''
-    if re.match("^[A-Za-z\s]+$", string) is None:
-        raise serializers.ValidationError(error+' contains invalid characters.')
+def alphabetical(value, field):
+    '''Raises a ValidationError if @param 'value' is not alphabetical.'''
+    if re.match("^[A-Za-z\s]+$", value) is None:
+        raise ValidationError('%s contains invalid characters.' % field)
 
 
-def numerical(string, error):
-    '''Raises a ValidationError if @param 'string' is not numerical.'''
-    if re.match("^[0-9\s]+$", string) is None:
-        raise serializers.ValidationError(error+' contains invalid characters.')
+def numerical(value, field):
+    '''Raises a ValidationError if @param 'value' is not numerical.'''
+    if re.match("^[0-9\s]+$", value) is None:
+        raise ValidationError('%s contains invalid characters.' % field)
 
 
-def email(string, error):
-    '''Raises a ValidationError if @param 'string' is not in email format.'''
-    if re.match("^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$", string) is None:
-        raise serializers.ValidationError(error+' contains invalid characters.')
+def email(value, field):
+    '''Raises a ValidationError if @param 'value' is not in email format.'''
+    if re.match("^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$", value) is None:
+        raise ValidationError('%s contains invalid characters.' % field)
 
 
-def phone_international(string, error):
-    '''Raises a ValidationError if @param 'string' is not formatted properly.'''
-    if(not bool(re.match("^[0-9\-x\s\+\(\)]+$", string))):
-        raise serializers.ValidationError('%s contains invalid characters.' % error)
+def phone_international(value, field):
+    '''Raises a ValidationError if @param 'value' is not formatted properly.'''
+    if re.match("^[0-9\-x\s\+\(\)]+$", value) is None:
+        raise ValidationError('%s contains invalid characters.' % field)
 
 
-def phone_domestic(string, error):
-    '''Raises a ValidationError if @param 'string' is not formatted properly.'''
-    if(not bool(re.match("^\(?([0-9]{3})\)?\s([0-9]{3})-([0-9]{4})(\sx[0-9]{1,5})?$", string))):
-        raise serializers.ValidationError('%s contains invalid characters.' % error)
+def phone_domestic(value, field):
+    '''Raises a ValidationError if @param 'value' is not formatted properly.'''
+    if re.match("^\(?([0-9]{3})\)?\s([0-9]{3})-([0-9]{4})(\sx[0-9]{1,5})?$", value) is None:
+        raise ValidationError('%s contains invalid characters.' % field)
