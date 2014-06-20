@@ -125,10 +125,8 @@ class SchoolDetailPatchTestCase(PartialUpdateAPITestCase):
         response = self.get_response(self.school.id, params=self.params)
         self.school = School.objects.get(id=self.school.id)
 
-        if('name' in response.data):
-            self.assertEqual(response.data['name'], self.school.name)
-        if('city' in response.data):
-            self.assertEqual(response.data['city'], self.school.city)
+        self.assertEqual(response.data['name'], self.school.name)
+        self.assertEqual(response.data['city'], self.school.city)
 
     def test_other_user(self):
         '''Should not allow another user to change a school's data'''

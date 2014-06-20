@@ -5,8 +5,8 @@ import re
 
 from rest_framework import serializers
 
-from huxley.core.models import School
 from huxley.api import validators
+from huxley.core.models import School
 
 
 class SchoolSerializer(serializers.ModelSerializer):
@@ -15,7 +15,7 @@ class SchoolSerializer(serializers.ModelSerializer):
     class Meta:
         model = School
         # TODO: country/committee preferences
-        fields = fields = (
+        fields = (
             'id',
             'registered',
             'name',
@@ -48,12 +48,12 @@ class SchoolSerializer(serializers.ModelSerializer):
     def validate_name(self, attrs, source):
         school_name = attrs[source]
 
-        if School.objects.filter(name=school_name).exists():
+        if (School.objects.filter(name=school_name).exists()):
             raise serializers.ValidationError(
                 'A school with the name "%s" has already been registered.'
-                % (school_name))
+                % school_name)
 
-            validators.alphanumeric(school_name, 'name')
+        validators.alphanumeric(school_name, 'name')
 
         return attrs
 
@@ -75,16 +75,12 @@ class SchoolSerializer(serializers.ModelSerializer):
         international = attrs['international']
         number = attrs[source]
 
-        if international == School.LOCATION_INTERNATIONAL:
-            if(bool(re.match("^[0-9\-x\s\+\(\)]+$", number))):
-                return attrs
-            else:
-               raise serializers.ValidationError('primary_phone contains invalid characters.')
+        if (international == School.LOCATION_INTERNATIONAL):
+            validators.phone_international(number, 'primary_phone')
         else:
-            if(bool(re.match("^\(?([0-9]{3})\)?\s([0-9]{3})-([0-9]{4})(\sx[0-9]{1,5})?$", number))):
-                return attrs
-            else:
-                raise serializers.ValidationError('primary_phone contains invalid characters.')
+            validators.phone_domestic(number, 'primary_phone')
+
+        return attrs
 
     def validate_address(self, attrs, source):
         school_address = attrs[source]
@@ -138,9 +134,13 @@ class SchoolSerializer(serializers.ModelSerializer):
         return attrs
 
     def validate_secondary_phone(self, attrs, source):
-        secondary_phone = attrs.get(source, '')
+        number = attrs.get(source, '')
+        international = attrs['international']
 
-        if(secondary_phone != ''):
-            validators.numerical(secondary_phone, 'secondary_phone')
+        if(number != ''):
+            if (international == School.LOCATION_INTERNATIONAL):
+                validators.phone_international(number, 'secondary_phone')
+            else:
+                validators.phone_domestic(number, 'secondary_phone')
 
         return attrs

@@ -1,13 +1,12 @@
 # Copyright (c) 2011-2014 Berkeley Model United Nations. All rights reserved.
 # Use of this source code is governed by a BSD License (see LICENSE).
 
+from rest_framework import status
+
 from huxley.accounts.models import User
-from huxley.api.tests import (CreateAPITestCase, DestroyAPITestCase,
-                              ListAPITestCase, PartialUpdateAPITestCase,
-                              RetrieveAPITestCase)
+from huxley.api.tests import CreateAPITestCase
 from huxley.core.models import School
 from huxley.utils.test import TestSchools
-from rest_framework import status
 
 
 class CreateSchoolTestCase(CreateAPITestCase):
@@ -88,18 +87,7 @@ class CreateSchoolTestCase(CreateAPITestCase):
 
     def test_invalid_state(self):
         '''States should be alphabetical.'''
-        params = {'name': 'Berkeley Prep',
-            'address': '1 BMUN way',
-            'city': 'Oakland',
-            'state': '99999',
-            'zip_code': 94720,
-            'country': 'USA',
-            'primary_name': 'Kunal Mehta',
-            'primary_gender': 1,
-            'primary_email': 'KunalMehta@huxley.org',
-            'primary_phone': '(999) 999-9999',
-            'primary_type': 2,
-            'program_type': User.TYPE_ADVISOR}
+        params = self.get_params(state='99999')
 
         response = self.get_response(params=params)
 
@@ -107,18 +95,7 @@ class CreateSchoolTestCase(CreateAPITestCase):
 
     def test_invalid_address(self):
         '''Address should be alphanumerical'''
-        params = {'name': 'Berkeley Prep',
-            'address': '@#/!?',
-            'city': 'Oakland',
-            'state': 'California',
-            'zip_code': 94720,
-            'country': 'USA',
-            'primary_name': 'Kunal Mehta',
-            'primary_gender': 1,
-            'primary_email': 'KunalMehta@huxley.org',
-            'primary_phone': '(999) 999-9999',
-            'primary_type': 2,
-            'program_type': User.TYPE_ADVISOR}
+        params = self.get_params(address='@#/!?')
 
         response = self.get_response(params=params)
 
@@ -126,18 +103,7 @@ class CreateSchoolTestCase(CreateAPITestCase):
 
     def test_invalid_city(self):
         '''City should be alphabetical.'''
-        params = {'name': 'Berkeley Prep',
-            'address': '1 BMUN way',
-            'city': '999999',
-            'state': 'California',
-            'zip_code': 94720,
-            'country': 'USA',
-            'primary_name': 'Kunal Mehta',
-            'primary_gender': 1,
-            'primary_email': 'KunalMehta@huxley.org',
-            'primary_phone': '(999) 999-9999',
-            'primary_type': 2,
-            'program_type': User.TYPE_ADVISOR}
+        params = self.get_params(city='99999')
 
         response = self.get_response(params=params)
 
@@ -145,18 +111,7 @@ class CreateSchoolTestCase(CreateAPITestCase):
 
     def test_invalid_country(self):
         '''Country should be alphabetical.'''
-        params = {'name': 'Berkeley Prep',
-            'address': '1 BMUN way',
-            'city': 'Oakland',
-            'state': 'California',
-            'zip_code': 94720,
-            'country': '99999',
-            'primary_name': 'Kunal Mehta',
-            'primary_gender': 1,
-            'primary_email': 'KunalMehta@huxley.org',
-            'primary_phone': '(999) 999-9999',
-            'primary_type': 2,
-            'program_type': User.TYPE_ADVISOR}
+        params = self.get_params(country='99999')
 
         response = self.get_response(params=params)
 
@@ -164,18 +119,7 @@ class CreateSchoolTestCase(CreateAPITestCase):
 
     def test_invalid_primary_name(self):
         '''Primary name should be alphabetical.'''
-        params = {'name': 'Berkeley Prep',
-            'address': '1 BMUN way',
-            'city': 'Oakland',
-            'state': 'California',
-            'zip_code': 94720,
-            'country': 'USA',
-            'primary_name': '123@#?$!',
-            'primary_gender': 1,
-            'primary_email': 'KunalMehta@huxley.org',
-            'primary_phone': '(999) 999-9999',
-            'primary_type': 2,
-            'program_type': User.TYPE_ADVISOR}
+        params = self.get_params(primary_name='123@#?$!')
 
         response = self.get_response(params=params)
 
@@ -183,18 +127,7 @@ class CreateSchoolTestCase(CreateAPITestCase):
 
     def test_invalid_primary_email(self):
         '''Primary email should only have valid email characters.'''
-        params = {'name': 'Berkeley Prep',
-            'address': '1 BMUN way',
-            'city': 'Oakland',
-            'state': 'California',
-            'zip_code': 94720,
-            'country': 'USA',
-            'primary_name': 'Kunal Mehta',
-            'primary_gender': 1,
-            'primary_email': '####@9999.999',
-            'primary_phone': '(999) 999-9999',
-            'primary_type': 2,
-            'program_type': User.TYPE_ADVISOR}
+        params = self.get_params(primary_email='####@9999.999')
 
         response = self.get_response(params=params)
 
@@ -202,18 +135,7 @@ class CreateSchoolTestCase(CreateAPITestCase):
 
     def test_invalid_primary_email_format(self):
         '''Primary email should match email format.'''
-        params = {'name': 'Berkeley Prep',
-            'address': '1 BMUN way',
-            'city': 'Oakland',
-            'state': 'California',
-            'zip_code': 94720,
-            'country': 'USA',
-            'primary_name': 'Kunal Mehta',
-            'primary_gender': 1,
-            'primary_email': '999999',
-            'primary_phone': '(999) 999-9999',
-            'primary_type': 2,
-            'program_type': User.TYPE_ADVISOR}
+        params = self.get_params(primary_email='999999')
 
         response = self.get_response(params=params)
 
@@ -221,18 +143,7 @@ class CreateSchoolTestCase(CreateAPITestCase):
 
     def test_invalid_US_primary_phone(self):
         '''Primary phone should be numerical.'''
-        params = {'name': 'Berkeley Prep',
-            'address': '1 BMUN way',
-            'city': 'Oakland',
-            'state': 'California',
-            'zip_code': 94720,
-            'country': 'USA',
-            'primary_name': 'Kunal Mehta',
-            'primary_gender': 1,
-            'primary_email': 'KunalMehta@huxley.org',
-            'primary_phone': 'ABC',
-            'primary_type': 2,
-            'program_type': User.TYPE_ADVISOR}
+        params = self.get_params(primary_phone='ABC')
 
         response = self.get_response(params=params)
 
@@ -240,19 +151,7 @@ class CreateSchoolTestCase(CreateAPITestCase):
 
     def test_invalid_international_primary_phone(self):
         '''Primary phone should be numerical.'''
-        params = {'name': 'Berkeley Prep',
-            'address': '1 BMUN way',
-            'city': 'Oakland',
-            'state': 'California',
-            'zip_code': 94720,
-            'country': 'USA',
-            'primary_name': 'Kunal Mehta',
-            'primary_gender': 1,
-            'primary_email': 'KunalMehta@huxley.org',
-            'primary_phone': 'ABC',
-            'primary_type': 2,
-            'program_type': User.TYPE_ADVISOR,
-            'international': School.LOCATION_INTERNATIONAL}
+        params = self.get_params(primary_phone='ABC')
 
         response = self.get_response(params=params)
 
@@ -260,19 +159,7 @@ class CreateSchoolTestCase(CreateAPITestCase):
 
     def test_invalid_secondary_name(self):
         '''Secondary name should be alphabetical.'''
-        params = {'name': 'Berkeley Prep',
-            'address': '1 BMUN way',
-            'city': 'Oakland',
-            'state': 'California',
-            'zip_code': 94720,
-            'country': 'USA',
-            'primary_name': 'Kunal Mehta',
-            'primary_gender': 1,
-            'primary_email': 'KunalMehta@huxley.org',
-            'primary_phone': '(999) 999-9999',
-            'primary_type': 2,
-            'program_type': User.TYPE_ADVISOR,
-            'secondary_name': '@!#$%^?'}
+        params = self.get_params(secondary_name='@!#$%^?')
 
         response = self.get_response(params=params)
 
@@ -280,19 +167,7 @@ class CreateSchoolTestCase(CreateAPITestCase):
 
     def test_invalid_secondary_email(self):
         '''Secondary email should only have valid email characters.'''
-        params = {'name': 'Berkeley Prep',
-            'address': '1 BMUN way',
-            'city': 'Oakland',
-            'state': 'California',
-            'zip_code': 94720,
-            'country': 'USA',
-            'primary_name': 'Kunal Mehta',
-            'primary_gender': 1,
-            'primary_email': 'KunalMehta@huxley.org',
-            'primary_phone': '(999) 999-9999',
-            'primary_type': 2,
-            'program_type': User.TYPE_ADVISOR,
-            'secondary_email': '####@9999.999'}
+        params = self.get_params(secondary_email='####@9999.999')
 
         response = self.get_response(params=params)
 
@@ -300,19 +175,7 @@ class CreateSchoolTestCase(CreateAPITestCase):
 
     def test_invalid_primary_email_format(self):
         '''Primary email should match email format.'''
-        params = {'name': 'Berkeley Prep',
-            'address': '1 BMUN way',
-            'city': 'Oakland',
-            'state': 'California',
-            'zip_code': 94720,
-            'country': 'USA',
-            'primary_name': 'Kunal Mehta',
-            'primary_gender': 1,
-            'primary_email': 'KunalMehta@huxley.org',
-            'primary_phone': '(999) 999-9999',
-            'primary_type': 2,
-            'program_type': User.TYPE_ADVISOR,
-            'secondary_email': '999999'}
+        params = self.get_params(secondary_email='999999')
 
         response = self.get_response(params=params)
 
@@ -320,19 +183,7 @@ class CreateSchoolTestCase(CreateAPITestCase):
 
     def test_invalid_US_secondary_phone(self):
         '''Secondary phone should be numerical.'''
-        params = {'name': 'Berkeley Prep',
-            'address': '1 BMUN way',
-            'city': 'Oakland',
-            'state': 'California',
-            'zip_code': 94720,
-            'country': 'USA',
-            'primary_name': 'Kunal Mehta',
-            'primary_gender': 1,
-            'primary_email': 'KunalMehta@huxley.org',
-            'primary_phone': '(999) 999-9999',
-            'primary_type': 2,
-            'program_type': User.TYPE_ADVISOR,
-            'secondary_phone': 'ABC'}
+        params = self.get_params(secondary_phone='ABC')
 
         response = self.get_response(params=params)
 
@@ -340,20 +191,8 @@ class CreateSchoolTestCase(CreateAPITestCase):
 
     def test_invalid_international_secondary_phone(self):
         '''Secondary_phone phone should be numerical.'''
-        params = {'name': 'Berkeley Prep',
-            'address': '1 BMUN way',
-            'city': 'Oakland',
-            'state': 'California',
-            'zip_code': 94720,
-            'country': 'USA',
-            'primary_name': 'Kunal Mehta',
-            'primary_gender': 1,
-            'primary_email': 'KunalMehta@huxley.org',
-            'primary_phone': '(999) 999-9999',
-            'primary_type': 2,
-            'program_type': User.TYPE_ADVISOR,
-            'secondary_phone': 'ABC',
-            'international': School.LOCATION_INTERNATIONAL}
+        params = self.get_params(international=School.LOCATION_INTERNATIONAL,
+            secondary_phone='ABC')
 
         response = self.get_response(params=params)
 
