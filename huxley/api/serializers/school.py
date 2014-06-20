@@ -48,7 +48,7 @@ class SchoolSerializer(serializers.ModelSerializer):
     def validate_name(self, attrs, source):
         school_name = attrs[source]
 
-        if (School.objects.filter(name=school_name).exists()):
+        if School.objects.filter(name=school_name).exists():
             raise serializers.ValidationError(
                 'A school with the name "%s" has already been registered.'
                 % school_name)
@@ -75,7 +75,7 @@ class SchoolSerializer(serializers.ModelSerializer):
         international = attrs['international']
         number = attrs[source]
 
-        if (international == School.LOCATION_INTERNATIONAL):
+        if international == School.LOCATION_INTERNATIONAL:
             validators.phone_international(number, 'primary_phone')
         else:
             validators.phone_domestic(number, 'primary_phone')
@@ -120,7 +120,7 @@ class SchoolSerializer(serializers.ModelSerializer):
     def validate_secondary_name(self, attrs, source):
         secondary_name = attrs.get(source, '')
 
-        if(secondary_name != ''):
+        if secondary_name:
             validators.alphabetical(secondary_name, 'secondary_name')
 
         return attrs
@@ -128,16 +128,16 @@ class SchoolSerializer(serializers.ModelSerializer):
     def validate_secondary_email(self, attrs, source):
         secondary_email = attrs.get(source, '')
 
-        if(secondary_email != ''):
+        if secondary_email:
             validators.email(secondary_email, 'secondary_email')
 
         return attrs
 
     def validate_secondary_phone(self, attrs, source):
-        number = attrs.get(source, '')
+        number = attrs.get(source)
         international = attrs['international']
 
-        if(number != ''):
+        if number:
             if (international == School.LOCATION_INTERNATIONAL):
                 validators.phone_international(number, 'secondary_phone')
             else:
