@@ -91,10 +91,10 @@ class UserDetailGetTestCase(RetrieveAPITestCase):
                        'advanced_delegates': school.advanced_delegates,
                        'spanish_speaking_delegates':
                             school.spanish_speaking_delegates,
-                        'bilingual': school.bilingual,
-                        'crisis': school.crisis,
-                        'small_specialized': school.small_specialized,
-                        'mid_large_specialized': school.mid_large_specialized,
+                       'bilingual': school.bilingual,
+                       'crisis': school.crisis,
+                       'small_specialized': school.small_specialized,
+                       'mid_large_specialized': school.mid_large_specialized,
                        'registration_comments': school.registration_comments},
             'committee': user.committee_id})
 
