@@ -118,7 +118,7 @@ class SchoolSerializer(serializers.ModelSerializer):
         return attrs
 
     def validate_secondary_name(self, attrs, source):
-        secondary_name = attrs.get(source, '')
+        secondary_name = attrs.get(source)
 
         if secondary_name:
             validators.alphabetical(secondary_name, 'secondary_name')
@@ -126,7 +126,7 @@ class SchoolSerializer(serializers.ModelSerializer):
         return attrs
 
     def validate_secondary_email(self, attrs, source):
-        secondary_email = attrs.get(source, '')
+        secondary_email = attrs.get(source)
 
         if secondary_email:
             validators.email(secondary_email, 'secondary_email')
