@@ -136,7 +136,7 @@ class CreateSchoolTestCase(CreateAPITestCase):
 
         response = self.get_response(params=params)
 
-        self.assertInvalidCharacters(response, 'primary_email')
+        self.assertInvalidEmail(response, 'primary_email')
 
     def test_invalid_primary_email_format(self):
         '''Primary email should match email format.'''
@@ -144,7 +144,7 @@ class CreateSchoolTestCase(CreateAPITestCase):
 
         response = self.get_response(params=params)
 
-        self.assertEqual(response.data, {'primary_email': [u'Enter a valid email address.']})
+        self.assertInvalidEmailFormat(response, 'primary_email')
 
     def test_invalid_US_primary_phone(self):
         '''Primary phone should be numerical.'''
@@ -152,15 +152,15 @@ class CreateSchoolTestCase(CreateAPITestCase):
 
         response = self.get_response(params=params)
 
-        self.assertInvalidCharacters(response, 'primary_phone')
+        self.assertInvalidPhone(response, 'primary_phone')
 
     def test_invalid_international_primary_phone(self):
         '''Primary phone should be numerical.'''
-        params = self.get_params(primary_phone='ABC')
+        params = self.get_params(primary_phone='ABC', international=True)
 
         response = self.get_response(params=params)
 
-        self.assertInvalidCharacters(response, 'primary_phone')
+        self.assertInvalidPhone(response, 'primary_phone')
 
     def test_invalid_secondary_name(self):
         '''Secondary name should be alphabetical.'''
@@ -176,15 +176,15 @@ class CreateSchoolTestCase(CreateAPITestCase):
 
         response = self.get_response(params=params)
 
-        self.assertInvalidCharacters(response, 'secondary_email')
+        self.assertInvalidEmail(response, 'secondary_email')
 
-    def test_invalid_primary_email_format(self):
+    def test_invalid_secondary_email_format(self):
         '''Primary email should match email format.'''
         params = self.get_params(secondary_email='999999')
 
         response = self.get_response(params=params)
 
-        self.assertEqual(response.data, {'secondary_email': [u'Enter a valid email address.']})
+        self.assertInvalidEmailFormat(response, 'secondary_email')
 
     def test_invalid_US_secondary_phone(self):
         '''Secondary phone should be numerical.'''
@@ -192,7 +192,7 @@ class CreateSchoolTestCase(CreateAPITestCase):
 
         response = self.get_response(params=params)
 
-        self.assertInvalidCharacters(response, 'secondary_phone')
+        self.assertInvalidPhone(response, 'secondary_phone')
 
     def test_invalid_international_secondary_phone(self):
         '''Secondary_phone phone should be numerical.'''
@@ -201,7 +201,7 @@ class CreateSchoolTestCase(CreateAPITestCase):
 
         response = self.get_response(params=params)
 
-        self.assertInvalidCharacters(response, 'secondary_phone')
+        self.assertInvalidPhone(response, 'secondary_phone')
 
     def test_duplicate_school_name(self):
         '''Validators should not allow for duplicated school names.'''

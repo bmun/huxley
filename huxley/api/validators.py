@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 # Copyright (c) 2011-2014 Berkeley Model United Nations. All rights reserved.
 # Use of this source code is governed by a BSD License (see LICENSE).
 
@@ -6,37 +8,37 @@ import re
 from rest_framework.serializers import ValidationError
 
 
-def alphanumeric(value, field):
-    '''Raises a ValidationError if @param 'value' is not alphanumeric.'''
-    if re.match("^[A-Za-z0-9\s]+$", value) is None:
-        raise ValidationError('%s contains invalid characters.' % field)
+def name(value):
+    '''Matches names of people, countries and and other things.'''
+    if re.match(r'^[A-Za-z\s\.\-\'àèéìòóôù]+$', value) is None:
+        raise ValidationError('This field contains invalid characters.')
 
 
-def alphabetical(value, field):
-    '''Raises a ValidationError if @param 'value' is not alphabetical.'''
-    if re.match("^[A-Za-z\s]+$", value) is None:
-        raise ValidationError('%s contains invalid characters.' % field)
+def address(value):
+    '''Matches street addresses.'''
+    if re.match(r'^[\w\s\.\-\'àèéìòóôù]+$', value) is None:
+        raise ValidationError('This field contains invalid characters.')
 
 
-def numerical(value, field):
-    '''Raises a ValidationError if @param 'value' is not numerical.'''
-    if re.match("^[0-9\s]+$", value) is None:
-        raise ValidationError('%s contains invalid characters.' % field)
+def numeric(value):
+    '''Matches numbers and spaces.'''
+    if re.match(r'^[\d\s]+$', value) is None:
+        raise ValidationError('This field can only contain numbers and spaces.')
 
 
-def email(value, field):
-    '''Raises a ValidationError if @param 'value' is not in email format.'''
-    if re.match("^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$", value) is None:
-        raise ValidationError('%s contains invalid characters.' % field)
+def email(value):
+    '''Loosely matches email addresses.'''
+    if re.match(r'^[\w_.+-]+@[\w-]+\.[\w\-.]+$', value) is None:
+        raise ValidationError('This is an invalid email address.')
 
 
-def phone_international(value, field):
-    '''Raises a ValidationError if @param 'value' is not formatted properly.'''
-    if re.match("^[0-9\-x\s\+\(\)]+$", value) is None:
-        raise ValidationError('%s contains invalid characters.' % field)
+def phone_international(value):
+    '''Loosely matches phone numbers.'''
+    if re.match(r'^[\d\-x\s\+\(\)]+$', value) is None:
+        raise ValidationError('This is an invalid phone number.')
 
 
-def phone_domestic(value, field):
-    '''Raises a ValidationError if @param 'value' is not formatted properly.'''
-    if re.match("^\(?([0-9]{3})\)?\s([0-9]{3})-([0-9]{4})(\sx[0-9]{1,5})?$", value) is None:
-        raise ValidationError('%s contains invalid characters.' % field)
+def phone_domestic(value):
+    '''Matches domestic phone numbers.'''
+    if re.match(r'^\(?(\d{3})\)?\s(\d{3})-(\d{4})(\sx\d{1,5})?$', value) is None:
+        raise ValidationError('This is an invalid phone number.')

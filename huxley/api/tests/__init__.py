@@ -78,7 +78,22 @@ class AbstractAPITestCase(APITestCase):
 
     def assertInvalidCharacters(self, response, field):
         self.assertEqual(response.data, {
-            "%s" % field: [u"%s contains invalid characters." % field]})
+            '%s' % field: [u'This field contains invalid characters.']})
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def assertInvalidEmail(self, response, field):
+        self.assertEqual(response.data, {
+            '%s' % field: [u'This is an invalid email address.']})
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def assertInvalidEmailFormat(self, response, field):
+        self.assertEqual(response.data, {
+            '%s' % field: [u'Enter a valid email address.']})
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def assertInvalidPhone(self, response, field):
+        self.assertEqual(response.data, {
+            '%s' % field: [u'This is an invalid phone number.']})
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
 
