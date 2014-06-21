@@ -65,7 +65,10 @@ var RegistrationView = React.createClass({
       country_pref8: 0,
       country_pref9: 0,
       country_pref10: 0,
-      committee_prefs: [],
+      prefers_bilingual: null,
+      prefers_crisis: null,
+      prefers_small_specialized: null,
+      prefers_mid_large_specialized: null,
       registration_comments: null,
       loading: false
     };
@@ -400,7 +403,50 @@ var RegistrationView = React.createClass({
             in the following small/specialized committees? Positions are limited
             and we may not be able to accomodate all preferences.</p>
             <ul>
-              {this.renderCommittees()}
+              <li>
+                <label name="committee_prefs">
+                  <input
+                    className="choice"
+                    type="checkbox"
+                    name="prefers_bilingual"
+                    valueLink={this.linkState('prefers_bilingual')}
+                  />
+                  Bilingual
+                </label>
+              </li>
+              <li>
+                <label name="committee_prefs">
+                  <input
+                    className="choice"
+                    type="checkbox"
+                    name="prefers_crisis"
+                    valueLink={this.linkState('prefers_crisis')}
+                  />
+                  Crisis
+                </label>
+              </li>
+              <li>
+                <label name="committee_prefs">
+                  <input
+                    className="choice"
+                    type="checkbox"
+                    name="prefers_small_specialized"
+                    valueLink={this.linkState('prefers_small_specialized')}
+                  />
+                  Small Specialized
+                </label>
+              </li>
+              <li>
+                <label name="committee_prefs">
+                  <input
+                    className="choice"
+                    type="checkbox"
+                    name="prefers_mid_large_specialized"
+                    valueLink={this.linkState('prefers_mid_large_specialized')}
+                  />
+                  Mid-large Specialized
+                </label>
+              </li>
             </ul>
             <hr />
             <h3>Comments</h3>
@@ -432,23 +478,6 @@ var RegistrationView = React.createClass({
         </form>
       </OuterView>
     );
-  },
-
-  renderCommittees: function() {
-    return this.state.committees.map(function(committee) {
-      return (
-        <li>
-          <label name="committee_prefs">
-            <input
-              className="choice"
-              type="checkbox"
-              name="committee_prefs"
-            />
-            {committee.full_name}
-          </label>
-        </li>
-      );
-    });
   },
 
   renderCommitteeOptions: function() {
@@ -546,7 +575,11 @@ var RegistrationView = React.createClass({
             this.state.country_pref9,
             this.state.country_pref10
           ],
-          committee_prefs: this.state.committee_prefs,
+          prefers_bilingual: this.state.prefers_bilingual,
+          prefers_crisis: this.state.prefers_crisis,
+          prefers_small_specialized: this.state.prefers_small_specialized,
+          prefers_mid_large_specialized:
+            this.state.prefers_mid_large_specialized,
           registration_comments: this.state.registration_comments
         }
       },
