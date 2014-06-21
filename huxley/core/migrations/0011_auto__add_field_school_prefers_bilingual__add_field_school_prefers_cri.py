@@ -8,23 +8,23 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding field 'School.bilingual'
-        db.add_column(u'school', 'bilingual',
+        # Adding field 'School.prefers_bilingual'
+        db.add_column(u'school', 'prefers_bilingual',
                       self.gf('django.db.models.fields.BooleanField')(default=False),
                       keep_default=False)
 
-        # Adding field 'School.crisis'
-        db.add_column(u'school', 'crisis',
+        # Adding field 'School.prefers_crisis'
+        db.add_column(u'school', 'prefers_crisis',
                       self.gf('django.db.models.fields.BooleanField')(default=False),
                       keep_default=False)
 
-        # Adding field 'School.small_specialized'
-        db.add_column(u'school', 'small_specialized',
+        # Adding field 'School.prefers_small_specialized'
+        db.add_column(u'school', 'prefers_small_specialized',
                       self.gf('django.db.models.fields.BooleanField')(default=False),
                       keep_default=False)
 
-        # Adding field 'School.mid_large_specialized'
-        db.add_column(u'school', 'mid_large_specialized',
+        # Adding field 'School.prefers_mid_large_specialized'
+        db.add_column(u'school', 'prefers_mid_large_specialized',
                       self.gf('django.db.models.fields.BooleanField')(default=False),
                       keep_default=False)
 
@@ -33,17 +33,17 @@ class Migration(SchemaMigration):
 
 
     def backwards(self, orm):
-        # Deleting field 'School.bilingual'
-        db.delete_column(u'school', 'bilingual')
+        # Deleting field 'School.prefers_bilingual'
+        db.delete_column(u'school', 'prefers_bilingual')
 
-        # Deleting field 'School.crisis'
-        db.delete_column(u'school', 'crisis')
+        # Deleting field 'School.prefers_crisis'
+        db.delete_column(u'school', 'prefers_crisis')
 
-        # Deleting field 'School.small_specialized'
-        db.delete_column(u'school', 'small_specialized')
+        # Deleting field 'School.prefers_small_specialized'
+        db.delete_column(u'school', 'prefers_small_specialized')
 
-        # Deleting field 'School.mid_large_specialized'
-        db.delete_column(u'school', 'mid_large_specialized')
+        # Deleting field 'School.prefers_mid_large_specialized'
+        db.delete_column(u'school', 'prefers_mid_large_specialized')
 
         # Adding M2M table for field committeepreferences on 'School'
         m2m_table_name = db.shorten_name(u'school_committeepreferences')
@@ -134,19 +134,20 @@ class Migration(SchemaMigration):
             'address': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
             'advanced_delegates': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': '0'}),
             'beginner_delegates': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': '0'}),
-            'bilingual': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'city': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
             'country': ('django.db.models.fields.CharField', [], {'max_length': '64'}),
             'countrypreferences': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['core.Country']", 'through': u"orm['core.CountryPreference']", 'symmetrical': 'False'}),
-            'crisis': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'delegation_fee': ('django.db.models.fields.DecimalField', [], {'default': '0', 'max_digits': '6', 'decimal_places': '2'}),
             'delegation_fee_balance': ('django.db.models.fields.DecimalField', [], {'default': '0', 'max_digits': '6', 'decimal_places': '2'}),
             'delegation_fee_paid': ('django.db.models.fields.DecimalField', [], {'default': '0', 'max_digits': '6', 'decimal_places': '2'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'intermediate_delegates': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': '0'}),
             'international': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'mid_large_specialized': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
+            'prefers_bilingual': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'prefers_crisis': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'prefers_mid_large_specialized': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'prefers_small_specialized': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'primary_email': ('django.db.models.fields.EmailField', [], {'max_length': '75'}),
             'primary_gender': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': '4'}),
             'primary_name': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
@@ -163,7 +164,6 @@ class Migration(SchemaMigration):
             'secondary_name': ('django.db.models.fields.CharField', [], {'max_length': '128', 'blank': 'True'}),
             'secondary_phone': ('django.db.models.fields.CharField', [], {'max_length': '32', 'blank': 'True'}),
             'secondary_type': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': '2', 'blank': 'True'}),
-            'small_specialized': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'spanish_speaking_delegates': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': '0'}),
             'state': ('django.db.models.fields.CharField', [], {'max_length': '16'}),
             'times_attended': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': '0'}),

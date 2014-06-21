@@ -83,10 +83,11 @@ class CreateSchoolTestCase(CreateAPITestCase):
             'intermediate_delegates': school.intermediate_delegates,
             'advanced_delegates': school.advanced_delegates,
             'spanish_speaking_delegates': school.spanish_speaking_delegates,
-            'bilingual': school.bilingual,
-            'crisis': school.crisis,
-            'small_specialized': school.small_specialized,
-            'mid_large_specialized': school.mid_large_specialized,
+            'prefers_bilingual': school.prefers_bilingual,
+            'prefers_crisis': school.prefers_crisis,
+            'prefers_small_specialized': school.prefers_small_specialized,
+            'prefers_mid_large_specialized':
+                school.prefers_mid_large_specialized,
             'registration_comments': school.registration_comments})
 
     def test_invalid_state(self):
