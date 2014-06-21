@@ -1,10 +1,8 @@
 # Copyright (c) 2011-2014 Berkeley Model United Nations. All rights reserved.
 # Use of this source code is governed by a BSD License (see LICENSE).
 
-from huxley.accounts.models import User
-from huxley.api.tests import (CreateAPITestCase, DestroyAPITestCase,
-                              ListAPITestCase, PartialUpdateAPITestCase,
-                              RetrieveAPITestCase)
+from huxley.api.tests import (DestroyAPITestCase, ListAPITestCase,
+                              PartialUpdateAPITestCase, RetrieveAPITestCase)
 from huxley.core.models import School
 from huxley.utils.test import TestSchools, TestUsers
 
