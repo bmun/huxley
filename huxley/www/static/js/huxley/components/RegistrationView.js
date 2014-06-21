@@ -15,7 +15,6 @@ var React = require('react/addons');
 var Button = require('./Button');
 var ContactTypes = require('../constants/ContactTypes');
 var CountryStore = require('../stores/CountryStore');
-var CommitteeStore = require('../stores/CommitteeStore');
 var GenderConstants = require('../constants/GenderConstants');
 var NavLink = require('./NavLink');
 var OuterView = require('./OuterView');
@@ -28,7 +27,6 @@ var RegistrationView = React.createClass({
   getInitialState: function() {
     return {
       countries: [],
-      committees: [],
       first_name: null,
       last_name: null,
       username: null,
@@ -77,9 +75,6 @@ var RegistrationView = React.createClass({
   componentDidMount: function() {
     CountryStore.getCountries(function(countries) {
       this.setState({countries: countries});
-    }.bind(this));
-    CommitteeStore.getSpecialCommittees(function(committees) {
-      this.setState({committees: committees});
     }.bind(this));
   },
 
