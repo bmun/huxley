@@ -3,7 +3,7 @@
 
 from django.db import models
 
-from huxley.core.constants import ContactGender, ContactType
+from huxley.core.constants import ContactGender, ContactType, ProgramTypes
 
 
 class Conference(models.Model):
@@ -110,11 +110,9 @@ class Committee(models.Model):
 
 
 class School(models.Model):
-    TYPE_CLUB = 1
-    TYPE_CLASS = 2
     PROGRAM_TYPE_OPTIONS = (
-        (TYPE_CLUB, 'Club'),
-        (TYPE_CLASS, 'Class'),
+        (ProgramTypes.CLUB, 'Club'),
+        (ProgramTypes.CLASS, 'Class'),
     )
 
     CONTACT_TYPE_OPTIONS = (

@@ -28,3 +28,9 @@ class ContactType(Constants):
     '''Whether a school's primary/secondary contact is a student or faculty.'''
     STUDENT = 1
     FACULTY = 2
+
+
+class ProgramTypes(Constants):
+    '''Type of a school's MUN program.'''
+    CLUB = 1
+    CLASS = 2
