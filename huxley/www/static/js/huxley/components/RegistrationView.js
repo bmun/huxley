@@ -51,10 +51,10 @@ var RegistrationView = React.createClass({
       primary_email: null,
       primary_phone: null,
       primary_type: ContactTypes.FACULTY,
-      secondary_name: null,
+      secondary_name: '',
       secondary_gender: GenderConstants.UNSPECFIED,
-      secondary_email: null,
-      secondary_phone: null,
+      secondary_email: '',
+      secondary_phone: '',
       secondary_type: ContactTypes.FACULTY,
       country_pref1: 0,
       country_pref2: 0,
@@ -70,7 +70,7 @@ var RegistrationView = React.createClass({
       prefers_crisis: null,
       prefers_small_specialized: null,
       prefers_mid_large_specialized: null,
-      registration_comments: null,
+      registration_comments: '',
       loading: false
     };
   },
