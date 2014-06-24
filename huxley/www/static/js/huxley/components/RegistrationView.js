@@ -34,10 +34,12 @@ var RegistrationView = React.createClass({
       password2: null,
       school_name: null,
       school_address: null,
+      school_city: null,
       school_state: null,
-      shool_zip: null,
+      school_zip: null,
       school_country: "United States of America",
-      program_type: "Club",
+      school_location: false,
+      program_type: 1,
       times_attended: null,
       beginner_delegates: null,
       intermediate_delegates: null,
@@ -144,7 +146,7 @@ var RegistrationView = React.createClass({
                     type="radio"
                     name="school_location"
                     valueLink={this.linkState('school_location')}
-                    checked="true"
+                    defaultChecked="true"
                   /> United States of America
                   </label>
               </li>
@@ -199,7 +201,8 @@ var RegistrationView = React.createClass({
               type="text"
               name="school_country"
               placeholder="Country"
-              valueLink={this.linkState('school_country')}
+              valueLink={this.state.school_location ? ''  :
+                this.linkState('school_country')}
             />
             <hr />
             <h3>Program Information</h3>
@@ -211,7 +214,7 @@ var RegistrationView = React.createClass({
                     className="choice"
                     type="radio"
                     name="program_type"
-                    checked="true"
+                    defaultChecked="true"
                     valueLink={this.linkState('program_type')}
                   /> Club
                 </label>
@@ -530,7 +533,7 @@ var RegistrationView = React.createClass({
     $.ajax({
       type: 'POST',
       url: '/api/users',
-      data: {
+      data: JSON.stringify({
         first_name: this.state.first_name,
         last_name: this.state.last_name,
         username: this.state.username,
@@ -539,9 +542,11 @@ var RegistrationView = React.createClass({
         school: {
           name: this.state.school_name,
           address: this.state.school_address,
+          city: this.state.school_city,
           state: this.state.school_state,
-          zip: this.state.school_zip,
+          zip_code: this.state.school_zip,
           country: this.state.school_country,
+          international: this.state.school_location,
           program_type: this.state.program_type,
           times_attended: this.state.times_attended,
           beginner_delegates: this.state.beginner_delegates,
@@ -558,7 +563,7 @@ var RegistrationView = React.createClass({
           secondary_email: this.state.secondary_email,
           secondary_phone: this.state.secondary_phone,
           secondary_type: this.state.secondary_type,
-          country_prefs: [
+          countrypreferences: [
             this.state.country_pref1,
             this.state.country_pref2,
             this.state.country_pref3,
@@ -577,10 +582,10 @@ var RegistrationView = React.createClass({
             this.state.prefers_mid_large_specialized,
           registration_comments: this.state.registration_comments
         }
-      },
+      }),
       success: this._handleSuccess,
       error: this._handleError,
-      dataType: 'json'
+      contentType: 'application/json'
     });
     event.preventDefault();
   },
