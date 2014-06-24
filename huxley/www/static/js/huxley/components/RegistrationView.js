@@ -18,6 +18,7 @@ var CountryStore = require('../stores/CountryStore');
 var GenderConstants = require('../constants/GenderConstants');
 var NavLink = require('./NavLink');
 var OuterView = require('./OuterView');
+var ProgramTypes = require('../constants/ProgramTypes')
 
 require('jquery-ui/effect-shake');
 
@@ -39,7 +40,7 @@ var RegistrationView = React.createClass({
       school_zip: null,
       school_country: "United States of America",
       school_location: false,
-      program_type: 1,
+      program_type: ProgramTypes.CLUB,
       times_attended: null,
       beginner_delegates: null,
       intermediate_delegates: null,

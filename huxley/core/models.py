@@ -151,7 +151,7 @@ class School(models.Model):
     secondary_email     = models.EmailField(blank=True)
     secondary_phone     = models.CharField(max_length=32, blank=True)
     secondary_type      = models.PositiveSmallIntegerField(choices=CONTACT_TYPE_OPTIONS, blank=True, default=ContactType.FACULTY)
-    program_type        = models.PositiveSmallIntegerField(choices=PROGRAM_TYPE_OPTIONS, default=TYPE_CLUB)
+    program_type        = models.PositiveSmallIntegerField(choices=PROGRAM_TYPE_OPTIONS, default=ProgramTypes.CLUB)
     times_attended      = models.PositiveSmallIntegerField(default=0)
     international       = models.BooleanField(default=False)
     waitlist            = models.BooleanField(default=False)
