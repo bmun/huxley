@@ -11,10 +11,9 @@ var React = require('react/addons');
 
 var InnerView = require('./InnerView');
 var LogoutButton = require('./LogoutButton');
+var ProgramTypes = require('../constants/ProgramTypes');
 var User = require('../User');
 
-var TYPE_CLUB = 1;
-var TYPE_CLASS = 2;
 
 var AdvisorProfileView = React.createClass({
   mixins: [React.addons.LinkedStateMixin],
@@ -143,7 +142,7 @@ var AdvisorProfileView = React.createClass({
                     type="radio"
                     name="program_type"
                     valueLink={this.linkState('program_type')}
-                    checked={TYPE_CLASS === school.program_type}
+                    checked={ProgramTypes.CLASS === school.program_type}
                   />
                   <label>Class</label>
                   &nbsp;&nbsp;&nbsp;&nbsp;
@@ -151,7 +150,7 @@ var AdvisorProfileView = React.createClass({
                     type="radio"
                     name="program_type"
                     valueLink={this.linkState('program_type')}
-                    checked={TYPE_CLUB === school.program_type}
+                    checked={ProgramTypes.CLUB === school.program_type}
                   />
                   <label>Club</label>
                 </td>
