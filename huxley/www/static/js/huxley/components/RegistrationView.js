@@ -66,10 +66,10 @@ var RegistrationView = React.createClass({
       country_pref8: 0,
       country_pref9: 0,
       country_pref10: 0,
-      prefers_bilingual: null,
-      prefers_crisis: null,
-      prefers_small_specialized: null,
-      prefers_mid_large_specialized: null,
+      prefers_bilingual: false,
+      prefers_crisis: false,
+      prefers_small_specialized: false,
+      prefers_mid_large_specialized: false,
       registration_comments: '',
       loading: false
     };
@@ -414,7 +414,8 @@ var RegistrationView = React.createClass({
                     className="choice"
                     type="checkbox"
                     name="prefers_bilingual"
-                    valueLink={this.linkState('prefers_bilingual')}
+                    checked={this.state.prefers_bilingual}
+                    onChange={this._handleBilingualChange}
                   />
                   Bilingual
                 </label>
@@ -425,7 +426,8 @@ var RegistrationView = React.createClass({
                     className="choice"
                     type="checkbox"
                     name="prefers_crisis"
-                    valueLink={this.linkState('prefers_crisis')}
+                    checked={this.state.prefers_crisis}
+                    onChange={this._handleCrisisChange}
                   />
                   Crisis
                 </label>
@@ -436,7 +438,8 @@ var RegistrationView = React.createClass({
                     className="choice"
                     type="checkbox"
                     name="prefers_small_specialized"
-                    valueLink={this.linkState('prefers_small_specialized')}
+                    checked={this.state.prefers_small_specialized}
+                    onChange={this._handleSmallSpecializedChange}
                   />
                   Small Specialized
                 </label>
@@ -447,7 +450,8 @@ var RegistrationView = React.createClass({
                     className="choice"
                     type="checkbox"
                     name="prefers_mid_large_specialized"
-                    valueLink={this.linkState('prefers_mid_large_specialized')}
+                    checked={this.state.prefers_mid_large_specialized}
+                    onChange={this._handleMidLargeSpecializedChange}
                   />
                   Mid-large Specialized
                 </label>
@@ -541,6 +545,24 @@ var RegistrationView = React.createClass({
 
   _handleInternationalChange: function(event) {
     this.setState({school_international: !!event.target.value});
+  },
+
+  _handleBilingualChange: function(event) {
+    this.setState({prefers_bilingual: !this.state.prefers_bilingual});
+  },
+
+  _handleCrisisChange: function(event) {
+    this.setState({prefers_crisis: !this.state.prefers_crisis});
+  },
+
+  _handleSmallSpecializedChange: function(event) {
+    this.setState({prefers_small_specialized:
+      !this.state.prefers_small_specialized});
+  },
+
+  _handleMidLargeSpecializedChange: function(event) {
+    this.setState({prefers_mid_large_specialized:
+      !this.state.prefers_mid_large_specialized});
   },
 
   _handleSubmit: function(event) {
