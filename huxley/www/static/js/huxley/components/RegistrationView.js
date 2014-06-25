@@ -39,7 +39,7 @@ var RegistrationView = React.createClass({
       school_state: null,
       school_zip: null,
       school_country: "United States of America",
-      school_location: false,
+      school_international: false,
       program_type: ProgramTypes.CLUB,
       times_attended: null,
       beginner_delegates: null,
@@ -141,23 +141,26 @@ var RegistrationView = React.createClass({
             <p className="instructions">Where is your school located?</p>
             <ul>
               <li>
-                <label name="school_location">
+                <label name="school_international">
                   <input
                     className="choice"
                     type="radio"
-                    name="school_location"
-                    valueLink={this.linkState('school_location')}
-                    defaultChecked="true"
+                    name="school_international"
+                    value=''
+                    onChange={this._handleInternationalChange}
+                    checked={!this.state.school_international}
                   /> United States of America
                   </label>
               </li>
               <li>
-                <label name="school_location">
+                <label name="school_international">
                   <input
                     className="choice"
                     type="radio"
-                    name="school_location"
-                    valueLink={this.linkState('school_location')}
+                    name="school_international"
+                    value="international"
+                    onChange={this._handleInternationalChange}
+                    checked={this.state.school_international}
                   /> International
                 </label>
               </li>
@@ -215,8 +218,9 @@ var RegistrationView = React.createClass({
                     className="choice"
                     type="radio"
                     name="program_type"
-                    defaultChecked="true"
-                    valueLink={this.linkState('program_type')}
+                    checked={this.state.program_type == ProgramTypes.CLUB}
+                    value={ProgramTypes.CLUB}
+                    onChange={this._handleProgramTypeChange}
                   /> Club
                 </label>
               </li>
@@ -226,7 +230,9 @@ var RegistrationView = React.createClass({
                     className="choice"
                     type="radio"
                     name="program_type"
-                    valueLink={this.linkState('program_type')}
+                    value={ProgramTypes.CLASS}
+                    checked={this.state.program_type == ProgramTypes.CLASS}
+                    onChange={this._handleProgramTypeChange}
                   /> Class
                 </label>
               </li>
@@ -529,6 +535,14 @@ var RegistrationView = React.createClass({
     );
   },
 
+  _handleProgramTypeChange: function(event) {
+    this.setState({program_type: event.target.value});
+  },
+
+  _handleInternationalChange: function(event) {
+    this.setState({school_international: !!event.target.value});
+  },
+
   _handleSubmit: function(event) {
     this.setState({loading: true});
     $.ajax({
@@ -547,7 +561,7 @@ var RegistrationView = React.createClass({
           state: this.state.school_state,
           zip_code: this.state.school_zip,
           country: this.state.school_country,
-          international: this.state.school_location,
+          international: this.state.school_international,
           program_type: this.state.program_type,
           times_attended: this.state.times_attended,
           beginner_delegates: this.state.beginner_delegates,
