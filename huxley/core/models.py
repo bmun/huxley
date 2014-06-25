@@ -110,6 +110,7 @@ class Committee(models.Model):
 
 
 class School(models.Model):
+
     PROGRAM_TYPE_OPTIONS = (
         (ProgramTypes.CLUB, 'Club'),
         (ProgramTypes.CLASS, 'Class'),
@@ -118,13 +119,6 @@ class School(models.Model):
     CONTACT_TYPE_OPTIONS = (
         (ContactType.FACULTY, 'Faculty'),
         (ContactType.STUDENT, 'Student'),
-    )
-
-    LOCATION_USA = 'location/usa'
-    LOCATION_INTERNATIONAL = 'location/international'
-    LOCATION_OPTIONS = (
-        (LOCATION_USA, 'United States of America'),
-        (LOCATION_INTERNATIONAL, 'International'),
     )
 
     GENDER_OPTIONS = (
