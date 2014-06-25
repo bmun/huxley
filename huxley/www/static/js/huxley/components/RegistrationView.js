@@ -146,8 +146,8 @@ var RegistrationView = React.createClass({
                     className="choice"
                     type="radio"
                     name="school_international"
-                    value={false}
-                    onChange={this._handleLocationChange}
+                    value=''
+                    onChange={this._handleInternationalChange}
                     checked={!this.state.school_international}
                   /> United States of America
                   </label>
@@ -158,8 +158,8 @@ var RegistrationView = React.createClass({
                     className="choice"
                     type="radio"
                     name="school_international"
-                    value={true}
-                    onChange={this._handleLocationChange}
+                    value="international"
+                    onChange={this._handleInternationalChange}
                     checked={this.state.school_international}
                   /> International
                 </label>
@@ -218,7 +218,7 @@ var RegistrationView = React.createClass({
                     className="choice"
                     type="radio"
                     name="program_type"
-                    checked={true}
+                    checked={this.state.program_type == ProgramTypes.CLUB}
                     value={ProgramTypes.CLUB}
                     onChange={this._handleProgramTypeChange}
                   /> Club
@@ -231,7 +231,7 @@ var RegistrationView = React.createClass({
                     type="radio"
                     name="program_type"
                     value={ProgramTypes.CLASS}
-                    checked={false}
+                    checked={this.state.program_type == ProgramTypes.CLASS}
                     onChange={this._handleProgramTypeChange}
                   /> Class
                 </label>
@@ -539,8 +539,8 @@ var RegistrationView = React.createClass({
     this.setState({program_type: event.target.value});
   },
 
-  _handleLocationChange: function(event) {
-    this.setState({school_international: event.target.value});
+  _handleInternationalChange: function(event) {
+    this.setState({school_international: !!event.target.value});
   },
 
   _handleSubmit: function(event) {
@@ -561,7 +561,7 @@ var RegistrationView = React.createClass({
           state: this.state.school_state,
           zip_code: this.state.school_zip,
           country: this.state.school_country,
-          international: this.state.school_location,
+          international: this.state.school_international,
           program_type: this.state.program_type,
           times_attended: this.state.times_attended,
           beginner_delegates: this.state.beginner_delegates,
