@@ -196,7 +196,7 @@ class CreateSchoolTestCase(CreateAPITestCase):
 
     def test_invalid_international_secondary_phone(self):
         '''Secondary_phone phone should be numerical.'''
-        params = self.get_params(international=School.LOCATION_INTERNATIONAL,
+        params = self.get_params(international=True,
             secondary_phone='ABC')
 
         response = self.get_response(params=params)

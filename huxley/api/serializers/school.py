@@ -77,7 +77,7 @@ class SchoolSerializer(serializers.ModelSerializer):
         international = attrs['international']
         number = attrs[source]
 
-        if international == School.LOCATION_INTERNATIONAL:
+        if international:
             validators.phone_international(number)
         else:
             validators.phone_domestic(number)
@@ -140,7 +140,7 @@ class SchoolSerializer(serializers.ModelSerializer):
         international = attrs['international']
 
         if number:
-            if (international == School.LOCATION_INTERNATIONAL):
+            if international:
                 validators.phone_international(number)
             else:
                 validators.phone_domestic(number)
