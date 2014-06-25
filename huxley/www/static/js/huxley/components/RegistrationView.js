@@ -148,7 +148,7 @@ var RegistrationView = React.createClass({
                     name="school_location"
                     value={this.state.school_location}
                     onChange={this.schoolLocationHandler}
-                    defaultChecked="true"
+                    defaultChecked={!this.state.school_location}
                   /> United States of America
                   </label>
               </li>
@@ -158,8 +158,9 @@ var RegistrationView = React.createClass({
                     className="choice"
                     type="radio"
                     name="school_location"
-                    value={this.state.school_location}
+                    value={!this.state.school_location}
                     onChange={this.schoolLocationHandler}
+                    defaultChecked={this.state.school_location}
                   /> International
                 </label>
               </li>
@@ -218,7 +219,7 @@ var RegistrationView = React.createClass({
                     type="radio"
                     name="program_type"
                     defaultChecked="true"
-                    value={this.state.program_type}
+                    value={ProgramTypes.CLUB}
                     onChange={this.programTypeHandler}
                   /> Club
                 </label>
@@ -229,7 +230,7 @@ var RegistrationView = React.createClass({
                     className="choice"
                     type="radio"
                     name="program_type"
-                    value={this.state.program_type}
+                    value={ProgramTypes.CLASS}
                     onChange={this.programTypeHandler}
                   /> Class
                 </label>
@@ -534,15 +535,11 @@ var RegistrationView = React.createClass({
   },
 
   programTypeHandler: function(event) {
-    if (this.state.program_type === ProgramTypes.CLUB) {
-      this.state.program_type = ProgramTypes.CLASS;
-    } else {
-      this.state.program_type = ProgramTypes.CLUB;
-    }
+    this.setState({program_type: event.target.value});
   },
 
   schoolLocationHandler: function(event) {
-    this.state.school_location = !this.state.school_location;
+    this.setState({school_location: event.target.value});
   },
 
   _handleSubmit: function(event) {
