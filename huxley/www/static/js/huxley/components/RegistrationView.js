@@ -146,7 +146,8 @@ var RegistrationView = React.createClass({
                     className="choice"
                     type="radio"
                     name="school_location"
-                    valueLink={this.linkState('school_location')}
+                    value={this.state.school_location}
+                    onChange={this.schoolLocationHandler}
                     defaultChecked="true"
                   /> United States of America
                   </label>
@@ -157,7 +158,8 @@ var RegistrationView = React.createClass({
                     className="choice"
                     type="radio"
                     name="school_location"
-                    valueLink={this.linkState('school_location')}
+                    value={this.state.school_location}
+                    onChange={this.schoolLocationHandler}
                   /> International
                 </label>
               </li>
@@ -216,7 +218,8 @@ var RegistrationView = React.createClass({
                     type="radio"
                     name="program_type"
                     defaultChecked="true"
-                    valueLink={this.linkState('program_type')}
+                    value={this.state.program_type}
+                    onChange={this.programTypeHandler}
                   /> Club
                 </label>
               </li>
@@ -226,7 +229,8 @@ var RegistrationView = React.createClass({
                     className="choice"
                     type="radio"
                     name="program_type"
-                    valueLink={this.linkState('program_type')}
+                    value={this.state.program_type}
+                    onChange={this.programTypeHandler}
                   /> Class
                 </label>
               </li>
@@ -527,6 +531,18 @@ var RegistrationView = React.createClass({
         </option>
       </select>
     );
+  },
+
+  programTypeHandler: function(event) {
+    if (this.state.program_type === ProgramTypes.CLUB) {
+      this.state.program_type = ProgramTypes.CLASS;
+    } else {
+      this.state.program_type = ProgramTypes.CLUB;
+    }
+  },
+
+  schoolLocationHandler: function(event) {
+    this.state.school_location = !this.state.school_location;
   },
 
   _handleSubmit: function(event) {
