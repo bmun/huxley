@@ -147,7 +147,7 @@ var RegistrationView = React.createClass({
                     type="radio"
                     name="school_location"
                     value={this.state.school_location}
-                    onChange={this.schoolLocationHandler}
+                    onChange={this._handleLocationChange}
                     defaultChecked={!this.state.school_location}
                   /> United States of America
                   </label>
@@ -159,7 +159,7 @@ var RegistrationView = React.createClass({
                     type="radio"
                     name="school_location"
                     value={!this.state.school_location}
-                    onChange={this.schoolLocationHandler}
+                    onChange={this._handleLocationChange}
                     defaultChecked={this.state.school_location}
                   /> International
                 </label>
@@ -220,7 +220,7 @@ var RegistrationView = React.createClass({
                     name="program_type"
                     defaultChecked="true"
                     value={ProgramTypes.CLUB}
-                    onChange={this.programTypeHandler}
+                    onChange={this._handleProgramTypeChange}
                   /> Club
                 </label>
               </li>
@@ -231,7 +231,7 @@ var RegistrationView = React.createClass({
                     type="radio"
                     name="program_type"
                     value={ProgramTypes.CLASS}
-                    onChange={this.programTypeHandler}
+                    onChange={this._handleProgramTypeChange}
                   /> Class
                 </label>
               </li>
@@ -534,11 +534,11 @@ var RegistrationView = React.createClass({
     );
   },
 
-  programTypeHandler: function(event) {
+  _handleProgramTypeChange: function(event) {
     this.setState({program_type: event.target.value});
   },
 
-  schoolLocationHandler: function(event) {
+  _handleLocationChange: function(event) {
     this.setState({school_location: event.target.value});
   },
 
