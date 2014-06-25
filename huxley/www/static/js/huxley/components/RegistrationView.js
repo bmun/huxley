@@ -415,7 +415,6 @@ var RegistrationView = React.createClass({
                     type="checkbox"
                     name="prefers_bilingual"
                     checked={this.state.prefers_bilingual}
-                    value='bilingual'
                     onChange={this._handleBilingualChange}
                   />
                   Bilingual
@@ -428,7 +427,6 @@ var RegistrationView = React.createClass({
                     type="checkbox"
                     name="prefers_crisis"
                     checked={this.state.prefers_crisis}
-                    value='crisis'
                     onChange={this._handleCrisisChange}
                   />
                   Crisis
@@ -441,7 +439,6 @@ var RegistrationView = React.createClass({
                     type="checkbox"
                     name="prefers_small_specialized"
                     checked={this.state.prefers_small_specialized}
-                    value='small_specialized'
                     onChange={this._handleSmallSpecializedChange}
                   />
                   Small Specialized
@@ -454,7 +451,6 @@ var RegistrationView = React.createClass({
                     type="checkbox"
                     name="prefers_mid_large_specialized"
                     checked={this.state.prefers_mid_large_specialized}
-                    value='mid_large_specialized'
                     onChange={this._handleMidLargeSpecializedChange}
                   />
                   Mid-large Specialized
@@ -552,35 +548,21 @@ var RegistrationView = React.createClass({
   },
 
   _handleBilingualChange: function(event) {
-    if (this.state.prefers_bilingual) {
-      this.setState({prefers_bilingual: !event.target.value});
-    } else {
-      this.setState({prefers_bilingual: event.target.value});
-    }
+    this.setState({prefers_bilingual: !this.state.prefers_bilingual});
   },
 
   _handleCrisisChange: function(event) {
-    if (this.state.prefers_crisis) {
-      this.setState({prefers_crisis: !event.target.value});
-    } else {
-      this.setState({prefers_crisis: event.target.value});
-    }
+    this.setState({prefers_crisis: !this.state.prefers_crisis});
   },
 
   _handleSmallSpecializedChange: function(event) {
-    if (this.state.prefers_small_specialized) {
-      this.setState({prefers_small_specialized: !event.target.value});
-    } else {
-      this.setState({prefers_small_specialized: event.target.value});
-    }
+    this.setState({prefers_small_specialized:
+      !this.state.prefers_small_specialized});
   },
 
   _handleMidLargeSpecializedChange: function(event) {
-    if (this.state.prefers_mid_large_specialized) {
-      this.setState({prefers_mid_large_specialized: !event.target.value});
-    } else {
-      this.setState({prefers_mid_large_specialized: event.target.value});
-    }
+    this.setState({prefers_mid_large_specialized:
+      !this.state.prefers_mid_large_specialized});
   },
 
   _handleSubmit: function(event) {
