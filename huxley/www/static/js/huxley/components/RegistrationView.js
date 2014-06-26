@@ -102,31 +102,26 @@ var RegistrationView = React.createClass({
             <hr />
             <h3>Account Information</h3>
             <input
-              className="text"
               type="text"
               placeholder="First Name"
               valueLink={this.linkState('first_name')}
             />
             <input
-              className="text"
               type="text"
               placeholder="Last Name"
               valueLink={this.linkState('last_name')}
             />
             <input
-              className="text"
               type="text"
               placeholder="Username"
               valueLink={this.linkState('username')}
             />
             <input
-              className="text"
               type="password"
               placeholder="Password"
               valueLink={this.linkState('password')}
             />
             <input
-              className="text"
               type="password"
               placeholder="Password (confirm)"
               valueLink={this.linkState('password2')}
@@ -159,37 +154,31 @@ var RegistrationView = React.createClass({
               </li>
             </ul>
             <input
-              className="text"
               type="text"
               placeholder="Official School Name"
               valueLink={this.linkState('school_name')}
             />
             <input
-              className="text"
               type="text"
               placeholder="Street Address"
               valueLink={this.linkState('school_address')}
             />
             <input
-              className="text"
               type="text"
               placeholder="City"
               valueLink={this.linkState('school_city')}
             />
             <input
-              className="text"
               type="text"
               placeholder="State"
               valueLink={this.linkState('school_state')}
             />
             <input
-              className="text"
               type="text"
               placeholder="Zip"
               valueLink={this.linkState('school_zip')}
             />
             <input
-              className="text"
               type="text"
               placeholder="Country"
               valueLink={this.state.school_location ? ''  :
@@ -225,31 +214,26 @@ var RegistrationView = React.createClass({
             <p className="instructions">Please tell us a bit more about your delegation this
               year.</p>
             <input
-              className="text"
               type="text"
               placeholder="Number of BMUN sessions attended"
               valueLink={this.linkState("times_attended")}
             />
             <input
-              className="text"
               type="text"
               placeholder="Number of Beginner Delegates"
               valueLink={this.linkState('beginner_delegates')}
             />
             <input
-              className="text"
               type="text"
               placeholder="Number of Intermediate Delegates"
               valueLink={this.linkState('intermediate_delegates')}
             />
             <input
-              className="text"
               type="text"
               placeholder="Number of Advanced Delegates"
               valueLink={this.linkState('advanced_delegates')}
             />
             <input
-              className="text"
               type="text"
               placeholder="Number of Spanish Speaking Delegates"
               valueLink={this.linkState('spanish_speaking_delegates')}
@@ -258,19 +242,16 @@ var RegistrationView = React.createClass({
             <h3>Primary Contact</h3>
             {this.renderContactGenderField('primary_gender')}
             <input
-              className="text"
               type="text"
               placeholder="Name"
               valueLink={this.linkState('primary_name')}
             />
             <input
-              className="text"
               type="text"
               placeholder="Email"
               valueLink={this.linkState('primary_email')}
             />
             <input
-              className="text"
               type="text"
               placeholder="Phone Number"
               valueLink={this.linkState('primary_phone')}
@@ -280,19 +261,16 @@ var RegistrationView = React.createClass({
             <h3>Secondary Contact</h3>
             {this.renderContactGenderField('secondary_gender')}
             <input
-              className="text"
               type="text"
               placeholder="Name"
               valueLink={this.linkState('secondary_name')}
             />
             <input
-              className="text"
               type="text"
               placeholder="Email"
               valueLink={this.linkState('secondary_email')}
             />
             <input
-              className="text"
               type="text"
               placeholder="Phone Number"
               valueLink={this.linkState('secondary_phone')}
@@ -434,7 +412,6 @@ var RegistrationView = React.createClass({
             general feedback about the registration process, please comment
             below.</p>
             <textarea
-              className="text"
               cols="40"
               rows="7"
               valueLink={this.linkState('registration_comments')}
