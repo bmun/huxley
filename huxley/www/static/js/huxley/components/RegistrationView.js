@@ -133,7 +133,6 @@ var RegistrationView = React.createClass({
               <li>
                 <label>
                   <input
-                    className="choice"
                     type="radio"
                     value=''
                     onChange={this._handleInternationalChange}
@@ -144,7 +143,6 @@ var RegistrationView = React.createClass({
               <li>
                 <label>
                   <input
-                    className="choice"
                     type="radio"
                     value="international"
                     onChange={this._handleInternationalChange}
@@ -191,7 +189,6 @@ var RegistrationView = React.createClass({
               <li>
                 <label>
                   <input
-                    className="choice"
                     type="radio"
                     checked={this.state.program_type == ProgramTypes.CLUB}
                     value={ProgramTypes.CLUB}
@@ -202,7 +199,6 @@ var RegistrationView = React.createClass({
               <li>
                 <label>
                   <input
-                    className="choice"
                     type="radio"
                     value={ProgramTypes.CLASS}
                     checked={this.state.program_type == ProgramTypes.CLASS}
@@ -363,7 +359,6 @@ var RegistrationView = React.createClass({
               <li>
                 <label>
                   <input
-                    className="choice"
                     type="checkbox"
                     checked={this.state.prefers_bilingual}
                     onChange={this._handleBilingualChange}
@@ -374,7 +369,6 @@ var RegistrationView = React.createClass({
               <li>
                 <label>
                   <input
-                    className="choice"
                     type="checkbox"
                     checked={this.state.prefers_crisis}
                     onChange={this._handleCrisisChange}
@@ -385,7 +379,6 @@ var RegistrationView = React.createClass({
               <li>
                 <label>
                   <input
-                    className="choice"
                     type="checkbox"
                     checked={this.state.prefers_small_specialized}
                     onChange={this._handleSmallSpecializedChange}
@@ -396,7 +389,6 @@ var RegistrationView = React.createClass({
               <li>
                 <label>
                   <input
-                    className="choice"
                     type="checkbox"
                     checked={this.state.prefers_mid_large_specialized}
                     onChange={this._handleMidLargeSpecializedChange}
