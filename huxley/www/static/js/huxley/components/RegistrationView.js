@@ -27,6 +27,7 @@ var RegistrationView = React.createClass({
 
   getInitialState: function() {
     return {
+      errors: null,
       countries: [],
       first_name: null,
       last_name: null,
@@ -106,16 +107,19 @@ var RegistrationView = React.createClass({
               placeholder="First Name"
               valueLink={this.linkState('first_name')}
             />
+            {this.renderError('first_name')}
             <input
               type="text"
               placeholder="Last Name"
               valueLink={this.linkState('last_name')}
             />
+            {this.renderError('last_name')}
             <input
               type="text"
               placeholder="Username"
               valueLink={this.linkState('username')}
             />
+            {this.renderError('username')}
             <input
               type="password"
               placeholder="Password"
@@ -179,7 +183,7 @@ var RegistrationView = React.createClass({
             <input
               type="text"
               placeholder="Country"
-              valueLink={this.state.school_location ? ''  :
+              valueLink={this.state.school_international ? ''  :
                 this.linkState('school_country')}
             />
             <hr />
@@ -477,6 +481,18 @@ var RegistrationView = React.createClass({
     );
   },
 
+  renderError: function(field) {
+    if (this.state.errors) {
+      return (
+        <div className="errorcontainer">
+          <label className="error">{this.state.errors[field]}</label>
+        </div>
+      );
+    }
+
+    return null;
+  },
+
   _handleProgramTypeChange: function(event) {
     this.setState({program_type: event.target.value});
   },
@@ -571,12 +587,12 @@ var RegistrationView = React.createClass({
 
   _handleError: function(jqXHR, status, error) {
     var response = jqXHR.responseJSON;
-    if (!response.detail) {
+    if (!response) {
       return;
     }
 
     this.setState({
-      error: response.detail,
+      errors: response,
       loading: false
     }, function() {
       $(this.getDOMNode()).effect(

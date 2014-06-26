@@ -300,6 +300,16 @@ class UserListPostTestCase(CreateAPITestCase):
         self.assertEqual(response.data, {
             'password': ['Password contains invalid characters.']})
 
+    def test_empty_first_name(self):
+        response = self.get_response(params=self.get_params(first_name=''))
+        self.assertEqual(response.data, {
+            'first_name': ['This field is required.']})
+
+    def test_empty_last_name(self):
+        response = self.get_response(params=self.get_params(last_name=''))
+        self.assertEqual(response.data, {
+            'last_name': ['This field is required.']})
+
 
 class CurrentUserTestCase(TestCase):
     def setUp(self):
