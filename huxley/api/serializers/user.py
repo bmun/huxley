@@ -64,3 +64,19 @@ class CreateUserSerializer(ModelSerializer):
 
         return attrs
 
+    def validate_first_name(self, attrs, source):
+        first_name = attrs[source]
+
+        if not first_name:
+            raise ValidationError('This field is required.')
+
+        return attrs
+
+    def validate_last_name(self, attrs, source):
+        last_name = attrs[source]
+
+        if not last_name:
+            raise ValidationError('This field is required.')
+
+        return attrs
+
