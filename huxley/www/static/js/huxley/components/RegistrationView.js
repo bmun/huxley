@@ -104,35 +104,30 @@ var RegistrationView = React.createClass({
             <input
               className="text"
               type="text"
-              name="first_name"
               placeholder="First Name"
               valueLink={this.linkState('first_name')}
             />
             <input
               className="text"
               type="text"
-              name="last_name"
               placeholder="Last Name"
               valueLink={this.linkState('last_name')}
             />
             <input
               className="text"
               type="text"
-              name="username"
               placeholder="Username"
               valueLink={this.linkState('username')}
             />
             <input
               className="text"
               type="password"
-              name="password"
               placeholder="Password"
               valueLink={this.linkState('password')}
             />
             <input
               className="text"
               type="password"
-              name="password2"
               placeholder="Password (confirm)"
               valueLink={this.linkState('password2')}
             />
@@ -141,11 +136,10 @@ var RegistrationView = React.createClass({
             <p className="instructions">Where is your school located?</p>
             <ul>
               <li>
-                <label name="school_international">
+                <label>
                   <input
                     className="choice"
                     type="radio"
-                    name="school_international"
                     value=''
                     onChange={this._handleInternationalChange}
                     checked={!this.state.school_international}
@@ -153,11 +147,10 @@ var RegistrationView = React.createClass({
                   </label>
               </li>
               <li>
-                <label name="school_international">
+                <label>
                   <input
                     className="choice"
                     type="radio"
-                    name="school_international"
                     value="international"
                     onChange={this._handleInternationalChange}
                     checked={this.state.school_international}
@@ -168,42 +161,36 @@ var RegistrationView = React.createClass({
             <input
               className="text"
               type="text"
-              name="school_name"
               placeholder="Official School Name"
               valueLink={this.linkState('school_name')}
             />
             <input
               className="text"
               type="text"
-              name="school_address"
               placeholder="Street Address"
               valueLink={this.linkState('school_address')}
             />
             <input
               className="text"
               type="text"
-              name="school_city"
               placeholder="City"
               valueLink={this.linkState('school_city')}
             />
             <input
               className="text"
               type="text"
-              name="school_state"
               placeholder="State"
               valueLink={this.linkState('school_state')}
             />
             <input
               className="text"
               type="text"
-              name="school_zip"
               placeholder="Zip"
               valueLink={this.linkState('school_zip')}
             />
             <input
               className="text"
               type="text"
-              name="school_country"
               placeholder="Country"
               valueLink={this.state.school_location ? ''  :
                 this.linkState('school_country')}
@@ -213,11 +200,10 @@ var RegistrationView = React.createClass({
             <p className="instructions">What category best describes your program?</p>
             <ul>
               <li>
-                <label name="program_type">
+                <label>
                   <input
                     className="choice"
                     type="radio"
-                    name="program_type"
                     checked={this.state.program_type == ProgramTypes.CLUB}
                     value={ProgramTypes.CLUB}
                     onChange={this._handleProgramTypeChange}
@@ -225,11 +211,10 @@ var RegistrationView = React.createClass({
                 </label>
               </li>
               <li>
-                <label name="program_type">
+                <label>
                   <input
                     className="choice"
                     type="radio"
-                    name="program_type"
                     value={ProgramTypes.CLASS}
                     checked={this.state.program_type == ProgramTypes.CLASS}
                     onChange={this._handleProgramTypeChange}
@@ -242,35 +227,30 @@ var RegistrationView = React.createClass({
             <input
               className="text"
               type="text"
-              name="times_attended"
               placeholder="Number of BMUN sessions attended"
               valueLink={this.linkState("times_attended")}
             />
             <input
               className="text"
               type="text"
-              name="beginner_delegates"
               placeholder="Number of Beginner Delegates"
               valueLink={this.linkState('beginner_delegates')}
             />
             <input
               className="text"
               type="text"
-              name="intermediate_delegates"
               placeholder="Number of Intermediate Delegates"
               valueLink={this.linkState('intermediate_delegates')}
             />
             <input
               className="text"
               type="text"
-              name="advanced_delegates"
               placeholder="Number of Advanced Delegates"
               valueLink={this.linkState('advanced_delegates')}
             />
             <input
               className="text"
               type="text"
-              name="spanish_speaking_delegates"
               placeholder="Number of Spanish Speaking Delegates"
               valueLink={this.linkState('spanish_speaking_delegates')}
             />
@@ -280,21 +260,18 @@ var RegistrationView = React.createClass({
             <input
               className="text"
               type="text"
-              name="primary_name"
               placeholder="Name"
               valueLink={this.linkState('primary_name')}
             />
             <input
               className="text"
               type="text"
-              name="primary_email"
               placeholder="Email"
               valueLink={this.linkState('primary_email')}
             />
             <input
               className="text"
               type="text"
-              name="primary_phone"
               placeholder="Phone Number"
               valueLink={this.linkState('primary_phone')}
             />
@@ -305,27 +282,24 @@ var RegistrationView = React.createClass({
             <input
               className="text"
               type="text"
-              name="secondary_name"
               placeholder="Name"
               valueLink={this.linkState('secondary_name')}
             />
             <input
               className="text"
               type="text"
-              name="secondary_email"
               placeholder="Email"
               valueLink={this.linkState('secondary_email')}
             />
             <input
               className="text"
               type="text"
-              name="secondary_phone"
               placeholder="Phone Number"
               valueLink={this.linkState('secondary_phone')}
             />
             {this.renderContactTypeField('secondary_type')}
             <hr />
-            <h3>Country Preferences></h3>
+            <h3>Country Preferences</h3>
             <p className="instructions">Please choose 10 United Nations Member States or
             Observers your school would like to represent. A reference list of
             countries and their relation to committees is available online.
@@ -333,70 +307,70 @@ var RegistrationView = React.createClass({
             <ul>
               <li>
                 <label>01</label>
-                <select name="country_pref1" valueLink={this.linkState('country_pref1')} defaultValue="0">
+                <select valueLink={this.linkState('country_pref1')} defaultValue="0">
                   <option value="0">No Preference</option>
                   {this.renderCommitteeOptions()}
                 </select>
               </li>
               <li>
                 <label>02</label>
-                <select name="country_pref2" valueLink={this.linkState('country_pref2')} defaultValue="0">
+                <select valueLink={this.linkState('country_pref2')} defaultValue="0">
                   <option value="0">No Preference</option>
                   {this.renderCommitteeOptions()}
                 </select>
               </li>
               <li>
                 <label>03</label>
-                <select name="country_pref3" valueLink={this.linkState('country_pref3')} defaultValue="0">
+                <select valueLink={this.linkState('country_pref3')} defaultValue="0">
                   <option value="0">No Preference</option>
                   {this.renderCommitteeOptions()}
                 </select>
               </li>
               <li>
                 <label>04</label>
-                <select name="country_pref4" valueLink={this.linkState('country_pref4')} defaultValue="0">
+                <select valueLink={this.linkState('country_pref4')} defaultValue="0">
                   <option value="0">No Preference</option>
                   {this.renderCommitteeOptions()}
                 </select>
               </li>
               <li>
                 <label>05</label>
-                <select name="country_pref5" valueLink={this.linkState('country_pref5')} defaultValue="0">
+                <select valueLink={this.linkState('country_pref5')} defaultValue="0">
                   <option value="0">No Preference</option>
                   {this.renderCommitteeOptions()}
                 </select>
               </li>
               <li>
                 <label>06</label>
-                <select name="country_pref6" valueLink={this.linkState('country_pref6')} defaultValue="0">
+                <select valueLink={this.linkState('country_pref6')} defaultValue="0">
                   <option value="0">No Preference</option>
                   {this.renderCommitteeOptions()}
                 </select>
               </li>
               <li>
                 <label>07</label>
-                <select name="country_pref7" valueLink={this.linkState('country_pref7')} defaultValue="0">
+                <select valueLink={this.linkState('country_pref7')} defaultValue="0">
                   <option value="0">No Preference</option>
                   {this.renderCommitteeOptions()}
                 </select>
               </li>
               <li>
                 <label>08</label>
-                <select name="country_pref8" valueLink={this.linkState('country_pref8')} defaultValue="0">
+                <select valueLink={this.linkState('country_pref8')} defaultValue="0">
                   <option value="0">No Preference</option>
                   {this.renderCommitteeOptions()}
                 </select>
               </li>
               <li>
                 <label>09</label>
-                <select name="country_pref9" valueLink={this.linkState('country_pref9')} defaultValue="0">
+                <select valueLink={this.linkState('country_pref9')} defaultValue="0">
                   <option value="0">No Preference</option>
                   {this.renderCommitteeOptions()}
                 </select>
               </li>
               <li>
                 <label>10</label>
-                <select name="country_pref10" valueLink={this.linkState('country_pref10')} defaultValue="0">
+                <select valueLink={this.linkState('country_pref10')} defaultValue="0">
                   <option value="0">No Preference</option>
                   {this.renderCommitteeOptions()}
                 </select>
@@ -409,11 +383,10 @@ var RegistrationView = React.createClass({
             and we may not be able to accomodate all preferences.</p>
             <ul>
               <li>
-                <label name="committee_prefs">
+                <label>
                   <input
                     className="choice"
                     type="checkbox"
-                    name="prefers_bilingual"
                     checked={this.state.prefers_bilingual}
                     onChange={this._handleBilingualChange}
                   />
@@ -421,11 +394,10 @@ var RegistrationView = React.createClass({
                 </label>
               </li>
               <li>
-                <label name="committee_prefs">
+                <label>
                   <input
                     className="choice"
                     type="checkbox"
-                    name="prefers_crisis"
                     checked={this.state.prefers_crisis}
                     onChange={this._handleCrisisChange}
                   />
@@ -433,11 +405,10 @@ var RegistrationView = React.createClass({
                 </label>
               </li>
               <li>
-                <label name="committee_prefs">
+                <label>
                   <input
                     className="choice"
                     type="checkbox"
-                    name="prefers_small_specialized"
                     checked={this.state.prefers_small_specialized}
                     onChange={this._handleSmallSpecializedChange}
                   />
@@ -445,11 +416,10 @@ var RegistrationView = React.createClass({
                 </label>
               </li>
               <li>
-                <label name="committee_prefs">
+                <label>
                   <input
                     className="choice"
                     type="checkbox"
-                    name="prefers_mid_large_specialized"
                     checked={this.state.prefers_mid_large_specialized}
                     onChange={this._handleMidLargeSpecializedChange}
                   />
@@ -465,7 +435,6 @@ var RegistrationView = React.createClass({
             below.</p>
             <textarea
               className="text"
-              name="registration_comments"
               cols="40"
               rows="7"
               valueLink={this.linkState('registration_comments')}
