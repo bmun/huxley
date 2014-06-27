@@ -18,7 +18,7 @@ var CountryStore = require('../stores/CountryStore');
 var GenderConstants = require('../constants/GenderConstants');
 var NavLink = require('./NavLink');
 var OuterView = require('./OuterView');
-var ProgramTypes = require('../constants/ProgramTypes')
+var ProgramTypes = require('../constants/ProgramTypes');
 
 require('jquery-ui/effect-shake');
 
@@ -27,7 +27,7 @@ var RegistrationView = React.createClass({
 
   getInitialState: function() {
     return {
-      errors: null,
+      errors: {},
       countries: [],
       first_name: null,
       last_name: null,
@@ -482,10 +482,12 @@ var RegistrationView = React.createClass({
   },
 
   renderError: function(field) {
-    if (this.state.errors) {
+    if (this.state.errors[field]) {
       return (
-        <div className="errorcontainer">
-          <label className="error">{this.state.errors[field]}</label>
+        <div>
+          <label className="error">
+            {this.state.errors[field]}
+          </label>
         </div>
       );
     }
