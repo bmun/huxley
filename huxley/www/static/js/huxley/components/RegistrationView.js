@@ -125,11 +125,13 @@ var RegistrationView = React.createClass({
               placeholder="Password"
               valueLink={this.linkState('password')}
             />
+            {this.renderError('password')}
             <input
               type="password"
               placeholder="Password (confirm)"
               valueLink={this.linkState('password2')}
             />
+            {this.renderPasswordConfirmError()}
             <hr />
             <h3>School Information</h3>
             <p className="instructions">Where is your school located?</p>
@@ -488,6 +490,18 @@ var RegistrationView = React.createClass({
           <label className="error">
             {this.state.errors[field]}
           </label>
+        </div>
+      );
+    }
+
+    return null;
+  },
+
+  renderPasswordConfirmError: function() {
+    if (this.state.password !== this.state.password2) {
+      return (
+        <div>
+          <label className="error">Please enter the same password again.</label>
         </div>
       );
     }
