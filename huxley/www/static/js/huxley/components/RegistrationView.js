@@ -27,7 +27,7 @@ var RegistrationView = React.createClass({
 
   getInitialState: function() {
     return {
-      error: null,
+      errors: null,
       countries: [],
       first_name: null,
       last_name: null,
@@ -107,19 +107,19 @@ var RegistrationView = React.createClass({
               placeholder="First Name"
               valueLink={this.linkState('first_name')}
             />
-            {this.renderFirstNameError()}
+            {this.renderError('first_name')}
             <input
               type="text"
               placeholder="Last Name"
               valueLink={this.linkState('last_name')}
             />
-            {this.renderLastNameError()}
+            {this.renderError('last_name')}
             <input
               type="text"
               placeholder="Username"
               valueLink={this.linkState('username')}
             />
-            {this.renderUsernameError()}
+            {this.renderError('username')}
             <input
               type="password"
               placeholder="Password"
@@ -481,33 +481,13 @@ var RegistrationView = React.createClass({
     );
   },
 
-  renderError: function(error) {
-    return (
-      <div id="errorcontainer">
-        <label className="error">{error}</label>
-      </div>
-    );
-  },
-
-  renderFirstNameError: function() {
-    if (this.state.error) {
-      return this.renderError(this.state.error.first_name);
-    }
-
-    return null;
-  },
-
-  renderLastNameError: function() {
-    if (this.state.error) {
-      return this.renderError(this.state.error.last_name);
-    }
-
-    return null;
-  },
-
-  renderUsernameError: function() {
-    if (this.state.error) {
-      return this.renderError(this.state.error.username);
+  renderError: function(field) {
+    if (this.state.errors) {
+      return (
+        <div className="errorcontainer">
+          <label className="error">{this.state.errors[field]}</label>
+        </div>
+      );
     }
 
     return null;
@@ -612,7 +592,7 @@ var RegistrationView = React.createClass({
     }
 
     this.setState({
-      error: response,
+      errors: response,
       loading: false
     }, function() {
       $(this.getDOMNode()).effect(

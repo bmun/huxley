@@ -6,6 +6,7 @@ import re
 from rest_framework.serializers import ModelSerializer, ValidationError
 
 from huxley.accounts.models import User
+from huxley.api import validators
 from huxley.api.serializers.school import SchoolSerializer
 
 
@@ -66,17 +67,11 @@ class CreateUserSerializer(ModelSerializer):
 
     def validate_first_name(self, attrs, source):
         first_name = attrs[source]
-
-        if not first_name:
-            raise ValidationError('This field is required.')
-
+        validators.require(first_name)
         return attrs
 
     def validate_last_name(self, attrs, source):
         last_name = attrs[source]
-
-        if not last_name:
-            raise ValidationError('This field is required.')
-
+        validators.require(last_name)
         return attrs
 
