@@ -162,26 +162,31 @@ var RegistrationView = React.createClass({
               placeholder="Official School Name"
               valueLink={this.linkState('school_name')}
             />
+            {this.renderError('school', 'name')}
             <input
               type="text"
               placeholder="Street Address"
               valueLink={this.linkState('school_address')}
             />
+            {this.renderError('school', 'address')}
             <input
               type="text"
               placeholder="City"
               valueLink={this.linkState('school_city')}
             />
+            {this.renderError('school', 'city')}
             <input
               type="text"
               placeholder="State"
               valueLink={this.linkState('school_state')}
             />
+            {this.renderError('school', 'state')}
             <input
               type="text"
               placeholder="Zip"
               valueLink={this.linkState('school_zip')}
             />
+            {this.renderError('school', 'zip_code')}
             <input
               type="text"
               placeholder="Country"
@@ -220,26 +225,31 @@ var RegistrationView = React.createClass({
               placeholder="Number of BMUN sessions attended"
               valueLink={this.linkState("times_attended")}
             />
+            {this.renderError('school', 'times_attended')}
             <input
               type="text"
               placeholder="Number of Beginner Delegates"
               valueLink={this.linkState('beginner_delegates')}
             />
+            {this.renderError('school', 'beginner_delegates')}
             <input
               type="text"
               placeholder="Number of Intermediate Delegates"
               valueLink={this.linkState('intermediate_delegates')}
             />
+            {this.renderError('school', 'intermediate_delegates')}
             <input
               type="text"
               placeholder="Number of Advanced Delegates"
               valueLink={this.linkState('advanced_delegates')}
             />
+            {this.renderError('school', 'advanced_delegates')}
             <input
               type="text"
               placeholder="Number of Spanish Speaking Delegates"
               valueLink={this.linkState('spanish_speaking_delegates')}
             />
+            {this.renderError('school', 'spanish_speaking_delegates')}
             <hr />
             <h3>Primary Contact</h3>
             {this.renderContactGenderField('primary_gender')}
@@ -248,16 +258,19 @@ var RegistrationView = React.createClass({
               placeholder="Name"
               valueLink={this.linkState('primary_name')}
             />
+            {this.renderError('school', 'primary_name')}
             <input
               type="text"
               placeholder="Email"
               valueLink={this.linkState('primary_email')}
             />
+            {this.renderError('school', 'primary_email')}
             <input
               type="text"
               placeholder="Phone Number"
               valueLink={this.linkState('primary_phone')}
             />
+            {this.renderError('school', 'primary_phone')}
             {this.renderContactTypeField('primary_type')}
             <hr />
             <h3>Secondary Contact</h3>
@@ -267,16 +280,19 @@ var RegistrationView = React.createClass({
               placeholder="Name"
               valueLink={this.linkState('secondary_name')}
             />
+            {this.renderError('school', 'secondary_name')}
             <input
               type="text"
               placeholder="Email"
               valueLink={this.linkState('secondary_email')}
             />
+            {this.renderError('school', 'secondary_email')}
             <input
               type="text"
               placeholder="Phone Number"
               valueLink={this.linkState('secondary_phone')}
             />
+            {this.renderError('school', 'secondary_phone')}
             {this.renderContactTypeField('secondary_type')}
             <hr />
             <h3>Country Preferences</h3>
@@ -483,8 +499,12 @@ var RegistrationView = React.createClass({
     );
   },
 
-  renderError: function(field) {
+  renderError: function(field, subfield) {
     if (this.state.errors[field]) {
+      if (field === 'school') {
+        return this.renderSchoolError(subfield);
+      }
+
       return (
         <div>
           <label className="error">
@@ -502,6 +522,18 @@ var RegistrationView = React.createClass({
       return (
         <div>
           <label className="error">Please enter the same password again.</label>
+        </div>
+      );
+    }
+
+    return null;
+  },
+
+  renderSchoolError: function(field) {
+    if (this.state.errors.school[0][field]) {
+      return (
+        <div>
+          <label className="error">{this.state.errors.school[0][field]}</label>
         </div>
       );
     }
