@@ -43,7 +43,7 @@ def phone_domestic(value):
     if re.match(r'^\(?(\d{3})\)?\s(\d{3})-(\d{4})(\sx\d{1,5})?$', value) is None:
         raise ValidationError('This is an invalid phone number.')
 
-def require(value):
+def nonempty(value):
     '''Requires that a field be non-empty.'''
     if not value:
         raise ValidationError('This field is required.')

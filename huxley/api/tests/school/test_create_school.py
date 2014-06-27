@@ -22,7 +22,11 @@ class CreateSchoolTestCase(CreateAPITestCase):
             'primary_email': 'KunalMehta@huxley.org',
             'primary_phone': '(999) 999-9999',
             'primary_type': 2,
-            'program_type': User.TYPE_ADVISOR}
+            'program_type': User.TYPE_ADVISOR,
+            'beginner_delegates': 0,
+            'intermediate_delegates': 0,
+            'advanced_delegates': 0,
+            'spanish_speaking_delegates': 0}
 
     def test_empty_fields(self):
         '''This should not allow for required fields to be empty.'''
@@ -35,7 +39,11 @@ class CreateSchoolTestCase(CreateAPITestCase):
                                                             primary_name='',
                                                             primary_email='',
                                                             primary_phone='',
-                                                            program_type=''))
+                                                            program_type='',
+                                                            beginner_delegates='',
+                                                            intermediate_delegates='',
+                                                            advanced_delegates='',
+                                                            spanish_speaking_delegates=''))
         self.assertEqual(response.data,
             {"city": ["This field is required."],
             "name": ["This field is required."],
@@ -46,7 +54,11 @@ class CreateSchoolTestCase(CreateAPITestCase):
             "primary_name": ["This field is required."],
             "primary_email": ["This field is required."],
             "address": ["This field is required."],
-            "zip_code": ["This field is required."]})
+            "zip_code": ["This field is required."],
+            "beginner_delegates": ["This field is required."],
+            "intermediate_delegates": ["This field is required."],
+            "advanced_delegates": ["This field is required."],
+            "spanish_speaking_delegates": ["This field is required."]})
 
     def test_valid(self):
         params = self.get_params()

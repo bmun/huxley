@@ -67,11 +67,11 @@ class CreateUserSerializer(ModelSerializer):
 
     def validate_first_name(self, attrs, source):
         first_name = attrs[source]
-        validators.require(first_name)
+        validators.nonempty(first_name)
         return attrs
 
     def validate_last_name(self, attrs, source):
         last_name = attrs[source]
-        validators.require(last_name)
+        validators.nonempty(last_name)
         return attrs
 

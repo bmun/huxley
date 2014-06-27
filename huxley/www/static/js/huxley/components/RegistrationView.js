@@ -162,32 +162,38 @@ var RegistrationView = React.createClass({
               placeholder="Official School Name"
               valueLink={this.linkState('school_name')}
             />
+            {this.renderSchoolError('name')}
             <input
               type="text"
               placeholder="Street Address"
               valueLink={this.linkState('school_address')}
             />
+            {this.renderSchoolError('address')}
             <input
               type="text"
               placeholder="City"
               valueLink={this.linkState('school_city')}
             />
+            {this.renderSchoolError('city')}
             <input
               type="text"
               placeholder="State"
               valueLink={this.linkState('school_state')}
             />
+            {this.renderSchoolError('state')}
             <input
               type="text"
               placeholder="Zip"
               valueLink={this.linkState('school_zip')}
             />
+            {this.renderSchoolError('zip_code')}
             <input
               type="text"
               placeholder="Country"
               valueLink={this.state.school_international ? ''  :
                 this.linkState('school_country')}
             />
+            {this.renderSchoolError('country')}
             <hr />
             <h3>Program Information</h3>
             <p className="instructions">What category best describes your program?</p>
@@ -220,26 +226,31 @@ var RegistrationView = React.createClass({
               placeholder="Number of BMUN sessions attended"
               valueLink={this.linkState("times_attended")}
             />
+            {this.renderSchoolError('times_attended')}
             <input
               type="text"
               placeholder="Number of Beginner Delegates"
               valueLink={this.linkState('beginner_delegates')}
             />
+            {this.renderSchoolError('beginner_delegates')}
             <input
               type="text"
               placeholder="Number of Intermediate Delegates"
               valueLink={this.linkState('intermediate_delegates')}
             />
+            {this.renderSchoolError('intermediate_delegates')}
             <input
               type="text"
               placeholder="Number of Advanced Delegates"
               valueLink={this.linkState('advanced_delegates')}
             />
+            {this.renderSchoolError('advanced_delegates')}
             <input
               type="text"
               placeholder="Number of Spanish Speaking Delegates"
               valueLink={this.linkState('spanish_speaking_delegates')}
             />
+            {this.renderSchoolError('spanish_speaking_delegates')}
             <hr />
             <h3>Primary Contact</h3>
             {this.renderContactGenderField('primary_gender')}
@@ -248,16 +259,19 @@ var RegistrationView = React.createClass({
               placeholder="Name"
               valueLink={this.linkState('primary_name')}
             />
+            {this.renderSchoolError('primary_name')}
             <input
               type="text"
               placeholder="Email"
               valueLink={this.linkState('primary_email')}
             />
+            {this.renderSchoolError('primary_email')}
             <input
               type="text"
               placeholder="Phone Number"
               valueLink={this.linkState('primary_phone')}
             />
+            {this.renderSchoolError('primary_phone')}
             {this.renderContactTypeField('primary_type')}
             <hr />
             <h3>Secondary Contact</h3>
@@ -267,16 +281,19 @@ var RegistrationView = React.createClass({
               placeholder="Name"
               valueLink={this.linkState('secondary_name')}
             />
+            {this.renderSchoolError('secondary_name')}
             <input
               type="text"
               placeholder="Email"
               valueLink={this.linkState('secondary_email')}
             />
+            {this.renderSchoolError('secondary_email')}
             <input
               type="text"
               placeholder="Phone Number"
               valueLink={this.linkState('secondary_phone')}
             />
+            {this.renderSchoolError('secondary_phone')}
             {this.renderContactTypeField('secondary_type')}
             <hr />
             <h3>Country Preferences</h3>
@@ -509,6 +526,20 @@ var RegistrationView = React.createClass({
     return null;
   },
 
+  renderSchoolError: function(field) {
+    if (this.state.errors.school) {
+      if (this.state.errors.school[0][field]) {
+        return (
+          <div>
+            <label className="error">{this.state.errors.school[0][field]}</label>
+          </div>
+        );
+      }
+    }
+
+    return null;
+  },
+
   _handleProgramTypeChange: function(event) {
     this.setState({program_type: event.target.value});
   },
@@ -559,7 +590,7 @@ var RegistrationView = React.createClass({
           beginner_delegates: this.state.beginner_delegates,
           intermediate_delegates: this.state.intermediate_delegates,
           advanced_delegates: this.state.advanced_delegates,
-          spanish_speaking_delegates: this.spanish_speaking_delegates,
+          spanish_speaking_delegates: this.state.spanish_speaking_delegates,
           primary_name: this.state.primary_name,
           primary_gender: this.state.primary_gender,
           primary_email: this.state.primary_email,
