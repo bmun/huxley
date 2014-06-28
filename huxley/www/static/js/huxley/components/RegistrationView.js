@@ -527,14 +527,15 @@ var RegistrationView = React.createClass({
   },
 
   renderSchoolError: function(field) {
-    if (this.state.errors.school) {
-      if (this.state.errors.school[0][field]) {
-        return (
-          <div>
-            <label className="error">{this.state.errors.school[0][field]}</label>
-          </div>
-        );
-      }
+    if (this.state.errors.school &&
+        this.state.errors.school[0][field]) {
+      return (
+        <div>
+          <label className="error">
+            {this.state.errors.school[0][field]}
+          </label>
+        </div>
+      );
     }
 
     return null;
