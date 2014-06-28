@@ -590,7 +590,7 @@ var RegistrationView = React.createClass({
           beginner_delegates: this.state.beginner_delegates,
           intermediate_delegates: this.state.intermediate_delegates,
           advanced_delegates: this.state.advanced_delegates,
-          spanish_speaking_delegates: this.spanish_speaking_delegates,
+          spanish_speaking_delegates: this.state.spanish_speaking_delegates,
           primary_name: this.state.primary_name,
           primary_gender: this.state.primary_gender,
           primary_email: this.state.primary_email,
