@@ -11,6 +11,7 @@ var console = require('console');
 
 var $ = require('jquery');
 var React = require('react/addons');
+var RRouter = require('rrouter');
 
 var Button = require('./Button');
 var ContactTypes = require('../constants/ContactTypes');
@@ -23,7 +24,10 @@ var ProgramTypes = require('../constants/ProgramTypes');
 require('jquery-ui/effect-shake');
 
 var RegistrationView = React.createClass({
-  mixins: [React.addons.LinkedStateMixin],
+  mixins: [
+    React.addons.LinkedStateMixin,
+    RRouter.RoutingContextMixin
+  ],
 
   getInitialState: function() {
     return {
@@ -630,7 +634,7 @@ var RegistrationView = React.createClass({
   },
 
   _handleSuccess: function(data, status, jqXHR) {
-    console.log(jqXHR.responseJSON);
+    this.navigate('/www/register/success');
   },
 
   _handleError: function(jqXHR, status, error) {
