@@ -11,11 +11,12 @@ from .assignment import AssignmentAdmin
 from .committee import CommitteeAdmin
 from .country import CountryAdmin
 from .delegate import DelegateAdmin
+from .schools import SchoolAdmin
 
 
 admin.site.register(Conference)
 admin.site.register(Country, CountryAdmin)
-admin.site.register(School)
+admin.site.register(School, SchoolAdmin)
 admin.site.register(Committee, CommitteeAdmin)
 admin.site.register(Assignment, AssignmentAdmin)
 admin.site.register(CountryPreference)

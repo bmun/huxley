@@ -1,0 +1,70 @@
+# Copyright (c) 2011-2014 Berkeley Model United Nations. All rights reserved.
+# Use of this source code is governed by a BSD License (see LICENSE).
+
+import csv
+
+from django.conf.urls import patterns, url
+from django.contrib import admin
+from django.http import HttpResponse
+
+from huxley.core.models import School
+
+class SchoolAdmin(admin.ModelAdmin):
+    def info(self, request):
+        """ Returns a CSV file containing the current set of
+            Schools registered with all of its fields. """
+        schools = HttpResponse(content_type='text/csv')
+        schools['Content-Disposition'] = 'attachment; filename="schools.csv"'
+        writer = csv.writer(schools)
+
+        for school in School.objects.all().order_by('name'):
+            writer.writerow([
+                school.name,
+                school.address,
+                school.city,
+                school.state,
+                school.zip_code,
+                school.country,
+                school.primary_name,
+                school.primary_gender,
+                school.primary_email,
+                school.primary_phone,
+                school.primary_type,
+                school.secondary_name,
+                school.secondary_gender,
+                school.secondary_email,
+                school.secondary_phone,
+                school.secondary_type,
+                school.program_type,
+                school.times_attended,
+                school.international,
+                school.waitlist,
+                school.beginner_delegates,
+                school.intermediate_delegates,
+                school.advanced_delegates,
+                school.spanish_speaking_delegates,
+                school.prefers_bilingual,
+                school.prefers_crisis,
+                school.prefers_small_specialized,
+                school.prefers_mid_large_specialized,
+                school.registration_comments,
+                school.registration_fee,
+                school.registration_fee_paid,
+                school.registration_fee_balance,
+                school.delegation_fee,
+                school.delegation_fee_paid,
+                school.delegation_fee_balance
+            ])
+
+        return schools
+
+    def get_urls(self):
+        urls = super(SchoolAdmin, self).get_urls()
+        urls += patterns('',
+            url(
+                r'info',
+                self.admin_site.admin_view(self.info),
+                name='core_school_info',
+            ),
+        )
+        return urls
