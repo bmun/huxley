@@ -1,7 +1,7 @@
 [
   {
     "pk": 3,
-    "model": "accounts.huxleyuser",
+    "model": "accounts.user",
     "fields": {
       "username": "mikejones69",
       "first_name": "Mike",
@@ -23,14 +23,12 @@
     "pk": 2,
     "model": "core.school",
     "fields": {
-      "delegation_size": 0,
       "city": "Houston",
       "delegation_fee": "0",
       "primary_phone": "(281) 330-8004",
       "program_type": 1,
       "delegation_fee_paid": "0",
       "state": "Texas",
-      "committeepreferences": [],
       "primary_name": "Mike Jones",
       "primary_email": "mikejones69@bmun.org",
       "secondary_phone": "",
@@ -45,7 +43,11 @@
       "registration_fee_balance": "0",
       "times_attended": 0,
       "secondary_name": "",
-      "registration_fee": "50"
+      "registration_fee": "50",
+      "beginner_delegates": 5,
+      "intermediate_delegates": 5,
+      "advanced_delegates": 5,
+      "spanish_speaking_delegates": 5
     }
   }
 ]
