@@ -3,7 +3,6 @@
 
 from django.test import TestCase
 
-from huxley.accounts.constants import *
 from huxley.accounts.exceptions import AuthenticationError, PasswordChangeFailed
 from huxley.accounts.models import *
 

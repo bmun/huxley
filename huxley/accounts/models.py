@@ -7,7 +7,6 @@ from django.contrib.auth.models import AbstractUser
 from django.core.urlresolvers import reverse
 from django.db import models
 
-from huxley.accounts.constants import *
 from huxley.accounts.exceptions import AuthenticationError, PasswordChangeFailed
 from huxley.core.models import *
 
