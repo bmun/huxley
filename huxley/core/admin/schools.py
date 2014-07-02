@@ -10,7 +10,7 @@ from django.http import HttpResponse
 from huxley.core.models import School
 
 class SchoolAdmin(admin.ModelAdmin):
-    def roster(self, request):
+    def info(self, request):
         """ Returns a CSV file containing the current set of
             Schools registered with all of its fields. """
         schools = HttpResponse(content_type='text/csv')
@@ -54,7 +54,7 @@ class SchoolAdmin(admin.ModelAdmin):
                 school.delegation_fee,
                 school.delegation_fee_paid,
                 school.delegation_fee_balance
-                ])
+            ])
 
         return schools
 
@@ -62,9 +62,9 @@ class SchoolAdmin(admin.ModelAdmin):
         urls = super(SchoolAdmin, self).get_urls()
         urls += patterns('',
             url(
-                r'roster',
-                self.admin_site.admin_view(self.roster),
-                name='core_school_roster',
+                r'info',
+                self.admin_site.admin_view(self.info),
+                name='core_school_info',
             ),
         )
         return urls
