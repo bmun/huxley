@@ -68,6 +68,3 @@ class SchoolAdmin(admin.ModelAdmin):
             ),
         )
         return urls
-
-
-
