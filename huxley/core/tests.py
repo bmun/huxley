@@ -200,3 +200,15 @@ class CountryAdminTest(TestCase):
             name="Côte d'Ivoire",
             special=False
         ).exists())
+
+
+class SchoolAdminTest(TestCase):
+
+    def test_export(self):
+        '''Test that the admin panel can properly export a list of schools.'''
+        TestUsers.new_superuser(username='testuser', password='test')
+        self.client.login(username='testuser', password='test')
+
+        response = self.client.get(reverse('admin:core_school_info'))
+
+        self.assertTrue(response.__getitem__('Content-Disposition'))
