@@ -9,7 +9,9 @@ from django.core.urlresolvers import reverse
 from django.test import TestCase
 
 from huxley.core.models import *
-from huxley.utils.test import TestFiles, TestUsers
+from huxley.utils.test import TestFiles, TestUsers, TestSchools
+
+import csv
 
 
 class ConferenceTest(TestCase):
@@ -206,9 +208,56 @@ class SchoolAdminTest(TestCase):
 
     def test_export(self):
         '''Test that the admin panel can properly export a list of schools.'''
-        TestUsers.new_superuser(username='testuser', password='test')
-        self.client.login(username='testuser', password='test')
+        TestUsers.new_user(username='testuser1', password='test1')
+        TestUsers.new_superuser(username='testuser2', password='test2')
+        self.client.login(username='testuser1', password='test1')
+        school = TestSchools.new_school()
+        self.client.logout()
+        self.client.login(username='testuser2', password='test2')
 
         response = self.client.get(reverse('admin:core_school_info'))
 
-        self.assertTrue(response.__getitem__('Content-Disposition'))
+        self.assertTrue(response)
+
+        fields = [school.name,
+                school.address,
+                school.city,
+                school.state,
+                school.zip_code,
+                school.country,
+                school.primary_name,
+                school.primary_gender,
+                school.primary_email,
+                school.primary_phone,
+                school.primary_type,
+                school.secondary_name,
+                school.secondary_gender,
+                school.secondary_email,
+                school.secondary_phone,
+                school.secondary_type,
+                school.program_type,
+                school.times_attended,
+                school.international,
+                school.waitlist,
+                school.beginner_delegates,
+                school.intermediate_delegates,
+                school.advanced_delegates,
+                school.spanish_speaking_delegates,
+                school.prefers_bilingual,
+                school.prefers_crisis,
+                school.prefers_small_specialized,
+                school.prefers_mid_large_specialized,
+                school.registration_comments,
+                school.registration_fee,
+                school.registration_fee_paid,
+                school.registration_fee_balance,
+                school.delegation_fee,
+                school.delegation_fee_paid,
+                school.delegation_fee_balance]
+
+        fields_csv = ",".join(map(str, fields))
+        self.assertEquals(fields_csv, response.content[:-2])
+
+
+
+
