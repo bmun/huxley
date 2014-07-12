@@ -306,76 +306,16 @@ var RegistrationView = React.createClass({
             countries and their relation to committees is available online.
             Please diversify your selection.</p>
             <ul>
-              <li>
-                <label>01</label>
-                <select valueLink={this.linkState('country_pref1')} defaultValue="0">
-                  <option value="0">No Preference</option>
-                  {this.renderCommitteeOptions()}
-                </select>
-              </li>
-              <li>
-                <label>02</label>
-                <select valueLink={this.linkState('country_pref2')} defaultValue="0">
-                  <option value="0">No Preference</option>
-                  {this.renderCommitteeOptions()}
-                </select>
-              </li>
-              <li>
-                <label>03</label>
-                <select valueLink={this.linkState('country_pref3')} defaultValue="0">
-                  <option value="0">No Preference</option>
-                  {this.renderCommitteeOptions()}
-                </select>
-              </li>
-              <li>
-                <label>04</label>
-                <select valueLink={this.linkState('country_pref4')} defaultValue="0">
-                  <option value="0">No Preference</option>
-                  {this.renderCommitteeOptions()}
-                </select>
-              </li>
-              <li>
-                <label>05</label>
-                <select valueLink={this.linkState('country_pref5')} defaultValue="0">
-                  <option value="0">No Preference</option>
-                  {this.renderCommitteeOptions()}
-                </select>
-              </li>
-              <li>
-                <label>06</label>
-                <select valueLink={this.linkState('country_pref6')} defaultValue="0">
-                  <option value="0">No Preference</option>
-                  {this.renderCommitteeOptions()}
-                </select>
-              </li>
-              <li>
-                <label>07</label>
-                <select valueLink={this.linkState('country_pref7')} defaultValue="0">
-                  <option value="0">No Preference</option>
-                  {this.renderCommitteeOptions()}
-                </select>
-              </li>
-              <li>
-                <label>08</label>
-                <select valueLink={this.linkState('country_pref8')} defaultValue="0">
-                  <option value="0">No Preference</option>
-                  {this.renderCommitteeOptions()}
-                </select>
-              </li>
-              <li>
-                <label>09</label>
-                <select valueLink={this.linkState('country_pref9')} defaultValue="0">
-                  <option value="0">No Preference</option>
-                  {this.renderCommitteeOptions()}
-                </select>
-              </li>
-              <li>
-                <label>10</label>
-                <select valueLink={this.linkState('country_pref10')} defaultValue="0">
-                  <option value="0">No Preference</option>
-                  {this.renderCommitteeOptions()}
-                </select>
-              </li>
+              {this.renderCountryDropdown('01', 'country_pref1')}
+              {this.renderCountryDropdown('02', 'country_pref2')}
+              {this.renderCountryDropdown('03', 'country_pref3')}
+              {this.renderCountryDropdown('04', 'country_pref4')}
+              {this.renderCountryDropdown('05', 'country_pref5')}
+              {this.renderCountryDropdown('06', 'country_pref6')}
+              {this.renderCountryDropdown('07', 'country_pref7')}
+              {this.renderCountryDropdown('08', 'country_pref8')}
+              {this.renderCountryDropdown('09', 'country_pref9')}
+              {this.renderCountryDropdown('10', 'country_pref10')}
             </ul>
             <hr />
             <h3>Special Committee Preferences</h3>
@@ -458,6 +398,20 @@ var RegistrationView = React.createClass({
     return this.state.countries.map(function(country) {
       return <option key={country.id} value={country.id}>{country.name}</option>
     });
+  },
+
+  renderCountryDropdown: function(labelNum, fieldName) {
+    return (
+      <li>
+        <label>{labelNum}</label>
+        <select
+          onChange={this._handleCountryChange.bind(this, fieldName)}
+          value={this.state[fieldName]}>
+          <option value="0">No Preference</option>
+          {this.renderCommitteeOptions()}
+        </select>
+      </li>
+    );
   },
 
   renderContactGenderField: function(name) {
@@ -547,6 +501,12 @@ var RegistrationView = React.createClass({
 
   _handleProgramTypeChange: function(event) {
     this.setState({program_type: event.target.value});
+  },
+
+  _handleCountryChange: function(fieldName, event) {
+    var change = {};
+    change[fieldName] = event.target.value;
+    this.setState(change);
   },
 
   _handleInternationalChange: function(event) {
