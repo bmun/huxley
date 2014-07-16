@@ -500,8 +500,8 @@ var RegistrationView = React.createClass({
     this.setState({program_type: event.target.value});
   },
 
-  _handleCountryChange: function(event) {
-    this.setState(event.target.value)
+  _handleCountryChange: function(event, fieldName) {
+    this.setState({fieldName: event.target.value})
   },
 
   _handleInternationalChange: function(event) {
