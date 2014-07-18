@@ -401,14 +401,16 @@ var RegistrationView = React.createClass({
   },
 
   renderCountryDropdown: function(labelNum, fieldName) {
-    return(
+    return (
       <li>
         <label>{labelNum}</label>
-        <select onChange={this._handleCountryChange.bind(this, fieldName)} value={this.state[fieldName]}>
+        <select onChange={this._handleCountryChange.bind(this, fieldName)}
+                value={this.state[fieldName]}>
           <option value="0">No Preference</option>
           {this.renderCommitteeOptions()}
         </select>
-      </li>)
+      </li>
+      );
   },
 
   renderContactGenderField: function(name) {
@@ -503,7 +505,7 @@ var RegistrationView = React.createClass({
   _handleCountryChange: function(fieldName, event) {
     var change = {};
     change[fieldName] = event.target.value;
-    this.setState(change)
+    this.setState(change);
   },
 
   _handleInternationalChange: function(event) {
