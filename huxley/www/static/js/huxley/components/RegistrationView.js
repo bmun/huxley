@@ -404,13 +404,14 @@ var RegistrationView = React.createClass({
     return (
       <li>
         <label>{labelNum}</label>
-        <select onChange={this._handleCountryChange.bind(this, fieldName)}
-                value={this.state[fieldName]}>
+        <select
+          onChange={this._handleCountryChange.bind(this, fieldName)}
+          value={this.state[fieldName]}>
           <option value="0">No Preference</option>
           {this.renderCommitteeOptions()}
         </select>
       </li>
-      );
+    );
   },
 
   renderContactGenderField: function(name) {
