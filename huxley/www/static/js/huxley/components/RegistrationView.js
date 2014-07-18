@@ -306,16 +306,16 @@ var RegistrationView = React.createClass({
             countries and their relation to committees is available online.
             Please diversify your selection.</p>
             <ul>
-              {this.renderCountryDropdown('01', this.country_pref1)}
-              {this.renderCountryDropdown('02', this.country_pref2)}
-              {this.renderCountryDropdown('03', this.country_pref3)}
-              {this.renderCountryDropdown('04', this.country_pref4)}
-              {this.renderCountryDropdown('05', this.country_pref5)}
-              {this.renderCountryDropdown('06', this.country_pref6)}
-              {this.renderCountryDropdown('07', this.country_pref7)}
-              {this.renderCountryDropdown('08', this.country_pref8)}
-              {this.renderCountryDropdown('09', this.country_pref9)}
-              {this.renderCountryDropdown('10', this.country_pref10)}
+              {this.renderCountryDropdown('01', 'country_pref1')}
+              {this.renderCountryDropdown('02', 'country_pref2')}
+              {this.renderCountryDropdown('03', 'country_pref3')}
+              {this.renderCountryDropdown('04', 'country_pref4')}
+              {this.renderCountryDropdown('05', 'country_pref5')}
+              {this.renderCountryDropdown('06', 'country_pref6')}
+              {this.renderCountryDropdown('07', 'country_pref7')}
+              {this.renderCountryDropdown('08', 'country_pref8')}
+              {this.renderCountryDropdown('09', 'country_pref9')}
+              {this.renderCountryDropdown('10', 'country_pref10')}
             </ul>
             <hr />
             <h3>Special Committee Preferences</h3>
@@ -404,7 +404,7 @@ var RegistrationView = React.createClass({
     return(
       <li>
         <label>{labelNum}</label>
-        <select onChange={this._handleCountryChange.bind(this, fieldName)} defaultValue="0">
+        <select onChange={this._handleCountryChange.bind(this, fieldName)} value={this.state[fieldName]}>
           <option value="0">No Preference</option>
           {this.renderCommitteeOptions()}
         </select>
@@ -500,8 +500,10 @@ var RegistrationView = React.createClass({
     this.setState({program_type: event.target.value});
   },
 
-  _handleCountryChange: function(event, fieldName) {
-    this.setState({fieldName: event.target.value})
+  _handleCountryChange: function(fieldName, event) {
+    var change = {};
+    change[fieldName] = event.target.value;
+    this.setState(change)
   },
 
   _handleInternationalChange: function(event) {
