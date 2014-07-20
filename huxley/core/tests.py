@@ -206,7 +206,7 @@ class CountryAdminTest(TestCase):
 
 class SchoolAdminTest(TestCase):
 
-    def test_export(self):
+    def test_info_export(self):
         '''Test that the admin panel can properly export a list of schools.'''
         TestUsers.new_user(username='testuser1', password='test1')
         TestUsers.new_superuser(username='testuser2', password='test2')
@@ -218,6 +218,32 @@ class SchoolAdminTest(TestCase):
         response = self.client.get(reverse('admin:core_school_info'))
 
         self.assertTrue(response)
+
+        header = [
+            "Name",
+            "Assignments Requested",
+            "Beginners",
+            "Intermediates",
+            "Advanced",
+            "Spanish Speakers",
+            "Bilingual?",
+            "Crisis?",
+            "Small Specialized?",
+            "Mid-Large Specialized?",
+            "Country 1",
+            "Country 2",
+            "Country 3",
+            "Country 4",
+            "Country 5",
+            "Country 6",
+            "Country 7",
+            "Country 8",
+            "Country 9",
+            "Country 10",
+            "Registration Comments"
+            ]
+
+        fields_csv = ",".join(map(str, header)) + "\n"
 
         fields = [school.name,
                 school.address,
@@ -253,9 +279,67 @@ class SchoolAdminTest(TestCase):
                 school.registration_fee_balance,
                 school.delegation_fee,
                 school.delegation_fee_paid,
-                school.delegation_fee_balance]
+                school.delegation_fee_balance
+                ]
 
-        fields_csv = ",".join(map(str, fields))
+        fields_csv += ",".join(map(str, fields))
+        self.assertEquals(fields_csv, response.content[:-2])
+
+    def test_preference_export(self):
+        '''Test that the admin panel can properly export school preferences.'''
+        TestUsers.new_user(username='testuser1', password='test1')
+        TestUsers.new_superuser(username='testuser2', password='test2')
+        self.client.login(username='testuser1', password='test1')
+        school = TestSchools.new_school()
+        self.client.logout()
+        self.client.login(username='testuser2', password='test2')
+
+        response = self.client.get(reverse('admin:core_school_preference'))
+
+        self.assertTrue(response)
+
+        header = [
+            "Name",
+            "Assignments Requested",
+            "Beginners",
+            "Intermediates",
+            "Advanced",
+            "Spanish Speakers",
+            "Bilingual?",
+            "Crisis?",
+            "Small Specialized?",
+            "Mid-Large Specialized?",
+            "Country 1",
+            "Country 2",
+            "Country 3",
+            "Country 4",
+            "Country 5",
+            "Country 6",
+            "Country 7",
+            "Country 8",
+            "Country 9",
+            "Country 10",
+            "Registration Comments"
+            ]
+
+        fields_csv = ",".join(map(str, header)) + "\n"
+
+        fields = [
+                school.name,
+                school.beginner_delegates + school.intermediate_delegates + school.advanced_delegates,
+                school.beginner_delegates,
+                school.intermediate_delegates,
+                school.advanced_delegates,
+                school.spanish_speaking_delegates,
+                school.prefers_bilingual,
+                school.prefers_crisis,
+                school.prefers_small_specialized,
+                school.prefers_mid_large_specialized] +
+                [c for c in school.countrypreferences.all()] +
+                [school.registration_comments
+            ]
+
+        fields_csv += ",".join(map(str, fields))
         self.assertEquals(fields_csv, response.content[:-2])
 
 

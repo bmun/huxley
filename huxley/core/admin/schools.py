@@ -95,6 +95,55 @@ class SchoolAdmin(admin.ModelAdmin):
 
         return schools
 
+    def preference(self, request):
+        """ Returns a CSV file containing the current set of
+            Schools registered with all of its fields. """
+        schools = HttpResponse(content_type='text/csv')
+        schools['Content-Disposition'] = 'attachment; filename="schools.csv"'
+        writer = csv.writer(schools)
+
+        writer.writerow([
+            "Name",
+            "Assignments Requested",
+            "Beginners",
+            "Intermediates",
+            "Advanced",
+            "Spanish Speakers",
+            "Bilingual?",
+            "Crisis?",
+            "Small Specialized?",
+            "Mid-Large Specialized?",
+            "Country 1",
+            "Country 2",
+            "Country 3",
+            "Country 4",
+            "Country 5",
+            "Country 6",
+            "Country 7",
+            "Country 8",
+            "Country 9",
+            "Country 10",
+            "Registration Comments"
+            ])
+
+        for school in School.objects.all().order_by('name'):
+            writer.writerow([
+                school.name,
+                school.beginner_delegates + school.intermediate_delegates + school.advanced_delegates,
+                school.beginner_delegates,
+                school.intermediate_delegates,
+                school.advanced_delegates,
+                school.spanish_speaking_delegates,
+                school.prefers_bilingual,
+                school.prefers_crisis,
+                school.prefers_small_specialized,
+                school.prefers_mid_large_specialized] +
+                [c for c in school.countrypreferences.all()] +
+                [school.registration_comments
+            ])
+
+        return schools
+
     def get_urls(self):
         urls = super(SchoolAdmin, self).get_urls()
         urls += patterns('',
@@ -103,5 +152,10 @@ class SchoolAdmin(admin.ModelAdmin):
                 self.admin_site.admin_view(self.info),
                 name='core_school_info',
             ),
+            url(
+                r'preference',
+                self.admin_site.admin_view(self.preference),
+                name='core_school_preference'
+            )
         )
         return urls
