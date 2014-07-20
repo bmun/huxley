@@ -11,11 +11,48 @@ from huxley.core.models import School
 
 class SchoolAdmin(admin.ModelAdmin):
     def info(self, request):
-        """ Returns a CSV file containing the current set of
-            Schools registered with all of its fields. """
+        ''' Returns a CSV file containing the current set of
+            Schools registered with all of its fields. '''
         schools = HttpResponse(content_type='text/csv')
         schools['Content-Disposition'] = 'attachment; filename="schools.csv"'
         writer = csv.writer(schools)
+
+        writer.writerow([
+            "Name",
+            "Address",
+            "City",
+            "Zip Code",
+            "Country",
+            "Primary Name",
+            "Primary Gender",
+            "Primary Email",
+            "Primary Phone",
+            "Primary Type",
+            "Secondary Name",
+            "Secondary Gender",
+            "Secondary Email",
+            "Secondary Phone",
+            "Secondary Type",
+            "Program Type",
+            "Times Attended",
+            "International",
+            "Waitlist",
+            "Beginners",
+            "Intermediates",
+            "Advanced",
+            "Spanish Speakers",
+            "Bilingual?",
+            "Crisis?",
+            "Small Specialized?",
+            "Mid-Large Specialized?",
+            "Registration Comments",
+            "Registration Fee",
+            "Registration Fee Paid",
+            "Registration Fee Balance",
+            "Delegation Fee",
+            "Delegation Fee Paid",
+            "Delegation Fee Balance"
+            ])
 
         for school in School.objects.all().order_by('name'):
             writer.writerow([
@@ -58,6 +95,58 @@ class SchoolAdmin(admin.ModelAdmin):
 
         return schools
 
+    def preferences(self, request):
+        ''' Returns a CSV file containing the current set of
+            Schools registered with all of its fields. '''
+        schools = HttpResponse(content_type='text/csv')
+        schools['Content-Disposition'] = 'attachment; filename="preferences.csv"'
+        writer = csv.writer(schools)
+
+        writer.writerow([
+                "Name",
+                "Assignments Requested",
+                "Beginners",
+                "Intermediates",
+                "Advanced",
+                "Spanish Speakers",
+                "Bilingual?",
+                "Crisis?",
+                "Small Specialized?",
+                "Mid-Large Specialized?",
+                "Country 1",
+                "Country 2",
+                "Country 3",
+                "Country 4",
+                "Country 5",
+                "Country 6",
+                "Country 7",
+                "Country 8",
+                "Country 9",
+                "Country 10",
+                "Registration Comments"
+                ])
+
+        for school in School.objects.all().order_by('name'):
+            countryprefs = [c for c in school.countrypreferences.all()]
+            countryprefs += [''] * (10 - len(countryprefs))
+
+            writer.writerow([
+                school.name,
+                school.beginner_delegates + school.intermediate_delegates + school.advanced_delegates,
+                school.beginner_delegates,
+                school.intermediate_delegates,
+                school.advanced_delegates,
+                school.spanish_speaking_delegates,
+                school.prefers_bilingual,
+                school.prefers_crisis,
+                school.prefers_small_specialized,
+                school.prefers_mid_large_specialized] +
+                countryprefs +
+                [school.registration_comments
+            ])
+
+        return schools
+
     def get_urls(self):
         urls = super(SchoolAdmin, self).get_urls()
         urls += patterns('',
@@ -66,5 +155,10 @@ class SchoolAdmin(admin.ModelAdmin):
                 self.admin_site.admin_view(self.info),
                 name='core_school_info',
             ),
+            url(
+                r'preferences',
+                self.admin_site.admin_view(self.preferences),
+                name='core_school_preferences'
+            )
         )
         return urls
