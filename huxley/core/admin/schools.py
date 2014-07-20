@@ -17,6 +17,43 @@ class SchoolAdmin(admin.ModelAdmin):
         schools['Content-Disposition'] = 'attachment; filename="schools.csv"'
         writer = csv.writer(schools)
 
+        writer.writerow([
+            "Name",
+            "Address",
+            "City",
+            "Zip Code",
+            "Country",
+            "Primary Name",
+            "Primary Gender",
+            "Primary Email",
+            "Primary Phone",
+            "Primary Type",
+            "Secondary Name",
+            "Secondary Gender",
+            "Secondary Email",
+            "Secondary Phone",
+            "Secondary Type",
+            "Program Type",
+            "Times Attended"
+            "International",
+            "Waitlist",
+            "Beginners",
+            "Intermediates",
+            "Advanced",
+            "Spanish Speakers",
+            "Bilingual?",
+            "Crisis?",
+            "Small Specialized?",
+            "Mid-Large Specialized?",
+            "Registration Comments",
+            "Registration Fee",
+            "Registration Fee Paid",
+            "Registration Fee Balance",
+            "Delegation Fee",
+            "Delegation Fee Paid",
+            "Delegation Fee Balance"
+            ])
+
         for school in School.objects.all().order_by('name'):
             writer.writerow([
                 school.name,
