@@ -334,10 +334,11 @@ class SchoolAdminTest(TestCase):
                 school.prefers_bilingual,
                 school.prefers_crisis,
                 school.prefers_small_specialized,
-                school.prefers_mid_large_specialized] +
-                [c for c in school.countrypreferences.all()] +
-                [school.registration_comments
-            ]
+                school.prefers_mid_large_specialized] 
+        fields +=
+                [c for c in school.countrypreferences.all()] 
+        fields +=
+                [school.registration_comments]
 
         fields_csv += ",".join(map(str, fields))
         self.assertEquals(fields_csv, response.content[:-2])
