@@ -129,6 +129,8 @@ var RegistrationView = React.createClass({
               type="password"
               placeholder="Password"
               valueLink={this.linkState('password')}
+              onBlur={this._handlePasswordBlur}
+              onFocus={this._handlePasswordFocus}
             />
             {this.renderError('password')}
             <input
