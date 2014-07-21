@@ -76,7 +76,8 @@ var RegistrationView = React.createClass({
       prefers_small_specialized: false,
       prefers_mid_large_specialized: false,
       registration_comments: '',
-      loading: false
+      loading: false,
+      passwordValidating: false
     };
   },
 
@@ -134,6 +135,8 @@ var RegistrationView = React.createClass({
               type="password"
               placeholder="Password (confirm)"
               valueLink={this.linkState('password2')}
+              onBlur={this._handlePasswordBlur}
+              onFocus={this._handlePasswordFocus}
             />
             {this.renderPasswordConfirmError()}
             <hr />
@@ -473,14 +476,13 @@ var RegistrationView = React.createClass({
   },
 
   renderPasswordConfirmError: function() {
-    if (this.state.password !== this.state.password2) {
+    if (this.state.passwordValidating && this.state.password !== this.state.password2) {
       return (
         <div>
           <label className="error">Please enter the same password again.</label>
         </div>
       );
     }
-
     return null;
   },
 
@@ -497,6 +499,14 @@ var RegistrationView = React.createClass({
     }
 
     return null;
+  },
+
+  _handlePasswordBlur: function(){
+    this.setState({passwordValidating: true})
+  },
+
+  _handlePasswordFocus: function(){
+    this.setState({passwordValidating: false})
   },
 
   _handleProgramTypeChange: function(event) {
