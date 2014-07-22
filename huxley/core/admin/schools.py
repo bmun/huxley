@@ -129,7 +129,7 @@ class SchoolAdmin(admin.ModelAdmin):
         for school in School.objects.all().order_by('name'):
             countryprefs = [c for c in school.countrypreferences.all()]
             countryprefs += [''] * (10 - len(countryprefs))
-            print(countryprefs)
+
             writer.writerow([
                 school.name,
                 school.beginner_delegates + school.intermediate_delegates + school.advanced_delegates,

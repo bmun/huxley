@@ -337,6 +337,9 @@ class SchoolAdminTest(TestCase):
 
         fields_csv = ",".join(map(str, header)) + "\r\n"
 
+        countryprefs = [c for c in school.countrypreferences.all()]
+        countryprefs += [''] * (10 - len(countryprefs))
+
         fields = [
                 school.name,
                 school.beginner_delegates + school.intermediate_delegates + school.advanced_delegates,
@@ -349,7 +352,7 @@ class SchoolAdminTest(TestCase):
                 school.prefers_small_specialized,
                 school.prefers_mid_large_specialized] 
         fields.extend(countryprefs)
-        fields.extend(school.registration_comments)
+        fields.append(school.registration_comments)
 
-        fields_csv += ",".join(map(str, fields))
+        fields_csv += ",".join(map(str, fields)) 
         self.assertEquals(fields_csv, response.content[:-2])
