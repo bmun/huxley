@@ -221,7 +221,24 @@ class SchoolAdminTest(TestCase):
 
         header = [
             "Name",
-            "Assignments Requested",
+            "Address",
+            "City",
+            "Zip Code",
+            "Country",
+            "Primary Name",
+            "Primary Gender",
+            "Primary Email",
+            "Primary Phone",
+            "Primary Type",
+            "Secondary Name",
+            "Secondary Gender",
+            "Secondary Email",
+            "Secondary Phone",
+            "Secondary Type",
+            "Program Type",
+            "Times Attended",
+            "International",
+            "Waitlist",
             "Beginners",
             "Intermediates",
             "Advanced",
@@ -230,20 +247,16 @@ class SchoolAdminTest(TestCase):
             "Crisis?",
             "Small Specialized?",
             "Mid-Large Specialized?",
-            "Country 1",
-            "Country 2",
-            "Country 3",
-            "Country 4",
-            "Country 5",
-            "Country 6",
-            "Country 7",
-            "Country 8",
-            "Country 9",
-            "Country 10",
-            "Registration Comments"
+            "Registration Comments",
+            "Registration Fee",
+            "Registration Fee Paid",
+            "Registration Fee Balance",
+            "Delegation Fee",
+            "Delegation Fee Paid",
+            "Delegation Fee Balance"
             ]
 
-        fields_csv = ",".join(map(str, header)) + "\n"
+        fields_csv = ",".join(map(str, header)) + "\r\n"
 
         fields = [school.name,
                 school.address,
@@ -322,7 +335,7 @@ class SchoolAdminTest(TestCase):
             "Registration Comments"
             ]
 
-        fields_csv = ",".join(map(str, header)) + "\n"
+        fields_csv = ",".join(map(str, header)) + "\r\n"
 
         fields = [
                 school.name,
@@ -335,14 +348,8 @@ class SchoolAdminTest(TestCase):
                 school.prefers_crisis,
                 school.prefers_small_specialized,
                 school.prefers_mid_large_specialized] 
-        fields +=
-                [c for c in school.countrypreferences.all()] 
-        fields +=
-                [school.registration_comments]
+        fields.extend(countryprefs)
+        fields.extend(school.registration_comments)
 
         fields_csv += ",".join(map(str, fields))
         self.assertEquals(fields_csv, response.content[:-2])
-
-
-
-

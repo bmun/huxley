@@ -34,7 +34,7 @@ class SchoolAdmin(admin.ModelAdmin):
             "Secondary Phone",
             "Secondary Type",
             "Program Type",
-            "Times Attended"
+            "Times Attended",
             "International",
             "Waitlist",
             "Beginners",
@@ -99,7 +99,7 @@ class SchoolAdmin(admin.ModelAdmin):
         """ Returns a CSV file containing the current set of
             Schools registered with all of its fields. """
         schools = HttpResponse(content_type='text/csv')
-        schools['Content-Disposition'] = 'attachment; filename="schools.csv"'
+        schools['Content-Disposition'] = 'attachment; filename="preferences.csv"'
         writer = csv.writer(schools)
 
         writer.writerow([
@@ -127,6 +127,9 @@ class SchoolAdmin(admin.ModelAdmin):
             ])
 
         for school in School.objects.all().order_by('name'):
+            countryprefs = [c for c in school.countrypreferences.all()]
+            countryprefs += [''] * (10 - len(countryprefs))
+            print(countryprefs)
             writer.writerow([
                 school.name,
                 school.beginner_delegates + school.intermediate_delegates + school.advanced_delegates,
@@ -138,7 +141,7 @@ class SchoolAdmin(admin.ModelAdmin):
                 school.prefers_crisis,
                 school.prefers_small_specialized,
                 school.prefers_mid_large_specialized] +
-                [c for c in school.countrypreferences.all()] +
+                countryprefs +
                 [school.registration_comments
             ])
 
