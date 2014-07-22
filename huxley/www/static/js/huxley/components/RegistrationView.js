@@ -505,11 +505,11 @@ var RegistrationView = React.createClass({
   },
 
   _handlePasswordBlur: function() {
-    this.setState({passwordValidating: true})
+    this.setState({passwordValidating: true});
   },
 
   _handlePasswordFocus: function() {
-    this.setState({passwordValidating: false})
+    this.setState({passwordValidating: false});
   },
 
   _handleProgramTypeChange: function(event) {
