@@ -478,7 +478,8 @@ var RegistrationView = React.createClass({
   },
 
   renderPasswordConfirmError: function() {
-    if (this.state.passwordValidating && this.state.password !== this.state.password2) {
+    if (this.state.passwordValidating &&
+        this.state.password !== this.state.password2) {
       return (
         <div>
           <label className="error">Please enter the same password again.</label>
@@ -503,11 +504,11 @@ var RegistrationView = React.createClass({
     return null;
   },
 
-  _handlePasswordBlur: function(){
+  _handlePasswordBlur: function() {
     this.setState({passwordValidating: true})
   },
 
-  _handlePasswordFocus: function(){
+  _handlePasswordFocus: function() {
     this.setState({passwordValidating: false})
   },
 
