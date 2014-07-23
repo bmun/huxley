@@ -421,45 +421,49 @@ var RegistrationView = React.createClass({
 
   renderContactGenderField: function(name) {
     return (
-      <select valueLink={this.linkState(name)}>
-        <option
-          key={GenderConstants.UNSPECFIED}
-          value={GenderConstants.UNSPECFIED}>
-          Unspecified
-        </option>
-        <option
-          key={GenderConstants.MALE}
-          value={GenderConstants.MALE}>
-          Mr.
-        </option>
-        <option
-          key={GenderConstants.FEMALE}
-          value={GenderConstants.FEMALE}>
-          Mrs./Ms.
-        </option>
-        <option
-          key={GenderConstants.OTHER}
-          value={GenderConstants.OTHER}>
-          Other
-        </option>
-      </select>
+      <div className="contact-select">
+        <select valueLink={this.linkState(name)}>
+          <option
+            key={GenderConstants.UNSPECFIED}
+            value={GenderConstants.UNSPECFIED}>
+            Unspecified
+          </option>
+          <option
+            key={GenderConstants.MALE}
+            value={GenderConstants.MALE}>
+            Mr.
+          </option>
+          <option
+            key={GenderConstants.FEMALE}
+            value={GenderConstants.FEMALE}>
+            Mrs./Ms.
+          </option>
+          <option
+            key={GenderConstants.OTHER}
+            value={GenderConstants.OTHER}>
+            Other
+          </option>
+        </select>
+      </div>
     );
   },
 
   renderContactTypeField: function(name) {
     return (
-      <select valueLink={this.linkState(name)}>
-        <option
-          key={ContactTypes.STUDENT}
-          value={ContactTypes.STUDENT}>
-          Student
-        </option>
-        <option
-          key={ContactTypes.FACULTY}
-          value={ContactTypes.FACULTY}>
-          Faculty
-        </option>
-      </select>
+      <div className="contact-select">
+        <select valueLink={this.linkState(name)}>
+          <option
+            key={ContactTypes.STUDENT}
+            value={ContactTypes.STUDENT}>
+            Student
+          </option>
+          <option
+            key={ContactTypes.FACULTY}
+            value={ContactTypes.FACULTY}>
+            Faculty
+          </option>
+        </select>
+      </div>
     );
   },
 

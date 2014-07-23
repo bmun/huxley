@@ -14,8 +14,18 @@
 
     select
     {
-        width: 250px;
+        font-size: 13px;
+        background-color: #fff;
+        color: #666;
+        border: 1px solid #ccc;
         margin-left: 3px;
+    }
+
+    .contact-select select
+    {
+        margin-top: 15px;
+        width:300px;
+        margin-left: 0px;
     }
 
     label.error { margin-top: 3px; }
