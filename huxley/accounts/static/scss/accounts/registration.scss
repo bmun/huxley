@@ -17,13 +17,13 @@
         font-size: 13px;
         background-color: #fff;
         color: #666;
-        width: 300px;
         border: 1px solid #ccc;
     }
 
-    .contact-select
+    .contact-select select
     {
         margin-top: 15px;
+        width:300px;
     }
 
     label.error { margin-top: 3px; }
