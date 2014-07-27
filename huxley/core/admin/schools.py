@@ -11,8 +11,8 @@ from huxley.core.models import School
 
 class SchoolAdmin(admin.ModelAdmin):
     def info(self, request):
-        """ Returns a CSV file containing the current set of
-            Schools registered with all of its fields. """
+        ''' Returns a CSV file containing the current set of
+            Schools registered with all of its fields. '''
         schools = HttpResponse(content_type='text/csv')
         schools['Content-Disposition'] = 'attachment; filename="schools.csv"'
         writer = csv.writer(schools)
@@ -95,36 +95,36 @@ class SchoolAdmin(admin.ModelAdmin):
 
         return schools
 
-    def preference(self, request):
-        """ Returns a CSV file containing the current set of
-            Schools registered with all of its fields. """
+    def preferences(self, request):
+        ''' Returns a CSV file containing the current set of
+            Schools registered with all of its fields. '''
         schools = HttpResponse(content_type='text/csv')
         schools['Content-Disposition'] = 'attachment; filename="preferences.csv"'
         writer = csv.writer(schools)
 
         writer.writerow([
-            "Name",
-            "Assignments Requested",
-            "Beginners",
-            "Intermediates",
-            "Advanced",
-            "Spanish Speakers",
-            "Bilingual?",
-            "Crisis?",
-            "Small Specialized?",
-            "Mid-Large Specialized?",
-            "Country 1",
-            "Country 2",
-            "Country 3",
-            "Country 4",
-            "Country 5",
-            "Country 6",
-            "Country 7",
-            "Country 8",
-            "Country 9",
-            "Country 10",
-            "Registration Comments"
-            ])
+                "Name",
+                "Assignments Requested",
+                "Beginners",
+                "Intermediates",
+                "Advanced",
+                "Spanish Speakers",
+                "Bilingual?",
+                "Crisis?",
+                "Small Specialized?",
+                "Mid-Large Specialized?",
+                "Country 1",
+                "Country 2",
+                "Country 3",
+                "Country 4",
+                "Country 5",
+                "Country 6",
+                "Country 7",
+                "Country 8",
+                "Country 9",
+                "Country 10",
+                "Registration Comments"
+                ])
 
         for school in School.objects.all().order_by('name'):
             countryprefs = [c for c in school.countrypreferences.all()]
@@ -156,9 +156,9 @@ class SchoolAdmin(admin.ModelAdmin):
                 name='core_school_info',
             ),
             url(
-                r'preference',
-                self.admin_site.admin_view(self.preference),
-                name='core_school_preference'
+                r'preferences',
+                self.admin_site.admin_view(self.preferences),
+                name='core_school_preferences'
             )
         )
         return urls

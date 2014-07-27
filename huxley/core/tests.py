@@ -292,8 +292,7 @@ class SchoolAdminTest(TestCase):
                 school.registration_fee_balance,
                 school.delegation_fee,
                 school.delegation_fee_paid,
-                school.delegation_fee_balance
-                ]
+                school.delegation_fee_balance]
 
         fields_csv += ",".join(map(str, fields))
         self.assertEquals(fields_csv, response.content[:-2])
