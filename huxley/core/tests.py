@@ -306,7 +306,7 @@ class SchoolAdminTest(TestCase):
         self.client.logout()
         self.client.login(username='testuser2', password='test2')
 
-        response = self.client.get(reverse('admin:core_school_preference'))
+        response = self.client.get(reverse('admin:core_school_preferences'))
 
         self.assertTrue(response)
 

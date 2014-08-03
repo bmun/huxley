@@ -47,8 +47,7 @@
       "beginner_delegates": 5,
       "intermediate_delegates": 5,
       "advanced_delegates": 5,
-      "spanish_speaking_delegates": 5,
-      "countrypreferences": ["Albania", "United States of America", "Uganda", "Bhutan", "El Salvador"]
+      "spanish_speaking_delegates": 5
     }
   }
 ]
