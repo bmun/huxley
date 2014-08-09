@@ -65,7 +65,7 @@
 }
 
 .table
-{   
+{
     width: 700px;
     margin: 10px auto 20px auto;
     font-size: 13px;
@@ -107,8 +107,8 @@
         width: 200px;
     }
 
-    &.highlight-cells td.field:hover
+    td.field
     {
-        background: #E0E0E0;
+        width: 375px;
     }
 }
