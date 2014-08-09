@@ -43,7 +43,7 @@ def authors():
     authors_path = join(env.huxley_root, 'AUTHORS')
     with hide('running'):
         local('git log --format="%%aN <%%aE>" | sort -u > %s' % authors_path)
-        if local('git diff --name-only AUTHORS', capture=True):
+        if local('git diff --name-only %s' % authors_path, capture=True):
             print ui.info('Automatically updating the authors file...')
             local('git commit -m "Update AUTHORS." %s' % authors_path)
         else:
