@@ -201,7 +201,7 @@ var RegistrationView = React.createClass({
               placeholder="Country"
               valueLink={this.state.school_international ? ''  :
                 this.linkState('school_country')}
-	      disabled={!this.state.school_international}
+	       disabled={!this.state.school_international}
             />
             {this.renderSchoolError('country')}
             <hr />
