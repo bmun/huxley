@@ -9,7 +9,7 @@
 
 var React = require('react/addons');
 
-var InnerView = require('./InnerView');
+var AdvisorView = require('./AdvisorView');
 var LogoutButton = require('./LogoutButton');
 var ProgramTypes = require('../constants/ProgramTypes');
 var User = require('../User');
@@ -24,9 +24,9 @@ var AdvisorProfileView = React.createClass({
 
   render: function() {
     var user = this.props.user.getData();
-    var school = user.school;
+    var school = this.props.user.getSchool();
     return (
-      <InnerView user={this.props.user}>
+      <AdvisorView user={this.props.user}>
         <h2>Welcome, {user.first_name}!</h2>
         <p>We are very excited to see {school.name} at BMUN 63 this year! Here,
         you can view your registration information for the conference,
@@ -175,7 +175,7 @@ var AdvisorProfileView = React.createClass({
           <div className="tablemenu footer">
           </div>
         </form>
-      </InnerView>
+      </AdvisorView>
     );
   },
 });

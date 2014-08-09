@@ -33,6 +33,10 @@ mergeInto(User.prototype, {
 
   getData: function() {
     return this._user;
+  },
+
+  getSchool: function() {
+    return this._user.school || {};
   }
 });
 
