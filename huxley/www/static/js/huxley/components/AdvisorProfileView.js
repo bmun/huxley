@@ -28,12 +28,9 @@ var AdvisorProfileView = React.createClass({
     return (
       <InnerView>
         <h2>Welcome, {user.first_name}!</h2>
-        <p>We're very excited to see {school.name} at BMUN 63 this year! Here,
-        you can view and edit your registration information for the conference,
-        edit your delegate roster, and find answers to frequently asked
-        questions. To edit your information, just click on any of the
-        highlighted fields and add your changes. Also, <span className="bold">
-        don't forget to save any information you update!</span></p>
+        <p>We are very excited to see {school.name} at BMUN 63 this year! Here,
+        you can view your registration information for the conference,
+        and find answers to frequently asked questions.</p>
         <br />
         <p><strong>Important Note:</strong> Please mail all checks to <strong>
         P.O. Box 4306 Berkeley, CA 94704-0306. If you have any other further
