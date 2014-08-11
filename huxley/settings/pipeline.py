@@ -2,7 +2,8 @@
 # Use of this source code is governed by a BSD License (see LICENSE).
 
 from os.path import join
-from roots import JS_ROOT
+
+from .roots import JS_ROOT
 
 
 PIPELINE_COMPILERS = (
