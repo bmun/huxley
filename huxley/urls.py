@@ -3,11 +3,13 @@
 
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
-from django.views.generic import RedirectView, TemplateView
+from django.views.generic import RedirectView
+
 
 admin.autodiscover()
 
 urlpatterns = patterns('',
+    url(r'^$', 'huxley.core.views.index', name='index'),
     url(r'^', include('huxley.accounts.urls', app_name='accounts', namespace='accounts')),
     url(r'^www/', include('huxley.www.urls', app_name='www', namespace='www')),
     url(r'^advisor/', include('huxley.advisors.urls', app_name='advisors', namespace='advisors')),
@@ -17,9 +19,4 @@ urlpatterns = patterns('',
 
 urlpatterns += patterns('',
     url(r'^favicon\.ico$', RedirectView.as_view(url='/static/img/favicon.ico')),
-    url(r'^success/?$', TemplateView.as_view(template_name='registration-success.html'), name='register_success'),
-)
-
-urlpatterns += patterns('',
-    url(r'^$', 'huxley.core.views.index', name='index'),
 )
