@@ -26,7 +26,7 @@ var AdvisorProfileView = React.createClass({
     var user = this.props.user.getData();
     var school = user.school;
     return (
-      <InnerView>
+      <InnerView user={this.props.user}>
         <h2>Welcome, {user.first_name}!</h2>
         <p>We are very excited to see {school.name} at BMUN 63 this year! Here,
         you can view your registration information for the conference,
@@ -175,8 +175,6 @@ var AdvisorProfileView = React.createClass({
           <div className="tablemenu footer">
           </div>
         </form>
-        <br />
-        <LogoutButton />
       </InnerView>
     );
   },

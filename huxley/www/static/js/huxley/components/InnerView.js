@@ -8,18 +8,22 @@
 'use strict';
 
 var React = require('react');
+var TopBar = require('./TopBar');
 
 var InnerView = React.createClass({
   render: function() {
-    // TODO: header, change password, navigation bar.
     return (
-      <div className="content transparent ie-layout rounded-bottom">
-        <div id="contentwrapper">
-          {this.props.children}
+      <div>
+        <TopBar user={this.props.user} />
+        <div id="appnavbar" className="titlebar rounded-top" />
+        <div className="content transparent ie-layout rounded-bottom">
+          <div id="contentwrapper">
+            {this.props.children}
+          </div>
         </div>
       </div>
     );
-  }
+  },
 });
 
 module.exports = InnerView;

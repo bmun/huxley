@@ -1,7 +1,6 @@
 /* Header */
 
 #headerwrapper {
-    display: none;
     height: 39px;
     margin: 0px auto 20px auto;
     background: #111;
@@ -9,7 +8,6 @@
 }
 
 #header {
-    display:none;
     font-size: 12px;
     height: 25px;
     min-width:760px;
@@ -32,11 +30,6 @@
         float: left;
         padding-top: 5px;
         color: #aaa;
-
-        .usertype {
-            color: #ddd;
-            &:hover { color: #fff; }
-        }
     }
 
     #right {
@@ -49,7 +42,7 @@
             padding: 0px 5px;
         }
 
-        a#changepassword-link {
+        #changepassword-link {
             color: #ccc;
             text-decoration: none;
             &:hover { color: #fff; }
