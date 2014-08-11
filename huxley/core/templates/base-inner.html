@@ -16,10 +16,6 @@
                     <li><a class="js-nav" href="{% url 'advisors:attendance' %}">Check Attendance</a></li>
                     <li><a class="js-nav" href="{% url 'advisors:summaries_advisors' %}">Delegate Summaries</a></li>
                     <li><a class="js-nav" href="{% url 'advisors:help' %}">Need Help?</a></li>
-                {% elif user|is_chair %}
-                    <li><a class="js-nav default" href="{% url 'chairs:summaries' %}">Delegate Summaries</a></li>
-                    <li><a class="js-nav" href="{% url 'chairs:attendance' %}">Take Attendance</a></li>
-                    <li><a class="js-nav" href="{% url 'chairs:help' %}">Need Help?</a></li>
                 {% endif %}
             {% endblock navmenu %}
         </ul>

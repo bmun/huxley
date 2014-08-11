@@ -10,7 +10,6 @@ admin.autodiscover()
 urlpatterns = patterns('',
     url(r'^', include('huxley.accounts.urls', app_name='accounts', namespace='accounts')),
     url(r'^www/', include('huxley.www.urls', app_name='www', namespace='www')),
-    url(r'^chair/', include('huxley.chairs.urls', app_name='chairs', namespace='chairs')),
     url(r'^advisor/', include('huxley.advisors.urls', app_name='advisors', namespace='advisors')),
     url(r'^api/', include('huxley.api.urls', app_name='api', namespace='api')),
     url(r'^admin/', include(admin.site.urls)),

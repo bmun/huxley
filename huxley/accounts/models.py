@@ -32,8 +32,7 @@ class User(AbstractUser):
     def default_path(self):
         if self.is_advisor():
             return reverse('advisors:welcome')
-        elif self.is_chair():
-            return reverse('chairs:attendance')
+        raise NotImplementedError('The chairs app no longer exists.')
 
     @staticmethod
     def authenticate(username, password):
