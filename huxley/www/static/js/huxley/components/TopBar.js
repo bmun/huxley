@@ -32,8 +32,8 @@ var TopBar = React.createClass({
             <strong>HUXLEY</strong>
             &middot;
             A Conference Management Tool by BMUN
-            &middot; <span className="usertype bold">for {
-              this.props.user.isAdvisor() ? "Advisors" : "Chairs"} </span>
+            &middot; <strong>for {this.props.user.isAdvisor() ? "Advisors" :
+              "Chairs"} </strong>
           </div>
         </div>
       </div>
