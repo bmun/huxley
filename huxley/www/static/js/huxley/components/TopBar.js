@@ -20,19 +20,20 @@ var TopBar = React.createClass({
           <ul id="right">
             <li>
               Logged in as
-              <span className="advisorfirstname bold"> {user.first_name}</span>
-              &nbsp;<span className="advisorlastname bold"> {user.last_name}
-              </span>
+              &nbsp;
+              <strong>{user.first_name} {user.last_name}</strong>
             </li>
-            <li id="changepassword-link">Change Password</li>
+            <li id="changepassword-link">Change Password </li>
             <li id="logout" className="topbarbutton">
               <LogoutButton />
             </li>
           </ul>
           <div id="left">
-            <strong>HUXLEY</strong> &middot; A Conference Management Tool by
-            BMUN &middot; <span className="usertype bold">for {user.user_type
-              === 1 ? "Advisors" : "Chairs"} </span>
+            <strong>HUXLEY</strong>
+            &middot;
+            A Conference Management Tool by BMUN
+            &middot; <span className="usertype bold">for {
+              this.props.user.isAdvisor() ? "Advisors" : "Chairs"} </span>
           </div>
         </div>
       </div>

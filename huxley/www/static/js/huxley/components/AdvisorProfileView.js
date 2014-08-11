@@ -175,8 +175,6 @@ var AdvisorProfileView = React.createClass({
           <div className="tablemenu footer">
           </div>
         </form>
-        <br />
-        <LogoutButton />
       </InnerView>
     );
   },

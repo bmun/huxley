@@ -14,22 +14,15 @@ var InnerView = React.createClass({
   render: function() {
     // TODO: header, change password, navigation bar.
     return (
-      <ul>
-        <li>
-          <TopBar user={this.props.user}/>
-        </li>
-        <li>
-          <div id="appnavbar" className="titlebar rounded-top">
+      <div>
+        <TopBar user={this.props.user}/>
+        <div id="appnavbar" className="titlebar rounded-top" />
+        <div className="content transparent ie-layout rounded-bottom">
+          <div id="contentwrapper">
+            {this.props.children}
           </div>
-        </li>
-        <li>
-          <div className="content transparent ie-layout rounded-bottom">
-            <div id="contentwrapper">
-              {this.props.children}
-            </div>
-          </div>
-        </li>
-      </ul>
+        </div>
+      </div>
     );
   },
 });
