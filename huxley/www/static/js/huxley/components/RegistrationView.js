@@ -20,6 +20,7 @@ var GenderConstants = require('../constants/GenderConstants');
 var NavLink = require('./NavLink');
 var OuterView = require('./OuterView');
 var ProgramTypes = require('../constants/ProgramTypes');
+var FormatPhone = require('./Format-Phone');
 
 require('jquery-ui/effect-shake');
 
@@ -149,7 +150,8 @@ var RegistrationView = React.createClass({
                 <label>
                   <input
                     type="radio"
-                    value=''
+                    value=""
+                    name="us_or_int"
                     onChange={this._handleInternationalChange}
                     checked={!this.state.school_international}
                   /> United States of America
@@ -160,6 +162,7 @@ var RegistrationView = React.createClass({
                   <input
                     type="radio"
                     value="international"
+                    name="us_or_int"
                     onChange={this._handleInternationalChange}
                     checked={this.state.school_international}
                   /> International
@@ -279,7 +282,7 @@ var RegistrationView = React.createClass({
             <input
               type="text"
               placeholder="Phone Number"
-              valueLink={this.linkState('primary_phone')}
+              className="phoneVal"
             />
             {this.renderSchoolError('primary_phone')}
             {this.renderContactTypeField('primary_type')}
@@ -301,7 +304,7 @@ var RegistrationView = React.createClass({
             <input
               type="text"
               placeholder="Phone Number"
-              valueLink={this.linkState('secondary_phone')}
+              className="phoneVal"
             />
             {this.renderSchoolError('secondary_phone')}
             {this.renderContactTypeField('secondary_type')}
