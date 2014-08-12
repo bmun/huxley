@@ -13,6 +13,8 @@ var RRouter = require('rrouter');
 var User = require('../User');
 
 var InnerView = React.createClass({
+  mixins: [RRouter.RoutingContextMixin],
+
   componentWillMount: function() {
     if (User.isAnonymous) {
       this.navigate('www/login');
