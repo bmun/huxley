@@ -8,9 +8,17 @@
 'use strict';
 
 var React = require('react');
-var TopBar = require('./TopBar');
+var RRouter = require('rrouter');
+
+var User = require('../User');
 
 var InnerView = React.createClass({
+  componentWillMount: function() {
+    if (User.isAnonymous) {
+      this.navigate('www/login');
+    }
+  },
+
   render: function() {
     return (
       <div>
