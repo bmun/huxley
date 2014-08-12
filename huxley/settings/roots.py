@@ -3,5 +3,7 @@
 
 from os.path import dirname, join
 
+
 HUXLEY_ROOT = dirname(dirname(__file__))
+PROJECT_ROOT = dirname(HUXLEY_ROOT)
 JS_ROOT = join(HUXLEY_ROOT, 'www/static/js')
