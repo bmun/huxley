@@ -10,15 +10,10 @@
 var React = require('react');
 var InnerView = require('./InnerView');
 var RRouter = require('rrouter')
-
-var User = require('User')
+var PermissionDeniedView = require('./PermissionDeniedView')
 
 var AdvisorView = React.createClass ({
   mixins: [RRouter.RoutingContextMixin],
-
-  propTypes: {
-    user: React.PropTypes.instanceOf(User).isRequired
-  },
 
   getIntialState: function() {
     return {
