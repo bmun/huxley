@@ -9,6 +9,7 @@
 
 var React = require('react');
 var RRouter = require('rrouter');
+var TopBar = require('.TopBar')
 
 var User = require('../User');
 
