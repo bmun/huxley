@@ -4,4 +4,7 @@ python:
 install: pip install -r requirements.txt
 before_script:
     - python manage.py syncdb --migrate --noinput
-script: python manage.py test
+    - npm install
+script:
+    - python manage.py test
+    - npm test
