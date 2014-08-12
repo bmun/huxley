@@ -8,7 +8,7 @@
 'use strict';
 
 var React = require('react');
-var TopBar = require('.TopBar')
+var TopBar = require('./TopBar')
 
 var InnerView = React.createClass({
   render: function() {
