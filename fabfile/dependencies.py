@@ -63,10 +63,10 @@ def check_js():
             print ui.error('npm not found! Install it with `brew install npm`.')
             return
 
-    with open(join(env.js_root, 'package.json'), 'r') as p:
+    with open(join(env.huxley_root, 'package.json'), 'r') as p:
         package = json.loads(p.read())
         required = package['dependencies']
-    with lcd(env.js_root), hide('running'):
+    with lcd(env.huxley_root), hide('running'):
         npm_list = json.loads(local('npm list --json', capture=True))
         modules = npm_list.get('dependencies', {}).items()
         installed = {name: info['version'] for name, info in modules}
@@ -79,7 +79,7 @@ def check_js():
 def update_js():
     '''Update JS dependencies with npm.'''
     print 'Updating JS dependencies...'
-    with lcd(env.js_root):
+    with lcd(env.huxley_root):
         local('npm install')
 
 

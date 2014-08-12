@@ -3,7 +3,7 @@
 
 from os.path import join
 
-from .roots import JS_ROOT
+from .roots import HUXLEY_ROOT
 
 
 PIPELINE_COMPILERS = (
@@ -46,6 +46,6 @@ PIPELINE_JS = {
     }
 }
 
-PIPELINE_BROWSERIFY_BINARY = join(JS_ROOT, 'node_modules/.bin/browserify')
+PIPELINE_BROWSERIFY_BINARY = join(HUXLEY_ROOT, 'node_modules/.bin/browserify')
 
 PIPELINE_BROWSERIFY_ARGUMENTS = '-t reactify'

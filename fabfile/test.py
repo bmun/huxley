@@ -25,5 +25,5 @@ def python(*args):
 @task
 def js():
     '''Run the JS test suite.'''
-    with hide('aborts', 'warnings'), lcd(env.js_root):
+    with hide('aborts', 'warnings'), lcd(env.huxley_root):
         return not local('npm test').failed

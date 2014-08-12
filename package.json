@@ -2,7 +2,7 @@
   "name": "huxley",
   "version": "0.0.0",
   "description": "A conference management system for Berkeley Model United Nations.",
-  "main": "huxley.browserify.js",
+  "main": "huxley/www/static/js/huxley.browserify.js",
   "license": "BSD",
   "dependencies": {
     "browserify": "4.1.2",
