@@ -1,6 +1,8 @@
 # Huxley
 Huxley is a web application designed to manage the annual [Berkeley Model United Nations](http://bmun.org/) conference.
 
+[![Build Status](https://travis-ci.org/bmun/huxley.svg?branch=master)](https://travis-ci.org/bmun/huxley)
+
 ## About BMUN
 The Berkeley Model United Nations conference is a high-school conference hosted every spring. Each year, we host over 1500 delegates from all over the country (and the world!), who compete in a simulation of the United Nations and other international/historical bodies to solve the world's most compelling problems.
 
