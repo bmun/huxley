@@ -7,7 +7,7 @@
 
 'use strict';
 
-var React = require('react')
+var React = require('react');
 
 var PermissionDeniedView = React.createClass({
   render: function(){

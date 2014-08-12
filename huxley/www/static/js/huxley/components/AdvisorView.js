@@ -9,8 +9,8 @@
 
 var React = require('react');
 var InnerView = require('./InnerView');
-var RRouter = require('rrouter')
-var PermissionDeniedView = require('./PermissionDeniedView')
+var RRouter = require('rrouter');
+var PermissionDeniedView = require('./PermissionDeniedView');
 
 var AdvisorView = React.createClass ({
   mixins: [RRouter.RoutingContextMixin],
