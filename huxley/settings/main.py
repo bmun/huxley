@@ -98,7 +98,6 @@ INSTALLED_APPS = (
     'huxley.api',
     'huxley.accounts',
     'huxley.advisors',
-    'huxley.chairs',
     'huxley.www',
     'pipeline',
     'south',
