@@ -8,20 +8,9 @@
 'use strict';
 
 var React = require('react');
-var RRouter = require('rrouter');
 var TopBar = require('.TopBar')
 
-var User = require('../User');
-
 var InnerView = React.createClass({
-  mixins: [RRouter.RoutingContextMixin],
-
-  componentWillMount: function() {
-    if (User.isAnonymous) {
-      this.navigate('www/login');
-    }
-  },
-
   render: function() {
     return (
       <div>
