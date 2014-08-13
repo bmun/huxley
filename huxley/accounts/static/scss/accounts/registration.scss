@@ -2,12 +2,21 @@
 
 #registration
 {
-    input[type=text], input[type=password]
+    input[type=text], input[type=password], textarea
     {
-        font-size: 14px;
         margin-top: 15px;
 
         &:focus { background-color: #f0f9ff; }
+    }
+
+    input[type=text], input[type=password]
+    {
+        font-size: 14px;
+    }
+
+    textarea
+    {
+        font-size: 12px;
     }
 
     input[type=radio], input[type=checkbox] { margin-right: 3px; }
