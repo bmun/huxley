@@ -1,4 +1,6 @@
-$(function(){
+var $ = require('jquery');
+
+var format = $(function(){
     
     // Phone Number Auto-Formatting
     // Based off of http://nsreekanth.blogspot.com/2010/12/simple-jquery-plugin-to-validate-format.html
@@ -8,7 +10,7 @@ $(function(){
         var currChar = userinput[len-1];
         
         // If it's not an international school, auto-format phone numbers.
-        if ($("input:radio[name=us_or_int]:checked").val() != 'international') {
+        if (!$("input:radio[value=international]:checked").val()) {
             // If it's not the delete key:
             if (k.which != 8) {
                 // Add parentheses around the area code.
