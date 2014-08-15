@@ -10,11 +10,15 @@
 var React = require('react');
 
 var PermissionDeniedView = React.createClass({
-  render: function(){
-    <h2>Permission Denied</h2>
-    <p>We are sorry but you do not have permission to view this page. Please
-    press the back button on your browser or email Tech@bmun.org if you feel
-    that you have encountered this message in error.</p>
+  render: function() {
+    return (
+      <div>
+        <h2>Permission Denied</h2>
+        <p>We are sorry but you do not have permission to view this page. Please
+        press the back button on your browser or email Tech@bmun.org if you feel
+        that you have encountered this message in error.</p>
+      </div>
+    );
   }
 });
 

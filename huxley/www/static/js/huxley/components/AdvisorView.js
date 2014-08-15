@@ -23,29 +23,27 @@ var AdvisorView = React.createClass ({
 
   componentWillMount: function() {
     if (this.props.user.isAdvisor()) {
-      this.setState({authorized: true})
+      this.setState({authorized: true});
     } else if (this.props.user.isAnonymous()) {
       this.navigate('www/login');
     }
   },
 
   render: function() {
-    if (this.state.authorized){
-      return(
+    if (this.state.authorized) {
+      return (
         <InnerView user={this.props.user}>
           {this.props.children}
         </InnerView>
       );
     } else {
-      return(
+      return (
         <InnerView>
-          <PermissionDeniedView>
-            {this.props.children}
-          </PermissionDeniedView>
+          <PermissionDeniedView />
         </InnerView>
       );
     }
-  },
+  }
 });
 
 module.exports = AdvisorView;
