@@ -9,35 +9,63 @@
 
 var React = require('react/addons');
 
+var ChangePasswordView = require('./ChangePasswordView');
 var LogoutButton = require('./LogoutButton');
 
 var TopBar = React.createClass({
+  getInitialState: function() {
+    return {
+      changePasswordVisible: false,
+    };
+  },
+
   render: function() {
     var user = this.props.user.getData();
     return (
-      <div id="headerwrapper" className="transparent rounded-bottom">
-        <div id="header">
-          <ul id="right">
-            <li>
-              Logged in as
+      <div>
+        <div id="headerwrapper" className="transparent rounded-bottom">
+          <div id="header">
+            <ul id="right">
+              <li>
+                Logged in as
+                &nbsp;
+                <strong>{user.first_name} {user.last_name}</strong>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  id="changepassword-link"
+                  onClick={this._handleChangePasswordClick}>
+                  Change Password
+                </a>
+              </li>
+              <li id="logout" className="topbarbutton">
+                <LogoutButton />
+              </li>
+            </ul>
+            <div id="left">
+              <strong>HUXLEY</strong>
+              &middot;
+              A Conference Management Tool by BMUN
+              &middot;
               &nbsp;
-              <strong>{user.first_name} {user.last_name}</strong>
-            </li>
-            <li id="changepassword-link">Change Password </li>
-            <li id="logout" className="topbarbutton">
-              <LogoutButton />
-            </li>
-          </ul>
-          <div id="left">
-            <strong>HUXLEY</strong>
-            &middot;
-            A Conference Management Tool by BMUN
-            &middot; <strong>for {this.props.user.isAdvisor() ? "Advisors" :
-              "Chairs"} </strong>
+              <strong>for {this._getUserType()} </strong>
+            </div>
           </div>
         </div>
+        <ChangePasswordView isVisible={this.state.changePasswordVisible} />
       </div>
     );
+  },
+
+  _getUserType: function() {
+    return this.props.user.isAdvisor() ? 'Advisors' : 'Chairs';
+  },
+
+  _handleChangePasswordClick: function() {
+    this.setState({
+      changePasswordVisible: !this.state.changePasswordVisible
+    });
   },
 });
 
