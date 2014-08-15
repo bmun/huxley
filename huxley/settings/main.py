@@ -76,7 +76,6 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'huxley.core.middleware.LatestConferenceMiddleware',
-    'huxley.accounts.middleware.EnforceUserTypeMiddleware',
 )
 
 AUTHENTICATION_BACKENDS = (
@@ -97,7 +96,6 @@ INSTALLED_APPS = (
     'huxley.core',
     'huxley.api',
     'huxley.accounts',
-    'huxley.advisors',
     'huxley.www',
     'pipeline',
     'south',

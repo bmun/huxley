@@ -4,7 +4,6 @@
 from django.conf import settings
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import AbstractUser
-from django.core.urlresolvers import reverse
 from django.db import models
 
 from huxley.accounts.exceptions import AuthenticationError, PasswordChangeFailed
@@ -28,11 +27,6 @@ class User(AbstractUser):
 
     def is_chair(self):
         return self.user_type == self.TYPE_CHAIR
-
-    def default_path(self):
-        if self.is_advisor():
-            return reverse('advisors:welcome')
-        raise NotImplementedError('The chairs app no longer exists.')
 
     @staticmethod
     def authenticate(username, password):
@@ -61,7 +55,6 @@ class User(AbstractUser):
         '''Log in a user and return a redirect url based on whether they're
         an advisor or chair.'''
         login(request, user)
-        return user.default_path()
 
     @classmethod
     def reset_password(cls, username):

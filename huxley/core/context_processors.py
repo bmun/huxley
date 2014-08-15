@@ -17,4 +17,3 @@ def user_type(request):
 def default_path(request):
     if not request.user.is_authenticated():
         return {'default_path': reverse('accounts:login')}
-    return {'default_path': request.user.default_path()}

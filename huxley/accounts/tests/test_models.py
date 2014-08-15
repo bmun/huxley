@@ -66,13 +66,3 @@ class UserTestCase(TestCase):
 
         user.change_password('old&busted', 'newhotness')
         self.assertTrue(user.check_password('newhotness'))
-
-    def test_default_path(self):
-        '''It should return the correct default path for a user.'''
-        advisor = User.objects.create(username='advisor', email='adv@lol.lol')
-        self.assertEqual(advisor.default_path(), reverse('advisors:welcome'))
-
-        chair = User.objects.create(username='chair', email='ch@lol.lol',
-                                    user_type=User.TYPE_CHAIR)
-        with self.assertRaises(NotImplementedError):
-            chair.default_path()
