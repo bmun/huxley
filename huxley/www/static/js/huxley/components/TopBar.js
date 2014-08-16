@@ -15,7 +15,7 @@ var LogoutButton = require('./LogoutButton');
 var TopBar = React.createClass({
   getInitialState: function() {
     return {
-      visible: false,
+      changePasswordVisible: false,
     };
   },
 
@@ -32,7 +32,8 @@ var TopBar = React.createClass({
                 <strong>{user.first_name} {user.last_name}</strong>
               </li>
               <li>
-                <a id="changepassword-link" onClick={this._handleClick}>
+                <a id="changepassword-link"
+                  onClick={this._handleChangePasswordClick}>
                   Change Password
                 </a>
               </li>
@@ -44,18 +45,21 @@ var TopBar = React.createClass({
               <strong>HUXLEY</strong>
               &middot;
               A Conference Management Tool by BMUN
-              &middot; <strong>for {this.props.user.isAdvisor() ? "Advisors" :
-                "Chairs"} </strong>
+              &middot; <strong>for {this._getUserType()} </strong>
             </div>
           </div>
         </div>
-        <ChangePasswordView isVisible={this.state.visible} />
+        <ChangePasswordView isVisible={this.state.changePasswordVisible} />
       </div>
     );
   },
 
-  _handleClick: function() {
-    this.setState({visible: !this.state.visible});
+  _getUserType: function() {
+    return this.props.user.isAdvisor() ? 'Advisors' : 'Chairs';
+  },
+
+  _handleChangePasswordClick: function() {
+    this.setState({changePasswordVisible: !this.state.changePasswordVisible});
   },
 });
 
