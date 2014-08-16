@@ -32,7 +32,9 @@ var TopBar = React.createClass({
                 <strong>{user.first_name} {user.last_name}</strong>
               </li>
               <li>
-                <a id="changepassword-link"
+                <a
+                  href="#"
+                  id="changepassword-link"
                   onClick={this._handleChangePasswordClick}>
                   Change Password
                 </a>
@@ -45,7 +47,9 @@ var TopBar = React.createClass({
               <strong>HUXLEY</strong>
               &middot;
               A Conference Management Tool by BMUN
-              &middot; <strong>for {this._getUserType()} </strong>
+              &middot;
+              &nbsp;
+              <strong>for {this._getUserType()} </strong>
             </div>
           </div>
         </div>
@@ -59,7 +63,9 @@ var TopBar = React.createClass({
   },
 
   _handleChangePasswordClick: function() {
-    this.setState({changePasswordVisible: !this.state.changePasswordVisible});
+    this.setState({
+      changePasswordVisible: !this.state.changePasswordVisible
+    });
   },
 });
 
