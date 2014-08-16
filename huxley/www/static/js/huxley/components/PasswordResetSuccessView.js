@@ -21,7 +21,7 @@ var PasswordResetSuccessView = React.createClass({
           We've sent a temporary password to the email address in your account.
           Please use it to log in and change your password.
         </p>
-        <NavLink direction="left" href="/www/login">
+        <NavLink direction="left" href="/login">
           Back to Login
         </NavLink>
       </OuterView>

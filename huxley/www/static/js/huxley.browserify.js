@@ -29,14 +29,13 @@ var Route = RRouter.Route;
 
 var routes = (
   <Routes>
-    <Route name="www" path="/www" view={RedirectView}>
-      <Route path="/login" view={LoginView} />
-      <Route path="/password" view={ForgotPasswordView} />
-      <Route path="/password/reset" view={PasswordResetSuccessView} />
-      <Route path="/register" view={RegistrationView} />
-      <Route path="/register/success" view={RegistrationSuccessView} />
-      <Route path="/advisor/profile" view={AdvisorProfileView} />
-    </Route>
+    <Route path="/" view={RedirectView} />
+    <Route path="/login" view={LoginView} />
+    <Route path="/password" view={ForgotPasswordView} />
+    <Route path="/password/reset" view={PasswordResetSuccessView} />
+    <Route path="/register" view={RegistrationView} />
+    <Route path="/register/success" view={RegistrationSuccessView} />
+    <Route path="/advisor/profile" view={AdvisorProfileView} />
   </Routes>
 );
 

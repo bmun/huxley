@@ -100,7 +100,7 @@ var RegistrationView = React.createClass({
             <p>Please fill out the following information to register your school
             for BMUN 63. All fields are required except for Secondary Contact
             information.</p>
-            <NavLink direction="left" href="/www/login">
+            <NavLink direction="left" href="/login">
               Back to Login
             </NavLink>
           </div>
@@ -382,7 +382,7 @@ var RegistrationView = React.createClass({
               valueLink={this.linkState('registration_comments')}
             />
             <hr />
-              <NavLink direction="left" href="/www/login">
+              <NavLink direction="left" href="/login">
                 Back to Login
               </NavLink>
               <div className="right">
@@ -612,7 +612,7 @@ var RegistrationView = React.createClass({
   },
 
   _handleSuccess: function(data, status, jqXHR) {
-    this.navigate('/www/register/success');
+    this.navigate('/register/success');
   },
 
   _handleError: function(jqXHR, status, error) {

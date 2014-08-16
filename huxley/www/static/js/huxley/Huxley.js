@@ -20,9 +20,9 @@ var Huxley = React.createClass({
     CurrentUserStore.addChangeListener(function() {
       var user = CurrentUserStore.getCurrentUser();
       if (user.isAnonymous()) {
-        this.navigate('/www/login');
+        this.navigate('/login');
       } else if (user.isAdvisor()) {
-        this.navigate('/www/advisor/profile');
+        this.navigate('/advisor/profile');
       }
     }.bind(this));
   },

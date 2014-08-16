@@ -17,9 +17,9 @@ var RedirectView = React.createClass({
 
   componentDidMount: function() {
     if (this.props.user.isAnonymous()) {
-      this.navigate('/www/login');
+      this.navigate('/login');
     } else if (this.props.user.isAdvisor()) {
-      this.navigate('/www/advisor/profile');
+      this.navigate('/advisor/profile');
     }
   },
 

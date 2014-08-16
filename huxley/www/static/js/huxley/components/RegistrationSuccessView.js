@@ -70,7 +70,7 @@ var RegistrationSuccessView = React.createClass({
           </p>
         </div>
         <hr />
-        <NavLink direction="right" href="/www/login">
+        <NavLink direction="right" href="/login">
           Proceed to Login
         </NavLink>
       </OuterView>

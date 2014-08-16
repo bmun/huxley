@@ -57,7 +57,6 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.messages.context_processors.messages',
     'huxley.core.context_processors.conference',
     'huxley.core.context_processors.user_type',
-    'huxley.core.context_processors.default_path',
 )
 
 TEMPLATE_LOADERS = (

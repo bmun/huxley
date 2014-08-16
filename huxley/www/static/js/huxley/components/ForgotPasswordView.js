@@ -37,7 +37,7 @@ var ForgotPasswordView = React.createClass({
         <h1>Forgot your Password?</h1>
         <p>No problem. Just enter your username below, and we'll send a
         temporary password to your email address.</p>
-        <NavLink direction="left" href="/www/login">
+        <NavLink direction="left" href="/login">
           Back to Login
         </NavLink>
         <hr />
@@ -93,7 +93,7 @@ var ForgotPasswordView = React.createClass({
   },
 
   _handleSuccess: function(data, status, jqXHR) {
-    this.navigate('/www/password/reset');
+    this.navigate('/password/reset');
   },
 
   _handleError: function(jqXHR, status, error) {

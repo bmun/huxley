@@ -40,7 +40,7 @@ var LoginView = React.createClass({
       return;
     }
     if (this.props.user.isAdvisor()) {
-      this.navigate('/www/advisor/profile');
+      this.navigate('/advisor/profile');
     }
   },
 
@@ -75,11 +75,11 @@ var LoginView = React.createClass({
               type="submit">
               Log In
             </Button>
-            <Button color="green" href="/www/register">
+            <Button color="green" href="/register">
               Register for BMUN
             </Button>
           </div>
-          <NavLink direction="left" href="/www/password">
+          <NavLink direction="left" href="/password">
             Forgot your password?
           </NavLink>
           {this.renderError()}

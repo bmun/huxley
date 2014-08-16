@@ -9,11 +9,9 @@ from django.views.generic import RedirectView
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    url(r'^$', 'huxley.core.views.index', name='index'),
-    url(r'^', include('huxley.accounts.urls', app_name='accounts', namespace='accounts')),
-    url(r'^www/', include('huxley.www.urls', app_name='www', namespace='www')),
-    url(r'^api/', include('huxley.api.urls', app_name='api', namespace='api')),
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^api/', include('huxley.api.urls', app_name='api', namespace='api')),
+    url(r'^', include('huxley.www.urls', app_name='www', namespace='www')),
 )
 
 urlpatterns += patterns('',
