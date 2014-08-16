@@ -2,14 +2,15 @@
 # Use of this source code is governed by a BSD License (see LICENSE).
 
 from django.conf import settings
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 from huxley.accounts.exceptions import AuthenticationError, PasswordChangeFailed
-from huxley.core.models import *
+from huxley.core.models import Committee, School
 
 import re
+
 
 class User(AbstractUser):
 
@@ -49,12 +50,6 @@ class User(AbstractUser):
             raise AuthenticationError.inactive_account()
 
         return user
-
-    @staticmethod
-    def login(request, user):
-        '''Log in a user and return a redirect url based on whether they're
-        an advisor or chair.'''
-        login(request, user)
 
     @classmethod
     def reset_password(cls, username):
