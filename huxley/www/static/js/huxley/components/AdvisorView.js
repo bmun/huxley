@@ -15,32 +15,28 @@ var PermissionDeniedView = require('./PermissionDeniedView');
 var AdvisorView = React.createClass ({
   mixins: [RRouter.RoutingContextMixin],
 
-  getIntialState: function() {
-    return {
-      authorized: false
-    };
-  },
-
-  componentWillMount: function() {
-    if (this.props.user.isAdvisor()) {
-      this.setState({authorized: true});
-    } else if (this.props.user.isAnonymous()) {
-      this.navigate('www/login');
+  componentDidMount: function() {
+    if (this.props.user.isAnonymous()) {
+      this.navigate('/login');
     }
   },
 
   render: function() {
-    if (this.state.authorized) {
+    if (this.props.user.isAdvisor()) {
       return (
         <InnerView user={this.props.user}>
           {this.props.children}
         </InnerView>
       );
-    } else {
+    } else if (this.props.user.isChair()) {
       return (
-        <InnerView>
+        <InnerView user={this.props.user}>
           <PermissionDeniedView />
         </InnerView>
+      );
+    } else {
+      return (
+        <div />
       );
     }
   }

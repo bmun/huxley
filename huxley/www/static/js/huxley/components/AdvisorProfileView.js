@@ -24,7 +24,7 @@ var AdvisorProfileView = React.createClass({
 
   render: function() {
     var user = this.props.user.getData();
-    var school = user.school;
+    var school = this.props.user.getSchool();
     return (
       <AdvisorView user={this.props.user}>
         <h2>Welcome, {user.first_name}!</h2>
