@@ -15,13 +15,24 @@ var Button = require('./Button');
 var ChangePasswordView = React.createClass({
   mixins: [React.addons.LinkedStateMixin],
 
+  propTypes: {
+    isVisible: React.PropTypes.bool.isRequired,
+    onSuccess: React.PropTypes.func.isRequired
+  },
+
   getInitialState: function() {
     return {
+      message: '',
+      success: false,
       loading: false,
-      currentPassword: null,
-      newPassword: null,
-      newPassword2: null,
+      currentPassword: '',
+      newPassword: '',
+      newPassword2: '',
     };
+  },
+
+  componentWillReceiveProps: function(nextProps) {
+    this.setState(this.getInitialState());
   },
 
   render: function() {
@@ -68,31 +79,67 @@ var ChangePasswordView = React.createClass({
             </Button>
           </div>
         </form>
+        {this.renderMessage()}
       </div>
     );
   },
 
+  renderMessage: function() {
+    if (!this.state.message) {
+      return null;
+    }
+
+    return (
+      <div id="message">
+        <label className={this.state.success ? 'success' : 'error'}>
+          {this.state.message}
+        </label>
+      </div>
+    );
+  },
+
+  onSuccess: function() {
+    setTimeout(this.props.onSuccess, 500);
+  },
+
   _handleSubmit: function(event) {
-    this.setState({loading: true});
-    $.ajax({
-      type: 'PUT',
-      url: '/api/users/me/password',
-      data: {
-        password: this.state.currentPassword,
-        new_password: this.state.newPassword,
-      },
-      success: this._handleSuccess,
-      error: this._handleError
-    }),
-    event.preventDefault();
+    if (this.state.newPassword != this.state.newPassword2) {
+      this.setState({
+        message: 'Please enter the same password again',
+        success: false,
+      });
+    } else {
+      this.setState({loading: true});
+      $.ajax({
+        type: 'PUT',
+        url: '/api/users/me/password',
+        data: {
+          password: this.state.currentPassword,
+          new_password: this.state.newPassword,
+        },
+        success: this._handleSuccess,
+        error: this._handleError
+      }),
+      event.preventDefault();
+    }
   },
 
   _handleSuccess: function(data, status, jqXHR) {
-    console.log('success!');
+    this.setState({
+      success: true,
+      message: 'Success',
+      currentPassword: '',
+      newPassword: '',
+      newPassword2: '',
+    }, this.onSuccess);
   },
 
   _handleError: function(jqXHR, status, error) {
-    console.log('error');
+    var response = jqXHR.responseJSON;
+    this.setState({
+      message: response.detail,
+      success: false,
+    });
   },
 });
 
