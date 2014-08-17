@@ -38,7 +38,7 @@ var AdvisorProfileView = React.createClass({
         info@bmun.org</a> and I will respond to all requests efficiently.
         See you soon!</strong></p>
         <br />
-        <p className="bold">Who is the USG of External this year?
+        <p className="bold">Hee Soo Kim
         <br />
         Under-Secretary General of External Relations, 63rd Session.</p>
         <form id="welcomepage">

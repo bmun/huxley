@@ -8,8 +8,9 @@
 'use strict';
 
 var React = require('react');
-var InnerView = require('./InnerView');
 var RRouter = require('rrouter');
+
+var InnerView = require('./InnerView');
 var PermissionDeniedView = require('./PermissionDeniedView');
 
 var AdvisorView = React.createClass ({

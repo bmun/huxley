@@ -36,11 +36,7 @@ mergeInto(User.prototype, {
   },
 
   getSchool: function() {
-    if (!this._user.school){
-      return {};
-    } else {
-      return this._user.school;
-    }
+    return this._user.school || {};
   }
 });
 

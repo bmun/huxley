@@ -15,8 +15,9 @@ var PermissionDeniedView = React.createClass({
       <div>
         <h2>Permission Denied</h2>
         <p>We are sorry but you do not have permission to view this page. Please
-        press the back button on your browser or email Tech@bmun.org if you feel
-        that you have encountered this message in error.</p>
+        press the back button on your browser or email
+        <a href="mailto:tech@bmun.org"> tech@bmun.org</a>
+        if you feelthat you have encountered this message in error.</p>
       </div>
     );
   }
