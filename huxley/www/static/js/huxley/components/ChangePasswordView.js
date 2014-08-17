@@ -17,6 +17,9 @@ var ChangePasswordView = React.createClass({
 
   getInitialState: function() {
     return {
+      error: null,
+      passwordConfirmError: null,
+      success: null,
       loading: false,
       currentPassword: null,
       newPassword: null,
@@ -68,31 +71,88 @@ var ChangePasswordView = React.createClass({
             </Button>
           </div>
         </form>
+        {this.renderSuccess()}
+        {this.renderError()}
+        {this.renderPasswordConfirmError()}
       </div>
     );
   },
 
+  renderSuccess: function() {
+    if (this.state.success) {
+      return (
+        <div id="message">
+          <label className="success">Success</label>
+        </div>
+      );
+    }
+
+    return null;
+  },
+
+  renderError: function() {
+    if (this.state.error) {
+      return (
+        <div id="message">
+          <label className="error">{this.state.error}</label>
+        </div>
+      );
+    }
+
+    return null;
+  },
+
+  renderPasswordConfirmError: function() {
+    if (this.state.passwordConfirmError) {
+      return (
+        <div id="message">
+          <label className="error">Please enter the same passoword again.
+          </label>
+        </div>
+      );
+    }
+
+    return null;
+  },
+
   _handleSubmit: function(event) {
-    this.setState({loading: true});
-    $.ajax({
-      type: 'PUT',
-      url: '/api/users/me/password',
-      data: {
-        password: this.state.currentPassword,
-        new_password: this.state.newPassword,
-      },
-      success: this._handleSuccess,
-      error: this._handleError
-    }),
-    event.preventDefault();
+    if (this.state.newPassword != this.state.newPassword2) {
+      this.setState({
+        passwordConfirmError: true,
+        error: false,
+      });
+    } else {
+      this.setState({
+        loading: true,
+        passwordConfirmError: false
+      });
+      $.ajax({
+        type: 'PUT',
+        url: '/api/users/me/password',
+        data: {
+          password: this.state.currentPassword,
+          new_password: this.state.newPassword,
+        },
+        success: this._handleSuccess,
+        error: this._handleError
+      }),
+      event.preventDefault();
+    }
   },
 
   _handleSuccess: function(data, status, jqXHR) {
-    console.log('success!');
+    this.setState({
+      success: true,
+      error: false,
+      currentPassword: '',
+      newPassword: '',
+      newPassword2: '',
+    });
   },
 
   _handleError: function(jqXHR, status, error) {
-    console.log('error');
+    var response = jqXHR.responseJSON;
+    this.setState({error: response.detail});
   },
 });
 
