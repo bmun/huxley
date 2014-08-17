@@ -55,8 +55,6 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.static',
     'django.contrib.auth.context_processors.auth',
     'django.contrib.messages.context_processors.messages',
-    'huxley.core.context_processors.conference',
-    'huxley.core.context_processors.user_type',
 )
 
 TEMPLATE_LOADERS = (
@@ -74,7 +72,6 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'huxley.core.middleware.LatestConferenceMiddleware',
 )
 
 AUTHENTICATION_BACKENDS = (
