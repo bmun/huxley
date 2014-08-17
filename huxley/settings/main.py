@@ -41,8 +41,6 @@ ADMIN_MEDIA_PREFIX = '/static/admin/'
 STATIC_ROOT = '%s/static/' % HUXLEY_ROOT
 STATIC_URL = '/static/'
 
-LOGIN_URL = 'huxley.accounts.views.login_user'
-
 STATICFILES_DIRS = ()
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
