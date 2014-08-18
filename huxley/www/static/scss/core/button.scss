@@ -33,6 +33,12 @@
         moz-box-shadow: none;
     }
 
+    &.button-small
+    {
+        font-size: 12px;
+        padding: 4px 6px;
+    }
+
     &.loading
     {
         background-position: center center;

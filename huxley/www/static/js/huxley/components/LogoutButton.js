@@ -15,13 +15,16 @@ var CurrentUserActions = require('../actions/CurrentUserActions');
 
 var LogoutButton = React.createClass({
   getInitialState: function() {
-    return {loggingOut: false};
+    return {
+      loggingOut: false
+    };
   },
 
   render: function() {
     return (
       <Button
         color="blue"
+        size="small"
         loading={this.state.loggingOut}
         onClick={this._handleLogout}>
         Log Out

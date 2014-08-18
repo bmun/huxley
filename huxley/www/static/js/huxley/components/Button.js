@@ -14,7 +14,16 @@ var Button = React.createClass({
   propTypes: {
     color: React.PropTypes.oneOf(['blue', 'green', 'yellow']),
     href: React.PropTypes.string,
-    loading: React.PropTypes.bool
+    loading: React.PropTypes.bool,
+    size: React.PropTypes.oneOf(['small', 'medium']),
+  },
+
+  getDefaultProps: function() {
+    return {
+      color: 'blue',
+      loading: false,
+      size: 'medium',
+    };
   },
 
   render: function() {
@@ -25,6 +34,7 @@ var Button = React.createClass({
       <ButtonComponent
         className={cx({
           'button': true,
+          'button-small': this.props.size == 'small',
           'button-blue': this.props.color == 'blue',
           'button-green': this.props.color == 'green',
           'button-yellow': this.props.color == 'yellow',
