@@ -17,11 +17,9 @@ var OuterView = React.createClass({
   render: function() {
     return (
       <div className="content content-outer transparent ie-layout rounded">
-        <div id="contentwrapper">
-          {this.renderHeader()}
-          <hr />
-          {this.props.children}
-        </div>
+        {this.renderHeader()}
+        <hr />
+        {this.props.children}
       </div>
     );
   },

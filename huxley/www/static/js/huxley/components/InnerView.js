@@ -17,9 +17,7 @@ var InnerView = React.createClass({
         <TopBar user={this.props.user} />
         <div id="appnavbar" className="titlebar rounded-top" />
         <div className="content transparent ie-layout rounded-bottom">
-          <div id="contentwrapper">
-            {this.props.children}
-          </div>
+          {this.props.children}
         </div>
       </div>
     );
