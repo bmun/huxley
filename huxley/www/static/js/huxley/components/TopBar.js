@@ -53,9 +53,16 @@ var TopBar = React.createClass({
             </div>
           </div>
         </div>
-        <ChangePasswordView isVisible={this.state.changePasswordVisible} />
+        <ChangePasswordView
+          isVisible={this.state.changePasswordVisible}
+          onSuccess={this.onSuccess}
+        />
       </div>
     );
+  },
+
+  onSuccess: function() {
+    this.setState({changePasswordVisible: false});
   },
 
   _getUserType: function() {

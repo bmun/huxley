@@ -17,13 +17,12 @@ var ChangePasswordView = React.createClass({
 
   getInitialState: function() {
     return {
-      error: null,
-      passwordConfirmError: null,
-      success: null,
+      message: '',
+      success: false,
       loading: false,
-      currentPassword: null,
-      newPassword: null,
-      newPassword2: null,
+      currentPassword: '',
+      newPassword: '',
+      newPassword2: '',
     };
   },
 
@@ -71,30 +70,22 @@ var ChangePasswordView = React.createClass({
             </Button>
           </div>
         </form>
-        {this.renderSuccess()}
-        {this.renderError()}
-        {this.renderPasswordConfirmError()}
+        {this.renderMessage()}
       </div>
     );
   },
 
-  renderSuccess: function() {
+  renderMessage: function() {
     if (this.state.success) {
       return (
         <div id="message">
           <label className="success">Success</label>
         </div>
       );
-    }
-
-    return null;
-  },
-
-  renderError: function() {
-    if (this.state.error) {
+    } else if (this.state.message) {
       return (
         <div id="message">
-          <label className="error">{this.state.error}</label>
+          <label className="error">{this.state.message}</label>
         </div>
       );
     }
@@ -102,30 +93,17 @@ var ChangePasswordView = React.createClass({
     return null;
   },
 
-  renderPasswordConfirmError: function() {
-    if (this.state.passwordConfirmError) {
-      return (
-        <div id="message">
-          <label className="error">Please enter the same passoword again.
-          </label>
-        </div>
-      );
-    }
-
-    return null;
+  onSuccess: function() {
+    setTimeout(this.props.onSuccess, 2000);
   },
 
   _handleSubmit: function(event) {
     if (this.state.newPassword != this.state.newPassword2) {
       this.setState({
-        passwordConfirmError: true,
-        error: false,
+        message: 'Please enter the same password again',
       });
     } else {
-      this.setState({
-        loading: true,
-        passwordConfirmError: false
-      });
+      this.setState({loading: true});
       $.ajax({
         type: 'PUT',
         url: '/api/users/me/password',
@@ -143,16 +121,16 @@ var ChangePasswordView = React.createClass({
   _handleSuccess: function(data, status, jqXHR) {
     this.setState({
       success: true,
-      error: false,
+      message: '',
       currentPassword: '',
       newPassword: '',
       newPassword2: '',
-    });
+    }, this.onSuccess);
   },
 
   _handleError: function(jqXHR, status, error) {
     var response = jqXHR.responseJSON;
-    this.setState({error: response.detail});
+    this.setState({message: response.detail});
   },
 });
 
