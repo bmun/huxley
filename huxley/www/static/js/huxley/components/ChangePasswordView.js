@@ -32,7 +32,7 @@ var ChangePasswordView = React.createClass({
     return (
       <div
         id="changepassword-container"
-        className="change-passwordrounded-bottom transparent">
+        className="change-password rounded-bottom transparent">
         <form
           id="changepassword"
           onSubmit={this._handleSubmit}>
