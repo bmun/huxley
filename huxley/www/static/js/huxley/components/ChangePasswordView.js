@@ -15,6 +15,11 @@ var Button = require('./Button');
 var ChangePasswordView = React.createClass({
   mixins: [React.addons.LinkedStateMixin],
 
+  propTypes: {
+    isVisible: React.PropTypes.bool.isRequired,
+    onSuccess: React.PropTypes.func.isRequired
+  },
+
   getInitialState: function() {
     return {
       message: '',
@@ -24,6 +29,13 @@ var ChangePasswordView = React.createClass({
       newPassword: '',
       newPassword2: '',
     };
+  },
+
+  componentWillReceiveProps: function(nextProps) {
+    this.setState({
+      success: false,
+      message: '',
+    });
   },
 
   render: function() {
@@ -76,25 +88,21 @@ var ChangePasswordView = React.createClass({
   },
 
   renderMessage: function() {
-    if (this.state.success) {
-      return (
-        <div id="message">
-          <label className="success">Success</label>
-        </div>
-      );
-    } else if (this.state.message) {
-      return (
-        <div id="message">
-          <label className="error">{this.state.message}</label>
-        </div>
-      );
+    if (!this.state.message) {
+      return null;
     }
 
-    return null;
+    return (
+      <div id="message">
+        <label className={this.state.success ? 'success' : 'error'}>
+          {this.state.message}
+        </label>
+      </div>
+      );
   },
 
   onSuccess: function() {
-    setTimeout(this.props.onSuccess, 2000);
+    setTimeout(this.props.onSuccess, 500);
   },
 
   _handleSubmit: function(event) {
@@ -121,7 +129,7 @@ var ChangePasswordView = React.createClass({
   _handleSuccess: function(data, status, jqXHR) {
     this.setState({
       success: true,
-      message: '',
+      message: 'Success',
       currentPassword: '',
       newPassword: '',
       newPassword2: '',
