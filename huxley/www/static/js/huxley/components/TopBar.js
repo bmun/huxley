@@ -39,7 +39,7 @@ var TopBar = React.createClass({
                   Change Password
                 </a>
               </li>
-              <li id="logout" className="topbarbutton">
+              <li>
                 <LogoutButton />
               </li>
             </ul>
