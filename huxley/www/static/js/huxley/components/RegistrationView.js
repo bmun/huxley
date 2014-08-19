@@ -21,6 +21,8 @@ var NavLink = require('./NavLink');
 var OuterView = require('./OuterView');
 var ProgramTypes = require('../constants/ProgramTypes');
 
+var formatPhone = require('../utils/formatPhone');
+
 require('jquery-ui/effect-shake');
 
 var RegistrationView = React.createClass({
@@ -279,7 +281,8 @@ var RegistrationView = React.createClass({
             <input
               type="text"
               placeholder="Phone Number"
-              valueLink={this.linkState('primary_phone')}
+              onChange={this._handlePrimaryPhoneChange}
+              value={this.state.primary_phone}
             />
             {this.renderSchoolError('primary_phone')}
             {this.renderContactTypeField('primary_type')}
@@ -301,7 +304,8 @@ var RegistrationView = React.createClass({
             <input
               type="text"
               placeholder="Phone Number"
-              valueLink={this.linkState('secondary_phone')}
+              onChange={this._handleSecondaryPhoneChange}
+              value={this.state.secondary_phone}
             />
             {this.renderSchoolError('secondary_phone')}
             {this.renderContactTypeField('secondary_type')}
@@ -547,6 +551,18 @@ var RegistrationView = React.createClass({
   _handleMidLargeSpecializedChange: function(event) {
     this.setState({prefers_mid_large_specialized:
       !this.state.prefers_mid_large_specialized});
+  },
+
+  _handlePrimaryPhoneChange: function(event) {
+    this.setState({
+      primary_phone: formatPhone(event.target.value)
+    });
+  },
+
+  _handleSecondaryPhoneChange: function(event) {
+    this.setState({
+      secondary_phone: formatPhone(event.target.value)
+    });
   },
 
   _handleSubmit: function(event) {
