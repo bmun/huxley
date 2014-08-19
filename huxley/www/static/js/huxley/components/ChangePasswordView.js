@@ -32,10 +32,7 @@ var ChangePasswordView = React.createClass({
   },
 
   componentWillReceiveProps: function(nextProps) {
-    this.setState({
-      success: false,
-      message: '',
-    });
+    this.getInitialState();
   },
 
   render: function() {
@@ -98,7 +95,7 @@ var ChangePasswordView = React.createClass({
           {this.state.message}
         </label>
       </div>
-      );
+    );
   },
 
   onSuccess: function() {
@@ -109,6 +106,7 @@ var ChangePasswordView = React.createClass({
     if (this.state.newPassword != this.state.newPassword2) {
       this.setState({
         message: 'Please enter the same password again',
+        success: false,
       });
     } else {
       this.setState({loading: true});
@@ -138,7 +136,10 @@ var ChangePasswordView = React.createClass({
 
   _handleError: function(jqXHR, status, error) {
     var response = jqXHR.responseJSON;
-    this.setState({message: response.detail});
+    this.setState({
+      message: response.detail,
+      success: false,
+    });
   },
 });
 
