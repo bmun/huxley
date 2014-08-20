@@ -15,4 +15,3 @@ pyScss==1.2.0.post3
 pycrypto==2.6.1
 six==1.7.3
 wsgiref==0.1.2
-
