@@ -7,8 +7,8 @@
     border-bottom: 1px solid #222;
     overflow: hidden;
 
-    -webkit-animation: dropDown 0.75s; /* Chrome, Safari, Opera */
-    animation: dropDown 0.75s;
+    -webkit-animation: drop-down 0.75s; /* Chrome, Safari, Opera */
+    animation: drop-down 0.75s;
 }
 
 @-webkit-keyframes drop-down {
