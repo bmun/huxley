@@ -140,7 +140,7 @@ var LoginView = React.createClass({
       error: response.detail,
       loading: false
     }, function() {
-      $(this.getDOMNode()).effect(
+      $('#huxley-app').effect(
         'shake',
         {direction: 'up', times: 2, distance: 2},
         250
