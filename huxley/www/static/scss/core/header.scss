@@ -11,12 +11,12 @@
     animation: dropDown 0.75s;
 }
 
-@-webkit-keyframes dropDown {
+@-webkit-keyframes drop-down {
     0%      {height:0px;}
     100%    {height:39px;}
 }
 
-@keyframes dropDown {
+@keyframes drop-down {
     0%      {height:0px;}
     100%    {height:39px;}
 }
