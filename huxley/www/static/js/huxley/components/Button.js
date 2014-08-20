@@ -40,7 +40,8 @@ var Button = React.createClass({
           'button-yellow': this.props.color == 'yellow',
           'rounded-small': true,
           'loading': this.props.loading
-        })}>
+        })}
+        disabled={this.props.loading}>
         <span>{this.props.children}</span>
       </ButtonComponent>
     );
