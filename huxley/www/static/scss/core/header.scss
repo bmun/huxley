@@ -5,6 +5,32 @@
     margin: 0px auto 20px auto;
     background: #111;
     border-bottom: 1px solid #222;
+    overflow: hidden;
+
+    -webkit-animation: drop-down 0.75s; /* Chrome, Safari, Opera */
+    -o-animation: drop-down 0.75s;
+    -moz-animation: drop-down 0.75s;
+    animation: drop-down 0.75s;
+}
+
+@-webkit-keyframes drop-down {
+    0%      {height:0px;}
+    100%    {height:39px;}
+}
+
+@-o-keyframes drop-down {
+    0%      {height:0px;}
+    100%    {height:39px;}
+}
+
+@-moz-keyframes drop-down {
+    0%      {height:0px;}
+    100%    {height:39px;}
+}
+
+@keyframes drop-down {
+    0%      {height:0px;}
+    100%    {height:39px;}
 }
 
 #header {
