@@ -5,6 +5,19 @@
     margin: 0px auto 20px auto;
     background: #111;
     border-bottom: 1px solid #222;
+
+    -webkit-animation: dropDown 5s; /* Chrome, Safari, Opera */
+    animation: dropDown 5s;
+}
+
+@-webkit-keyframes dropDown {
+    from {height:0px;}
+    to   {height:39px;}
+}
+
+@keyframes dropDown {
+    from {height:0px;}
+    to   {height:39px;}
 }
 
 #header {
