@@ -11,6 +11,7 @@ futures==2.1.6
 jsmin==2.0.3
 mock==1.0.1
 paramiko==1.14.0
-pyScss==1.1.5
+pyScss==1.2.0.post3
 pycrypto==2.6.1
+six==1.7.3
 wsgiref==0.1.2
