@@ -38,9 +38,9 @@ var TopBar = React.createClass({
                   onClick={this._handleChangePasswordClick}>
                   Change Password
                 </a>
-	      </li>
+              </li>
               <li>
-                <LogoutButton/>
+                <LogoutButton />
               </li>
             </ul>
             <div id="left">
