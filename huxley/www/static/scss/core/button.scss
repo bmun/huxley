@@ -9,8 +9,8 @@
     text-align: center;
 
     box-shadow: 0px 1px 2px #ccc;
-    webkit-box-shadow: 0px 1px 2px #ccc;
-    moz-box-shadow: 0px 1px 2px #ccc;
+    -webkit-box-shadow: 0px 1px 2px #ccc;
+    -moz-box-shadow: 0px 1px 2px #ccc;
 
     span
     {
@@ -29,8 +29,8 @@
         top: 1px;
 
         box-shadow: none;
-        webkit-box-shadow: none;
-        moz-box-shadow: none;
+        -webkit-box-shadow: none;
+        -moz-box-shadow: none;
     }
 
     &.button-small
