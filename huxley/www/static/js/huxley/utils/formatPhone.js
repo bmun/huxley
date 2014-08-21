@@ -77,7 +77,7 @@ function _getTransitionFunction(slot) {
  * Consume the next token only if it's the given token type.
  * Always transition.
  */
-function _foo(token) {
+function _singleToken(token) {
   return function(accumulator, input) {
     if (input[0] === token) {
       input.shift();
@@ -87,11 +87,11 @@ function _foo(token) {
   };
 }
 
-var _leftParen = _foo('(');
-var _rightParen = _foo(')');
-var _dash = _foo('-');
-var _space = _foo(' ');
-var _x = _foo('x');
+var _leftParen = _singleToken('(');
+var _rightParen = _singleToken(')');
+var _dash = _singleToken('-');
+var _space = _singleToken(' ');
+var _x = _singleToken('x');
 
 /**
  * Push the next token onto the output only if it's a digit.
@@ -109,13 +109,13 @@ function _digit(accumulator, input) {
 }
 
 /**
- * Strip leading whitespace, remove invalid characters,
+ * Remove invalid characters, strip leading whitespace/dashes/right-parens/x,
  * and split into an array.
  */
 function _tokenize(input) {
   return input
-    .replace(/^\s+/, '')
     .replace(/[^\d\s\(\)\-x]+/, '')
+    .replace(/^[\s\-\)x]+/, '')
     .split('');
 }
 

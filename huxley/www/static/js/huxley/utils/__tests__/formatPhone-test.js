@@ -11,7 +11,12 @@ describe('formatPhone', function() {
   it('should format phone numbers correctly in progress', function() {
     var formatPhone = require('../formatPhone');
     var testCases = [
+      ['-', ''],
       [' ', ''],
+      [' -', ''],
+      ['- ', ''],
+      [' )', ''],
+      ['x -', ''],
       ['hi', ''],
       ['(', '('],
       ['1', '(1'],
