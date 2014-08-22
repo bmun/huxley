@@ -20,6 +20,7 @@ var GenderConstants = require('../constants/GenderConstants');
 var NavLink = require('./NavLink');
 var OuterView = require('./OuterView');
 var ProgramTypes = require('../constants/ProgramTypes');
+var CountrySelect = require('./CountrySelect');
 
 var formatPhone = require('../utils/formatPhone');
 
@@ -414,12 +415,10 @@ var RegistrationView = React.createClass({
     return (
       <li>
         <label>{labelNum}</label>
-        <select
-          onChange={this._handleCountryChange.bind(this, fieldName)}
-          value={this.state[fieldName]}>
-          <option value="0">No Preference</option>
-          {this.renderCommitteeOptions()}
-        </select>
+        <CountrySelect
+        onChange={this._handleCountryChange.bind(this, fieldName)}
+        countries={this.renderCommitteeOptions()}
+        selectedCountryID={this.state[fieldName]} />
       </li>
     );
   },
