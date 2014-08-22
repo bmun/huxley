@@ -405,19 +405,13 @@ var RegistrationView = React.createClass({
     );
   },
 
-  renderCommitteeOptions: function() {
-    return this.state.countries.map(function(country) {
-      return <option key={country.id} value={country.id}>{country.name}</option>
-    });
-  },
-
   renderCountryDropdown: function(labelNum, fieldName) {
     return (
       <li>
         <label>{labelNum}</label>
         <CountrySelect
         onChange={this._handleCountryChange.bind(this, fieldName)}
-        countries={this.renderCommitteeOptions()}
+        countries={this.state.countries}
         selectedCountryID={this.state[fieldName]} />
       </li>
     );
