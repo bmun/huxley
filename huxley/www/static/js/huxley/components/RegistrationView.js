@@ -15,12 +15,12 @@ var RRouter = require('rrouter');
 
 var Button = require('./Button');
 var ContactTypes = require('../constants/ContactTypes');
+var CountrySelect = require('./CountrySelect');
 var CountryStore = require('../stores/CountryStore');
 var GenderConstants = require('../constants/GenderConstants');
 var NavLink = require('./NavLink');
 var OuterView = require('./OuterView');
 var ProgramTypes = require('../constants/ProgramTypes');
-var CountrySelect = require('./CountrySelect');
 
 var formatPhone = require('../utils/formatPhone');
 
@@ -412,7 +412,8 @@ var RegistrationView = React.createClass({
         <CountrySelect
         onChange={this._handleCountryChange.bind(this, fieldName)}
         countries={this.state.countries}
-        selectedCountryID={this.state[fieldName]} />
+        selectedCountryID={this.state[fieldName]}
+        />
       </li>
     );
   },

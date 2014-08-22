@@ -10,6 +10,11 @@
 var React = require('react/addons');
 
 var CountrySelect = React.createClass({
+  propTypes: {
+    onChange: React.PropTypes.func,
+    countries: React.PropTypes.array,
+    selectedCountryID: React.PropTypes.number
+  },
 
   shouldComponentUpdate: function(nextProps, nextState) {
     return (
@@ -31,7 +36,11 @@ var CountrySelect = React.createClass({
 
   renderCommitteeOptions: function() {
     return this.props.countries.map(function(country) {
-      return <option key={country.id} value={country.id}>{country.name}</option>
+      return (
+        <option key={country.id} value={country.id}>
+          {country.name}
+        </option>
+      );
     });
   }
 });
