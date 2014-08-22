@@ -410,9 +410,9 @@ var RegistrationView = React.createClass({
       <li>
         <label>{labelNum}</label>
         <CountrySelect
-        onChange={this._handleCountryChange.bind(this, fieldName)}
-        countries={this.state.countries}
-        selectedCountryID={this.state[fieldName]}
+          onChange={this._handleCountryChange.bind(this, fieldName)}
+          countries={this.state.countries}
+          selectedCountryID={this.state[fieldName]}
         />
       </li>
     );
