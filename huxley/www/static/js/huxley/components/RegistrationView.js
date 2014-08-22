@@ -15,6 +15,7 @@ var RRouter = require('rrouter');
 
 var Button = require('./Button');
 var ContactTypes = require('../constants/ContactTypes');
+var CountrySelect = require('./CountrySelect');
 var CountryStore = require('../stores/CountryStore');
 var GenderConstants = require('../constants/GenderConstants');
 var NavLink = require('./NavLink');
@@ -404,22 +405,15 @@ var RegistrationView = React.createClass({
     );
   },
 
-  renderCommitteeOptions: function() {
-    return this.state.countries.map(function(country) {
-      return <option key={country.id} value={country.id}>{country.name}</option>
-    });
-  },
-
   renderCountryDropdown: function(labelNum, fieldName) {
     return (
       <li>
         <label>{labelNum}</label>
-        <select
+        <CountrySelect
           onChange={this._handleCountryChange.bind(this, fieldName)}
-          value={this.state[fieldName]}>
-          <option value="0">No Preference</option>
-          {this.renderCommitteeOptions()}
-        </select>
+          countries={this.state.countries}
+          selectedCountryID={this.state[fieldName]}
+        />
       </li>
     );
   },
