@@ -83,7 +83,3 @@ class User(AbstractUser):
 
         self.set_password(new_password)
         self.save()
-
-    class Meta:
-        db_table = 'huxley_user'
-        verbose_name = 'user'
