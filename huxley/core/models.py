@@ -352,26 +352,3 @@ class Delegate(models.Model):
 
     class Meta:
         db_table = u'delegate'
-
-
-class HelpCategory(models.Model):
-    name = models.CharField(max_length=128, unique=True)
-
-    def __unicode__(self):
-        return self.name
-
-    class Meta:
-        db_table = u'help_category'
-
-
-class HelpQuestion(models.Model):
-    category = models.ForeignKey(HelpCategory)
-    question = models.CharField(max_length=255)
-    answer   = models.TextField()
-
-    def __unicode__(self):
-        return self.question
-
-    class Meta:
-        db_table = u'help_question'
-
