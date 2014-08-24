@@ -36,20 +36,9 @@
 #header {
     font-size: 12px;
     height: 25px;
-    min-width:760px;
+    min-width: 760px;
     margin: 0px auto;
     padding: 7px 15px;
-    opacity: 1.0;
-
-    h2 {
-        font: {
-            size: 10px;
-            weight: 500
-        }
-        color: #666;
-        letter-spacing: 12px;
-        padding: 5px 0px;
-    }
 
     #left {
         font-size: 13px;
@@ -61,7 +50,6 @@
     #right {
         float: right;
         color: #fff;
-        padding-top: 2px;
 
         li {
             display: inline;

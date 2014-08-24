@@ -23,7 +23,7 @@ var TopBar = React.createClass({
     var user = this.props.user.getData();
     return (
       <div>
-        <div id="headerwrapper" className="transparent rounded-bottom">
+        <div id="headerwrapper" className="transparent">
           <div id="header">
             <ul id="right">
               <li>
@@ -45,11 +45,14 @@ var TopBar = React.createClass({
             </ul>
             <div id="left">
               <strong>HUXLEY</strong>
-              &middot;
-              A Conference Management Tool by BMUN
+              &nbsp;
               &middot;
               &nbsp;
-              <strong>for {this._getUserType()} </strong>
+              <span>A Conference Management Tool by BMUN</span>
+              &nbsp;
+              &middot;
+              &nbsp;
+              <strong>for {this._getUserType()}</strong>
             </div>
           </div>
         </div>
