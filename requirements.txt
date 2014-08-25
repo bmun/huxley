@@ -8,7 +8,6 @@ django-pipeline-browserify==0.1.0
 djangorestframework==2.3.14
 ecdsa==0.11
 futures==2.1.6
-jsmin==2.0.3
 mock==1.0.1
 paramiko==1.14.0
 pyScss==1.2.0.post3

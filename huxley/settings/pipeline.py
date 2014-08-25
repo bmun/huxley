@@ -13,7 +13,7 @@ PIPELINE_COMPILERS = (
 
 PIPELINE_CSS_COMPRESSOR = 'pipeline.compressors.cssmin.CSSMinCompressor'
 
-PIPELINE_JS_COMPRESSOR = 'pipeline.compressors.jsmin.JSMinCompressor'
+PIPELINE_JS_COMPRESSOR = None
 
 PIPELINE_CSS = {
     'huxley': {
