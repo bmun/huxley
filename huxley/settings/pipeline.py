@@ -18,11 +18,8 @@ PIPELINE_JS_COMPRESSOR = None
 PIPELINE_CSS = {
     'huxley': {
         'source_filenames': (
-            'css/*.css',
             'scss/core/*.scss',
             'scss/accounts/*.scss',
-            'scss/advisors/*.scss',
-            'scss/chairs/*.scss',
         ),
         'output_filename': 'css/huxley.css'
     },
