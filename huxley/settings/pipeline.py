@@ -31,18 +31,9 @@ PIPELINE_CSS = {
 PIPELINE_JS = {
     'huxley': {
         'source_filenames': (
-            'js/core/*.js',
-            'js/accounts/*.js',
-            'js/advisors/*.js',
-            'js/chairs/*.js',
-        ),
-        'output_filename': 'js/huxley.js'
-    },
-    'www': {
-        'source_filenames': (
             'js/huxley.browserify.js',
         ),
-        'output_filename': 'js/huxley_www.js'
+        'output_filename': 'js/huxley.js'
     }
 }
 
