@@ -11,19 +11,18 @@ from django.test import TestCase
 from huxley.core.models import *
 from huxley.utils.test import TestFiles, TestUsers, TestSchools
 
-import csv
-
 
 class ConferenceTest(TestCase):
 
-    conference = Conference.objects.create(
-        session=61,
-        start_date=date(2013, 3, 1),
-        end_date=date(2013, 3, 3),
-        reg_open=date(2012, 9, 1),
-        early_reg_close=date(2013, 1, 10),
-        reg_close=date(2013, 2, 28)
-    )
+    def setUp(self):
+        self.conference = Conference.objects.create(
+            session=61,
+            start_date=date(2013, 3, 1),
+            end_date=date(2013, 3, 3),
+            reg_open=date(2012, 9, 1),
+            early_reg_close=date(2013, 1, 10),
+            reg_close=date(2013, 2, 28)
+        )
 
     def test_default_fields(self):
         """ Tests that fields with default values are correctly set. """
@@ -37,7 +36,8 @@ class ConferenceTest(TestCase):
 
 class CountryTest(TestCase):
 
-    country = Country.objects.create(name='Lolville')
+    def setUp(self):
+        self.country = Country.objects.create(name='Lolville')
 
     def test_default_fields(self):
         """ Tests that fields with default values are correctly set. """
@@ -50,10 +50,11 @@ class CountryTest(TestCase):
 
 class CommitteeTest(TestCase):
 
-    committee = Committee.objects.create(
-        name='DISC',
-        full_name='Disarmament and International Security'
-    )
+    def setUp(self):
+        self.committee = Committee.objects.create(
+            name='DISC',
+            full_name='Disarmament and International Security'
+        )
 
     def test_default_fields(self):
         """ Tests that fields with default values are correctly set. """
@@ -349,9 +350,9 @@ class SchoolAdminTest(TestCase):
                 school.prefers_bilingual,
                 school.prefers_crisis,
                 school.prefers_small_specialized,
-                school.prefers_mid_large_specialized] 
+                school.prefers_mid_large_specialized]
         fields.extend(countryprefs)
         fields.append(school.registration_comments)
 
-        fields_csv += ",".join(map(str, fields)) 
+        fields_csv += ",".join(map(str, fields))
         self.assertEquals(fields_csv, response.content[:-2])
