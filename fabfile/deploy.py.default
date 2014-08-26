@@ -18,10 +18,10 @@ virtualenvs = {
 def deploy(environment):
     source_path = source_paths[environment]
     virtualenv_prefix = 'workon %s' % virtualenvs[environment]
-    with cd(source_path):
-        with prefix(virtualenv_prefix):
-            run('git pull')
-            run('pip install -r requirements.txt')
-            run('python manage.py migrate')
-            run('python manage.py collectstatic --noinput')
-            run('../apache2/bin/restart')
+    with cd(source_path), prefix(virtualenv_prefix):
+        run('git pull --force')
+        run('pip install -r requirements.txt')
+        run('npm install')
+        run('python manage.py migrate')
+        run('python manage.py collectstatic --noinput')
+        run('../apache2/bin/restart')
