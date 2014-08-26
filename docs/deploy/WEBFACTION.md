@@ -1,7 +1,7 @@
 ## WebFaction Deployment Guide
 BMUN's Web host of choice is WebFaction, due to their commitment to hosting the latest version of popular software, numerous one-click install options, and customizable server configuration. If you're deploying on another host, please contribute a guide!
 
-**Guide last updated: 06/19/2013.** If you run into issues with this guide, try [WebFaction's own Django deployment guide!](http://docs.webfaction.com/software/django/getting-started.html) (And of course, [open an issue](https://github.com/bmun/huxley/issues) so we can improve ours :) 
+**Guide last updated: 08/25/2014.** If you run into issues with this guide, try [WebFaction's own Django deployment guide!](http://docs.webfaction.com/software/django/getting-started.html) (And of course, [open an issue](https://github.com/bmun/huxley/issues) so we can improve ours :)
 
 ### First steps
 Before we get started, you'll need to have a WebFaction account. Then, using WebFaction's one-click installer, install the latest version of Django/Python. Lastly, create a static files application for your app using [Webfaction's guide](http://docs.webfaction.com/software/django/getting-started.html#create-a-website-with-django-and-static-media-applications). We assume that you have `ssh` access to your server as well. **All steps in this guide happen on your WebFactionServer.**
@@ -37,8 +37,11 @@ WSGIDaemonProcess huxley processes=2 threads=12 python-path=/home/bmun/webapps/h
 WSGIScriptAlias / /home/bmun/webapps/huxley/myproject/myproject/wsgi.py
 ```
 
-### Create a Database
-Follow WebFaction's instructions to create a MySQL or PostgreSQL database, and write down the password. That's it for the database step :)
+Lastly, we want to use the Django from our virtualenv. Webfaction's Python setup prioritizes modules installed in the app's `lib` directory over modules in the virtualenv (more info [here](http://docs.webfaction.com/software/python.html#python-search-path)), which means we'll actually be removing the Django installed by the one-click installer!
+
+```sh
+$ rm -r ~/webapps/huxley/lib/python2.7/django
+```
 
 ### Virtualenv
 Just like during development, we need a virtualenv. As of this writing, WebFaction doesn't have pip installed, so we have to install it along with virtualenv and virtualenvwrapper:
@@ -80,6 +83,19 @@ If you'll be using MySQL, there's one more package we'll need to install:
 (huxley)$ pip install MySQL-python
 ```
 
+### Install Node/NPM
+Huxley's JavaScript code is organized as node modules and packaged for the browser with Browserify. Webfaction provides one-click installers for Node apps, but since this is just using it as part of a build step, a global install is easier to deal with.
+
+To install it, follow the directions under the **Install Node.js** section of [this StackOverflow answer](http://stackoverflow.com/a/18687851). After that, you can install JS dependencies with `npm`:
+
+```sh
+$ cd ~/webapps/huxley/huxley
+$ npm install
+```
+
+### Create a Database
+Follow WebFaction's instructions to create a MySQL or PostgreSQL database, and write down the password. That's it for the database step :)
+
 ### Configure the Application
 
 First, let's configure our deployment settings by specifying a local settings file. Copy the `local.py.default` file in the `huxley/settings` directory:
@@ -115,14 +131,15 @@ application = WSGIHandler()
 ```
 
 ### Sync Database
-Finally, prepare your database:
+Finally, prepare your database and restart the application. Remember to activate your virtualenv!
 
 ```sh
 $ cd ~/webapps/huxley/huxley
-$ python manage.py syncdb
-$ python manage.py migrate
-$ python manage.py collectstatic --noinput # Not really database-related, but whatever.
-$ ~/webapps/huxley/apache2/bin/restart # Restart the server process
+$ workon huxley
+(huxley)$ python manage.py syncdb
+(huxley)$ python manage.py migrate
+(huxley)$ python manage.py collectstatic --noinput # Not really database-related, but whatever.
+(huxley)$ ~/webapps/huxley/apache2/bin/restart # Restart the server process
 ```
 
 ### Mount the Application
