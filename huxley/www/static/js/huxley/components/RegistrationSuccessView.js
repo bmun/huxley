@@ -19,20 +19,17 @@ var RegistrationSuccessView = React.createClass({
         <div class="letter">
           <h1>Thank You</h1>
           <p>
-            Thank you for registering for BMUN 62! Country assignments will be
+            Thank you for registering for BMUN 63! Country assignments will be
             made available soon in your Huxley account. A summary of fees is
             listed below:
           </p>
           <h3>School Registration Fee</h3>
           <ul>
-            <li>$40 (if registered by November 1, 2013)</li>
-            <li>$50 (if registered after November 1, 2013)</li>
+            <li>$50</li>
           </ul>
           <h3>Delegate Registration Fee</h3>
           <ul>
-            <li>$40 per delegate (by February 10, 2014)</li>
-            <li>$50 per delegate (by February 24, 2014)</li>
-            <li>$55 per delegate (after February 24, 2014)</li>
+            <li>$50</li>
           </ul>
           <h3>Payment Instructions</h3>
           <p>
@@ -60,12 +57,12 @@ var RegistrationSuccessView = React.createClass({
           </p>
           <p>Sincerely,</p>
           <p class="sender">
-            <strong>Shrey Goel</strong>
+            <strong>Hee Soo Kim</strong>
             <br />
             <span class="subtext">
               Under-Secretary General of External Relations
               <br />
-              Berkeley Model United Nations, 62nd Session
+              Berkeley Model United Nations, 63nd Session
             </span>
           </p>
         </div>
