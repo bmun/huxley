@@ -40,4 +40,4 @@ PIPELINE_BROWSERIFY_ARGUMENTS = '-t reactify'
 
 PIPELINE_UGLIFYJS_BINARY = join(PROJECT_ROOT, 'node_modules/.bin/uglifyjs')
 
-PIPELINE_UGLIFYJS_ARGUMENTS = '--compress --screw-ie8'
+PIPELINE_UGLIFYJS_ARGUMENTS = '--compress --mangle --screw-ie8'
