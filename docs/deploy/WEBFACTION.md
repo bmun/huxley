@@ -1,7 +1,7 @@
 ## WebFaction Deployment Guide
 BMUN's Web host of choice is WebFaction, due to their commitment to hosting the latest version of popular software, numerous one-click install options, and customizable server configuration. If you're deploying on another host, please contribute a guide!
 
-**Guide last updated: 08/25/2014.** If you run into issues with this guide, try [WebFaction's own Django deployment guide!](http://docs.webfaction.com/software/django/getting-started.html) (And of course, [open an issue](https://github.com/bmun/huxley/issues) so we can improve ours :)
+**Guide last updated: 08/27/2014.** If you run into issues with this guide, try [WebFaction's own Django deployment guide!](http://docs.webfaction.com/software/django/getting-started.html) (And of course, [open an issue](https://github.com/bmun/huxley/issues) so we can improve ours :)
 
 ### First steps
 Before we get started, you'll need to have a WebFaction account. Then, using WebFaction's one-click installer, install the latest version of Django/Python. Lastly, create a static files application for your app using [Webfaction's guide](http://docs.webfaction.com/software/django/getting-started.html#create-a-website-with-django-and-static-media-applications). We assume that you have `ssh` access to your server as well. **All steps in this guide happen on your WebFactionServer.**
@@ -144,3 +144,25 @@ $ workon huxley
 
 ### Mount the Application
 In your WebFaction control panel, create a new website, and mount your Huxley application at the root URL. Mount the static application you created on the /static URL. You may have to wait a few minutes for the changes to take effect. Then, visit www.yourdomain.com to see Huxley up and running!
+
+### Pushing New Code
+The steps above covered deploying Huxley to a Webfaction server for the first time. Pushing new code is substantially easier; it's just a condensed version of the above process. First, move into the code directory and activate your virtualenv
+
+```sh
+$ cd ~/webapps/huxley/huxley
+$ workon huxley
+```
+
+Then, update dependencies, run migrations, collect static files, and restart the application:
+
+```sh
+(huxley)$ pip install -r requirements.txt
+(huxley)$ npm install
+(huxley)$ python manage.py migrate
+(huxley)$ python manage.py collectstatic --noinput --clear
+(huxley)$ ~/webapps/huxley/apache2/bin/restart
+```
+
+It's even easier if you can automate this process; we use [Fabric](http://www.fabfile.org/), a tool for automating tasks, especially those that involve SSH.
+
+Thanks for using Huxley! Again, please [open an issue](https://github.com/bmun/huxley/issues) if this guide is out-of-date or could be improved.
