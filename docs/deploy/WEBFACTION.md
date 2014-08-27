@@ -37,7 +37,7 @@ WSGIDaemonProcess huxley processes=2 threads=12 python-path=/home/bmun/webapps/h
 WSGIScriptAlias / /home/bmun/webapps/huxley/myproject/myproject/wsgi.py
 ```
 
-Lastly, we want to use the Django from our virtualenv. Webfaction's Python setup prioritizes modules installed in the app's `lib` directory over modules in the virtualenv (more info [here](http://docs.webfaction.com/software/python.html#python-search-path)), which means we'll actually be removing the Django installed by the one-click installer!
+Lastly, we want to use the Django from our virtualenv. Webfactiond's Python setup prioritizes modules installed in the app's `lib` directory over modules in the virtualenv (more info [here](http://docs.webfaction.com/software/python.html#python-search-path)), which means we'll actually be removing the Django installed by the one-click installer!
 
 ```sh
 $ rm -r ~/webapps/huxley/lib/python2.7/django

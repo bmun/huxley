@@ -20,6 +20,7 @@ var CountryStore = require('../stores/CountryStore');
 var GenderConstants = require('../constants/GenderConstants');
 var NavLink = require('./NavLink');
 var OuterView = require('./OuterView');
+var PhoneInput = require('./PhoneInput');
 var ProgramTypes = require('../constants/ProgramTypes');
 
 var formatPhone = require('../utils/formatPhone');
@@ -279,11 +280,10 @@ var RegistrationView = React.createClass({
               valueLink={this.linkState('primary_email')}
             />
             {this.renderSchoolError('primary_email')}
-            <input
-              type="text"
-              placeholder="Phone Number"
+            <PhoneInput
               onChange={this._handlePrimaryPhoneChange}
               value={this.state.primary_phone}
+              isInternational={this.state.school_international}
             />
             {this.renderSchoolError('primary_phone')}
             {this.renderContactTypeField('primary_type')}
@@ -302,11 +302,10 @@ var RegistrationView = React.createClass({
               valueLink={this.linkState('secondary_email')}
             />
             {this.renderSchoolError('secondary_email')}
-            <input
-              type="text"
-              placeholder="Phone Number"
+            <PhoneInput
               onChange={this._handleSecondaryPhoneChange}
               value={this.state.secondary_phone}
+              isInternational={this.state.school_international}
             />
             {this.renderSchoolError('secondary_phone')}
             {this.renderContactTypeField('secondary_type')}
@@ -547,15 +546,15 @@ var RegistrationView = React.createClass({
       !this.state.prefers_mid_large_specialized});
   },
 
-  _handlePrimaryPhoneChange: function(event) {
+  _handlePrimaryPhoneChange: function(number) {
     this.setState({
-      primary_phone: formatPhone(event.target.value)
+      primary_phone: number
     });
   },
 
-  _handleSecondaryPhoneChange: function(event) {
+  _handleSecondaryPhoneChange: function(number) {
     this.setState({
-      secondary_phone: formatPhone(event.target.value)
+      secondary_phone: number
     });
   },
 
