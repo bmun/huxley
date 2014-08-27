@@ -7,13 +7,19 @@
 
 'use strict';
 
-var React = require('react');
+var React = require('react/addons');
 
 var formatPhone = require('../utils/formatPhone');
 
 var PhoneInput = React.createClass({
+  propTypes: {
+    onChange: React.PropTypes.func,
+    value: React.PropTypes.string,
+    isInternational: React.PropTypes.bool
+  },
+
   render: function() {
-    return(
+    return (
       <input
         type="text"
         placeholder="Phone Number"
@@ -24,13 +30,11 @@ var PhoneInput = React.createClass({
   },
 
   _handleChange: function(event) {
-    if(this.props.isInternational){
-      return (
-        this.props.onChange(event.target.value.replace(/[^0-9+\(\)\-]/, ""))
-      );
-    } else {
-      return this.props.onChange(formatPhone(event.target.value));
-    }
+    var value = event.target.value;
+    var number = this.props.isInternational
+      ? value.replace(/[^0-9+\(\)\-]/, '')
+      : formatPhone(value);
+    this.props.onChange(number);
   }
 });
 
