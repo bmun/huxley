@@ -15,7 +15,8 @@
     "jest-cli": "0.1.18",
     "url-pattern": "0.6.0",
     "bluebird": "2.1.1",
-    "rrouter": "0.4.2"
+    "rrouter": "0.4.2",
+    "uglify-js": "2.4.15"
   },
   "scripts": {
     "test": "jest"

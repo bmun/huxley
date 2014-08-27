@@ -13,7 +13,7 @@ PIPELINE_COMPILERS = (
 
 PIPELINE_CSS_COMPRESSOR = 'pipeline.compressors.cssmin.CSSMinCompressor'
 
-PIPELINE_JS_COMPRESSOR = None
+PIPELINE_JS_COMPRESSOR = 'pipeline.compressors.uglifyjs.UglifyJSCompressor'
 
 PIPELINE_CSS = {
     'huxley': {
@@ -37,3 +37,7 @@ PIPELINE_JS = {
 PIPELINE_BROWSERIFY_BINARY = join(PROJECT_ROOT, 'node_modules/.bin/browserify')
 
 PIPELINE_BROWSERIFY_ARGUMENTS = '-t reactify'
+
+PIPELINE_UGLIFYJS_BINARY = join(PROJECT_ROOT, 'node_modules/.bin/uglifyjs')
+
+PIPELINE_UGLIFYJS_ARGUMENTS = '--compress --screw-ie8'
