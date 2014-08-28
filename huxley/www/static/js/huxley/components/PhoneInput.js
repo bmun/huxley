@@ -15,16 +15,16 @@ var PhoneInput = React.createClass({
   propTypes: {
     onChange: React.PropTypes.func,
     value: React.PropTypes.string,
-    isInternational: React.PropTypes.bool
+    isInternational: React.PropTypes.bool.isRequired,
   },
 
-  componentWillUpdate: function(nextProps, nextState) {
-    if (nextProps.isInternational !== this.props.isInternational) {
-      var value = nextProps.value;
-      var number = nextProps.isInternational
-        ? value.replace(/[^0-9+\(\)\-]/, '')
-        : formatPhone(value);
-      nextProps.onChange(number);
+  componentDidUpdate: function(prevProps, prevState) {
+    if (prevProps.isInternational !== this.props.isInternational) {
+      var number = this._formatValue(
+        this.props.value,
+        this.props.isInternational
+      );
+      this.props.onChange && this.props.onChange(number);
     }
   },
 
@@ -40,12 +40,19 @@ var PhoneInput = React.createClass({
   },
 
   _handleChange: function(event) {
-    var value = event.target.value;
-    var number = this.props.isInternational
-      ? value.replace(/[^0-9+\(\)\-]/, '')
+    var number = this._formatValue(
+      event.target.value,
+      this.props.isInternational
+    );
+    this.props.onChange && this.props.onChange(number);
+  },
+
+  _formatValue: function(value, isInternational) {
+    var value = value || '';
+    return isInternational
+      ? value.replace(/[^0-9+\(\)\-\s]/, '')
       : formatPhone(value);
-    this.props.onChange(number);
-  }
+  },
 });
 
 module.exports = PhoneInput;

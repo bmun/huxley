@@ -23,8 +23,6 @@ var OuterView = require('./OuterView');
 var PhoneInput = require('./PhoneInput');
 var ProgramTypes = require('../constants/ProgramTypes');
 
-var formatPhone = require('../utils/formatPhone');
-
 require('jquery-ui/effect-shake');
 
 var RegistrationView = React.createClass({
