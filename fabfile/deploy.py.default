@@ -1,7 +1,8 @@
-# Copyright (c) 2011-2013 Berkeley Model United Nations. All rights reserved.
+# Copyright (c) 2011-2014 Berkeley Model United Nations. All rights reserved.
 # Use of this source code is governed by a BSD License (see LICENSE).
 
-from fabric.api import cd, hosts, prefix, run
+from fabric.api import cd, hosts, prefix, run, task
+
 
 source_paths = {
     'prod': '/path/to/your/production/deployment',
@@ -23,5 +24,5 @@ def deploy(environment):
         run('pip install -r requirements.txt')
         run('npm install')
         run('python manage.py migrate')
-        run('python manage.py collectstatic --noinput')
+        run('python manage.py collectstatic --clear --noinput')
         run('../apache2/bin/restart')
