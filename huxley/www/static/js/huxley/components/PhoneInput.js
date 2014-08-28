@@ -18,6 +18,16 @@ var PhoneInput = React.createClass({
     isInternational: React.PropTypes.bool
   },
 
+  componentWillUpdate: function(nextProps, nextState) {
+    if (nextProps.isInternational !== this.props.isInternational) {
+      var value = nextProps.value;
+      var number = nextProps.isInternational
+        ? value.replace(/[^0-9+\(\)\-]/, '')
+        : formatPhone(value);
+      nextProps.onChange(number);
+    }
+  },
+
   render: function() {
     return (
       <input
