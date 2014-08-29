@@ -74,6 +74,8 @@ var ChangePasswordView = React.createClass({
           <div className="rounded-small topbarbutton">
             <Button
               type="submit"
+              color="green"
+              size="small"
               loading={this.state.loading}>
               Change Password!
             </Button>
