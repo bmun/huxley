@@ -21,6 +21,7 @@ class SchoolAdmin(admin.ModelAdmin):
             "Name",
             "Address",
             "City",
+            "State",
             "Zip Code",
             "Country",
             "Primary Name",
