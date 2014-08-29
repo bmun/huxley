@@ -236,7 +236,7 @@ var RegistrationView = React.createClass({
               intermediate, and advanced delegates you intend to bring to BMUN.
               Try to provide us with realistic estimates for your delegate
               numbers in each category so we can provide your delegation with
-              the appropriate number and type of assignments</p>
+              the appropriate number and type of assignments.</p>
             <input
               type="text"
               placeholder="Number of BMUN sessions attended"
@@ -523,12 +523,12 @@ var RegistrationView = React.createClass({
 
   _handleDelegateSum: function() {
     var sum = 0;
-    if (this.state.beginner_delegates){
-      sum+=parseInt(this.state.beginner_delegates);
-    } if (this.state.intermediate_delegates){
-      sum+=parseInt(this.state.intermediate_delegates);
-    } if (this.state.advanced_delegates){
-      sum+=parseInt(this.state.advanced_delegates);
+    if (this.state.beginner_delegates) {
+      sum += parseInt(this.state.beginner_delegates, 10) || 0;
+    } if (this.state.intermediate_delegates) {
+      sum += parseInt(this.state.intermediate_delegates, 10) || 0;
+    } if (this.state.advanced_delegates) {
+      sum += parseInt(this.state.advanced_delegates, 10) || 0;
     }
     return sum;
   },
