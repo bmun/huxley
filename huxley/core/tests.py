@@ -224,6 +224,7 @@ class SchoolAdminTest(TestCase):
             "Name",
             "Address",
             "City",
+            "State",
             "Zip Code",
             "Country",
             "Primary Name",
