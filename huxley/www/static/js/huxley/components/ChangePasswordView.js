@@ -71,9 +71,11 @@ var ChangePasswordView = React.createClass({
               valueLink={this.linkState('newPassword2')}
             />
           </div>
-          <div className="rounded-small topbarbutton">
+          <div className="rounded-small">
             <Button
               type="submit"
+              color="green"
+              size="small"
               loading={this.state.loading}>
               Change Password!
             </Button>
