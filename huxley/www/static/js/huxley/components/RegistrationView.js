@@ -232,7 +232,11 @@ var RegistrationView = React.createClass({
               </li>
             </ul>
             <p className="instructions">Please tell us a bit more about your delegation this
-              year.</p>
+              year. Provide us with the tentative number of beginner,
+              intermediate, and advanced delegates you intend to bring to BMUN.
+              Try to provide us with realistic estimates for your delegate
+              numbers in each category so we can provide your delegation with
+              the appropriate number and type of assignments.</p>
             <input
               type="text"
               placeholder="Number of BMUN sessions attended"
@@ -244,18 +248,30 @@ var RegistrationView = React.createClass({
               placeholder="Number of Beginner Delegates"
               valueLink={this.linkState('beginner_delegates')}
             />
+            <label>
+              Beginner: Attended 0-3 conferences, not very familiar with Model
+              United Nations.
+            </label>
             {this.renderSchoolError('beginner_delegates')}
             <input
               type="text"
               placeholder="Number of Intermediate Delegates"
               valueLink={this.linkState('intermediate_delegates')}
             />
+            <label>
+              Intermediate: Attended 4-7 conferences, little to no practice in
+              advanced committees.
+            </label>
             {this.renderSchoolError('intermediate_delegates')}
             <input
               type="text"
               placeholder="Number of Advanced Delegates"
               valueLink={this.linkState('advanced_delegates')}
             />
+            <label >
+              Advanced: Attended more than seven conferences, has participated
+              in many diverse committees.
+            </label>
             {this.renderSchoolError('advanced_delegates')}
             <input
               type="text"
@@ -263,6 +279,7 @@ var RegistrationView = React.createClass({
               valueLink={this.linkState('spanish_speaking_delegates')}
             />
             {this.renderSchoolError('spanish_speaking_delegates')}
+            <p> Total Number of Delegates: {this._handleDelegateSum()}</p>
             <hr />
             <h3>Primary Contact</h3>
             {this.renderContactGenderField('primary_gender')}
@@ -502,6 +519,18 @@ var RegistrationView = React.createClass({
     }
 
     return null;
+  },
+
+  _handleDelegateSum: function() {
+    var sum = 0;
+    if (this.state.beginner_delegates) {
+      sum += parseInt(this.state.beginner_delegates, 10) || 0;
+    } if (this.state.intermediate_delegates) {
+      sum += parseInt(this.state.intermediate_delegates, 10) || 0;
+    } if (this.state.advanced_delegates) {
+      sum += parseInt(this.state.advanced_delegates, 10) || 0;
+    }
+    return sum;
   },
 
   _handlePasswordBlur: function() {
