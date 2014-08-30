@@ -19,6 +19,7 @@ var CountrySelect = require('./CountrySelect');
 var CountryStore = require('../stores/CountryStore');
 var GenderConstants = require('../constants/GenderConstants');
 var NavLink = require('./NavLink');
+var NumberInput = require('./NumberInput');
 var OuterView = require('./OuterView');
 var PhoneInput = require('./PhoneInput');
 var ProgramTypes = require('../constants/ProgramTypes');
@@ -203,7 +204,7 @@ var RegistrationView = React.createClass({
               placeholder="Country"
               valueLink={this.state.school_international ? ''  :
                 this.linkState('school_country')}
-	       disabled={!this.state.school_international}
+              disabled={!this.state.school_international}
             />
             {this.renderSchoolError('country')}
             <hr />
@@ -243,30 +244,30 @@ var RegistrationView = React.createClass({
               valueLink={this.linkState("times_attended")}
             />
             {this.renderSchoolError('times_attended')}
-            <input
-              type="text"
+            <NumberInput
               placeholder="Number of Beginner Delegates"
-              valueLink={this.linkState('beginner_delegates')}
+              onChange={this._handleNumDelChange.bind(this, 'beginner_delegates')}
+              value={this.state.beginner_delegates}
             />
             <label className="hint">
               Beginner: Attended 0-3 conferences, not very familiar with Model
               United Nations.
             </label>
             {this.renderSchoolError('beginner_delegates')}
-            <input
-              type="text"
+            <NumberInput
               placeholder="Number of Intermediate Delegates"
-              valueLink={this.linkState('intermediate_delegates')}
+              onChange={this._handleNumDelChange.bind(this, 'intermediate_delegates')}
+              value={this.state.intermediate_delegates}
             />
             <label className="hint">
               Intermediate: Attended 4-7 conferences, little to no practice in
               advanced committees.
             </label>
             {this.renderSchoolError('intermediate_delegates')}
-            <input
-              type="text"
+            <NumberInput
               placeholder="Number of Advanced Delegates"
-              valueLink={this.linkState('advanced_delegates')}
+              onChange={this._handleNumDelChange.bind(this, 'advanced_delegates')}
+              value={this.state.advanced_delegates}
             />
             <label className="hint">
               Advanced: Attended more than seven conferences, has participated
@@ -528,6 +529,12 @@ var RegistrationView = React.createClass({
       sum += parseInt(this.state.advanced_delegates, 10) || 0;
     }
     return sum;
+  },
+
+  _handleNumDelChange: function(fieldName, value) {
+    var change = {};
+    change[fieldName] = value;
+    this.setState(change);
   },
 
   _handlePasswordBlur: function() {
