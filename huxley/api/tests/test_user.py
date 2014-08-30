@@ -310,6 +310,16 @@ class UserListPostTestCase(CreateAPITestCase):
         self.assertEqual(response.data, {
             'last_name': ['This field is required.']})
 
+    def test_username_length(self):
+        response = self.get_response(params=self.get_params(username='user'))
+        self.assertEqual(response.data, {
+            'username': ['Username must be at least 5 characters.']})
+
+    def test_password_length(self):
+        response = self.get_response(params=self.get_params(password='pass'))
+        self.assertEqual(response.data, {
+            'password': ['Password must be at least 6 characters.']})
+
 
 class CurrentUserTestCase(TestCase):
     def setUp(self):
