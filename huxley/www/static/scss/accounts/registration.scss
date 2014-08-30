@@ -37,7 +37,18 @@
         margin-left: 0px;
     }
 
-    label.error { margin-top: 3px; }
+    label.hint
+    {
+        display: block;
+        font-size: 11px;
+        line-height: 1.4;
+        padding: 3px 5px 0;
+
+        & + input[type=text], & + input[type=password]
+        {
+            margin-top: 11px;
+        }
+    }
 
     .instructions { font-weight: bold; }
 }

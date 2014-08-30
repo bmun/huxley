@@ -248,7 +248,7 @@ var RegistrationView = React.createClass({
               placeholder="Number of Beginner Delegates"
               valueLink={this.linkState('beginner_delegates')}
             />
-            <label>
+            <label className="hint">
               Beginner: Attended 0-3 conferences, not very familiar with Model
               United Nations.
             </label>
@@ -258,7 +258,7 @@ var RegistrationView = React.createClass({
               placeholder="Number of Intermediate Delegates"
               valueLink={this.linkState('intermediate_delegates')}
             />
-            <label>
+            <label className="hint">
               Intermediate: Attended 4-7 conferences, little to no practice in
               advanced committees.
             </label>
@@ -268,7 +268,7 @@ var RegistrationView = React.createClass({
               placeholder="Number of Advanced Delegates"
               valueLink={this.linkState('advanced_delegates')}
             />
-            <label >
+            <label className="hint">
               Advanced: Attended more than seven conferences, has participated
               in many diverse committees.
             </label>
@@ -483,11 +483,9 @@ var RegistrationView = React.createClass({
   renderError: function(field) {
     if (this.state.errors[field]) {
       return (
-        <div>
-          <label className="error">
-            {this.state.errors[field]}
-          </label>
-        </div>
+        <label className="hint error">
+          {this.state.errors[field]}
+        </label>
       );
     }
 
@@ -498,11 +496,12 @@ var RegistrationView = React.createClass({
     if (this.state.passwordValidating &&
         this.state.password !== this.state.password2) {
       return (
-        <div>
-          <label className="error">Please enter the same password again.</label>
-        </div>
+        <label className="hint error">
+          Please enter the same password again.
+        </label>
       );
     }
+
     return null;
   },
 
@@ -510,11 +509,9 @@ var RegistrationView = React.createClass({
     if (this.state.errors.school &&
         this.state.errors.school[0][field]) {
       return (
-        <div>
-          <label className="error">
-            {this.state.errors.school[0][field]}
-          </label>
-        </div>
+        <label className="hint error">
+          {this.state.errors.school[0][field]}
+        </label>
       );
     }
 
