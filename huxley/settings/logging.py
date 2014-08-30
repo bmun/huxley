@@ -14,7 +14,7 @@ LOGGING = {
         'huxley': {
             'handlers': ['console'],
             'level': 'DEBUG',
-            'propogate': True,
+            'propagate': True,
         },
     },
 }
