@@ -253,7 +253,7 @@ class UserListGetTestCase(ListAPITestCase):
 class UserListPostTestCase(CreateAPITestCase):
     url_name = 'api:user_list'
     params = {'username': 'Kunal',
-              'password': 'pass',
+              'password': 'password',
               'first_name': 'Kunal',
               'last_name': 'Mehta'}
 
