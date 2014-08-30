@@ -54,6 +54,9 @@ class CreateUserSerializer(ModelSerializer):
         if User.objects.filter(username=username).exists():
             raise ValidationError('This username is already taken.')
 
+        if len(username) < 5:
+            raise ValidationError('Username must be at least 5 characters.')
+
         return attrs
 
     def validate_password(self, attrs, source):
@@ -62,6 +65,9 @@ class CreateUserSerializer(ModelSerializer):
         match = re.match("^[A-Za-z0-9\_\.!@#\$%\^&\*\(\)~\-=\+`\?]+$", password)
         if match is None:
             raise ValidationError('Password contains invalid characters.')
+
+        if len(password) < 6:
+            raise ValidationError('Password must be at least 6 characters.')
 
         return attrs
 
