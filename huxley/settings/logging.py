@@ -11,7 +11,7 @@ LOGGING = {
         },
     },
     'loggers': {
-        'django': {
+        'huxley': {
             'handlers': ['console'],
             'level': 'DEBUG',
             'propogate': True,
