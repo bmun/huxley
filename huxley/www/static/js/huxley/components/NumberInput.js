@@ -11,6 +11,12 @@ var React = require('react')
 
 var NumberInput = React.createClass({
 
+  propTypes: {
+    onChange: React.PropTypes.func,
+    value: React.PropTypes.number,
+    placeholder: React.PropTypes.string,
+  },
+
   render: function() {
     return (
       <input
@@ -23,7 +29,7 @@ var NumberInput = React.createClass({
   },
 
   _handleChange: function(event) {
-    var value = event.target.value.replace(/[^0-9]/, '') || '';
+    var value = event.target.value.replace(/[^\d]/, '');
     this.props.onChange && this.props.onChange(value);
   },
 });
