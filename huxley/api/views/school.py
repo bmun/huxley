@@ -14,6 +14,22 @@ class SchoolList(generics.CreateAPIView):
     queryset = School.objects.all()
     serializer_class = SchoolSerializer
 
+    def create(self, request, *args, **kwargs):
+        '''Intercept the create request and extract the country preference data,
+        create the school as normal, then create the country preferences.
+
+        This is a workaround for Django Rest Framework not supporting M2M
+        fields with a "through" model.'''
+        country_ids = request.DATA.pop('country_preferences', [])
+        response = super(SchoolList, self).create(request, *args, **kwargs)
+        school_id = response.data.get('id')
+
+        if school_id:
+            prefs = School.update_country_preferences(school_id, country_ids)
+            response.data['country_preferences'] = prefs
+
+        return response
+
 
 class SchoolDetail(generics.RetrieveUpdateDestroyAPIView):
     authentication_classes = (SessionAuthentication,)

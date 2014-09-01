@@ -171,27 +171,35 @@ class School(models.Model):
     delegation_fee_paid      = models.DecimalField(max_digits=6, decimal_places=2, default=0)
     delegation_fee_balance   = models.DecimalField(max_digits=6, decimal_places=2, default=0)
 
-    def update_country_preferences(self, country_ids, shuffled=False):
-        """ Refreshes a school's country preferences, given a list of
-            country IDs. If shuffled is True, then the country_ids are
-            ordered [1, 6, 2, 7, 3, 8, ...] due to double columning in
-            the template. """
-        if shuffled:
-            country_ids = CountryPreference.unshuffle(country_ids)
-        self.countrypreferences.clear()
-        seen = set()
-        for rank, country_id in enumerate(country_ids, start=1):
-            if country_id and country_id not in seen:
-                seen.add(country_id)
-                CountryPreference.objects.create(school=self,
-                                                 country_id=country_id,
-                                                 rank=rank)
+    @classmethod
+    def update_country_preferences(cls, school_id, country_ids):
+        '''Refresh a school's country preferences.
 
-    def update_committee_preferences(self, committee_ids):
-        """ Refreshes a school's committee preferences. """
-        self.committeepreferences.clear()
-        self.committeepreferences = committee_ids
-        self.save()
+        Given a list of country IDs, first dedupe and filter out 0s, then clear
+        the existing country preferences and construct new ones.'''
+        seen = set()
+        processed_country_ids = []
+        country_preferences = []
+
+        for rank, country_id in enumerate(country_ids):
+            if not country_id or country_id in seen:
+                continue
+            seen.add(country_id)
+            processed_country_ids.append(country_id)
+            country_preferences.append(
+                CountryPreference(
+                    school_id=school_id,
+                    country_id=country_id,
+                    rank=rank,
+                )
+            )
+
+        if country_preferences:
+            school = cls.objects.get(id=school_id)
+            school.countrypreferences.clear()
+            CountryPreference.objects.bulk_create(country_preferences)
+
+        return processed_country_ids
 
     def update_delegate_slots(self, slot_data):
         """ Adds, deletes, or updates delegates attached to this school's
@@ -209,9 +217,6 @@ class School(models.Model):
             not CountryPreference objects."""
         return list(self.countrypreferences.all()
                         .order_by('countrypreference__rank'))
-
-    def get_committee_preferences(self):
-        return self.committeepreferences.all()
 
     def get_delegate_slots(self):
         """ Returns a list of this school's delegate slots,
@@ -268,7 +273,7 @@ class CountryPreference(models.Model):
         return zip(c1, c2)
 
     def __unicode__(self):
-        return "%s : %s (%d)" % self.school.name, self.country.name, self.rank
+        return "%s : %s (%d)" % (self.school.name, self.country.name, self.rank)
 
     class Meta:
         db_table = u'country_preference'

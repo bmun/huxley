@@ -6,8 +6,9 @@ from datetime import date
 
 from django.test import TestCase
 
-from huxley.core.models import Committee, Conference, Country, CountryPreference
-
+from huxley.core.models import (Committee, Conference, Country,
+                                CountryPreference, School)
+from huxley.utils.test import TestSchools
 
 class ConferenceTest(TestCase):
 
@@ -81,3 +82,19 @@ class CountryPreferenceTest(TestCase):
     def test_unicode(self):
         """ Tests that the object's __unicode__ outputs correctly. """
         pass
+
+
+class SchoolTest(TestCase):
+
+    def test_update_country_preferences(self):
+        school = TestSchools.new_school()
+        country_ids = [0, 1, 2, 2, 0, 3]
+        self.assertEquals(0, CountryPreference.objects.all().count())
+
+        prefs = School.update_country_preferences(school.id, country_ids)
+        self.assertEquals([1, 2, 3], prefs)
+
+        self.assertEquals(3, CountryPreference.objects.all().count())
+        for i, country_preference in enumerate(CountryPreference.objects.all()):
+            self.assertEquals(prefs[i], country_preference.country_id)
+            self.assertEquals(school.id, country_preference.school_id)

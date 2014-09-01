@@ -5,28 +5,31 @@ from rest_framework import status
 
 from huxley.accounts.models import User
 from huxley.api.tests import CreateAPITestCase
-from huxley.core.models import School
+from huxley.core.models import CountryPreference, School
 from huxley.utils.test import TestSchools
 
 
 class CreateSchoolTestCase(CreateAPITestCase):
     url_name = 'api:school_list'
-    params = {'name': 'Berkeley Prep',
-            'address': '1 BMUN way',
-            'city': 'Oakland',
-            'state': 'California',
-            'zip_code': 94720,
-            'country': 'USA',
-            'primary_name': 'Kunal Mehta',
-            'primary_gender': 1,
-            'primary_email': 'KunalMehta@huxley.org',
-            'primary_phone': '(999) 999-9999',
-            'primary_type': 2,
-            'program_type': User.TYPE_ADVISOR,
-            'beginner_delegates': 0,
-            'intermediate_delegates': 0,
-            'advanced_delegates': 0,
-            'spanish_speaking_delegates': 0}
+    params = {
+        'name': 'Berkeley Prep',
+        'address': '1 BMUN way',
+        'city': 'Oakland',
+        'state': 'California',
+        'zip_code': 94720,
+        'country': 'USA',
+        'primary_name': 'Kunal Mehta',
+        'primary_gender': 1,
+        'primary_email': 'KunalMehta@huxley.org',
+        'primary_phone': '(999) 999-9999',
+        'primary_type': 2,
+        'program_type': User.TYPE_ADVISOR,
+        'beginner_delegates': 0,
+        'intermediate_delegates': 0,
+        'advanced_delegates': 0,
+        'spanish_speaking_delegates': 0,
+        'country_preferences': [],
+    }
 
     def test_empty_fields(self):
         '''This should not allow for required fields to be empty.'''
@@ -62,7 +65,7 @@ class CreateSchoolTestCase(CreateAPITestCase):
 
     def test_valid(self):
         params = self.get_params()
-        response = self.get_response(params)
+        response = self.get_response(params=params)
 
         school_query = School.objects.filter(id=response.data['id'])
         self.assertTrue(school_query.exists())
@@ -95,12 +98,27 @@ class CreateSchoolTestCase(CreateAPITestCase):
             'intermediate_delegates': school.intermediate_delegates,
             'advanced_delegates': school.advanced_delegates,
             'spanish_speaking_delegates': school.spanish_speaking_delegates,
+            'country_preferences': list(school.countrypreferences.all()),
             'prefers_bilingual': school.prefers_bilingual,
             'prefers_crisis': school.prefers_crisis,
             'prefers_small_specialized': school.prefers_small_specialized,
             'prefers_mid_large_specialized':
                 school.prefers_mid_large_specialized,
             'registration_comments': school.registration_comments})
+
+    def test_country_preferences(self):
+        '''It should save a school's country preferences.'''
+        params = self.get_params(country_preferences=[0, 1, 2, 0, 3])
+        response = self.get_response(params=params)
+
+        school_id = response.data['id']
+
+        self.assertEqual(response.data['country_preferences'], [1, 2, 3])
+        for country_id in xrange(1, 4):
+            self.assertTrue(
+                CountryPreference.objects
+                    .filter(school_id=school_id, country_id=country_id)
+                    .exists())
 
     def test_invalid_state(self):
         '''States should be alphabetical.'''

@@ -624,7 +624,7 @@ var RegistrationView = React.createClass({
           secondary_email: this.state.secondary_email,
           secondary_phone: this.state.secondary_phone,
           secondary_type: this.state.secondary_type,
-          countrypreferences: [
+          country_preferences: [
             this.state.country_pref1,
             this.state.country_pref2,
             this.state.country_pref3,
