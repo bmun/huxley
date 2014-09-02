@@ -6,14 +6,14 @@ LOGGING = {
     'disable_existing_loggers': False,
     'formatters': {
         'simple': {
-            'format': '%(levelname)s'+':'+' %(message)s',
+            'format': '%(levelname)s: %(message)s',
         },
     },
     'handlers': {
         'console': {
             'level': 'DEBUG',
             'class': 'logging.StreamHandler',
-            'formatter':'simple',
+            'formatter': 'simple',
         },
     },
     'loggers': {
