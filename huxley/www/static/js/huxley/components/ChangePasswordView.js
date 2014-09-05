@@ -41,45 +41,33 @@ var ChangePasswordView = React.createClass({
     }
 
     return (
-      <div
-        id="changepassword-container"
-        className="change-password rounded-bottom transparent">
-        <form
-          id="changepassword"
-          onSubmit={this._handleSubmit}>
-          <div className="input">
-            <label htmlFor="oldpassword">Current Password</label>
-            <input
-              type="password"
-              className="rounded-small"
-              valueLink={this.linkState('currentPassword')}
-            />
-          </div>
-          <div className="input">
-            <label htmlFor="newpassword">New Password</label>
-            <input
-              type="password"
-              className="rounded-small"
-              valueLink={this.linkState('newPassword')}
-            />
-          </div>
-          <div className="input">
-            <label htmlFor="newpassword">New Password (again)</label>
-            <input
-              type="password"
-              className="rounded-small"
-              valueLink={this.linkState('newPassword2')}
-            />
-          </div>
-          <div className="rounded-small">
-            <Button
-              type="submit"
-              color="green"
-              size="small"
-              loading={this.state.loading}>
-              Change Password!
-            </Button>
-          </div>
+      <div className="change-password rounded-bottom transparent">
+        <form onSubmit={this._handleSubmit}>
+          <input
+            type="password"
+            className="rounded-small"
+            valueLink={this.linkState('currentPassword')}
+          />
+          <label>Current Password</label>
+          <input
+            type="password"
+            className="rounded-small"
+            valueLink={this.linkState('newPassword')}
+          />
+          <label>New Password</label>
+          <input
+            type="password"
+            className="rounded-small"
+            valueLink={this.linkState('newPassword2')}
+          />
+          <label>New Password (again)</label>
+          <Button
+            type="submit"
+            color="green"
+            size="small"
+            loading={this.state.loading}>
+            Change Password
+          </Button>
         </form>
         {this.renderMessage()}
       </div>
@@ -92,7 +80,7 @@ var ChangePasswordView = React.createClass({
     }
 
     return (
-      <div id="message">
+      <div className="message">
         <label className={this.state.success ? 'success' : 'error'}>
           {this.state.message}
         </label>
@@ -101,7 +89,7 @@ var ChangePasswordView = React.createClass({
   },
 
   onSuccess: function() {
-    setTimeout(this.props.onSuccess, 500);
+    setTimeout(this.props.onSuccess, 750);
   },
 
   _handleSubmit: function(event) {
@@ -128,8 +116,9 @@ var ChangePasswordView = React.createClass({
 
   _handleSuccess: function(data, status, jqXHR) {
     this.setState({
+      loading: false,
       success: true,
-      message: 'Success',
+      message: 'Password changed!',
       currentPassword: '',
       newPassword: '',
       newPassword2: '',
@@ -139,6 +128,7 @@ var ChangePasswordView = React.createClass({
   _handleError: function(jqXHR, status, error) {
     var response = jqXHR.responseJSON;
     this.setState({
+      loading: false,
       message: response.detail,
       success: false,
     });
