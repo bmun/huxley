@@ -21,20 +21,27 @@ var TopBar = React.createClass({
 
   render: function() {
     var user = this.props.user.getData();
+    var cx = React.addons.classSet;
+
     return (
       <div>
-        <div id="headerwrapper" className="transparent">
-          <div id="header">
-            <ul id="right">
+        <div className="top-bar-wrapper transparent">
+          <div className="top-bar">
+            <ul className="right">
               <li>
                 Logged in as
                 &nbsp;
-                <strong>{user.first_name} {user.last_name}</strong>
+                <span className="white">
+                  {user.first_name} {user.last_name}
+                </span>
               </li>
               <li>
                 <a
+                  className={cx({
+                    'change-password-link': true,
+                    'active': this.state.changePasswordVisible,
+                  })}
                   href="#"
-                  id="changepassword-link"
                   onClick={this._handleChangePasswordClick}>
                   Change Password
                 </a>
@@ -43,8 +50,8 @@ var TopBar = React.createClass({
                 <LogoutButton />
               </li>
             </ul>
-            <div id="left">
-              <strong>HUXLEY</strong>
+            <div className="left">
+              <span className="title white">Huxley</span>
               &nbsp;
               &middot;
               &nbsp;
@@ -52,7 +59,7 @@ var TopBar = React.createClass({
               &nbsp;
               &middot;
               &nbsp;
-              <strong>for {this._getUserType()}</strong>
+              <em className="white">for {this._getUserType()}</em>
             </div>
           </div>
         </div>
