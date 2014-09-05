@@ -17,7 +17,8 @@ var ChangePasswordView = React.createClass({
 
   propTypes: {
     isVisible: React.PropTypes.bool.isRequired,
-    onSuccess: React.PropTypes.func.isRequired
+    onClick: React.PropTypes.func,
+    onSuccess: React.PropTypes.func.isRequired,
   },
 
   getInitialState: function() {
@@ -41,7 +42,9 @@ var ChangePasswordView = React.createClass({
     }
 
     return (
-      <div className="change-password rounded-bottom transparent">
+      <div
+        className="change-password rounded-bottom transparent"
+        onClick={this._handleDropdownClick}>
         <form onSubmit={this._handleSubmit}>
           <input
             type="password"
@@ -132,6 +135,10 @@ var ChangePasswordView = React.createClass({
       message: response.detail,
       success: false,
     });
+  },
+
+  _handleDropdownClick: function(e) {
+    this.props.onClick && this.props.onClick(e);
   },
 });
 

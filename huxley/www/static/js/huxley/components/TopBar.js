@@ -19,6 +19,14 @@ var TopBar = React.createClass({
     };
   },
 
+  componentDidMount: function() {
+    document.addEventListener('click', this._hideDropdown);
+  },
+
+  componentWillUnmount: function() {
+    document.removeEventListener('click', this._hideDropdown);
+  },
+
   render: function() {
     var user = this.props.user.getData();
     var cx = React.addons.classSet;
@@ -65,13 +73,26 @@ var TopBar = React.createClass({
         </div>
         <ChangePasswordView
           isVisible={this.state.changePasswordVisible}
-          onSuccess={this._handleChangePasswordSuccess}
+          onClick={this._handleDropdownClick}
+          onSuccess={this._hideDropdown}
         />
       </div>
     );
   },
 
-  _handleChangePasswordSuccess: function() {
+  _handleChangePasswordClick: function(e) {
+    e.preventDefault();
+    this._stopPropagation(e);
+    this.setState({
+      changePasswordVisible: !this.state.changePasswordVisible
+    });
+  },
+
+  _handleDropdownClick: function(e) {
+    this._stopPropagation(e);
+  },
+
+  _hideDropdown: function() {
     this.setState({changePasswordVisible: false});
   },
 
@@ -79,10 +100,12 @@ var TopBar = React.createClass({
     return this.props.user.isAdvisor() ? 'Advisors' : 'Chairs';
   },
 
-  _handleChangePasswordClick: function() {
-    this.setState({
-      changePasswordVisible: !this.state.changePasswordVisible
-    });
+  _stopPropagation: function(e) {
+    e.stopPropagation();
+
+    // TODO: display a warning if stopImmediatePropagation isn't supported.
+    var ne = e.nativeEvent;
+    ne.stopImmediatePropagation && ne.stopImmediatePropagation();
   },
 });
 
