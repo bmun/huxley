@@ -63,6 +63,20 @@ class CreateSchoolTestCase(CreateAPITestCase):
             "advanced_delegates": ["This field is required."],
             "spanish_speaking_delegates": ["This field is required."]})
 
+    def test_fees(self):
+        '''Fees should be read-only fields.'''
+        params = self.get_params(fees_owed=2000.0, fees_paid=2000.0)
+        response = self.get_response(params=params)
+
+        school = School.objects.get(id=response.data['id'])
+        fees_owed = response.data['fees_owed']
+        fees_paid = response.data['fees_paid']
+
+        self.assertEqual(fees_owed, float(school.fees_owed))
+        self.assertEqual(fees_paid, float(school.fees_paid))
+        self.assertNotEqual(fees_owed, 2000.0)
+        self.assertNotEqual(fees_paid, 2000.0)
+
     def test_valid(self):
         params = self.get_params()
         response = self.get_response(params=params)
@@ -104,7 +118,10 @@ class CreateSchoolTestCase(CreateAPITestCase):
             'prefers_small_specialized': school.prefers_small_specialized,
             'prefers_mid_large_specialized':
                 school.prefers_mid_large_specialized,
-            'registration_comments': school.registration_comments})
+            'registration_comments': school.registration_comments,
+            'fees_owed': float(school.fees_owed),
+            'fees_paid': float(school.fees_paid),
+        })
 
     def test_country_preferences(self):
         '''It should save a school's country preferences.'''

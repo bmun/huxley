@@ -47,13 +47,9 @@ class SchoolAdmin(admin.ModelAdmin):
             "Small Specialized?",
             "Mid-Large Specialized?",
             "Registration Comments",
-            "Registration Fee",
-            "Registration Fee Paid",
-            "Registration Fee Balance",
-            "Delegation Fee",
-            "Delegation Fee Paid",
-            "Delegation Fee Balance"
-            ])
+            "Fees Owed",
+            "Fees Paid",
+        ])
 
         for school in School.objects.all().order_by('name'):
             writer.writerow([
@@ -86,12 +82,8 @@ class SchoolAdmin(admin.ModelAdmin):
                 school.prefers_small_specialized,
                 school.prefers_mid_large_specialized,
                 school.registration_comments,
-                school.registration_fee,
-                school.registration_fee_paid,
-                school.registration_fee_balance,
-                school.delegation_fee,
-                school.delegation_fee_paid,
-                school.delegation_fee_balance
+                school.fees_owed,
+                school.fees_paid,
             ])
 
         return schools

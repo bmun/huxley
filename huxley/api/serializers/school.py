@@ -4,15 +4,17 @@
 from rest_framework import serializers
 
 from huxley.api import validators
+from huxley.api.serializers.fields import DecimalField
 from huxley.core.models import School
 
 
 class SchoolSerializer(serializers.ModelSerializer):
     registered = serializers.DateTimeField(format='iso-8601', required=False)
+    fees_owed = DecimalField(read_only=True)
+    fees_paid = DecimalField(read_only=True)
 
     class Meta:
         model = School
-        # TODO: country/committee preferences
         fields = (
             'id',
             'registered',
@@ -45,6 +47,8 @@ class SchoolSerializer(serializers.ModelSerializer):
             'prefers_small_specialized',
             'prefers_mid_large_specialized',
             'registration_comments',
+            'fees_owed',
+            'fees_paid',
         )
 
     def validate_name(self, attrs, source):

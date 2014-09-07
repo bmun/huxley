@@ -164,12 +164,8 @@ class School(models.Model):
 
     registration_comments = models.TextField(default='', blank=True)
 
-    registration_fee         = models.DecimalField(max_digits=6, decimal_places=2, default=0)
-    registration_fee_paid    = models.DecimalField(max_digits=6, decimal_places=2, default=0)
-    registration_fee_balance = models.DecimalField(max_digits=6, decimal_places=2, default=0)
-    delegation_fee           = models.DecimalField(max_digits=6, decimal_places=2, default=0)
-    delegation_fee_paid      = models.DecimalField(max_digits=6, decimal_places=2, default=0)
-    delegation_fee_balance   = models.DecimalField(max_digits=6, decimal_places=2, default=0)
+    fees_owed = models.DecimalField(max_digits=6, decimal_places=2, default=0)
+    fees_paid = models.DecimalField(max_digits=6, decimal_places=2, default=0)
 
     @classmethod
     def update_country_preferences(cls, school_id, country_ids):

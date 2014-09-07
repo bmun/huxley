@@ -55,7 +55,10 @@ class SchoolDetailGetTestCase(RetrieveAPITestCase):
             'prefers_small_specialized': school.prefers_small_specialized,
             'prefers_mid_large_specialized':
                 school.prefers_mid_large_specialized,
-            'registration_comments': school.registration_comments})
+            'registration_comments': school.registration_comments,
+            'fees_owed': float(school.fees_owed),
+            'fees_paid': float(school.fees_paid),
+        })
 
     def test_other_user(self):
         '''it should not allow a get request from another user.'''
@@ -107,7 +110,10 @@ class SchoolDetailGetTestCase(RetrieveAPITestCase):
             'prefers_small_specialized': school.prefers_small_specialized,
             'prefers_mid_large_specialized':
                 school.prefers_mid_large_specialized,
-            'registration_comments': school.registration_comments})
+            'registration_comments': school.registration_comments,
+            'fees_owed': float(school.fees_owed),
+            'fees_paid': float(school.fees_paid),
+        })
 
 
 class SchoolDetailPatchTestCase(PartialUpdateAPITestCase):
