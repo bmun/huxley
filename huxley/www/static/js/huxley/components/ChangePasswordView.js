@@ -37,13 +37,15 @@ var ChangePasswordView = React.createClass({
   },
 
   render: function() {
-    if (!this.props.isVisible) {
-      return <div />;
-    }
-
+    var cx = React.addons.classSet;
     return (
       <div
-        className="change-password rounded-bottom transparent"
+        className={cx({
+          'change-password': true,
+          'rounded-bottom': true,
+           'transparent': true,
+           'visible': this.props.isVisible,
+        })}
         onClick={this._handleDropdownClick}>
         <form onSubmit={this._handleSubmit}>
           <input

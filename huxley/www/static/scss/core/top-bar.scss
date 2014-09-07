@@ -63,6 +63,8 @@
 {
     margin: 0 auto 20px auto;
     overflow-y: hidden;
+    position: relative;
+    z-index: 10;
 
     -webkit-animation: drop-down 0.75s;
     -o-animation: drop-down 0.75s;
