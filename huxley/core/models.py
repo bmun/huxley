@@ -2,6 +2,7 @@
 # Use of this source code is governed by a BSD License (see LICENSE).
 
 from django.db import models
+from django.db.models.signals import pre_save
 
 from huxley.core.constants import ContactGender, ContactType, ProgramTypes
 
@@ -110,6 +111,8 @@ class Committee(models.Model):
 
 
 class School(models.Model):
+    REGISTRATION_FEE = 50.0
+    DELEGATE_FEE = 50.0
 
     PROGRAM_TYPE_OPTIONS = (
         (ProgramTypes.CLUB, 'Club'),
@@ -197,6 +200,17 @@ class School(models.Model):
 
         return processed_country_ids
 
+    @classmethod
+    def update_fees(cls, **kwargs):
+        school = kwargs['instance']
+        delegate_fees = cls.DELEGATE_FEE * sum((
+            school.beginner_delegates,
+            school.intermediate_delegates,
+            school.advanced_delegates,
+        ))
+
+        school.fees_owed = cls.REGISTRATION_FEE + delegate_fees
+
     def update_delegate_slots(self, slot_data):
         """ Adds, deletes, or updates delegates attached to this school's
             delegate slots. """
@@ -233,6 +247,8 @@ class School(models.Model):
 
     class Meta:
         db_table = u'school'
+
+pre_save.connect(School.update_fees, sender=School)
 
 
 class Assignment(models.Model):

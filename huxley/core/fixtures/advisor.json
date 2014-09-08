@@ -24,30 +24,25 @@
     "model": "core.school",
     "fields": {
       "city": "Houston",
-      "delegation_fee": "0",
       "primary_phone": "(281) 330-8004",
       "program_type": 1,
-      "delegation_fee_paid": "0",
       "state": "Texas",
       "primary_name": "Mike Jones",
       "primary_email": "mikejones69@bmun.org",
       "secondary_phone": "",
       "international": false,
-      "delegation_fee_balance": "0",
       "zip_code": "77002",
       "registered": "2013-06-09T16:24:11.302",
       "address": "100 Still Tippin Blvd.",
-      "registration_fee_paid": "0",
       "name": "Who Is Mike Jones?",
       "secondary_email": "",
-      "registration_fee_balance": "0",
       "times_attended": 0,
       "secondary_name": "",
-      "registration_fee": "50",
       "beginner_delegates": 5,
       "intermediate_delegates": 5,
       "advanced_delegates": 5,
-      "spanish_speaking_delegates": 5
+      "spanish_speaking_delegates": 5,
+      "fees_paid": 0.0
     }
   }
 ]
