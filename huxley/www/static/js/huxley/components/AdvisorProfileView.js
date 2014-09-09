@@ -28,9 +28,12 @@ var AdvisorProfileView = React.createClass({
     return (
       <AdvisorView user={this.props.user}>
         <h2>Welcome, {user.first_name}!</h2>
-        <p>We are very excited to see {school.name} at BMUN 63 this year! Here,
-        you can view your registration information for the conference,
-        and find answers to frequently asked questions.</p>
+        <p>
+          We are very excited to see {school.name} at BMUN 63 this year! Here,
+          you can view your registration information for the conference. Please
+          note that fees are currently <strong>estimates</strong> based on the
+          approximate delegation size given during registration.
+        </p>
         <br />
         <p><strong>Important Note:</strong> Please mail all checks to <strong>
         P.O. Box 4306 Berkeley, CA 94704-0306. If you have any other further
@@ -168,6 +171,27 @@ var AdvisorProfileView = React.createClass({
                 <td className="fieldLabel">Phone</td>
                 <td className="field">
                   {school.secondary_phone}
+                </td>
+              </tr>
+              <tr>
+                <th colSpan="2">Fees</th>
+              </tr>
+              <tr>
+                <td className="fieldLabel">Fees Owed</td>
+                <td className="field">
+                  {'$' + school.fees_owed.toFixed(2)}
+                </td>
+              </tr>
+              <tr>
+                <td className="fieldLabel">Fees Paid</td>
+                <td className="field">
+                  {'$' + school.fees_paid.toFixed(2)}
+                </td>
+              </tr>
+              <tr>
+                <td className="fieldLabel">Balance</td>
+                <td className="field">
+                  {'$' + (school.fees_owed - school.fees_paid).toFixed(2)}
                 </td>
               </tr>
             </table>
