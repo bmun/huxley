@@ -13,7 +13,7 @@ var NumberInput = React.createClass({
 
   propTypes: {
     onChange: React.PropTypes.func,
-    value: React.PropTypes.number,
+    value: React.PropTypes.string,
     placeholder: React.PropTypes.string,
   },
 
