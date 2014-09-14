@@ -114,10 +114,10 @@ class CreateSchoolTestCase(CreateAPITestCase):
             'spanish_speaking_delegates': school.spanish_speaking_delegates,
             'country_preferences': list(school.countrypreferences.all()),
             'prefers_bilingual': school.prefers_bilingual,
+            'prefers_specialized_regional': school.prefers_specialized_regional,
             'prefers_crisis': school.prefers_crisis,
-            'prefers_small_specialized': school.prefers_small_specialized,
-            'prefers_mid_large_specialized':
-                school.prefers_mid_large_specialized,
+            'prefers_alternative': school.prefers_alternative,
+            'prefers_press_corps': school.prefers_press_corps,
             'registration_comments': school.registration_comments,
             'fees_owed': float(school.fees_owed),
             'fees_paid': float(school.fees_paid),
