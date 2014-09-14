@@ -55,6 +55,9 @@ class User(AbstractUser):
     def reset_password(cls, username):
         '''Reset a user's password and email it to them, or raise if the
         user doesn't exist.'''
+        if not username:
+            raise User.DoesNotExist
+
         query = models.Q(username=username) | models.Q(email=username)
         user = cls.objects.get(query)
 
