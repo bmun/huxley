@@ -75,9 +75,10 @@ var RegistrationView = React.createClass({
       country_pref9: 0,
       country_pref10: 0,
       prefers_bilingual: false,
+      prefers_specialized_regional: false,
       prefers_crisis: false,
-      prefers_small_specialized: false,
-      prefers_mid_large_specialized: false,
+      prefers_alternative: false,
+      prefers_press_corps: false,
       registration_comments: '',
       loading: false,
       passwordValidating: false
@@ -245,7 +246,7 @@ var RegistrationView = React.createClass({
             />
             {this.renderSchoolError('times_attended')}
             <NumberInput
-              placeholder="Number of Beginner Delegates"
+              placeholder="Tentative Number of Beginner Delegates"
               onChange={this._handleNumDelChange.bind(this, 'beginner_delegates')}
               value={this.state.beginner_delegates}
             />
@@ -255,7 +256,7 @@ var RegistrationView = React.createClass({
             </label>
             {this.renderSchoolError('beginner_delegates')}
             <NumberInput
-              placeholder="Number of Intermediate Delegates"
+              placeholder="Tentative Number of Intermediate Delegates"
               onChange={this._handleNumDelChange.bind(this, 'intermediate_delegates')}
               value={this.state.intermediate_delegates}
             />
@@ -265,7 +266,7 @@ var RegistrationView = React.createClass({
             </label>
             {this.renderSchoolError('intermediate_delegates')}
             <NumberInput
-              placeholder="Number of Advanced Delegates"
+              placeholder="Tentative Number of Advanced Delegates"
               onChange={this._handleNumDelChange.bind(this, 'advanced_delegates')}
               value={this.state.advanced_delegates}
             />
@@ -274,13 +275,7 @@ var RegistrationView = React.createClass({
               in many diverse committees.
             </label>
             {this.renderSchoolError('advanced_delegates')}
-            <input
-              type="text"
-              placeholder="Number of Spanish Speaking Delegates"
-              valueLink={this.linkState('spanish_speaking_delegates')}
-            />
-            {this.renderSchoolError('spanish_speaking_delegates')}
-            <p> Total Number of Delegates: {this._handleDelegateSum()}</p>
+            <p>Tentative Total Number of Delegates: {this._handleDelegateSum()}</p>
             <hr />
             <h3>Primary Contact</h3>
             {this.renderContactGenderField('primary_gender')}
@@ -345,9 +340,12 @@ var RegistrationView = React.createClass({
             </ul>
             <hr />
             <h3>Special Committee Preferences</h3>
-            <p className="instructions">Would your delegation be interested in being represented
-            in the following small/specialized committees? Positions are limited
-            and we may not be able to accomodate all preferences.</p>
+            <p className="instructions">Would your delegation be interested in
+            being represented in the following small/specialized committees?
+            Positions are limited and we may not be able to accomodate all
+            preferences. You can find a reference to our
+            committees <a href="http://bmun.org/Committees.php" target="_blank">
+            here</a>.</p>
             <ul>
               <li>
                 <label>
@@ -356,7 +354,17 @@ var RegistrationView = React.createClass({
                     checked={this.state.prefers_bilingual}
                     onChange={this._handleBilingualChange}
                   />
-                  Bilingual
+                  Bilingual - (IDB)
+                </label>
+              </li>
+              <li>
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={this.state.prefers_specialized_regional}
+                    onChange={this._handleSpecializedRegionalChange}
+                  />
+                  Specialized/Regional - (SC, G20, EU, APEC)
                 </label>
               </li>
               <li>
@@ -366,28 +374,36 @@ var RegistrationView = React.createClass({
                     checked={this.state.prefers_crisis}
                     onChange={this._handleCrisisChange}
                   />
-                  Crisis
+                  Crisis - (KHAN, ACC, JCC)
                 </label>
               </li>
               <li>
                 <label>
                   <input
                     type="checkbox"
-                    checked={this.state.prefers_small_specialized}
-                    onChange={this._handleSmallSpecializedChange}
+                    checked={this.state.prefers_alternative}
+                    onChange={this._handleAlternativeChange}
                   />
-                  Small Specialized
+                  Alternative - (ICC, IFC, UNGC)
                 </label>
               </li>
               <li>
                 <label>
                   <input
                     type="checkbox"
-                    checked={this.state.prefers_mid_large_specialized}
-                    onChange={this._handleMidLargeSpecializedChange}
+                    checked={this.state.prefers_press_corps}
+                    onChange={this._handlePressCorpsChange}
                   />
-                  Mid-large Specialized
+                  Press Corps
                 </label>
+              </li>
+              <li>
+                <input
+                  type="text"
+                  placeholder="Number of Spanish Speaking Delegates"
+                  valueLink={this.linkState('spanish_speaking_delegates')}
+                />
+                {this.renderSchoolError('spanish_speaking_delegates')}
               </li>
             </ul>
             <hr />
@@ -563,18 +579,22 @@ var RegistrationView = React.createClass({
     this.setState({prefers_bilingual: !this.state.prefers_bilingual});
   },
 
+  _handleSpecializedRegionalChange: function(event) {
+    this.setState({
+      prefers_specialized_regional: !this.state.prefers_specialized_regional
+    });
+  },
+
   _handleCrisisChange: function(event) {
     this.setState({prefers_crisis: !this.state.prefers_crisis});
   },
 
-  _handleSmallSpecializedChange: function(event) {
-    this.setState({prefers_small_specialized:
-      !this.state.prefers_small_specialized});
+  _handleAlternativeChange: function(event) {
+    this.setState({prefers_alternative: !this.state.prefers_alternative});
   },
 
-  _handleMidLargeSpecializedChange: function(event) {
-    this.setState({prefers_mid_large_specialized:
-      !this.state.prefers_mid_large_specialized});
+  _handlePressCorpsChange: function(event) {
+    this.setState({prefers_press_corps: !this.state.prefers_press_corps});
   },
 
   _handlePrimaryPhoneChange: function(number) {
@@ -637,10 +657,10 @@ var RegistrationView = React.createClass({
             this.state.country_pref10
           ],
           prefers_bilingual: this.state.prefers_bilingual,
+          prefers_specialized_regional: this.state.prefers_specialized_regional,
           prefers_crisis: this.state.prefers_crisis,
-          prefers_small_specialized: this.state.prefers_small_specialized,
-          prefers_mid_large_specialized:
-            this.state.prefers_mid_large_specialized,
+          prefers_alternative: this.state.prefers_alternative,
+          prefers_press_corps: this.state.prefers_press_corps,
           registration_comments: this.state.registration_comments.trim()
         }
       }),

@@ -160,10 +160,11 @@ class School(models.Model):
 
     countrypreferences   = models.ManyToManyField(Country, through='CountryPreference')
 
-    prefers_bilingual             = models.BooleanField(default=False)
-    prefers_crisis                = models.BooleanField(default=False)
-    prefers_small_specialized     = models.BooleanField(default=False)
-    prefers_mid_large_specialized = models.BooleanField(default=False)
+    prefers_bilingual            = models.BooleanField(default=False)
+    prefers_specialized_regional = models.BooleanField(default=False)
+    prefers_crisis               = models.BooleanField(default=False)
+    prefers_alternative          = models.BooleanField(default=False)
+    prefers_press_corps          = models.BooleanField(default=False)
 
     registration_comments = models.TextField(default='', blank=True)
 
