@@ -607,7 +607,7 @@ var RegistrationView = React.createClass({
           state: this.state.school_state.trim(),
           zip_code: this.state.school_zip.trim(),
           country: this.state.school_country.trim(),
-          international: this.state.school_international.trim(),
+          international: this.state.school_international,
           program_type: this.state.program_type,
           times_attended: this.state.times_attended.trim(),
           beginner_delegates: this.state.beginner_delegates.trim(),
