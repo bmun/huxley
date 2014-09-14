@@ -38,7 +38,10 @@ class UserList(generics.ListCreateAPIView):
 
         response = super(UserList, self).create(request, *args, **kwargs)
         school_data = response.data.get('school', {}) or {}
-        school_id = school_data.get('id')
+
+        school_id = None
+        if isinstance(school_data, dict):
+            school_id = school_data.get('id')
 
         if school_id:
             prefs = School.update_country_preferences(school_id, country_ids)
