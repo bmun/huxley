@@ -62,7 +62,7 @@ var RegistrationSuccessView = React.createClass({
             <span class="subtext">
               Under-Secretary General of External Relations
               <br />
-              Berkeley Model United Nations, 63nd Session
+              Berkeley Model United Nations, 63rd Session
             </span>
           </p>
         </div>
