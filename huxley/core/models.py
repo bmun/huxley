@@ -212,28 +212,12 @@ class School(models.Model):
 
         school.fees_owed = cls.REGISTRATION_FEE + delegate_fees
 
-    def update_delegate_slots(self, slot_data):
-        """ Adds, deletes, or updates delegates attached to this school's
-            delegate slots. """
-        for slot_id, delegate_data in slot_data.items():
-            slot = DelegateSlot.objects.get(id=slot_id)
-            if 'name' in delegate_data and 'email' in delegate_data:
-                slot.update_or_create_delegate(delegate_data)
-            else:
-                slot.delete_delegate_if_exists()
-
     def get_country_preferences(self):
         """ Returns a list of this school's country preferences,
             ordered by rank. Note that these are Country objects,
             not CountryPreference objects."""
         return list(self.countrypreferences.all()
                         .order_by('countrypreference__rank'))
-
-    def get_delegate_slots(self):
-        """ Returns a list of this school's delegate slots,
-            ordered by committee name. """
-        return list(DelegateSlot.objects.filter(assignment__school=self)
-                                                .order_by('assignment__committee__name'))
 
     def remove_from_waitlist(self):
         """ If a school is on the waitlist, remove it and
@@ -278,38 +262,15 @@ class CountryPreference(models.Model):
         ordering = ['rank']
 
 
-class DelegateSlot(models.Model):
-    assignment        = models.ForeignKey(Assignment)
-    attended_session1 = models.PositiveSmallIntegerField(default=0)
-    attended_session2 = models.PositiveSmallIntegerField(default=0)
-    attended_session3 = models.PositiveSmallIntegerField(default=0)
-    attended_session4 = models.PositiveSmallIntegerField(default=0)
+class Delegate(models.Model):
+    assignment    = models.ForeignKey(Assignment, related_name='delegates')
+    name          = models.CharField(max_length=64, blank=True)
+    email         = models.EmailField(blank=True)
+    created_at    = models.DateTimeField(auto_now_add=True)
+    summary       = models.TextField(default='', null=True)
 
-    def update_or_create_delegate(self, delegate_data):
-        """ Updates this slot's delegate object, or creates one if
-            the slot has no delegate. """
-        try:
-            delegate = self.delegate
-            for attr, value in delegate_data.items():
-                setattr(delegate, attr, value)
-            delegate.save()
-        except Delegate.DoesNotExist:
-            Delegate.objects.create(delegate_slot=self, **delegate_data)
-
-    def delete_delegate_if_exists(self):
-        """ Deletes this slot's delegate or fails silently. """
-        try:
-            self.delegate.delete()
-        except Delegate.DoesNotExist:
-            pass
-
-    def update_delegate_attendance(self, slot_data):
-        """ Updates this slot's attendance information. """
-        self.attended_session1 = slot_data['session1']
-        self.attended_session2 = slot_data['session2']
-        self.attended_session3 = slot_data['session3']
-        self.attended_session4 = slot_data['session4']
-        self.save()
+    def __unicode__(self):
+        return self.name
 
     @property
     def country(self):
@@ -323,35 +284,6 @@ class DelegateSlot(models.Model):
     def school(self):
         return self.assignment.school
 
-    def __unicode__(self):
-        return str(self.assignment)
-
-    class Meta:
-        db_table = u'delegate_slot'
-        ordering = ['assignment__country']
-
-
-class Delegate(models.Model):
-    name          = models.CharField(max_length=64, blank=True)
-    email         = models.EmailField(blank=True)
-    delegate_slot = models.OneToOneField(DelegateSlot, related_name='delegate', null=True, default=None)
-    created_at    = models.DateTimeField(auto_now_add=True)
-    summary       = models.TextField(default='', null=True)
-
-    def __unicode__(self):
-        return self.name
-
-    @property
-    def country(self):
-        return self.delegate_slot.country
-
-    @property
-    def committee(self):
-        return self.delegate_slot.committee
-
-    @property
-    def school(self):
-        return self.delegate_slot.school
-
     class Meta:
         db_table = u'delegate'
+        ordering = ['assignment__country']

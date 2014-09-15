@@ -18,7 +18,7 @@ class DelegateAdmin(admin.ModelAdmin):
         roster['Content-Disposition'] = 'attachment; filename="roster.csv"'
         writer = csv.writer(roster)
 
-        ordering = 'delegate_slot__assignment__school__name'
+        ordering = 'assignment__school__name'
         for delegate in Delegate.objects.all().order_by(ordering):
             writer.writerow([
                 delegate,
