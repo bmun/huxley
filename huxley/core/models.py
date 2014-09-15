@@ -262,6 +262,7 @@ class Assignment(models.Model):
 
     class Meta:
         db_table = u'assignment'
+        unique_together = ('committee', 'country')
 
 
 class CountryPreference(models.Model):

@@ -4,9 +4,10 @@
 
 from datetime import date
 
+from django.db import IntegrityError
 from django.test import TestCase
 
-from huxley.core.models import (Committee, Conference, Country,
+from huxley.core.models import (Assignment, Committee, Conference, Country,
                                 CountryPreference, School)
 from huxley.utils.test import TestSchools
 
@@ -123,3 +124,12 @@ class SchoolTest(TestCase):
             school.fees_owed,
             school.REGISTRATION_FEE + school.DELEGATE_FEE * (b2 + i2 + a2),
         )
+
+class AssignmentTest(TestCase):
+
+    def test_uniqueness(self):
+        '''Country and committee fields must be unique.'''
+        Assignment.objects.create(committee_id=1, country_id=1)
+        with self.assertRaises(IntegrityError):
+            Assignment.objects.create(committee_id=1, country_id=1)
+
