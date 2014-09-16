@@ -26,6 +26,20 @@ class IsAdvisorOrSuperuser(permissions.BasePermission):
         return request.user.is_superuser or request.user == obj.advisor
 
 
+class IsSchoolAdvisorOrSuperuser(permissions.BasePermission):
+    '''Accept only the advisor of the given school_id query param.'''
+
+    def has_permission(self, request, view):
+        if request.user.is_superuser:
+            return True
+
+        school_id = view.kwargs.get('pk', None)
+        user = request.user
+
+        return (user.is_authenticated() and user.is_advisor() and
+                user.school_id == int(school_id))
+
+
 class IsPostOrSuperuserOnly(permissions.BasePermission):
     '''Accept POST (create) requests, superusers-only otherwise.'''
 

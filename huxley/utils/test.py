@@ -59,11 +59,19 @@ class TestSchools():
                    spanish_speaking_delegates=kwargs.pop('spanish_speaking_delegates', 0),
                    registration_comments=kwargs.pop('registration_comments', ''))
 
+        user = kwargs.pop('user', None)
         for attr, value in kwargs.items():
             setattr(s, attr, value)
 
         s.save()
-        TestUsers.new_user(school=s, committee=TestCommittees.new_committee())
+
+        if user is None:
+          committee = TestCommittees.new_committee()
+          TestUsers.new_user(school=s, committee=committee)
+        else:
+          user.school = s;
+          user.save()
+
         return s
 
 
