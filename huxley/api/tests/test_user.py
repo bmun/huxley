@@ -274,7 +274,8 @@ class UserListPostTestCase(CreateAPITestCase):
             'first_name': user.first_name,
             'last_name': user.last_name,
             'user_type': User.TYPE_ADVISOR,
-            'school': user.school_id})
+            'school': user.school_id,
+            'email': user.email})
 
     def test_empty_username(self):
         response = self.get_response(params=self.get_params(username=''))

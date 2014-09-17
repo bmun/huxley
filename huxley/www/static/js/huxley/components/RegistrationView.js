@@ -618,6 +618,7 @@ var RegistrationView = React.createClass({
         first_name: this.state.first_name.trim(),
         last_name: this.state.last_name.trim(),
         username: this.state.username.trim(),
+        email: this.state.primary_email.trim(),
         password: this.state.password,
         password2: this.state.password2,
         school: {
