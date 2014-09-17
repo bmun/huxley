@@ -27,6 +27,7 @@ DATABASES = {
 
 STATIC_ROOT = 'static_root' # Where your static files will be collected.
 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'email_host'                   # Mail server hostname.
 EMAIL_HOST_USER = 'email_host_user'         # Username for the mail server.
 EMAIL_HOST_PASSWORD = 'email_host_password' # Password

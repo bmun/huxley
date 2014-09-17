@@ -34,6 +34,8 @@ LANGUAGE_CODE = 'en-us'
 USE_I18N = False
 USE_L10N = False
 
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
 MEDIA_ROOT = ''
 MEDIA_URL = ''
 ADMIN_MEDIA_PREFIX = '/static/admin/'

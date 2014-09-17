@@ -65,11 +65,10 @@ class User(AbstractUser):
         user.set_password(new_password)
         user.save()
 
-        if not settings.DEBUG:
-            user.email_user('Huxley Password Reset',
-                            'Your password has been reset to %s.\n'
-                            'Thank you for using Huxley!' % (new_password),
-                            from_email="no-reply@bmun.org")
+        user.email_user('Huxley Password Reset',
+                        'Your password has been reset to %s.\n'
+                        'Thank you for using Huxley!' % (new_password),
+                        from_email='no-reply@bmun.org')
 
     def change_password(self, old_password, new_password):
         '''Change the user's password, or raise PasswordChangeFailed.'''
