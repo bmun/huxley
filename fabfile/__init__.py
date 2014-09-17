@@ -121,6 +121,6 @@ def finish(branch_name=None, remote='origin'):
                                                                    remote))
 
 try:
-    from deploy import deploy
+    from deploy import deploy, restart
 except ImportError:
     pass

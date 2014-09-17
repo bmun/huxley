@@ -26,3 +26,12 @@ def deploy(environment):
         run('python manage.py migrate')
         run('python manage.py collectstatic --clear --noinput')
         run('../apache2/bin/restart')
+
+
+@task
+@hosts(['your.host.name'])
+def restart(environment):
+    source_path = source_paths[environment]
+    virtualenv_prefix = 'workon %s' % virtualenvs[environment]
+    with cd(source_path), prefix(virtualenv_prefix):
+        run('../apache2/bin/restart')
