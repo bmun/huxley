@@ -26,6 +26,8 @@ var ProgramTypes = require('../constants/ProgramTypes');
 
 require('jquery-ui/effect-shake');
 
+var USA = 'United States of America';
+
 var RegistrationView = React.createClass({
   mixins: [
     React.addons.LinkedStateMixin,
@@ -46,7 +48,7 @@ var RegistrationView = React.createClass({
       school_city: '',
       school_state: '',
       school_zip: '',
-      school_country: "United States of America",
+      school_country: '',
       school_international: false,
       program_type: ProgramTypes.CLUB,
       times_attended: '',
@@ -203,8 +205,8 @@ var RegistrationView = React.createClass({
             <input
               type="text"
               placeholder="Country"
-              valueLink={this.state.school_international ? ''  :
-                this.linkState('school_country')}
+              value={this._getSchoolCountry()}
+              onChange={this._handleSchoolCountryChange}
               disabled={!this.state.school_international}
             />
             {this.renderSchoolError('country')}
@@ -441,7 +443,7 @@ var RegistrationView = React.createClass({
       <li>
         <label>{labelNum}</label>
         <CountrySelect
-          onChange={this._handleCountryChange.bind(this, fieldName)}
+          onChange={this._handleCountryPrefChange.bind(this, fieldName)}
           countries={this.state.countries}
           selectedCountryID={this.state[fieldName]}
         />
@@ -565,7 +567,7 @@ var RegistrationView = React.createClass({
     this.setState({program_type: event.target.value});
   },
 
-  _handleCountryChange: function(fieldName, event) {
+  _handleCountryPrefChange: function(fieldName, event) {
     var change = {};
     change[fieldName] = event.target.value;
     this.setState(change);
@@ -609,6 +611,14 @@ var RegistrationView = React.createClass({
     });
   },
 
+  _handleSchoolCountryChange: function(event) {
+    this.setState({school_country: event.target.value});
+  },
+
+  _getSchoolCountry: function() {
+    return this.state.school_international ? this.state.school_country : USA;
+  },
+
   _handleSubmit: function(event) {
     this.setState({loading: true});
     $.ajax({
@@ -627,7 +637,7 @@ var RegistrationView = React.createClass({
           city: this.state.school_city.trim(),
           state: this.state.school_state.trim(),
           zip_code: this.state.school_zip.trim(),
-          country: this.state.school_country.trim(),
+          country: this._getSchoolCountry().trim(),
           international: this.state.school_international,
           program_type: this.state.program_type,
           times_attended: this.state.times_attended.trim(),
