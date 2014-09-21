@@ -240,6 +240,54 @@ class Assignment(models.Model):
     country   = models.ForeignKey(Country)
     school    = models.ForeignKey(School, null=True, blank=True, default=None)
 
+    @classmethod
+    def update_assignments(cls, new_assignments):
+        '''
+        Atomically update the set of country assignments in a transaction.
+
+        For each assignment in the updated list, either update the existing
+        one (and delete its delegates), or create a new one if it doesn't
+        exist.
+        '''
+        assignments = cls.objects.all().values()
+        assignment_dict = {(a['committee_id'], a['country_id']): a
+                           for a in assignments}
+        additions = []
+        deletions = []
+
+        def add(committee, country, school):
+            additions.append(cls(
+                committee_id=committee,
+                country_id=country,
+                school_id=school,
+            ))
+
+        def remove(assignment_data):
+            deletions.append(assignment_data['id'])
+
+        for committee, country, school in new_assignments:
+            key = (committee, country)
+            old_assignment = assignment_dict.get(key)
+
+            if not old_assignment:
+                add(committee, country, school)
+                continue
+
+            if old_assignment['school_id'] != school:
+                # Remove the old assignment instead of just updating it
+                # so that its delegates are deleted by cascade.
+                remove(old_assignment)
+                add(committee, country, school)
+
+            del assignment_dict[key]
+
+        for old_assignment in assignment_dict.values():
+            remove(old_assignment)
+
+        with transaction.atomic():
+            Assignment.objects.filter(id__in=deletions).delete()
+            Assignment.objects.bulk_create(additions)
+
     def __unicode__(self):
         return self.committee.name + " : " + self.country.name + " : " + (self.school.name if self.school else "Unassigned")
 

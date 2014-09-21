@@ -8,8 +8,9 @@ from django.db import IntegrityError
 from django.test import TestCase
 
 from huxley.core.models import (Assignment, Committee, Conference, Country,
-                                CountryPreference, School)
-from huxley.utils.test import TestCountries, TestSchools
+                                CountryPreference)
+from huxley.utils.test import TestCommittees, TestCountries, TestSchools
+
 
 class ConferenceTest(TestCase):
 
@@ -121,3 +122,33 @@ class AssignmentTest(TestCase):
         with self.assertRaises(IntegrityError):
             Assignment.objects.create(committee_id=1, country_id=1)
 
+    def test_update_assignments(self):
+        '''It should correctly update the set of country assignments.'''
+        cm1 = TestCommittees.new_committee(name='CM1').id
+        cm2 = TestCommittees.new_committee(name='CM2').id
+        ct1 = TestCountries.new_country(name='CT1').id
+        ct2 = TestCountries.new_country(name='CT2').id
+        ct3 = TestCountries.new_country(name='CT3').id
+        s1 = TestSchools.new_school(name='S1').id
+        s2 = TestSchools.new_school(name='S2').id
+
+        Assignment.objects.bulk_create([
+            Assignment(committee_id=cm, country_id=ct, school_id=s1)
+            for ct in [ct1, ct2]
+            for cm in [cm1, cm2]
+        ])
+
+        # TODO: Also assert on delegate deletion.
+        updates = [
+            (cm1, ct1, s1),
+            (cm1, ct2, s1),
+            (cm1, ct3, s1),   # ADDED
+            # (cm2, ct1, s1), # DELETED
+            (cm2, ct2, s2),   # UPDATED
+            (cm2, ct3, s2),   # ADDED
+        ]
+
+        Assignment.update_assignments(updates)
+        new_assignments = [a[1:] for a in Assignment.objects.all().values_list()]
+
+        self.assertEquals(set(updates), set(new_assignments))
