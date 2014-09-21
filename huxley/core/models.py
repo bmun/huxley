@@ -259,7 +259,7 @@ class CountryPreference(models.Model):
 
     class Meta:
         db_table = u'country_preference'
-        ordering = ['rank']
+        ordering = ['-school','rank']
 
 
 class Delegate(models.Model):
