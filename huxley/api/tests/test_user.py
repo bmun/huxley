@@ -55,7 +55,7 @@ class UserDetailGetTestCase(RetrieveAPITestCase):
         '''It should return the correct fields for a single user.'''
         school = TestSchools.new_school()
         user = school.advisor
-        self.client.login(username='testuser', password='test')
+        self.client.login(username=user.username, password='test')
         response = self.get_response(user.id)
 
         self.assertEqual(response.data, {
@@ -373,7 +373,7 @@ class CurrentUserTestCase(TestCase):
 
         school = TestSchools.new_school()
         user = school.advisor
-        self.client.login(username='testuser', password='test')
+        self.client.login(username=user.username, password='test')
 
         data = self.get_data(self.url)
         self.assertEqual(len(data.keys()), 7)

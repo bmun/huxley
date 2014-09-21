@@ -21,7 +21,7 @@ class SchoolDetailGetTestCase(RetrieveAPITestCase):
         '''It should allow the get request from the user.'''
         school = TestSchools.new_school()
 
-        self.client.login(username='testuser', password='test')
+        self.client.login(username=school.advisor.username, password='test')
         response = self.get_response(school.id)
         self.assertEqual(response.data, {
             'id': school.id,
@@ -135,7 +135,7 @@ class SchoolDetailPatchTestCase(PartialUpdateAPITestCase):
 
     def test_self(self):
         '''You should be able to update with an anonymous user.'''
-        self.client.login(username='testuser', password='test')
+        self.client.login(username=self.user.username, password='test')
         response = self.get_response(self.school.id, params=self.params)
         self.school = School.objects.get(id=self.school.id)
 
@@ -180,7 +180,7 @@ class SchoolDetailDeleteTestCase(DestroyAPITestCase):
 
     def test_self(self):
         '''One user should be able to delete their own account.'''
-        self.client.login(username='testuser', password='test')
+        self.client.login(username=self.user.username, password='test')
         response = self.get_response(self.school.id)
 
         self.assertEqual(response.data, None)

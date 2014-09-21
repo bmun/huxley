@@ -2,6 +2,7 @@
 # Use of this source code is governed by a BSD License (see LICENSE).
 
 import csv
+import uuid
 import StringIO
 
 from huxley.accounts.models import User
@@ -67,7 +68,10 @@ class TestSchools():
 
         if user is None:
           committee = TestCommittees.new_committee()
-          TestUsers.new_user(school=s, committee=committee)
+          TestUsers.new_user(
+            username=str(uuid.uuid4()),
+            school=s,
+            committee=committee)
         else:
           user.school = s;
           user.save()
