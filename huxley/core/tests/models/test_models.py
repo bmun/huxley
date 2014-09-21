@@ -9,7 +9,7 @@ from django.test import TestCase
 
 from huxley.core.models import (Assignment, Committee, Conference, Country,
                                 CountryPreference, School)
-from huxley.utils.test import TestSchools
+from huxley.utils.test import TestCountries, TestSchools
 
 class ConferenceTest(TestCase):
 
@@ -68,17 +68,25 @@ class CommitteeTest(TestCase):
 class SchoolTest(TestCase):
 
     def test_update_country_preferences(self):
-        school = TestSchools.new_school()
-        country_ids = [0, 1, 2, 2, 0, 3]
+        '''It should filter and replace the school's country preferences.'''
+        s1 = TestSchools.new_school()
+        s2 = TestSchools.new_school()
+        c1 = TestCountries.new_country().id
+        c2 = TestCountries.new_country().id
+        c3 = TestCountries.new_country().id
+
+        country_ids = [0, c1, c2, c2, 0, c3]
         self.assertEquals(0, CountryPreference.objects.all().count())
 
-        prefs = School.update_country_preferences(school.id, country_ids)
-        self.assertEquals([1, 2, 3], prefs)
+        s1.update_country_preferences(country_ids)
+        self.assertEquals([c1, c2, c3], s1.country_preference_ids)
 
-        self.assertEquals(3, CountryPreference.objects.all().count())
-        for i, country_preference in enumerate(CountryPreference.objects.all()):
-            self.assertEquals(prefs[i], country_preference.country_id)
-            self.assertEquals(school.id, country_preference.school_id)
+        s2.update_country_preferences(country_ids)
+        self.assertEquals([c1, c2, c3], s2.country_preference_ids)
+
+        s1.update_country_preferences([c3, c1])
+        self.assertEquals([c3, c1], s1.country_preference_ids)
+        self.assertEquals([c1, c2, c3], s2.country_preference_ids)
 
     def test_update_fees(self):
         '''Fees should be calculated when a School is created/updated.'''

@@ -27,28 +27,6 @@ class UserList(generics.ListCreateAPIView):
             return CreateUserSerializer
         return UserSerializer
 
-    def create(self, request, *args, **kwargs):
-        '''Intercept the create request and extract the country preference data,
-        create the user+school as normal, then create the country preferences.
-
-        This is a workaround for Django Rest Framework not supporting M2M
-        fields with a "through" model.'''
-        data = request.DATA
-        country_ids = data.get('school', {}).pop('country_preferences', [])
-
-        response = super(UserList, self).create(request, *args, **kwargs)
-        school_data = response.data.get('school', {}) or {}
-
-        school_id = None
-        if isinstance(school_data, dict):
-            school_id = school_data.get('id')
-
-        if school_id:
-            prefs = School.update_country_preferences(school_id, country_ids)
-            response.data['country_preferences'] = prefs
-
-        return response
-
 
 class UserDetail(generics.RetrieveUpdateDestroyAPIView):
     authentication_classes = (SessionAuthentication,)

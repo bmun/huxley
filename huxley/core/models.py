@@ -1,7 +1,7 @@
 # Copyright (c) 2011-2014 Berkeley Model United Nations. All rights reserved.
 # Use of this source code is governed by a BSD License (see LICENSE).
 
-from django.db import models
+from django.db import models, transaction
 from django.db.models.signals import pre_save
 
 from huxley.core.constants import ContactGender, ContactType, ProgramTypes
@@ -39,7 +39,7 @@ class Conference(models.Model):
                                                 1,
                                                 (school.max_delegation_size*.20)+1)
         if spots_left:
-            spots_left = Conference.auto_assign(school.get_country_preferences(),
+            spots_left = Conference.auto_assign(school.countrypreferences.all(),
                                                 Committee.objects.filter(special=False).order_by('?'),
                                                 school,
                                                 spots_left,
@@ -171,12 +171,9 @@ class School(models.Model):
     fees_owed = models.DecimalField(max_digits=6, decimal_places=2, default=0)
     fees_paid = models.DecimalField(max_digits=6, decimal_places=2, default=0)
 
-    @classmethod
-    def update_country_preferences(cls, school_id, country_ids):
-        '''Refresh a school's country preferences.
-
-        Given a list of country IDs, first dedupe and filter out 0s, then clear
-        the existing country preferences and construct new ones.'''
+    def update_country_preferences(self, country_ids):
+        '''Given a list of country IDs, first dedupe and filter out 0s, then
+        clear the existing country preferences and construct new ones.'''
         seen = set()
         processed_country_ids = []
         country_preferences = []
@@ -188,16 +185,16 @@ class School(models.Model):
             processed_country_ids.append(country_id)
             country_preferences.append(
                 CountryPreference(
-                    school_id=school_id,
+                    school=self,
                     country_id=country_id,
                     rank=rank,
                 )
             )
 
         if country_preferences:
-            school = cls.objects.get(id=school_id)
-            school.countrypreferences.clear()
-            CountryPreference.objects.bulk_create(country_preferences)
+            with transaction.atomic():
+                self.countrypreferences.clear()
+                CountryPreference.objects.bulk_create(country_preferences)
 
         return processed_country_ids
 
@@ -209,23 +206,25 @@ class School(models.Model):
             school.intermediate_delegates,
             school.advanced_delegates,
         ))
-
         school.fees_owed = cls.REGISTRATION_FEE + delegate_fees
 
-    def get_country_preferences(self):
-        """ Returns a list of this school's country preferences,
-            ordered by rank. Note that these are Country objects,
-            not CountryPreference objects."""
-        return list(self.countrypreferences.all()
-                        .order_by('countrypreference__rank'))
+    @property
+    def country_preference_ids(self):
+        '''Return an ordered list of the school's preferred countries.'''
+        return [country.id for country in self.countrypreferences.all()]
 
-    def remove_from_waitlist(self):
-        """ If a school is on the waitlist, remove it and
-            automatically generate country assignments. """
-        if self.waitlist:
-            self.waitlist = False
-            self.save()
-            Conference.auto_country_assign(self)
+    @country_preference_ids.setter
+    def country_preference_ids(self, country_ids):
+        '''Queue a pending update to replace the school's preferred countries
+        on the next save.'''
+        self._pending_country_preference_ids = country_ids
+
+    def save(self, *args, **kwargs):
+        '''Save the school normally, then update its country preferences.'''
+        super(School, self).save(*args, **kwargs)
+        if getattr(self, '_pending_country_preference_ids', []):
+            self.update_country_preferences(self._pending_country_preference_ids)
+            self._pending_country_preference_ids = []
 
     def __unicode__(self):
         return self.name

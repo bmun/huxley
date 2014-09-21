@@ -1,6 +1,7 @@
 # Copyright (c) 2011-2014 Berkeley Model United Nations. All rights reserved.
 # Use of this source code is governed by a BSD License (see LICENSE).
 
+from drf_compound_fields.fields import ListField
 from rest_framework import serializers
 
 from huxley.api import validators
@@ -12,6 +13,9 @@ class SchoolSerializer(serializers.ModelSerializer):
     registered = serializers.DateTimeField(format='iso-8601', required=False)
     fees_owed = DecimalField(read_only=True)
     fees_paid = DecimalField(read_only=True)
+    country_preferences = ListField(
+        serializers.IntegerField(),
+        source='country_preference_ids')
 
     class Meta:
         model = School
@@ -42,6 +46,7 @@ class SchoolSerializer(serializers.ModelSerializer):
             'intermediate_delegates',
             'advanced_delegates',
             'spanish_speaking_delegates',
+            'country_preferences',
             'prefers_bilingual',
             'prefers_specialized_regional',
             'prefers_crisis',

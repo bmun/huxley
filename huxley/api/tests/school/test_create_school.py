@@ -6,7 +6,7 @@ from rest_framework import status
 from huxley.accounts.models import User
 from huxley.api.tests import CreateAPITestCase
 from huxley.core.models import CountryPreference, School
-from huxley.utils.test import TestSchools
+from huxley.utils.test import TestCountries, TestSchools
 
 
 class CreateSchoolTestCase(CreateAPITestCase):
@@ -28,7 +28,7 @@ class CreateSchoolTestCase(CreateAPITestCase):
         'intermediate_delegates': 0,
         'advanced_delegates': 0,
         'spanish_speaking_delegates': 0,
-        'country_preferences': [],
+        'country_preferences': [1, 2],
     }
 
     def test_empty_fields(self):
@@ -112,7 +112,7 @@ class CreateSchoolTestCase(CreateAPITestCase):
             'intermediate_delegates': school.intermediate_delegates,
             'advanced_delegates': school.advanced_delegates,
             'spanish_speaking_delegates': school.spanish_speaking_delegates,
-            'country_preferences': list(school.countrypreferences.all()),
+            'country_preferences': school.country_preference_ids,
             'prefers_bilingual': school.prefers_bilingual,
             'prefers_specialized_regional': school.prefers_specialized_regional,
             'prefers_crisis': school.prefers_crisis,
@@ -125,17 +125,16 @@ class CreateSchoolTestCase(CreateAPITestCase):
 
     def test_country_preferences(self):
         '''It should save a school's country preferences.'''
-        params = self.get_params(country_preferences=[0, 1, 2, 0, 3])
+        c1 = TestCountries.new_country().id
+        c2 = TestCountries.new_country().id
+        params = self.get_params(country_preferences=[0, c1, c2, 0, c1])
         response = self.get_response(params=params)
 
-        school_id = response.data['id']
+        self.assertEqual(response.data['country_preferences'], [c1, c2])
 
-        self.assertEqual(response.data['country_preferences'], [1, 2, 3])
-        for country_id in xrange(1, 4):
-            self.assertTrue(
-                CountryPreference.objects
-                    .filter(school_id=school_id, country_id=country_id)
-                    .exists())
+        school_id = response.data['id']
+        school = School.objects.get(id=school_id)
+        self.assertEqual([c1, c2], school.country_preference_ids)
 
     def test_invalid_state(self):
         '''States should be alphabetical.'''

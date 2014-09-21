@@ -91,6 +91,7 @@ class UserDetailGetTestCase(RetrieveAPITestCase):
                 'intermediate_delegates': school.intermediate_delegates,
                 'advanced_delegates': school.advanced_delegates,
                 'spanish_speaking_delegates': school.spanish_speaking_delegates,
+                'country_preferences': school.country_preference_ids,
                 'prefers_bilingual': school.prefers_bilingual,
                 'prefers_specialized_regional':
                     school.prefers_specialized_regional,
@@ -409,6 +410,7 @@ class CurrentUserTestCase(TestCase):
             'intermediate_delegates': school.intermediate_delegates,
             'advanced_delegates': school.advanced_delegates,
             'spanish_speaking_delegates': school.spanish_speaking_delegates,
+            'country_preferences': school.country_preference_ids,
             'prefers_bilingual': school.prefers_bilingual,
             'prefers_specialized_regional': school.prefers_specialized_regional,
             'prefers_crisis': school.prefers_crisis,
