@@ -212,6 +212,17 @@ class School(models.Model):
 
         school.fees_owed = cls.REGISTRATION_FEE + delegate_fees
 
+    @classmethod
+    def email_confirmation(cls, **kwargs):
+        school = kwargs['instance']
+        school.advisor.email_user('BMUN 63 Registration Confirmation',
+                                  'Congratulations!\n\n'
+                                  'You have officially been registered for BMUN 63. To access your account, please login at huxley.bmun.org.\n\n'
+                                  'The school registration fee is $50. The delegate registration fee is $50 per student. You will be able to view your balance on huxley.bmun.org in November, at which point we will begin accepting payments.\n\n'
+                                  'If you have any tech related questions, please email tech@bmun.org. For all other questions, please email info@bmun.org.\n\n'
+                                  'Thank you for using Huxley!',
+                                  from_email="no-reply@bmun.org")
+
     def get_country_preferences(self):
         """ Returns a list of this school's country preferences,
             ordered by rank. Note that these are Country objects,
@@ -234,7 +245,7 @@ class School(models.Model):
         db_table = u'school'
 
 pre_save.connect(School.update_fees, sender=School)
-
+pre_save.connect(School.email_confirmation, sender=School)
 
 class Assignment(models.Model):
     committee = models.ForeignKey(Committee)
