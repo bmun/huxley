@@ -212,6 +212,14 @@ class School(models.Model):
 
         school.fees_owed = cls.REGISTRATION_FEE + delegate_fees
 
+    @classmethod
+    def email_confirmation(cls, **kwargs):
+        school = kwargs['instance']
+        school.advisor.email_user('BMUN 63 Registration Confirmation',
+                                  'Congratulations! You have successfully registered for BMUN 63.\n'
+                                  'Thank you for using Huxley!',
+                                  from_email="no-reply@bmun.org")
+
     def get_country_preferences(self):
         """ Returns a list of this school's country preferences,
             ordered by rank. Note that these are Country objects,
@@ -234,7 +242,7 @@ class School(models.Model):
         db_table = u'school'
 
 pre_save.connect(School.update_fees, sender=School)
-
+pre_save.connect(School.email_confirmation, sender=School)
 
 class Assignment(models.Model):
     committee = models.ForeignKey(Committee)
