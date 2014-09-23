@@ -16,14 +16,16 @@
     "url-pattern": "0.6.0",
     "bluebird": "2.1.1",
     "rrouter": "0.4.2",
-    "uglify-js": "2.4.15"
+    "uglify-js": "2.4.15",
+    "es6-promise": "1.0.0"
   },
   "scripts": {
     "test": "jest"
   },
   "jest": {
     "unmockedModulePathPatterns": [
-      "<rootDir>/node_modules/react"
+      "<rootDir>/node_modules/react",
+      "<rootDir>/node_modules/es6-promise"
     ],
     "testPathIgnorePatterns": [
       "/node_modules/",

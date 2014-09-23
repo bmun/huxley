@@ -6,21 +6,27 @@
 'use strict';
 
 var $ = require('jquery');
+var Promise = require('es6-promise').Promise;
 
-var _committeeRequest = null;
+
+var _committeePromise = null;
 
 var CommitteeStore = {
   getCommittees: function(callback) {
-    if (!_committeeRequest) {
-      _committeeRequest = $.ajax({
-        type: 'GET',
-        url: '/api/committees',
-        dataType: 'json'
+    if (!_committeePromise) {
+      _committeePromise = new Promise(function(resolve, reject) {
+        $.ajax({
+          type: 'GET',
+          url: '/api/committees',
+          dataType: 'json',
+          success: function(data, textStatus, jqXHR) {
+            resolve(jqXHR.responseJSON);
+          },
+        });
       });
     }
-    _committeeRequest.done(function(data, textStatus, jqXHR) {
-      callback(jqXHR.responseJSON);
-    });
+
+    _committeePromise.then(callback);
   },
 
   getSpecialCommittees: function(callback) {

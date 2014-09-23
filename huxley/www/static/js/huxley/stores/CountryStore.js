@@ -6,22 +6,28 @@
 'use strict';
 
 var $ = require('jquery');
+var Promise = require('es6-promise').Promise;
 
-var _countryRequest = null;
+
+var _countryPromise = null;
 
 var CountryStore = {
   getCountries: function(callback) {
-    if (!_countryRequest) {
-      _countryRequest = $.ajax({
-        type: 'GET',
-        url: '/api/countries',
-        dataType: 'json'
+    if (!_countryPromise) {
+      _countryPromise = new Promise(function(resolve, reject) {
+        $.ajax({
+          type: 'GET',
+          url: '/api/countries',
+          dataType: 'json',
+          success: function(data, textStatus, jqXHR) {
+            resolve(jqXHR.responseJSON);
+          },
+        });
       });
     }
-    _countryRequest.done(function(data, textStatus, jqXHR) {
-      callback(jqXHR.responseJSON);
-    });
-  }
+
+    _countryPromise.then(callback);
+  },
 };
 
 module.exports = CountryStore;
