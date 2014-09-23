@@ -24,6 +24,7 @@ def deploy(environment):
         run('pip install -r requirements.txt')
         run('npm install')
         run('python manage.py migrate')
+        run('git clean -xf *.css')
         run('python manage.py collectstatic --clear --noinput')
         run('../apache2/bin/restart')
 

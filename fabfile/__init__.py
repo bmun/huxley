@@ -33,6 +33,8 @@ def update():
     '''Rebase the current feature branch onto the latest version of upstream.'''
     print ui.info('Updating your local branch...')
     git.pull()
+    print ui.info('Clearing old files...')
+    local('git clean -xf *.css')
     dependencies.check()
     migrations.check()
 
