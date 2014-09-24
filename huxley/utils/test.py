@@ -36,7 +36,6 @@ class TestUsers():
 class TestSchools():
     @staticmethod
     def new_school(**kwargs):
-        user = kwargs.pop('user', None)
         s = School(name=kwargs.pop('name', 'Test School'),
                    address=kwargs.pop('address', '1 Schoolhouse Road'),
                    city=kwargs.pop('city', 'Berkeley'),
@@ -61,10 +60,9 @@ class TestSchools():
                    spanish_speaking_delegates=kwargs.pop('spanish_speaking_delegates', 0),
                    registration_comments=kwargs.pop('registration_comments', ''))
 
+        user = kwargs.pop('user', None)
         for attr, value in kwargs.items():
             setattr(s, attr, value)
-
-        s.save()
 
         if user is None:
           committee = TestCommittees.new_committee()
@@ -75,6 +73,8 @@ class TestSchools():
         else:
           user.school = s;
           user.save()
+
+        s.save()
 
         return s
 
