@@ -210,8 +210,7 @@ class School(models.Model):
 
     @classmethod
     def email_confirmation(cls, **kwargs):
-        created = kwargs['created']
-        if (created):
+        if kwargs['created']:
             school = kwargs['instance']
             school.advisor.email_user('BMUN 63 Registration Confirmation',
                                       'Congratulations!\n\n'
