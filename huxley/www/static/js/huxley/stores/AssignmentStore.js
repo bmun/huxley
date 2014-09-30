@@ -8,16 +8,13 @@
 var $ = require('jquery');
 
 var _assignmentRequest = null;
-var CurrentUserStore = require('./CurrentUserStore');
 
 var AssignmentStore = {
-  getAssignments: function(callback) {
+  getAssignments: function(schoolID, callback) {
     if (!_assignmentRequest) {
-      var user = CurrentUserStore.getCurrentUser();
-      var school = user.getSchool();
-      _assignmentRequest = $.ajax ({
+      _assignmentRequest = $.ajax({
         type: 'GET',
-        url: '/api/'+school.id+'/assignments',
+        url: '/api/schools/'+schoolID+'/assignments',
         dataType: 'json'
       });
     }
