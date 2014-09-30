@@ -376,7 +376,7 @@ var RegistrationView = React.createClass({
                     checked={this.state.prefers_crisis}
                     onChange={this._handleCrisisChange}
                   />
-                  Crisis - (KHAN, ACC, JCC)
+                  Crisis - (IFC, KHAN, ACC, JCC)
                 </label>
               </li>
               <li>
@@ -386,7 +386,7 @@ var RegistrationView = React.createClass({
                     checked={this.state.prefers_alternative}
                     onChange={this._handleAlternativeChange}
                   />
-                  Alternative - (ICC, IFC, UNGC)
+                  Alternative - (ICC, UNGC)
                 </label>
               </li>
               <li>
