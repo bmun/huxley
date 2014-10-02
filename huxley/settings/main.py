@@ -94,6 +94,7 @@ INSTALLED_APPS = (
     'huxley.core',
     'huxley.api',
     'huxley.accounts',
+    'huxley.payments',
     'huxley.www',
     'pipeline',
     'south',
