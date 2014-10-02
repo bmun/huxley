@@ -6,22 +6,28 @@
 'use strict';
 
 var $ = require('jquery');
+var Promise = require('es6-promise').Promise;
 
-var _assignmentRequest = null;
+
+var _assignmentPromise = null;
 
 var AssignmentStore = {
   getAssignments: function(schoolID, callback) {
-    if (!_assignmentRequest) {
-      _assignmentRequest = $.ajax({
-        type: 'GET',
-        url: '/api/schools/'+schoolID+'/assignments',
-        dataType: 'json'
+    if (!_assignmentPromise) {
+      _assignmentPromise = new Promise(function(resolve, reject) {
+        $.ajax({
+          type: 'GET',
+          url: '/api/schools/'+schoolID+'/assignments',
+          dataType: 'json',
+          success: function(data, textStatus, jqXHR) {
+            resolve(jqXHR.responseJSON);
+          },
+        });
       });
     }
-    _assignmentRequest.done(function(data, textStatus, jqXHR) {
-      callback(jqXHR.responseJSON);
-    });
-  }
+
+    _assignmentPromise.then(callback);
+  },
 };
 
 module.exports = AssignmentStore;
