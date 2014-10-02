@@ -1,8 +1,9 @@
 # Copyright (c) 2011-2014 Berkeley Model United Nations. All rights reserved.
 # Use of this source code is governed by a BSD License (see LICENSE).
 
+from django.core.mail import send_mail
 from django.db import models, transaction
-from django.db.models.signals import pre_save
+from django.db.models.signals import post_save, pre_save
 
 from huxley.core.constants import ContactGender, ContactType, ProgramTypes
 
@@ -226,6 +227,15 @@ class School(models.Model):
             self.update_country_preferences(self._pending_country_preference_ids)
             self._pending_country_preference_ids = []
 
+    @classmethod
+    def email_comments(cls, **kwargs):
+        school = kwargs['instance']
+        if kwargs['created'] and school.registration_comments:
+            send_mail('Registration Comments from '+ school.name, school.name +
+                ' made comments about registration: '
+                + school.registration_comments, 'tech@bmun.org',
+                ['external@bmun.org'], fail_silently=True)
+
     def __unicode__(self):
         return self.name
 
@@ -233,6 +243,7 @@ class School(models.Model):
         db_table = u'school'
 
 pre_save.connect(School.update_fees, sender=School)
+post_save.connect(School.email_comments, sender=School)
 
 
 class Assignment(models.Model):
