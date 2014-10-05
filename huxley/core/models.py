@@ -229,13 +229,12 @@ class School(models.Model):
 
     @classmethod
     def email_comments(cls, **kwargs):
-        created = kwargs['created']
-        if created:
-            school = kwargs['instance']
-            if school.registration_comments:
-                send_mail('Registration Comments',
-                    school.name + ' made comments about registration.',
-                    'tech@bmun.org', ['external@bmun.org'], fail_silently=True)
+        school = kwargs['instance']
+        if kwargs['created'] and school.registration_comments:
+            send_mail('Registration Comments from '+ school.name, school.name +
+                ' made comments about registration: '
+                + school.registration_comments, 'tech@bmun.org',
+                ['external@bmun.org'], fail_silently=True)
 
     def __unicode__(self):
         return self.name
