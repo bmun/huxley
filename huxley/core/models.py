@@ -318,6 +318,7 @@ class CountryPreference(models.Model):
     class Meta:
         db_table = u'country_preference'
         ordering = ['-school','rank']
+        unique_together = ('country', 'school')
 
 
 class Delegate(models.Model):

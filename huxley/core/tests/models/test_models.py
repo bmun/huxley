@@ -152,3 +152,11 @@ class AssignmentTest(TestCase):
         new_assignments = [a[1:] for a in Assignment.objects.all().values_list()]
 
         self.assertEquals(set(updates), set(new_assignments))
+
+class CountryPreferenceTest(TestCase):
+
+    def test_uniqueness(self):
+        '''Country and school fields should be unique.'''
+        CountryPreference.objects.create(school_id=1, country_id=1, rank=1)
+        with self.assertRaises(IntegrityError):
+            CountryPreference.objects.create(school_id=1, country_id=1, rank=1)
