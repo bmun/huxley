@@ -238,16 +238,17 @@ class School(models.Model):
 
     @classmethod
     def email_confirmation(cls, **kwargs):
-        if (kwargs['created']):
+        if kwargs['created']:
             school = kwargs['instance']
             send_mail('BMUN 63 Registration Confirmation',
-                      'You have officially been registered for BMUN 63. To access your account, plea\
-se login at huxley.bmun.org.\n\n'
-                      'The school registration fee is $50. The delegate registration fee is $50 per \
-student. You will be able to view your balance on huxley.bmun.org in November, at which point we wil\
-l begin accepting payments.\n\n'
-                      'If you have any tech related questions, please email tech@bmun.org. For all o\
-ther questions, please email info@bmun.org\n\n'
+                      'You have officially been registered for BMUN 63. '
+                      'To access your account, please log in at huxley.bmun.org.\n\n'
+                      'The school registration fee is $50. The delegate registration '
+                      'fee is $50 per student. You will be able to view your balance '
+                      'on huxley.bmun.org in November, at which point we will begin '
+                      'accepting payments.\n\n'
+                      'If you have any tech related questions, please email tech@bmun.org. '
+                      'For all other questions, please email info@bmun.org\n\n'
                       'Thank you for using Huxley!',
                       'no-reply@bmun.org',
                       [school.primary_email], fail_silently=True)
