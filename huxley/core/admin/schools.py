@@ -53,7 +53,7 @@ class SchoolAdmin(admin.ModelAdmin):
         ])
 
         for school in School.objects.all().order_by('name'):
-            writer.writerow([
+            writer.writerow([unicode(field).encode('utf8') for field in [
                 school.name,
                 school.address,
                 school.city,
@@ -86,7 +86,7 @@ class SchoolAdmin(admin.ModelAdmin):
                 school.registration_comments,
                 school.fees_owed,
                 school.fees_paid,
-            ])
+            ]])
 
         return schools
 
