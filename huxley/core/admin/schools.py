@@ -18,6 +18,7 @@ class SchoolAdmin(admin.ModelAdmin):
         writer = csv.writer(schools)
 
         writer.writerow([
+            "ID",
             "Name",
             "Address",
             "City",
@@ -54,6 +55,7 @@ class SchoolAdmin(admin.ModelAdmin):
 
         for school in School.objects.all().order_by('name'):
             writer.writerow([unicode(field).encode('utf8') for field in [
+                school.id,
                 school.name,
                 school.address,
                 school.city,

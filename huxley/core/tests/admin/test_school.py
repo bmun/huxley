@@ -23,6 +23,7 @@ class SchoolAdminTest(TestCase):
         self.assertTrue(response)
 
         header = [
+            "ID",
             "Name",
             "Address",
             "City",
@@ -60,6 +61,7 @@ class SchoolAdminTest(TestCase):
         fields_csv = ",".join(map(str, header)) + "\r\n"
 
         fields = [
+            school.id,
             school.name,
             school.address,
             school.city,
