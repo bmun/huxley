@@ -128,7 +128,7 @@ class SchoolAdmin(admin.ModelAdmin):
             countryprefs = [c for c in school.countrypreferences.all()]
             countryprefs += [''] * (10 - len(countryprefs))
 
-            writer.writerow([
+            writer.writerow([unicode(field).encode('utf8') for field in [
                 school.name,
                 school.beginner_delegates + school.intermediate_delegates + school.advanced_delegates,
                 school.beginner_delegates,
@@ -139,9 +139,9 @@ class SchoolAdmin(admin.ModelAdmin):
                 school.prefers_specialized_regional,
                 school.prefers_crisis,
                 school.prefers_alternative,
-                school.prefers_press_corps] +
+                school.prefers_press_corps]] +
                 countryprefs +
-                [school.registration_comments
+                [unicode(field).encode('utf8') for field in [school.registration_comments]
             ])
 
         return schools
