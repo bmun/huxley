@@ -141,7 +141,7 @@ class SchoolAdmin(admin.ModelAdmin):
                 school.prefers_alternative,
                 school.prefers_press_corps]] +
                 countryprefs +
-                [unicode(field).encode('utf8') for field in [school.registration_comments]
+                [unicode(school.registration_comments).encode('utf8')
             ])
 
         return schools
