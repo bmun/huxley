@@ -1,6 +1,7 @@
 # Copyright (c) 2011-2014 Berkeley Model United Nations. All rights reserved.
 # Use of this source code is governed by a BSD License (see LICENSE).
 
+from django.conf import settings
 from django.core.mail import send_mail
 from django.db import models, transaction
 from django.db.models.signals import post_save, pre_save
@@ -209,6 +210,14 @@ class School(models.Model):
         ))
         school.fees_owed = cls.REGISTRATION_FEE + delegate_fees
 
+    @classmethod
+    def update_waitlist(cls, **kwargs):
+        '''If the school is about to be created (i.e. has no ID) and
+        registration is closed, add it to the waitlist.'''
+        school = kwargs['instance']
+        if not school.id and settings.CONFERENCE_WAITLIST_OPEN:
+            school.waitlist = True
+
     @property
     def country_preference_ids(self):
         '''Return an ordered list of the school's preferred countries.'''
@@ -260,8 +269,10 @@ class School(models.Model):
         db_table = u'school'
 
 pre_save.connect(School.update_fees, sender=School)
+pre_save.connect(School.update_waitlist, sender=School)
 post_save.connect(School.email_comments, sender=School)
 post_save.connect(School.email_confirmation, sender=School)
+
 
 class Assignment(models.Model):
     committee = models.ForeignKey(Committee)

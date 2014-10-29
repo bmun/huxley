@@ -4,6 +4,7 @@
 
 from datetime import date
 
+from django.conf import settings
 from django.db import IntegrityError
 from django.test import TestCase
 
@@ -114,6 +115,21 @@ class SchoolTest(TestCase):
             school.REGISTRATION_FEE + school.DELEGATE_FEE * (b2 + i2 + a2),
         )
 
+    def test_update_waitlist(self):
+        '''New schools should be waitlisted based on the conference settings.'''
+        self.assertTrue(hasattr(settings, 'CONFERENCE_WAITLIST_OPEN'))
+
+        with self.settings(CONFERENCE_WAITLIST_OPEN=False):
+            s1 = TestSchools.new_school()
+            self.assertFalse(s1.waitlist)
+
+        with self.settings(CONFERENCE_WAITLIST_OPEN=True):
+            s1.save()
+            self.assertFalse(s1.waitlist)
+            s2 = TestSchools.new_school()
+            self.assertTrue(s2.waitlist)
+
+
 class AssignmentTest(TestCase):
 
     def test_uniqueness(self):
@@ -152,6 +168,7 @@ class AssignmentTest(TestCase):
         new_assignments = [a[1:] for a in Assignment.objects.all().values_list()]
 
         self.assertEquals(set(updates), set(new_assignments))
+
 
 class CountryPreferenceTest(TestCase):
 
