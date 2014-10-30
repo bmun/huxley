@@ -41,16 +41,6 @@ var InvoiceButton = React.createClass({
         </Button>
       )
     };
-
-    // return (
-    //     <Button
-    //       color="green"
-    //       size="small"
-    //       onClick={this._generateInvoice}>
-    //       Generate Your Invoice
-    //     </Button>
-    //   );
-
   },
 
   _generateInvoice: function(event) {
@@ -75,15 +65,11 @@ var InvoiceButton = React.createClass({
   },
 
   _handleSuccess: function(data, status, jqXHR) {
-    console.log("helloo");
-    console.log(data);
     this.setState({generated: true});
   },
 
   _handleError: function(jqXHR, status, error) {
-    console.log("error");
-    var response = jqXHR.responseText;
-    console.log(response);
+    this.setState({generated: true});
   }
 
 });

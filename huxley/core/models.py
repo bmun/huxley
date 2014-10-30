@@ -7,6 +7,7 @@ from django.db import models, transaction
 from django.db.models.signals import post_save, pre_save
 
 from huxley.core.constants import ContactGender, ContactType, ProgramTypes
+from huxley.settings.zoho import organization_id, authtoken
 import requests
 import json
 
@@ -206,9 +207,9 @@ class School(models.Model):
 
     @classmethod
     def create_zoho_contact(cls, **kwargs):
-        print "Hi"
+        
         def get_contact(school):
-            list_url = 'https://invoice.zoho.com/api/v3/contacts?organization_id=41668886&authtoken=bf583d135a5a677a9a85ec1bc8268ab8'
+            list_url = 'https://invoice.zoho.com/api/v3/contacts?organization_id=' + organization_id + '&authtoken=' + authtoken
             contact = {
                 "company_name_contains": school.name
             }
@@ -265,10 +266,10 @@ class School(models.Model):
                 "JSONString": json.dumps(attrs)
         }
         if kwargs['created']:
-            create_url = 'https://invoice.zoho.com/api/v3/contacts?organization_id=41668886&authtoken=bf583d135a5a677a9a85ec1bc8268ab8'
+            create_url = 'https://invoice.zoho.com/api/v3/contacts?organization_id=' + organization_id + '&authtoken=' + authtoken
             r = requests.post(create_url, params=parameters)
         else:
-            update_url = 'https://invoice.zoho.com/api/v3/contacts/'+ get_contact(school) +'?organization_id=41668886&authtoken=bf583d135a5a677a9a85ec1bc8268ab8'
+            update_url = 'https://invoice.zoho.com/api/v3/contacts/'+ get_contact(school) +'?organization_id=' + organization_id + '&authtoken=' + authtoken
             r = requests.put(update_url, params=parameters)
 
     def __unicode__(self):

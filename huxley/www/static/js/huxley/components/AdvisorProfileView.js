@@ -36,6 +36,13 @@ var AdvisorProfileView = React.createClass({
           approximate delegation size given during registration.
         </p>
         <br />
+        <p>
+          Advisors, if you wish to generate an invoice for your school with your
+          payment details, please click on the Generate Your Invoice button under
+          the Fees tab. You will receive an invoice in your email within 1 business 
+          day.
+        </p>
+        <br />
         <p><strong>Important Note:</strong> Please mail all checks to <strong>
         P.O. Box 4306 Berkeley, CA 94704-0306. If you have any other further
         questions contact me at <a href="mailto:info@bmun.org">
