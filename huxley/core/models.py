@@ -7,7 +7,8 @@ from django.db import models, transaction
 from django.db.models.signals import post_save, pre_save
 
 from huxley.core.constants import ContactGender, ContactType, ProgramTypes
-
+import requests
+import json
 
 class Conference(models.Model):
     session         = models.PositiveSmallIntegerField(default=0)
@@ -203,6 +204,73 @@ class School(models.Model):
                       'no-reply@bmun.org',
                       [school.primary_email], fail_silently=True)
 
+    @classmethod
+    def create_zoho_contact(cls, **kwargs):
+        print "Hi"
+        def get_contact(school):
+            list_url = 'https://invoice.zoho.com/api/v3/contacts?organization_id=41668886&authtoken=bf583d135a5a677a9a85ec1bc8268ab8'
+            contact = {
+                "company_name_contains": school.name
+            }
+            return requests.get(list_url, params=contact).json()["contacts"][0]["contact_id"]
+
+        school = kwargs['instance']
+        attrs = {
+          "contact_name": school.primary_name,
+          "company_name": school.name,
+          "payment_terms": "",
+          "payment_terms_label": "Due on Receipt",
+          "currency_id": "",
+          "website": "",
+          "custom_fields": [
+          ],
+          "billing_address": {
+            "address": "",
+            "city": "",
+            "state": "",
+            "zip": "",
+            "country": "",
+            "fax": ""
+          },
+          "shipping_address": {
+            "address": "",
+            "city": "",
+            "state": "",
+            "zip": "",
+            "country": "",
+            "fax": ""
+          },
+          "contact_persons": [
+            {
+              "salutation": "",
+              "first_name": "",
+              "last_name": "",
+              "email": school.primary_email,
+              "phone": "",
+              "mobile": "",
+              "is_primary_contact": True
+            }
+          ],
+          "default_templates": {
+            "invoice_template_id": "",
+            "estimate_template_id": "",
+            "creditnote_template_id": "",
+            "invoice_email_template_id": "",
+            "estimate_email_template_id": "",
+            "creditnote_email_template_id": ""
+          },
+          "notes": ""
+        }
+        parameters = {
+                "JSONString": json.dumps(attrs)
+        }
+        if kwargs['created']:
+            create_url = 'https://invoice.zoho.com/api/v3/contacts?organization_id=41668886&authtoken=bf583d135a5a677a9a85ec1bc8268ab8'
+            r = requests.post(create_url, params=parameters)
+        else:
+            update_url = 'https://invoice.zoho.com/api/v3/contacts/'+ get_contact(school) +'?organization_id=41668886&authtoken=bf583d135a5a677a9a85ec1bc8268ab8'
+            r = requests.put(update_url, params=parameters)
+
     def __unicode__(self):
         return self.name
 
@@ -213,6 +281,7 @@ pre_save.connect(School.update_fees, sender=School)
 pre_save.connect(School.update_waitlist, sender=School)
 post_save.connect(School.email_comments, sender=School)
 post_save.connect(School.email_confirmation, sender=School)
+post_save.connect(School.create_zoho_contact, sender=School)
 
 
 class Assignment(models.Model):

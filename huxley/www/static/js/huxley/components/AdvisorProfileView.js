@@ -13,7 +13,8 @@ var AdvisorView = require('./AdvisorView');
 var LogoutButton = require('./LogoutButton');
 var ProgramTypes = require('../constants/ProgramTypes');
 var User = require('../User');
-
+var Button = require('./Button');
+var InvoiceButton = require('./InvoiceButton');
 
 var AdvisorProfileView = React.createClass({
   mixins: [React.addons.LinkedStateMixin],
@@ -174,7 +175,7 @@ var AdvisorProfileView = React.createClass({
                 </td>
               </tr>
               <tr>
-                <th colSpan="2">Fees</th>
+                <th colSpan="2">Fees <InvoiceButton user = {this.props.user}/></th>
               </tr>
               <tr>
                 <td className="fieldLabel">Fees Owed</td>
@@ -194,6 +195,9 @@ var AdvisorProfileView = React.createClass({
                   {'$' + (school.fees_owed - school.fees_paid).toFixed(2)}
                 </td>
               </tr>
+              <tr>
+                
+              </tr>
             </table>
           </div>
           <div className="tablemenu footer">
@@ -202,6 +206,7 @@ var AdvisorProfileView = React.createClass({
       </AdvisorView>
     );
   },
+
 });
 
 module.exports = AdvisorProfileView;
