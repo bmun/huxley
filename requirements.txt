@@ -13,5 +13,6 @@ mock==1.0.1
 paramiko==1.14.0
 pyScss==1.2.0.post3
 pycrypto==2.6.1
+requests==2.4.3
 six==1.7.3
 wsgiref==0.1.2

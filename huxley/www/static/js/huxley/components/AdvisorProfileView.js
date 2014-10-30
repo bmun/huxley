@@ -10,10 +10,11 @@
 var React = require('react/addons');
 
 var AdvisorView = require('./AdvisorView');
+var Button = require('./Button');
+var InvoiceButton = require('./InvoiceButton'); 
 var LogoutButton = require('./LogoutButton');
 var ProgramTypes = require('../constants/ProgramTypes');
 var User = require('../User');
-
 
 var AdvisorProfileView = React.createClass({
   mixins: [React.addons.LinkedStateMixin],
@@ -33,6 +34,13 @@ var AdvisorProfileView = React.createClass({
           you can view your registration information for the conference. Please
           note that fees are currently <strong>estimates</strong> based on the
           approximate delegation size given during registration.
+        </p>
+        <br />
+        <p>
+          Advisors, if you wish to generate an invoice for your school with your
+          payment details, please click on the Generate Your Invoice button under
+          the Fees tab. You will receive an invoice in your email within 2 business 
+          days.
         </p>
         <br />
         <p><strong>Important Note:</strong> Please mail all checks to <strong>
@@ -174,7 +182,7 @@ var AdvisorProfileView = React.createClass({
                 </td>
               </tr>
               <tr>
-                <th colSpan="2">Fees</th>
+                <th colSpan="2">Fees <InvoiceButton user={this.props.user} /></th>
               </tr>
               <tr>
                 <td className="fieldLabel">Fees Owed</td>
@@ -203,5 +211,4 @@ var AdvisorProfileView = React.createClass({
     );
   },
 });
-
 module.exports = AdvisorProfileView;

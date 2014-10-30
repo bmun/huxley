@@ -10,3 +10,10 @@ try:
     from .local import *
 except ImportError:
     pass
+
+ZOHO_CREDENTIALS = False
+try:
+    from .zoho import ORGANIZATION_ID, AUTHTOKEN
+    ZOHO_CREDENTIALS = True
+except ImportError:
+    pass
