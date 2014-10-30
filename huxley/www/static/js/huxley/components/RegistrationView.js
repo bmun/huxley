@@ -683,7 +683,11 @@ var RegistrationView = React.createClass({
   },
 
   _handleSuccess: function(data, status, jqXHR) {
-    this.navigate('/register/success');
+    if (data.school.waitlist) {
+      this.navigate('/register/waitlist');
+    } else {
+      this.navigate('/register/success');
+    }
   },
 
   _handleError: function(jqXHR, status, error) {
