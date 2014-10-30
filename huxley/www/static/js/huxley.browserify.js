@@ -36,8 +36,9 @@ var routes = (
     <Route path="/password/reset" view={PasswordResetSuccessView} />
     <Route path="/register" view={RegistrationView} />
     <Route path="/register/success" view={RegistrationSuccessView} />
-    <Route path="/advisor/profile" view={AdvisorProfileView} />
     <Route path="/register/waitlist" view={RegistrationWaitlistView} />
+    <Route path="/advisor/profile" view={AdvisorProfileView} />
+
   </Routes>
 );
 
