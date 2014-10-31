@@ -17,6 +17,7 @@ var RegistrationClosedView = React.createClass({
     return (
       <OuterView>
         <div class="letter">
+          <h1>I'm Sorry</h1>
           <p>
             Thank you for your interest in participating in the sixty-third
             session of Berkeley Model United Nations. Registration is now closed
