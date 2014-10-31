@@ -22,6 +22,7 @@ var LoginView = require('./huxley/components/LoginView');
 var PasswordResetSuccessView = require('./huxley/components/PasswordResetSuccessView');
 var RedirectView = require('./huxley/components/RedirectView');
 var RegistrationView = require('./huxley/components/RegistrationView');
+var RegistrationClosedView = require('./huxley/components/RegistrationClosedView');
 var RegistrationSuccessView = require('./huxley/components/RegistrationSuccessView');
 var RegistrationWaitlistView = require('./huxley/components/RegistrationWaitlistView');
 
@@ -35,6 +36,7 @@ var routes = (
     <Route path="/password" view={ForgotPasswordView} />
     <Route path="/password/reset" view={PasswordResetSuccessView} />
     <Route path="/register" view={RegistrationView} />
+    <Route path="/register/closed" view={RegistrationClosedView} />
     <Route path="/register/success" view={RegistrationSuccessView} />
     <Route path="/register/waitlist" view={RegistrationWaitlistView} />
     <Route path="/advisor/profile" view={AdvisorProfileView} />

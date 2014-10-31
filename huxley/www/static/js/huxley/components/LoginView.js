@@ -75,7 +75,7 @@ var LoginView = React.createClass({
               type="submit">
               Log In
             </Button>
-            <Button color="green" href="/register">
+            <Button color="green" href="/register/closed">
               Register for BMUN
             </Button>
           </div>
