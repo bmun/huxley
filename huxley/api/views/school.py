@@ -2,6 +2,9 @@
 # Copyright (c) 2011-2014 Berkeley Model United Nations. All rights reserved.
 # Use of this source code is governed by a BSD License (see LICENSE).
 
+import datetime, json
+import requests
+
 from django.http import Http404
 from rest_framework import generics, status
 from rest_framework.authentication import SessionAuthentication
@@ -10,11 +13,8 @@ from rest_framework.response import Response
 from huxley.api.permissions import IsAdvisorOrSuperuser, IsSchoolAdvisorOrSuperuser
 from huxley.api.serializers import AssignmentSerializer, SchoolSerializer
 from huxley.core.models import Assignment, School
-from huxley.settings.zoho import organization_id, authtoken
+from huxley.settings.zoho import ORGANIZATION_ID, AUTHTOKEN
 
-import datetime
-import requests
-import json
 
 class SchoolList(generics.CreateAPIView):
     authentication_classes = (SessionAuthentication,)
@@ -50,13 +50,13 @@ class SchoolInvoice(generics.CreateAPIView):
         return now.strftime("%Y-%m-%d")
 
     def get_contact(self, school_name):
-      list_url = 'https://invoice.zoho.com/api/v3/contacts?organization_id=' + organization_id + '&authtoken=' + authtoken
+      list_url = 'https://invoice.zoho.com/api/v3/contacts?organization_id=' + ORGANIZATION_ID + '&authtoken=' + AUTHTOKEN
       contact = {
         "company_name_contains": school_name
       }
       customer_id = requests.get(list_url, params=contact).json()["contacts"][0]["contact_id"]
 
-      get_url = 'https://invoice.zoho.com/api/v3/contacts/' + customer_id + '?organization_id=' + organization_id + '&authtoken=' + authtoken
+      get_url = 'https://invoice.zoho.com/api/v3/contacts/' + customer_id + '?organization_id=' + ORGANIZATION_ID + '&authtoken=' + AUTHTOKEN
       contact_id = requests.get(get_url).json()["contact"]["primary_contact_id"]
       return (customer_id, contact_id)
 
@@ -110,6 +110,6 @@ class SchoolInvoice(generics.CreateAPIView):
             "ignore_auto_number_generation": False,
             "JSONString": json.dumps(attrs)
         }
-        zoho_url = 'https://invoice.zoho.com/api/v3/invoices?organization_id=' + organization_id + '&authtoken=' + authtoken
+        zoho_url = 'https://invoice.zoho.com/api/v3/invoices?organization_id=' + ORGANIZATION_ID + '&authtoken=' + AUTHTOKEN
         r = requests.post(zoho_url, params=parameters)
         return Response(status=status.HTTP_201_CREATED)
