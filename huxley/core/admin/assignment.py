@@ -33,35 +33,31 @@ class AssignmentAdmin(admin.ModelAdmin):
         assignments = request.FILES
         reader = csv.reader(assignments['csv'])
 
-        def generate_assigments(assignments):
-            for assignment in assignments:
-                yield assignment
+        def generate_assigments(reader):
+            committees = {}
+            countries = {}
+            schools = {}
+            for row in reader:
+                if (len(row[4]) < 2): #ignore the first row because of headers
+                    if row[2] in committees:
+                        committee = committees[row[2]]
+                    else:
+                        committee = Committee.objects.get(name=row[2])
+                        committees[row[2]] = committee
+                    if row[3] in countries:
+                        country = countries[row[3]]
+                    else:
+                        country = Country.objects.get(name=row[3])
+                        countries[row[3]] = country
+                    if row[0] in schools:
+                        school = schools[row[0]]
+                    else:
+                        school = School.objects.get(name=row[0])
+                        schools[row[0]] = school
+                    assignment = (committee.id, country.id, school.id)
+                    yield assignment
 
-        new_assignments = []
-        committees = {}
-        countries = {}
-        schools = {}
-        for row in reader:
-            if (len(row[4]) < 2): #ignore the first row because of headers
-                if row[2] in committees:
-                    committee = committees[row[2]]
-                else:
-                    committee = Committee.objects.get(name=row[2])
-                    committees[row[2]] = committee
-                if row[3] in countries:
-                    country = countries[row[3]]
-                else:
-                    country = Country.objects.get(name=row[3])
-                    countries[row[3]] = country
-                if row[0] in schools:
-                    school = schools[row[0]]
-                else:
-                    school = School.objects.get(name=row[0])
-                    schools[row[0]] = school
-                assignment = (committee.id, country.id, school.id)
-                new_assignments.append(assignment)
-
-        Assignment.update_assignments(generate_assigments(new_assignments))
+        Assignment.update_assignments(generate_assigments(reader))
         return HttpResponseRedirect(reverse('admin:core_assignment_changelist'))
 
     def get_urls(self):
