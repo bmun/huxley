@@ -24,8 +24,8 @@
   {{ block.super }}
   <form action="{% url cl.opts|admin_urlname:'load' %}" enctype="multipart/form-data" method="post">
     {% csrf_token %}
-    Import Country Matrix
-    <input type="file" name="excel" />
+    Import Assignments
+    <input type="file" name="csv" />
     <input type="submit" />
   </form>
 {% endblock %}
