@@ -54,8 +54,7 @@ class AssignmentAdmin(admin.ModelAdmin):
                     else:
                         school = School.objects.get(name=row[0])
                         schools[row[0]] = school
-                    assignment = (committee.id, country.id, school.id)
-                    yield assignment
+                    yield (committee.id, country.id, school.id)
 
         Assignment.update_assignments(generate_assigments(reader))
         return HttpResponseRedirect(reverse('admin:core_assignment_changelist'))
@@ -71,7 +70,7 @@ class AssignmentAdmin(admin.ModelAdmin):
             url(
                 r'load',
                 self.admin_site.admin_view(self.load),
-                name='core_assignment_load'
+                name='core_assignment_load',
             ),
         )
         return urls
