@@ -14,7 +14,7 @@ def get_contact(school):
     return requests.get(list_url, params=contact).json()["contacts"][0]["contact_id"]
 
 def generate_contact_attributes(school):
-	attrs = {
+	return {
           "contact_name": school.primary_name,
           "company_name": school.name,
           "payment_terms": "",
@@ -60,4 +60,3 @@ def generate_contact_attributes(school):
           },
           "notes": ""
         }
-        return attrs

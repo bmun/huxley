@@ -10,11 +10,11 @@
 var React = require('react/addons');
 
 var AdvisorView = require('./AdvisorView');
+var Button = require('./Button');
+var InvoiceButton = require('./InvoiceButton'); 
 var LogoutButton = require('./LogoutButton');
 var ProgramTypes = require('../constants/ProgramTypes');
 var User = require('../User');
-var Button = require('./Button');
-var InvoiceButton = require('./InvoiceButton');
 
 var AdvisorProfileView = React.createClass({
   mixins: [React.addons.LinkedStateMixin],
@@ -39,8 +39,8 @@ var AdvisorProfileView = React.createClass({
         <p>
           Advisors, if you wish to generate an invoice for your school with your
           payment details, please click on the Generate Your Invoice button under
-          the Fees tab. You will receive an invoice in your email within 1 business 
-          day.
+          the Fees tab. You will receive an invoice in your email within 2 business 
+          days.
         </p>
         <br />
         <p><strong>Important Note:</strong> Please mail all checks to <strong>
@@ -202,9 +202,6 @@ var AdvisorProfileView = React.createClass({
                   {'$' + (school.fees_owed - school.fees_paid).toFixed(2)}
                 </td>
               </tr>
-              <tr>
-                
-              </tr>
             </table>
           </div>
           <div className="tablemenu footer">
@@ -213,7 +210,5 @@ var AdvisorProfileView = React.createClass({
       </AdvisorView>
     );
   },
-
 });
-
 module.exports = AdvisorProfileView;

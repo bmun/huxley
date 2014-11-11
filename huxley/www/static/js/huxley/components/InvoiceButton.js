@@ -8,12 +8,10 @@
 'use strict';
 
 var $ = require('jquery');
+var Button = require('./Button');
 var React = require('react');
 
-var Button = require('./Button');
-
 var InvoiceButton = React.createClass({
-
   getInitialState: function() {
     return {
       generated: false
@@ -27,7 +25,7 @@ var InvoiceButton = React.createClass({
           color="green"
           size="small"
           onClick={this._generateInvoice}>
-          Your Invoice Has Been Generated
+          Your Invoice Will Be Emailed Within 2 Business Days
         </Button>
       )
     }
@@ -50,13 +48,6 @@ var InvoiceButton = React.createClass({
     $.ajax({
       type: 'POST',
       url: '/api/schools/'+school.id+'/invoice/',
-      data: {
-        'user.id': user.id,
-        'user.name': user.name,
-        'school.name': school.name,
-        'school.fees_owed': school.fees_owed,
-        'school.fees_paid': school.fees_paid
-      },
       success: this._handleSuccess,
       error: this._handleError,
       dataType: 'json'
