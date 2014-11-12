@@ -9,13 +9,21 @@
 
 var React = require('react');
 var TopBar = require('./TopBar');
+var NavTab = require('./NavTab');
 
 var InnerView = React.createClass({
   render: function() {
     return (
       <div>
         <TopBar user={this.props.user} />
-        <div id="appnavbar" className="titlebar rounded-top" />
+        <div id="appnavbar" className="titlebar rounded-top">
+          <NavTab href="/advisor/profile" id="tab-profile">
+            Profile
+          </NavTab>
+          <NavTab href="/advisor/assignments" id="tab-assignments">
+            Assignments
+          </NavTab>
+        </div>
         <div className="content transparent ie-layout rounded-bottom">
           {this.props.children}
         </div>
