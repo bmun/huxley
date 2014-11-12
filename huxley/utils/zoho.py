@@ -4,14 +4,20 @@
 import json
 import requests
 
-from huxley.settings.zoho import ORGANIZATION_ID, AUTHTOKEN
+ZOHO_CREDENTIALS = False
+try:
+    from huxley.settings.zoho import ORGANIZATION_ID, AUTHTOKEN
+    ZOHO_CREDENTIALS = True
+except ImportError:
+    pass
 
 def get_contact(school):
-    list_url = 'https://invoice.zoho.com/api/v3/contacts?organization_id=' + ORGANIZATION_ID + '&authtoken=' + AUTHTOKEN
-    contact = {
-        "company_name_contains": school.name
-    }
-    return requests.get(list_url, params=contact).json()["contacts"][0]["contact_id"]
+    if ZOHO_CREDENTIALS:
+      list_url = 'https://invoice.zoho.com/api/v3/contacts?organization_id=' + ORGANIZATION_ID + '&authtoken=' + AUTHTOKEN
+      contact = {
+          "company_name_contains": school.name
+      }
+      return requests.get(list_url, params=contact).json()["contacts"][0]["contact_id"]
 
 def generate_contact_attributes(school):
 	return {
