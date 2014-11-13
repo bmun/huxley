@@ -77,7 +77,7 @@ var AdvisorAssignmentsView = React.createClass({
   renderAssignmentRows: function() {
     var committees = this.state.committees;
     var countries = this.state.countries;
-    var rows = this.state.assignments.map(function(assignment) {
+    return this.state.assignments.map(function(assignment) {
       return (
         <tr>
           <td>{committees[assignment.committee].name}</td>
@@ -86,7 +86,6 @@ var AdvisorAssignmentsView = React.createClass({
         </tr>
       );
     });
-    return rows;
   }
 });
 
