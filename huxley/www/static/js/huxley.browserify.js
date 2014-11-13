@@ -17,6 +17,7 @@ var CurrentUserStore = require('./huxley/stores/CurrentUserStore');
 var Huxley = require('./huxley/Huxley');
 
 var AdvisorProfileView = require('./huxley/components/AdvisorProfileView');
+var AssignmentsView = require('./huxley/components/AssignmentsView');
 var ForgotPasswordView = require('./huxley/components/ForgotPasswordView');
 var LoginView = require('./huxley/components/LoginView');
 var PasswordResetSuccessView = require('./huxley/components/PasswordResetSuccessView');
@@ -39,6 +40,7 @@ var routes = (
     <Route path="/register/success" view={RegistrationSuccessView} />
     <Route path="/register/waitlist" view={RegistrationWaitlistView} />
     <Route path="/advisor/profile" view={AdvisorProfileView} />
+    <Route path="/advisor/assignments" view={AssignmentsView} />
 
   </Routes>
 );
