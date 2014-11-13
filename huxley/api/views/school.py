@@ -5,6 +5,7 @@
 import datetime, json
 import requests
 
+from django.conf import settings
 from django.http import Http404
 from rest_framework import generics, status
 from rest_framework.authentication import SessionAuthentication
@@ -13,12 +14,7 @@ from rest_framework.response import Response
 from huxley.api.permissions import IsAdvisorOrSuperuser, IsSchoolAdvisorOrSuperuser, IsPostOrSuperuserOnly
 from huxley.api.serializers import AssignmentSerializer, SchoolSerializer
 from huxley.core.models import Assignment, School
-ZOHO_CREDENTIALS = False
-try:
-  from huxley.settings.zoho import ORGANIZATION_ID, AUTHTOKEN
-  ZOHO_CREDENTIALS = True
-except ImportError:
-  pass
+from huxley.utils import zoho
 
 class SchoolList(generics.CreateAPIView):
     authentication_classes = (SessionAuthentication,)
@@ -48,32 +44,33 @@ class SchoolAssignments(generics.ListAPIView):
 
 class SchoolInvoice(generics.CreateAPIView):
     authentication_classes = (SessionAuthentication,)
-    permission_classes = (IsPostOrSuperuserOnly,)
+    permission_classes = (IsSchoolAdvisorOrSuperuser,)
 
     def invoice_date(self):
         now = datetime.datetime.now()
         return now.strftime("%Y-%m-%d")
 
     def get_contact(self, school_name):
-      list_url = 'https://invoice.zoho.com/api/v3/contacts?organization_id=' + ORGANIZATION_ID + '&authtoken=' + AUTHTOKEN
+      list_url = 'https://invoice.zoho.com/api/v3/contacts?organization_id=' + settings.ORGANIZATION_ID + '&authtoken=' + settings.AUTHTOKEN
       contact = {
         "company_name_contains": school_name
       }
       customer_id = requests.get(list_url, params=contact).json()["contacts"][0]["contact_id"]
 
-      get_url = 'https://invoice.zoho.com/api/v3/contacts/' + customer_id + '?organization_id=' + ORGANIZATION_ID + '&authtoken=' + AUTHTOKEN
+      get_url = 'https://invoice.zoho.com/api/v3/contacts/' + customer_id + '?organization_id=' + settings.ORGANIZATION_ID + '&authtoken=' + settings.AUTHTOKEN
       contact_id = requests.get(get_url).json()["contact"]["primary_contact_id"]
       return (customer_id, contact_id)
 
     def post(self, request, *args, **kwargs):
-        if ZOHO_CREDENTIALS:
-          school_id = self.kwargs.get('pk', None)
-          school = School.objects.get(id = school_id)
-          customer_id, contact_id = self.get_contact(school)
-          attrs = {
+        if not settings.ZOHO_CREDENTIALS:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+        school_id = self.kwargs.get('pk', None)
+        school = School.objects.get(id = school_id)
+        customer_id, contact_id = self.get_contact(school)
+        attrs = {
             "customer_id": customer_id,
             "contact_persons":  [
-              contact_id,
+                contact_id,
             ],
             "invoice_number": "",
             "template_id": "",
@@ -89,8 +86,7 @@ class SchoolInvoice(generics.CreateAPIView):
             "salesperson_name": "",
             "custom_fields": [
             ],
-            "line_items": [
-              {
+            "line_items": [{
                 "item_id": "",
                 "project_id": "",
                 "expense_id": "",
@@ -101,22 +97,19 @@ class SchoolInvoice(generics.CreateAPIView):
                 "quantity": 1.00,
                 "discount": 0.00,
                 "tax_id": ""
-              },
-            ],
+            }],
             "payment_options": {
             },
             "allow_partial_payments": True,
             "shipping_charge": 0.00,
             "adjustment": -int(school.fees_paid),
             "adjustment_description": "Already Paid",
-          }
-          parameters = {
-              "send": True,
-              "ignore_auto_number_generation": False,
-              "JSONString": json.dumps(attrs)
-          }
-          zoho_url = 'https://invoice.zoho.com/api/v3/invoices?organization_id=' + ORGANIZATION_ID + '&authtoken=' + AUTHTOKEN
-          r = requests.post(zoho_url, params=parameters)
-          return Response(status=status.HTTP_201_CREATED)
-        else:
-          return Response(status=status.HTTP_401_UNAUTHORIZED)
+        }
+        parameters = {
+            "send": True,
+            "ignore_auto_number_generation": False,
+            "JSONString": json.dumps(attrs)
+        }
+        zoho_url = 'https://invoice.zoho.com/api/v3/invoices?organization_id=' + settings.ORGANIZATION_ID + '&authtoken=' + settings.AUTHTOKEN
+        r = requests.post(zoho_url, params=parameters)
+        return Response(status=status.HTTP_201_CREATED)        

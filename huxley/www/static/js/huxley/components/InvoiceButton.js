@@ -14,40 +14,40 @@ var React = require('react');
 var InvoiceButton = React.createClass({
   getInitialState: function() {
     return {
-      generated: false
+      loading: false,
+      generated: false,
+      unauthorized: false
     };
   },
 
   render: function() {
+    var buttonText = 'Generate Your Invoice';
     if (this.state.generated) {
-      return (
-        <Button
-          color="green"
-          size="small"
-          onClick={this._generateInvoice}>
-          Your Invoice Will Be Emailed Within 2 Business Days
-        </Button>
-      )
+      buttonText = 'Your Invoice Will Be Emailed Within 2 Business Days';
     }
-    else {
-      return (
-        <Button
-          color="green"
-          size="small"
-          onClick={this._generateInvoice}>
-          Generate Your Invoice
-        </Button>
-      )
-    };
+    if (this.state.unauthorized) {
+      buttonText = 'Something Went Wrong - Please Email treasurer@bmun.org';
+    }
+    return (
+      <Button
+        color="green"
+        size="small"
+        loading={this.state.loading}
+        onClick={this.state.generated 
+          ? null
+          : this._handleClick}>
+        {buttonText}
+      </Button>
+    )
   },
 
-  _generateInvoice: function(event) {
+  _handleClick: function(event) {
+    this.setState({loading: true});
     var user = this.props.user.getData();
     var school = this.props.user.getSchool();
-
     $.ajax({
       type: 'POST',
-      url: '/api/schools/'+school.id+'/invoice/',
+      url: '/api/schools/' + school.id + '/invoice/',
       success: this._handleSuccess,
       error: this._handleError,
       dataType: 'json'
@@ -57,10 +57,17 @@ var InvoiceButton = React.createClass({
 
   _handleSuccess: function(data, status, jqXHR) {
     this.setState({generated: true});
+    this.setState({loading: false});
   },
 
   _handleError: function(jqXHR, status, error) {
-    this.setState({generated: true});
+    // Unrelated errors might still pop up even though invoices are being created
+    if (jqXHR.status == 201) {
+      this.setState({generated: true});
+    } else {
+      this.setState({unauthorized: true});
+    }
+    this.setState({loading: false});
   }
 
 });
