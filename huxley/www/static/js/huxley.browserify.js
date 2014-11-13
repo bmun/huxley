@@ -16,6 +16,7 @@ var RRouter = require('rrouter');
 var CurrentUserStore = require('./huxley/stores/CurrentUserStore');
 var Huxley = require('./huxley/Huxley');
 
+var AdvisorAssignmentsView = require('./huxley/components/AdvisorAssignmentsView');
 var AdvisorProfileView = require('./huxley/components/AdvisorProfileView');
 var ForgotPasswordView = require('./huxley/components/ForgotPasswordView');
 var LoginView = require('./huxley/components/LoginView');
@@ -39,7 +40,7 @@ var routes = (
     <Route path="/register/success" view={RegistrationSuccessView} />
     <Route path="/register/waitlist" view={RegistrationWaitlistView} />
     <Route path="/advisor/profile" view={AdvisorProfileView} />
-
+    <Route path="/advisor/assignments" view={AdvisorAssignmentsView} />
   </Routes>
 );
 
