@@ -19,8 +19,8 @@ var AdvisorAssignmentsView = React.createClass({
   getInitialState: function() {
     return {
       assignments: [],
-      committees: [],
-      countries: []
+      committees: {},
+      countries: {}
     };
   },
 
@@ -46,7 +46,7 @@ var AdvisorAssignmentsView = React.createClass({
   },
 
   render: function() {
-    return(
+    return (
       <AdvisorView user={this.props.user}>
         <h2>Roster</h2>
         <p>
@@ -54,37 +54,38 @@ var AdvisorAssignmentsView = React.createClass({
           would like to request more slots, please email <a href="mailto:info@bmun.org">
           info@bmun.org</a>. In the coming months
           we will ask that you finalize your assignment roster and input your
-          delegates' name.
+          delegates' names.
         </p>
-        <form id="welcomepage">
-          <div className="tablemenu header">
-          </div>
-          <div id="welcomeinfocontainer" className="table-container">
-            <table id="welcomeinfo" className="table highlight-cells">
+        <form>
+          <div className="tablemenu header" />
+          <div className="table-container">
+            <table className="table highlight-cells">
               <tr>
                 <th>Committee</th>
                 <th>Country</th>
                 <th>Delegation Size</th>
               </tr>
-              {this.generateAssignmentRows()}
+              {this.renderAssignmentRows()}
             </table>
           </div>
-          <div className="tablemenu footer">
-          </div>
+          <div className="tablemenu footer" />
         </form>
       </AdvisorView>
     );
   },
 
-  generateAssignmentRows: function() {
-    var rows = [];
-    for (var i = 0; i < this.state.assignments.length; i++) {
-      rows.push(<tr>
-        <td>{this.state.committees[this.state.assignments[i].committee].name}</td>
-        <td>{this.state.countries[this.state.assignments[i].country].name}</td>
-        <td>{this.state.committees[this.state.assignments[i].committee].delegation_size}</td>
-      </tr>);
-    }
+  renderAssignmentRows: function() {
+    var committees = this.state.committees;
+    var countries = this.state.countries;
+    var rows = this.state.assignments.map(function(assignment) {
+      return (
+        <tr>
+          <td>{committees[assignment.committee].name}</td>
+          <td>{countries[assignment.country].name}</td>
+          <td>{committees[assignment.committee].delegation_size}</td>
+        </tr>
+      );
+    });
     return rows;
   }
 });

@@ -17,10 +17,10 @@ var InnerView = React.createClass({
       <div>
         <TopBar user={this.props.user} />
         <div id="appnavbar" className="titlebar rounded-top">
-          <NavTab href="/advisor/profile" id="tab-profile">
+          <NavTab href="/advisor/profile">
             Profile
           </NavTab>
-          <NavTab href="/advisor/assignments" id="tab-assignments">
+          <NavTab href="/advisor/assignments">
             Assignments
           </NavTab>
         </div>

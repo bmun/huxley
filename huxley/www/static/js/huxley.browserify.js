@@ -16,8 +16,8 @@ var RRouter = require('rrouter');
 var CurrentUserStore = require('./huxley/stores/CurrentUserStore');
 var Huxley = require('./huxley/Huxley');
 
-var AdvisorProfileView = require('./huxley/components/AdvisorProfileView');
 var AdvisorAssignmentsView = require('./huxley/components/AdvisorAssignmentsView');
+var AdvisorProfileView = require('./huxley/components/AdvisorProfileView');
 var ForgotPasswordView = require('./huxley/components/ForgotPasswordView');
 var LoginView = require('./huxley/components/LoginView');
 var PasswordResetSuccessView = require('./huxley/components/PasswordResetSuccessView');
