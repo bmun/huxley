@@ -21,65 +21,6 @@ class Conference(models.Model):
     open_reg        = models.BooleanField(default=True)
     waitlist_reg    = models.BooleanField(default=False)
 
-    @staticmethod
-    def auto_country_assign(school):
-        '''Automatically assign a school country and committee assignments
-        based on preference, and then by default order.'''
-        spots_left = school.max_delegation_size
-        if spots_left > 10:
-            spots_left = Conference.auto_assign(Country.objects.filter(special=True).order_by('?'),
-                                                school.get_committee_preferences(),
-                                                school,
-                                                spots_left,
-                                                1,
-                                                (school.max_delegation_size*.15)+1)
-        if spots_left > 10:
-            spots_left = Conference.auto_assign(Country.objects.filter(special=False).order_by('?'),
-                                                school.get_committee_preferences(),
-                                                school,
-                                                spots_left,
-                                                1,
-                                                (school.max_delegation_size*.20)+1)
-        if spots_left:
-            spots_left = Conference.auto_assign(school.countrypreferences.all(),
-                                                Committee.objects.filter(special=False).order_by('?'),
-                                                school,
-                                                spots_left,
-                                                3)
-        if spots_left:
-            spots_left = Conference.auto_assign(Country.objects.filter(special=False).order_by('?'),
-                                                Committee.objects.filter(special=False).order_by('?'),
-                                                school,
-                                                spots_left)
-
-    @staticmethod
-    def auto_assign(countries, committees, school, spots_left, num_delegations=100, max_spots=100):
-        '''Assign schools to unassigned Assignment objects based on a set of
-        available countries and committees.'''
-        for committee in committees:
-            num_del = num_delegations
-            for country in countries:
-                try:
-                    assignment = Assignment.objects.get(committee=committee,
-                                                        country=country)
-                    if assignment.school is None:
-                        assignment.school = school
-                        spots_left -= committee.delegation_size
-                        max_spots -= committee.delegation_size
-                        num_delegations -= 1
-                        assignment.save()
-                        if spots_left < 2:
-                            return 0
-                        if num_del <= 0:
-                            break
-                        if max_spots < 0:
-                            return spots_left
-                except Assignment.DoesNotExist:
-                    pass
-            if num_del <= 0:
-                continue
-        return spots_left
-
     def __unicode__(self):
         return 'BMUN %d' % self.session
 
