@@ -10,8 +10,7 @@ from django.http import Http404
 from rest_framework import generics, status
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.response import Response
-
-from huxley.api.permissions import IsAdvisorOrSuperuser, IsSchoolAdvisorOrSuperuser, IsPostOrSuperuserOnly
+from huxley.api.permissions import IsAdvisorOrSuperuser, IsSchoolAdvisorOrSuperuser
 from huxley.api.serializers import AssignmentSerializer, SchoolSerializer
 from huxley.core.models import Assignment, School
 from huxley.utils import zoho
@@ -65,7 +64,7 @@ class SchoolInvoice(generics.CreateAPIView):
         if not settings.ZOHO_CREDENTIALS:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
         school_id = self.kwargs.get('pk', None)
-        school = School.objects.get(id = school_id)
+        school = School.objects.get(id=school_id)
         customer_id, contact_id = self.get_contact(school)
         attrs = {
             "customer_id": customer_id,
@@ -112,4 +111,7 @@ class SchoolInvoice(generics.CreateAPIView):
         }
         zoho_url = 'https://invoice.zoho.com/api/v3/invoices?organization_id=' + settings.ORGANIZATION_ID + '&authtoken=' + settings.AUTHTOKEN
         r = requests.post(zoho_url, params=parameters)
-        return Response(status=status.HTTP_201_CREATED)        
+        if r.status_code == requests.codes.ok:
+            return Response(status=status.HTTP_200_OK)
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST)

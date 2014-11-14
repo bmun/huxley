@@ -16,7 +16,7 @@ var InvoiceButton = React.createClass({
     return {
       loading: false,
       generated: false,
-      unauthorized: false
+      error: false
     };
   },
 
@@ -25,7 +25,7 @@ var InvoiceButton = React.createClass({
     if (this.state.generated) {
       buttonText = 'Your Invoice Will Be Emailed Within 2 Business Days';
     }
-    if (this.state.unauthorized) {
+    if (this.state.error) {
       buttonText = 'Something Went Wrong - Please Email treasurer@bmun.org';
     }
     return (
@@ -56,18 +56,16 @@ var InvoiceButton = React.createClass({
   },
 
   _handleSuccess: function(data, status, jqXHR) {
-    this.setState({generated: true});
-    this.setState({loading: false});
+    this.setState({generated: true, loading: false});
   },
 
   _handleError: function(jqXHR, status, error) {
     // Unrelated errors might still pop up even though invoices are being created
-    if (jqXHR.status == 201) {
-      this.setState({generated: true});
-    } else {
-      this.setState({unauthorized: true});
-    }
-    this.setState({loading: false});
+    this.setState({
+      loading: false,
+      generated: jqXHR.status == 200,
+      error: jqXHR.status != 200
+    });
   }
 
 });

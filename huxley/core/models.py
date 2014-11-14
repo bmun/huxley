@@ -12,6 +12,7 @@ from django.db.models.signals import post_save, pre_save
 from huxley.core.constants import ContactGender, ContactType, ProgramTypes
 from huxley.utils import zoho
 
+
 class Conference(models.Model):
     session         = models.PositiveSmallIntegerField(default=0)
     start_date      = models.DateField()
