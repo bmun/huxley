@@ -3,8 +3,8 @@
 
 import json
 
-from django.shortcuts import redirect
 from django.core.urlresolvers import reverse
+from django.shortcuts import redirect
 
 from huxley.api.serializers import UserSerializer
 from huxley.core.constants import ContactGender, ContactType, ProgramTypes
