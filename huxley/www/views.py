@@ -6,9 +6,12 @@ import json
 from huxley.api.serializers import UserSerializer
 from huxley.core.constants import ContactGender, ContactType, ProgramTypes
 from huxley.utils.shortcuts import render_template
+from django.shortcuts import redirect
 
 
 def index(request):
+    if request.user.is_superuser:
+        return redirect('/admin/')
     user_dict = {};
     if request.user.is_authenticated():
         user_dict = UserSerializer(request.user).data
