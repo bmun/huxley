@@ -194,18 +194,28 @@ class School(models.Model):
     def email_confirmation(cls, **kwargs):
         if kwargs['created']:
             school = kwargs['instance']
-            send_mail('BMUN 63 Registration Confirmation',
-                      'You have officially been registered for BMUN 63. '
-                      'To access your account, please log in at huxley.bmun.org.\n\n'
-                      'The school registration fee is $50. The delegate registration '
-                      'fee is $50 per student. You will be able to view your balance '
-                      'on huxley.bmun.org in November, at which point we will begin '
-                      'accepting payments.\n\n'
-                      'If you have any tech related questions, please email tech@bmun.org. '
-                      'For all other questions, please email info@bmun.org\n\n'
-                      'Thank you for using Huxley!',
-                      'no-reply@bmun.org',
-                      [school.primary_email], fail_silently=True)
+            if school.waitlist:
+                send_mail('BMUN 63 Waitlist Confirmation',
+                          'You have officially been put on the waitlist for BMUN 63. '
+                          'We will inform you if and when you are taken off the waitlist.\n\n'
+                          'If you have any tech related questions, please email tech@bmun.org. '
+                          'For all other questions, please email info@bmun.org.\n\n'
+                          'Thank you for using Huxley!',
+                          'no-reply@bmun.org',
+                          [school.primary_email], fail_silently=True)
+            else:
+                send_mail('BMUN 63 Registration Confirmation',
+                          'You have officially been registered for BMUN 63. '
+                          'To access your account, please log in at huxley.bmun.org.\n\n'
+                          'The school registration fee is $50. The delegate registration '
+                          'fee is $50 per student. You will be able to view your balance '
+                          'on huxley.bmun.org in November, at which point we will begin '
+                          'accepting payments.\n\n'
+                          'If you have any tech related questions, please email tech@bmun.org. '
+                          'For all other questions, please email info@bmun.org.\n\n'
+                          'Thank you for using Huxley!',
+                          'no-reply@bmun.org',
+                          [school.primary_email], fail_silently=True)
 
     @classmethod
     def create_zoho_contact(cls, **kwargs):
