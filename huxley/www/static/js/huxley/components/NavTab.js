@@ -7,7 +7,7 @@
 
 'use strict';
 
-var Link = require('rrouter').Link;
+var Link = require('react-router').Link;
 var React = require('react');
 
 var NavTab = React.createClass({
@@ -17,7 +17,7 @@ var NavTab = React.createClass({
 
   render: function() {
     return (
-      <Link href={this.props.href} className='tab'>
+      <Link to={this.props.href} className='tab'>
         {this.props.children}
       </Link>
     );

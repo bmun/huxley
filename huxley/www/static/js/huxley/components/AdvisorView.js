@@ -8,17 +8,17 @@
 'use strict';
 
 var React = require('react');
-var RRouter = require('rrouter');
+var Router = require('react-router');
 
 var InnerView = require('./InnerView');
 var PermissionDeniedView = require('./PermissionDeniedView');
 
 var AdvisorView = React.createClass ({
-  mixins: [RRouter.RoutingContextMixin],
+  mixins: [Router.Navigation],
 
   componentDidMount: function() {
     if (this.props.user.isAnonymous()) {
-      this.navigate('/login');
+      this.transitionTo('/login');
     }
   },
 

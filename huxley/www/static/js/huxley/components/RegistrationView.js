@@ -11,7 +11,7 @@ var console = require('console');
 
 var $ = require('jquery');
 var React = require('react/addons');
-var RRouter = require('rrouter');
+var Router = require('react-router');
 
 var Button = require('./Button');
 var ContactTypes = require('../constants/ContactTypes');
@@ -31,7 +31,7 @@ var USA = 'United States of America';
 var RegistrationView = React.createClass({
   mixins: [
     React.addons.LinkedStateMixin,
-    RRouter.RoutingContextMixin
+    Router.Navigation,
   ],
 
   getInitialState: function() {
@@ -684,9 +684,9 @@ var RegistrationView = React.createClass({
 
   _handleSuccess: function(data, status, jqXHR) {
     if (data.school.waitlist) {
-      this.navigate('/register/waitlist');
+      this.transitionTo('/register/waitlist');
     } else {
-      this.navigate('/register/success');
+      this.transitionTo('/register/success');
     }
   },
 

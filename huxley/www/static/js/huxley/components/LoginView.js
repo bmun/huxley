@@ -11,7 +11,7 @@ var console = require('console');
 
 var $ = require('jquery');
 var React = require('react/addons');
-var RRouter = require('rrouter');
+var Router = require('react-router');
 
 var Button = require('./Button');
 var CurrentUserActions = require('../actions/CurrentUserActions');
@@ -23,7 +23,7 @@ require('jquery-ui/effect-shake');
 var LoginView = React.createClass({
   mixins: [
     React.addons.LinkedStateMixin,
-    RRouter.RoutingContextMixin
+    Router.Navigation,
   ],
 
   getInitialState: function() {
@@ -40,7 +40,7 @@ var LoginView = React.createClass({
       return;
     }
     if (this.props.user.isAdvisor()) {
-      this.navigate('/advisor/profile');
+      this.transitionTo('/advisor/profile');
     }
   },
 

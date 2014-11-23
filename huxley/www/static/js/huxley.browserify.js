@@ -11,7 +11,7 @@ require('jquery.cookie');
 
 var $ = require('jquery');
 var React = require('react');
-var RRouter = require('rrouter');
+var Router = require('react-router');
 
 var CurrentUserStore = require('./huxley/stores/CurrentUserStore');
 var Huxley = require('./huxley/Huxley');
@@ -27,27 +27,28 @@ var RegistrationClosedView = require('./huxley/components/RegistrationClosedView
 var RegistrationSuccessView = require('./huxley/components/RegistrationSuccessView');
 var RegistrationWaitlistView = require('./huxley/components/RegistrationWaitlistView');
 
-var Routes = RRouter.Routes;
-var Route = RRouter.Route;
+var DefaultRoute = Router.DefaultRoute;
+var Routes = Router.Routes;
+var Route = Router.Route;
 
 var routes = (
-  <Routes>
-    <Route path="/" view={RedirectView} />
-    <Route path="/login" view={LoginView} />
-    <Route path="/password" view={ForgotPasswordView} />
-    <Route path="/password/reset" view={PasswordResetSuccessView} />
-    <Route path="/register" view={RegistrationClosedView} />
-    <Route path="/register/success" view={RegistrationSuccessView} />
-    <Route path="/register/waitlist" view={RegistrationWaitlistView} />
-    <Route path="/advisor/profile" view={AdvisorProfileView} />
-    <Route path="/advisor/assignments" view={AdvisorAssignmentsView} />
-  </Routes>
+  <Route path="/" handler={Huxley}>
+    <Route path="/login" handler={LoginView} />
+    <Route path="/password" handler={ForgotPasswordView} />
+    <Route path="/password/reset" handler={PasswordResetSuccessView} />
+    <Route path="/register" handler={RegistrationClosedView} />
+    <Route path="/register/success" handler={RegistrationSuccessView} />
+    <Route path="/register/waitlist" handler={RegistrationWaitlistView} />
+    <Route path="/advisor/profile" handler={AdvisorProfileView} />
+    <Route path="/advisor/assignments" handler={AdvisorAssignmentsView} />
+    <DefaultRoute handler={RedirectView} />
+  </Route>
 );
 
 $(function() {
-  RRouter.start(routes, function(view) {
-    React.renderComponent(
-      <Huxley view={view} />,
+  Router.run(routes, function(Handler) {
+    React.render(
+      <Handler />,
       document.getElementById('huxley-app')
     );
   });

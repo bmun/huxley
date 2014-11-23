@@ -5,19 +5,17 @@
   "main": "huxley/www/static/js/huxley.browserify.js",
   "license": "BSD",
   "dependencies": {
-    "browserify": "5.10.0",
-    "envify": "3.0.0",
-    "react": "0.11.1",
-    "reactify": "0.14.0",
+    "browserify": "6.3.2",
+    "envify": "3.2.0",
+    "react": "0.12.1",
+    "reactify": "0.17.1",
     "jquery": "2.1.1",
     "jquery.cookie": "1.4.1",
     "jquery-ui": "1.10.5",
     "jest-cli": "0.1.18",
-    "url-pattern": "0.6.0",
-    "bluebird": "2.1.1",
-    "rrouter": "0.4.2",
     "uglify-js": "2.4.15",
-    "es6-promise": "1.0.0"
+    "es6-promise": "2.0.0",
+    "react-router": "~0.11.1"
   },
   "scripts": {
     "test": "jest"

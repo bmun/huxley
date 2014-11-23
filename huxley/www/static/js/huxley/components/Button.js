@@ -8,7 +8,7 @@
 'use strict';
 
 var React = require('react/addons');
-var RRouter = require('rrouter');
+var Router = require('react-router');
 
 var Button = React.createClass({
   propTypes: {
@@ -28,7 +28,7 @@ var Button = React.createClass({
 
   render: function() {
     var cx = React.addons.classSet;
-    var ButtonComponent = this.props.href ? RRouter.Link : React.DOM.button;
+    var ButtonComponent = this.props.href ? Router.Link : React.DOM.button;
 
     return this.transferPropsTo(
       <ButtonComponent
@@ -41,7 +41,8 @@ var Button = React.createClass({
           'rounded-small': true,
           'loading': this.props.loading
         })}
-        disabled={this.props.loading}>
+        disabled={this.props.loading}
+        to={this.props.href}>
         <span>{this.props.children}</span>
       </ButtonComponent>
     );
