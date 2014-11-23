@@ -9,9 +9,9 @@
 
 var React = require('react/addons');
 
-var AdvisorView = require('./AdvisorView');
 var Button = require('./Button');
-var InvoiceButton = require('./InvoiceButton'); 
+var InnerView = require('./InnerView');
+var InvoiceButton = require('./InvoiceButton');
 var LogoutButton = require('./LogoutButton');
 var ProgramTypes = require('../constants/ProgramTypes');
 var User = require('../User');
@@ -27,7 +27,7 @@ var AdvisorProfileView = React.createClass({
     var user = this.props.user.getData();
     var school = this.props.user.getSchool();
     return (
-      <AdvisorView user={this.props.user}>
+      <InnerView>
         <h2>Welcome, {user.first_name}!</h2>
         <p>
           We are very excited to see {school.name} at BMUN 63 this year! Here,
@@ -39,7 +39,7 @@ var AdvisorProfileView = React.createClass({
         <p>
           Advisors, if you wish to generate an invoice for your school with your
           payment details, please click on the Generate Your Invoice button under
-          the Fees tab. You will receive an invoice in your email within 2 business 
+          the Fees tab. You will receive an invoice in your email within 2 business
           days.
         </p>
         <br />
@@ -207,7 +207,7 @@ var AdvisorProfileView = React.createClass({
           <div className="tablemenu footer">
           </div>
         </form>
-      </AdvisorView>
+      </InnerView>
     );
   },
 });

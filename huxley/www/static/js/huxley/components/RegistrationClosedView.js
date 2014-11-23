@@ -16,7 +16,7 @@ var RegistrationClosedView = React.createClass({
   render: function() {
     return (
       <OuterView>
-        <div class="letter">
+        <div className="letter">
           <h1>I'm Sorry</h1>
           <p>
             Thank you for your interest in participating in the sixty-third

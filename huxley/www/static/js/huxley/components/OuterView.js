@@ -11,7 +11,7 @@ var React = require('react');
 
 var OuterView = React.createClass({
   propTypes: {
-    header: React.PropTypes.component
+    header: React.PropTypes.element,
   },
 
   render: function() {

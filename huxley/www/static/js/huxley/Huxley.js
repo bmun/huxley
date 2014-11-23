@@ -9,6 +9,8 @@
 
 var React = require('react/addons');
 var Router = require('react-router');
+
+var AdvisorView = require('./components/AdvisorView');
 var CurrentUserStore = require('./stores/CurrentUserStore');
 
 var RouteHandler = Router.RouteHandler;
@@ -28,7 +30,18 @@ var Huxley = React.createClass({
   },
 
   render: function() {
-    return <RouteHandler user={CurrentUserStore.getCurrentUser()} />;
+    var user = CurrentUserStore.getCurrentUser();
+    if (user.isAnonymous()) {
+      return <RouteHandler user={user} />;
+    } else if (user.isAdvisor()) {
+      return (
+        <AdvisorView user={user}>
+          <RouteHandler user={user} />
+        </AdvisorView>
+      );
+    } else {
+      // TODO: Chairs
+    }
   },
 });
 

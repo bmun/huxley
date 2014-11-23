@@ -11,7 +11,9 @@ var React = require('react');
 var Router = require('react-router');
 
 var InnerView = require('./InnerView');
+var NavTab = require('./NavTab');
 var PermissionDeniedView = require('./PermissionDeniedView');
+var TopBar = require('./TopBar');
 
 var AdvisorView = React.createClass ({
   mixins: [Router.Navigation],
@@ -23,24 +25,25 @@ var AdvisorView = React.createClass ({
   },
 
   render: function() {
-    if (this.props.user.isAdvisor()) {
-      return (
-        <InnerView user={this.props.user}>
-          {this.props.children}
-        </InnerView>
-      );
-    } else if (this.props.user.isChair()) {
-      return (
-        <InnerView user={this.props.user}>
-          <PermissionDeniedView />
-        </InnerView>
-      );
-    } else {
-      return (
-        <div />
-      );
-    }
-  }
+    var content = this.props.user.isAdvisor()
+      ? this.props.children
+      : <PermissionDeniedView />;
+
+    return (
+      <div>
+        <TopBar user={this.props.user} />
+        <div id="appnavbar" className="titlebar rounded-top">
+          <NavTab href="/advisor/profile">
+            Profile
+          </NavTab>
+          <NavTab href="/advisor/assignments">
+            Assignments
+          </NavTab>
+        </div>
+        {this.props.children}
+      </div>
+    );
+  },
 });
 
 module.exports = AdvisorView;

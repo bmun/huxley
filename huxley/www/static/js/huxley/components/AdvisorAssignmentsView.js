@@ -10,10 +10,10 @@
 var $ = require('jquery');
 var React = require('react');
 
-var AdvisorView = require('./AdvisorView');
 var AssignmentStore = require('../stores/AssignmentStore');
 var CommitteeStore = require('../stores/CommitteeStore');
 var CountryStore = require('../stores/CountryStore');
+var InnerView = require('./InnerView');
 
 var AdvisorAssignmentsView = React.createClass({
   getInitialState: function() {
@@ -47,7 +47,7 @@ var AdvisorAssignmentsView = React.createClass({
 
   render: function() {
     return (
-      <AdvisorView user={this.props.user}>
+      <InnerView>
         <h2>Roster</h2>
         <p>
           Here you can view your tentative assignments for BMUN 63. If you
@@ -70,7 +70,7 @@ var AdvisorAssignmentsView = React.createClass({
           </div>
           <div className="tablemenu footer" />
         </form>
-      </AdvisorView>
+      </InnerView>
     );
   },
 

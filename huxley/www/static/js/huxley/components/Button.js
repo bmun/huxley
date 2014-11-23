@@ -28,10 +28,11 @@ var Button = React.createClass({
 
   render: function() {
     var cx = React.addons.classSet;
-    var ButtonComponent = this.props.href ? Router.Link : React.DOM.button;
+    var ButtonComponent = this.props.href ? Router.Link : 'button';
 
-    return this.transferPropsTo(
+    return (
       <ButtonComponent
+        {...this.props}
         className={cx({
           'button': true,
           'button-small': this.props.size == 'small',

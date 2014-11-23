@@ -44,13 +44,11 @@ var LogoutButton = React.createClass({
   },
 
   _handleLogoutSuccess: function(data, status, jqXHR) {
-    console.log('logging out');
     CurrentUserActions.logout();
   },
 
   _handleLogoutError: function(jqXHR, status, error) {
     var response = jqXHR.responseJSON;
-    console.log(response.detail);
   }
 });
 
