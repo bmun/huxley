@@ -111,7 +111,7 @@ class SchoolInvoice(generics.CreateAPIView):
         }
         zoho_url = 'https://invoice.zoho.com/api/v3/invoices?organization_id=' + settings.ORGANIZATION_ID + '&authtoken=' + settings.AUTHTOKEN
         r = requests.post(zoho_url, params=parameters)
-        if r.status_code == requests.codes.ok:
+        if r.raise_for_status() == None:
             return Response(status=status.HTTP_200_OK)
         else:
             return Response(status=status.HTTP_400_BAD_REQUEST)
