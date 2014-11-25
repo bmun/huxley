@@ -10,7 +10,6 @@
 var React = require('react');
 var Router = require('react-router');
 
-var InnerView = require('./InnerView');
 var NavTab = require('./NavTab');
 var PermissionDeniedView = require('./PermissionDeniedView');
 var TopBar = require('./TopBar');

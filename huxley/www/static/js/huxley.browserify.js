@@ -20,6 +20,7 @@ var AdvisorAssignmentsView = require('./huxley/components/AdvisorAssignmentsView
 var AdvisorProfileView = require('./huxley/components/AdvisorProfileView');
 var ForgotPasswordView = require('./huxley/components/ForgotPasswordView');
 var LoginView = require('./huxley/components/LoginView');
+var NotFoundView = require('./huxley/components/NotFoundView');
 var PasswordResetSuccessView = require('./huxley/components/PasswordResetSuccessView');
 var RedirectView = require('./huxley/components/RedirectView');
 // var RegistrationView = require('./huxley/components/RegistrationView');
@@ -28,6 +29,7 @@ var RegistrationSuccessView = require('./huxley/components/RegistrationSuccessVi
 var RegistrationWaitlistView = require('./huxley/components/RegistrationWaitlistView');
 
 var DefaultRoute = Router.DefaultRoute;
+var NotFoundRoute = Router.NotFoundRoute;
 var Routes = Router.Routes;
 var Route = Router.Route;
 
@@ -42,6 +44,7 @@ var routes = (
     <Route path="/advisor/profile" handler={AdvisorProfileView} />
     <Route path="/advisor/assignments" handler={AdvisorAssignmentsView} />
     <DefaultRoute handler={RedirectView} />
+    <NotFoundRoute handler={NotFoundView} />
   </Route>
 );
 
