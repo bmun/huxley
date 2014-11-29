@@ -1,8 +1,6 @@
 /**
  * Copyright (c) 2011-2014 Berkeley Model United Nations. All rights reserved.
  * Use of this source code is governed by a BSD License (see LICENSE).
- *
- * @jsx React.DOM
  */
 
 'use strict';
@@ -33,7 +31,7 @@ var InvoiceButton = React.createClass({
         color="green"
         size="small"
         loading={this.state.loading}
-        onClick={this.state.generated 
+        onClick={this.state.generated
           ? null
           : this._handleClick}>
         {buttonText}
