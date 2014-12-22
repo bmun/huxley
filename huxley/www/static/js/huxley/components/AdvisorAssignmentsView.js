@@ -11,6 +11,7 @@ var $ = require('jquery');
 var React = require('react');
 
 var AssignmentStore = require('../stores/AssignmentStore');
+var Button = require('./Button');
 var CommitteeStore = require('../stores/CommitteeStore');
 var CountryStore = require('../stores/CountryStore');
 var InnerView = require('./InnerView');
@@ -68,10 +69,35 @@ var AdvisorAssignmentsView = React.createClass({
               {this.renderAssignmentRows()}
             </table>
           </div>
-          <div className="tablemenu footer" />
+          <div className="tablemenu footer">
+            <Button
+              color="green"
+              size="small"
+              loading={this.state.loading}
+              onClick={this._finalize}>
+              Finalize Assignments
+            </Button>
+          </div>
         </form>
       </InnerView>
     );
+  },
+
+  _finalize: function(e) {
+    var committees = this.state.committees;
+    var countries = this.state.countries;
+/*    for (int i=0; i<committees.length; i++) {
+      for (int j=0; j<countries.length; j++) {
+        checkID = committee[i].name + country[j].name;
+        elem = document.getElementById("' + checkID + '");
+        if (elem) {
+          status = elem.checked;
+          if (!status) {
+            // remove from database
+          }
+        }
+      }
+    }*/
   },
 
   renderAssignmentRows: function() {
@@ -83,6 +109,8 @@ var AdvisorAssignmentsView = React.createClass({
           <td>{committees[assignment.committee].name}</td>
           <td>{countries[assignment.country].name}</td>
           <td>{committees[assignment.committee].delegation_size}</td>
+          checkID = committees[assignment.committee].name + countries[assignment.country].name
+          <td><input id="' + checkID + '" type="checkbox"/></td>
         </tr>
       );
     });
