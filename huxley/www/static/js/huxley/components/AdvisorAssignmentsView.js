@@ -83,21 +83,37 @@ var AdvisorAssignmentsView = React.createClass({
     );
   },
 
+/*
+  _finalize: function(e) {
+    var elements = document.getElementsByName("test");
+    var x = 0;
+    for (var i=0; i<elements.length; i++) {
+      if (elements[i].checked) {
+        x = x + 1;
+      }
+    }
+    window.alert(elements.length);
+    window.alert(x);
+  },
+*/
+
   _finalize: function(e) {
     var committees = this.state.committees;
     var countries = this.state.countries;
-/*    for (int i=0; i<committees.length; i++) {
-      for (int j=0; j<countries.length; j++) {
-        checkID = committee[i].name + country[j].name;
-        elem = document.getElementById("' + checkID + '");
-        if (elem) {
-          status = elem.checked;
-          if (!status) {
-            // remove from database
-          }
+    window.alert(committees.length);
+    var elem = [];
+    var x = 0;
+    for (var i=0; i<10; i++) {
+      for (var j=0; j<10; j++) {
+        x = x + 1;
+        var checkID = "test";
+        var elem = document.getElementsByName(checkID);
+        if (elem.length>0 && elem[0].checked) {
+          x = x + 1;
         }
       }
-    }*/
+    }
+    window.alert(x);
   },
 
   renderAssignmentRows: function() {
@@ -109,8 +125,8 @@ var AdvisorAssignmentsView = React.createClass({
           <td>{committees[assignment.committee].name}</td>
           <td>{countries[assignment.country].name}</td>
           <td>{committees[assignment.committee].delegation_size}</td>
-          checkID = committees[assignment.committee].name + countries[assignment.country].name
-          <td><input id="' + checkID + '" type="checkbox"/></td>
+          var checkID = committees[assignment.committee].name + countries[assignment.country].name
+          <td><input name="test" type="checkbox"/></td>
         </tr>
       );
     });
