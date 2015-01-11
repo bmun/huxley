@@ -7,7 +7,7 @@ import requests
 from django.conf import settings
 
 def get_contact(school):
-    if settings.ZOHO_CREDENTIALS:
+    if not settings.ZOHO_CREDENTIALS:
         return
     list_url = 'https://invoice.zoho.com/api/v3/contacts?organization_id=' + settings.ORGANIZATION_ID + '&authtoken=' + settings.AUTHTOKEN
     contact = {
