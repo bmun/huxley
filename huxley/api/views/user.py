@@ -24,7 +24,8 @@ class UserList(generics.ListCreateAPIView):
 
     def get_serializer_class(self):
         if self.request.method == 'POST':
-            return CreateUserSerializer
+            # return CreateUserSerializer
+            raise PermissionDenied('Conference registration is closed.')
         return UserSerializer
 
 
