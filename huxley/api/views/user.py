@@ -1,6 +1,7 @@
 # Copyright (c) 2011-2014 Berkeley Model United Nations. All rights reserved.
 # Use of this source code is governed by a BSD License (see LICENSE).
 
+from django.conf import settings
 from django.contrib.auth import login, logout
 from django.http import Http404
 
@@ -21,6 +22,11 @@ class UserList(generics.ListCreateAPIView):
     authentication_classes = (SessionAuthentication,)
     queryset = User.objects.all()
     permission_classes = (IsPostOrSuperuserOnly,)
+
+    def create(self, request, *args, **kwargs):
+        if settings.REGISTRATION_OPEN:
+            return super(UserList, self).create(request, *args, **kwargs)
+        raise PermissionDenied('Conference registration is closed.')
 
     def get_serializer_class(self):
         if self.request.method == 'POST':
