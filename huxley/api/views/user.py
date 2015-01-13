@@ -25,7 +25,7 @@ class UserList(generics.ListCreateAPIView):
 
     def create(self, request, *args, **kwargs):
         if settings.REGISTRATION_OPEN:
-            return super(UserList, self).create(request, args, kwargs)
+            return super(UserList, self).create(request, *args, **kwargs)
         raise PermissionDenied('Conference registration is closed.')
 
     def get_serializer_class(self):
