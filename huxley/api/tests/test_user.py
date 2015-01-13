@@ -254,6 +254,7 @@ class UserListGetTestCase(ListAPITestCase):
              'school': user2.school_id,
              'committee': user2.committee_id}])
 
+
 @override_settings(REGISTRATION_OPEN=True)
 class UserListPostTestCase(CreateAPITestCase):
     url_name = 'api:user_list'

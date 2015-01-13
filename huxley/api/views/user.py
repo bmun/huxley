@@ -17,16 +17,20 @@ from huxley.api.permissions import IsPostOrSuperuserOnly, IsUserOrSuperuser
 from huxley.api.serializers import CreateUserSerializer, UserSerializer
 from huxley.core.models import School
 
+
 class UserList(generics.ListCreateAPIView):
     authentication_classes = (SessionAuthentication,)
     queryset = User.objects.all()
     permission_classes = (IsPostOrSuperuserOnly,)
 
+    def create(self, request, *args, **kwargs):
+        if settings.REGISTRATION_OPEN:
+            return super(UserList, self).create(request, args, kwargs)
+        raise PermissionDenied('Conference registration is closed.')
+
     def get_serializer_class(self):
         if self.request.method == 'POST':
-            if settings.REGISTRATION_OPEN:
-                return CreateUserSerializer
-            raise PermissionDenied('Conference registration is closed.')
+            return CreateUserSerializer
         return UserSerializer
 
 
