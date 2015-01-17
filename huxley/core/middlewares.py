@@ -6,4 +6,4 @@ import logging
 class ExceptionLoggerMiddleware(object):
     def process_exception(self, request, exception):
         logger = logging.getLogger('huxley')
-        logger.critical(exception)
+        logger.exception(exception)
