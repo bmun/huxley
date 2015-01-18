@@ -74,7 +74,7 @@ var AdvisorAssignmentsView = React.createClass({
               color="green"
               size="small"
               loading={this.state.loading}
-              onClick={this._finalize}>
+              onClick={this._handleClick}>
               Finalize Assignments
             </Button>
           </div>
@@ -83,37 +83,43 @@ var AdvisorAssignmentsView = React.createClass({
     );
   },
 
-/*
-  _finalize: function(e) {
-    var elements = document.getElementsByName("test");
-    var x = 0;
+  _handleClick: function(event) {
+    this.setState({loading: true});
+    var user = this.props.user.getData();
+    var school = this.props.user.getSchool();
+    var elements = document.getElementsByTagName("input");
+    var assignList = [];
     for (var i=0; i<elements.length; i++) {
       if (elements[i].checked) {
-        x = x + 1;
+        assignList.push(elements[i].getAttribute("name"));
       }
     }
-    window.alert(elements.length);
-    window.alert(x);
+    window.alert("worked");
+    $.ajax({
+      type: 'POST',
+      url: '/api/schools/' + school.id + '/finalize/',
+      data: assignList,
+      success: this._handleSuccess,
+      error: this._handleError,
+      dataType: 'json'
+    });
+    event.preventDefault();
   },
-*/
 
-  _finalize: function(e) {
-    var committees = this.state.committees;
-    var countries = this.state.countries;
-    window.alert(committees.length);
-    var elem = [];
-    var x = 0;
-    for (var i=0; i<10; i++) {
-      for (var j=0; j<10; j++) {
-        x = x + 1;
-        var checkID = "test";
-        var elem = document.getElementsByName(checkID);
-        if (elem.length>0 && elem[0].checked) {
-          x = x + 1;
-        }
+  _handleSuccess: function(data, status, jqXHR) {
+    window.alert("yay!");
+
+  },
+
+  _handleError: function(jqXHR, status, error) {
+    window.alert("uhoh :(");
+    this.setState({loading: false});
+    /*var elements = document.getElementsByTagName("input");
+    for (var i=0; i<elements.length; i++) {
+      if (elements[i].getAttribute("type") == 'checkbox') {
+        elements[i].remove();
       }
-    }
-    window.alert(x);
+    }*/
   },
 
   renderAssignmentRows: function() {
@@ -125,8 +131,7 @@ var AdvisorAssignmentsView = React.createClass({
           <td>{committees[assignment.committee].name}</td>
           <td>{countries[assignment.country].name}</td>
           <td>{committees[assignment.committee].delegation_size}</td>
-          var checkID = committees[assignment.committee].name + countries[assignment.country].name
-          <td><input name="test" type="checkbox"/></td>
+          <td><input name={assignment.id} type="checkbox"/></td>
         </tr>
       );
     });
