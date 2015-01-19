@@ -1,7 +1,6 @@
 # Copyright (c) 2011-2015 Berkeley Model United Nations. All rights reserved.
 # Use of this source code is governed by a BSD License (see LICENSE).
 
-from django.conf import settings
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import AbstractUser
 from django.db import models
@@ -20,8 +19,8 @@ class User(AbstractUser):
                          (TYPE_CHAIR, 'Chair'))
 
     user_type = models.PositiveSmallIntegerField(choices=USER_TYPE_CHOICES, default=TYPE_ADVISOR)
-    school = models.OneToOneField(School, related_name='advisor', null=True)  # Advisors only.
-    committee = models.ForeignKey(Committee, related_name='chair', null=True) # Chairs only.
+    school = models.OneToOneField(School, related_name='advisor', null=True, blank=True)  # Advisors only.
+    committee = models.ForeignKey(Committee, related_name='chair', null=True, blank=True) # Chairs only.
 
     def is_advisor(self):
         return self.user_type == self.TYPE_ADVISOR
