@@ -71,6 +71,7 @@ var AdvisorAssignmentsView = React.createClass({
           </div>
           <div className="tablemenu footer">
             <Button
+              id="finalize"
               color="green"
               size="small"
               loading={this.state.loading}
@@ -94,32 +95,35 @@ var AdvisorAssignmentsView = React.createClass({
         assignList.push(elements[i].getAttribute("name"));
       }
     }
-    window.alert("worked");
     $.ajax({
       type: 'POST',
       url: '/api/schools/' + school.id + '/finalize/',
-      data: assignList,
+      data: JSON.stringify(assignList, null, 2),
       success: this._handleSuccess,
       error: this._handleError,
-      dataType: 'json'
+      dataType: 'text'
     });
     event.preventDefault();
   },
 
   _handleSuccess: function(data, status, jqXHR) {
-    window.alert("yay!");
-
+    var elements = document.getElementsByTagName("input");
+    var nodesToDelete = []
+    for (var i=0; i<elements.length; i++) {
+      if (elements[i].getAttribute("type") == 'checkbox') {
+        nodesToDelete.push(elements[i]);
+      }
+    }
+    for (var j=0; j<nodesToDelete.length; j++) {
+      nodesToDelete[j].parentNode.removeChild(nodesToDelete[j]);
+    }
+    location.reload();
+    this.setState({loading: false});
   },
 
   _handleError: function(jqXHR, status, error) {
-    window.alert("uhoh :(");
+    window.alert("Something went wrong. Please try again.");
     this.setState({loading: false});
-    /*var elements = document.getElementsByTagName("input");
-    for (var i=0; i<elements.length; i++) {
-      if (elements[i].getAttribute("type") == 'checkbox') {
-        elements[i].remove();
-      }
-    }*/
   },
 
   renderAssignmentRows: function() {
