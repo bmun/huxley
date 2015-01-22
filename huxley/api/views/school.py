@@ -45,11 +45,15 @@ class SchoolFinalize(generics.GenericAPIView):
     permission_classes = (IsSchoolAdvisorOrSuperuser,)
 
     def post(self, request, *args, **kwargs):
-       data = json.load(request)
-       for identity in data:
-           assignment = Assignment.objects.get(pk=int(identity))
-           assignment.delete()
-       return Response(status=status.HTTP_200_OK)
+        school_id = self.kwargs.get('pk', None)
+        school = School.objects.get(id=school_id)
+        school.assignments_finalized = True
+        school.save()
+        data = json.load(request)
+        for identity in data:
+            assignment = Assignment.objects.get(pk=int(identity))
+            assignment.delete()
+        return Response(status=status.HTTP_200_OK)
 
 class SchoolInvoice(generics.CreateAPIView):
     authentication_classes = (SessionAuthentication,)
