@@ -252,7 +252,7 @@ class Migration(SchemaMigration):
             'state': ('django.db.models.fields.CharField', [], {'max_length': '16'}),
             'times_attended': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': '0'}),
             'waitlist': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'zip_code': ('django.db.models.fields.CharField', [], {'max_length': '16'})
+            'zip_code': ('django.db.models.fields.CharField', [], {'max_length': '16'}),
         }
     }
 
