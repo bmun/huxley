@@ -5,9 +5,10 @@ import csv
 
 from django.conf.urls import patterns, url
 from django.contrib import admin
-from django.http import HttpResponse
+from django.core.urlresolvers import reverse
+from django.http import HttpResponse, HttpResponseRedirect
 
-from huxley.core.models import Delegate
+from huxley.core.models import Assignment, Committee, Country, Delegate, School
 
 
 class DelegateAdmin(admin.ModelAdmin):
@@ -29,6 +30,25 @@ class DelegateAdmin(admin.ModelAdmin):
 
         return roster
 
+    def load(self, request):
+        '''Loads new Assignments.'''
+        delegates = request.FILES
+        reader = csv.reader(delegates['csv'])
+
+        def upload_delegates(reader):
+            assignments = {}
+            header = False
+            for row in reader:
+                if not header:
+                        header = True
+                        continue
+                assignment = Assignment.objects.get(committee=Committee.objects.get(name=row[1]), country=Country.objects.get(name=row[2]), school=School.objects.get(name=row[3]))
+                d = Delegate(name=row[0], assignment=assignment)
+                d.save()
+
+        upload_delegates(reader)
+        return HttpResponseRedirect(reverse('admin:core_delegate_changelist'))
+
     def get_urls(self):
         urls = super(DelegateAdmin, self).get_urls()
         urls += patterns('',
@@ -36,6 +56,11 @@ class DelegateAdmin(admin.ModelAdmin):
                 r'roster',
                 self.admin_site.admin_view(self.roster),
                 name='core_delegate_roster',
+            ),
+            url(
+                r'load',
+                self.admin_site.admin_view(self.load),
+                name='core_delegate_load',
             ),
         )
         return urls
