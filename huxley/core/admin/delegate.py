@@ -35,18 +35,18 @@ class DelegateAdmin(admin.ModelAdmin):
         delegates = request.FILES
         reader = csv.reader(delegates['csv'])
 
-        def upload_delegates(reader):
-            assignments = {}
-            header = False
-            for row in reader:
-                if not header:
-                        header = True
-                        continue
-                assignment = Assignment.objects.get(committee=Committee.objects.get(name=row[1]), country=Country.objects.get(name=row[2]), school=School.objects.get(name=row[3]))
-                d = Delegate(name=row[0], assignment=assignment)
-                d.save()
+        assignments = {}
+        for assignment in Assignments.objects.all():
+            assignments[committee.name + country.name + school.name] = assignment
+        header = False
+        for row in reader:
+            if not header:
+                header = True
+                continue
+            assignment = assignments[row[1] + row[2] + row[3]]
+            d = Delegate(name=row[0], assignment=assignment)
+            d.save()
 
-        upload_delegates(reader)
         return HttpResponseRedirect(reverse('admin:core_delegate_changelist'))
 
     def get_urls(self):
