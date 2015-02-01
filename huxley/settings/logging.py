@@ -18,7 +18,7 @@ LOGGING = {
         'file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': 'huxley/logs/error.log',
+            'filename': 'huxley/logs/debug.log',
         },
         'mail_admins': {
             'level': 'ERROR',
