@@ -15,11 +15,26 @@ LOGGING = {
             'class': 'logging.StreamHandler',
             'formatter': 'simple',
         },
+        'database': {
+            'level': 'DEBUG',
+            'class': 'huxley.logs.handlers.DatabaseHandler',
+            'formatter': 'simple',
+        },
+        'mail_admins': {
+            'level': 'ERROR',
+            'class': 'django.utils.log.AdminEmailHandler',
+            'include_html': True,
+        },
     },
     'loggers': {
         'huxley': {
             'handlers': ['console'],
             'level': 'DEBUG',
+            'propagate': True,
+        },
+        'huxley.server': {
+            'handlers': ['database', 'mail_admins'],
+            'level': 'ERROR',
             'propagate': True,
         },
     },

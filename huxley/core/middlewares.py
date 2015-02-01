@@ -7,3 +7,8 @@ class ExceptionLoggerMiddleware(object):
     def process_exception(self, request, exception):
         logger = logging.getLogger('huxley')
         logger.exception(exception)
+
+class ServerLoggingMiddleware(object):
+    def process_exception(self, request, exception):
+        logger = logging.getLogger('huxley.server')
+        logger.exception(exception)
