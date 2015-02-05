@@ -148,7 +148,7 @@ class School(models.Model):
     @classmethod
     def update_fees(cls, **kwargs):
         school = kwargs['instance']
-        delegate_fees = cls.DELEGATE_FEE * len(Assignment.objects.get(school = self))
+        delegate_fees = cls.DELEGATE_FEE * len(Assignment.objects.get(school_id=school_id))
         school.fees_owed = cls.REGISTRATION_FEE + delegate_fees
 
     @classmethod
