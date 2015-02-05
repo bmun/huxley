@@ -148,11 +148,7 @@ class School(models.Model):
     @classmethod
     def update_fees(cls, **kwargs):
         school = kwargs['instance']
-        delegate_fees = cls.DELEGATE_FEE * sum((
-            school.beginner_delegates,
-            school.intermediate_delegates,
-            school.advanced_delegates,
-        ))
+        delegate_fees = cls.DELEGATE_FEE * len(Assignment.objects.get(school = self))
         school.fees_owed = cls.REGISTRATION_FEE + delegate_fees
 
     @classmethod
@@ -180,6 +176,7 @@ class School(models.Model):
         if getattr(self, '_pending_country_preference_ids', []):
             self.update_country_preferences(self._pending_country_preference_ids)
             self._pending_country_preference_ids = []
+            post_save.connect(School.update_fees, sender=School)
 
     @classmethod
     def email_comments(cls, **kwargs):
