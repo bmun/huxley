@@ -83,7 +83,7 @@ class DelegateAdminTest(TestCase):
         ).exists())
 
         f = TestFiles.new_csv([
-            ['Name', 'Committee', 'Country', 'School']
+            ['Name', 'Committee', 'Country', 'School'],
             ['John Doe', 'SPD', "Côte d'Ivoire", 'Test School'],
             ['Jane Doe', 'USS', 'Barbara Boxer', 'Test School'],
         ])
