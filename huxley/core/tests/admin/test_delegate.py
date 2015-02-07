@@ -8,7 +8,7 @@ from django.core.urlresolvers import reverse
 from django.test import TestCase
 
 from huxley.core.models import Assignment, Committee, Country, Delegate, School
-from huxley.utils.test import TestFiles, TestUsers
+from huxley.utils.test import TestFiles, TestSchools, TestUsers
 
 
 class DelegateAdminTest(TestCase):
@@ -61,29 +61,31 @@ class DelegateAdminTest(TestCase):
             special=False
         ).exists())
 
+        school = TestSchools.new_school()
+
         f = TestFiles.new_csv([
-            ['Who Is Mike Jones?', '1', 'SPD', "Côte d'Ivoire", '2'],
-            ['Who Is Mike Jones?', '1', 'USS', 'Barbara Boxer', '1'],
+            ['Test School', '1', 'SPD', "Côte d'Ivoire", '2'],
+            ['Test School', '1', 'USS', 'Barbara Boxer', '1'],
         ])
 
         with closing(f) as f:
             self.client.post(reverse('admin:core_assignment_load'), {'csv': f})
 
         self.assertTrue(Assignment.objects.filter(
-            school=School.objects.get(name='Who Is Mike Jones?'),
+            school=School.objects.get(name='Test School'),
             committee=Committee.objects.get(name='SPD'),
             country=Country.objects.get(name="Côte d'Ivoire")
         ).exists())
         self.assertTrue(Assignment.objects.filter(
-            school=School.objects.get(name='Who Is Mike Jones?'),
+            school=School.objects.get(name='Test School'),
             committee=Committee.objects.get(name='USS'),
             country=Country.objects.get(name='Barbara Boxer')
         ).exists())
 
         f = TestFiles.new_csv([
             ['Name', 'Committee', 'Country', 'School']
-            ['John Doe', 'SPD', "Côte d'Ivoire", 'Who Is Mike Jones?'],
-            ['Jane Doe', 'USS', 'Barbara Boxer', 'Who Is Mike Jones?'],
+            ['John Doe', 'SPD', "Côte d'Ivoire", 'Test School'],
+            ['Jane Doe', 'USS', 'Barbara Boxer', 'Test School'],
         ])
 
         with closing(f) as f:
@@ -91,7 +93,7 @@ class DelegateAdminTest(TestCase):
 
         self.assertTrue(Delegate.objects.filter(
             assignment=Assignment.objects.get(
-                school=School.objects.get(name='Who Is Mike Jones?'),
+                school=School.objects.get(name='Test School'),
                 committee=Committee.objects.get(name='SPD'),
                 country=Country.objects.get(name="Côte d'Ivoire")
                 ),
@@ -99,7 +101,7 @@ class DelegateAdminTest(TestCase):
         ).exists())
         self.assertTrue(Delegate.objects.filter(
             assignment=Assignment.objects.get(
-                school=School.objects.get(name='Who Is Mike Jones?'),
+                school=School.objects.get(name='Test School'),
                 committee=Committee.objects.get(name='USS'),
                 country=Country.objects.get(name='Barbara Boxer')
                 ),
