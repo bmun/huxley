@@ -36,12 +36,10 @@ class DelegateAdmin(admin.ModelAdmin):
         reader = csv.reader(delegates['csv'])
 
         assignments = {}
-        for assignment in Assignments.objects.all():
-            assignments[committee.name + country.name + school.name] = assignment
-        header = False
+        for assignment in Assignment.objects.all():
+            assignments[assignment.committee.name + assignment.country.name + assignment.school.name] = assignment
         for row in reader:
-            if not header:
-                header = True
+            if row[1] == 'Committee':
                 continue
             assignment = assignments[row[1] + row[2] + row[3]]
             d = Delegate(name=row[0], assignment=assignment)
