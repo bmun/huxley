@@ -37,11 +37,11 @@ class DelegateAdmin(admin.ModelAdmin):
 
         assignments = {}
         for assignment in Assignment.objects.all():
-            assignments[assignment.committee.name + assignment.country.name + assignment.school.name] = assignment
+            assignments[assignment.committee.name.encode('ascii', 'ignore') + assignment.country.name.encode('ascii', 'ignore') + assignment.school.name] = assignment
         for row in reader:
             if row[1] == 'Committee':
                 continue
-            assignment = assignments[row[1] + row[2] + row[3]]
+            assignment = assignments[unicode(row[1], errors='ignore')+ unicode(row[2], errors='ignore') + row[3]]
             d = Delegate(name=row[0], assignment=assignment)
             d.save()
 
