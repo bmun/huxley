@@ -18,17 +18,6 @@ class DelegateAdminTest(TestCase):
         TestUsers.new_superuser(username='testuser', password='test')
         self.client.login(username='testuser', password='test')
 
-        f = TestFiles.new_csv([
-            ['SPD', 'Special Pôlitical and Decolonization', 2, ''],
-            ['USS', 'United States Senate', 2, True]
-        ])
-
-        f = TestFiles.new_csv([
-            ['United States of America', ''],
-            ['Barbara Boxer', True],
-            ["Côte d'Ivoire", '']
-        ])
-
         school = TestSchools.new_school()
         cm1 = TestCommittees.new_committee(name='SPD')
         cm2 = TestCommittees.new_committee(name='USS')
