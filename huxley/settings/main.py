@@ -68,6 +68,8 @@ TEMPLATE_DIRS = (
     '%s/templates/' % HUXLEY_ROOT,
 )
 
+TEST_RUNNER = 'django.test.runner.DiscoverRunner'
+
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -98,5 +100,4 @@ INSTALLED_APPS = (
     'huxley.payments',
     'huxley.www',
     'pipeline',
-    'south',
 )
