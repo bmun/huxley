@@ -98,5 +98,4 @@ INSTALLED_APPS = (
     'huxley.payments',
     'huxley.www',
     'pipeline',
-    'south',
 )

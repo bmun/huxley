@@ -1,259 +1,181 @@
 # -*- coding: utf-8 -*-
-from south.utils import datetime_utils as datetime
-from south.db import db
-from south.v2 import SchemaMigration
-from django.db import models
+from __future__ import unicode_literals
+
+from django.db import models, migrations
 
 
-class Migration(SchemaMigration):
+class Migration(migrations.Migration):
 
-    def forwards(self, orm):
-        # Adding model 'Conference'
-        db.create_table(u'conference', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('session', self.gf('django.db.models.fields.PositiveSmallIntegerField')(default=0)),
-            ('start_date', self.gf('django.db.models.fields.DateField')()),
-            ('end_date', self.gf('django.db.models.fields.DateField')()),
-            ('reg_open', self.gf('django.db.models.fields.DateField')()),
-            ('early_reg_close', self.gf('django.db.models.fields.DateField')()),
-            ('reg_close', self.gf('django.db.models.fields.DateField')()),
-            ('min_attendance', self.gf('django.db.models.fields.PositiveSmallIntegerField')(default=0)),
-            ('max_attendance', self.gf('django.db.models.fields.PositiveSmallIntegerField')(default=0)),
-            ('open_reg', self.gf('django.db.models.fields.BooleanField')(default=True)),
-            ('waitlist_reg', self.gf('django.db.models.fields.BooleanField')(default=False)),
-        ))
-        db.send_create_signal(u'core', ['Conference'])
+    dependencies = [
+    ]
 
-        # Adding model 'Country'
-        db.create_table(u'country', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=128)),
-            ('special', self.gf('django.db.models.fields.BooleanField')(default=False)),
-        ))
-        db.send_create_signal(u'core', ['Country'])
-
-        # Adding model 'Committee'
-        db.create_table(u'committee', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=8)),
-            ('full_name', self.gf('django.db.models.fields.CharField')(max_length=128)),
-            ('delegation_size', self.gf('django.db.models.fields.PositiveSmallIntegerField')(default=2)),
-            ('special', self.gf('django.db.models.fields.BooleanField')(default=False)),
-        ))
-        db.send_create_signal(u'core', ['Committee'])
-
-        # Adding model 'School'
-        db.create_table(u'school', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('registered', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=128)),
-            ('address', self.gf('django.db.models.fields.CharField')(max_length=128)),
-            ('city', self.gf('django.db.models.fields.CharField')(max_length=128)),
-            ('state', self.gf('django.db.models.fields.CharField')(max_length=16)),
-            ('zip_code', self.gf('django.db.models.fields.CharField')(max_length=16)),
-            ('country', self.gf('django.db.models.fields.CharField')(max_length=64)),
-            ('primary_name', self.gf('django.db.models.fields.CharField')(max_length=128)),
-            ('primary_gender', self.gf('django.db.models.fields.PositiveSmallIntegerField')(default=4)),
-            ('primary_email', self.gf('django.db.models.fields.EmailField')(max_length=75)),
-            ('primary_phone', self.gf('django.db.models.fields.CharField')(max_length=32)),
-            ('primary_type', self.gf('django.db.models.fields.PositiveSmallIntegerField')(default=2)),
-            ('secondary_name', self.gf('django.db.models.fields.CharField')(max_length=128, blank=True)),
-            ('secondary_gender', self.gf('django.db.models.fields.PositiveSmallIntegerField')(default=4, blank=True)),
-            ('secondary_email', self.gf('django.db.models.fields.EmailField')(max_length=75, blank=True)),
-            ('secondary_phone', self.gf('django.db.models.fields.CharField')(max_length=32, blank=True)),
-            ('secondary_type', self.gf('django.db.models.fields.PositiveSmallIntegerField')(default=2, blank=True)),
-            ('program_type', self.gf('django.db.models.fields.PositiveSmallIntegerField')(default=1)),
-            ('times_attended', self.gf('django.db.models.fields.PositiveSmallIntegerField')(default=0)),
-            ('international', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('waitlist', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('beginner_delegates', self.gf('django.db.models.fields.PositiveSmallIntegerField')()),
-            ('intermediate_delegates', self.gf('django.db.models.fields.PositiveSmallIntegerField')()),
-            ('advanced_delegates', self.gf('django.db.models.fields.PositiveSmallIntegerField')()),
-            ('spanish_speaking_delegates', self.gf('django.db.models.fields.PositiveSmallIntegerField')()),
-            ('prefers_bilingual', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('prefers_crisis', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('prefers_small_specialized', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('prefers_mid_large_specialized', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('registration_comments', self.gf('django.db.models.fields.TextField')(default='', blank=True)),
-            ('registration_fee', self.gf('django.db.models.fields.DecimalField')(default=0, max_digits=6, decimal_places=2)),
-            ('registration_fee_paid', self.gf('django.db.models.fields.DecimalField')(default=0, max_digits=6, decimal_places=2)),
-            ('registration_fee_balance', self.gf('django.db.models.fields.DecimalField')(default=0, max_digits=6, decimal_places=2)),
-            ('delegation_fee', self.gf('django.db.models.fields.DecimalField')(default=0, max_digits=6, decimal_places=2)),
-            ('delegation_fee_paid', self.gf('django.db.models.fields.DecimalField')(default=0, max_digits=6, decimal_places=2)),
-            ('delegation_fee_balance', self.gf('django.db.models.fields.DecimalField')(default=0, max_digits=6, decimal_places=2)),
-        ))
-        db.send_create_signal(u'core', ['School'])
-
-        # Adding model 'Assignment'
-        db.create_table(u'assignment', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('committee', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['core.Committee'])),
-            ('country', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['core.Country'])),
-            ('school', self.gf('django.db.models.fields.related.ForeignKey')(default=None, to=orm['core.School'], null=True, blank=True)),
-        ))
-        db.send_create_signal(u'core', ['Assignment'])
-
-        # Adding model 'CountryPreference'
-        db.create_table(u'country_preference', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('school', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['core.School'])),
-            ('country', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['core.Country'])),
-            ('rank', self.gf('django.db.models.fields.PositiveSmallIntegerField')()),
-        ))
-        db.send_create_signal(u'core', ['CountryPreference'])
-
-        # Adding model 'DelegateSlot'
-        db.create_table(u'delegate_slot', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('assignment', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['core.Assignment'])),
-            ('attended_session1', self.gf('django.db.models.fields.PositiveSmallIntegerField')(default=0)),
-            ('attended_session2', self.gf('django.db.models.fields.PositiveSmallIntegerField')(default=0)),
-            ('attended_session3', self.gf('django.db.models.fields.PositiveSmallIntegerField')(default=0)),
-            ('attended_session4', self.gf('django.db.models.fields.PositiveSmallIntegerField')(default=0)),
-        ))
-        db.send_create_signal(u'core', ['DelegateSlot'])
-
-        # Adding model 'Delegate'
-        db.create_table(u'delegate', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=64, blank=True)),
-            ('email', self.gf('django.db.models.fields.EmailField')(max_length=75, blank=True)),
-            ('delegate_slot', self.gf('django.db.models.fields.related.OneToOneField')(default=None, related_name='delegate', unique=True, null=True, to=orm['core.DelegateSlot'])),
-            ('created_at', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
-            ('summary', self.gf('django.db.models.fields.TextField')(default='', null=True)),
-        ))
-        db.send_create_signal(u'core', ['Delegate'])
-
-
-    def backwards(self, orm):
-        # Deleting model 'Conference'
-        db.delete_table(u'conference')
-
-        # Deleting model 'Country'
-        db.delete_table(u'country')
-
-        # Deleting model 'Committee'
-        db.delete_table(u'committee')
-
-        # Deleting model 'School'
-        db.delete_table(u'school')
-
-        # Deleting model 'Assignment'
-        db.delete_table(u'assignment')
-
-        # Deleting model 'CountryPreference'
-        db.delete_table(u'country_preference')
-
-        # Deleting model 'DelegateSlot'
-        db.delete_table(u'delegate_slot')
-
-        # Deleting model 'Delegate'
-        db.delete_table(u'delegate')
-
-
-    models = {
-        u'core.assignment': {
-            'Meta': {'object_name': 'Assignment', 'db_table': "u'assignment'"},
-            'committee': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['core.Committee']"}),
-            'country': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['core.Country']"}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'school': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'to': u"orm['core.School']", 'null': 'True', 'blank': 'True'})
-        },
-        u'core.committee': {
-            'Meta': {'object_name': 'Committee', 'db_table': "u'committee'"},
-            'countries': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['core.Country']", 'through': u"orm['core.Assignment']", 'symmetrical': 'False'}),
-            'delegation_size': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': '2'}),
-            'full_name': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '8'}),
-            'special': ('django.db.models.fields.BooleanField', [], {'default': 'False'})
-        },
-        u'core.conference': {
-            'Meta': {'object_name': 'Conference', 'db_table': "u'conference'"},
-            'early_reg_close': ('django.db.models.fields.DateField', [], {}),
-            'end_date': ('django.db.models.fields.DateField', [], {}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'max_attendance': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': '0'}),
-            'min_attendance': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': '0'}),
-            'open_reg': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
-            'reg_close': ('django.db.models.fields.DateField', [], {}),
-            'reg_open': ('django.db.models.fields.DateField', [], {}),
-            'session': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': '0'}),
-            'start_date': ('django.db.models.fields.DateField', [], {}),
-            'waitlist_reg': ('django.db.models.fields.BooleanField', [], {'default': 'False'})
-        },
-        u'core.country': {
-            'Meta': {'object_name': 'Country', 'db_table': "u'country'"},
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
-            'special': ('django.db.models.fields.BooleanField', [], {'default': 'False'})
-        },
-        u'core.countrypreference': {
-            'Meta': {'ordering': "['rank']", 'object_name': 'CountryPreference', 'db_table': "u'country_preference'"},
-            'country': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['core.Country']"}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'rank': ('django.db.models.fields.PositiveSmallIntegerField', [], {}),
-            'school': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['core.School']"})
-        },
-        u'core.delegate': {
-            'Meta': {'object_name': 'Delegate', 'db_table': "u'delegate'"},
-            'created_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'delegate_slot': ('django.db.models.fields.related.OneToOneField', [], {'default': 'None', 'related_name': "'delegate'", 'unique': 'True', 'null': 'True', 'to': u"orm['core.DelegateSlot']"}),
-            'email': ('django.db.models.fields.EmailField', [], {'max_length': '75', 'blank': 'True'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '64', 'blank': 'True'}),
-            'summary': ('django.db.models.fields.TextField', [], {'default': "''", 'null': 'True'})
-        },
-        u'core.delegateslot': {
-            'Meta': {'ordering': "['assignment__country']", 'object_name': 'DelegateSlot', 'db_table': "u'delegate_slot'"},
-            'assignment': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['core.Assignment']"}),
-            'attended_session1': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': '0'}),
-            'attended_session2': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': '0'}),
-            'attended_session3': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': '0'}),
-            'attended_session4': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': '0'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
-        },
-        u'core.school': {
-            'Meta': {'object_name': 'School', 'db_table': "u'school'"},
-            'address': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
-            'advanced_delegates': ('django.db.models.fields.PositiveSmallIntegerField', [], {}),
-            'beginner_delegates': ('django.db.models.fields.PositiveSmallIntegerField', [], {}),
-            'city': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
-            'country': ('django.db.models.fields.CharField', [], {'max_length': '64'}),
-            'countrypreferences': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['core.Country']", 'through': u"orm['core.CountryPreference']", 'symmetrical': 'False'}),
-            'delegation_fee': ('django.db.models.fields.DecimalField', [], {'default': '0', 'max_digits': '6', 'decimal_places': '2'}),
-            'delegation_fee_balance': ('django.db.models.fields.DecimalField', [], {'default': '0', 'max_digits': '6', 'decimal_places': '2'}),
-            'delegation_fee_paid': ('django.db.models.fields.DecimalField', [], {'default': '0', 'max_digits': '6', 'decimal_places': '2'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'intermediate_delegates': ('django.db.models.fields.PositiveSmallIntegerField', [], {}),
-            'international': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
-            'prefers_bilingual': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'prefers_crisis': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'prefers_mid_large_specialized': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'prefers_small_specialized': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'primary_email': ('django.db.models.fields.EmailField', [], {'max_length': '75'}),
-            'primary_gender': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': '4'}),
-            'primary_name': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
-            'primary_phone': ('django.db.models.fields.CharField', [], {'max_length': '32'}),
-            'primary_type': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': '2'}),
-            'program_type': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': '1'}),
-            'registered': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'registration_comments': ('django.db.models.fields.TextField', [], {'default': "''", 'blank': 'True'}),
-            'registration_fee': ('django.db.models.fields.DecimalField', [], {'default': '0', 'max_digits': '6', 'decimal_places': '2'}),
-            'registration_fee_balance': ('django.db.models.fields.DecimalField', [], {'default': '0', 'max_digits': '6', 'decimal_places': '2'}),
-            'registration_fee_paid': ('django.db.models.fields.DecimalField', [], {'default': '0', 'max_digits': '6', 'decimal_places': '2'}),
-            'secondary_email': ('django.db.models.fields.EmailField', [], {'max_length': '75', 'blank': 'True'}),
-            'secondary_gender': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': '4', 'blank': 'True'}),
-            'secondary_name': ('django.db.models.fields.CharField', [], {'max_length': '128', 'blank': 'True'}),
-            'secondary_phone': ('django.db.models.fields.CharField', [], {'max_length': '32', 'blank': 'True'}),
-            'secondary_type': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': '2', 'blank': 'True'}),
-            'spanish_speaking_delegates': ('django.db.models.fields.PositiveSmallIntegerField', [], {}),
-            'state': ('django.db.models.fields.CharField', [], {'max_length': '16'}),
-            'times_attended': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': '0'}),
-            'waitlist': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'zip_code': ('django.db.models.fields.CharField', [], {'max_length': '16'})
-        }
-    }
-
-    complete_apps = ['core']
+    operations = [
+        migrations.CreateModel(
+            name='Assignment',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+            ],
+            options={
+                'db_table': 'assignment',
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='Committee',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('name', models.CharField(max_length=8)),
+                ('full_name', models.CharField(max_length=128)),
+                ('delegation_size', models.PositiveSmallIntegerField(default=2)),
+                ('special', models.BooleanField(default=False)),
+            ],
+            options={
+                'db_table': 'committee',
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='Conference',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('session', models.PositiveSmallIntegerField(default=0)),
+                ('start_date', models.DateField()),
+                ('end_date', models.DateField()),
+                ('reg_open', models.DateField()),
+                ('early_reg_close', models.DateField()),
+                ('reg_close', models.DateField()),
+                ('min_attendance', models.PositiveSmallIntegerField(default=0)),
+                ('max_attendance', models.PositiveSmallIntegerField(default=0)),
+                ('open_reg', models.BooleanField(default=True)),
+                ('waitlist_reg', models.BooleanField(default=False)),
+            ],
+            options={
+                'db_table': 'conference',
+                'get_latest_by': 'start_date',
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='Country',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('name', models.CharField(max_length=128)),
+                ('special', models.BooleanField(default=False)),
+            ],
+            options={
+                'db_table': 'country',
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='CountryPreference',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('rank', models.PositiveSmallIntegerField()),
+                ('country', models.ForeignKey(to='core.Country')),
+            ],
+            options={
+                'ordering': ['-school', 'rank'],
+                'db_table': 'country_preference',
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='Delegate',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('name', models.CharField(max_length=64, blank=True)),
+                ('email', models.EmailField(max_length=75, blank=True)),
+                ('created_at', models.DateTimeField(auto_now_add=True)),
+                ('summary', models.TextField(default=b'', null=True)),
+                ('assignment', models.ForeignKey(related_name='delegates', to='core.Assignment')),
+            ],
+            options={
+                'ordering': ['assignment__country'],
+                'db_table': 'delegate',
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='School',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('registered', models.DateTimeField(auto_now_add=True)),
+                ('name', models.CharField(max_length=128)),
+                ('address', models.CharField(max_length=128)),
+                ('city', models.CharField(max_length=128)),
+                ('state', models.CharField(max_length=16)),
+                ('zip_code', models.CharField(max_length=16)),
+                ('country', models.CharField(max_length=64)),
+                ('primary_name', models.CharField(max_length=128)),
+                ('primary_gender', models.PositiveSmallIntegerField(default=4, choices=[(1, b'Male'), (2, b'Female'), (3, b'Other'), (4, b'Unspecified')])),
+                ('primary_email', models.EmailField(max_length=75)),
+                ('primary_phone', models.CharField(max_length=32)),
+                ('primary_type', models.PositiveSmallIntegerField(default=2, choices=[(2, b'Faculty'), (1, b'Student')])),
+                ('secondary_name', models.CharField(max_length=128, blank=True)),
+                ('secondary_gender', models.PositiveSmallIntegerField(default=4, blank=True, choices=[(1, b'Male'), (2, b'Female'), (3, b'Other'), (4, b'Unspecified')])),
+                ('secondary_email', models.EmailField(max_length=75, blank=True)),
+                ('secondary_phone', models.CharField(max_length=32, blank=True)),
+                ('secondary_type', models.PositiveSmallIntegerField(default=2, blank=True, choices=[(2, b'Faculty'), (1, b'Student')])),
+                ('program_type', models.PositiveSmallIntegerField(default=1, choices=[(1, b'Club'), (2, b'Class')])),
+                ('times_attended', models.PositiveSmallIntegerField(default=0)),
+                ('international', models.BooleanField(default=False)),
+                ('waitlist', models.BooleanField(default=False)),
+                ('beginner_delegates', models.PositiveSmallIntegerField()),
+                ('intermediate_delegates', models.PositiveSmallIntegerField()),
+                ('advanced_delegates', models.PositiveSmallIntegerField()),
+                ('spanish_speaking_delegates', models.PositiveSmallIntegerField()),
+                ('prefers_bilingual', models.BooleanField(default=False)),
+                ('prefers_specialized_regional', models.BooleanField(default=False)),
+                ('prefers_crisis', models.BooleanField(default=False)),
+                ('prefers_alternative', models.BooleanField(default=False)),
+                ('prefers_press_corps', models.BooleanField(default=False)),
+                ('registration_comments', models.TextField(default=b'', blank=True)),
+                ('fees_owed', models.DecimalField(default=0, max_digits=6, decimal_places=2)),
+                ('fees_paid', models.DecimalField(default=0, max_digits=6, decimal_places=2)),
+                ('countrypreferences', models.ManyToManyField(to='core.Country', through='core.CountryPreference')),
+            ],
+            options={
+                'db_table': 'school',
+            },
+            bases=(models.Model,),
+        ),
+        migrations.AddField(
+            model_name='countrypreference',
+            name='school',
+            field=models.ForeignKey(to='core.School'),
+            preserve_default=True,
+        ),
+        migrations.AlterUniqueTogether(
+            name='countrypreference',
+            unique_together=set([('country', 'school')]),
+        ),
+        migrations.AddField(
+            model_name='committee',
+            name='countries',
+            field=models.ManyToManyField(to='core.Country', through='core.Assignment'),
+            preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name='assignment',
+            name='committee',
+            field=models.ForeignKey(to='core.Committee'),
+            preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name='assignment',
+            name='country',
+            field=models.ForeignKey(to='core.Country'),
+            preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name='assignment',
+            name='school',
+            field=models.ForeignKey(default=None, blank=True, to='core.School', null=True),
+            preserve_default=True,
+        ),
+        migrations.AlterUniqueTogether(
+            name='assignment',
+            unique_together=set([('committee', 'country')]),
+        ),
+    ]
