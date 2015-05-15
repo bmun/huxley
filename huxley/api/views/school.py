@@ -1,4 +1,3 @@
-
 # Copyright (c) 2011-2015 Berkeley Model United Nations. All rights reserved.
 # Use of this source code is governed by a BSD License (see LICENSE).
 
@@ -40,6 +39,21 @@ class SchoolAssignments(generics.ListAPIView):
             raise Http404
 
         return Assignment.objects.filter(school_id=school_id)
+
+class SchoolFinalize(generics.GenericAPIView):
+    authentication_classes = (SessionAuthentication,)
+    permission_classes = (IsSchoolAdvisorOrSuperuser,)
+
+    def post(self, request, *args, **kwargs):
+        school_id = self.kwargs.get('pk', None)
+        school = School.objects.get(id=school_id)
+        school.assignments_finalized = True
+        school.save()
+        data = json.load(request)
+        for identity in data:
+            assignment = Assignment.objects.get(pk=int(identity))
+            assignment.delete()
+        return Response(status=status.HTTP_200_OK)
 
 class SchoolInvoice(generics.CreateAPIView):
     authentication_classes = (SessionAuthentication,)
