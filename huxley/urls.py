@@ -6,8 +6,6 @@ from django.contrib import admin
 from django.views.generic import RedirectView
 
 
-admin.autodiscover()
-
 urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url(r'^api/', include('huxley.api.urls', app_name='api', namespace='api')),
