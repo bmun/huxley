@@ -98,6 +98,12 @@ var AdvisorProfileView = React.createClass({
                 </td>
               </tr>
               <tr>
+                <td className="fieldLabel">Waitlisted</td>
+                <td className="field">
+                  {school.waitlist == true ? 'Yes' : 'No'}
+                </td>
+              </tr>
+              <tr>
                 <th colSpan="2">Program Information</th>
               </tr>
               <tr>
