@@ -3,9 +3,9 @@ python:
     - "2.7"
 install: pip install -r requirements.txt
 before_script:
+    - touch /huxley/logs/debug.log
     - python manage.py migrate
     - npm install
-    - touch /huxley/logs/debug.log
 script:
     - python manage.py test
     - npm test
