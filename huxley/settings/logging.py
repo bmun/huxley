@@ -15,10 +15,10 @@ LOGGING = {
             'class': 'logging.StreamHandler',
             'formatter': 'simple',
         },
-        'file': {
+        'database': {
             'level': 'DEBUG',
-            'class': 'logging.FileHandler',
-            'filename': 'huxley/logs/debug.log',
+            'class': 'huxley.logs.handlers.DatabaseHandler',
+            'formatter': 'simple',
         },
         'mail_admins': {
             'level': 'ERROR',
@@ -33,7 +33,7 @@ LOGGING = {
             'propagate': True,
         },
         'huxley.server': {
-            'handlers': ['file', 'mail_admins'],
+            'handlers': ['database', 'mail_admins'],
             'level': 'ERROR',
             'propagate': True,
         },
