@@ -13,9 +13,10 @@ class DatabaseHandler(logging.Handler):
 
     def emit(self, record):
         try:
-            logEntry = LogEntry(level=record.levelname, message=record.message, timestamp=datetime.datetime.now())
-            logEntry.save()
+            log_entry = LogEntry(
+                level=record.levelname,
+                message=record.message,
+                timestamp=datetime.datetime.now())
+            log_entry.save()
         except:
             pass
-
-        return
