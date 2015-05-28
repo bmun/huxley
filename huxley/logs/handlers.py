@@ -15,7 +15,7 @@ class DatabaseHandler(logging.Handler):
         try:
             log_entry = LogEntry(
                 level=record.levelname,
-                message=record.message,
+                message=record.msg,
                 timestamp=datetime.datetime.now())
             log_entry.save()
         except:
