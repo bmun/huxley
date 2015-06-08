@@ -17,7 +17,7 @@ class DatabaseHandler(logging.Handler):
             log_entry = LogEntry(
                 level=record.levelname,
                 message=record.message,
-                timestamp=None)
+                timestamp=datetime.datetime.strptime(record.asctime, "%Y-%m-%d %H:%M:%S,%f"))
             log_entry.save()
         except:
             pass
