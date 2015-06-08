@@ -11,6 +11,7 @@ from huxley.logs.models import LogEntry
 
 
 class LogEntryTestCase(TestCase):
+    '''Should successfully create a LogEntry object and save it.'''
     def test_valid(self):
         log_entry = LogEntry.objects.create(
             level='DEBUG',
@@ -23,21 +24,24 @@ class LogEntryTestCase(TestCase):
 
 
 class DatabaseHandlerTestCase(TestCase):
+    '''DatabaseHandler should create a LogEntry object and save it.'''
     def test_valid(self):
-        log_record = logging.LogRecord(
-            name='Logger',
-            level=10,
-            pathname='',
-            lineno='',
-            msg='There is a problem.',
-            args=(),
-            exc_info=None,
-            func=None)
+        formatter = logging.Formatter('%(asctime)s: %(levelname)s %(message)s')
+        log_record = logging.makeLogRecord({
+                    'name':'huxley.server',
+                    'level':10,
+                    'fn':'',
+                    'lno':'',
+                    'msg':'There is a problem.',
+                    'args':(),
+                    'exc_info':None})
 
         handler = DatabaseHandler()
+        handler.formatter = formatter
         handler.emit(log_record)
 
         log_entry = LogEntry.objects.get(id=1)
         self.assertEqual(log_entry.level, log_record.levelname)
         self.assertEqual(log_entry.message, log_record.message)
-        self.assertEqual(log_entry.timestamp, None)
+        self.assertEqual(log_entry.timestamp,
+            datetime.datetime.strptime(log_record.asctime, "%Y-%m-%d %H:%M:%S,%f"))
