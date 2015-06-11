@@ -106,12 +106,7 @@ class School(models.Model):
     spanish_speaking_delegates = models.PositiveSmallIntegerField()
 
     countrypreferences   = models.ManyToManyField(Country, through='CountryPreference')
-
-    prefers_bilingual            = models.BooleanField(default=False)
-    prefers_specialized_regional = models.BooleanField(default=False)
-    prefers_crisis               = models.BooleanField(default=False)
-    prefers_alternative          = models.BooleanField(default=False)
-    prefers_press_corps          = models.BooleanField(default=False)
+    committeepreferences = models.ManyToManyField(Committee, limit_choices_to={'special': True})
 
     registration_comments = models.TextField(default='', blank=True)
 
