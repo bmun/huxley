@@ -114,6 +114,7 @@ class CreateSchoolTestCase(CreateAPITestCase):
             'spanish_speaking_delegates': school.spanish_speaking_delegates,
             'country_preferences': school.country_preference_ids,
             'registration_comments': school.registration_comments,
+            'committeepreferences': list(school.committeepreferences.all()),
             'fees_owed': float(school.fees_owed),
             'fees_paid': float(school.fees_paid),
         })
