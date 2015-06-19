@@ -114,6 +114,8 @@ class School(models.Model):
     fees_owed = models.DecimalField(max_digits=6, decimal_places=2, default=0)
     fees_paid = models.DecimalField(max_digits=6, decimal_places=2, default=0)
 
+    assignments_finalized = models.BooleanField(default=False)
+
     def update_country_preferences(self, country_ids):
         '''Given a list of country IDs, first dedupe and filter out 0s, then
         clear the existing country preferences and construct new ones.'''
@@ -292,6 +294,9 @@ class Assignment(models.Model):
         with transaction.atomic():
             Assignment.objects.filter(id__in=deletions).delete()
             Assignment.objects.bulk_create(additions)
+
+    def finalize(self):
+        self.finalize = True
 
     def __unicode__(self):
         return self.committee.name + " : " + self.country.name + " : " + (self.school.name if self.school else "Unassigned")

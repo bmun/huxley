@@ -64,6 +64,7 @@ var AdvisorAssignmentsView = React.createClass({
                 <th>Committee</th>
                 <th>Country</th>
                 <th>Delegation Size</th>
+                <th>Assigned Delegate</th>
               </tr>
               {this.renderAssignmentRows()}
             </table>
@@ -83,6 +84,7 @@ var AdvisorAssignmentsView = React.createClass({
           <td>{committees[assignment.committee].name}</td>
           <td>{countries[assignment.country].name}</td>
           <td>{committees[assignment.committee].delegation_size}</td>
+          <td> <input className="text" type="text" placeholder="Assigned Delegate"/></td>
         </tr>
       );
     });
