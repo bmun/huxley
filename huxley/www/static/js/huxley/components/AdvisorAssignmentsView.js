@@ -11,6 +11,7 @@ var $ = require('jquery');
 var React = require('react');
 
 var AssignmentStore = require('../stores/AssignmentStore');
+var Button = require('./Button');
 var CommitteeStore = require('../stores/CommitteeStore');
 var CountryStore = require('../stores/CountryStore');
 var InnerView = require('./InnerView');
@@ -20,7 +21,8 @@ var AdvisorAssignmentsView = React.createClass({
     return {
       assignments: [],
       committees: {},
-      countries: {}
+      countries: {},
+      finalizing: false
     };
   },
 
@@ -46,6 +48,7 @@ var AdvisorAssignmentsView = React.createClass({
   },
 
   render: function() {
+    var school = this.props.user.getSchool();
     return (
       <InnerView>
         <h2>Roster</h2>
@@ -64,18 +67,20 @@ var AdvisorAssignmentsView = React.createClass({
                 <th>Committee</th>
                 <th>Country</th>
                 <th>Delegation Size</th>
-                <th>Assigned Delegate</th>
+                <th>{school.assignments_finalized ? "finalized" : "Relinquish Assignment"}</th>
               </tr>
               {this.renderAssignmentRows()}
             </table>
           </div>
           <div className="tablemenu footer" />
         </form>
+        {school.assignments_finalized ? <div> </div>: <div className="center"><Button color="green" size="large"> Finalize Assignments </Button></div>}
       </InnerView>
     );
   },
 
   renderAssignmentRows: function() {
+    var school = this.props.user.getSchool();
     var committees = this.state.committees;
     var countries = this.state.countries;
     return this.state.assignments.map(function(assignment) {
@@ -84,11 +89,14 @@ var AdvisorAssignmentsView = React.createClass({
           <td>{committees[assignment.committee].name}</td>
           <td>{countries[assignment.country].name}</td>
           <td>{committees[assignment.committee].delegation_size}</td>
-          <td> <input className="text" type="text" placeholder="Assigned Delegate"/></td>
+          <td>{school.assignments_finalized ?
+            <input className="text" type="text" placeholder="Assigned Delegate"/> :
+            <Button color="red" size="small"> Relinquish </Button>}
+          </td>
         </tr>
       );
     });
-  }
+  },
 });
 
 module.exports = AdvisorAssignmentsView;
