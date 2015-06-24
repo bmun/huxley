@@ -56,6 +56,7 @@ class SchoolDetailGetTestCase(RetrieveAPITestCase):
             'registration_comments': school.registration_comments,
             'fees_owed': float(school.fees_owed),
             'fees_paid': float(school.fees_paid),
+            'assignments_finalized': school.assignments_finalized,
         })
 
     def test_other_user(self):
@@ -109,6 +110,7 @@ class SchoolDetailGetTestCase(RetrieveAPITestCase):
             'registration_comments': school.registration_comments,
             'fees_owed': float(school.fees_owed),
             'fees_paid': float(school.fees_paid),
+            'assignments_finalized': school.assignments_finalized,
         })
 
 

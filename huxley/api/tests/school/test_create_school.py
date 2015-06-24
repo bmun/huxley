@@ -121,6 +121,7 @@ class CreateSchoolTestCase(CreateAPITestCase):
             'committeepreferences': list(school.committeepreferences.all()),
             'fees_owed': float(school.fees_owed),
             'fees_paid': float(school.fees_paid),
+            'assignments_finalized': school.assignments_finalized,
         })
 
     def test_country_preferences(self):
