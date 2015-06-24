@@ -97,6 +97,7 @@ class UserDetailGetTestCase(RetrieveAPITestCase):
                 'registration_comments': school.registration_comments,
                 'fees_owed': float(school.fees_owed),
                 'fees_paid': float(school.fees_paid),
+                'assignments_finalized': school.assignments_finalized,
             },
             'committee': user.committee_id})
 
@@ -419,4 +420,5 @@ class CurrentUserTestCase(TestCase):
             'registration_comments': school.registration_comments,
             'fees_owed': float(school.fees_owed),
             'fees_paid': float(school.fees_paid),
+            'assignments_finalized': school.assignments_finalized,
         })
