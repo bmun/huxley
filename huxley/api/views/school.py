@@ -50,10 +50,6 @@ class SchoolAssignmentsFinalize(generics.GenericAPIView):
         school = School.objects.get(id=school_id)
         school.assignments_finalized = True
         school.save()
-        data = json.load(request)
-        for identity in data:
-            assignment = Assignment.objects.get(pk=int(identity))
-            assignment.delete()
 
         return Response(status=status.HTTP_200_OK)
 
