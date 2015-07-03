@@ -23,7 +23,6 @@ var AdvisorAssignmentsView = React.createClass({
       assignments: [],
       committees: {},
       countries: {},
-      confirming: false,
       finalized: school.assignments_finalized,
       loading: false
     };
@@ -103,7 +102,11 @@ var AdvisorAssignmentsView = React.createClass({
           <td>{committees[assignment.committee].delegation_size}</td>
           <td>{this.state.finalized ?
             <input className="text" type="text" placeholder="Assigned Delegate"/> :
-            <Button color="red" size="small"> Relinquish </Button>}
+            <Button color="red"
+                    size="small"
+                    onClick={this._handleAssignmentDelete.bind(this, assignment)}>
+                    Relinquish
+            </Button>}
           </td>
         </tr>
       )
@@ -117,15 +120,26 @@ var AdvisorAssignmentsView = React.createClass({
       type: 'POST',
       url: '/api/schools/'+school.id+'/assignments/finalize/',
       data: null,
+      sucess: this._handleFinalizedSuccess,
+      error: this._handleError,
+      dataType: null
+    });
+  },
+
+  _handleAssignmentDelete: function(event, assignment) {
+    this.setState({loading: true});
+    $.ajax ({
+      type: 'POST',
+      url: '/api/assignment/'+assignment.id+'/delete/',
+      data: null,
       sucess: this._handleSuccess,
       error: this._handleError,
       dataType: null
     });
-    this.setState({finalized: true});
-    event.preventDefault();
   },
 
-  _handleSuccess: function(event) {
+  _handleFinalizedSuccess: function(event) {
+    this.setState({finalized: true});
     this.setState({loading: false});
     forceUpdate();
   },
@@ -133,6 +147,11 @@ var AdvisorAssignmentsView = React.createClass({
   _handleError: function(jqXHR, status, error) {
     window.alert("Something went wrong. Please try again.");
     this.setState({loading: false});
+  },
+
+   _handleSuccess: function(event) {
+    this.setState({loading: false});
+    forceUpdate();
   }
 });
 
