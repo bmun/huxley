@@ -12,6 +12,7 @@ var React = require('react/addons');
 var Router = require('react-router');
 
 var Button = require('./Button');
+var CommitteeStore = require('../stores/CommitteeStore');
 var ContactTypes = require('../constants/ContactTypes');
 var CountrySelect = require('./CountrySelect');
 var CountryStore = require('../stores/CountryStore');
@@ -36,6 +37,7 @@ var RegistrationView = React.createClass({
     return {
       errors: {},
       countries: [],
+      committees: [],
       first_name: '',
       last_name: '',
       username: '',
@@ -74,11 +76,7 @@ var RegistrationView = React.createClass({
       country_pref8: 0,
       country_pref9: 0,
       country_pref10: 0,
-      prefers_bilingual: false,
-      prefers_specialized_regional: false,
-      prefers_crisis: false,
-      prefers_alternative: false,
-      prefers_press_corps: false,
+      committee_prefs: [],
       registration_comments: '',
       loading: false,
       passwordValidating: false
@@ -88,6 +86,9 @@ var RegistrationView = React.createClass({
   componentDidMount: function() {
     CountryStore.getCountries(function(countries) {
       this.setState({countries: countries});
+    }.bind(this));
+    CommitteeStore.getSpecialCommittees(function(committees) {
+      this.setState({committees: committees});
     }.bind(this));
   },
 
@@ -347,56 +348,7 @@ var RegistrationView = React.createClass({
             committees <a href="http://bmun.org/Committees.php" target="_blank">
             here</a>.</p>
             <ul>
-              <li>
-                <label>
-                  <input
-                    type="checkbox"
-                    checked={this.state.prefers_bilingual}
-                    onChange={this._handleBilingualChange}
-                  />
-                  Bilingual - (IDB)
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input
-                    type="checkbox"
-                    checked={this.state.prefers_specialized_regional}
-                    onChange={this._handleSpecializedRegionalChange}
-                  />
-                  Specialized/Regional - (SC, G20, EU, APEC)
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input
-                    type="checkbox"
-                    checked={this.state.prefers_crisis}
-                    onChange={this._handleCrisisChange}
-                  />
-                  Crisis - (IFC, KHAN, ACC, JCC)
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input
-                    type="checkbox"
-                    checked={this.state.prefers_alternative}
-                    onChange={this._handleAlternativeChange}
-                  />
-                  Alternative - (ICC, UNGC)
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input
-                    type="checkbox"
-                    checked={this.state.prefers_press_corps}
-                    onChange={this._handlePressCorpsChange}
-                  />
-                  Press Corps
-                </label>
-              </li>
+              {this.renderCommittees()}
               <li>
                 <input
                   type="text"
@@ -447,6 +399,24 @@ var RegistrationView = React.createClass({
         />
       </li>
     );
+  },
+
+  renderCommittees: function() {
+    return this.state.committees.map(function(committee) {
+      return (
+        <li>
+          <label name="committee_prefs">
+          <input
+            className="choice"
+            type="checkbox"
+            name="committee_prefs"
+            onChange={this._handleCommitteePreferenceChange.bind(this, committee)}
+          />
+          {committee.full_name}
+          </label>
+        </li>
+      );
+    }, this);
   },
 
   renderContactGenderField: function(name) {
@@ -571,6 +541,15 @@ var RegistrationView = React.createClass({
     this.setState(change);
   },
 
+   _handleCommitteePreferenceChange: function(committee) {
+    var index = this.state.committee_prefs.indexOf(committee.id);
+    if (index < 0) {
+      this.state.committee_prefs.push(committee.id);
+    } else {
+      this.state.committee_prefs.splice(index, 1);
+    }
+  },
+
   _handleInternationalChange: function(event) {
     this.setState({school_international: !!event.target.value});
   },
@@ -665,11 +644,7 @@ var RegistrationView = React.createClass({
             this.state.country_pref9,
             this.state.country_pref10
           ],
-          prefers_bilingual: this.state.prefers_bilingual,
-          prefers_specialized_regional: this.state.prefers_specialized_regional,
-          prefers_crisis: this.state.prefers_crisis,
-          prefers_alternative: this.state.prefers_alternative,
-          prefers_press_corps: this.state.prefers_press_corps,
+          committeepreferences: this.state.committee_prefs,
           registration_comments: this.state.registration_comments.trim()
         }
       }),
