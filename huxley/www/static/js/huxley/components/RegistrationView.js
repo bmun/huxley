@@ -406,13 +406,13 @@ var RegistrationView = React.createClass({
       return (
         <li>
           <label name="committee_prefs">
-          <input
-            className="choice"
-            type="checkbox"
-            name="committee_prefs"
-            onChange={this._handleCommitteePreferenceChange.bind(this, committee)}
-          />
-          {committee.full_name}
+            <input
+              className="choice"
+              type="checkbox"
+              name="committee_prefs"
+              onChange={this._handleCommitteePreferenceChange.bind(this, committee)}
+            />
+            {committee.full_name}
           </label>
         </li>
       );
@@ -544,9 +544,15 @@ var RegistrationView = React.createClass({
    _handleCommitteePreferenceChange: function(committee) {
     var index = this.state.committee_prefs.indexOf(committee.id);
     if (index < 0) {
-      this.state.committee_prefs.push(committee.id);
+      this.setState({
+        committee_prefs: this.state.committee_prefs.concat(committee.id),
+      });
     } else {
-      this.state.committee_prefs.splice(index, 1);
+      this.setState({
+        committee_prefs: this.state.committee_prefs.filter(function(id) {
+          return committee.id !== id;
+        }),
+      });
     }
   },
 
