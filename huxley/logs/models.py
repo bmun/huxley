@@ -8,5 +8,5 @@ class LogEntry(models.Model):
     message = models.TextField()
     timestamp = models.DateTimeField('timestamp', null=True, blank=True)
 
-    def __str__(self):
+    def __unicode__(self):
         return u'%s: %s' % (self.level, self.timestamp)
