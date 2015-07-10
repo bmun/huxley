@@ -7,3 +7,6 @@ class LogEntry(models.Model):
     level = models.CharField(max_length=200)
     message = models.TextField()
     timestamp = models.DateTimeField('timestamp', null=True, blank=True)
+
+    def __unicode__(self):
+        return u'%s: %s' % (self.level, self.timestamp)
