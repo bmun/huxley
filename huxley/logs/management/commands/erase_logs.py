@@ -11,13 +11,7 @@ class Command(BaseCommand):
     help = 'Deletes all log entries after a specified number of days (defaults to 30).'
 
     def handle(self, *args, **kwargs):
-        if args:
-            try:
-                days = int(args[0])
-            except ValueError as e:
-                raise e
-        else:
-            days = 30
+        days = int(args[0]) if args else 30
 
         cutoff = datetime.now() - timedelta(days=days)
         records = LogEntry.objects.filter(timestamp__lt=cutoff)
