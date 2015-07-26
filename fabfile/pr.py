@@ -4,7 +4,7 @@
 import json
 import urllib2
 
-from fabric.api import abort, local, task
+from fabric.api import abort, env, local, task
 from fabric.contrib.console import confirm
 
 from .utils import git, ui
@@ -14,18 +14,19 @@ from .utils import git, ui
 def merge(number):
     '''Prepare and push a pull request.'''
     author, branch = patch(number)
+    upstream = env.get('huxley_upstream', 'upstream')
 
     print ui.info('Changes checked out. Rebasing and squashing...')
-    local('git fetch origin; git rebase origin/master')
-    commits_ahead = git.commits_ahead('origin')
+    git.rebase_remote(upstream)
+    commits_ahead = git.commits_ahead(upstream)
     local('git rebase -i HEAD~%d' % commits_ahead)
 
     if not confirm(ui.warning('Changes squashed. Push?')):
         abort('Push canceled.')
 
     local('git checkout master; git merge %s --ff-only' % branch)
-    local('git pull --rebase')
-    local('git push')
+    git.rebase_remote(upstream)
+    local('git push %s master' % upstream)
 
     print ui.success('Changes pushed! Deleting branch...')
     local('git branch -d %s' % branch)

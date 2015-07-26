@@ -33,15 +33,19 @@ def remote_branch_exists(branch_name=None, remote='upstream'):
     return any(full_name in head for head in heads_list)
 
 
-def commits_ahead(remote='upstream'):
+def commits_ahead(remote='upstream', branch='master'):
     with hide('running'):
-        commit_list = local('git rev-list --left-right %s/master...HEAD' % remote, capture=True)
+        commit_list = local('git rev-list --left-right %s/%s...HEAD' % (remote, branch), capture=True)
     return len(commit_list.split('\n'))
+
+
+def rebase_remote(remote='upstream', branch='master'):
+    local('git fetch %s; git rebase %s/%s' % (remote, remote, branch))
 
 
 def pull(remote='upstream', rebase=True):
     if current_branch() == 'master':
-        local('git fetch %s; git rebase %s/master' % (remote, remote))
+        rebase_remote(remote)
     else:
         rebase_flag = '--rebase' if rebase else ''
         local('git pull %s' % rebase_flag)
