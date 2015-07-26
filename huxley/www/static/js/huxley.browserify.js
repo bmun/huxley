@@ -5,9 +5,8 @@
 
 'use strict';
 
-require('jquery.cookie');
-
 var $ = require('jquery');
+var Cookie = require('js-cookie');
 var React = require('react');
 var Router = require('react-router');
 
@@ -61,7 +60,7 @@ $.ajaxSetup({
   beforeSend: function(xhr, settings) {
     if (!/^(GET|HEAD|OPTIONS|TRACE)$/.test(settings.type)) {
       // TODO: check that it's same origin.
-      xhr.setRequestHeader('X-CSRFToken', $.cookie('csrftoken'));
+      xhr.setRequestHeader('X-CSRFToken', Cookie.get('csrftoken'));
     }
   }
 });
