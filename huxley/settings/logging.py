@@ -17,7 +17,7 @@ LOGGING = {
         },
         'database': {
             'level': 'DEBUG',
-            'class': 'huxley.logs.handlers.DatabaseHandler',
+            'class': 'huxley.logging.handlers.DatabaseHandler',
             'formatter': 'simple',
         },
         'mail_admins': {

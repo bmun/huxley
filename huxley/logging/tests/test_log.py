@@ -6,8 +6,8 @@ import logging
 
 from django.test import TestCase
 
-from huxley.logs.handlers import DatabaseHandler
-from huxley.logs.models import LogEntry
+from huxley.logging.handlers import DatabaseHandler
+from huxley.logging.models import LogEntry
 
 
 class LogEntryTestCase(TestCase):

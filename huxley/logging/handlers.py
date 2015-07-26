@@ -4,14 +4,15 @@
 import datetime
 import logging
 
-from huxley.logs.models import LogEntry
-
 
 class DatabaseHandler(logging.Handler):
     def __init__(self):
         logging.Handler.__init__(self)
 
     def emit(self, record):
+        # Import the model lazily; otherwise it's imported before its AppConfig.
+        from huxley.logging.models import LogEntry
+
         try:
             self.format(record)
             log_entry = LogEntry(

@@ -100,6 +100,6 @@ INSTALLED_APPS = (
     'huxley.accounts',
     'huxley.payments',
     'huxley.www',
-    'huxley.logs',
+    'huxley.logging',
     'pipeline',
 )

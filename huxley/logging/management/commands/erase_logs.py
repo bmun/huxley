@@ -4,7 +4,7 @@
 from datetime import datetime, timedelta
 from django.core.management.base import BaseCommand
 
-from huxley.logs.models import LogEntry
+from huxley.logging.models import LogEntry
 
 class Command(BaseCommand):
     args = '<days> (optional).'

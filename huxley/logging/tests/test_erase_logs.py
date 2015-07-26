@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 from django.core.management import call_command
 from django.test import TestCase
 
-from huxley.logs.models import LogEntry
+from huxley.logging.models import LogEntry
 
 class EraseLogsTest(TestCase):
     def test_no_args(self):
