@@ -4,6 +4,22 @@
 # Use of this source code is governed by a BSD License (see LICENSE).
 
 from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin as UserAdminBase
+
 from huxley.accounts.models import User
 
-admin.site.register(User)
+
+class UserAdmin(UserAdminBase):
+    model = User
+    fieldsets = UserAdminBase.fieldsets + (
+        ('BMUN-Specific Information', {
+            'fields': (
+                'user_type',
+                'school',
+                'committee',
+            )
+        }),
+    )
+
+
+admin.site.register(User, UserAdmin)

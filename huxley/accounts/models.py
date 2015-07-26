@@ -1,14 +1,14 @@
 # Copyright (c) 2011-2015 Berkeley Model United Nations. All rights reserved.
 # Use of this source code is governed by a BSD License (see LICENSE).
 
+import re
+
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 from huxley.accounts.exceptions import AuthenticationError, PasswordChangeFailed
 from huxley.core.models import Committee, School
-
-import re
 
 
 class User(AbstractUser):
