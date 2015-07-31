@@ -130,7 +130,7 @@ var AdvisorAssignmentsView = React.createClass({
     this.setState({loading: true});
     $.ajax ({
       type: 'POST',
-      url: '/api/assignment/'+assignment.id+'/delete/',
+      url: '/api/assignments/'+assignment.id+'/delete/',
       data: null,
       sucess: this._handleSuccess,
       error: this._handleError,
