@@ -8,6 +8,7 @@ from huxley.api.permissions import IsSchoolAdvisorOrSuperuser
 from huxley.api.serializers import AssignmentSerializer
 from huxley.core.models import Assignment
 
+
 class AssignmentList(generics.CreateAPIView):
     authentication_classes = (SessionAuthentication,)
     queryset = Assignment.objects.all()
@@ -24,7 +25,7 @@ class AssignmentDelete(generics.GenericAPIView):
     permission_classes = (IsSchoolAdvisorOrSuperuser,)
 
     def post(self, request, *args, **kwargs):
-        assignment_id = self.kwargs.get('pk', None)
+        assignment_id = kwargs.get('pk', None)
         assignment = Assignment.objects.get(id=assignment_id)
         assignment.delete()
 
