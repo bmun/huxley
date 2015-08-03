@@ -294,9 +294,6 @@ class Assignment(models.Model):
             Assignment.objects.filter(id__in=deletions).delete()
             Assignment.objects.bulk_create(additions)
 
-    def finalize(self):
-        self.finalize = True
-
     def __unicode__(self):
         return self.committee.name + " : " + self.country.name + " : " + (self.school.name if self.school else "Unassigned")
 

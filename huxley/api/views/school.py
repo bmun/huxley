@@ -15,6 +15,7 @@ from huxley.api.serializers import AssignmentSerializer, SchoolSerializer
 from huxley.core.models import Assignment, School
 from huxley.utils import zoho
 
+
 class SchoolList(generics.CreateAPIView):
     authentication_classes = (SessionAuthentication,)
     queryset = School.objects.all()
@@ -41,17 +42,19 @@ class SchoolAssignments(generics.ListAPIView):
 
         return Assignment.objects.filter(school_id=school_id)
 
+
 class SchoolAssignmentsFinalize(generics.GenericAPIView):
     authentication_classes = (SessionAuthentication,)
     permission_classes = (IsSchoolAdvisorOrSuperuser,)
 
     def post(self, request, *args, **kwargs):
-        school_id = self.kwargs.get('pk', None)
+        school_id = kwargs.get('pk', None)
         school = School.objects.get(id=school_id)
         school.assignments_finalized = True
         school.save()
 
         return Response(status=status.HTTP_200_OK)
+
 
 class SchoolInvoice(generics.CreateAPIView):
     authentication_classes = (SessionAuthentication,)
