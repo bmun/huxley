@@ -33,12 +33,6 @@ class Migration(migrations.Migration):
         ),
         migrations.AddField(
             model_name='school',
-            name='assignments_finalized',
-            field=models.BooleanField(default=False),
-            preserve_default=True,
-        ),
-        migrations.AddField(
-            model_name='school',
             name='committeepreferences',
             field=models.ManyToManyField(to='core.Committee'),
             preserve_default=True,
