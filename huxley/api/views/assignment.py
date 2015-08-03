@@ -5,15 +5,15 @@ from rest_framework import generics, status
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.response import Response
 
-from huxley.api.permissions import IsSchoolAdvisorOrSuperuser
+from huxley.api.permissions import IsSchoolAdvisorOrSuperuser, IsSuperuserOrReadOnly
 from huxley.api.serializers import AssignmentSerializer
 from huxley.core.models import Assignment
 
 
 class AssignmentList(generics.CreateAPIView):
     authentication_classes = (SessionAuthentication,)
-    permission_classes = (IsSuperuserOrReadOnly)
     queryset = Assignment.objects.all()
+    permission_classes = (IsSuperuserOrReadOnly,)
     serializer_class = AssignmentSerializer
 
 
