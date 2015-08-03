@@ -69,7 +69,7 @@ var AdvisorAssignmentsView = React.createClass({
                 <th>Country</th>
                 <th>Delegation Size</th>
                 <th>{this.state.finalized ?
-                  "Delegate Names" :
+                  "" :
                   "Relinquish Assignment"}
                 </th>
               </tr>
@@ -101,7 +101,7 @@ var AdvisorAssignmentsView = React.createClass({
           <td>{countries[assignment.country].name}</td>
           <td>{committees[assignment.committee].delegation_size}</td>
           <td>{this.state.finalized ?
-            <input className="text" type="text" placeholder="Assigned Delegate"/> :
+            <div/> :
             <Button color="red"
                     size="small"
                     onClick={this._handleAssignmentDelete.bind(this, assignment)}>
@@ -126,7 +126,7 @@ var AdvisorAssignmentsView = React.createClass({
     });
   },
 
-  _handleAssignmentDelete: function(event, assignment) {
+  _handleAssignmentDelete: function(assignment) {
     this.setState({loading: true});
     $.ajax ({
       type: 'POST',
@@ -136,6 +136,10 @@ var AdvisorAssignmentsView = React.createClass({
       error: this._handleError,
       dataType: null
     });
+    var user = this.props.user.getData();
+    AssignmentStore.getAssignments(user.school.id, function(assignments) {
+      this.setState({assignments: assignments});
+    }.bind(this));
   },
 
   _handleFinalizedSuccess: function(event) {
@@ -151,7 +155,6 @@ var AdvisorAssignmentsView = React.createClass({
 
    _handleSuccess: function(event) {
     this.setState({loading: false});
-    forceUpdate();
   }
 });
 
