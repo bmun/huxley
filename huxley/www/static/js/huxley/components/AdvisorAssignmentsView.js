@@ -114,15 +114,13 @@ var AdvisorAssignmentsView = React.createClass({
   },
 
   _handleFinalize: function(event) {
-    var school = this.props.user.getSchool()
+    var school = this.props.user.getSchool();
     this.setState({loading: true});
     $.ajax ({
-      type: 'POST',
+      type: 'PUT',
       url: '/api/schools/'+school.id+'/assignments/finalize/',
-      data: null,
       sucess: this._handleFinalizedSuccess,
-      error: this._handleError,
-      dataType: null
+      error: this._handleError
     });
   },
 
@@ -142,7 +140,8 @@ var AdvisorAssignmentsView = React.createClass({
     }.bind(this));
   },
 
-  _handleFinalizedSuccess: function(event) {
+  _handleFinalizedSuccess: function(data, status, jqXHR) {
+    console.log('Finalized successful');
     this.setState({finalized: true});
     this.setState({loading: false});
     forceUpdate();

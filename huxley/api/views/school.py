@@ -47,7 +47,7 @@ class SchoolAssignmentsFinalize(generics.GenericAPIView):
     authentication_classes = (SessionAuthentication,)
     permission_classes = (IsSchoolAdvisorOrSuperuser,)
 
-    def post(self, request, *args, **kwargs):
+    def put(self, request, *args, **kwargs):
         school_id = kwargs.get('pk', None)
         school = School.objects.get(id=school_id)
         school.assignments_finalized = True
