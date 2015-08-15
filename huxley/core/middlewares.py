@@ -12,3 +12,8 @@ class ServerLoggingMiddleware(object):
     def process_exception(self, request, exception):
         logger = logging.getLogger('huxley.server')
         logger.exception(exception)
+
+class LoggingMiddleware(object):
+    def process_response(self, request, response):
+        print(response)
+
