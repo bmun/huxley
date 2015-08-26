@@ -34,12 +34,8 @@ var TopBar = React.createClass({
         <div className="top-bar-wrapper transparent">
           <div className="top-bar">
             <ul className="right">
-              <li>
-                Logged in as
-                &nbsp;
-                <span className="white">
-                  {user.first_name} {user.last_name}
-                </span>
+              <li className="white">
+                {user.first_name} {user.last_name}
               </li>
               <li>
                 <a
@@ -62,10 +58,6 @@ var TopBar = React.createClass({
               &middot;
               &nbsp;
               <span>A Conference Management Tool by BMUN</span>
-              &nbsp;
-              &middot;
-              &nbsp;
-              <em className="white">for {this._getUserType()}</em>
             </div>
           </div>
         </div>
@@ -92,10 +84,6 @@ var TopBar = React.createClass({
 
   _hideDropdown: function() {
     this.setState({changePasswordVisible: false});
-  },
-
-  _getUserType: function() {
-    return this.props.user.isAdvisor() ? 'Advisors' : 'Chairs';
   },
 
   _stopPropagation: function(e) {
