@@ -50,6 +50,7 @@ var AdvisorAssignmentsView = React.createClass({
   },
 
   render: function() {
+    console.log(this.state.finalized)
     return (
       <InnerView>
         <h2>Roster</h2>
@@ -114,37 +115,43 @@ var AdvisorAssignmentsView = React.createClass({
   },
 
   _handleFinalize: function(event) {
-    var school = this.props.user.getSchool();
-    this.setState({loading: true});
-    $.ajax ({
-      type: 'PUT',
-      url: '/api/schools/'+school.id+'/assignments/finalize/',
-      sucess: this._handleFinalizedSuccess,
-      error: this._handleError
-    });
+    var confirm = window.confirm("By pressing okay you are committing to the financial respoinsibility of each assingment. Are you sure you want to finalize assignments?");
+    if (confirm) {
+      var school = this.props.user.getSchool();
+      this.setState({loading: true});
+      $.ajax ({
+        type: 'PATCH',
+        url: '/api/schools/'+school.id+'/assignments/finalize/',
+        data: {
+          assignments_finalized: true,
+        },
+        success: this._handleFinalizedSuccess,
+        error: this._handleError
+      });
+      console.log(response);
+    }
   },
 
   _handleAssignmentDelete: function(assignment) {
-    this.setState({loading: true});
-    $.ajax ({
-      type: 'POST',
-      url: '/api/assignments/'+assignment.id+'/delete/',
-      data: null,
-      sucess: this._handleSuccess,
-      error: this._handleError,
-      dataType: null
-    });
-    var user = this.props.user.getData();
-    AssignmentStore.getAssignments(user.school.id, function(assignments) {
-      this.setState({assignments: assignments});
-    }.bind(this));
+    var confirm = window.confirm("Are you sure you want to delete this assignment");
+    if (confirm) {
+      this.setState({loading: true});
+      $.ajax ({
+        type: 'POST',
+        url: '/api/assignments/'+assignment.id+'/delete/',
+        success: this._handleSuccess,
+        error: this._handleError,
+      });
+      var user = this.props.user.getData();
+      AssignmentStore.getAssignments(user.school.id, function(assignments) {
+        this.setState({assignments: assignments});
+      }.bind(this));
+    }
   },
 
   _handleFinalizedSuccess: function(data, status, jqXHR) {
-    console.log('Finalized successful');
-    this.setState({finalized: true});
-    this.setState({loading: false});
-    forceUpdate();
+    this.setState({finalized: true,
+                   loading: false});
   },
 
   _handleError: function(jqXHR, status, error) {

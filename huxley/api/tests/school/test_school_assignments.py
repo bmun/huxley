@@ -103,6 +103,8 @@ class SchoolAssignmentsFinalizeTestCase(UpdateAPITestCase):
         '''It finalizes the assignments for the school's advisor.'''
         self.client.login(username='regular', password='user')
         response = self.get_response(self.school.id)
+        print(response)
+        print(self.school.assignments_finalized)
         self.assertFinalized(response)
 
     def test_other_user(self):
