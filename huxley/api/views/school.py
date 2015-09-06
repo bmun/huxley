@@ -52,8 +52,6 @@ class SchoolAssignmentsFinalize(generics.UpdateAPIView):
         school_id = kwargs.get('pk', None)
         school = School.objects.get(id=school_id)
         # serializer = SchoolSerializer(school, data=request.data, partial=true)
-        print(request.data)
-        print(school.assignments_finalized)
         return Response(status=status.HTTP_200_OK)
 
 
