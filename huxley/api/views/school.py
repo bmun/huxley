@@ -1,4 +1,3 @@
-
 # Copyright (c) 2011-2015 Berkeley Model United Nations. All rights reserved.
 # Use of this source code is governed by a BSD License (see LICENSE).
 
@@ -43,16 +42,18 @@ class SchoolAssignments(generics.ListAPIView):
         return Assignment.objects.filter(school_id=school_id)
 
 
-class SchoolAssignmentsFinalize(generics.GenericAPIView):
+class SchoolAssignmentsFinalize(generics.UpdateAPIView):
     authentication_classes = (SessionAuthentication,)
     permission_classes = (IsSchoolAdvisorOrSuperuser,)
+    serializer_class = SchoolSerializer
+    queryset = School.objects.all()
 
-    def put(self, request, *args, **kwargs):
+    def patch(self, request, *args, **kwargs):
         school_id = kwargs.get('pk', None)
         school = School.objects.get(id=school_id)
-        school.assignments_finalized = True
-        school.save()
-
+        # serializer = SchoolSerializer(school, data=request.data, partial=true)
+        print(request.data)
+        print(school.assignments_finalized)
         return Response(status=status.HTTP_200_OK)
 
 
