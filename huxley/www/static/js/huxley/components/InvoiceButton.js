@@ -9,7 +9,7 @@ var $ = require('jquery');
 var Button = require('./Button');
 var React = require('react');
 
-var User = require('../User');
+var User = require('../utils/User');
 
 var InvoiceButton = React.createClass({
   getInitialState: function() {

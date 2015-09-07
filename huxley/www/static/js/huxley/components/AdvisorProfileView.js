@@ -12,7 +12,7 @@ var InnerView = require('./InnerView');
 var InvoiceButton = require('./InvoiceButton');
 var LogoutButton = require('./LogoutButton');
 var ProgramTypes = require('../constants/ProgramTypes');
-var User = require('../User');
+var User = require('../utils/User');
 
 var AdvisorProfileView = React.createClass({
   mixins: [React.addons.LinkedStateMixin],

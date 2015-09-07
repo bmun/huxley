@@ -8,7 +8,7 @@
 var ActionConstants = require('../constants/ActionConstants');
 var Dispatcher = require('../dispatcher/Dispatcher');
 var EventEmitter = require('events').EventEmitter;
-var User = require('../User');
+var User = require('../utils/User');
 
 var invariant = require('react/lib/invariant');
 

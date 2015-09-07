@@ -15,7 +15,7 @@ var Button = require('./Button');
 var CurrentUserActions = require('../actions/CurrentUserActions');
 var NavLink = require('./NavLink');
 var OuterView = require('./OuterView');
-var User = require('../User');
+var User = require('../utils/User');
 
 require('jquery-ui/effect-shake');
 

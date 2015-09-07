@@ -6,7 +6,6 @@
 'use strict';
 
 jest.dontMock('../CurrentUserStore');
-jest.dontMock('../../User');
 jest.dontMock('events');
 
 describe('CurrentUserStore', function() {

@@ -11,7 +11,7 @@ var Router = require('react-router');
 var NavTab = require('./NavTab');
 var PermissionDeniedView = require('./PermissionDeniedView');
 var TopBar = require('./TopBar');
-var User = require('../User');
+var User = require('../utils/User');
 
 var AdvisorView = React.createClass ({
   mixins: [Router.Navigation],

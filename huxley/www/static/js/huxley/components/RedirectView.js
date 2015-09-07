@@ -9,7 +9,7 @@ var React = require('react');
 var Router = require('react-router');
 
 var OuterView = require('./OuterView');
-var User = require('../User');
+var User = require('../utils/User');
 
 var RedirectView = React.createClass({
   mixins: [Router.Navigation],
