@@ -17,6 +17,9 @@
     "test": "jest"
   },
   "jest": {
+    "scriptPreprocessor": "<rootDir>/node_modules/babel-jest",
+    "testFileExtensions": ["es6", "js"],
+    "moduleFileExtensions": ["js", "json", "es6"],
     "unmockedModulePathPatterns": [
       "<rootDir>/node_modules/react",
       "<rootDir>/node_modules/es6-promise"
@@ -31,6 +34,7 @@
     "babelify": "~6.3.0",
     "envify": "~3.4.0",
     "uglify-js": "~2.4.15",
-    "jest-cli": "~0.1.18"
+    "jest-cli": "~0.4.0",
+    "babel-jest": "~5.3.0"
   }
 }
