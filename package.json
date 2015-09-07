@@ -18,9 +18,11 @@
   },
   "jest": {
     "scriptPreprocessor": "<rootDir>/node_modules/babel-jest",
+    "setupTestFrameworkScriptFile": "<rootDir>/scripts/jestPreprocessor.js",
     "testFileExtensions": ["es6", "js"],
     "moduleFileExtensions": ["js", "json", "es6"],
     "unmockedModulePathPatterns": [
+      "<rootDir>/node_modules/babelify",
       "<rootDir>/node_modules/react",
       "<rootDir>/node_modules/es6-promise"
     ],
