@@ -8,9 +8,9 @@
 var React = require('react/addons');
 var Router = require('react-router');
 
-var AdvisorView = require('./components/AdvisorView');
-var CurrentUserStore = require('./stores/CurrentUserStore');
-var User = require('./utils/User');
+var AdvisorView = require('../components/AdvisorView');
+var CurrentUserStore = require('../stores/CurrentUserStore');
+var User = require('../utils/User');
 
 var RouteHandler = Router.RouteHandler;
 

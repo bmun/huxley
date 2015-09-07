@@ -11,7 +11,7 @@ var React = require('react');
 var Router = require('react-router');
 
 var CurrentUserStore = require('./huxley/stores/CurrentUserStore');
-var Huxley = require('./huxley/Huxley');
+var Huxley = require('./huxley/components/Huxley');
 
 var AdvisorAssignmentsView = require('./huxley/components/AdvisorAssignmentsView');
 var AdvisorProfileView = require('./huxley/components/AdvisorProfileView');
