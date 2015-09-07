@@ -36,7 +36,7 @@ PIPELINE_JS = {
 
 PIPELINE_BROWSERIFY_BINARY = join(PROJECT_ROOT, 'node_modules/.bin/browserify')
 
-PIPELINE_BROWSERIFY_ARGUMENTS = '-t reactify'
+PIPELINE_BROWSERIFY_ARGUMENTS = '-t babelify'
 
 PIPELINE_UGLIFYJS_BINARY = join(PROJECT_ROOT, 'node_modules/.bin/uglifyjs')
 

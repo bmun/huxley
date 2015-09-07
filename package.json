@@ -6,9 +6,7 @@
   "license": "BSD",
   "dependencies": {
     "browserify": "6.3.2",
-    "envify": "3.2.0",
     "react": "0.12.1",
-    "reactify": "0.17.1",
     "jquery": "2.1.1",
     "jquery-ui": "1.10.5",
     "jest-cli": "0.1.18",
@@ -30,5 +28,9 @@
       "huxley/static"
     ]
   },
-  "private": true
+  "private": true,
+  "devDependencies": {
+    "babelify": "~6.3.0",
+    "envify": "~3.4.0"
+  }
 }
