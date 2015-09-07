@@ -5,8 +5,6 @@
 
 'use strict';
 
-var mergeInto = require('react/lib/mergeInto');
-
 var TYPE_ADVISOR = 1;
 var TYPE_CHAIR = 2;
 
@@ -14,7 +12,7 @@ function User(rawData) {
   this._user = rawData || {};
 }
 
-mergeInto(User.prototype, {
+Object.assign(User.prototype, {
   isAnonymous: function() {
     return !this._user.id;
   },

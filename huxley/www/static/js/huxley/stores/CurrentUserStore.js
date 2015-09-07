@@ -11,7 +11,6 @@ var EventEmitter = require('events').EventEmitter;
 var User = require('../User');
 
 var invariant = require('react/lib/invariant');
-var merge = require('react/lib/merge');
 
 var CHANGE_EVENT = 'change';
 
@@ -25,7 +24,7 @@ function _assertBootstrapped() {
   );
 }
 
-var CurrentUserStore = merge(EventEmitter.prototype, {
+var CurrentUserStore = {...EventEmitter.prototype,
   bootstrap: function() {
     invariant(
       !_bootstrapped,
@@ -60,7 +59,7 @@ var CurrentUserStore = merge(EventEmitter.prototype, {
     _assertBootstrapped();
     this.removeListener(CHANGE_EVENT, callback);
   }
-});
+};
 
 Dispatcher.register(function(action) {
   switch (action.actionType) {
