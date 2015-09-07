@@ -26,7 +26,7 @@ var TopBar = React.createClass({
   },
 
   render: function() {
-    var user = this.props.user.getData();
+    var {user} = this.props;
     var cx = React.addons.classSet;
 
     return (

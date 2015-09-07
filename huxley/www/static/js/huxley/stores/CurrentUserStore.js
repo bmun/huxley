@@ -35,7 +35,7 @@ var CurrentUserStore = {...EventEmitter.prototype,
       'currentUser must be defined to bootstrap CurrentUserStore.'
     );
 
-    _currentUser = new User(global.currentUser);
+    _currentUser = global.currentUser;
     delete global.currentUser;
     _bootstrapped = true;
   },
@@ -64,11 +64,10 @@ var CurrentUserStore = {...EventEmitter.prototype,
 Dispatcher.register(function(action) {
   switch (action.actionType) {
     case ActionConstants.LOGIN:
-      _currentUser && _currentUser.destroy();
-      _currentUser = new User(action.user);
+      _currentUser = action.user;
       break;
     case ActionConstants.LOGOUT:
-      _currentUser = new User();
+      _currentUser = {};
       break;
   }
 

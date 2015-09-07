@@ -9,14 +9,16 @@ var React = require('react');
 var Router = require('react-router');
 
 var OuterView = require('./OuterView');
+var User = require('../User');
 
 var RedirectView = React.createClass({
   mixins: [Router.Navigation],
 
   componentDidMount: function() {
-    if (this.props.user.isAnonymous()) {
+    var {user} = this.props;
+    if (User.isAnonymous(user)) {
       this.transitionTo('/login');
-    } else if (this.props.user.isAdvisor()) {
+    } else if (User.isAdvisor(user)) {
       this.transitionTo('/advisor/profile');
     }
   },

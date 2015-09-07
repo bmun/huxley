@@ -25,7 +25,7 @@ var AdvisorAssignmentsView = React.createClass({
   },
 
   componentWillMount: function() {
-    var user = this.props.user.getData();
+    var {user} = this.props;
     AssignmentStore.getAssignments(user.school.id, function(assignments) {
       this.setState({assignments: assignments});
     }.bind(this));

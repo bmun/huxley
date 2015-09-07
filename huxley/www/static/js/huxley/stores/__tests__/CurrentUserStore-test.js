@@ -46,8 +46,8 @@ describe('CurrentUserStore', function() {
     });
     var mockUser = CurrentUserStore.getCurrentUser();
     expect(user).not.toBe(mockUser);
-    expect(mockUser.getData().id).toEqual(2);
-    expect(mockUser.getData().user_type).toEqual(1);
+    expect(mockUser.id).toEqual(2);
+    expect(mockUser.user_type).toEqual(1);
   });
 
   it('sets an anonymous user on logout', function() {
@@ -55,7 +55,7 @@ describe('CurrentUserStore', function() {
       actionType: ActionConstants.LOGOUT,
     });
     var mockUser = CurrentUserStore.getCurrentUser();
-    expect(mockUser.isAnonymous()).toBe(true);
+    expect(mockUser).toEqual({});
   });
 
   it('emits a change when the user changes', function() {

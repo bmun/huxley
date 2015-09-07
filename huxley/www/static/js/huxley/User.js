@@ -8,34 +8,22 @@
 var TYPE_ADVISOR = 1;
 var TYPE_CHAIR = 2;
 
-function User(rawData) {
-  this._user = rawData || {};
-}
-
-Object.assign(User.prototype, {
-  isAnonymous: function() {
-    return !this._user.id;
+var User = {
+  isAnonymous(user) {
+    return !user.id;
   },
 
-  isAdvisor: function() {
-    return this._user.user_type == TYPE_ADVISOR;
+  isAdvisor(user) {
+    return user.user_type == TYPE_ADVISOR;
   },
 
-  isChair: function() {
-    return this._user.user_type == TYPE_CHAIR;
+  isChair(user) {
+    return user.user_type == TYPE_CHAIR;
   },
 
-  destroy: function() {
-    delete this._user;
-  },
-
-  getData: function() {
-    return this._user;
-  },
-
-  getSchool: function() {
-    return this._user.school || {};
+  getSchool(user) {
+    return user.school || {};
   }
-});
+};
 
 module.exports = User;

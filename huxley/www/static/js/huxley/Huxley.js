@@ -10,6 +10,7 @@ var Router = require('react-router');
 
 var AdvisorView = require('./components/AdvisorView');
 var CurrentUserStore = require('./stores/CurrentUserStore');
+var User = require('./User');
 
 var RouteHandler = Router.RouteHandler;
 
@@ -19,9 +20,9 @@ var Huxley = React.createClass({
   componentWillMount: function() {
     CurrentUserStore.addChangeListener(function() {
       var user = CurrentUserStore.getCurrentUser();
-      if (user.isAnonymous()) {
+      if (User.isAnonymous(user)) {
         this.transitionTo('/login');
-      } else if (user.isAdvisor()) {
+      } else if (User.isAdvisor(user)) {
         this.transitionTo('/advisor/profile');
       }
     }.bind(this));
@@ -29,9 +30,9 @@ var Huxley = React.createClass({
 
   render: function() {
     var user = CurrentUserStore.getCurrentUser();
-    if (user.isAnonymous()) {
+    if (User.isAnonymous(user)) {
       return <RouteHandler user={user} />;
-    } else if (user.isAdvisor()) {
+    } else if (User.isAdvisor(user)) {
       return (
         <AdvisorView user={user}>
           <RouteHandler user={user} />

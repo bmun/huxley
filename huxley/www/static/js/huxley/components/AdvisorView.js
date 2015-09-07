@@ -11,18 +11,19 @@ var Router = require('react-router');
 var NavTab = require('./NavTab');
 var PermissionDeniedView = require('./PermissionDeniedView');
 var TopBar = require('./TopBar');
+var User = require('../User');
 
 var AdvisorView = React.createClass ({
   mixins: [Router.Navigation],
 
   componentDidMount: function() {
-    if (this.props.user.isAnonymous()) {
+    if (User.isAnonymous(this.props.user)) {
       this.transitionTo('/login');
     }
   },
 
   render: function() {
-    var content = this.props.user.isAdvisor()
+    var content = User.isAdvisor(this.props.user)
       ? this.props.children
       : <PermissionDeniedView />;
 

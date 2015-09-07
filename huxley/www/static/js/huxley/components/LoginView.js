@@ -15,6 +15,7 @@ var Button = require('./Button');
 var CurrentUserActions = require('../actions/CurrentUserActions');
 var NavLink = require('./NavLink');
 var OuterView = require('./OuterView');
+var User = require('../User');
 
 require('jquery-ui/effect-shake');
 
@@ -34,10 +35,11 @@ var LoginView = React.createClass({
   },
 
   componentWillMount: function() {
-    if (this.props.user.isAnonymous()) {
+    var {user} = this.props;
+    if (User.isAnonymous(user)) {
       return;
     }
-    if (this.props.user.isAdvisor()) {
+    if (User.isAdvisor(user)) {
       this.transitionTo('/advisor/profile');
     }
   },

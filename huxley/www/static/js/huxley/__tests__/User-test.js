@@ -15,35 +15,26 @@ describe('User', function() {
   });
 
   it('instantiates an anonymous user', function() {
-    var user = new User();
+    var user = {};
 
-    expect(user.isAnonymous()).toBe(true);
-    expect(user.isAdvisor()).toBe(false);
-    expect(user.isChair()).toBe(false);
+    expect(User.isAnonymous(user)).toBe(true);
+    expect(User.isAdvisor(user)).toBe(false);
+    expect(User.isChair(user)).toBe(false);
   });
 
   it('instantiates an advisor', function() {
-    var user = new User({id: 1, user_type: 1});
+    var user = {id: 1, user_type: 1};
 
-    expect(user.isAnonymous()).toBe(false);
-    expect(user.isAdvisor()).toBe(true);
-    expect(user.isChair()).toBe(false);
+    expect(User.isAnonymous(user)).toBe(false);
+    expect(User.isAdvisor(user)).toBe(true);
+    expect(User.isChair(user)).toBe(false);
   });
 
   it('instantiates a chair', function() {
-    var user = new User({id: 1, user_type: 2});
+    var user = {id: 1, user_type: 2};
 
-    expect(user.isAnonymous()).toBe(false);
-    expect(user.isAdvisor()).toBe(false);
-    expect(user.isChair()).toBe(true);
-  });
-
-  it('becomes unusable after destruction', function() {
-    var user = new User();
-    user.destroy();
-
-    expect(function() { user.isAnonymous(); }).toThrow();
-    expect(function() { user.isAdvisor(); }).toThrow();
-    expect(function() { user.isChair(); }).toThrow();
+    expect(User.isAnonymous(user)).toBe(false);
+    expect(User.isAdvisor(user)).toBe(false);
+    expect(User.isChair(user)).toBe(true);
   });
 });

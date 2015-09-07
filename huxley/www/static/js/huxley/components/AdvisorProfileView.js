@@ -18,12 +18,12 @@ var AdvisorProfileView = React.createClass({
   mixins: [React.addons.LinkedStateMixin],
 
   propTypes: {
-    user: React.PropTypes.instanceOf(User).isRequired
+    user: React.PropTypes.object.isRequired
   },
 
   render: function() {
-    var user = this.props.user.getData();
-    var school = this.props.user.getSchool();
+    var user = this.props.user;
+    var school = User.getSchool(user);
     return (
       <InnerView>
         <h2>Welcome, {user.first_name}!</h2>

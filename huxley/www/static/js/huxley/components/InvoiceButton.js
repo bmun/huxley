@@ -9,6 +9,8 @@ var $ = require('jquery');
 var Button = require('./Button');
 var React = require('react');
 
+var User = require('../User');
+
 var InvoiceButton = React.createClass({
   getInitialState: function() {
     return {
@@ -41,8 +43,8 @@ var InvoiceButton = React.createClass({
 
   _handleClick: function(event) {
     this.setState({loading: true});
-    var user = this.props.user.getData();
-    var school = this.props.user.getSchool();
+    var {user} = this.props;
+    var school = User.getSchool(user);
     $.ajax({
       type: 'POST',
       url: '/api/schools/' + school.id + '/invoice/',
