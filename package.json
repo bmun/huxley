@@ -23,6 +23,7 @@
     "unmockedModulePathPatterns": [
       "node_modules/babel-core",
       "node_modules/core-js",
+      "<rootDir>/node_modules/flux",
       "<rootDir>/node_modules/react",
       "<rootDir>/node_modules/es6-promise"
     ],

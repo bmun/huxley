@@ -18,14 +18,14 @@ var Huxley = React.createClass({
   mixins: [Router.Navigation],
 
   componentWillMount: function() {
-    CurrentUserStore.addChangeListener(function() {
+    CurrentUserStore.addListener(() => {
       var user = CurrentUserStore.getCurrentUser();
       if (User.isAnonymous(user)) {
         this.transitionTo('/login');
       } else if (User.isAdvisor(user)) {
         this.transitionTo('/advisor/profile');
       }
-    }.bind(this));
+    });
   },
 
   render: function() {

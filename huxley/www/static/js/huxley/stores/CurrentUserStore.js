@@ -7,73 +7,66 @@
 
 var ActionConstants = require('../constants/ActionConstants');
 var Dispatcher = require('../dispatcher/Dispatcher');
-var EventEmitter = require('events').EventEmitter;
+var {Store} = require('flux/utils');
 
 var invariant = require('react/lib/invariant');
 
-var CHANGE_EVENT = 'change';
+class CurrentUserStore extends Store {
+  constructor(dispatcher) {
+    super(dispatcher);
+    this._currentUser = null;
+    this._isBootstrapped = false;
+  }
 
-var _currentUser = null;
-var _bootstrapped = false;
-
-var CurrentUserStore = {...EventEmitter.prototype,
   getCurrentUser() {
-    _assertBootstrapped();
-    return _currentUser;
-  },
-
-  emitChange() {
-    _assertBootstrapped();
-    this.emit(CHANGE_EVENT);
-  },
-
-  addChangeListener(callback) {
-    _assertBootstrapped();
-    this.on(CHANGE_EVENT, callback);
-  },
-
-  removeChangeListener(callback) {
-    _assertBootstrapped();
-    this.removeListener(CHANGE_EVENT, callback);
-  }
-};
-
-Dispatcher.register((action) => {
-  switch (action.actionType) {
-    case ActionConstants.BOOTSTRAP:
-      _bootstrap();
-      break;
-    case ActionConstants.LOGIN:
-      _currentUser = action.user;
-      break;
-    case ActionConstants.LOGOUT:
-      _currentUser = {};
-      break;
+    this._assertBootstrapped();
+    return this._currentUser;
   }
 
-  CurrentUserStore.emitChange();
-});
+  addListener(callback) {
+    this._assertBootstrapped();
+    return super.addListener(callback);
+  }
 
-function _bootstrap() {
-  invariant(
-    !_bootstrapped,
-    'CurrentUserStore can only be bootstrapped once.'
-  );
-  invariant(
-    global.currentUser !== undefined,
-    'currentUser must be defined to bootstrap CurrentUserStore.'
-  );
+  __onDispatch(action) {
+    switch (action.actionType) {
+      case ActionConstants.BOOTSTRAP:
+        this._bootstrap();
+        break;
+      case ActionConstants.LOGIN:
+        this._currentUser = action.user;
+        break;
+      case ActionConstants.LOGOUT:
+        this._currentUser = {};
+        break;
+      default:
+        return;
+    }
 
-  _currentUser = global.currentUser;
-  delete global.currentUser;
-  _bootstrapped = true;
+    this.__emitChange();
+  }
+
+  _bootstrap() {
+    invariant(
+      !this._isBootstrapped,
+      'CurrentUserStore can only be bootstrapped once.'
+    );
+    invariant(
+      global.currentUser !== undefined,
+      'currentUser must be defined to bootstrap CurrentUserStore.'
+    );
+
+    this._currentUser = global.currentUser;
+    delete global.currentUser;
+    this._isBootstrapped = true;
+  }
+
+  _assertBootstrapped() {
+    invariant(
+      this._isBootstrapped,
+      'CurrentUserStore must be bootstrapped before being used.'
+    );
+  }
 }
 
-function _assertBootstrapped() {
-  invariant(
-    _bootstrapped,
-    'CurrentUserStore must be bootstrapped before being used.'
-  );
-}
-
-module.exports = CurrentUserStore;
+module.exports = new CurrentUserStore(Dispatcher);

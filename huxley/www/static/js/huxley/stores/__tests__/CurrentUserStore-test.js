@@ -6,7 +6,6 @@
 'use strict';
 
 jest.dontMock('../CurrentUserStore');
-jest.dontMock('events');
 
 describe('CurrentUserStore', function() {
   var ActionConstants;
@@ -20,7 +19,11 @@ describe('CurrentUserStore', function() {
     CurrentUserStore = require('../CurrentUserStore');
     Dispatcher = require('../../dispatcher/Dispatcher');
 
-    registerCallback = Dispatcher.register.mock.calls[0][0];
+    registerCallback = function(action) {
+      Dispatcher.isDispatching.mockReturnValue(true);
+      Dispatcher.register.mock.calls[0][0](action);
+      Dispatcher.isDispatching.mockReturnValue(false);
+    };
     global.currentUser = {id: 1, user_type: 1};
 
     registerCallback({
@@ -62,7 +65,7 @@ describe('CurrentUserStore', function() {
 
   it('emits a change when the user changes', function() {
     var callback = jest.genMockFunction();
-    CurrentUserStore.addChangeListener(callback);
+    CurrentUserStore.addListener(callback);
     expect(callback).not.toBeCalled();
     registerCallback({
       actionType: ActionConstants.LOGIN,
