@@ -6,12 +6,13 @@
   "license": "BSD",
   "dependencies": {
     "browserify": "6.3.2",
-    "react": "~0.13.3",
+    "es6-promise": "2.0.0",
+    "flux": "^2.1.1",
     "jquery": "2.1.1",
     "jquery-ui": "1.10.5",
-    "es6-promise": "2.0.0",
-    "react-router": "~0.13.0",
-    "js-cookie": "~2.0.3"
+    "js-cookie": "~2.0.3",
+    "react": "~0.13.3",
+    "react-router": "~0.13.0"
   },
   "scripts": {
     "test": "jest"
@@ -19,17 +20,9 @@
   "jest": {
     "scriptPreprocessor": "<rootDir>/node_modules/babel-jest",
     "setupTestFrameworkScriptFile": "<rootDir>/scripts/jestPreprocessor.js",
-    "testFileExtensions": [
-      "es6",
-      "js"
-    ],
-    "moduleFileExtensions": [
-      "js",
-      "json",
-      "es6"
-    ],
     "unmockedModulePathPatterns": [
       "node_modules/babel-core",
+      "node_modules/core-js",
       "<rootDir>/node_modules/react",
       "<rootDir>/node_modules/es6-promise"
     ],

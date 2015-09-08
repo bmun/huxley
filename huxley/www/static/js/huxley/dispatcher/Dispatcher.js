@@ -5,19 +5,6 @@
 
 'use strict';
 
-var _callbacks = [];
+var Dispatcher = require('flux').Dispatcher;
 
-var Dispatcher = {
-  register: function(callback) {
-    _callbacks.push(callback);
-    return _callbacks.length - 1;
-  },
-
-  dispatch: function(action) {
-    _callbacks.forEach(function(callback) {
-      callback(action);
-    });
-  }
-};
-
-module.exports = Dispatcher;
+module.exports = new Dispatcher();
