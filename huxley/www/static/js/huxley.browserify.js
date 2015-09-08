@@ -10,7 +10,7 @@ var Cookie = require('js-cookie');
 var React = require('react');
 var Router = require('react-router');
 
-var CurrentUserStore = require('./huxley/stores/CurrentUserStore');
+var CurrentUserActions = require('./huxley/actions/CurrentUserActions');
 var Huxley = require('./huxley/components/Huxley');
 
 var AdvisorAssignmentsView = require('./huxley/components/AdvisorAssignmentsView');
@@ -54,7 +54,7 @@ $(function() {
   });
 });
 
-CurrentUserStore.bootstrap();
+CurrentUserActions.bootstrap();
 
 $.ajaxSetup({
   beforeSend: function(xhr, settings) {

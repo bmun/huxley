@@ -22,7 +22,10 @@ describe('CurrentUserStore', function() {
 
     registerCallback = Dispatcher.register.mock.calls[0][0];
     global.currentUser = {id: 1, user_type: 1};
-    CurrentUserStore.bootstrap();
+
+    registerCallback({
+      actionType: ActionConstants.BOOTSTRAP,
+    });
   });
 
   it('correctly bootstraps the current user object', function() {

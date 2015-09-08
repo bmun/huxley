@@ -8,7 +8,6 @@
 var ActionConstants = require('../constants/ActionConstants');
 var Dispatcher = require('../dispatcher/Dispatcher');
 var EventEmitter = require('events').EventEmitter;
-var User = require('../utils/User');
 
 var invariant = require('react/lib/invariant');
 
@@ -17,52 +16,33 @@ var CHANGE_EVENT = 'change';
 var _currentUser = null;
 var _bootstrapped = false;
 
-function _assertBootstrapped() {
-  invariant(
-    _bootstrapped,
-    'CurrentUserStore must be bootstrapped before being used.'
-  );
-}
-
 var CurrentUserStore = {...EventEmitter.prototype,
-  bootstrap: function() {
-    invariant(
-      !_bootstrapped,
-      'CurrentUserStore can only be bootstrapped once.'
-    );
-    invariant(
-      global.currentUser !== undefined,
-      'currentUser must be defined to bootstrap CurrentUserStore.'
-    );
-
-    _currentUser = global.currentUser;
-    delete global.currentUser;
-    _bootstrapped = true;
-  },
-
-  getCurrentUser: function() {
+  getCurrentUser() {
     _assertBootstrapped();
     return _currentUser;
   },
 
-  emitChange: function() {
+  emitChange() {
     _assertBootstrapped();
     this.emit(CHANGE_EVENT);
   },
 
-  addChangeListener: function(callback) {
+  addChangeListener(callback) {
     _assertBootstrapped();
     this.on(CHANGE_EVENT, callback);
   },
 
-  removeChangeListener: function(callback) {
+  removeChangeListener(callback) {
     _assertBootstrapped();
     this.removeListener(CHANGE_EVENT, callback);
   }
 };
 
-Dispatcher.register(function(action) {
+Dispatcher.register((action) => {
   switch (action.actionType) {
+    case ActionConstants.BOOTSTRAP:
+      _bootstrap();
+      break;
     case ActionConstants.LOGIN:
       _currentUser = action.user;
       break;
@@ -73,5 +53,27 @@ Dispatcher.register(function(action) {
 
   CurrentUserStore.emitChange();
 });
+
+function _bootstrap() {
+  invariant(
+    !_bootstrapped,
+    'CurrentUserStore can only be bootstrapped once.'
+  );
+  invariant(
+    global.currentUser !== undefined,
+    'currentUser must be defined to bootstrap CurrentUserStore.'
+  );
+
+  _currentUser = global.currentUser;
+  delete global.currentUser;
+  _bootstrapped = true;
+}
+
+function _assertBootstrapped() {
+  invariant(
+    _bootstrapped,
+    'CurrentUserStore must be bootstrapped before being used.'
+  );
+}
 
 module.exports = CurrentUserStore;

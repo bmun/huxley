@@ -9,14 +9,20 @@ var ActionConstants = require('../constants/ActionConstants');
 var Dispatcher = require('../dispatcher/Dispatcher');
 
 var CurrentUserActions = {
-  login: function(user) {
+  bootstrap() {
+    Dispatcher.dispatch({
+      actionType: ActionConstants.BOOTSTRAP,
+    });
+  },
+
+  login(user) {
     Dispatcher.dispatch({
       actionType: ActionConstants.LOGIN,
       user: user
     });
   },
 
-  logout: function() {
+  logout() {
     Dispatcher.dispatch({
       actionType: ActionConstants.LOGOUT
     });
