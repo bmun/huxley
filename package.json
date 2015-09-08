@@ -19,8 +19,15 @@
   "jest": {
     "scriptPreprocessor": "<rootDir>/node_modules/babel-jest",
     "setupTestFrameworkScriptFile": "<rootDir>/scripts/jestPreprocessor.js",
-    "testFileExtensions": ["es6", "js"],
-    "moduleFileExtensions": ["js", "json", "es6"],
+    "testFileExtensions": [
+      "es6",
+      "js"
+    ],
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "es6"
+    ],
     "unmockedModulePathPatterns": [
       "node_modules/babel-core",
       "<rootDir>/node_modules/react",
@@ -33,10 +40,11 @@
   },
   "private": true,
   "devDependencies": {
+    "babel-jest": "~5.3.0",
     "babelify": "~6.3.0",
+    "detachkify": "0.0.6",
     "envify": "~3.4.0",
-    "uglify-js": "~2.4.15",
     "jest-cli": "~0.4.0",
-    "babel-jest": "~5.3.0"
+    "uglify-js": "~2.4.15"
   }
 }

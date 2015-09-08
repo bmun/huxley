@@ -3,7 +3,7 @@
 
 from os.path import join
 
-from .roots import PROJECT_ROOT
+from .roots import JS_ROOT, PROJECT_ROOT
 
 
 PIPELINE_COMPILERS = (
@@ -36,7 +36,7 @@ PIPELINE_JS = {
 
 PIPELINE_BROWSERIFY_BINARY = join(PROJECT_ROOT, 'node_modules/.bin/browserify')
 
-PIPELINE_BROWSERIFY_ARGUMENTS = '-t babelify'
+PIPELINE_BROWSERIFY_ARGUMENTS = '-t babelify -t [detachkify -relativeTo %s]' % JS_ROOT
 
 PIPELINE_UGLIFYJS_BINARY = join(PROJECT_ROOT, 'node_modules/.bin/uglifyjs')
 
