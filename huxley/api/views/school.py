@@ -1,4 +1,3 @@
-
 # Copyright (c) 2011-2015 Berkeley Model United Nations. All rights reserved.
 # Use of this source code is governed by a BSD License (see LICENSE).
 
@@ -14,6 +13,7 @@ from huxley.api.permissions import IsAdvisorOrSuperuser, IsSchoolAdvisorOrSuperu
 from huxley.api.serializers import AssignmentSerializer, SchoolSerializer
 from huxley.core.models import Assignment, School
 from huxley.utils import zoho
+
 
 class SchoolList(generics.CreateAPIView):
     authentication_classes = (SessionAuthentication,)
@@ -40,6 +40,20 @@ class SchoolAssignments(generics.ListAPIView):
             raise Http404
 
         return Assignment.objects.filter(school_id=school_id)
+
+
+class SchoolAssignmentsFinalize(generics.UpdateAPIView):
+    authentication_classes = (SessionAuthentication,)
+    permission_classes = (IsSchoolAdvisorOrSuperuser,)
+    serializer_class = SchoolSerializer
+    queryset = School.objects.all()
+
+    def patch(self, request, *args, **kwargs):
+        school_id = kwargs.get('pk', None)
+        school = School.objects.get(id=school_id)
+        # serializer = SchoolSerializer(school, data=request.data, partial=true)
+        return Response(status=status.HTTP_200_OK)
+
 
 class SchoolInvoice(generics.CreateAPIView):
     authentication_classes = (SessionAuthentication,)

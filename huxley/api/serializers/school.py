@@ -51,6 +51,7 @@ class SchoolSerializer(serializers.ModelSerializer):
             'registration_comments',
             'fees_owed',
             'fees_paid',
+            'assignments_finalized',
         )
 
     def validate_name(self, attrs, source):

@@ -58,7 +58,8 @@ class TestSchools():
                    intermediate_delegates=kwargs.pop('intermediate_delegates', 0),
                    advanced_delegates=kwargs.pop('advanced_delegates', 0),
                    spanish_speaking_delegates=kwargs.pop('spanish_speaking_delegates', 0),
-                   registration_comments=kwargs.pop('registration_comments', ''))
+                   registration_comments=kwargs.pop('registration_comments', ''),
+                   assignments_finalized=kwargs.pop('assignments_finalized',False))
 
         user = kwargs.pop('user', None)
         for attr, value in kwargs.items():

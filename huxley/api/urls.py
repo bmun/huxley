@@ -27,7 +27,14 @@ urlpatterns += patterns('',
     url(r'^schools/?$', views.school.SchoolList.as_view(), name='school_list'),
     url(r'^schools/(?P<pk>[0-9]+)/?$', views.school.SchoolDetail.as_view(), name='school_detail'),
     url(r'^schools/(?P<pk>[0-9]+)/assignments/?$', views.school.SchoolAssignments.as_view(), name='school_assignments'),
+    url(r'^schools/(?P<pk>[0-9]+)/assignments/finalize/?$', views.school.SchoolAssignmentsFinalize.as_view(), name='school_assignments_finalize'),
     url(r'^schools/(?P<pk>[0-9]+)/invoice/?$', views.school.SchoolInvoice.as_view(), name='school_invoice')
+)
+
+urlpatterns += patterns('',
+    url(r'^assignments/?$', views.assignment.AssignmentList.as_view(), name='assignment_list'),
+    url(r'^assignments/(?P<pk>[0-9]+)/?$', views.assignment.AssignmentDetail.as_view(), name='assignment_detail'),
+    url(r'^assignments/(?P<pk>[0-9]+)/delete/?$', views.assignment.AssignmentDelete.as_view(), name='assignment_delete'),
 )
 
 urlpatterns = format_suffix_patterns(urlpatterns)
