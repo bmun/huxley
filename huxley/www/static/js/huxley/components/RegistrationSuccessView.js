@@ -17,7 +17,7 @@ var RegistrationSuccessView = React.createClass({
         <div class="letter">
           <h1>Thank You</h1>
           <p>
-            Thank you for registering for BMUN 63! Country assignments will be
+            Thank you for registering for BMUN 64! Country assignments will be
             made available soon in your Huxley account. A summary of fees is
             listed below:
           </p>
@@ -55,12 +55,12 @@ var RegistrationSuccessView = React.createClass({
           </p>
           <p>Sincerely,</p>
           <p class="sender">
-            <strong>Hee Soo Kim</strong>
+            <strong>Rita Hu</strong>
             <br />
             <span class="subtext">
               Under-Secretary General of External Relations
               <br />
-              Berkeley Model United Nations, 63rd Session
+              Berkeley Model United Nations, 64th Session
             </span>
           </p>
         </div>

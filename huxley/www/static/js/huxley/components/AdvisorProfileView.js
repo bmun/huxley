@@ -28,7 +28,7 @@ var AdvisorProfileView = React.createClass({
       <InnerView>
         <h2>Welcome, {user.first_name}!</h2>
         <p>
-          We are very excited to see {school.name} at BMUN 63 this year! Here,
+          We are very excited to see {school.name} at BMUN 64 this year! Here,
           you can view your registration information for the conference. Please
           note that fees are currently <strong>estimates</strong> based on the
           approximate delegation size given during registration.
@@ -47,9 +47,9 @@ var AdvisorProfileView = React.createClass({
         info@bmun.org</a> and I will respond to all requests efficiently.
         See you soon!</strong></p>
         <br />
-        <p><strong>Hee Soo Kim
+        <p><strong>Rita Hu
         <br />
-        Under-Secretary General of External Relations, 63rd Session.</strong></p>
+        Under-Secretary General of External Relations, 64th Session.</strong></p>
         <form id="welcomepage">
           <div className="tablemenu header">
           </div>
@@ -185,9 +185,9 @@ var AdvisorProfileView = React.createClass({
                   {school.secondary_phone}
                 </td>
               </tr>
-              <tr>
-                <th colSpan="2">Fees <InvoiceButton user={this.props.user} /></th>
-              </tr>
+              // <tr>
+              //   <th colSpan="2">Fees <InvoiceButton user={this.props.user} /></th>
+              // </tr>
               <tr>
                 <td className="fieldLabel">Fees Owed</td>
                 <td className="field">
