@@ -17,7 +17,7 @@ var RegistrationClosedView = React.createClass({
         <div className="letter">
           <h1>I'm Sorry</h1>
           <p>
-            Thank you for your interest in participating in the sixty-third
+            Thank you for your interest in participating in the sixty-fourth
             session of Berkeley Model United Nations. Registration is now closed
             as we have already reached our maximum capacity. We hope to see you
             at the next BMUN session!

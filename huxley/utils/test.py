@@ -58,6 +58,7 @@ class TestSchools():
                    intermediate_delegates=kwargs.pop('intermediate_delegates', 0),
                    advanced_delegates=kwargs.pop('advanced_delegates', 0),
                    spanish_speaking_delegates=kwargs.pop('spanish_speaking_delegates', 0),
+                   chinese_speaking_delegates=kwargs.pop('chinese_speaking_delegates', 0),
                    registration_comments=kwargs.pop('registration_comments', ''))
 
         user = kwargs.pop('user', None)

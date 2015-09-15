@@ -48,6 +48,7 @@ class SchoolAdminTest(TestCase):
             "Intermediates",
             "Advanced",
             "Spanish Speakers",
+            "Chinese Speakers",
             "Registration Comments",
             "Fees Owed",
             "Fees Paid",
@@ -81,6 +82,7 @@ class SchoolAdminTest(TestCase):
             school.intermediate_delegates,
             school.advanced_delegates,
             school.spanish_speaking_delegates,
+            school.chinese_speaking_delegates,
             school.registration_comments,
             int(school.fees_owed),
             int(school.fees_paid),
@@ -109,6 +111,7 @@ class SchoolAdminTest(TestCase):
             "Intermediates",
             "Advanced",
             "Spanish Speakers",
+            "Chinese Speakers",
             "Country 1",
             "Country 2",
             "Country 3",
@@ -133,7 +136,8 @@ class SchoolAdminTest(TestCase):
                 school.beginner_delegates,
                 school.intermediate_delegates,
                 school.advanced_delegates,
-                school.spanish_speaking_delegates]
+                school.spanish_speaking_delegates,
+                school.chinese_speaking_delegates,]
         fields.extend(countryprefs)
         fields.append(school.registration_comments)
 

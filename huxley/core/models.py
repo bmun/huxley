@@ -104,6 +104,7 @@ class School(models.Model):
     intermediate_delegates     = models.PositiveSmallIntegerField()
     advanced_delegates         = models.PositiveSmallIntegerField()
     spanish_speaking_delegates = models.PositiveSmallIntegerField()
+    chinese_speaking_delegates = models.PositiveSmallIntegerField()
 
     countrypreferences   = models.ManyToManyField(Country, through='CountryPreference')
     committeepreferences = models.ManyToManyField(Committee, limit_choices_to={'special': True})

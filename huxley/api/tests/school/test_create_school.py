@@ -28,6 +28,7 @@ class CreateSchoolTestCase(CreateAPITestCase):
         'intermediate_delegates': 0,
         'advanced_delegates': 0,
         'spanish_speaking_delegates': 0,
+        'chinese_speaking_delegates': 0,
         'country_preferences': [1, 2],
     }
 
@@ -46,7 +47,8 @@ class CreateSchoolTestCase(CreateAPITestCase):
                                                             beginner_delegates='',
                                                             intermediate_delegates='',
                                                             advanced_delegates='',
-                                                            spanish_speaking_delegates=''))
+                                                            spanish_speaking_delegates='',
+                                                            chinese_speaking_delegates=''))
         self.assertEqual(response.data,
             {"city": ["This field is required."],
             "name": ["This field is required."],
@@ -61,7 +63,8 @@ class CreateSchoolTestCase(CreateAPITestCase):
             "beginner_delegates": ["This field is required."],
             "intermediate_delegates": ["This field is required."],
             "advanced_delegates": ["This field is required."],
-            "spanish_speaking_delegates": ["This field is required."]})
+            "spanish_speaking_delegates": ["This field is required."],
+            "chinese_speaking_delegates": ["This field is required."]})
 
     def test_fees(self):
         '''Fees should be read-only fields.'''
@@ -112,6 +115,7 @@ class CreateSchoolTestCase(CreateAPITestCase):
             'intermediate_delegates': school.intermediate_delegates,
             'advanced_delegates': school.advanced_delegates,
             'spanish_speaking_delegates': school.spanish_speaking_delegates,
+            'chinese_speaking_delegates': school.chinese_speaking_delegates,
             'country_preferences': school.country_preference_ids,
             'registration_comments': school.registration_comments,
             'committeepreferences': list(school.committeepreferences.all()),

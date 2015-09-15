@@ -56,6 +56,7 @@ var RegistrationView = React.createClass({
       intermediate_delegates: '',
       advanced_delegates: '',
       spanish_speaking_delegates: '',
+      chinese_speaking_delegates: '',
       primary_name: '',
       primary_gender: GenderConstants.UNSPECFIED,
       primary_email: '',
@@ -357,6 +358,14 @@ var RegistrationView = React.createClass({
                 />
                 {this.renderSchoolError('spanish_speaking_delegates')}
               </li>
+              <li>
+                <input
+                  type="text"
+                  placeholder="Number of Chinese Speaking Delegates"
+                  valueLink={this.linkState('chinese_speaking_delegates')}
+                />
+                {this.renderSchoolError('chinese_speaking_delegates')}
+              </li>
             </ul>
             <hr />
             <h3>Comments</h3>
@@ -628,6 +637,7 @@ var RegistrationView = React.createClass({
           intermediate_delegates: this.state.intermediate_delegates,
           advanced_delegates: this.state.advanced_delegates,
           spanish_speaking_delegates: this.state.spanish_speaking_delegates,
+          chinese_speaking_delegates: this.state.chinese_speaking_delegates,
           primary_name: this.state.primary_name.trim(),
           primary_gender: this.state.primary_gender,
           primary_email: this.state.primary_email.trim(),

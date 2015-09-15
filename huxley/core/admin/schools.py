@@ -43,6 +43,7 @@ class SchoolAdmin(admin.ModelAdmin):
             "Intermediates",
             "Advanced",
             "Spanish Speakers",
+            "Chinese Speakers",
             "Registration Comments",
             "Fees Owed",
             "Fees Paid",
@@ -75,6 +76,7 @@ class SchoolAdmin(admin.ModelAdmin):
                 school.intermediate_delegates,
                 school.advanced_delegates,
                 school.spanish_speaking_delegates,
+                school.chinese_speaking_delegates,
                 school.registration_comments,
                 school.fees_owed,
                 school.fees_paid,
@@ -96,6 +98,7 @@ class SchoolAdmin(admin.ModelAdmin):
                 "Intermediates",
                 "Advanced",
                 "Spanish Speakers",
+                "Chinese Speakers",
                 "Country 1",
                 "Country 2",
                 "Country 3",
@@ -119,7 +122,8 @@ class SchoolAdmin(admin.ModelAdmin):
                 school.beginner_delegates,
                 school.intermediate_delegates,
                 school.advanced_delegates,
-                school.spanish_speaking_delegates]] +
+                school.spanish_speaking_delegates,
+                school.chinese_speaking_delegates]] +
                 countryprefs +
                 [unicode(school.registration_comments).encode('utf8')
             ])
