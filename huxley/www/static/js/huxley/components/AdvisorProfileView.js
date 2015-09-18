@@ -142,6 +142,8 @@ var AdvisorProfileView = React.createClass({
                 <td className="field">
                   {school.spanish_speaking_delegates}
                 </td>
+              </tr>
+              <tr>
                 <td className="fieldLabel">Number of Chinese Speaking
                 Delegates</td>
                 <td className="field">
@@ -190,9 +192,6 @@ var AdvisorProfileView = React.createClass({
                   {school.secondary_phone}
                 </td>
               </tr>
-              // <tr>
-              //   <th colSpan="2">Fees <InvoiceButton user={this.props.user} /></th>
-              // </tr>
               <tr>
                 <td className="fieldLabel">Fees Owed</td>
                 <td className="field">
