@@ -15,6 +15,6 @@ pycrypto==2.6.1
 requests==2.4.3
 six==1.7.3
 wsgiref==0.1.2
-django-easy-pdf
+django-easy-pdf>=0.1.0
 xhtml2pdf>=0.0.6
 reportlab>=2.7,<3
