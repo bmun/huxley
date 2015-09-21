@@ -9,7 +9,7 @@ var React = require('react/addons');
 
 var Button = require('./Button');
 var InnerView = require('./InnerView');
-var InvoiceButton = require('./InvoiceButton');
+//var InvoiceButton = require('./InvoiceButton');
 var LogoutButton = require('./LogoutButton');
 var ProgramTypes = require('../constants/ProgramTypes');
 var User = require('../utils/User');
@@ -22,8 +22,9 @@ var AdvisorProfileView = React.createClass({
   },
 
   render: function() {
-    var user = this.props.user;
-    var school = User.getSchool(user);
+    var user = this.props.user.getData();
+    var school = this.props.user.getSchool();
+    var invoiceUrl = '/api/schools/' + school.id + '/invoice/';
     return (
       <InnerView>
         <h2>Welcome, {user.first_name}!</h2>
@@ -191,6 +192,9 @@ var AdvisorProfileView = React.createClass({
                 <td className="field">
                   {school.secondary_phone}
                 </td>
+              </tr>
+              <tr>
+                <th colSpan="2">Fees <a href={invoiceUrl}>Generate Your Invoice</a></th>
               </tr>
               <tr>
                 <td className="fieldLabel">Fees Owed</td>

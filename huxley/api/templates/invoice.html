@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    th {
+      text-align: right;
+    }
+
+    td, th {
+      padding: 0.25em;
+    }
+
+    .date {
+      text-align: center;
+      border-bottom: .5px, solid, #113C7C;
+    }
+
+    #dates-table {
+      border-top: .5px, solid, #294A8A;
+    }
+
+    .info {
+      font: italic, 7pt;
+      color: gray;
+    }
+
+    #invoice-information {
+      border-top: .5px solid gray;
+      border-bottom: .5px solid gray;
+      text-align: right;
+    }
+
+    .left-cells {
+      text-align: left;
+    }
+
+    .paid {
+      border-bottom: .5px, solid, gray;
+    }
+
+    .total {
+      border-bottom: .5px, solid, #113C7C;
+      color: #113C7C;
+    }
+  </style>
+</head>
+
+{% block content %}
+<body>
+    <div id="invoice-container">
+      <table id="dates-table">
+        <tbody>
+          <tr>
+            <td class="left-cells" colspan="3">
+              BILL TO<br>
+              {{ name }}
+            </td>
+            <td class="date" style="background:#CFD8E5; color:#113C7C;">
+              DATE<br>
+              {{ date_registered }}
+            </td>
+            <td class="date" style="background:#113C7C; color:white">
+              PLEASE PAY<br>
+              <b>${{ amount_due }}</b>
+            </td>
+            <td class="date" style="background:#CFD8E5; color:#113C7C;">
+              DUE DATE<br>
+              {{ due_date }}
+          </tr>
+        </tbody>
+      </table>
+      <br>
+      <table id="invoice-information">
+        <thead>
+          <tr>
+            <th class="left-cells" colspan="3">Activity</th>
+            <th>Quantity</th>
+            <th>Rate</th>
+            <th>Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="left-cells" colspan="3">Delegate Fee</td>
+            <td>{{ delegate_total }}</td>
+            <td>${{ delegate_fee }}</td>
+            <td>${{ delegate_fees }}</td>
+          </tr>
+          <tr>
+            <td class="left-cells" colspan="3">Registration Fees</td>
+            <td>1</td>
+            <td>${{ registration_fee }}</td>
+            <td>${{ registration_fee }}</td>
+          </tr>
+        </tbody>
+      </table>
+      <br />
+      <table>
+        <tbody>
+          <tr>
+            <td colspan="2" rowspan="2" class="info">
+              Thank you for registering for BMUN. The payment is due
+              three weeks after receiving your country assignments. If we
+              do not receive your payment within 3 weeks, you risk forfeiture
+              of your country assignments. In order to pay, please send your
+              check to:
+            </td>
+            <td class="paid">Fees Paid</td>
+            <td class="paid" style="text-align:right">${{ fees_paid }}</td>
+          </tr>
+          <tr>
+            <td class="total">
+              TOTAL DUE
+            </td>
+            <td class="total" style="text-align:right">
+              <b>${{ amount_due }}</b>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2" class="info">
+                Berkeley Model United Nations<br>
+                PO Box 4306<br>
+                Berkeley, CA 94704-0306<br>
+                United States
+            </td>
+            <td colspan="2" style="text-align:right; color:#3b5998">
+              THANK YOU.
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2" class="info">
+              Please email info@bmun.org if you have any questions. If you wish
+              to pay online via credit card, please email info@bmun.org. Note if
+              you pay online, there will be a 2.75% credit card processing fee.
+            </td>
+        </tbody>
+      </table>
+    </div>
+</body>
+</html>
+{% endblock %}
+</html>
