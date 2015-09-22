@@ -194,7 +194,7 @@ var AdvisorProfileView = React.createClass({
                 </td>
               </tr>
               <tr>
-                <th colSpan="2">Fees <a href={invoiceUrl}>Generate Your Invoice</a></th>
+                <th colSpan="2">Fees <a className="button button-green" href={invoiceUrl}>Generate Your Invoice</a></th>
               </tr>
               <tr>
                 <td className="fieldLabel">Fees Owed</td>
