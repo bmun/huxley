@@ -9,7 +9,6 @@ var React = require('react/addons');
 
 var Button = require('./Button');
 var InnerView = require('./InnerView');
-//var InvoiceButton = require('./InvoiceButton');
 var LogoutButton = require('./LogoutButton');
 var ProgramTypes = require('../constants/ProgramTypes');
 var User = require('../utils/User');
@@ -196,7 +195,7 @@ var AdvisorProfileView = React.createClass({
               <tr>
                 <th>Fees</th>
                 <td className="field">
-                  <a className="button button-green" href={invoiceUrl}>
+                  <a className="button button-green" href={invoiceUrl} target="_blank">
                     Generate Your Invoice
                   </a>
                 </td>
