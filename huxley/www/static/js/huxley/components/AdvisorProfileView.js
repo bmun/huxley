@@ -22,8 +22,8 @@ var AdvisorProfileView = React.createClass({
   },
 
   render: function() {
-    var user = this.props.user.getData();
-    var school = this.props.user.getSchool();
+    var user = this.props.user;
+    var school = User.getSchool(user);
     var invoiceUrl = '/api/schools/' + school.id + '/invoice/';
     return (
       <InnerView>
