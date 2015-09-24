@@ -37,5 +37,10 @@ LOGGING = {
             'level': 'ERROR',
             'propagate': True,
         },
+        'huxley.db': {
+            'handlers': ['database'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
     },
 }

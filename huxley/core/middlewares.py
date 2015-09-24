@@ -15,5 +15,8 @@ class ServerLoggingMiddleware(object):
 
 class LoggingMiddleware(object):
     def process_response(self, request, response):
-        print(response)
+        if request.path.find('api') >= 0:
+            logger = logging.getLogger('huxley.db')
+            logger.info(request.path+', response data: '+str(response.data))
 
+        return response
