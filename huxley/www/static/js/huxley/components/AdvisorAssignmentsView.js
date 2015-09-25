@@ -14,10 +14,12 @@ var AssignmentStore = require('../stores/AssignmentStore');
 var Button = require('./Button');
 var CommitteeStore = require('../stores/CommitteeStore');
 var CountryStore = require('../stores/CountryStore');
+var CurrentUserStore = require('../stores/CurrentUserStore');
 var InnerView = require('./InnerView');
 
 var AdvisorAssignmentsView = React.createClass({
   getInitialState: function() {
+    var user = CurrentUserStore.getCurrentUser();
     var school = User.getSchool(this.props.user);
     return {
       assignments: [],
@@ -106,7 +108,7 @@ var AdvisorAssignmentsView = React.createClass({
             <Button color="red"
                     size="small"
                     onClick={this._handleAssignmentDelete.bind(this, assignment)}>
-                    Relinquish
+                    Remove
             </Button>}
           </td>
         </tr>
@@ -133,7 +135,7 @@ var AdvisorAssignmentsView = React.createClass({
   },
 
   _handleAssignmentDelete: function(assignment) {
-    var confirm = window.confirm("Are you sure you want to delete this assignment");
+    var confirm = window.confirm("Are you sure you want to delete this assignment?");
     if (confirm) {
       this.setState({loading: true});
       $.ajax ({

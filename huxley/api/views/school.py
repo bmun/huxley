@@ -49,9 +49,10 @@ class SchoolAssignmentsFinalize(generics.UpdateAPIView):
     queryset = School.objects.all()
 
     def patch(self, request, *args, **kwargs):
-        school_id = kwargs.get('pk', None)
-        school = School.objects.get(id=school_id)
+        # school_id = kwargs.get('pk', None)
+        # school = School.objects.get(id=school_id)
         # serializer = SchoolSerializer(school, data=request.data, partial=true)
+        print 'made it to the patch'
         return Response(status=status.HTTP_200_OK)
 
 
