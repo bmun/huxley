@@ -2,6 +2,7 @@
 # Use of this source code is governed by a BSD License (see LICENSE).
 
 import datetime
+import json
 import logging
 
 from django.test import TestCase
@@ -16,23 +17,33 @@ class LogEntryTestCase(TestCase):
         log_entry = LogEntry.objects.create(
             level='DEBUG',
             message='This is a message',
-            timestamp=datetime.datetime(2015, 05, 27))
+            timestamp=datetime.datetime(2015, 05, 27),
+            uri="/some/random/uri",
+            status_code=200)
 
         self.assertEqual(log_entry.level, 'DEBUG')
         self.assertEqual(log_entry.message, 'This is a message')
         self.assertEqual(log_entry.timestamp, datetime.datetime(2015, 05, 27))
+        self.assertEqual(log_entry.uri, "/some/random/uri")
+        self.assertEqual(log_entry.status_code, 200)
 
 
 class DatabaseHandlerTestCase(TestCase):
     '''DatabaseHandler should create a LogEntry object and save it.'''
     def test_valid(self):
         formatter = logging.Formatter('%(asctime)s: %(levelname)s %(message)s')
+        message = "There is a problem."
+        uri = "/some/random/uri"
+        status_code = 400
         log_record = logging.makeLogRecord({
                     'name':'huxley.server',
                     'level':10,
                     'fn':'',
                     'lno':'',
-                    'msg':'There is a problem.',
+                    'msg':json.dumps({
+                         'message': message,
+                         'uri': uri,
+                         'status_code': status_code}),
                     'args':(),
                     'exc_info':None})
 
@@ -42,6 +53,8 @@ class DatabaseHandlerTestCase(TestCase):
 
         log_entry = LogEntry.objects.get(id=1)
         self.assertEqual(log_entry.level, log_record.levelname)
-        self.assertEqual(log_entry.message, log_record.message)
+        self.assertEqual(log_entry.message, message)
         self.assertEqual(log_entry.timestamp,
             datetime.datetime.strptime(log_record.asctime, "%Y-%m-%d %H:%M:%S,%f"))
+        self.assertEqual(log_entry.uri, uri)
+        self.assertEqual(log_entry.status_code, status_code)

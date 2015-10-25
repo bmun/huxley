@@ -2,6 +2,7 @@
 # Use of this source code is governed by a BSD License (see LICENSE).
 
 import datetime
+import json
 import logging
 
 
@@ -15,10 +16,16 @@ class DatabaseHandler(logging.Handler):
 
         try:
             self.format(record)
+            data = json.loads(record.message)
+            message = data["message"]
+            uri = data["uri"]
+            status_code = data["status_code"]
             log_entry = LogEntry(
                 level=record.levelname,
-                message=record.message,
-                timestamp=datetime.datetime.strptime(record.asctime, "%Y-%m-%d %H:%M:%S,%f"))
+                message=message,
+                timestamp=datetime.datetime.strptime(record.asctime, "%Y-%m-%d %H:%M:%S,%f"),
+                uri=uri,
+                status_code=status_code)
             log_entry.save()
         except:
             pass
