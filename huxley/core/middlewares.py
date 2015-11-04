@@ -17,13 +17,10 @@ class LoggingMiddleware(object):
     def process_response(self, request, response):
         if 'api' in request.path:
             logger = logging.getLogger('huxley.api')
-            uri = request.path
-            message = "Logging response from the api."
-            status_code = response.status_code
             log = json.dumps({
-                  'message': message,
-                  'uri': uri,
-                  'status_code': status_code})
+                  'message': "Logging response from the api.",
+                  'uri': request.path,
+                  'status_code': response.status_code})
             logger.info(log)
 
         return response
