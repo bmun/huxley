@@ -20,8 +20,9 @@ var InnerView = require('./InnerView');
 var AdvisorAssignmentsView = React.createClass({
   getInitialState: function() {
     var user = CurrentUserStore.getCurrentUser();
-    var school = User.getSchool(this.props.user);
+    var school = user.school;
     return {
+      school: school,
       assignments: [],
       committees: {},
       countries: {},
@@ -119,18 +120,16 @@ var AdvisorAssignmentsView = React.createClass({
   _handleFinalize: function(event) {
     var confirm = window.confirm("By pressing okay you are committing to the financial respoinsibility of each assingment. Are you sure you want to finalize assignments?");
     if (confirm) {
-      var school = User.getSchool(this.props.user);
       this.setState({loading: true});
       $.ajax ({
         type: 'PATCH',
-        url: '/api/schools/'+school.id+'/assignments/finalize/',
+        url: '/api/schools/'+this.state.school.id+'/assignments/finalize/',
         data: {
           assignments_finalized: true,
         },
         success: this._handleFinalizedSuccess,
         error: this._handleError
       });
-      console.log(response);
     }
   },
 

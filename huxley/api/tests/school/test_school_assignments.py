@@ -2,7 +2,7 @@
 # Use of this source code is governed by a BSD License (see LICENSE).
 
 from huxley.api.tests import ListAPITestCase, UpdateAPITestCase
-from huxley.core.models import Assignment
+from huxley.core.models import Assignment, School
 from huxley.utils.test import (TestCommittees, TestCountries, TestSchools,
                                TestUsers)
 
@@ -126,4 +126,5 @@ class SchoolAssignmentsFinalizeTestCase(UpdateAPITestCase):
 
     def assertFinalized(self, response):
         '''Assert that the school now has a finalized assignments'''
-        self.assertEqual(True, self.school.assignments_finalized)
+        school = School.objects.get(id=self.school.id)
+        self.assertEqual(True, school.assignments_finalized)
