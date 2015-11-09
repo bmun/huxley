@@ -9,5 +9,8 @@ class LogEntry(models.Model):
     message = models.TextField()
     timestamp = models.DateTimeField('timestamp', null=True, blank=True)
 
+    uri = models.CharField(max_length=200)
+    status_code = models.PositiveSmallIntegerField(default=0)
+
     def __unicode__(self):
         return u'%s: %s' % (self.level, self.timestamp)

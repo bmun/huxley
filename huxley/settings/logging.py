@@ -37,5 +37,10 @@ LOGGING = {
             'level': 'ERROR',
             'propagate': True,
         },
+        'huxley.api': {
+            'handlers': ['database'],
+            'level': 'DEBUG',
+            'propagate': True, #Set to false to elimninate logs in the console
+        },
     },
 }
