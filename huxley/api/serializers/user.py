@@ -31,21 +31,34 @@ class CreateUserSerializer(ModelSerializer):
         read_only_fields = ('user_type',)
         write_only_fields = ('password',)
 
-    def restore_object(self, attrs, instance=None):
-        original_attrs = attrs.copy()
-        if 'password' in attrs:
-            del attrs['password']
+    def create(self, validated_data):
+        original_validated_data = validated_data.copy()
+        if 'password' in validated_data:
+            del validated_data.pop('password')
 
-        user = super(CreateUserSerializer, self).restore_object(attrs, instance)
-        if 'password' in original_attrs:
-            user.set_password(original_attrs['password'])
-        if 'school' in original_attrs:
+        user = super(CreateUserSerializer, self).create(validated_data)
+        if 'password' in original_validated_data:
+            user.set_password(original_validated_data['password'])
+        if 'school' in original_validated_data:
             user.user_type = User.TYPE_ADVISOR
 
         return user
 
-    def validate_username(self, attrs, source):
-        username = attrs[source]
+    def update(self, instance, validated_data):
+        original_validated_data = validated_data.copy()
+        if 'password' in validated_data:
+            del validated_data.pop('password')
+
+        user = super(CreateUserSerializer, self).update(instance, validated_data)
+        if 'password' in original_validated_data:
+            user.set_password(original_validated_data['password'])
+        if 'school' in original_validated_data:
+            user.user_type = User.TYPE_ADVISOR
+
+        return user
+
+    def validate_username(self, value):
+        username = value
 
         if re.match("^[A-Za-z0-9\_\-]+$", username) is None:
             raise ValidationError('Usernames may contain alphanumerics, '
@@ -59,8 +72,8 @@ class CreateUserSerializer(ModelSerializer):
 
         return attrs
 
-    def validate_password(self, attrs, source):
-        password = attrs[source]
+    def validate_password(self, value):
+        password = value
 
         match = re.match("^[A-Za-z0-9\_\.!@#\$%\^&\*\(\)~\-=\+`\?]+$", password)
         if match is None:
@@ -71,13 +84,13 @@ class CreateUserSerializer(ModelSerializer):
 
         return attrs
 
-    def validate_first_name(self, attrs, source):
-        first_name = attrs[source]
+    def validate_first_name(self, value):
+        first_name = value
         validators.nonempty(first_name)
         return attrs
 
-    def validate_last_name(self, attrs, source):
-        last_name = attrs[source]
+    def validate_last_name(self, value):
+        last_name = value
         validators.nonempty(last_name)
         return attrs
 

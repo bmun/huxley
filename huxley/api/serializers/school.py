@@ -56,8 +56,22 @@ class SchoolSerializer(serializers.ModelSerializer):
             'assignments_finalized',
         )
 
-    def validate_name(self, attrs, source):
-        school_name = attrs[source]
+    def validate(self, data):
+        international = data['international']
+        primary_phone = data['primary_phone']
+        secondary_phone = data['secondary_phone']
+
+        if international:
+            validators.phone_international(primary_phone)
+            validators.phone_international(secondary_phone)
+        else:
+            validators.phone_domestic(primary_phone)
+            validators.phone_domestic(secondary_phone)
+
+        return data
+
+    def validate_name(self, value):
+        school_name = value
 
         if School.objects.filter(name=school_name).exists():
             raise serializers.ValidationError(
@@ -66,69 +80,58 @@ class SchoolSerializer(serializers.ModelSerializer):
 
         validators.name(school_name)
 
-        return attrs
+        return value
 
-    def validate_state(self, attrs, source):
+    def validate_state(self, value):
         school_state = attrs[source]
 
         validators.name(school_state)
 
         return attrs
 
-    def validate_country(self, attrs, source):
+    def validate_country(self, value):
         school_country = attrs[source]
 
         validators.name(school_country)
 
         return attrs
 
-    def validate_primary_phone(self, attrs, source):
-        international = attrs['international']
-        number = attrs[source]
-
-        if international:
-            validators.phone_international(number)
-        else:
-            validators.phone_domestic(number)
-
-        return attrs
-
-    def validate_address(self, attrs, source):
+    def validate_address(self, value):
         school_address = attrs[source]
 
         validators.address(school_address)
 
         return attrs
 
-    def validate_city(self, attrs, source):
+    def validate_city(self, value):
         school_city = attrs[source]
 
         validators.name(school_city)
 
         return attrs
 
-    def validate_zip(self, attrs, source):
+    def validate_zip(self, value):
         school_zip = attrs[source]
 
         validators.numeric(school_zip)
 
         return attrs
 
-    def validate_primary_name(self, attrs, source):
+    def validate_primary_name(self, value):
         primary_name = attrs[source]
 
         validators.name(primary_name)
 
         return attrs
 
-    def validate_primary_email(self, attrs, source):
+    def validate_primary_email(self, value):
         primary_email = attrs[source]
 
         validators.email(primary_email)
 
         return attrs
 
-    def validate_secondary_name(self, attrs, source):
+    def validate_secondary_name(self, value):
         secondary_name = attrs.get(source)
 
         if secondary_name:
@@ -136,22 +139,10 @@ class SchoolSerializer(serializers.ModelSerializer):
 
         return attrs
 
-    def validate_secondary_email(self, attrs, source):
+    def validate_secondary_email(self, value):
         secondary_email = attrs.get(source)
 
         if secondary_email:
             validators.email(secondary_email)
-
-        return attrs
-
-    def validate_secondary_phone(self, attrs, source):
-        number = attrs.get(source)
-        international = attrs['international']
-
-        if number:
-            if international:
-                validators.phone_international(number)
-            else:
-                validators.phone_domestic(number)
 
         return attrs
