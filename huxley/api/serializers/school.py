@@ -1,22 +1,19 @@
 # Copyright (c) 2011-2015 Berkeley Model United Nations. All rights reserved.
 # Use of this source code is governed by a BSD License (see LICENSE).
-
-from drf_compound_fields.fields import ListField
 from rest_framework import serializers
 
 from huxley.api import validators
 from huxley.api.serializers.fields import DecimalField
-from huxley.core.models import School
+from huxley.core.models import School, Committee
 
 
 class SchoolSerializer(serializers.ModelSerializer):
     registered = serializers.DateTimeField(format='iso-8601', required=False)
-    fees_owed = DecimalField(read_only=True)
-    fees_paid = DecimalField(read_only=True)
+    fees_owed = serializers.FloatField(read_only=True)
+    fees_paid = serializers.FloatField(read_only=True)
     assignments_finalized = serializers.BooleanField(required=False)
-    country_preferences = ListField(
-        serializers.IntegerField(),
-        source='country_preference_ids')
+    countrypreferences = serializers.ListField(child=serializers.IntegerField(required=False), source='country_preference_ids')
+    committeepreferences = serializers.PrimaryKeyRelatedField(allow_empty=True, many=True, queryset=Committee.objects.all(), required=False)
 
     class Meta:
         model = School
@@ -48,16 +45,54 @@ class SchoolSerializer(serializers.ModelSerializer):
             'advanced_delegates',
             'spanish_speaking_delegates',
             'chinese_speaking_delegates',
-            'country_preferences',
+            'countrypreferences',
             'committeepreferences',
             'registration_comments',
             'fees_owed',
             'fees_paid',
             'assignments_finalized',
         )
+        extra_kwargs = {
+        'committeepreferences': {'required': False},
+        'countrypreferences': {'required': False},
+        'secondary_name': {'required': False},
+        'secondary_gender': {'required': False},
+        'secondary_email': {'required': False},
+        'secondary_phone': {'required': False},
+        'secondary_type': {'required': False},
+        'program_type': {'required': False},
+        'times_attended': {'required': False},
+        'beginner_delegates': {'required': False},
+        'intermediate_delegates': {'required': False},
+        'advanced_delegates': {'required': False},
+        'spanish_speaking_delegates': {'required': False},
+        'chinese_speaking_delegates': {'required': False},
+        'countrypreferences': {'required': False},
+        'committeepreferences': {'required': False},
+        'registration_comments': {'required': False}
+        }
 
-    def validate_name(self, attrs, source):
-        school_name = attrs[source]
+
+    def validate(self, data):
+        international = data.get('international')
+        primary_phone = data.get('primary_phone')
+        secondary_phone = data.get('secondary_phone')
+
+        if primary_phone:
+            if international:
+                validators.phone_international(primary_phone)
+            else:
+                validators.phone_domestic(primary_phone)
+        if secondary_phone:
+            if international:
+                validators.phone_international(secondary_phone)
+            else:
+                validators.phone_domestic(secondary_phone)
+
+        return data
+
+    def validate_name(self, value):
+        school_name = value
 
         if School.objects.filter(name=school_name).exists():
             raise serializers.ValidationError(
@@ -66,92 +101,69 @@ class SchoolSerializer(serializers.ModelSerializer):
 
         validators.name(school_name)
 
-        return attrs
+        return value
 
-    def validate_state(self, attrs, source):
-        school_state = attrs[source]
+    def validate_state(self, value):
+        school_state = value
 
         validators.name(school_state)
 
-        return attrs
+        return value
 
-    def validate_country(self, attrs, source):
-        school_country = attrs[source]
+    def validate_country(self, value):
+        school_country = value
 
         validators.name(school_country)
 
-        return attrs
+        return value
 
-    def validate_primary_phone(self, attrs, source):
-        international = attrs['international']
-        number = attrs[source]
-
-        if international:
-            validators.phone_international(number)
-        else:
-            validators.phone_domestic(number)
-
-        return attrs
-
-    def validate_address(self, attrs, source):
-        school_address = attrs[source]
+    def validate_address(self, value):
+        school_address = value
 
         validators.address(school_address)
 
-        return attrs
+        return value
 
-    def validate_city(self, attrs, source):
-        school_city = attrs[source]
+    def validate_city(self, value):
+        school_city = value
 
         validators.name(school_city)
 
-        return attrs
+        return value
 
-    def validate_zip(self, attrs, source):
-        school_zip = attrs[source]
+    def validate_zip(self, value):
+        school_zip = value
 
         validators.numeric(school_zip)
 
-        return attrs
+        return value
 
-    def validate_primary_name(self, attrs, source):
-        primary_name = attrs[source]
+    def validate_primary_name(self, value):
+        primary_name = value
 
         validators.name(primary_name)
 
-        return attrs
+        return value
 
-    def validate_primary_email(self, attrs, source):
-        primary_email = attrs[source]
+    def validate_primary_email(self, value):
+        primary_email = value
 
         validators.email(primary_email)
 
-        return attrs
+        return value
 
-    def validate_secondary_name(self, attrs, source):
-        secondary_name = attrs.get(source)
+    def validate_secondary_name(self, value):
+        secondary_name = value
 
         if secondary_name:
             validators.name(secondary_name)
 
-        return attrs
+        return value
 
-    def validate_secondary_email(self, attrs, source):
-        secondary_email = attrs.get(source)
+    def validate_secondary_email(self, value):
+        secondary_email = value
 
         if secondary_email:
             validators.email(secondary_email)
 
-        return attrs
-
-    def validate_secondary_phone(self, attrs, source):
-        number = attrs.get(source)
-        international = attrs['international']
-
-        if number:
-            if international:
-                validators.phone_international(number)
-            else:
-                validators.phone_domestic(number)
-
-        return attrs
+        return value

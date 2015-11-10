@@ -507,10 +507,10 @@ var RegistrationView = React.createClass({
 
   renderSchoolError: function(field) {
     if (this.state.errors.school &&
-        this.state.errors.school[0][field]) {
+        this.state.errors.school[field]) {
       return (
         <label className="hint error">
-          {this.state.errors.school[0][field]}
+          {this.state.errors.school[field]}
         </label>
       );
     }
@@ -652,7 +652,7 @@ var RegistrationView = React.createClass({
           secondary_email: this.state.secondary_email.trim(),
           secondary_phone: this.state.secondary_phone.trim(),
           secondary_type: this.state.secondary_type,
-          country_preferences: [
+          countrypreferences: [
             this.state.country_pref1,
             this.state.country_pref2,
             this.state.country_pref3,
