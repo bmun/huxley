@@ -132,6 +132,8 @@ class CreateSchoolTestCase(CreateAPITestCase):
         params = self.get_params(country_preferences=[0, c1, c2, 0, c1])
         response = self.get_response(params=params)
 
+        print response.data
+
         self.assertEqual(response.data['country_preferences'], [c1, c2])
 
         school_id = response.data['id']

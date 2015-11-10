@@ -56,14 +56,17 @@ class SchoolSerializer(serializers.ModelSerializer):
         international = data.get('international')
         primary_phone = data.get('primary_phone')
         secondary_phone = data.get('secondary_phone')
-        print data
 
-        if international:
-            validators.phone_international(primary_phone)
-            validators.phone_international(secondary_phone)
-        else:
-            validators.phone_domestic(primary_phone)
-            validators.phone_domestic(secondary_phone)
+        if primary_phone:
+            if international:
+                validators.phone_international(primary_phone)
+            else:
+                validators.phone_domestic(primary_phone)
+        if secondary_phone:
+            if international:
+                validators.phone_international(secondary_phone)
+            else:
+                validators.phone_domestic(secondary_phone)
 
         return data
 
