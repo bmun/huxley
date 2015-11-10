@@ -49,12 +49,28 @@ class SchoolAssignmentsFinalize(generics.UpdateAPIView):
     serializer_class = SchoolSerializer
     queryset = School.objects.all()
 
-    def perform_update(self, request, *args, **kwargs):
-        school_id = kwargs.get('pk', None)
-        school = School.objects.get(id=school_id)
-        serializer = SchoolSerializer(school, data=request.data, partial=true)
-        print 'made it to the patch'
-        return Response(status=status.HTTP_200_OK)
+    # def perform_update(self, request, *args, **kwargs):
+    #     school_id = kwargs.get('pk', None)
+    #     school = School.objects.get(id=school_id)
+    #     serializer = SchoolSerializer(school, data=request.data, partial=True)
+    #     return Response(status=status.HTTP_200_OK)
+    # def patch(self, request, *args, **kwargs):
+    #     return self.partial_update(self, request, *args, **kwargs)
+    #     school_id = kwargs.get('pk', None)
+    #     school = School.objects.get(id=school_id)
+    #     data = SchoolSerializer(school).data.update({'assignments_finalized': True})
+    #     serializer = SchoolSerializer(school, data)
+    #     return Response(status=status.HTTP_200_OK)
+
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        instance.assignments_finalized = True
+        instance.save()
+
+        serializer = self.get_serializer(instance)
+        self.perform_update(serializer, partial=True)
+
+        return Response(serializer.data)
 
 
 class SchoolInvoice(PDFTemplateView):
