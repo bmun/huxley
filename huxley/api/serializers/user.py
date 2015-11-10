@@ -34,7 +34,7 @@ class CreateUserSerializer(ModelSerializer):
     def create(self, validated_data):
         original_validated_data = validated_data.copy()
         if 'password' in validated_data:
-            del validated_data.pop('password')
+            password = validated_data.pop('password')
 
         user = super(CreateUserSerializer, self).create(validated_data)
         if 'password' in original_validated_data:
@@ -47,7 +47,7 @@ class CreateUserSerializer(ModelSerializer):
     def update(self, instance, validated_data):
         original_validated_data = validated_data.copy()
         if 'password' in validated_data:
-            del validated_data.pop('password')
+            password = validated_data.pop('password')
 
         user = super(CreateUserSerializer, self).update(instance, validated_data)
         if 'password' in original_validated_data:
@@ -70,7 +70,7 @@ class CreateUserSerializer(ModelSerializer):
         if len(username) < 5:
             raise ValidationError('Username must be at least 5 characters.')
 
-        return attrs
+        return value
 
     def validate_password(self, value):
         password = value
@@ -82,15 +82,15 @@ class CreateUserSerializer(ModelSerializer):
         if len(password) < 6:
             raise ValidationError('Password must be at least 6 characters.')
 
-        return attrs
+        return value
 
     def validate_first_name(self, value):
         first_name = value
         validators.nonempty(first_name)
-        return attrs
+        return value
 
     def validate_last_name(self, value):
         last_name = value
         validators.nonempty(last_name)
-        return attrs
+        return value
 

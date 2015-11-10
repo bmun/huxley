@@ -1,7 +1,5 @@
 # Copyright (c) 2011-2015 Berkeley Model United Nations. All rights reserved.
 # Use of this source code is governed by a BSD License (see LICENSE).
-
-from drf_compound_fields.fields import ListField
 from rest_framework import serializers
 
 from huxley.api import validators
@@ -11,12 +9,10 @@ from huxley.core.models import School
 
 class SchoolSerializer(serializers.ModelSerializer):
     registered = serializers.DateTimeField(format='iso-8601', required=False)
-    fees_owed = DecimalField(read_only=True)
-    fees_paid = DecimalField(read_only=True)
+    fees_owed = DecimalField(max_digits=10, decimal_places=2, read_only=True, coerce_to_string=False)
+    fees_paid = DecimalField(max_digits=10, decimal_places=2, read_only=True, coerce_to_string=False)
     assignments_finalized = serializers.BooleanField(required=False)
-    country_preferences = ListField(
-        serializers.IntegerField(),
-        source='country_preference_ids')
+    country_preferences = serializers.ListField(serializers.IntegerField())
 
     class Meta:
         model = School
@@ -57,9 +53,10 @@ class SchoolSerializer(serializers.ModelSerializer):
         )
 
     def validate(self, data):
-        international = data['international']
-        primary_phone = data['primary_phone']
-        secondary_phone = data['secondary_phone']
+        international = data.get('international')
+        primary_phone = data.get('primary_phone')
+        secondary_phone = data.get('secondary_phone')
+        print data
 
         if international:
             validators.phone_international(primary_phone)
@@ -83,66 +80,66 @@ class SchoolSerializer(serializers.ModelSerializer):
         return value
 
     def validate_state(self, value):
-        school_state = attrs[source]
+        school_state = value
 
         validators.name(school_state)
 
-        return attrs
+        return value
 
     def validate_country(self, value):
-        school_country = attrs[source]
+        school_country = value
 
         validators.name(school_country)
 
-        return attrs
+        return value
 
     def validate_address(self, value):
-        school_address = attrs[source]
+        school_address = value
 
         validators.address(school_address)
 
-        return attrs
+        return value
 
     def validate_city(self, value):
-        school_city = attrs[source]
+        school_city = value
 
         validators.name(school_city)
 
-        return attrs
+        return value
 
     def validate_zip(self, value):
-        school_zip = attrs[source]
+        school_zip = value
 
         validators.numeric(school_zip)
 
-        return attrs
+        return value
 
     def validate_primary_name(self, value):
-        primary_name = attrs[source]
+        primary_name = value
 
         validators.name(primary_name)
 
-        return attrs
+        return value
 
     def validate_primary_email(self, value):
-        primary_email = attrs[source]
+        primary_email = value
 
         validators.email(primary_email)
 
-        return attrs
+        return value
 
     def validate_secondary_name(self, value):
-        secondary_name = attrs.get(source)
+        secondary_name = value
 
         if secondary_name:
             validators.name(secondary_name)
 
-        return attrs
+        return value
 
     def validate_secondary_email(self, value):
-        secondary_email = attrs.get(source)
+        secondary_email = value
 
         if secondary_email:
             validators.email(secondary_email)
 
-        return attrs
+        return value
