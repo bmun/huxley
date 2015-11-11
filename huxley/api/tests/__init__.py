@@ -47,6 +47,7 @@ class AbstractAPITestCase(APITestCase):
             params = json.dumps(params)
 
         request = getattr(self.client, self.method)
+        print request
         url = self.get_url(object_id)
         return request(url, params, content_type='application/json')
 
@@ -60,7 +61,7 @@ class AbstractAPITestCase(APITestCase):
 
     def assertMethodNotAllowed(self, response, method):
         self.assertEqual(response.data, {
-            'detail':  u"Method '%s' not allowed." % method})
+            u'detail':  u'Method "%s" not allowed.' % method})
         self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
 
     def assertNotAuthenticated(self, response):
@@ -93,7 +94,7 @@ class AbstractAPITestCase(APITestCase):
 
     def assertInvalidPhone(self, response, field):
         self.assertEqual(response.data, {
-            '%s' % field: [u'This is an invalid phone number.']})
+            u'non_field_errors': [u'This is an invalid phone number.']})
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
 

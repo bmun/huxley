@@ -28,8 +28,10 @@ class CreateUserSerializer(ModelSerializer):
         model = User
         fields = ('id', 'username', 'password', 'first_name', 'last_name',
                   'user_type', 'school', 'email')
-        read_only_fields = ('user_type',)
-        write_only_fields = ('password',)
+        extra_kwargs = {
+            'password': {'write_only': True},
+            'user_type': {'read_only': True}
+        }
 
     def create(self, validated_data):
         original_validated_data = validated_data.copy()

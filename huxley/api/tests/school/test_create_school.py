@@ -29,8 +29,12 @@ class CreateSchoolTestCase(CreateAPITestCase):
         'advanced_delegates': 0,
         'spanish_speaking_delegates': 0,
         'chinese_speaking_delegates': 0,
+<<<<<<< 47b9e4624d0c543a194897408b8d1e90c8a53d12
         'country_preferences': [1, 2],
         'assignments_finalized': False,
+=======
+        'countrypreferences': [1, 2]
+>>>>>>> fixes test cases
     }
 
     def test_empty_fields(self):
@@ -50,22 +54,23 @@ class CreateSchoolTestCase(CreateAPITestCase):
                                                             advanced_delegates='',
                                                             spanish_speaking_delegates='',
                                                             chinese_speaking_delegates=''))
+
         self.assertEqual(response.data,
-            {"city": ["This field is required."],
-            "name": ["This field is required."],
-            "primary_phone": ["This field is required."],
-            "program_type": ["This field is required."],
-            "country": ["This field is required."],
-            "state": ["This field is required."],
-            "primary_name": ["This field is required."],
-            "primary_email": ["This field is required."],
-            "address": ["This field is required."],
-            "zip_code": ["This field is required."],
-            "beginner_delegates": ["This field is required."],
-            "intermediate_delegates": ["This field is required."],
-            "advanced_delegates": ["This field is required."],
-            "spanish_speaking_delegates": ["This field is required."],
-            "chinese_speaking_delegates": ["This field is required."]})
+            {'city': [u'This field may not be blank.'],
+            'beginner_delegates': [u'A valid integer is required.'],
+            'name': [u'This field may not be blank.'],
+            'primary_phone': [u'This field may not be blank.'],
+            'program_type': [u'"" is not a valid choice.'],
+            'country': [u'This field may not be blank.'],
+            'advanced_delegates': [u'A valid integer is required.'],
+            'chinese_speaking_delegates': [u'A valid integer is required.'],
+            'state': [u'This field may not be blank.'],
+            'intermediate_delegates': [u'A valid integer is required.'],
+            'primary_email': [u'This field may not be blank.'],
+            'address': [u'This field may not be blank.'],
+            'primary_name': [u'This field may not be blank.'],
+            'spanish_speaking_delegates': [u'A valid integer is required.'],
+            'zip_code': [u'This field may not be blank.']})
 
     def test_fees(self):
         '''Fees should be read-only fields.'''
@@ -117,7 +122,7 @@ class CreateSchoolTestCase(CreateAPITestCase):
             'advanced_delegates': school.advanced_delegates,
             'spanish_speaking_delegates': school.spanish_speaking_delegates,
             'chinese_speaking_delegates': school.chinese_speaking_delegates,
-            'country_preferences': school.country_preference_ids,
+            'countrypreferences': school.country_preference_ids,
             'registration_comments': school.registration_comments,
             'committeepreferences': list(school.committeepreferences.all()),
             'fees_owed': float(school.fees_owed),
@@ -129,12 +134,10 @@ class CreateSchoolTestCase(CreateAPITestCase):
         '''It should save a school's country preferences.'''
         c1 = TestCountries.new_country().id
         c2 = TestCountries.new_country().id
-        params = self.get_params(country_preferences=[0, c1, c2, 0, c1])
+        params = self.get_params(countrypreferences=[0, c1, c2, 0, c1])
         response = self.get_response(params=params)
 
-        print response.data
-
-        self.assertEqual(response.data['country_preferences'], [c1, c2])
+        self.assertEqual(response.data['countrypreferences'], [c1, c2])
 
         school_id = response.data['id']
         school = School.objects.get(id=school_id)

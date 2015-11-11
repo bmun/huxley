@@ -93,7 +93,7 @@ class UserDetailGetTestCase(RetrieveAPITestCase):
                 'advanced_delegates': school.advanced_delegates,
                 'spanish_speaking_delegates': school.spanish_speaking_delegates,
                 'chinese_speaking_delegates': school.chinese_speaking_delegates,
-                'country_preferences': school.country_preference_ids,
+                'countrypreferences': school.country_preference_ids,
                 'committeepreferences': list(school.committeepreferences.all()),
                 'registration_comments': school.registration_comments,
                 'fees_owed': float(school.fees_owed),
@@ -280,24 +280,23 @@ class UserListPostTestCase(CreateAPITestCase):
     def test_empty_username(self):
         response = self.get_response(params=self.get_params(username=''))
         self.assertEqual(response.data, {
-            'username': ['This field is required.']})
+            'username': [u'This field may not be blank.']})
 
     def test_taken_username(self):
         TestUsers.new_user(username='_Kunal', password='pass')
         response = self.get_response(params=self.get_params(username='_Kunal'))
         self.assertEqual(response.data, {
-            'username': ['This username is already taken.']})
+            'username': [u'User with this username already exists.']})
 
     def test_invalid_username(self):
         response = self.get_response(params=self.get_params(username='>Kunal'))
         self.assertEqual(response.data, {
-            'username': ['Usernames may contain alphanumerics, underscores, '
-                         'and/or hyphens only.']})
+            'username': [u'Enter a valid username.']})
 
     def test_empty_password(self):
         response = self.get_response(params=self.get_params(password=''))
         self.assertEqual(response.data, {
-            'password': ['This field is required.']})
+            'password': [u'This field may not be blank.']})
 
     def test_invalid_password(self):
         response = self.get_response(params=self.get_params(password='>pass'))
@@ -336,6 +335,7 @@ class CurrentUserTestCase(TestCase):
     def setUp(self):
         self.client = Client()
         self.url = reverse('api:current_user')
+        self.maxDiff = None
 
     def get_data(self, url):
         return json.loads(self.client.get(url).content)
@@ -376,7 +376,7 @@ class CurrentUserTestCase(TestCase):
         data = self.get_data(self.url)
 
         self.assertEqual(len(data.keys()), 1)
-        self.assertEqual(data['detail'], 'Not found')
+        self.assertEqual(data['detail'], u'Not found.')
 
         school = TestSchools.new_school()
         user = school.advisor
@@ -390,6 +390,7 @@ class CurrentUserTestCase(TestCase):
         self.assertEqual(data['last_name'], user.last_name)
         self.assertEqual(data['user_type'], User.TYPE_ADVISOR)
         self.assertEqual(data['school'], {
+<<<<<<< 47b9e4624d0c543a194897408b8d1e90c8a53d12
             'id': school.id,
             'registered': school.registered.isoformat(),
             'name': school.name,
@@ -423,4 +424,38 @@ class CurrentUserTestCase(TestCase):
             'fees_owed': float(school.fees_owed),
             'fees_paid': float(school.fees_paid),
             'assignments_finalized': school.assignments_finalized,
+=======
+            u'id': school.id,
+            u'registered': school.registered.isoformat(),
+            u'name': unicode(school.name),
+            u'address': unicode(school.address),
+            u'city': unicode(school.city),
+            u'state': unicode(school.state),
+            u'zip_code': unicode(school.zip_code),
+            u'country': unicode(school.country),
+            u'primary_name': unicode(school.primary_name),
+            u'primary_gender': school.primary_gender,
+            u'primary_email': unicode(school.primary_email),
+            u'primary_phone': unicode(school.primary_phone),
+            u'primary_type': school.primary_type,
+            u'secondary_name': unicode(school.secondary_name),
+            u'secondary_gender': school.secondary_gender,
+            u'secondary_email': unicode(school.secondary_email),
+            u'secondary_phone': unicode(school.secondary_phone),
+            u'secondary_type': school.secondary_type,
+            u'program_type': school.program_type,
+            u'times_attended': school.times_attended,
+            u'international': school.international,
+            u'waitlist': school.waitlist,
+            u'beginner_delegates': school.beginner_delegates,
+            u'intermediate_delegates': school.intermediate_delegates,
+            u'advanced_delegates': school.advanced_delegates,
+            u'spanish_speaking_delegates': school.spanish_speaking_delegates,
+            u'chinese_speaking_delegates': school.chinese_speaking_delegates,
+            u'countrypreferences': school.country_preference_ids,
+            u'committeepreferences': list(school.committeepreferences.all()),
+            u'registration_comments': unicode(school.registration_comments),
+            u'fees_owed': float(school.fees_owed),
+            u'fees_paid': float(school.fees_paid),
+>>>>>>> fixes test cases
         })

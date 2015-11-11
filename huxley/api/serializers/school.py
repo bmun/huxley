@@ -12,7 +12,6 @@ class SchoolSerializer(serializers.ModelSerializer):
     fees_owed = DecimalField(max_digits=10, decimal_places=2, read_only=True, coerce_to_string=False)
     fees_paid = DecimalField(max_digits=10, decimal_places=2, read_only=True, coerce_to_string=False)
     assignments_finalized = serializers.BooleanField(required=False)
-    country_preferences = serializers.ListField(serializers.IntegerField())
 
     class Meta:
         model = School
@@ -44,13 +43,18 @@ class SchoolSerializer(serializers.ModelSerializer):
             'advanced_delegates',
             'spanish_speaking_delegates',
             'chinese_speaking_delegates',
-            'country_preferences',
+            'countrypreferences',
             'committeepreferences',
             'registration_comments',
             'fees_owed',
             'fees_paid',
             'assignments_finalized',
         )
+        extra_kwargs = {
+        'committeepreferences': {'required': False},
+        'countrypreferences': {'required': False}
+        }
+
 
     def validate(self, data):
         international = data.get('international')
