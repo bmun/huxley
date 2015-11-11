@@ -12,6 +12,7 @@ class SchoolSerializer(serializers.ModelSerializer):
     fees_owed = DecimalField(max_digits=10, decimal_places=2, read_only=True, coerce_to_string=False)
     fees_paid = DecimalField(max_digits=10, decimal_places=2, read_only=True, coerce_to_string=False)
     assignments_finalized = serializers.BooleanField(required=False)
+    countrypreferences = serializers.ListField(child=serializers.IntegerField(), source='country_preference_ids')
 
     class Meta:
         model = School
