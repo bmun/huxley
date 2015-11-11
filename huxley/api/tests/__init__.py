@@ -47,7 +47,6 @@ class AbstractAPITestCase(APITestCase):
             params = json.dumps(params)
 
         request = getattr(self.client, self.method)
-        print request
         url = self.get_url(object_id)
         return request(url, params, content_type='application/json')
 
