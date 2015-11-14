@@ -22,7 +22,8 @@ class DatabaseHandler(logging.Handler):
                 message=data['message'],
                 timestamp=datetime.datetime.strptime(record.asctime, "%Y-%m-%d %H:%M:%S,%f"),
                 uri=data['uri'],
-                status_code=data['status_code'])
+                status_code=data['status_code'],
+                username=data['username'])
             log_entry.save()
         except:
             pass
