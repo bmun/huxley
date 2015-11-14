@@ -125,5 +125,5 @@ class SchoolAssignmentsFinalizeTestCase(UpdateAPITestCase):
 
     def assertFinalized(self, response):
         '''Assert that the school now has a finalized assignments'''
-        a = School.objects.get(name=self.school.name)
-        self.assertEqual(True, a.check_assignments_finalized())
+        school = School.objects.get(name=self.school.name)
+        self.assertEqual(True, school.assignments_finalized)
