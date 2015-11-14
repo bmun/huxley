@@ -20,7 +20,8 @@ class LoggingMiddleware(object):
             log = json.dumps({
                   'message': "Logging response from the api.",
                   'uri': request.path,
-                  'status_code': response.status_code})
+                  'status_code': response.status_code,
+                  'username': request.user.username})
             logger.info(log)
 
         return response

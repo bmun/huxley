@@ -19,13 +19,15 @@ class LogEntryTestCase(TestCase):
             message='This is a message',
             timestamp=datetime.datetime(2015, 05, 27),
             uri="/some/random/uri",
-            status_code=200)
+            status_code=200,
+            username='username')
 
         self.assertEqual(log_entry.level, 'DEBUG')
         self.assertEqual(log_entry.message, 'This is a message')
         self.assertEqual(log_entry.timestamp, datetime.datetime(2015, 05, 27))
         self.assertEqual(log_entry.uri, "/some/random/uri")
         self.assertEqual(log_entry.status_code, 200)
+        self.assertEqual(log_entry.username, 'username')
 
 
 class DatabaseHandlerTestCase(TestCase):
@@ -35,6 +37,7 @@ class DatabaseHandlerTestCase(TestCase):
         message = "There is a problem."
         uri = "/some/random/uri"
         status_code = 400
+        username = 'username'
         log_record = logging.makeLogRecord({
                     'name':'huxley.server',
                     'level':10,
@@ -43,7 +46,8 @@ class DatabaseHandlerTestCase(TestCase):
                     'msg':json.dumps({
                          'message': message,
                          'uri': uri,
-                         'status_code': status_code}),
+                         'status_code': status_code,
+                         'username': username}),
                     'args':(),
                     'exc_info':None})
 
@@ -58,3 +62,4 @@ class DatabaseHandlerTestCase(TestCase):
             datetime.datetime.strptime(log_record.asctime, "%Y-%m-%d %H:%M:%S,%f"))
         self.assertEqual(log_entry.uri, uri)
         self.assertEqual(log_entry.status_code, status_code)
+        self.assertEqual(log_entry.username, username)

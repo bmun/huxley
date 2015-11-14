@@ -11,6 +11,7 @@ class LogEntry(models.Model):
 
     uri = models.CharField(max_length=200)
     status_code = models.PositiveSmallIntegerField(default=0)
+    username = models.CharField(max_length=200)
 
     def __unicode__(self):
         return u'%s: %s' % (self.level, self.timestamp)
