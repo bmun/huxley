@@ -72,10 +72,6 @@ var AdvisorAssignmentsView = React.createClass({
                 <th>Committee</th>
                 <th>Country</th>
                 <th>Delegation Size</th>
-                <th>{this.state.finalized ?
-                  "" :
-                  "Relinquish Assignment"}
-                </th>
               </tr>
               {this.renderAssignmentRows()}
             </table>
@@ -104,21 +100,13 @@ var AdvisorAssignmentsView = React.createClass({
           <td>{committees[assignment.committee].name}</td>
           <td>{countries[assignment.country].name}</td>
           <td>{committees[assignment.committee].delegation_size}</td>
-          <td>{this.state.finalized ?
-            <div/> :
-            <Button color="red"
-                    size="small"
-                    onClick={this._handleAssignmentDelete.bind(this, assignment)}>
-                    Remove
-            </Button>}
-          </td>
         </tr>
       )
     }.bind(this));
   },
 
   _handleFinalize: function(event) {
-    var confirm = window.confirm("By pressing okay you are committing to the financial respoinsibility of each assingment. Are you sure you want to finalize assignments?");
+    var confirm = window.confirm("By pressing okay you are committing to the financial responsibility of each assingment. Are you sure you want to finalize assignments?");
     if (confirm) {
       this.setState({loading: true});
       $.ajax ({
@@ -130,23 +118,6 @@ var AdvisorAssignmentsView = React.createClass({
         success: this._handleFinalizedSuccess,
         error: this._handleError
       });
-    }
-  },
-
-  _handleAssignmentDelete: function(assignment) {
-    var confirm = window.confirm("Are you sure you want to delete this assignment?");
-    if (confirm) {
-      this.setState({loading: true});
-      $.ajax ({
-        type: 'POST',
-        url: '/api/assignments/'+assignment.id+'/delete/',
-        success: this._handleSuccess,
-        error: this._handleError,
-      });
-      var user = this.props.user.getData();
-      AssignmentStore.getAssignments(user.school.id, function(assignments) {
-        this.setState({assignments: assignments});
-      }.bind(this));
     }
   },
 

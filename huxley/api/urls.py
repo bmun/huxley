@@ -34,7 +34,6 @@ urlpatterns += patterns('',
 urlpatterns += patterns('',
     url(r'^assignments/?$', views.assignment.AssignmentList.as_view(), name='assignment_list'),
     url(r'^assignments/(?P<pk>[0-9]+)/?$', views.assignment.AssignmentDetail.as_view(), name='assignment_detail'),
-    url(r'^assignments/(?P<pk>[0-9]+)/delete/?$', views.assignment.AssignmentDelete.as_view(), name='assignment_delete'),
 )
 
 urlpatterns = format_suffix_patterns(urlpatterns)

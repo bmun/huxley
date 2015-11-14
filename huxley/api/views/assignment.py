@@ -23,15 +23,3 @@ class AssignmentDetail(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = (IsSchoolAdvisorOrSuperuser,)
     serializer_class = AssignmentSerializer
 
-
-class AssignmentDelete(generics.GenericAPIView):
-    authentication_classes = (SessionAuthentication,)
-    permission_classes = (IsSchoolAdvisorOrSuperuser,)
-
-    def post(self, request, *args, **kwargs):
-        assignment_id = kwargs.get('pk', None)
-        assignment = Assignment.objects.get(id=assignment_id)
-        assignment.delete()
-
-        return Response(status=status.HTTP_200_OK)
-
