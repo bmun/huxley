@@ -34,7 +34,7 @@ var Huxley = React.createClass({
       return <RouteHandler user={user} />;
     } else if (User.isAdvisor(user)) {
       return (
-        <AdvisorView user={user}>
+        <AdvisorView user={user} conferenceSession={conferenceSession}>
           <RouteHandler user={user} />
         </AdvisorView>
       );

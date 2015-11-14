@@ -95,6 +95,7 @@ var RegistrationView = React.createClass({
 
   render: function() {
     var cx = React.addons.classSet;
+    var conferenceSession = global.conferenceSession;
     return (
       <OuterView>
         <form
@@ -104,7 +105,7 @@ var RegistrationView = React.createClass({
           <div>
             <h1>Register for Berkeley Model United Nations</h1>
             <p>Please fill out the following information to register your school
-            for BMUN 64. All fields are required except for Secondary Contact
+            for BMUN {conferenceSession}. All fields are required except for Secondary Contact
             information.</p>
             <NavLink direction="left" href="/login">
               Back to Login

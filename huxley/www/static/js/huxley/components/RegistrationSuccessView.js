@@ -12,12 +12,13 @@ var OuterView = require('./OuterView');
 
 var RegistrationSuccessView = React.createClass({
   render: function() {
+    var conferenceSession = global.conferenceSession;
     return (
       <OuterView>
         <div class="letter">
           <h1>Thank You</h1>
           <p>
-            Thank you for registering for BMUN 64! Country assignments will be
+            Thank you for registering for BMUN {conferenceSession}! Country assignments will be
             made available soon in your Huxley account. A summary of fees is
             listed below:
           </p>
