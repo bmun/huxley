@@ -11,13 +11,18 @@ var NavLink = require('./NavLink');
 var OuterView = require('./OuterView');
 
 var RegistrationSuccessView = React.createClass({
+
+  contextTypes: {
+    session: React.PropTypes.number
+  },
+
   render: function() {
     return (
       <OuterView>
         <div class="letter">
           <h1>Thank You</h1>
           <p>
-            Thank you for registering for BMUN 64! Country assignments will be
+            Thank you for registering for BMUN {this.context.session}! Country assignments will be
             made available soon in your Huxley account. A summary of fees is
             listed below:
           </p>
@@ -60,7 +65,7 @@ var RegistrationSuccessView = React.createClass({
             <span class="subtext">
               Under-Secretary General of External Relations
               <br />
-              Berkeley Model United Nations, 64th Session
+              Berkeley Model United Nations, {this.context.session}th Session
             </span>
           </p>
         </div>

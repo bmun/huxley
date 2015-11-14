@@ -4,10 +4,12 @@
 import json
 
 from django.core.urlresolvers import reverse
+from django.db.models import Max
 from django.shortcuts import redirect
 
 from huxley.api.serializers import UserSerializer
 from huxley.core.constants import ContactGender, ContactType, ProgramTypes
+from huxley.core.models import Conference
 from huxley.utils.shortcuts import render_template
 
 
@@ -21,6 +23,7 @@ def index(request):
 
     context = {
         'user_json': json.dumps(user_dict).replace('</', '<\\/'),
+        'conference_session': Conference.objects.all().aggregate(Max('session'))['session__max'],
         'gender_constants': ContactGender.to_json(),
         'contact_types': ContactType.to_json(),
         'program_types': ProgramTypes.to_json(),

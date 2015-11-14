@@ -20,6 +20,10 @@ var AdvisorProfileView = React.createClass({
     user: React.PropTypes.object.isRequired
   },
 
+  contextTypes: {
+    session: React.PropTypes.number
+  },
+
   render: function() {
     var user = this.props.user;
     var school = User.getSchool(user);
@@ -28,7 +32,7 @@ var AdvisorProfileView = React.createClass({
       <InnerView>
         <h2>Welcome, {user.first_name}!</h2>
         <p>
-          We are very excited to see {school.name} at BMUN 64 this year! Here,
+          We are very excited to see {school.name} at BMUN {this.context.session} this year! Here,
           you can view your registration information for the conference. Please
           note that fees are currently <strong>estimates</strong> based on the
           approximate delegation size given during registration.
@@ -49,7 +53,7 @@ var AdvisorProfileView = React.createClass({
         <br />
         <p><strong>Rita Hu
         <br />
-        Under-Secretary General of External Relations, 64th Session.</strong></p>
+        Under-Secretary General of External Relations, {this.context.session}th Session.</strong></p>
         <form id="welcomepage">
           <div className="tablemenu header">
           </div>

@@ -17,6 +17,14 @@ var RouteHandler = Router.RouteHandler;
 var Huxley = React.createClass({
   mixins: [Router.Navigation],
 
+  childContextTypes: {
+    session: React.PropTypes.number
+  },
+
+  getChildContext: function() {
+    return {session: global.conferenceSession}
+  },
+
   componentWillMount: function() {
     CurrentUserStore.addListener(() => {
       var user = CurrentUserStore.getCurrentUser();
