@@ -122,7 +122,7 @@ var AdvisorAssignmentsView = React.createClass({
     if (confirm) {
       this.setState({loading: true});
       $.ajax ({
-        type: 'PATCH',
+        type: 'PUT',
         url: '/api/schools/'+this.state.school.id+'/assignments/finalize/',
         data: {
           assignments_finalized: true,

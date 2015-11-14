@@ -76,6 +76,7 @@ class SchoolAssignmentsGetTestCase(ListAPITestCase):
 
 class SchoolAssignmentsFinalizeTestCase(UpdateAPITestCase):
     url_name = 'api:school_assignments_finalize'
+    params = {'assignments_finalized': True}
 
     def setUp(self):
         self.user = TestUsers.new_user(username='regular', password='user')
@@ -103,8 +104,6 @@ class SchoolAssignmentsFinalizeTestCase(UpdateAPITestCase):
         '''It finalizes the assignments for the school's advisor.'''
         self.client.login(username='regular', password='user')
         response = self.get_response(self.school.id)
-        print(response)
-        print(self.school.assignments_finalized)
         self.assertFinalized(response)
 
     def test_other_user(self):
@@ -126,5 +125,5 @@ class SchoolAssignmentsFinalizeTestCase(UpdateAPITestCase):
 
     def assertFinalized(self, response):
         '''Assert that the school now has a finalized assignments'''
-        school = School.objects.get(id=self.school.id)
-        self.assertEqual(True, school.assignments_finalized)
+        a = School.objects.get(name=self.school.name)
+        self.assertEqual(True, a.check_assignments_finalized())

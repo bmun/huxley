@@ -30,6 +30,7 @@ class CreateSchoolTestCase(CreateAPITestCase):
         'spanish_speaking_delegates': 0,
         'chinese_speaking_delegates': 0,
         'country_preferences': [1, 2],
+        'assignments_finalized': False,
     }
 
     def test_empty_fields(self):
