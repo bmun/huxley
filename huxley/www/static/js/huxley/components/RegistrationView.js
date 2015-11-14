@@ -506,6 +506,7 @@ var RegistrationView = React.createClass({
   },
 
   renderSchoolError: function(field) {
+    console.log(this.state.errors.school)
     if (this.state.errors.school &&
         this.state.errors.school[0][field]) {
       return (
@@ -616,6 +617,54 @@ var RegistrationView = React.createClass({
   },
 
   _handleSubmit: function(event) {
+    console.log(JSON.stringify({
+        first_name: this.state.first_name.trim(),
+        last_name: this.state.last_name.trim(),
+        username: this.state.username.trim(),
+        email: this.state.primary_email.trim(),
+        password: this.state.password,
+        password2: this.state.password2,
+        school: {
+          name: this.state.school_name.trim(),
+          address: this.state.school_address.trim(),
+          city: this.state.school_city.trim(),
+          state: this.state.school_state.trim(),
+          zip_code: this.state.school_zip.trim(),
+          country: this._getSchoolCountry().trim(),
+          international: this.state.school_international,
+          program_type: this.state.program_type,
+          times_attended: this.state.times_attended.trim(),
+          beginner_delegates: this.state.beginner_delegates,
+          intermediate_delegates: this.state.intermediate_delegates,
+          advanced_delegates: this.state.advanced_delegates,
+          spanish_speaking_delegates: this.state.spanish_speaking_delegates,
+          chinese_speaking_delegates: this.state.chinese_speaking_delegates,
+          primary_name: this.state.primary_name.trim(),
+          primary_gender: this.state.primary_gender,
+          primary_email: this.state.primary_email.trim(),
+          primary_phone: this.state.primary_phone.trim(),
+          primary_type: this.state.primary_type,
+          secondary_name: this.state.secondary_name.trim(),
+          secondary_gender: this.state.secondary_gender,
+          secondary_email: this.state.secondary_email.trim(),
+          secondary_phone: this.state.secondary_phone.trim(),
+          secondary_type: this.state.secondary_type,
+          countrypreferences: [
+            this.state.country_pref1,
+            this.state.country_pref2,
+            this.state.country_pref3,
+            this.state.country_pref4,
+            this.state.country_pref5,
+            this.state.country_pref6,
+            this.state.country_pref7,
+            this.state.country_pref8,
+            this.state.country_pref9,
+            this.state.country_pref10
+          ],
+          committeepreferences: this.state.committee_prefs,
+          registration_comments: this.state.registration_comments.trim()
+        }
+      }))
     this.setState({loading: true});
     $.ajax({
       type: 'POST',

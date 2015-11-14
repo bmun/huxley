@@ -34,9 +34,18 @@ class CreateUserSerializer(ModelSerializer):
         }
 
     def create(self, validated_data):
-        school_data = validated_data.pop('school')
-        user = User.objects.create(**original_validated_data)
-        School.objects.create(user=user, **school_data)
+        if validated_data.get('school'):
+            # print validated_data
+            school_data = validated_data.pop('school')
+            committeepreferences = school_data.pop('committeepreferences')
+            school = School.objects.create(**school_data)
+            school.save()
+            for pref in committeepreferences:
+                school.committeepreferences.add(pref)
+            school.save()
+            user = User.objects.create(school=school, **validated_data)
+        else:
+            user = User.objects.create(**validated_data)
         return user
 
     def update(self, instance, validated_data):
