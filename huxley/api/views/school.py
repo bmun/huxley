@@ -15,7 +15,6 @@ from huxley.api.permissions import IsAdvisorOrSuperuser, IsSchoolAdvisorOrSuperu
 from huxley.api.serializers import AssignmentSerializer, SchoolSerializer
 from huxley.core.models import Assignment, School
 
-
 class SchoolList(generics.CreateAPIView):
     authentication_classes = (SessionAuthentication,)
     queryset = School.objects.all()
