@@ -27,7 +27,6 @@ urlpatterns += patterns('',
     url(r'^schools/?$', views.school.SchoolList.as_view(), name='school_list'),
     url(r'^schools/(?P<pk>[0-9]+)/?$', views.school.SchoolDetail.as_view(), name='school_detail'),
     url(r'^schools/(?P<pk>[0-9]+)/assignments/?$', views.school.SchoolAssignments.as_view(), name='school_assignments'),
-    url(r'^schools/(?P<pk>[0-9]+)/assignments/finalize/?$', views.school.SchoolAssignmentsFinalize.as_view(), name='school_assignments_finalize'),
     url(r'^schools/(?P<pk>[0-9]+)/invoice/?$', views.school.SchoolInvoice.as_view(), name='school_invoice')
 )
 

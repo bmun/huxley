@@ -28,6 +28,9 @@ class SchoolDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = SchoolSerializer
     permission_classes = (IsAdvisorOrSuperuser,)
 
+    def put(self, request, *args, **kwargs):
+        return self.partial_update(request, *args, **kwargs)
+
 
 class SchoolAssignments(generics.ListAPIView):
     authentication_classes = (SessionAuthentication,)
@@ -41,16 +44,6 @@ class SchoolAssignments(generics.ListAPIView):
             raise Http404
 
         return Assignment.objects.filter(school_id=school_id)
-
-
-class SchoolAssignmentsFinalize(generics.UpdateAPIView):
-    authentication_classes = (SessionAuthentication,)
-    permission_classes = (IsSchoolAdvisorOrSuperuser,)
-    serializer_class = SchoolSerializer
-    queryset = School.objects.all()
-
-    def put(self, request, *args, **kwargs):
-        return self.partial_update(request, *args, **kwargs)
 
 
 class SchoolInvoice(PDFTemplateView):

@@ -75,7 +75,7 @@ class SchoolAssignmentsGetTestCase(ListAPITestCase):
         ])
 
 class SchoolAssignmentsFinalizeTestCase(UpdateAPITestCase):
-    url_name = 'api:school_assignments_finalize'
+    url_name = 'api:school_detail'
     params = {'assignments_finalized': True}
 
     def setUp(self):
