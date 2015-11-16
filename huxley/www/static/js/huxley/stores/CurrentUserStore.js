@@ -16,17 +16,11 @@ class CurrentUserStore extends Store {
     super(dispatcher);
     this._currentUser = null;
     this._isBootstrapped = false;
-    this._assignmentsFinalized = false;
   }
 
   getCurrentUser() {
     this._assertBootstrapped();
     return this._currentUser;
-  }
-
-  getFinalized() {
-    this._assertBootstrapped();
-    return this._assignmentsFinalized;
   }
 
   addListener(callback) {
@@ -44,9 +38,6 @@ class CurrentUserStore extends Store {
         break;
       case ActionConstants.LOGOUT:
         this._currentUser = {};
-        break;
-      case ActionConstants.FINALIZE:
-        this._assignmentsFinalized = action.finalize;
         break;
       default:
         return;

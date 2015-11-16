@@ -40,7 +40,7 @@ LOGGING = {
         'huxley.api': {
             'handlers': ['database'],
             'level': 'DEBUG',
-            'propagate': False, #Set to false to elimninate logs in the console
+            'propagate': True, #Set to false to elimninate logs in the console
         },
     },
 }

@@ -11,11 +11,8 @@ var $ = require('jquery');
 var React = require('react');
 
 var AssignmentStore = require('../stores/AssignmentStore');
-var Button = require('./Button');
 var CommitteeStore = require('../stores/CommitteeStore');
 var CountryStore = require('../stores/CountryStore');
-var CurrentUserStore = require('../stores/CurrentUserStore');
-var CurrentUserActions = require('../actions/CurrentUserActions');
 var InnerView = require('./InnerView');
 
 var AdvisorAssignmentsView = React.createClass({
@@ -23,8 +20,7 @@ var AdvisorAssignmentsView = React.createClass({
     return {
       assignments: [],
       committees: {},
-      countries: {},
-      loading: false
+      countries: {}
     };
   },
 
@@ -50,7 +46,6 @@ var AdvisorAssignmentsView = React.createClass({
   },
 
   render: function() {
-    var finalized = CurrentUserStore.getFinalized();
     return (
       <InnerView>
         <h2>Roster</h2>
@@ -74,15 +69,6 @@ var AdvisorAssignmentsView = React.createClass({
             </table>
           </div>
           <div className="tablemenu footer" />
-          {finalized ?
-            <div> </div> :
-            <Button
-              color="green"
-              size="large"
-              onClick={this._handleFinalize}
-              loading={this.state.loading}>
-              Finalize Assignments
-            </Button>}
         </form>
       </InnerView>
     );
@@ -98,38 +84,8 @@ var AdvisorAssignmentsView = React.createClass({
           <td>{countries[assignment.country].name}</td>
           <td>{committees[assignment.committee].delegation_size}</td>
         </tr>
-      )
-    }.bind(this));
-  },
-
-  _handleFinalize: function(event) {
-    var confirm = window.confirm("By pressing okay you are committing to the financial responsibility of each assingment. Are you sure you want to finalize assignments?");
-    if (confirm) {
-      this.setState({loading: true});
-      $.ajax ({
-        type: 'PUT',
-        url: '/api/schools/'+this.state.school.id,
-        data: {
-          assignments_finalized: true,
-        },
-        success: this._handleFinalizedSuccess,
-        error: this._handleError
-      });
-    }
-  },
-
-  _handleFinalizedSuccess: function(data, status, jqXHR) {
-    CurrentUserActions.finalize(jqXHR.responseJSON);
-    this.setState({loading: false});
-  },
-
-  _handleError: function(jqXHR, status, error) {
-    window.alert("Something went wrong. Please try again.");
-    this.setState({loading: false});
-  },
-
-   _handleSuccess: function(event) {
-    this.setState({loading: false});
+      );
+    });
   }
 });
 
