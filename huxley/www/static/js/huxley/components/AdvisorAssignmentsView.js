@@ -15,6 +15,7 @@ var Button = require('./Button');
 var CommitteeStore = require('../stores/CommitteeStore');
 var CountryStore = require('../stores/CountryStore');
 var CurrentUserStore = require('../stores/CurrentUserStore');
+var CurrentUserActions = require('../actions/CurrentUserActions');
 var InnerView = require('./InnerView');
 
 var AdvisorAssignmentsView = React.createClass({
@@ -53,7 +54,7 @@ var AdvisorAssignmentsView = React.createClass({
   },
 
   render: function() {
-    console.log(this.state.finalized)
+    var finalized = CurrentUserStore.getFinalized();
     return (
       <InnerView>
         <h2>Roster</h2>
@@ -77,7 +78,7 @@ var AdvisorAssignmentsView = React.createClass({
             </table>
           </div>
           <div className="tablemenu footer" />
-          {this.state.finalized ?
+          {finalized ?
             <div> </div> :
             <Button
               color="green"
@@ -122,8 +123,8 @@ var AdvisorAssignmentsView = React.createClass({
   },
 
   _handleFinalizedSuccess: function(data, status, jqXHR) {
-    this.setState({finalized: true,
-                   loading: false});
+    CurrentUserActions.finalize(jqXHR.responseJSON);
+    this.setState({loading: false});
   },
 
   _handleError: function(jqXHR, status, error) {
