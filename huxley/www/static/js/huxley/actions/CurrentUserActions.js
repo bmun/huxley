@@ -26,13 +26,6 @@ var CurrentUserActions = {
     Dispatcher.dispatch({
       actionType: ActionConstants.LOGOUT
     });
-  },
-
-  finalize(finalize) {
-    Dispatcher.dispatch({
-      actionType: ActionConstants.FINALIZE,
-      finalize: finalize
-    });
   }
 };
 

@@ -10,10 +10,10 @@ var Router = require('react-router');
 
 var Button = React.createClass({
   propTypes: {
-    color: React.PropTypes.oneOf(['blue', 'green', 'yellow', 'red']),
+    color: React.PropTypes.oneOf(['blue', 'green', 'yellow']),
     href: React.PropTypes.string,
     loading: React.PropTypes.bool,
-    size: React.PropTypes.oneOf(['small', 'medium', 'large']),
+    size: React.PropTypes.oneOf(['small', 'medium']),
   },
 
   getDefaultProps: function() {
@@ -34,11 +34,9 @@ var Button = React.createClass({
         className={cx({
           'button': true,
           'button-small': this.props.size == 'small',
-          'button-large': this.props.size == 'large',
           'button-blue': this.props.color == 'blue',
           'button-green': this.props.color == 'green',
           'button-yellow': this.props.color == 'yellow',
-          'button-red': this.props.color == 'red',
           'rounded-small': true,
           'loading': this.props.loading
         })}
