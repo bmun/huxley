@@ -28,6 +28,9 @@ class SchoolDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = SchoolSerializer
     permission_classes = (IsAdvisorOrSuperuser,)
 
+    def put(self, request, *args, **kwargs):
+        return self.partial_update(request, *args, **kwargs)
+
 
 class SchoolAssignments(generics.ListAPIView):
     authentication_classes = (SessionAuthentication,)

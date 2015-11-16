@@ -26,6 +26,14 @@ var CurrentUserActions = {
     Dispatcher.dispatch({
       actionType: ActionConstants.LOGOUT
     });
+  },
+
+
+  updateSchool(school) {
+    Dispatcher.dispatch({
+      actionType: ActionConstants.UPDATE_SCHOOL,
+      school: school
+    });
   }
 };
 
