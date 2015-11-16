@@ -20,14 +20,10 @@ var InnerView = require('./InnerView');
 
 var AdvisorAssignmentsView = React.createClass({
   getInitialState: function() {
-    var user = CurrentUserStore.getCurrentUser();
-    var school = user.school;
     return {
-      school: school,
       assignments: [],
       committees: {},
       countries: {},
-      finalized: school.assignments_finalized,
       loading: false
     };
   },
