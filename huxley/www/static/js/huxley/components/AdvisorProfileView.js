@@ -20,16 +20,19 @@ var AdvisorProfileView = React.createClass({
     user: React.PropTypes.object.isRequired
   },
 
+  contextTypes: {
+    session: React.PropTypes.number
+  },
+
   render: function() {
     var user = this.props.user;
     var school = User.getSchool(user);
-    var conferenceSession =  global.conferenceSession;
     var invoiceUrl = '/api/schools/' + school.id + '/invoice/';
     return (
       <InnerView>
         <h2>Welcome, {user.first_name}!</h2>
         <p>
-          We are very excited to see {school.name} at BMUN {conferenceSession} this year! Here,
+          We are very excited to see {school.name} at BMUN {this.context.session} this year! Here,
           you can view your registration information for the conference. Please
           note that fees are currently <strong>estimates</strong> based on the
           approximate delegation size given during registration.
@@ -50,7 +53,7 @@ var AdvisorProfileView = React.createClass({
         <br />
         <p><strong>Rita Hu
         <br />
-        Under-Secretary General of External Relations, {conferenceSession}th Session.</strong></p>
+        Under-Secretary General of External Relations, {this.context.session}th Session.</strong></p>
         <form id="welcomepage">
           <div className="tablemenu header">
           </div>

@@ -19,6 +19,11 @@ var CurrentUserActions = require('../actions/CurrentUserActions');
 var InnerView = require('./InnerView');
 
 var AdvisorAssignmentsView = React.createClass({
+
+  contextTypes: {
+    session: React.PropTypes.number
+  },
+
   getInitialState: function() {
     return {
       assignments: [],
@@ -55,7 +60,7 @@ var AdvisorAssignmentsView = React.createClass({
       <InnerView>
         <h2>Roster</h2>
         <p>
-          Here you can view your tentative assignments for BMUN {conferenceSession}. If you
+          Here you can view your tentative assignments for BMUN {this.context.session}. If you
           would like to request more slots, please email <a href="mailto:info@bmun.org">
           info@bmun.org</a>. In the coming months
           we will ask that you finalize your assignment roster and input your

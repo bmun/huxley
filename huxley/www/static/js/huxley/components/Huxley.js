@@ -17,6 +17,14 @@ var RouteHandler = Router.RouteHandler;
 var Huxley = React.createClass({
   mixins: [Router.Navigation],
 
+  childContextTypes: {
+    session: React.PropTypes.number
+  },
+
+  getChildContext: function() {
+    return {session: global.conferenceSession}
+  },
+
   componentWillMount: function() {
     CurrentUserStore.addListener(() => {
       var user = CurrentUserStore.getCurrentUser();
@@ -34,7 +42,7 @@ var Huxley = React.createClass({
       return <RouteHandler user={user} />;
     } else if (User.isAdvisor(user)) {
       return (
-        <AdvisorView user={user} conferenceSession={conferenceSession}>
+        <AdvisorView user={user}>
           <RouteHandler user={user} />
         </AdvisorView>
       );
