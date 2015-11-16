@@ -65,6 +65,7 @@ class CurrentUserStore extends Store {
     );
 
     this._currentUser = global.currentUser;
+    this._assignmentsFinalized = this._currentUser.school.assignmentsFinalized;
     delete global.currentUser;
     this._isBootstrapped = true;
   }
