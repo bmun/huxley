@@ -104,12 +104,11 @@ var AdvisorAssignmentsView = React.createClass({
 
   _handleFinalize: function(event) {
     var confirm = window.confirm("By pressing okay you are committing to the financial responsibility of each assingment. Are you sure you want to finalize assignments?");
-    var school = CurrentUserStore.getCurrentUser().school
     if (confirm) {
       this.setState({loading: true});
       $.ajax ({
         type: 'PUT',
-        url: '/api/schools/'+school.id,
+        url: '/api/schools/'+this.state.school.id,
         data: {
           assignments_finalized: true,
         },
