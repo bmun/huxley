@@ -44,6 +44,13 @@
         padding: 3px 6px;
     }
 
+    &.button-large
+    {
+        font-size: 16px;
+        padding: 4 px 7px;
+        border: 40px 40px;
+    }
+
     &.loading
     {
         background-position: center center;
@@ -95,6 +102,21 @@
         {
             background-color: #e0e000;
             border-color: #cc0;
+        }
+    }
+
+    &.button-red
+    {
+        background-color: #c20;
+        background-image: url(/static/img/loading.gif);
+        border: 1px solid #b10;
+        color: #fff;
+        text-shadow: #b10 0px 1px;
+
+        &:hover, &:focus
+        {
+            background-color: #d03000;
+            border-color: #c00;
         }
     }
 }
