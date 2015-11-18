@@ -43,7 +43,6 @@ class AssignmentAdmin(admin.ModelAdmin):
             countries = {}
             schools = {}
             for row in reader:
-                print row
                 committee = get_model(Committee, row[1], committees)
                 country = get_model(Country, row[2], countries)
                 school = get_model(School, row[0], schools)
