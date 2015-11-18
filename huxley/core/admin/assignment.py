@@ -43,11 +43,11 @@ class AssignmentAdmin(admin.ModelAdmin):
             countries = {}
             schools = {}
             for row in reader:
-                if (len(row[4]) < 2): #ignore the first row because of headers
-                    committee = get_model(Committee, row[2], committees)
-                    country = get_model(Country, row[3], countries)
-                    school = get_model(School, row[0], schools)
-                    yield (committee.id, country.id, school.id)
+                print row
+                committee = get_model(Committee, row[1], committees)
+                country = get_model(Country, row[2], countries)
+                school = get_model(School, row[0], schools)
+                yield (committee.id, country.id, school.id)
 
         Assignment.update_assignments(generate_assigments(reader))
         return HttpResponseRedirect(reverse('admin:core_assignment_changelist'))
