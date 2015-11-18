@@ -34,11 +34,13 @@ var CountrySelect = React.createClass({
 
   renderCommitteeOptions: function() {
     return this.props.countries.map(function(country) {
-      return (
-        <option key={country.id} value={country.id}>
-          {country.name}
-        </option>
-      );
+      if (!country.special) {
+        return (
+          <option key={country.id} value={country.id}>
+            {country.name}
+          </option>
+        );
+      }
     });
   }
 });
