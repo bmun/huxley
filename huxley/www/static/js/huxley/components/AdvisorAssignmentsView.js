@@ -36,7 +36,11 @@ var AdvisorAssignmentsView = React.createClass({
   componentWillMount: function() {
     var user = CurrentUserStore.getCurrentUser();
     AssignmentStore.getAssignments(user.school.id, function(assignments) {
-      this.setState({assignments: assignments});
+      this.setState({assignments: assignments.filter(
+        function(assignment) {
+          return !assignment.rejected
+        }
+      )});
     }.bind(this));
     CommitteeStore.getCommittees(function(committees) {
       var new_committees = {};
@@ -141,11 +145,11 @@ var AdvisorAssignmentsView = React.createClass({
     if (confirm) {
       this.setState({loading: true});
       $.ajax ({
-        type: 'POST',
+        type: 'PUT',
         url: '/api/assignments/'+assignment.id,
         data: {
           rejected: true,
-        }
+        },
         success: this._handleAssignmentDeleteSuccess,
         error: this._handleError,
       });
@@ -158,15 +162,13 @@ var AdvisorAssignmentsView = React.createClass({
   },
 
   _handleAssignmentDeleteSuccess: function(data, status, jqXHR) {
-    var user = this.props.user.getData();
-    AssignmentStore.getAssignments(user.school.id, function(assignments) {
-      new_assignments = [];
-      for (var i = 0; i <assignments.length; i++) {
-        new_assignments.= countries[i];
-      }
-      this.setState({assignments: assignments});
-    }.bind(this));
-  }
+    var assignments = this.state.assignments
+    assignments = assignments.filter(function (assignment) {
+      return assignment.id != jqXHR.responseJSON.id
+    })
+    this.setState({assignments: assignments})
+    this.setState({loading: false});
+  },
 
   _handleError: function(jqXHR, status, error) {
     window.alert("Something went wrong. Please try again.");

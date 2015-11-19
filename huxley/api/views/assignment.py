@@ -5,7 +5,7 @@ from rest_framework import generics, status
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.response import Response
 
-from huxley.api.permissions import IsSchoolAdvisorOrSuperuser, IsSuperuserOrReadOnly
+from huxley.api.permissions import IsSchoolAssignmentAdvisorOrSuperuser, IsSuperuserOrReadOnly
 from huxley.api.serializers import AssignmentSerializer
 from huxley.core.models import Assignment
 
@@ -20,7 +20,7 @@ class AssignmentList(generics.CreateAPIView):
 class AssignmentDetail(generics.RetrieveUpdateDestroyAPIView):
     authentication_classes = (SessionAuthentication,)
     queryset = Assignment.objects.all()
-    permission_classes = (IsSchoolAdvisorOrSuperuser,)
+    permission_classes = (IsSchoolAssignmentAdvisorOrSuperuser,)
     serializer_class = AssignmentSerializer
 
     def put(self, request, *args, **kwargs):
