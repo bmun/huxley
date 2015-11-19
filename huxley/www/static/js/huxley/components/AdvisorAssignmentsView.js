@@ -64,7 +64,7 @@ var AdvisorAssignmentsView = React.createClass({
       <InnerView>
         <h2>Roster</h2>
         <p>
-          Here you can view your tentative assignments for BMUN 63. If you
+          Here you can view your tentative assignments for BMUN {this.context.session}. If you
           would like to request more slots, please email <a href="mailto:info@bmun.org">
           info@bmun.org</a>. In the coming months
           we will ask that you finalize your assignment roster and input your
@@ -78,7 +78,7 @@ var AdvisorAssignmentsView = React.createClass({
                 <th>Committee</th>
                 <th>Country</th>
                 <th>Delegation Size</th>
-                <th>{this.state.finalized ?
+                <th>{finalized ?
                   "" :
                   "Delete Assignments"}
                 </th>
@@ -87,7 +87,7 @@ var AdvisorAssignmentsView = React.createClass({
             </table>
           </div>
           <div className="tablemenu footer" />
-          {this.state.finalized ?
+          {finalized ?
             <div> </div> :
             <Button
               color="green"
@@ -104,13 +104,14 @@ var AdvisorAssignmentsView = React.createClass({
   renderAssignmentRows: function() {
     var committees = this.state.committees;
     var countries = this.state.countries;
+    var finalized = CurrentUserStore.getFinalized();
     return this.state.assignments.map(function(assignment) {
       return (
         <tr>
           <td>{committees[assignment.committee].name}</td>
           <td>{countries[assignment.country].name}</td>
           <td>{committees[assignment.committee].delegation_size}</td>
-          <td>{this.state.finalized ?
+          <td>{finalized ?
             <div/> :
             <Button color="red"
                     size="small"
