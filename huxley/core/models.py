@@ -230,6 +230,7 @@ class Assignment(models.Model):
     committee = models.ForeignKey(Committee)
     country   = models.ForeignKey(Country)
     school    = models.ForeignKey(School, null=True, blank=True, default=None)
+    rejected  = models.BooleanField(default=False)
 
     @classmethod
     def update_assignments(cls, new_assignments):

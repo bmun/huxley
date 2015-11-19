@@ -22,3 +22,6 @@ class AssignmentDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Assignment.objects.all()
     permission_classes = (IsSchoolAdvisorOrSuperuser,)
     serializer_class = AssignmentSerializer
+
+    def put(self, request, *args, **kwargs):
+        return self.partial_update(request, *args, **kwargs)

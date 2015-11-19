@@ -60,7 +60,7 @@ var AdvisorAssignmentsView = React.createClass({
       <InnerView>
         <h2>Roster</h2>
         <p>
-          Here you can view your tentative assignments for BMUN {this.context.session}. If you
+          Here you can view your tentative assignments for BMUN 63. If you
           would like to request more slots, please email <a href="mailto:info@bmun.org">
           info@bmun.org</a>. In the coming months
           we will ask that you finalize your assignment roster and input your
@@ -74,12 +74,16 @@ var AdvisorAssignmentsView = React.createClass({
                 <th>Committee</th>
                 <th>Country</th>
                 <th>Delegation Size</th>
+                <th>{this.state.finalized ?
+                  "" :
+                  "Delete Assignments"}
+                </th>
               </tr>
               {this.renderAssignmentRows()}
             </table>
           </div>
           <div className="tablemenu footer" />
-          {finalized ?
+          {this.state.finalized ?
             <div> </div> :
             <Button
               color="green"
@@ -102,6 +106,14 @@ var AdvisorAssignmentsView = React.createClass({
           <td>{committees[assignment.committee].name}</td>
           <td>{countries[assignment.country].name}</td>
           <td>{committees[assignment.committee].delegation_size}</td>
+          <td>{this.state.finalized ?
+            <div/> :
+            <Button color="red"
+                    size="small"
+                    onClick={this._handleAssignmentDelete.bind(this, assignment)}>
+                    Delete Assignment
+            </Button>}
+          </td>
         </tr>
       )
     }.bind(this));
@@ -124,10 +136,37 @@ var AdvisorAssignmentsView = React.createClass({
     }
   },
 
+  _handleAssignmentDelete: function(assignment) {
+    var confirm = window.confirm("Are you sure you want to delete this assignment");
+    if (confirm) {
+      this.setState({loading: true});
+      $.ajax ({
+        type: 'POST',
+        url: '/api/assignments/'+assignment.id,
+        data: {
+          rejected: true,
+        }
+        success: this._handleAssignmentDeleteSuccess,
+        error: this._handleError,
+      });
+    }
+  },
+
   _handleFinalizedSuccess: function(data, status, jqXHR) {
     CurrentUserActions.updateSchool(jqXHR.responseJSON);
     this.setState({loading: false});
   },
+
+  _handleAssignmentDeleteSuccess: function(data, status, jqXHR) {
+    var user = this.props.user.getData();
+    AssignmentStore.getAssignments(user.school.id, function(assignments) {
+      new_assignments = [];
+      for (var i = 0; i <assignments.length; i++) {
+        new_assignments.= countries[i];
+      }
+      this.setState({assignments: assignments});
+    }.bind(this));
+  }
 
   _handleError: function(jqXHR, status, error) {
     window.alert("Something went wrong. Please try again.");
