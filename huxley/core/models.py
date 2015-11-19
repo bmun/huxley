@@ -10,7 +10,6 @@ from django.db import models, transaction
 from django.db.models.signals import post_save, pre_save
 
 from huxley.core.constants import ContactGender, ContactType, ProgramTypes
-from huxley.utils import zoho
 
 
 class Conference(models.Model):
@@ -215,20 +214,6 @@ class School(models.Model):
                           'no-reply@bmun.org',
                           [school.primary_email], fail_silently=True)
 
-    @classmethod
-    def create_zoho_contact(cls, **kwargs):
-        if not settings.ZOHO_CREDENTIALS:
-            return
-        school = kwargs['instance']
-        attrs = zoho.generate_contact_attributes(school)
-        parameters = {'JSONString': json.dumps(attrs)}
-        if kwargs['created']:
-            create_url = 'https://invoice.zoho.com/api/v3/contacts?organization_id=' + settings.ORGANIZATION_ID + '&authtoken=' + settings.AUTHTOKEN
-            r = requests.post(create_url, params=parameters)
-        else:
-            update_url = 'https://invoice.zoho.com/api/v3/contacts/'+ zoho.get_contact(school) +'?organization_id=' + settings.ORGANIZATION_ID + '&authtoken=' + settings.AUTHTOKEN
-            r = requests.put(update_url, params=parameters)
-
     def __unicode__(self):
         return self.name
 
@@ -239,7 +224,6 @@ pre_save.connect(School.update_fees, sender=School)
 pre_save.connect(School.update_waitlist, sender=School)
 post_save.connect(School.email_comments, sender=School)
 post_save.connect(School.email_confirmation, sender=School)
-post_save.connect(School.create_zoho_contact, sender=School)
 
 
 class Assignment(models.Model):
