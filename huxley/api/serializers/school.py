@@ -4,15 +4,16 @@ from rest_framework import serializers
 
 from huxley.api import validators
 from huxley.api.serializers.fields import DecimalField
-from huxley.core.models import School
+from huxley.core.models import School, Committee
 
 
 class SchoolSerializer(serializers.ModelSerializer):
     registered = serializers.DateTimeField(format='iso-8601', required=False)
-    fees_owed = DecimalField(max_digits=10, decimal_places=2, read_only=True, coerce_to_string=False)
-    fees_paid = DecimalField(max_digits=10, decimal_places=2, read_only=True, coerce_to_string=False)
+    fees_owed = serializers.FloatField(read_only=True)
+    fees_paid = serializers.FloatField(read_only=True)
     assignments_finalized = serializers.BooleanField(required=False)
-    countrypreferences = serializers.ListField(child=serializers.IntegerField(), source='country_preference_ids')
+    countrypreferences = serializers.ListField(child=serializers.IntegerField(required=False), source='country_preference_ids')
+    committeepreferences = serializers.PrimaryKeyRelatedField(allow_empty=True, many=True, queryset=Committee.objects.all(), required=False)
 
     class Meta:
         model = School

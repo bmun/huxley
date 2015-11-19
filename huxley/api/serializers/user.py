@@ -3,7 +3,7 @@
 
 import re
 
-from rest_framework.serializers import ModelSerializer, ValidationError
+from rest_framework.serializers import ModelSerializer, ValidationError, CharField
 
 from huxley.accounts.models import User, School
 from huxley.api import validators
@@ -34,30 +34,32 @@ class CreateUserSerializer(ModelSerializer):
         }
 
     def create(self, validated_data):
+        original_validated_data = validated_data.copy()
+
+        if 'password' in validated_data:
+            del validated_data['password']
+
         if validated_data.get('school'):
-            # print validated_data
             school_data = validated_data.pop('school')
             committeepreferences = school_data.pop('committeepreferences')
+
             school = School.objects.create(**school_data)
             school.save()
+
             for pref in committeepreferences:
                 school.committeepreferences.add(pref)
             school.save()
+
             user = User.objects.create(school=school, **validated_data)
         else:
             user = User.objects.create(**validated_data)
-        return user
 
-    def update(self, instance, validated_data):
-        original_validated_data = validated_data.copy()
-        if 'password' in validated_data:
-            password = validated_data.pop('password')
-
-        user = super(CreateUserSerializer, self).update(instance, validated_data)
         if 'password' in original_validated_data:
             user.set_password(original_validated_data['password'])
+            user.save()
         if 'school' in original_validated_data:
             user.user_type = User.TYPE_ADVISOR
+            user.save()
 
         return user
 

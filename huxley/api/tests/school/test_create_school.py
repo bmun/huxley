@@ -29,12 +29,8 @@ class CreateSchoolTestCase(CreateAPITestCase):
         'advanced_delegates': 0,
         'spanish_speaking_delegates': 0,
         'chinese_speaking_delegates': 0,
-<<<<<<< 47b9e4624d0c543a194897408b8d1e90c8a53d12
-        'country_preferences': [1, 2],
+        'countrypreferences': [1, 2],
         'assignments_finalized': False,
-=======
-        'countrypreferences': [1, 2]
->>>>>>> fixes test cases
     }
 
     def test_empty_fields(self):
