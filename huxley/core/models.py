@@ -247,29 +247,30 @@ class Assignment(models.Model):
         additions = []
         deletions = []
 
-        def add(committee, country, school):
+        def add(committee, country, school, rejected):
             additions.append(cls(
                 committee_id=committee,
                 country_id=country,
                 school_id=school,
+                rejected=rejected,
             ))
 
         def remove(assignment_data):
             deletions.append(assignment_data['id'])
 
-        for committee, country, school in new_assignments:
+        for committee, country, school, rejected in new_assignments:
             key = (committee, country)
             old_assignment = assignment_dict.get(key)
 
             if not old_assignment:
-                add(committee, country, school)
+                add(committee, country, school, rejected)
                 continue
 
             if old_assignment['school_id'] != school:
                 # Remove the old assignment instead of just updating it
                 # so that its delegates are deleted by cascade.
                 remove(old_assignment)
-                add(committee, country, school)
+                add(committee, country, school, rejected)
 
             del assignment_dict[key]
 

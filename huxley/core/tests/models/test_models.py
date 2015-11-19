@@ -156,12 +156,12 @@ class AssignmentTest(TestCase):
 
         # TODO: Also assert on delegate deletion.
         updates = [
-            (cm1, ct1, s1),
-            (cm1, ct2, s1),
-            (cm1, ct3, s1),   # ADDED
+            (cm1, ct1, s1, False),
+            (cm1, ct2, s1, False),
+            (cm1, ct3, s1, False),   # ADDED
             # (cm2, ct1, s1), # DELETED
-            (cm2, ct2, s2),   # UPDATED
-            (cm2, ct3, s2),   # ADDED
+            (cm2, ct2, s2, False),   # UPDATED
+            (cm2, ct3, s2, False),   # ADDED
         ]
 
         Assignment.update_assignments(updates)
