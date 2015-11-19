@@ -17,13 +17,20 @@ class AssignmentAdmin(admin.ModelAdmin):
         assignments = HttpResponse(content_type='text/csv')
         assignments['Content-Disposition'] = 'attachment; filename="assignments.csv"'
         writer = csv.writer(assignments)
+        writer.writerow([
+                'School',
+                'Committee',
+                'Country',
+                'Rejected'
+            ])
 
         for assignment in Assignment.objects.all().order_by('school__name',
                                                             'committee__name'):
             writer.writerow([
                 assignment.school,
                 assignment.committee,
-                assignment.country
+                assignment.country,
+                assignment.rejected
             ])
 
         return assignments
@@ -43,10 +50,16 @@ class AssignmentAdmin(admin.ModelAdmin):
             countries = {}
             schools = {}
             for row in reader:
+                if (row[0]=='School' and row[1]=='Committee' and row[2]=='Country'):
+                    continue # skip the first row if it is a header
                 committee = get_model(Committee, row[1], committees)
                 country = get_model(Country, row[2], countries)
                 school = get_model(School, row[0], schools)
-                yield (committee.id, country.id, school.id)
+                if len(row) < 4:
+                    rejected = False # allow for the rejected field to be null
+                else:
+                    rejected = (row[3].lower() == 'true') # use the provided value if admin provides it
+                yield (committee.id, country.id, school.id, rejected)
 
         Assignment.update_assignments(generate_assigments(reader))
         return HttpResponseRedirect(reverse('admin:core_assignment_changelist'))

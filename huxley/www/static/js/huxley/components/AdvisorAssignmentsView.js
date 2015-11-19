@@ -36,7 +36,11 @@ var AdvisorAssignmentsView = React.createClass({
   componentWillMount: function() {
     var user = CurrentUserStore.getCurrentUser();
     AssignmentStore.getAssignments(user.school.id, function(assignments) {
-      this.setState({assignments: assignments});
+      this.setState({assignments: assignments.filter(
+        function(assignment) {
+          return !assignment.rejected
+        }
+      )});
     }.bind(this));
     CommitteeStore.getCommittees(function(committees) {
       var new_committees = {};
@@ -74,6 +78,10 @@ var AdvisorAssignmentsView = React.createClass({
                 <th>Committee</th>
                 <th>Country</th>
                 <th>Delegation Size</th>
+                <th>{finalized ?
+                  "" :
+                  "Delete Assignments"}
+                </th>
               </tr>
               {this.renderAssignmentRows()}
             </table>
@@ -96,12 +104,21 @@ var AdvisorAssignmentsView = React.createClass({
   renderAssignmentRows: function() {
     var committees = this.state.committees;
     var countries = this.state.countries;
+    var finalized = CurrentUserStore.getFinalized();
     return this.state.assignments.map(function(assignment) {
       return (
         <tr>
           <td>{committees[assignment.committee].name}</td>
           <td>{countries[assignment.country].name}</td>
           <td>{committees[assignment.committee].delegation_size}</td>
+          <td>{finalized ?
+            <div/> :
+            <Button color="red"
+                    size="small"
+                    onClick={this._handleAssignmentDelete.bind(this, assignment)}>
+                    Delete Assignment
+            </Button>}
+          </td>
         </tr>
       )
     }.bind(this));
@@ -124,8 +141,33 @@ var AdvisorAssignmentsView = React.createClass({
     }
   },
 
+  _handleAssignmentDelete: function(assignment) {
+    var confirm = window.confirm("Are you sure you want to delete this assignment");
+    if (confirm) {
+      this.setState({loading: true});
+      $.ajax ({
+        type: 'PUT',
+        url: '/api/assignments/'+assignment.id,
+        data: {
+          rejected: true,
+        },
+        success: this._handleAssignmentDeleteSuccess,
+        error: this._handleError,
+      });
+    }
+  },
+
   _handleFinalizedSuccess: function(data, status, jqXHR) {
     CurrentUserActions.updateSchool(jqXHR.responseJSON);
+    this.setState({loading: false});
+  },
+
+  _handleAssignmentDeleteSuccess: function(data, status, jqXHR) {
+    var assignments = this.state.assignments
+    assignments = assignments.filter(function (assignment) {
+      return assignment.id != jqXHR.responseJSON.id
+    })
+    this.setState({assignments: assignments})
     this.setState({loading: false});
   },
 

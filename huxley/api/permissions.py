@@ -3,6 +3,8 @@
 
 from rest_framework import permissions
 
+from huxley.core.models import Assignment
+
 
 class IsSuperuserOrReadOnly(permissions.BasePermission):
     '''Allow writes if superuser, read-only otherwise.'''
@@ -45,3 +47,18 @@ class IsPostOrSuperuserOnly(permissions.BasePermission):
 
     def has_permission(self, request, view):
         return request.method == 'POST' or request.user.is_superuser
+
+
+class IsSchoolAssignmentAdvisorOrSuperuser(permissions.BasePermission):
+    '''Accept only the advisor of the given school with a given assignment.'''
+
+    def has_permission(self, request, view):
+        if request.user.is_superuser:
+            return True
+
+        assignment_id = view.kwargs.get('pk', None)
+        assignment = Assignment.objects.get(id=assignment_id)
+        user = request.user
+
+        return (user.is_authenticated() and user.is_advisor() and
+                user.school.id == assignment.school.id)

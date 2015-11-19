@@ -9,4 +9,4 @@ from huxley.core.models import Assignment
 class AssignmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Assignment
-        fields = ('id', 'committee', 'country', 'school')
+        fields = ('id', 'committee', 'country', 'school', 'rejected')
