@@ -54,7 +54,22 @@ class SchoolSerializer(serializers.ModelSerializer):
         )
         extra_kwargs = {
         'committeepreferences': {'required': False},
-        'countrypreferences': {'required': False}
+        'countrypreferences': {'required': False},
+        'secondary_name': {'required': False},
+        'secondary_gender': {'required': False},
+        'secondary_email': {'required': False},
+        'secondary_phone': {'required': False},
+        'secondary_type': {'required': False},
+        'program_type': {'required': False},
+        'times_attended': {'required': False},
+        'beginner_delegates': {'required': False},
+        'intermediate_delegates': {'required': False},
+        'advanced_delegates': {'required': False},
+        'spanish_speaking_delegates': {'required': False},
+        'chinese_speaking_delegates': {'required': False},
+        'countrypreferences': {'required': False},
+        'committeepreferences': {'required': False},
+        'registration_comments': {'required': False}
         }
 
 
