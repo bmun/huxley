@@ -3,6 +3,11 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
+/**
+ * Copyright (c) 2011-2015 Berkeley Model United Nations. All rights reserved.
+ * Use of this source code is governed by a BSD License (see LICENSE).
+ */
+
 'use strict';
 
 var React = require('react/addons');
@@ -11,14 +16,8 @@ var CountrySelect = React.createClass({
   propTypes: {
     onChange: React.PropTypes.func,
     countries: React.PropTypes.array,
-    selectedCountryID: React.PropTypes.number
-  },
-
-  shouldComponentUpdate: function(nextProps, nextState) {
-    return (
-      nextProps.selectedCountryID !== this.props.selectedCountryID ||
-      nextProps.countries.length !== this.props.countries.length
-    );
+    selectedCountryID: React.PropTypes.number,
+    countryPreferences: React.PropTypes.array
   },
 
   render: function() {
@@ -34,14 +33,22 @@ var CountrySelect = React.createClass({
 
   renderCommitteeOptions: function() {
     return this.props.countries.map(function(country) {
-      if (!country.special) {
+      var index = this.props.countryPreferences.indexOf(""+country.id)
+      if(index < 0){
         return (
           <option key={country.id} value={country.id}>
             {country.name}
           </option>
         );
+
+      }else{
+        return (
+          <option key={country.id} value={country.id} disabled>
+            {country.name}
+          </option>
+        );
       }
-    });
+    }.bind(this));
   }
 });
 
