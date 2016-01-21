@@ -409,6 +409,18 @@ var RegistrationView = React.createClass({
           onChange={this._handleCountryPrefChange.bind(this, fieldName)}
           countries={this.state.countries}
           selectedCountryID={this.state[fieldName]}
+          countryPreferences={[
+            this.state.country_pref1,
+            this.state.country_pref2,
+            this.state.country_pref3,
+            this.state.country_pref4,
+            this.state.country_pref5,
+            this.state.country_pref6,
+            this.state.country_pref7,
+            this.state.country_pref8,
+            this.state.country_pref9,
+            this.state.country_pref10
+          ]}
         />
       </li>
     );

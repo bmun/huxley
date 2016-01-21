@@ -11,10 +11,16 @@ var CountrySelect = React.createClass({
   propTypes: {
     onChange: React.PropTypes.func,
     countries: React.PropTypes.array,
-    selectedCountryID: React.PropTypes.number
+    selectedCountryID: React.PropTypes.number,
+    countryPreferences: React.PropTypes.array
   },
 
   shouldComponentUpdate: function(nextProps, nextState) {
+    for (var i = 0; i < this.props.countryPreferences.length; i++) {
+      if (this.props.countryPreferences[i] !== nextProps.countryPreferences[i]) { 
+        return true;
+      }
+    }
     return (
       nextProps.selectedCountryID !== this.props.selectedCountryID ||
       nextProps.countries.length !== this.props.countries.length
@@ -35,13 +41,14 @@ var CountrySelect = React.createClass({
   renderCommitteeOptions: function() {
     return this.props.countries.map(function(country) {
       if (!country.special) {
+        var index = this.props.countryPreferences.indexOf("" + country.id)
         return (
-          <option key={country.id} value={country.id}>
+          <option key={country.id} value={country.id} disabled={index >= 0}>
             {country.name}
           </option>
         );
       }
-    });
+    }.bind(this));
   }
 });
 
