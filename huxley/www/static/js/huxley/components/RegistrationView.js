@@ -507,10 +507,10 @@ var RegistrationView = React.createClass({
 
   renderSchoolError: function(field) {
     if (this.state.errors.school &&
-        this.state.errors.school[0][field]) {
+        this.state.errors.school[field]) {
       return (
         <label className="hint error">
-          {this.state.errors.school[0][field]}
+          {this.state.errors.school[field]}
         </label>
       );
     }
