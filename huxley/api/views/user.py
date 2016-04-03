@@ -56,7 +56,7 @@ class CurrentUser(generics.GenericAPIView):
             raise PermissionDenied('Another user is currently logged in.')
 
         try:
-            data = request.DATA
+            data = request.data
             user = User.authenticate(data['username'], data['password'])
         except AuthenticationError as e:
             raise AuthenticationFailed(str(e))
@@ -77,7 +77,7 @@ class UserPassword(generics.GenericAPIView):
     def post(self, request, *args, **kwargs):
         '''Reset a user's password and email it to them.'''
         try:
-            User.reset_password(request.DATA.get('username'))
+            User.reset_password(request.data.get('username'))
             return Response(status=status.HTTP_201_CREATED)
         except User.DoesNotExist:
             raise Http404
@@ -87,7 +87,7 @@ class UserPassword(generics.GenericAPIView):
         if not request.user.is_authenticated():
             raise PermissionDenied()
 
-        data = request.DATA
+        data = request.data
         password, new_password = data.get('password'), data.get('new_password')
 
         try:
