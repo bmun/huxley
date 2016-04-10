@@ -18,7 +18,8 @@ var CountrySelect = React.createClass({
   shouldComponentUpdate: function(nextProps, nextState) {
     var preferenceChange = false;
     for (var i = 0; i < this.props.countryPreferences.length; i++) {
-      if (this.props.countryPreferences[i] != nextProps.countryPreferences[i]) preferenceChange = true;
+      if (this.props.countryPreferences[i] != nextProps.countryPreferences[i]) 
+        preferenceChange = true;
     }
     return (
       nextProps.selectedCountryID !== this.props.selectedCountryID ||
