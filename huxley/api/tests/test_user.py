@@ -286,12 +286,14 @@ class UserListPostTestCase(CreateAPITestCase):
         TestUsers.new_user(username='_Kunal', password='pass')
         response = self.get_response(params=self.get_params(username='_Kunal'))
         self.assertEqual(response.data, {
-            'username': [u'User with this username already exists.']})
+            'username': [u'A user with that username already exists.']})
 
     def test_invalid_username(self):
         response = self.get_response(params=self.get_params(username='>Kunal'))
         self.assertEqual(response.data, {
-            'username': [u'Enter a valid username.']})
+            'username': [
+                u'Enter a valid username. This value may contain only letters, '
+                u'numbers and @/./+/-/_ characters.']})
 
     def test_empty_password(self):
         response = self.get_response(params=self.get_params(password=''))
@@ -349,14 +351,14 @@ class CurrentUserTestCase(TestCase):
                                     data=json.dumps(credentials),
                                     content_type='application/json')
         self.assertEqual(response.status_code, 201)
-        self.assertEqual(self.client.session['_auth_user_id'], user.id)
+        self.assertEqual(int(self.client.session['_auth_user_id']), user.id)
 
 
         credentials = {'username': 'bunny', 'password': 'bunny'}
         response = self.client.post(self.url,
                                     data=json.dumps(credentials),
                                     content_type='application/json')
-        self.assertEqual(self.client.session['_auth_user_id'], user.id)
+        self.assertEqual(int(self.client.session['_auth_user_id']), user.id)
 
         data = json.loads(response.content)
         self.assertEqual(data['detail'],
@@ -366,7 +368,7 @@ class CurrentUserTestCase(TestCase):
         user = TestUsers.new_user(username='lol', password='lol')
 
         self.client.login(username='lol', password='lol')
-        self.assertEqual(self.client.session['_auth_user_id'], user.id)
+        self.assertEqual(int(self.client.session['_auth_user_id']), user.id)
 
         response = self.client.delete(self.url)
         self.assertEqual(response.status_code, 204)

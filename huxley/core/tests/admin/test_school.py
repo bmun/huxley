@@ -84,8 +84,8 @@ class SchoolAdminTest(TestCase):
             school.spanish_speaking_delegates,
             school.chinese_speaking_delegates,
             school.registration_comments,
-            int(school.fees_owed),
-            int(school.fees_paid),
+            school.fees_owed,
+            school.fees_paid,
         ]
 
         fields_csv += ",".join(map(str, fields))

@@ -4,6 +4,8 @@
 import json
 import requests
 
+from decimal import Decimal
+
 from django.conf import settings
 from django.core.mail import send_mail
 from django.db import models, transaction
@@ -30,6 +32,7 @@ class Conference(models.Model):
     class Meta:
         db_table = u'conference'
         get_latest_by = 'start_date'
+
 
 class Country(models.Model):
     name    = models.CharField(max_length=128)
@@ -110,8 +113,8 @@ class School(models.Model):
 
     registration_comments = models.TextField(default='', blank=True)
 
-    fees_owed = models.DecimalField(max_digits=6, decimal_places=2, default=0)
-    fees_paid = models.DecimalField(max_digits=6, decimal_places=2, default=0)
+    fees_owed = models.DecimalField(max_digits=6, decimal_places=2, default=Decimal('0.00'))
+    fees_paid = models.DecimalField(max_digits=6, decimal_places=2, default=Decimal('0.00'))
 
     assignments_finalized = models.BooleanField(default=False)
 
@@ -150,7 +153,8 @@ class School(models.Model):
             school.intermediate_delegates,
             school.advanced_delegates,
         ))
-        school.fees_owed = cls.REGISTRATION_FEE + delegate_fees
+        total_fees = cls.REGISTRATION_FEE + delegate_fees
+        school.fees_owed = Decimal(total_fees) + Decimal('0.00')
 
     @classmethod
     def update_waitlist(cls, **kwargs):

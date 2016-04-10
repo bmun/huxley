@@ -64,16 +64,9 @@ class CreateUserSerializer(ModelSerializer):
         return user
 
     def validate_username(self, value):
-        username = value
-
-        if re.match("^[A-Za-z0-9\_\-]+$", username) is None:
-            raise ValidationError('Usernames may contain alphanumerics, '
-                                  'underscores, and/or hyphens only.')
-
-        if User.objects.filter(username=username).exists():
-            raise ValidationError('This username is already taken.')
-
-        if len(username) < 5:
+        # Django's User model already handles character and uniqueness
+        # validation, so we only worry about length.
+        if len(value) < 5:
             raise ValidationError('Username must be at least 5 characters.')
 
         return value

@@ -38,7 +38,7 @@ class EraseLogsTest(TestCase):
             message='This should not be deleted by the script',
             timestamp=datetime.now()-timedelta(days=4))
 
-        call_command('erase_logs', 7)
+        call_command('erase_logs', '7')
 
         logs = LogEntry.objects.all()
         self.assertEqual(logs.count(), 1)
