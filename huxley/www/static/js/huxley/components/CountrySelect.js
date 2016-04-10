@@ -41,7 +41,7 @@ var CountrySelect = React.createClass({
   renderCommitteeOptions: function() {
     return this.props.countries.map(function(country) {
       if (!country.special) {
-        var index = this.props.countryPreferences.indexOf(""+country.id)
+        var index = this.props.countryPreferences.indexOf("" + country.id)
         return (
           <option key={country.id} value={country.id} disabled={index >= 0}>
             {country.name}
