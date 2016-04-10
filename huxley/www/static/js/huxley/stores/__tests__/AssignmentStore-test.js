@@ -16,12 +16,17 @@ describe('AssignmentStore', function() {
   beforeEach(function() {
     $ = require('jquery');
     AssignmentStore = require('../AssignmentStore');
+    Dispatcher = require('../../dispatcher/Dispatcher');
 
     mockAssignments = [{id: 1, school: 1}, {id: 2, school: 1}];
 
     $.ajax.mockImplementation(function(options) {
       options.success(null, null, {responseJSON: mockAssignments});
     });
+  });
+
+  it('subscribes to the dispatcher', function() {
+    expect(Dispatcher.register).toBeCalled();
   });
 
   it('requests the assignments on first call and caches locally', function() {

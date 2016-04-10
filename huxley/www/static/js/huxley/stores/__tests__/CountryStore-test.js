@@ -16,11 +16,16 @@ describe('CountryStore', function() {
   beforeEach(function() {
     $ = require('jquery');
     CountryStore = require('../CountryStore');
+    Dispatcher = require('../../dispatcher/Dispatcher');
 
     mockCountries = [{id: 1, name: 'USA'}, {id: 2, name: 'China'}];
     $.ajax.mockImplementation(function(options) {
       options.success(null, null, {responseJSON: mockCountries});
     });
+  });
+
+  it('subscribes to the dispatcher', function() {
+    expect(Dispatcher.register).toBeCalled();
   });
 
   it('requests the countries on first call and caches locally', function() {

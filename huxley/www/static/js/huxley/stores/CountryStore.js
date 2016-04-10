@@ -7,12 +7,14 @@
 
 var $ = require('jquery');
 var Promise = require('es6-promise').Promise;
+var Dispatcher = require('../dispatcher/Dispatcher');
+var {Store} = require('flux/utils');
 
 
 var _countryPromise = null;
 
-var CountryStore = {
-  getCountries: function(callback) {
+class CountryStore extends Store {
+  getCountries(callback) {
     if (!_countryPromise) {
       _countryPromise = new Promise(function(resolve, reject) {
         $.ajax({
@@ -27,7 +29,12 @@ var CountryStore = {
     }
 
     _countryPromise.then(callback);
-  },
+  }
+
+  __onDispatch(action) {
+    // This method must be overwritten
+    return;
+  }
 };
 
-module.exports = CountryStore;
+module.exports = new CountryStore(Dispatcher);
