@@ -7,12 +7,14 @@
 
 var $ = require('jquery');
 var Promise = require('es6-promise').Promise;
+var Dispatcher = require('../dispatcher/Dispatcher');
+var {Store} = require('flux/utils');
 
 
 var _committeePromise = null;
 
-var CommitteeStore = {
-  getCommittees: function(callback) {
+class CommitteeStore extends Store {
+  getCommittees(callback) {
     if (!_committeePromise) {
       _committeePromise = new Promise(function(resolve, reject) {
         $.ajax({
@@ -27,15 +29,20 @@ var CommitteeStore = {
     }
 
     _committeePromise.then(callback);
-  },
+  }
 
-  getSpecialCommittees: function(callback) {
+  getSpecialCommittees(callback) {
     this.getCommittees(function(committees) {
       callback(committees.filter(function(committee) {
         return committee.special;
       }));
     });
   }
+
+  __onDispatch(action) {
+    // This method must be overwritten
+    return;
+  }
 };
 
-module.exports = CommitteeStore;
+module.exports = new CommitteeStore(Dispatcher);
