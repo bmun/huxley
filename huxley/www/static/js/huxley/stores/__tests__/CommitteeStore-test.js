@@ -18,6 +18,7 @@ describe('CommitteeStore', function() {
   beforeEach(function() {
     $ = require('jquery');
     CommitteeStore = require('../CommitteeStore');
+    Dispatcher = require('../../dispatcher/Dispatcher');
 
     disc = {id: 1, name: 'DISC', special: false};
     icj = {id: 2, name: 'ICJ', special: true};
@@ -26,6 +27,10 @@ describe('CommitteeStore', function() {
     $.ajax.mockImplementation(function(options) {
       options.success(null, null, {responseJSON: mockCommittees});
     });
+  });
+
+  it('subscribes to the dispatcher', function() {
+    expect(Dispatcher.register).toBeCalled();
   });
 
   it('requests the committees on first call and caches locally', function() {
