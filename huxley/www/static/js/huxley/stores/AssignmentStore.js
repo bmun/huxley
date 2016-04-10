@@ -7,12 +7,14 @@
 
 var $ = require('jquery');
 var Promise = require('es6-promise').Promise;
+var Dispatcher = require('../dispatcher/Dispatcher');
+var {Store} = require('flux/utils');
 
 
 var _assignmentPromise = null;
 
-var AssignmentStore = {
-  getAssignments: function(schoolID, callback) {
+class AssignmentStore extends Store {
+  getAssignments(schoolID, callback) {
     if (!_assignmentPromise) {
       _assignmentPromise = new Promise(function(resolve, reject) {
         $.ajax({
@@ -27,7 +29,12 @@ var AssignmentStore = {
     }
 
     _assignmentPromise.then(callback);
-  },
+  }
+
+  __onDispatch(action) {
+    // This method must be overwritten
+    return;
+  }
 };
 
-module.exports = AssignmentStore;
+module.exports = new AssignmentStore(Dispatcher);
