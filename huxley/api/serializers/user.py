@@ -5,6 +5,8 @@ import re
 
 from rest_framework.serializers import ModelSerializer, ValidationError, CharField
 
+from datetime import datetime
+
 from huxley.accounts.models import User, School
 from huxley.api import validators
 from huxley.api.serializers.school import SchoolSerializer
@@ -50,9 +52,9 @@ class CreateUserSerializer(ModelSerializer):
                 school.committeepreferences.add(pref)
             school.save()
 
-            user = User.objects.create(school=school, **validated_data)
+            user = User.objects.create(school=school, last_login=datetime.now(), **validated_data)
         else:
-            user = User.objects.create(**validated_data)
+            user = User.objects.create(last_login=datetime.now(), **validated_data)
 
         if 'password' in original_validated_data:
             user.set_password(original_validated_data['password'])
