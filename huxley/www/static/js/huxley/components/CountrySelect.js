@@ -16,15 +16,14 @@ var CountrySelect = React.createClass({
   },
 
   shouldComponentUpdate: function(nextProps, nextState) {
-    var preferenceChange = false;
     for (var i = 0; i < this.props.countryPreferences.length; i++) {
-      if (this.props.countryPreferences[i] != nextProps.countryPreferences[i]) 
-        preferenceChange = true;
+      if (this.props.countryPreferences[i] != nextProps.countryPreferences[i]) { 
+        return true;
+      }
     }
     return (
       nextProps.selectedCountryID !== this.props.selectedCountryID ||
-      nextProps.countries.length !== this.props.countries.length ||
-      preferenceChange
+      nextProps.countries.length !== this.props.countries.length
     );
   },
 
