@@ -17,7 +17,7 @@ var CountrySelect = React.createClass({
 
   shouldComponentUpdate: function(nextProps, nextState) {
     for (var i = 0; i < this.props.countryPreferences.length; i++) {
-      if (this.props.countryPreferences[i] != nextProps.countryPreferences[i]) { 
+      if (this.props.countryPreferences[i] !== nextProps.countryPreferences[i]) { 
         return true;
       }
     }
