@@ -53,6 +53,9 @@ class AbstractAPITestCase(APITestCase):
     def assertOK(self, response):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
+    def assert204(self, response):
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
     def assertPermissionDenied(self, response):
         self.assertEqual(response.data, {
             'detail': u'You do not have permission to perform this action.'})

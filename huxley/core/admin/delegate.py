@@ -40,7 +40,7 @@ class DelegateAdmin(admin.ModelAdmin):
             assignments[
                 assignment.committee.name.encode('ascii', 'ignore'),
                 assignment.country.name.encode('ascii', 'ignore'),
-                assignment.school.name, 
+                assignment.school.name,
             ] = assignment
         for row in reader:
             if row[1] == 'Committee':
@@ -48,7 +48,7 @@ class DelegateAdmin(admin.ModelAdmin):
             assignment = assignments[
                             unicode(row[1], errors='ignore'),
                             unicode(row[2], errors='ignore'),
-                            row[3], 
+                            row[3],
                           ]
             d = Delegate.objects.create(name=row[0], assignment=assignment)
 

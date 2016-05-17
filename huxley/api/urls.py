@@ -35,5 +35,9 @@ urlpatterns += patterns('',
     url(r'^assignments/(?P<pk>[0-9]+)/?$', views.assignment.AssignmentDetail.as_view(), name='assignment_detail'),
 )
 
+urlpatterns += patterns('',
+    url(r'^delegates/?$', views.delegate.DelegateList.as_view(), name='delegate_list'),
+    url(r'^delegates/(?P<pk>[0-9]+)/?$', views.delegate.DelegateDetail.as_view(), name='delegate_detail'),
+)
 
 urlpatterns = format_suffix_patterns(urlpatterns)
