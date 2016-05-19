@@ -8,7 +8,7 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 from huxley.accounts.exceptions import AuthenticationError, PasswordChangeFailed
-from huxley.core.models import Committee, School
+from huxley.core.models import Assignment, Committee, School
 
 
 class User(AbstractUser):
@@ -21,8 +21,9 @@ class User(AbstractUser):
                          (TYPE_DELEGATE, 'Delegate'))
 
     user_type = models.PositiveSmallIntegerField(choices=USER_TYPE_CHOICES, default=TYPE_ADVISOR)
-    school = models.OneToOneField(School, related_name='advisor', null=True, blank=True)  # Advisors and Delegate.
-    committee = models.ForeignKey(Committee, related_name='chair', null=True, blank=True) # Chairs and Delegate.
+    school = models.OneToOneField(School, related_name='advisor', null=True, blank=True)  # Advisors only
+    committee = models.ForeignKey(Committee, related_name='chair', null=True, blank=True) # Chairs only
+    assignment = models.ForeignKey(Assignment, related_name='delegate', null=True, blank=True) # Delegate only (Note you can access school and committee through assignment)
 
     def is_advisor(self):
         return self.user_type == self.TYPE_ADVISOR

@@ -3,7 +3,7 @@
 
 from rest_framework import permissions
 
-from huxley.core.models import Assignment
+from huxley.core.models import Assignment, Delegate
 
 
 class IsSuperuserOrReadOnly(permissions.BasePermission):
@@ -62,3 +62,17 @@ class IsSchoolAssignmentAdvisorOrSuperuser(permissions.BasePermission):
 
         return (user.is_authenticated() and user.is_advisor() and
                 user.school.id == assignment.school.id)
+
+class IsSchoolDelegateAdvisorOrSuperuser(permissions.BasePermission):
+    '''Accept only the advisor of the given school with a given assignment.'''
+
+    def has_permission(self, request, view):
+        if request.user.is_superuser:
+            return True
+
+        delegate_id = view.kwargs.get('pk', None)
+        delegate = delegate.objects.get(id=delegate_id)
+        user = request.user
+
+        return (user.is_authenticated() and user.is_advisor() and
+                user.school.id == delegate.school.id)

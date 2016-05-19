@@ -24,7 +24,7 @@ class UserSerializer(ModelSerializer):
 
 
 class CreateUserSerializer(ModelSerializer):
-    school = SchoolSerializer(required=False) # TODO: CreateSchoolSerializer
+    school = SchoolSerializer(required=False)
 
     class Meta:
         model = User
