@@ -71,7 +71,7 @@ class IsSchoolDelegateAdvisorOrSuperuser(permissions.BasePermission):
             return True
 
         delegate_id = view.kwargs.get('pk', None)
-        delegate = delegate.objects.get(id=delegate_id)
+        delegate = Delegate.objects.get(id=delegate_id)
         user = request.user
 
         return (user.is_authenticated() and user.is_advisor() and

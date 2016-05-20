@@ -102,7 +102,7 @@ class CommitteeDetailDeleteTestCase(DestroyAPITestCase):
         self.assertMethodNotAllowed(response, 'DELETE')
 
     def test_super_user(self):
-        '''Countries should not be able to be deleted'''
+        '''Committees should not be able to be deleted'''
         TestUsers.new_superuser(username='user', password='user')
         self.client.login(username='user', password='user')
 

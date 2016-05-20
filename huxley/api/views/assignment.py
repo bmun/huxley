@@ -17,7 +17,7 @@ class AssignmentList(generics.CreateAPIView):
     serializer_class = AssignmentSerializer
 
 
-class AssignmentDetail(generics.RetrieveUpdateDestroyAPIView):
+class AssignmentDetail(generics.RetrieveUpdateAPIView):
     authentication_classes = (SessionAuthentication,)
     queryset = Assignment.objects.all()
     permission_classes = (IsSchoolAssignmentAdvisorOrSuperuser,)

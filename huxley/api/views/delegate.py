@@ -5,7 +5,7 @@ from rest_framework import generics, status
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.response import Response
 
-from huxley.api.permissions import IsSchoolDelegateAdvisorOrSuperuser, IsSuperuserOrReadOnly
+from huxley.api.permissions import IsSchoolDelegateAdvisorOrSuperuser, IsPostOrSuperuserOnly
 from huxley.api.serializers import DelegateSerializer
 from huxley.core.models import Delegate
 
@@ -13,7 +13,7 @@ from huxley.core.models import Delegate
 class DelegateList(generics.CreateAPIView):
     authentication_classes = (SessionAuthentication,)
     queryset = Delegate.objects.all()
-    permission_classes = (IsSuperuserOrReadOnly,)
+    permission_classes = (IsPostOrSuperuserOnly,)
     serializer_class = DelegateSerializer
 
 

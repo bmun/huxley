@@ -7,7 +7,7 @@ import StringIO
 
 from huxley.accounts.models import User
 from huxley.core.constants import ContactGender, ContactType, ProgramTypes
-from huxley.core.models import School, Committee, Country
+from huxley.core.models import School, Committee, Country, Delegate, Assignment
 
 
 class TestUsers():
@@ -96,11 +96,38 @@ class TestCommittees():
 class TestCountries():
     @staticmethod
     def new_country(**kwargs):
-        c = Country(name=kwargs.pop('name', 'TestCountry'),
-                    special=kwargs.pop('special', False))
+        c = Country(
+                name=kwargs.pop('name', 'TestCountry'),
+                special=kwargs.pop('special', False))
         c.save()
         return c
 
+class TestDelegates():
+    @staticmethod
+    def new_delegate(**kwargs):
+        a = TestAssignments.new_assignment()
+        c = Delegate(
+                assignment=kwargs.pop('assignment', a),
+                name=kwargs.pop('name', 'Nate Parke'),
+                email=kwargs.pop('email', 'nate@earthlink.gov'),
+                summary=kwargs.pop('summary', 'He did well!'),)
+        c.save()
+        return c
+
+class TestAssignments():
+    @staticmethod
+    def new_assignment(**kwargs):
+        test_committee = TestCommittees.new_committee()
+        test_school = TestSchools.new_school()
+        test_country = TestCountries.new_country()
+
+        a = Assignment(
+                committee=kwargs.pop('committee', test_committee),
+                school=kwargs.pop('school', test_school),
+                country=kwargs.pop('country', test_country),
+                rejected=kwargs.pop('rejected', False))
+        a.save()
+        return a
 
 class TestFiles():
     @staticmethod
