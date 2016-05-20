@@ -113,7 +113,7 @@ class SchoolAdmin(admin.ModelAdmin):
                 ])
 
         for school in School.objects.all().order_by('name'):
-            countryprefs = [c for c in school.countrypreferences.all()]
+            countryprefs = [c for c in school.countrypreferences.all().order_by('countrypreference')]
             countryprefs += [''] * (10 - len(countryprefs))
 
             writer.writerow([unicode(field).encode('utf8') for field in [

@@ -127,7 +127,7 @@ class SchoolAdminTest(TestCase):
 
         fields_csv = ",".join(map(str, header)) + "\r\n"
 
-        countryprefs = [c for c in school.countrypreferences.all()]
+        countryprefs = [c for c in school.countrypreferences.all().order_by('countrypreference')]
         countryprefs += [''] * (10 - len(countryprefs))
 
         fields = [
