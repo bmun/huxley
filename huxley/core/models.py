@@ -167,7 +167,7 @@ class School(models.Model):
     @property
     def country_preference_ids(self):
         '''Return an ordered list of the school's preferred countries.'''
-        return [country.id for country in self.countrypreferences.all()]
+        return [country.id for country in self.countrypreferences.all().order_by('countrypreference')]
 
     @country_preference_ids.setter
     def country_preference_ids(self, country_ids):
