@@ -45,8 +45,6 @@ class SchoolAssignments(generics.ListAPIView):
 
         return Assignment.objects.filter(school_id=school_id)
 
-<<<<<<< 5d3a71fa59dc25788b33464de26c80d1c46a7b39
-=======
 class SchoolAssignmentsFinalize(generics.GenericAPIView):
     authentication_classes = (SessionAuthentication,)
     permission_classes = (IsSchoolAdvisorOrSuperuser,)
@@ -66,7 +64,7 @@ class SchoolAssignmentsFinalize(generics.GenericAPIView):
 class SchoolInvoice(generics.CreateAPIView):
     authentication_classes = (SessionAuthentication,)
     permission_classes = (IsSchoolAdvisorOrSuperuser,)
->>>>>>> adds in api work for finalized assignments
+
 
 class SchoolInvoice(PDFTemplateView):
 

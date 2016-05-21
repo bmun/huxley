@@ -150,11 +150,7 @@ class School(models.Model):
     @classmethod
     def update_fees(cls, **kwargs):
         school = kwargs['instance']
-        delegate_fees = cls.DELEGATE_FEE * sum((
-            school.beginner_delegates,
-            school.intermediate_delegates,
-            school.advanced_delegates,
-        ))
+        delegate_fees = cls.DELEGATE_FEE * (len(Assignment.objects.filter(school_id=school.id, is_double=False))+2*len(Assignment.objects.filter(school_id=school.id, is_double=True)))
         total_fees = cls.REGISTRATION_FEE + delegate_fees
         school.fees_owed = Decimal(total_fees) + Decimal('0.00')
 
@@ -237,6 +233,7 @@ class Assignment(models.Model):
     country   = models.ForeignKey(Country)
     school    = models.ForeignKey(School, null=True, blank=True, default=None)
     rejected  = models.BooleanField(default=False)
+    is_double = models.BooleanField(default=True)
 
     @classmethod
     def update_assignments(cls, new_assignments):
@@ -253,30 +250,31 @@ class Assignment(models.Model):
         additions = []
         deletions = []
 
-        def add(committee, country, school, rejected):
+        def add(committee, country, school, rejected, is_double):
             additions.append(cls(
                 committee_id=committee,
                 country_id=country,
                 school_id=school,
                 rejected=rejected,
+                is_double=is_double
             ))
 
         def remove(assignment_data):
             deletions.append(assignment_data['id'])
 
-        for committee, country, school, rejected in new_assignments:
+        for committee, country, school, rejected, is_double in new_assignments:
             key = (committee, country)
             old_assignment = assignment_dict.get(key)
 
             if not old_assignment:
-                add(committee, country, school, rejected)
+                add(committee, country, school, rejected, is_double)
                 continue
 
             if old_assignment['school_id'] != school:
                 # Remove the old assignment instead of just updating it
                 # so that its delegates are deleted by cascade.
                 remove(old_assignment)
-                add(committee, country, school, rejected)
+                add(committee, country, school, rejected, is_double)
 
             del assignment_dict[key]
 
