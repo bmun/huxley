@@ -4,7 +4,8 @@
 from huxley.api.tests import (CreateAPITestCase, DestroyAPITestCase,
                               ListAPITestCase, PartialUpdateAPITestCase,
                               RetrieveAPITestCase, UpdateAPITestCase)
-from huxley.utils.test import TestUsers, TestSchools, TestAssignments, TestCommittees
+from huxley.utils.test import (TestUsers, TestSchools, TestAssignments,
+                               TestCommittees, TestCountries)
 
 
 class AssignmentDetailGetTestCase(RetrieveAPITestCase):
@@ -154,4 +155,42 @@ class AssignmentDetailDeleteTestCase(DestroyAPITestCase):
         response = self.get_response(self.assignment.id)
         self.assertMethodNotAllowed(response, 'DELETE')
 
-#TODO: AssignmentListTestCases
+
+class AssignmentListCreateTestCase(CreateAPITestCase):
+    url_name = 'api:assignment_list'
+    params = {'rejected':True}
+
+    def setUp(self):
+        self.user = TestUsers.new_user(username='user', password='user')
+        self.school = TestSchools.new_school(user=self.user)
+        self.committee = TestCommittees.new_committee()
+        self.country = TestCountries.new_country()
+        self.params['committee'] = self.committee.id
+        self.params['school'] = self.school.id
+        self.params['country'] = self.country.id
+
+    def test_anonymous_user(self):
+        '''Anonymous Users should not be able to create assignments.'''
+        response = self.get_response(params=self.params)
+        self.assertNotAuthenticated(response)
+
+    def test_advisor(self):
+        '''Advisors should not be able to create Assignments.'''
+        self.client.login(username='user', password='user')
+        response = self.get_response(params=self.params)
+        self.assertPermissionDenied(response)
+
+    def test_superuser(self):
+        '''Superusers should be able to create assignments.'''
+        TestUsers.new_superuser(username='s_user', password='s_user')
+        self.client.login(username='s_user', password='s_user')
+
+        response = self.get_response(params=self.params)
+        response.data.pop('id')
+        self.assertEqual(response.data, {
+            "committee" : self.committee.id,
+            "country" : self.country.id,
+            "school" : self.school.id,
+            "rejected" : True,
+        })
+

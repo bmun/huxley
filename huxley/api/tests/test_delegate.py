@@ -172,4 +172,54 @@ class DelegateDetailDeleteTestCase(DestroyAPITestCase):
         response = self.get_response(self.assignment.id)
         self.assert204(response)
 
-#TODO: delegate list API tests
+class DelegateListCreateTestCase(CreateAPITestCase):
+    url_name = 'api:delegate_list'
+    params = {
+        'name':'Trevor Dowds',
+        'email':'tdowds@hotmail.org',
+        'summary':'He did awful!'}
+
+    def setUp(self):
+        self.user = TestUsers.new_user(username='user', password='user')
+        self.school = TestSchools.new_school(user=self.user)
+        self.assignment = TestAssignments.new_assignment(school=self.school)
+        self.params['assignment'] = self.assignment.id
+
+    def test_anonymous_user(self):
+        '''Should accept post request from any user.'''
+        response = self.get_response(params=self.params)
+        response.data.pop('created_at')
+        response.data.pop('id')
+        self.assertEqual(response.data, {
+            "assignment" : self.assignment.id,
+            "name" : unicode(self.params['name']),
+            "email" : unicode(self.params['email']),
+            "summary" : unicode(self.params['summary'])}
+        )
+
+    def test_advisor(self):
+        '''Should allow advisors to create new delegates.'''
+        self.client.login(username='user', password='user')
+        response = self.get_response(params=self.params)
+        response.data.pop('created_at')
+        response.data.pop('id')
+        self.assertEqual(response.data, {
+            "assignment" : self.assignment.id,
+            "name" : unicode(self.params['name']),
+            "email" : unicode(self.params['email']),
+            "summary" : unicode(self.params['summary'])}
+        )
+
+    def test_superuser(self):
+        '''Should allow superuser to create delegate.'''
+        superuser = TestUsers.new_superuser(username='s_user', password='s_user')
+        self.client.login(username='s_user', password='s_user')
+        response = self.get_response(params=self.params)
+        response.data.pop('created_at')
+        response.data.pop('id')
+        self.assertEqual(response.data, {
+            "assignment" : self.assignment.id,
+            "name" : unicode(self.params['name']),
+            "email" : unicode(self.params['email']),
+            "summary" : unicode(self.params['summary'])}
+        )
