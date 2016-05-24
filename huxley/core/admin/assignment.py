@@ -59,7 +59,8 @@ class AssignmentAdmin(admin.ModelAdmin):
                     rejected = False # allow for the rejected field to be null
                 else:
                     rejected = (row[3].lower() == 'true') # use the provided value if admin provides it
-                yield (committee.id, country.id, school.id, rejected)
+                is_double = True
+                yield (committee.id, country.id, school.id, rejected, is_double)
 
         Assignment.update_assignments(generate_assigments(reader))
         return HttpResponseRedirect(reverse('admin:core_assignment_changelist'))

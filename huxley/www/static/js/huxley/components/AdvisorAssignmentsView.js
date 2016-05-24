@@ -82,10 +82,14 @@ var AdvisorAssignmentsView = React.createClass({
                 <th>Committee</th>
                 <th>Country</th>
                 <th>Delegation Size</th>
+<<<<<<< Updated upstream
                 <th>{finalized ?
                   "" :
                   "Delete Assignments"}
                 </th>
+=======
+                <th>Assigned Delegate</th>
+>>>>>>> Stashed changes
               </tr>
               {this.renderAssignmentRows()}
             </table>
@@ -115,6 +119,7 @@ var AdvisorAssignmentsView = React.createClass({
           <td>{committees[assignment.committee].name}</td>
           <td>{countries[assignment.country].name}</td>
           <td>{committees[assignment.committee].delegation_size}</td>
+<<<<<<< Updated upstream
           <td>{finalized ?
             <div/> :
             <Button color="red"
@@ -123,6 +128,9 @@ var AdvisorAssignmentsView = React.createClass({
                     Delete Assignment
             </Button>}
           </td>
+=======
+          <td> <input className="text" type="text" placeholder="Assigned Delegate"/></td>
+>>>>>>> Stashed changes
         </tr>
       )
     }.bind(this));

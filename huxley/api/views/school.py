@@ -45,6 +45,26 @@ class SchoolAssignments(generics.ListAPIView):
 
         return Assignment.objects.filter(school_id=school_id)
 
+class SchoolAssignmentsFinalize(generics.GenericAPIView):
+    authentication_classes = (SessionAuthentication,)
+    permission_classes = (IsSchoolAdvisorOrSuperuser,)
+
+    def post(self, request, *args, **kwargs):
+        school_id = self.kwargs.get('pk', None)
+        school = School.objects.get(id=school_id)
+        school.assignments_finalized = True
+        school.save()
+        data = json.load(request)
+        for identity in data:
+            assignment = Assignment.objects.get(pk=int(identity))
+            assignment.delete()
+
+        return Response(status=status.HTTP_200_OK)
+
+class SchoolInvoice(generics.CreateAPIView):
+    authentication_classes = (SessionAuthentication,)
+    permission_classes = (IsSchoolAdvisorOrSuperuser,)
+
 
 class SchoolInvoice(PDFTemplateView):
 
