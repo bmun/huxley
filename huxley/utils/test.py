@@ -106,7 +106,7 @@ class TestDelegates():
     @staticmethod
     def new_delegate(**kwargs):
         if 'assignment' in kwargs.keys():
-            a = Assignment.objects.get(id=kwargs.pop('assignment'))
+            a = kwargs.pop('assignment')
         else:
             a = TestAssignments.new_assignment()
 
@@ -122,17 +122,17 @@ class TestAssignments():
     @staticmethod
     def new_assignment(**kwargs):
         if 'committee' in kwargs.keys():
-            test_committee = Committee.objects.get(id=kwargs.pop('committee'))
+            test_committee = kwargs.pop('committee')
         else:
             test_committee = TestCommittees.new_committee()
 
         if 'school' in kwargs.keys():
-            test_school = School.objects.get(id=kwargs.pop('school'))
+            test_school = kwargs.pop('school')
         else:
             test_school = TestSchools.new_school()
 
         if 'country' in kwargs.keys():
-            test_country = Country.objects.get(id=kwargs.pop('country'))
+            test_country = kwargs.pop('country')
         else:
             test_country = TestCountries.new_country()
 
