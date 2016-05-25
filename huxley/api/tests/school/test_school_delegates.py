@@ -18,20 +18,20 @@ class SchoolDelegateGetTestCase(ListAPITestCase):
         self.committee1 = TestCommittees.new_committee()
         self.committee2 = TestCommittees.new_committee()
         self.assignment1 = TestAssignments.new_assignment(
-            committee=self.committee1.id,
-            country=self.country.id,
-            school=self.school.id,
+            committee=self.committee1,
+            country=self.country,
+            school=self.school,
         )
         self.assignment2 = TestAssignments.new_assignment(
-            committee=self.committee2.id,
-            country=self.country.id,
-            school=self.school.id,
+            committee=self.committee2,
+            country=self.country,
+            school=self.school,
         )
         self.delegate1 = TestDelegates.new_delegate(
-            assignment=self.assignment1.id,
+            assignment=self.assignment1,
         )
         self.delegate2 = TestDelegates.new_delegate(
-            assignment=self.assignment2.id,
+            assignment=self.assignment2,
             name='Trevor Dowds',
             email='t@dowds.com',
             summary='Good!'
