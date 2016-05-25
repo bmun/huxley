@@ -68,11 +68,8 @@ var AdvisorRosterView = React.createClass({
       <InnerView>
         <h2>Roster</h2>
         <p>
-          Here you can view your tentative assignments for BMUN {this.context.session}. If you
-          would like to request more slots, please email <a href="mailto:info@bmun.org">
-          info@bmun.org</a>. In the coming months
-          we will ask that you finalize your assignment roster and input your
-          delegates' names.
+          Here you can add your school's delegates to your roster.
+          Any comments that chairs have about your delegate will appear here.
         </p>
         <form>
           <div className="tablemenu header" />
@@ -80,6 +77,8 @@ var AdvisorRosterView = React.createClass({
             <table className="table highlight-cells">
               <tr>
                 <th>Delegate</th>
+                <th>Email</th>
+                <th>Summary</th>
               </tr>
               {this.renderRosterRows()}
             </table>
@@ -97,6 +96,8 @@ var AdvisorRosterView = React.createClass({
       return (
         <tr>
           <td>{delegate.name}</td>
+          <td>{delegate.email}</td>
+          <td>{delegate.summary}</td>
         </tr>
       )
     }.bind(this));
