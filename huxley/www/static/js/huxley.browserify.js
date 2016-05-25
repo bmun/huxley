@@ -15,6 +15,7 @@ var Huxley = require('./huxley/components/Huxley');
 
 var AdvisorAssignmentsView = require('./huxley/components/AdvisorAssignmentsView');
 var AdvisorProfileView = require('./huxley/components/AdvisorProfileView');
+var AdvisorRosterView = require('./huxley/components/AdvisorRosterView')
 var ForgotPasswordView = require('./huxley/components/ForgotPasswordView');
 var LoginView = require('./huxley/components/LoginView');
 var NotFoundView = require('./huxley/components/NotFoundView');
@@ -40,6 +41,7 @@ var routes = (
     <Route path="/register/waitlist" handler={RegistrationWaitlistView} />
     <Route path="/advisor/profile" handler={AdvisorProfileView} />
     <Route path="/advisor/assignments" handler={AdvisorAssignmentsView} />
+    <Route path="/advisor/roster" handler={AdvisorRosterView} />
     <DefaultRoute handler={RedirectView} />
     <NotFoundRoute handler={NotFoundView} />
   </Route>

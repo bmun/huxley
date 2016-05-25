@@ -105,7 +105,11 @@ class TestCountries():
 class TestDelegates():
     @staticmethod
     def new_delegate(**kwargs):
-        a = TestAssignments.new_assignment()
+        if 'assignment' in kwargs.keys():
+            a = Assignment.objects.get(id=kwargs.pop('assignment'))
+        else:
+            a = TestAssignments.new_assignment()
+
         c = Delegate(
                 assignment=kwargs.pop('assignment', a),
                 name=kwargs.pop('name', 'Nate Parke'),
@@ -117,9 +121,20 @@ class TestDelegates():
 class TestAssignments():
     @staticmethod
     def new_assignment(**kwargs):
-        test_committee = TestCommittees.new_committee()
-        test_school = TestSchools.new_school()
-        test_country = TestCountries.new_country()
+        if 'committee' in kwargs.keys():
+            test_committee = Committee.objects.get(id=kwargs.pop('committee'))
+        else:
+            test_committee = TestCommittees.new_committee()
+
+        if 'school' in kwargs.keys():
+            test_school = School.objects.get(id=kwargs.pop('school'))
+        else:
+            test_school = TestSchools.new_school()
+
+        if 'country' in kwargs.keys():
+            test_country = Country.objects.get(id=kwargs.pop('country'))
+        else:
+            test_country = TestCountries.new_country()
 
         a = Assignment(
                 committee=kwargs.pop('committee', test_committee),
