@@ -31,7 +31,7 @@ var AdvisorRosterView = React.createClass({
       delegates: [],
       committees: {},
       countries: {},
-      loading: false
+      loading: false,
     };
   },
 
@@ -84,6 +84,9 @@ var AdvisorRosterView = React.createClass({
             </table>
           </div>
         </form>
+        <div>
+          <Button>Add Delegate</Button>
+        </div>
       </InnerView>
     );
   },
@@ -98,10 +101,14 @@ var AdvisorRosterView = React.createClass({
           <td>{delegate.name}</td>
           <td>{delegate.email}</td>
           <td>{delegate.summary}</td>
+          <td>
+            <Button>Delete</Button>
+          </td>
         </tr>
       )
     }.bind(this));
   },
+
 });
 
 module.exports = AdvisorRosterView;

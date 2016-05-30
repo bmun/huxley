@@ -37,6 +37,9 @@ var AdvisorView = React.createClass ({
           <NavTab href="/advisor/assignments">
             Assignments
           </NavTab>
+          <NavTab href="/advisor/roster">
+            Roster
+          </NavTab>
         </div>
         {this.props.children}
       </div>
