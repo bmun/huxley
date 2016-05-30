@@ -113,7 +113,6 @@ class School(models.Model):
 
     registration_comments = models.TextField(default='', blank=True)
 
-    total_fees = models.DecimalField(max_digits=6, decimal_places=2, default=Decimal('0.00'))
     fees_owed = models.DecimalField(max_digits=6, decimal_places=2, default=Decimal('0.00'))
     fees_paid = models.DecimalField(max_digits=6, decimal_places=2, default=Decimal('0.00'))
 
@@ -154,12 +153,12 @@ class School(models.Model):
             school.intermediate_delegates,
             school.advanced_delegates,
         ))
-        school.total_fees = cls.REGISTRATION_FEE + delegate_fees
-        school.fees_owed = Decimal(school.total_fees) + Decimal('0.00') - school.fees_paid
+        total_fees = cls.REGISTRATION_FEE + delegate_fees
+        school.fees_owed = Decimal(total_fees) + Decimal('0.00') - school.fees_paid
 
     @classmethod
     def update_waitlist(cls, **kwargs):
-        '''If the school is about to be created (i.e. has no ID) and
+        '''If the school is about to be created (i.e. has no ID) and 
         registration is closed, add it to the waitlist.'''
         school = kwargs['instance']
         if not school.id and settings.CONFERENCE_WAITLIST_OPEN:
