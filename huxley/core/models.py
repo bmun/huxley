@@ -115,6 +115,7 @@ class School(models.Model):
 
     fees_owed = models.DecimalField(max_digits=6, decimal_places=2, default=Decimal('0.00'))
     fees_paid = models.DecimalField(max_digits=6, decimal_places=2, default=Decimal('0.00'))
+    balance   = models.DecimalField(max_digits=6, decimal_places=2, default=Decimal('0.00'))
 
     assignments_finalized = models.BooleanField(default=False)
 
@@ -154,7 +155,8 @@ class School(models.Model):
             school.advanced_delegates,
         ))
         total_fees = cls.REGISTRATION_FEE + delegate_fees
-        school.fees_owed = Decimal(total_fees) + Decimal('0.00') - school.fees_paid
+        school.fees_owed = Decimal(total_fees) + Decimal('0.00')
+        school.balance = school.fees_owed - school.fees_paid
 
     @classmethod
     def update_waitlist(cls, **kwargs):
