@@ -14,7 +14,7 @@
     {% block js %}
         <script type="text/javascript">
             currentUser = {{ user_json|safe }};
-            conferenceSession = {{ conference_session|safe }};
+            conference = {{ conference_json|safe }}
             GenderConstants = {{ gender_constants|safe }};
             ContactTypes = {{ contact_types|safe }};
             ProgramTypes = {{ program_types|safe }};

@@ -21,9 +21,17 @@ def index(request):
     if request.user.is_authenticated():
         user_dict = UserSerializer(request.user).data
 
+    session = Conference.objects.all().aggregate(Max('session'))['session__max']
+    conference = Conference.objects.get(session=session)
+    conference_dict = {
+        'session': session,
+        'start_date': conference.start_date.strftime('%m/%d/%Y'),
+        'end_date': conference.end_date.strftime('%m/%d/%Y')
+    }
+
     context = {
         'user_json': json.dumps(user_dict).replace('</', '<\\/'),
-        'conference_session': Conference.objects.all().aggregate(Max('session'))['session__max'],
+        'conference_json': json.dumps(conference_dict),
         'gender_constants': ContactGender.to_json(),
         'contact_types': ContactType.to_json(),
         'program_types': ProgramTypes.to_json(),

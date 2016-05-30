@@ -25,6 +25,11 @@ var LoginView = React.createClass({
     Router.Navigation,
   ],
 
+  contextTypes: {
+    startDate: React.PropTypes.string,
+    endDate: React.PropTypes.string
+  },
+
   getInitialState: function() {
     return {
       error: null,
@@ -94,6 +99,12 @@ var LoginView = React.createClass({
         <hr />
         <h1>Welcome to Huxley</h1>
         <span className="help-text">for Berkeley Model United Nations</span>
+        <br />
+        <span className="help-text">a High School Conference</span>
+        <br />
+        <span className="help-text">
+          {this.context.startDate} - {this.context.endDate}
+        </span>
       </div>
     );
   },

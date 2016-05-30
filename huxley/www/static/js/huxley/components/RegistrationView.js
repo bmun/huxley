@@ -109,7 +109,7 @@ var RegistrationView = React.createClass({
             <h1>Register for Berkeley Model United Nations</h1>
             <p>Please fill out the following information to register your school
             for BMUN {this.context.session}. All fields are required except for Secondary Contact
-            information.</p>
+            information. Please note that BMUN is a high school level conference.</p>
             <NavLink direction="left" href="/login">
               Back to Login
             </NavLink>
