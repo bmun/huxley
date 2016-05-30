@@ -14,6 +14,7 @@ var Router = require('react-router');
 var Button = require('./Button');
 var CommitteeStore = require('../stores/CommitteeStore');
 var ContactTypes = require('../constants/ContactTypes');
+var ConferenceContext = require('./ConferenceContext');
 var CountrySelect = require('./CountrySelect');
 var CountryStore = require('../stores/CountryStore');
 var GenderConstants = require('../constants/GenderConstants');
@@ -34,7 +35,7 @@ var RegistrationView = React.createClass({
   ],
 
   contextTypes: {
-    session: React.PropTypes.number
+    conference: React.PropTypes.shape(ConferenceContext)
   },
 
   getInitialState: function() {
@@ -99,6 +100,7 @@ var RegistrationView = React.createClass({
 
   render: function() {
     var cx = React.addons.classSet;
+    var conference = this.context.conference;
     return (
       <OuterView>
         <form
@@ -108,8 +110,8 @@ var RegistrationView = React.createClass({
           <div>
             <h1>Register for Berkeley Model United Nations</h1>
             <p>Please fill out the following information to register your school
-            for BMUN {this.context.session}. All fields are required except for Secondary Contact
-            information.</p>
+            for BMUN {conference.session}. All fields are required except for Secondary Contact
+            information. Please note that BMUN is a high school level conference.</p>
             <NavLink direction="left" href="/login">
               Back to Login
             </NavLink>

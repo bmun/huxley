@@ -2,3 +2,5 @@
 # Use of this source code is governed by a BSD License (see LICENSE).
 
 CONFERENCE_WAITLIST_OPEN = False
+
+SESSION = 65

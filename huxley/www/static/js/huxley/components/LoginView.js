@@ -12,6 +12,7 @@ var React = require('react/addons');
 var Router = require('react-router');
 
 var Button = require('./Button');
+var ConferenceContext = require('./ConferenceContext');
 var CurrentUserActions = require('../actions/CurrentUserActions');
 var NavLink = require('./NavLink');
 var OuterView = require('./OuterView');
@@ -24,6 +25,10 @@ var LoginView = React.createClass({
     React.addons.LinkedStateMixin,
     Router.Navigation,
   ],
+
+  contextTypes: {
+    conference: React.PropTypes.shape(ConferenceContext)
+  },
 
   getInitialState: function() {
     return {
@@ -89,11 +94,19 @@ var LoginView = React.createClass({
   },
 
   renderHeader: function() {
+    var conference = this.context.conference;
     return (
       <div className="logo">
         <hr />
         <h1>Welcome to Huxley</h1>
         <span className="help-text">for Berkeley Model United Nations</span>
+        <br />
+        <span className="help-text">a High School Conference</span>
+        <br />
+        <span className="help-text">
+          {conference.start_date['month']} {conference.start_date['day']} -&nbsp;
+          {conference.end_date['day']}, {conference.start_date['year']}
+        </span>
       </div>
     );
   },

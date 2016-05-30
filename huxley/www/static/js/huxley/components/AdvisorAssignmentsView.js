@@ -14,6 +14,7 @@ var Router = require('react-router');
 var AssignmentStore = require('../stores/AssignmentStore');
 var Button = require('./Button');
 var CommitteeStore = require('../stores/CommitteeStore');
+var ConferenceContext = require('./ConferenceContext');
 var CountryStore = require('../stores/CountryStore');
 var CurrentUserStore = require('../stores/CurrentUserStore');
 var CurrentUserActions = require('../actions/CurrentUserActions');
@@ -25,7 +26,7 @@ var AdvisorAssignmentsView = React.createClass({
   ],
 
   contextTypes: {
-    session: React.PropTypes.number
+    conference: React.PropTypes.shape(ConferenceContext)
   },
 
   getInitialState: function() {
@@ -64,11 +65,12 @@ var AdvisorAssignmentsView = React.createClass({
 
   render: function() {
     var finalized = CurrentUserStore.getFinalized();
+    var conference = this.context.conference;
     return (
       <InnerView>
         <h2>Roster</h2>
         <p>
-          Here you can view your tentative assignments for BMUN {this.context.session}. If you
+          Here you can view your tentative assignments for BMUN {conference.session}. If you
           would like to request more slots, please email <a href="mailto:info@bmun.org">
           info@bmun.org</a>. In the coming months
           we will ask that you finalize your assignment roster and input your

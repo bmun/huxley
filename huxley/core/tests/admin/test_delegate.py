@@ -13,6 +13,8 @@ from huxley.utils.test import TestCommittees, TestCountries, TestFiles, TestScho
 
 class DelegateAdminTest(TestCase):
 
+    fixtures = ['conference']
+
     def test_import(self):
         '''Test that the admin panel can import delegates. '''
         TestUsers.new_superuser(username='testuser', password='test')

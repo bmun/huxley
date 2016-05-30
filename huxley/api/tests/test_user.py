@@ -334,6 +334,8 @@ class UserListPostTestCase(CreateAPITestCase):
 
 
 class CurrentUserTestCase(TestCase):
+    fixtures = ['conference']
+
     def setUp(self):
         self.client = Client()
         self.url = reverse('api:current_user')
