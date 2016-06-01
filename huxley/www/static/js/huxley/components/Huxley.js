@@ -21,7 +21,9 @@ var Huxley = React.createClass({
     session: React.PropTypes.number,
     startDate: React.PropTypes.object,
     endDate: React.PropTypes.object,
-    external: React.PropTypes.string
+    external: React.PropTypes.string,
+    registrationFee: React.PropTypes.number,
+    delegateFee: React.PropTypes.number
   },
 
   getChildContext: function() {
@@ -30,7 +32,9 @@ var Huxley = React.createClass({
       session: conference['session'],
       startDate: conference['start_date'],
       endDate: conference['end_date'],
-      external: conference['external']
+      external: conference['external'],
+      registrationFee: conference['registration_fee'],
+      delegateFee: conference['delegate_fee']
     }
   },
 

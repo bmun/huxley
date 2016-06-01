@@ -36,7 +36,9 @@ def index(request):
             'day': conference.end_date.strftime('%d'),
             'year': conference.end_date.strftime('%Y')
         },
-        'external': conference.external
+        'external': conference.external,
+        'registration_fee': int(conference.registration_fee),
+        'delegate_fee': int(conference.delegate_fee)
     }
 
     context = {

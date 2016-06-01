@@ -14,7 +14,9 @@ var RegistrationSuccessView = React.createClass({
 
   contextTypes: {
     session: React.PropTypes.number,
-    external: React.PropTypes.string
+    external: React.PropTypes.string,
+    registrationFee: React.PropTypes.number,
+    delegateFee: React.PropTypes.number
   },
 
   render: function() {
@@ -29,11 +31,11 @@ var RegistrationSuccessView = React.createClass({
           </p>
           <h3>School Registration Fee</h3>
           <ul>
-            <li>$50</li>
+            <li>${this.context.registrationFee}</li>
           </ul>
           <h3>Delegate Registration Fee</h3>
           <ul>
-            <li>$50</li>
+            <li>${this.context.delegateFee}</li>
           </ul>
           <h3>Payment Instructions</h3>
           <p>

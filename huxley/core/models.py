@@ -15,17 +15,19 @@ from huxley.core.constants import ContactGender, ContactType, ProgramTypes
 
 
 class Conference(models.Model):
-    session         = models.PositiveSmallIntegerField(default=0)
-    start_date      = models.DateField()
-    end_date        = models.DateField()
-    reg_open        = models.DateField()
-    early_reg_close = models.DateField()
-    reg_close       = models.DateField()
-    min_attendance  = models.PositiveSmallIntegerField(default=0)
-    max_attendance  = models.PositiveSmallIntegerField(default=0)
-    open_reg        = models.BooleanField(default=True)
-    waitlist_reg    = models.BooleanField(default=False)
-    external        = models.CharField(max_length=128)
+    session          = models.PositiveSmallIntegerField(default=0)
+    start_date       = models.DateField()
+    end_date         = models.DateField()
+    reg_open         = models.DateField()
+    early_reg_close  = models.DateField()
+    reg_close        = models.DateField()
+    min_attendance   = models.PositiveSmallIntegerField(default=0)
+    max_attendance   = models.PositiveSmallIntegerField(default=0)
+    open_reg         = models.BooleanField(default=True)
+    waitlist_reg     = models.BooleanField(default=False)
+    external         = models.CharField(max_length=128)
+    registration_fee = models.DecimalField(max_digits=6, decimal_places=2, default=Decimal('50.00'))
+    delegate_fee     = models.DecimalField(max_digits=6, decimal_places=2, default=Decimal('50.00'))
 
     def __unicode__(self):
         return 'BMUN %d' % self.session
