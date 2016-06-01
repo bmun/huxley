@@ -23,10 +23,20 @@ def index(request):
 
     session = Conference.objects.all().aggregate(Max('session'))['session__max']
     conference = Conference.objects.get(session=session)
+
     conference_dict = {
         'session': session,
-        'start_date': conference.start_date.strftime('%m/%d/%Y'),
-        'end_date': conference.end_date.strftime('%m/%d/%Y')
+        'start_date': {
+            'month': conference.start_date.strftime('%B'),
+            'day': conference.start_date.strftime('%d'),
+            'year': conference.start_date.strftime('%Y')
+        },
+        'end_date': {
+            'month': conference.end_date.strftime('%B'),
+            'day': conference.end_date.strftime('%d'),
+            'year': conference.end_date.strftime('%Y')
+        },
+        'external': conference.external
     }
 
     context = {

@@ -19,17 +19,18 @@ var Huxley = React.createClass({
 
   childContextTypes: {
     session: React.PropTypes.number,
-    startDate: React.PropTypes.string,
-    endDate: React.PropTypes.string
+    startDate: React.PropTypes.object,
+    endDate: React.PropTypes.object,
+    external: React.PropTypes.string
   },
 
   getChildContext: function() {
     var conference = global.conference;
-    delete global.conference;
     return {
       session: conference['session'],
       startDate: conference['start_date'],
-      endDate: conference['end_date']
+      endDate: conference['end_date'],
+      external: conference['external']
     }
   },
 

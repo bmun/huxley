@@ -21,7 +21,8 @@ var AdvisorProfileView = React.createClass({
   },
 
   contextTypes: {
-    session: React.PropTypes.number
+    session: React.PropTypes.number,
+    external: React.PropTypes.string
   },
 
   render: function() {
@@ -51,7 +52,7 @@ var AdvisorProfileView = React.createClass({
         info@bmun.org</a> and I will respond to all requests efficiently.
         See you soon!</strong></p>
         <br />
-        <p><strong>Rita Hu
+        <p><strong>{this.context.external}
         <br />
         Under-Secretary General of External Relations, {this.context.session}th Session.</strong></p>
         <form id="welcomepage">

@@ -13,7 +13,8 @@ var OuterView = require('./OuterView');
 var RegistrationSuccessView = React.createClass({
 
   contextTypes: {
-    session: React.PropTypes.number
+    session: React.PropTypes.number,
+    external: React.PropTypes.string
   },
 
   render: function() {
@@ -60,7 +61,7 @@ var RegistrationSuccessView = React.createClass({
           </p>
           <p>Sincerely,</p>
           <p class="sender">
-            <strong>Rita Hu</strong>
+            <strong>{this.context.external}</strong>
             <br />
             <span class="subtext">
               Under-Secretary General of External Relations

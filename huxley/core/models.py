@@ -25,6 +25,7 @@ class Conference(models.Model):
     max_attendance  = models.PositiveSmallIntegerField(default=0)
     open_reg        = models.BooleanField(default=True)
     waitlist_reg    = models.BooleanField(default=False)
+    external        = models.CharField(max_length=128)
 
     def __unicode__(self):
         return 'BMUN %d' % self.session
@@ -160,7 +161,7 @@ class School(models.Model):
 
     @classmethod
     def update_waitlist(cls, **kwargs):
-        '''If the school is about to be created (i.e. has no ID) and 
+        '''If the school is about to be created (i.e. has no ID) and
         registration is closed, add it to the waitlist.'''
         school = kwargs['instance']
         if not school.id and settings.CONFERENCE_WAITLIST_OPEN:
