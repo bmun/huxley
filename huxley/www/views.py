@@ -21,11 +21,10 @@ def index(request):
     if request.user.is_authenticated():
         user_dict = UserSerializer(request.user).data
 
-    session = Conference.objects.all().aggregate(Max('session'))['session__max']
-    conference = Conference.objects.get(session=session)
+    conference = Conference.get_conference()
 
     conference_dict = {
-        'session': session,
+        'session': conference.session,
         'start_date': {
             'month': conference.start_date.strftime('%B'),
             'day': conference.start_date.strftime('%d'),

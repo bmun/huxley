@@ -29,6 +29,10 @@ class Conference(models.Model):
     registration_fee = models.DecimalField(max_digits=6, decimal_places=2, default=Decimal('50.00'))
     delegate_fee     = models.DecimalField(max_digits=6, decimal_places=2, default=Decimal('50.00'))
 
+    @classmethod
+    def get_conference(cls):
+        return Conference.objects.get(session=settings.SESSION)
+
     def __unicode__(self):
         return 'BMUN %d' % self.session
 
@@ -63,8 +67,8 @@ class Committee(models.Model):
 
 
 class School(models.Model):
-    REGISTRATION_FEE = 50.0
-    DELEGATE_FEE = 50.0
+    REGISTRATION_FEE = Conference.get_conference().registration_fee
+    DELEGATE_FEE = Conference.get_conference().delegate_fee
 
     PROGRAM_TYPE_OPTIONS = (
         (ProgramTypes.CLUB, 'Club'),
@@ -201,25 +205,25 @@ class School(models.Model):
         if kwargs['created']:
             school = kwargs['instance']
             if school.waitlist:
-                send_mail('BMUN 64 Waitlist Confirmation',
-                          'You have officially been put on the waitlist for BMUN 64. '
+                send_mail('BMUN %d Waitlist Confirmation' % settings.SESSION,
+                          'You have officially been put on the waitlist for BMUN %d. '
                           'We will inform you if and when you are taken off the waitlist.\n\n'
                           'If you have any tech related questions, please email tech@bmun.org. '
                           'For all other questions, please email info@bmun.org.\n\n'
-                          'Thank you for using Huxley!',
+                          'Thank you for using Huxley!' % settings.SESSION,
                           'no-reply@bmun.org',
                           [school.primary_email], fail_silently=True)
             else:
-                send_mail('BMUN 64 Registration Confirmation',
-                          'You have officially been registered for BMUN 64. '
+                send_mail('BMUN %d Registration Confirmation' % settings.SESSION,
+                          'You have officially been registered for BMUN %d. '
                           'To access your account, please log in at huxley.bmun.org.\n\n'
-                          'The school registration fee is $50. The delegate registration '
-                          'fee is $50 per student. You will be able to view your balance '
+                          'The school registration fee is $%d. The delegate registration '
+                          'fee is $%d per student. You will be able to view your balance '
                           'on huxley.bmun.org in November, at which point we will begin '
                           'accepting payments.\n\n'
                           'If you have any tech related questions, please email tech@bmun.org. '
                           'For all other questions, please email info@bmun.org.\n\n'
-                          'Thank you for using Huxley!',
+                          'Thank you for using Huxley!' % (settings.SESSION, int(cls.REGISTRATION_FEE), int(cls.DELEGATE_FEE)),
                           'no-reply@bmun.org',
                           [school.primary_email], fail_silently=True)
 
