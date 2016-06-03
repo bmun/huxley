@@ -15,7 +15,7 @@ from huxley.core.constants import ContactGender, ContactType, ProgramTypes
 
 
 class Conference(models.Model):
-    session          = models.PositiveSmallIntegerField(default=0)
+    session          = models.PositiveSmallIntegerField(default=0, primary_key=True)
     start_date       = models.DateField()
     end_date         = models.DateField()
     reg_open         = models.DateField()
