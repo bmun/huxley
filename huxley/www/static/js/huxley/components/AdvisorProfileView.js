@@ -21,11 +21,11 @@ var AdvisorProfileView = React.createClass({
   },
 
   contextTypes: {
-    session: React.PropTypes.number,
-    external: React.PropTypes.string
+    conference: React.PropTypes.object
   },
 
   render: function() {
+    var conference = this.context.conference;
     var user = this.props.user;
     var school = User.getSchool(user);
     var invoiceUrl = '/api/schools/' + school.id + '/invoice/';
@@ -33,7 +33,7 @@ var AdvisorProfileView = React.createClass({
       <InnerView>
         <h2>Welcome, {user.first_name}!</h2>
         <p>
-          We are very excited to see {school.name} at BMUN {this.context.session} this year! Here,
+          We are very excited to see {school.name} at BMUN {conference.session} this year! Here,
           you can view your registration information for the conference. Please
           note that fees are currently <strong>estimates</strong> based on the
           approximate delegation size given during registration.
@@ -52,9 +52,9 @@ var AdvisorProfileView = React.createClass({
         info@bmun.org</a> and I will respond to all requests efficiently.
         See you soon!</strong></p>
         <br />
-        <p><strong>{this.context.external}
+        <p><strong>{conference.external}
         <br />
-        Under-Secretary General of External Relations, {this.context.session}th Session.</strong></p>
+        Under-Secretary General of External Relations, {conference.session}th Session.</strong></p>
         <form id="welcomepage">
           <div className="tablemenu header">
           </div>

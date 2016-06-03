@@ -1,0 +1,21 @@
+[
+  {
+    "pk": 1,
+    "model": "core.conference",
+    "fields": {
+      "session": 65,
+      "start_date": "2017-03-05",
+      "end_date": "2017-03-07",
+      "reg_open": "2017-01-01",
+      "early_reg_close": "2017-02-02",
+      "reg_close": "2017-03-03",
+      "min_attendance": 0,
+      "max_attendance": 1500,
+      "open_reg": true,
+      "waitlist_reg": false,
+      "external": "Rita Hu",
+      "registration_fee": 50.0,
+      "delegate_fee": 50.0
+    }
+  }
+]

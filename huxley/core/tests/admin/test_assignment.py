@@ -13,6 +13,8 @@ from huxley.utils.test import TestCommittees, TestCountries, TestFiles, TestScho
 
 class AssignmentAdminTest(TestCase):
 
+    fixtures = ['conference']
+
     def test_import(self):
         '''Test that the admin panel can import Assignments.'''
         TestUsers.new_superuser(username='testuser', password='test')

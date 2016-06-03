@@ -13,29 +13,27 @@ var OuterView = require('./OuterView');
 var RegistrationSuccessView = React.createClass({
 
   contextTypes: {
-    session: React.PropTypes.number,
-    external: React.PropTypes.string,
-    registrationFee: React.PropTypes.number,
-    delegateFee: React.PropTypes.number
+    conference: React.PropTypes.object
   },
 
   render: function() {
+    var conference = this.context.conference;
     return (
       <OuterView>
         <div class="letter">
           <h1>Thank You</h1>
           <p>
-            Thank you for registering for BMUN {this.context.session}! Country assignments will be
+            Thank you for registering for BMUN {conference.session}! Country assignments will be
             made available soon in your Huxley account. A summary of fees is
             listed below:
           </p>
           <h3>School Registration Fee</h3>
           <ul>
-            <li>${this.context.registrationFee}</li>
+            <li>${conference.registration_fee}</li>
           </ul>
           <h3>Delegate Registration Fee</h3>
           <ul>
-            <li>${this.context.delegateFee}</li>
+            <li>${conference.delegate_fee}</li>
           </ul>
           <h3>Payment Instructions</h3>
           <p>
@@ -63,12 +61,12 @@ var RegistrationSuccessView = React.createClass({
           </p>
           <p>Sincerely,</p>
           <p class="sender">
-            <strong>{this.context.external}</strong>
+            <strong>{conference.external}</strong>
             <br />
             <span class="subtext">
               Under-Secretary General of External Relations
               <br />
-              Berkeley Model United Nations, {this.context.session}th Session
+              Berkeley Model United Nations, {conference.session}th Session
             </span>
           </p>
         </div>

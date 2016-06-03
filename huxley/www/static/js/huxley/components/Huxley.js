@@ -18,23 +18,13 @@ var Huxley = React.createClass({
   mixins: [Router.Navigation],
 
   childContextTypes: {
-    session: React.PropTypes.number,
-    startDate: React.PropTypes.object,
-    endDate: React.PropTypes.object,
-    external: React.PropTypes.string,
-    registrationFee: React.PropTypes.number,
-    delegateFee: React.PropTypes.number
+    conference: React.PropTypes.object
   },
 
   getChildContext: function() {
     var conference = global.conference;
     return {
-      session: conference['session'],
-      startDate: conference['start_date'],
-      endDate: conference['end_date'],
-      external: conference['external'],
-      registrationFee: conference['registration_fee'],
-      delegateFee: conference['delegate_fee']
+      conference: conference
     }
   },
 

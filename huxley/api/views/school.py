@@ -14,7 +14,7 @@ from rest_framework.authentication import SessionAuthentication
 from rest_framework.response import Response
 from huxley.api.permissions import IsAdvisorOrSuperuser, IsSchoolAdvisorOrSuperuser
 from huxley.api.serializers import AssignmentSerializer, SchoolSerializer
-from huxley.core.models import Assignment, School
+from huxley.core.models import Assignment, Conference, School
 
 class SchoolList(generics.CreateAPIView):
     authentication_classes = (SessionAuthentication,)
@@ -58,7 +58,8 @@ class SchoolInvoice(PDFTemplateView):
             school.intermediate_delegates,
             school.advanced_delegates,
         ))
-        delegate_fees = delegate_total*School.DELEGATE_FEE
+        delegate_fee = Conference.get_conference().delegate_fee
+        delegate_fees = delegate_total*delegate_fee
         fees_owed = school.fees_owed
         fees_paid = school.fees_paid
         amount_due = fees_owed - fees_paid
@@ -68,9 +69,9 @@ class SchoolInvoice(PDFTemplateView):
             "date_registered": school.registered.strftime("%m/%d/%y"),
             "due_date": due_date.strftime("%m/%d/%y"),
             "delegate_total": delegate_total,
-            "delegate_fee": School.DELEGATE_FEE,
+            "delegate_fee": delegate_fee,
             "delegate_fees": delegate_fees,
-            "registration_fee": School.REGISTRATION_FEE,
+            "registration_fee": Conference.get_conference().registration_fee,
             "fees_owed": fees_owed,
             "fees_paid": fees_paid,
             "amount_due": amount_due})

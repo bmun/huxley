@@ -18,6 +18,7 @@ class AbstractAPITestCase(APITestCase):
     They can optionally specify a params class member to define default
     params and then use get_params() to override certain properties.'''
 
+    fixtures = ['conference']
     url_name = None
     params = {}
     method = None

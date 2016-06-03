@@ -67,9 +67,6 @@ class Committee(models.Model):
 
 
 class School(models.Model):
-    REGISTRATION_FEE = Conference.get_conference().registration_fee
-    DELEGATE_FEE = Conference.get_conference().delegate_fee
-
     PROGRAM_TYPE_OPTIONS = (
         (ProgramTypes.CLUB, 'Club'),
         (ProgramTypes.CLASS, 'Class'),
@@ -156,12 +153,14 @@ class School(models.Model):
     @classmethod
     def update_fees(cls, **kwargs):
         school = kwargs['instance']
-        delegate_fees = cls.DELEGATE_FEE * sum((
+        delegate_fee = Conference.get_conference().delegate_fee
+        delegate_fees = delegate_fee * sum((
             school.beginner_delegates,
             school.intermediate_delegates,
             school.advanced_delegates,
         ))
-        total_fees = cls.REGISTRATION_FEE + delegate_fees
+        registration_fee = Conference.get_conference().registration_fee
+        total_fees = registration_fee + delegate_fees
         school.fees_owed = Decimal(total_fees) + Decimal('0.00')
         school.balance = school.fees_owed - school.fees_paid
 
@@ -214,6 +213,8 @@ class School(models.Model):
                           'no-reply@bmun.org',
                           [school.primary_email], fail_silently=True)
             else:
+                registration_fee = Conference.get_conference().registration_fee
+                delegate_fee = Conference.get_conference().delegate_fee
                 send_mail('BMUN %d Registration Confirmation' % settings.SESSION,
                           'You have officially been registered for BMUN %d. '
                           'To access your account, please log in at huxley.bmun.org.\n\n'
@@ -223,7 +224,7 @@ class School(models.Model):
                           'accepting payments.\n\n'
                           'If you have any tech related questions, please email tech@bmun.org. '
                           'For all other questions, please email info@bmun.org.\n\n'
-                          'Thank you for using Huxley!' % (settings.SESSION, int(cls.REGISTRATION_FEE), int(cls.DELEGATE_FEE)),
+                          'Thank you for using Huxley!' % (settings.SESSION, int(registration_fee), int(delegate_fee)),
                           'no-reply@bmun.org',
                           [school.primary_email], fail_silently=True)
 

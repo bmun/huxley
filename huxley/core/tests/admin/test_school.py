@@ -9,6 +9,8 @@ from huxley.utils.test import TestSchools, TestUsers
 
 class SchoolAdminTest(TestCase):
 
+    fixtures = ['conference']
+
     def test_info_export(self):
         '''Test that the admin panel can properly export a list of schools.'''
         TestUsers.new_user(username='testuser1', password='test1')

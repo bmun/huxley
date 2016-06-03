@@ -69,6 +69,8 @@ class CommitteeTest(TestCase):
 
 class SchoolTest(TestCase):
 
+    fixtures = ['conference']
+
     def test_update_country_preferences(self):
         '''It should filter and replace the school's country preferences.'''
         s1 = TestSchools.new_school()
@@ -99,9 +101,11 @@ class SchoolTest(TestCase):
             advanced_delegates=a,
         )
 
+        registration_fee = Conference.get_conference().registration_fee
+        delegate_fee = Conference.get_conference().delegate_fee
+
         self.assertEquals(
-            school.fees_owed,
-            school.REGISTRATION_FEE + school.DELEGATE_FEE * (b + i + a),
+            school.fees_owed, registration_fee + delegate_fee * (b + i + a),
         )
 
         b2, i2, a2 = 5, 10, 15
@@ -111,8 +115,7 @@ class SchoolTest(TestCase):
         school.save()
 
         self.assertEquals(
-            school.fees_owed,
-            school.REGISTRATION_FEE + school.DELEGATE_FEE * (b2 + i2 + a2),
+            school.fees_owed, registration_fee + delegate_fee * (b2 + i2 + a2),
         )
 
     def test_update_waitlist(self):
@@ -131,6 +134,8 @@ class SchoolTest(TestCase):
 
 
 class AssignmentTest(TestCase):
+
+    fixtures = ['conference']
 
     def test_uniqueness(self):
         '''Country and committee fields must be unique.'''

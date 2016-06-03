@@ -26,8 +26,7 @@ var LoginView = React.createClass({
   ],
 
   contextTypes: {
-    startDate: React.PropTypes.object,
-    endDate: React.PropTypes.object
+    conference: React.PropTypes.object
   },
 
   getInitialState: function() {
@@ -94,6 +93,7 @@ var LoginView = React.createClass({
   },
 
   renderHeader: function() {
+    var conference = this.context.conference;
     return (
       <div className="logo">
         <hr />
@@ -103,8 +103,8 @@ var LoginView = React.createClass({
         <span className="help-text">a High School Conference</span>
         <br />
         <span className="help-text">
-          {this.context.startDate['month']} {this.context.startDate['day']} -&nbsp;
-          {this.context.endDate['day']}, {this.context.startDate['year']}
+          {conference.start_date['month']} {conference.start_date['day']} -&nbsp;
+          {conference.end_date['day']}, {conference.start_date['year']}
         </span>
       </div>
     );
