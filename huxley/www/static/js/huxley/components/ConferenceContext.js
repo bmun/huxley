@@ -22,6 +22,6 @@ var ConferenceContext = {
     external: React.PropTypes.string,
     registration_fee: React.PropTypes.number,
     delegate_fee: React.PropTypes.number
-}
+};
 
 module.exports = ConferenceContext;
