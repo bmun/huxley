@@ -26,7 +26,7 @@ var Huxley = React.createClass({
     var conference = global.conference;
     return {
       conference: conference
-    }
+    };
   },
 
   componentWillMount: function() {
