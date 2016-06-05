@@ -9,6 +9,7 @@ var React = require('react/addons');
 var Router = require('react-router');
 
 var AdvisorView = require('../components/AdvisorView');
+var ConferenceContext = require('../components/ConferenceContext');
 var CurrentUserStore = require('../stores/CurrentUserStore');
 var User = require('../utils/User');
 
@@ -18,7 +19,7 @@ var Huxley = React.createClass({
   mixins: [Router.Navigation],
 
   childContextTypes: {
-    conference: React.PropTypes.object
+    conference: React.PropTypes.shape(ConferenceContext)
   },
 
   getChildContext: function() {

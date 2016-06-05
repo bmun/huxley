@@ -51,6 +51,7 @@ class SchoolInvoice(PDFTemplateView):
     def get(self, request, *args, **kwargs):
         template_name = "invoice.html"
 
+        conference = Conference.get_current()
         school = School.objects.get(pk=kwargs['pk'])
         due_date = school.registered + datetime.timedelta(days=21)
         delegate_total = sum((
@@ -58,7 +59,7 @@ class SchoolInvoice(PDFTemplateView):
             school.intermediate_delegates,
             school.advanced_delegates,
         ))
-        delegate_fee = Conference.get_conference().delegate_fee
+        delegate_fee = conference.delegate_fee
         delegate_fees = delegate_total*delegate_fee
         fees_owed = school.fees_owed
         fees_paid = school.fees_paid
@@ -71,7 +72,7 @@ class SchoolInvoice(PDFTemplateView):
             "delegate_total": delegate_total,
             "delegate_fee": delegate_fee,
             "delegate_fees": delegate_fees,
-            "registration_fee": Conference.get_conference().registration_fee,
+            "registration_fee": conference.registration_fee,
             "fees_owed": fees_owed,
             "fees_paid": fees_paid,
             "amount_due": amount_due})

@@ -21,7 +21,7 @@ def index(request):
     if request.user.is_authenticated():
         user_dict = UserSerializer(request.user).data
 
-    conference = Conference.get_conference()
+    conference = Conference.get_current()
 
     conference_dict = {
         'session': conference.session,

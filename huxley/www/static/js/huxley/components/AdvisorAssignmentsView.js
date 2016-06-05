@@ -14,6 +14,7 @@ var Router = require('react-router');
 var AssignmentStore = require('../stores/AssignmentStore');
 var Button = require('./Button');
 var CommitteeStore = require('../stores/CommitteeStore');
+var ConferenceContext = require('./ConferenceContext');
 var CountryStore = require('../stores/CountryStore');
 var CurrentUserStore = require('../stores/CurrentUserStore');
 var CurrentUserActions = require('../actions/CurrentUserActions');
@@ -25,7 +26,7 @@ var AdvisorAssignmentsView = React.createClass({
   ],
 
   contextTypes: {
-    conference: React.PropTypes.object
+    conference: React.PropTypes.shape(ConferenceContext)
   },
 
   getInitialState: function() {

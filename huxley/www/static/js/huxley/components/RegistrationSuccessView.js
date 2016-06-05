@@ -7,13 +7,14 @@
 
 var React = require('react');
 
+var ConferenceContext = require('./ConferenceContext');
 var NavLink = require('./NavLink');
 var OuterView = require('./OuterView');
 
 var RegistrationSuccessView = React.createClass({
 
   contextTypes: {
-    conference: React.PropTypes.object
+    conference: React.PropTypes.shape(ConferenceContext)
   },
 
   render: function() {

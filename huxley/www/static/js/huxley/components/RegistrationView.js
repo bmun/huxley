@@ -14,6 +14,7 @@ var Router = require('react-router');
 var Button = require('./Button');
 var CommitteeStore = require('../stores/CommitteeStore');
 var ContactTypes = require('../constants/ContactTypes');
+var ConferenceContext = require('./ConferenceContext');
 var CountrySelect = require('./CountrySelect');
 var CountryStore = require('../stores/CountryStore');
 var GenderConstants = require('../constants/GenderConstants');
@@ -34,7 +35,7 @@ var RegistrationView = React.createClass({
   ],
 
   contextTypes: {
-    conference: React.PropTypes.object
+    conference: React.PropTypes.shape(ConferenceContext)
   },
 
   getInitialState: function() {

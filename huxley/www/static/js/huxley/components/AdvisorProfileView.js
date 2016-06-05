@@ -10,6 +10,7 @@ var React = require('react/addons');
 var Button = require('./Button');
 var InnerView = require('./InnerView');
 var LogoutButton = require('./LogoutButton');
+var ConferenceContext = require('./ConferenceContext');
 var ProgramTypes = require('../constants/ProgramTypes');
 var User = require('../utils/User');
 
@@ -21,7 +22,7 @@ var AdvisorProfileView = React.createClass({
   },
 
   contextTypes: {
-    conference: React.PropTypes.object
+    conference: React.PropTypes.shape(ConferenceContext)
   },
 
   render: function() {

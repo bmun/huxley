@@ -101,8 +101,9 @@ class SchoolTest(TestCase):
             advanced_delegates=a,
         )
 
-        registration_fee = Conference.get_conference().registration_fee
-        delegate_fee = Conference.get_conference().delegate_fee
+        conference = Conference.get_current()
+        registration_fee = conference.registration_fee
+        delegate_fee = conference.delegate_fee
 
         self.assertEquals(
             school.fees_owed, registration_fee + delegate_fee * (b + i + a),

@@ -30,7 +30,7 @@ class Conference(models.Model):
     delegate_fee     = models.DecimalField(max_digits=6, decimal_places=2, default=Decimal('50.00'))
 
     @classmethod
-    def get_conference(cls):
+    def get_current(cls):
         return Conference.objects.get(session=settings.SESSION)
 
     def __unicode__(self):
@@ -153,13 +153,13 @@ class School(models.Model):
     @classmethod
     def update_fees(cls, **kwargs):
         school = kwargs['instance']
-        delegate_fee = Conference.get_conference().delegate_fee
+        delegate_fee = Conference.get_current().delegate_fee
         delegate_fees = delegate_fee * sum((
             school.beginner_delegates,
             school.intermediate_delegates,
             school.advanced_delegates,
         ))
-        registration_fee = Conference.get_conference().registration_fee
+        registration_fee = Conference.get_current().registration_fee
         total_fees = registration_fee + delegate_fees
         school.fees_owed = Decimal(total_fees) + Decimal('0.00')
         school.balance = school.fees_owed - school.fees_paid
@@ -201,21 +201,22 @@ class School(models.Model):
 
     @classmethod
     def email_confirmation(cls, **kwargs):
+        conference = Conference.get_current()
         if kwargs['created']:
             school = kwargs['instance']
             if school.waitlist:
-                send_mail('BMUN %d Waitlist Confirmation' % settings.SESSION,
+                send_mail('BMUN %d Waitlist Confirmation' % conference.session,
                           'You have officially been put on the waitlist for BMUN %d. '
                           'We will inform you if and when you are taken off the waitlist.\n\n'
                           'If you have any tech related questions, please email tech@bmun.org. '
                           'For all other questions, please email info@bmun.org.\n\n'
-                          'Thank you for using Huxley!' % settings.SESSION,
+                          'Thank you for using Huxley!' % conference.session,
                           'no-reply@bmun.org',
                           [school.primary_email], fail_silently=True)
             else:
-                registration_fee = Conference.get_conference().registration_fee
-                delegate_fee = Conference.get_conference().delegate_fee
-                send_mail('BMUN %d Registration Confirmation' % settings.SESSION,
+                registration_fee = conference.registration_fee
+                delegate_fee = conference.delegate_fee
+                send_mail('BMUN %d Registration Confirmation' % conference.session,
                           'You have officially been registered for BMUN %d. '
                           'To access your account, please log in at huxley.bmun.org.\n\n'
                           'The school registration fee is $%d. The delegate registration '
@@ -224,7 +225,7 @@ class School(models.Model):
                           'accepting payments.\n\n'
                           'If you have any tech related questions, please email tech@bmun.org. '
                           'For all other questions, please email info@bmun.org.\n\n'
-                          'Thank you for using Huxley!' % (settings.SESSION, int(registration_fee), int(delegate_fee)),
+                          'Thank you for using Huxley!' % (conference.session, int(registration_fee), int(delegate_fee)),
                           'no-reply@bmun.org',
                           [school.primary_email], fail_silently=True)
 

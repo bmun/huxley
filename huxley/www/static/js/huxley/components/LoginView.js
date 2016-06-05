@@ -12,6 +12,7 @@ var React = require('react/addons');
 var Router = require('react-router');
 
 var Button = require('./Button');
+var ConferenceContext = require('./ConferenceContext');
 var CurrentUserActions = require('../actions/CurrentUserActions');
 var NavLink = require('./NavLink');
 var OuterView = require('./OuterView');
@@ -26,7 +27,7 @@ var LoginView = React.createClass({
   ],
 
   contextTypes: {
-    conference: React.PropTypes.object
+    conference: React.PropTypes.shape(ConferenceContext)
   },
 
   getInitialState: function() {
