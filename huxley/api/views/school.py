@@ -45,6 +45,19 @@ class SchoolAssignments(generics.ListAPIView):
 
         return Assignment.objects.filter(school_id=school_id)
 
+class SchoolDelegates(generics.ListAPIView):
+    authentication_classes = (SessionAuthentication,)
+    serializer_class = DelegateSerializer
+    permission_classes = (IsSchoolAdvisorOrSuperuser,)
+
+    def get_queryset(self):
+        '''Filter schools by the given pk param.'''
+        school_id = self.kwargs.get('pk', None)
+        if not school_id:
+            raise Http404
+
+        return Delegate.objects.filter(assignment__school_id=school_id)
+
 
 class SchoolInvoice(PDFTemplateView):
 
