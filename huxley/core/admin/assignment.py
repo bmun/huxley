@@ -4,9 +4,10 @@
 import csv
 
 from django.conf.urls import patterns, url
-from django.contrib import admin
+from django.contrib import admin, messages
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect
+from django.utils import html
 
 from huxley.core.models import Assignment, Committee, Country, School
 
@@ -42,27 +43,43 @@ class AssignmentAdmin(admin.ModelAdmin):
 
         def get_model(model, name, cache):
             if not name in cache:
-                cache[name] = model.objects.get(name=name)
+                try:
+                    cache[name] = model.objects.get(name=name)
+                except model.DoesNotExist:
+                    cache[name] = name
             return cache[name]
 
-        def generate_assigments(reader):
+        def generate_assignments(reader):
             committees = {}
             countries = {}
             schools = {}
+
             for row in reader:
                 if (row[0]=='School' and row[1]=='Committee' and row[2]=='Country'):
                     continue # skip the first row if it is a header
-                committee = get_model(Committee, row[1], committees)
-                country = get_model(Country, row[2], countries)
-                school = get_model(School, row[0], schools)
+
+                while len(row) < 3:
+                    row.append("") # extend the row to have the minimum proper num of columns
+                
                 if len(row) < 4:
                     rejected = False # allow for the rejected field to be null
                 else:
                     rejected = (row[3].lower() == 'true') # use the provided value if admin provides it
-                yield (committee.id, country.id, school.id, rejected)
 
-        Assignment.update_assignments(generate_assigments(reader))
+                committee = get_model(Committee, row[1], committees)
+                country = get_model(Country, row[2], countries)
+                school = get_model(School, row[0], schools)
+                yield (committee, country, school, rejected)
+
+    
+        failed_rows = Assignment.update_assignments(generate_assignments(reader))
+        if failed_rows:
+            # Format the message with HTML to put each failed assignment on a new line
+            messages.error(request, 
+                html.format_html('Assignment upload aborted. These assignments failed:<br/>' + '<br/>'.join(failed_rows)))
+        
         return HttpResponseRedirect(reverse('admin:core_assignment_changelist'))
+
 
     def get_urls(self):
         urls = super(AssignmentAdmin, self).get_urls()

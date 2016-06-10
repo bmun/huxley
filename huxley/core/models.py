@@ -262,12 +262,14 @@ class Assignment(models.Model):
                            for a in assignments}
         additions = []
         deletions = []
+        assigned = set()
+        failed_assignments = []
 
         def add(committee, country, school, rejected):
             additions.append(cls(
-                committee_id=committee,
-                country_id=country,
-                school_id=school,
+                committee_id=committee.id,
+                country_id=country.id,
+                school_id=school.id,
                 rejected=rejected,
             ))
 
@@ -276,6 +278,31 @@ class Assignment(models.Model):
 
         for committee, country, school, rejected in new_assignments:
             key = (committee, country)
+            if key in assigned:
+                # Make sure that the same committee/country pair is not being
+                # given to more than one school in the upload
+                committee = str(committee.name)
+                country = str(country.name)
+                failed_assignments.append(str((committee, country)) + ' - ASSIGNED TO MORE THAN ONE SCHOOL')
+                continue
+
+            # If the assignemnt contains no bad cells, then each value should
+            # have the type of its corresponding model.
+            is_invalid = False
+            if type(committee) is not Committee:
+                committee = Committee(name=committee+' - DOES NOT EXIST')
+                is_invalid = True
+            if type(country) is not Country:
+                country = Country(name=country+' - DOES NOT EXIST')
+                is_invalid = True
+            if type(school) is not School:
+                school = School(name=school+' - DOES NOT EXIST')
+                is_invalid = True
+            if is_invalid:
+                failed_assignments.append(str((str(school.name), str(committee.name), str(country.name))))
+                continue
+
+            assigned.add(key)
             old_assignment = assignment_dict.get(key)
 
             if not old_assignment:
@@ -290,12 +317,16 @@ class Assignment(models.Model):
 
             del assignment_dict[key]
 
-        for old_assignment in assignment_dict.values():
-            remove(old_assignment)
+        if not failed_assignments:
+            # Only update assignments if there were no issues
+            for old_assignment in assignment_dict.values():
+                remove(old_assignment)
 
-        with transaction.atomic():
-            Assignment.objects.filter(id__in=deletions).delete()
-            Assignment.objects.bulk_create(additions)
+            with transaction.atomic():
+                Assignment.objects.filter(id__in=deletions).delete()
+                Assignment.objects.bulk_create(additions)
+
+        return failed_assignments
 
     def __unicode__(self):
         return self.committee.name + " : " + self.country.name + " : " + (self.school.name if self.school else "Unassigned")
