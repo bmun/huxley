@@ -41,8 +41,6 @@ class AssignmentAdmin(admin.ModelAdmin):
         '''Loads new Assignments.'''
         assignments = request.FILES
         reader = csv.reader(assignments['csv'])
-        successful_rows = []
-        failed_rows = []
 
         def get_model(model, name, cache):
             if not name in cache:
@@ -64,6 +62,8 @@ class AssignmentAdmin(admin.ModelAdmin):
             countries = {}
             schools = {}
             assigned = set()
+            successful_rows = []
+            failed_rows = []
 
             for row in reader:
                 if (row[0]=='School' and row[1]=='Committee' and row[2]=='Country'):
@@ -94,8 +94,9 @@ class AssignmentAdmin(admin.ModelAdmin):
                         row[1] = row[1] + ' - ALREADY ASSIGNED'
                         row[2] = row[2] + ' - ALREADY ASSIGNED'
                     failed_rows.append(str((row[0], row[1], row[2], str(rejected))))
+            return successful_rows, failed_rows
 
-        create_assignments(reader)
+        successful_rows, failed_rows = create_assignments(reader)
         if not failed_rows:
             Assignment.update_assignments(successful_rows)
             return HttpResponseRedirect(reverse('admin:core_assignment_changelist'))
