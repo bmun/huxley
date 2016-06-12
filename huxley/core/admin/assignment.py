@@ -60,6 +60,7 @@ class AssignmentAdmin(admin.ModelAdmin):
 
                 while len(row) < 3:
                     row.append("") # extends the row to have the minimum proper num of columns
+                
                 if len(row) < 4:
                     rejected = False # allow for the rejected field to be null
                 else:
