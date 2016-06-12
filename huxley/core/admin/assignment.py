@@ -2,7 +2,6 @@
 # Use of this source code is governed by a BSD License (see LICENSE).
 
 import csv
-import Tkinter, tkMessageBox
 
 from django.conf.urls import patterns, url
 from django.contrib import admin, messages
@@ -41,8 +40,6 @@ class AssignmentAdmin(admin.ModelAdmin):
         '''Loads new Assignments.'''
         assignments = request.FILES
         reader = csv.reader(assignments['csv'])
-        assigned = set()
-        failed_rows = []
 
         def get_model(model, name, cache):
             if not name in cache:
