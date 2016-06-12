@@ -69,9 +69,9 @@ class AssignmentAdmin(admin.ModelAdmin):
                     committee = get_model(Committee, row[1], committees)
                     country = get_model(Country, row[2], countries)
                     school = get_model(School, row[0], schools)
-                    yield (committee.id, country.id, school.id, rejected, True)
+                    yield (committee.id, country.id, school.id, rejected)
                 except ObjectDoesNotExist:
-                    yield (row[1], row[2], row[0], rejected, False)
+                    yield (row[1], row[2], row[0], rejected)
 
     
         failed_rows = Assignment.update_assignments(generate_assignments(reader))

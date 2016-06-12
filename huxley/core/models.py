@@ -276,9 +276,11 @@ class Assignment(models.Model):
         def remove(assignment_data):
             deletions.append(assignment_data['id'])
 
-        for committee, country, school, rejected, is_valid in new_assignments:
-            # If one or more fields in the assignment are invalid, the
-            # the values are passed in as CharFields instead of Model ids
+        for committee, country, school, rejected in new_assignments:
+            # If one or more fields in the assignment are invalid, the first 
+            # three values are passed in as strings instead of ints
+            is_valid = type(committee) is int
+
             key = (committee, country)
             if key in assigned:
                 # Make sure that the same committee/country pair is not being
@@ -288,10 +290,9 @@ class Assignment(models.Model):
                 school = str(School.objects.get(pk=school).name)
                 failed_assignments.append(str((school, committee, country, rejected)))
                 continue
-            elif is_valid:
-                assigned.add(key)
 
             if is_valid:
+                assigned.add(key)
                 old_assignment = assignment_dict.get(key)
 
                 if not old_assignment:
