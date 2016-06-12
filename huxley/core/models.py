@@ -262,6 +262,8 @@ class Assignment(models.Model):
                            for a in assignments}
         additions = []
         deletions = []
+        assigned = set()
+        failed_assignments = []
 
         def add(committee, country, school, rejected):
             additions.append(cls(
@@ -274,28 +276,54 @@ class Assignment(models.Model):
         def remove(assignment_data):
             deletions.append(assignment_data['id'])
 
-        for committee, country, school, rejected in new_assignments:
+        for committee, country, school, rejected, is_valid in new_assignments:
+            # If one or more fields in the assignment are invalid, the
+            # the values are passed in as CharFields instead of Model ids
             key = (committee, country)
-            old_assignment = assignment_dict.get(key)
-
-            if not old_assignment:
-                add(committee, country, school, rejected)
+            if key in assigned:
+                # Make sure that the same committee/country pair is not being
+                # given to more than one school in the upload
+                committee = str(Committee.objects.get(pk=committee).name) + ' - DUPLICATE ASSIGNMENT IN CSV'
+                country = str(Country.objects.get(pk=country).name) + ' - DUPLICATE ASSIGNMENT IN CSV'
+                school = str(School.objects.get(pk=school).name)
+                failed_assignments.append(str((school, committee, country, rejected)))
                 continue
+            elif is_valid:
+                assigned.add(key)
 
-            if old_assignment['school_id'] != school:
-                # Remove the old assignment instead of just updating it
-                # so that its delegates are deleted by cascade.
+            if is_valid:
+                old_assignment = assignment_dict.get(key)
+
+                if not old_assignment:
+                    add(committee, country, school, rejected)
+                    continue
+
+                if old_assignment['school_id'] != school:
+                    # Remove the old assignment instead of just updating it
+                    # so that its delegates are deleted by cascade.
+                    remove(old_assignment)
+                    add(committee, country, school, rejected)
+
+                del assignment_dict[key]
+            else:
+                if not Committee.objects.filter(name=committee).exists():
+                    committee = committee + ' - INVALID'
+                if not Country.objects.filter(name=country).exists():
+                    country = country + ' - INVALID'
+                if not School.objects.filter(name=school).exists():
+                    school = school + ' - INVALID'
+                failed_assignments.append(str((school, committee, country)))
+
+        if not failed_assignments:
+            # Only update assignments if there were no issues
+            for old_assignment in assignment_dict.values():
                 remove(old_assignment)
-                add(committee, country, school, rejected)
 
-            del assignment_dict[key]
-
-        for old_assignment in assignment_dict.values():
-            remove(old_assignment)
-
-        with transaction.atomic():
-            Assignment.objects.filter(id__in=deletions).delete()
-            Assignment.objects.bulk_create(additions)
+            with transaction.atomic():
+                Assignment.objects.filter(id__in=deletions).delete()
+                Assignment.objects.bulk_create(additions)
+        else:
+            return failed_assignments
 
     def __unicode__(self):
         return self.committee.name + " : " + self.country.name + " : " + (self.school.name if self.school else "Unassigned")
