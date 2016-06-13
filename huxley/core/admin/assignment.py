@@ -75,7 +75,7 @@ class AssignmentAdmin(admin.ModelAdmin):
         failed_rows = Assignment.update_assignments(generate_assignments(reader))
         if failed_rows:
             messages.error(request, 
-                'Assignments aborted. These are the rows that failed with identification of the cells at fault: ' + ' | '.join(failed_rows))
+                'Assignment upload aborted. These assignments failed: ' + ' | '.join(failed_rows))
         
         return HttpResponseRedirect(reverse('admin:core_assignment_changelist'))
 

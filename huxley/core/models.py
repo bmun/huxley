@@ -308,11 +308,11 @@ class Assignment(models.Model):
                 del assignment_dict[key]
             else:
                 if not Committee.objects.filter(name=committee).exists():
-                    committee = committee + ' - INVALID'
+                    committee = committee + ' - DOES NOT EXIST'
                 if not Country.objects.filter(name=country).exists():
-                    country = country + ' - INVALID'
+                    country = country + ' - DOES NOT EXIST'
                 if not School.objects.filter(name=school).exists():
-                    school = school + ' - INVALID'
+                    school = school + ' - DOES NOT EXIST'
                 failed_assignments.append(str((school, committee, country)))
 
         if not failed_assignments:
