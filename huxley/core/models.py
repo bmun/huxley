@@ -267,9 +267,9 @@ class Assignment(models.Model):
 
         def add(committee, country, school, rejected):
             additions.append(cls(
-                committee_id=committee,
-                country_id=country,
-                school_id=school,
+                committee_id=committee.id,
+                country_id=country.id,
+                school_id=school.id,
                 rejected=rejected,
             ))
 
@@ -277,43 +277,46 @@ class Assignment(models.Model):
             deletions.append(assignment_data['id'])
 
         for committee, country, school, rejected in new_assignments:
-            # If one or more fields in the assignment are invalid, the first 
-            # three values are passed in as strings instead of ints
-            is_valid = type(committee) is int
-
             key = (committee, country)
             if key in assigned:
                 # Make sure that the same committee/country pair is not being
                 # given to more than one school in the upload
-                committee = str(Committee.objects.get(pk=committee).name) + ' - DUPLICATE ASSIGNMENT IN CSV'
-                country = str(Country.objects.get(pk=country).name) + ' - DUPLICATE ASSIGNMENT IN CSV'
-                school = str(School.objects.get(pk=school).name)
+                committee = str(committee.name) + ' - DUPLICATE ASSIGNMENT IN CSV'
+                country = str(country.name) + ' - DUPLICATE ASSIGNMENT IN CSV'
+                school = str(school.name)
                 failed_assignments.append(str((school, committee, country, rejected)))
                 continue
 
-            if is_valid:
-                assigned.add(key)
-                old_assignment = assignment_dict.get(key)
+            # If the assignemnt contains no bad cells, then each value should
+            # have the type of its corresponding model.
+            is_valid = True
+            if type(committee) is not Committee:
+                committee = Committee(name=str(committee)+' - DOES NOT EXIST')
+                is_valid = False
+            if type(country) is not Country:
+                country = Country(name=str(country)+' - DOES NOT EXIST')
+                is_valid = False
+            if type(school) is not School:
+                school = School(name=str(school)+' - DOES NOT EXIST')
+                is_valid = False
+            if not is_valid:
+                failed_assignments.append(str((str(school.name), str(committee.name), str(country.name))))
+                continue
 
-                if not old_assignment:
-                    add(committee, country, school, rejected)
-                    continue
+            assigned.add(key)
+            old_assignment = assignment_dict.get(key)
 
-                if old_assignment['school_id'] != school:
-                    # Remove the old assignment instead of just updating it
-                    # so that its delegates are deleted by cascade.
-                    remove(old_assignment)
-                    add(committee, country, school, rejected)
+            if not old_assignment:
+                add(committee, country, school, rejected)
+                continue
 
-                del assignment_dict[key]
-            else:
-                if not Committee.objects.filter(name=committee).exists():
-                    committee = committee + ' - DOES NOT EXIST'
-                if not Country.objects.filter(name=country).exists():
-                    country = country + ' - DOES NOT EXIST'
-                if not School.objects.filter(name=school).exists():
-                    school = school + ' - DOES NOT EXIST'
-                failed_assignments.append(str((school, committee, country)))
+            if old_assignment['school_id'] != school:
+                # Remove the old assignment instead of just updating it
+                # so that its delegates are deleted by cascade.
+                remove(old_assignment)
+                add(committee, country, school, rejected)
+
+            del assignment_dict[key]
 
         if not failed_assignments:
             # Only update assignments if there were no issues
@@ -323,8 +326,8 @@ class Assignment(models.Model):
             with transaction.atomic():
                 Assignment.objects.filter(id__in=deletions).delete()
                 Assignment.objects.bulk_create(additions)
-        else:
-            return failed_assignments
+
+        return failed_assignments
 
     def __unicode__(self):
         return self.committee.name + " : " + self.country.name + " : " + (self.school.name if self.school else "Unassigned")

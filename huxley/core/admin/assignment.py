@@ -5,9 +5,9 @@ import csv
 
 from django.conf.urls import patterns, url
 from django.contrib import admin, messages
+from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect
-from django.core.exceptions import ObjectDoesNotExist
 
 from huxley.core.models import Assignment, Committee, Country, School
 
@@ -42,8 +42,11 @@ class AssignmentAdmin(admin.ModelAdmin):
         reader = csv.reader(assignments['csv'])
 
         def get_model(model, name, cache):
-            if not name in cache:
-                cache[name] = model.objects.get(name=name)
+            try:
+                if not name in cache:
+                    cache[name] = model.objects.get(name=name)
+            except ObjectDoesNotExist:
+                cache[name] = name
             return cache[name]
 
         def generate_assignments(reader):
@@ -56,20 +59,17 @@ class AssignmentAdmin(admin.ModelAdmin):
                     continue # skip the first row if it is a header
 
                 while len(row) < 3:
-                    row.append("") # extends the row to have the minimum proper num of columns
+                    row.append("") # extend the row to have the minimum proper num of columns
                 
                 if len(row) < 4:
                     rejected = False # allow for the rejected field to be null
                 else:
                     rejected = (row[3].lower() == 'true') # use the provided value if admin provides it
 
-                try:
-                    committee = get_model(Committee, row[1], committees)
-                    country = get_model(Country, row[2], countries)
-                    school = get_model(School, row[0], schools)
-                    yield (committee.id, country.id, school.id, rejected)
-                except ObjectDoesNotExist:
-                    yield (row[1], row[2], row[0], rejected)
+                committee = get_model(Committee, row[1], committees)
+                country = get_model(Country, row[2], countries)
+                school = get_model(School, row[0], schools)
+                yield (committee, country, school, rejected)
 
     
         failed_rows = Assignment.update_assignments(generate_assignments(reader))
