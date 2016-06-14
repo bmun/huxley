@@ -173,6 +173,7 @@ class AssignmentTest(TestCase):
         Assignment.update_assignments(updates)
         new_assignments = [a[1:] for a in Assignment.objects.all().values_list()]
 
+        updates = [(cm.id, ct.id, s.id, rej) for cm, ct, s, rej in updates]
         self.assertEquals(set(updates), set(new_assignments))
 
 
