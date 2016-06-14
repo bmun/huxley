@@ -289,17 +289,17 @@ class Assignment(models.Model):
 
             # If the assignemnt contains no bad cells, then each value should
             # have the type of its corresponding model.
-            is_valid = True
+            is_invalid = False
             if type(committee) is not Committee:
                 committee = Committee(name=str(committee)+' - DOES NOT EXIST')
-                is_valid = False
+                is_invalid = True
             if type(country) is not Country:
                 country = Country(name=str(country)+' - DOES NOT EXIST')
-                is_valid = False
+                is_invalid = True
             if type(school) is not School:
                 school = School(name=str(school)+' - DOES NOT EXIST')
-                is_valid = False
-            if not is_valid:
+                is_invalid = True
+            if is_invalid:
                 failed_assignments.append(str((str(school.name), str(committee.name), str(country.name))))
                 continue
 

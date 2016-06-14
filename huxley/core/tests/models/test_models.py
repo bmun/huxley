@@ -146,16 +146,16 @@ class AssignmentTest(TestCase):
 
     def test_update_assignments(self):
         '''It should correctly update the set of country assignments.'''
-        cm1 = TestCommittees.new_committee(name='CM1').id
-        cm2 = TestCommittees.new_committee(name='CM2').id
-        ct1 = TestCountries.new_country(name='CT1').id
-        ct2 = TestCountries.new_country(name='CT2').id
-        ct3 = TestCountries.new_country(name='CT3').id
-        s1 = TestSchools.new_school(name='S1').id
-        s2 = TestSchools.new_school(name='S2').id
+        cm1 = TestCommittees.new_committee(name='CM1')
+        cm2 = TestCommittees.new_committee(name='CM2')
+        ct1 = TestCountries.new_country(name='CT1')
+        ct2 = TestCountries.new_country(name='CT2')
+        ct3 = TestCountries.new_country(name='CT3')
+        s1 = TestSchools.new_school(name='S1')
+        s2 = TestSchools.new_school(name='S2')
 
         Assignment.objects.bulk_create([
-            Assignment(committee_id=cm, country_id=ct, school_id=s1)
+            Assignment(committee_id=cm.id, country_id=ct.id, school_id=s1.id)
             for ct in [ct1, ct2]
             for cm in [cm1, cm2]
         ])
