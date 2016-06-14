@@ -284,7 +284,7 @@ class Assignment(models.Model):
                 committee = str(committee.name) + ' - DUPLICATE ASSIGNMENT IN CSV'
                 country = str(country.name) + ' - DUPLICATE ASSIGNMENT IN CSV'
                 school = str(school.name)
-                failed_assignments.append(str((school, committee, country, rejected)))
+                failed_assignments.append(str((school, committee, country)))
                 continue
 
             # If the assignemnt contains no bad cells, then each value should
