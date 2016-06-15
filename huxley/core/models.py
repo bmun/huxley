@@ -152,8 +152,6 @@ class School(models.Model):
 
         return processed_country_ids
 
-
-
     @classmethod
     def update_fees(cls, **kwargs):
         school = kwargs['instance']
@@ -166,8 +164,6 @@ class School(models.Model):
         registration_fee = Conference.get_current().registration_fee
         total_fees = registration_fee + delegate_fees
         school.fees_owed = Decimal(total_fees) + Decimal('0.00')
-
-
 
     @classmethod
     def update_waitlist(cls, **kwargs):
