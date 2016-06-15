@@ -11,7 +11,6 @@ from huxley.core.models import School
 
 class SchoolAdmin(admin.ModelAdmin):
 
-    ist_display = ('fees_owed', 'fees_paid', 'calc_balance')
     readonly_fields = ('balance',)
 
     def calc_balance(self, obj):
