@@ -76,7 +76,7 @@ class AssignmentAdmin(admin.ModelAdmin):
         if failed_rows:
             # Format the message with HTML to put each failed assignment on a new line
             messages.error(request, 
-                html.format_html('Assignment upload aborted. These assignments failed:<br/>' + '<br/>'.join(str(row) for row in failed_rows)))
+                html.format_html('Assignment upload aborted. These assignments failed:<br/>' + '<br/>'.join(failed_rows)))
         
         return HttpResponseRedirect(reverse('admin:core_assignment_changelist'))
 

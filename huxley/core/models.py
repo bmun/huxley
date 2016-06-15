@@ -299,7 +299,7 @@ class Assignment(models.Model):
                 school = School(name=school+' - DOES NOT EXIST')
                 is_invalid = True
             if is_invalid:
-                failed_assignments.append((str(school.name), str(committee.name), str(country.name)))
+                failed_assignments.append(str((str(school.name), str(committee.name), str(country.name))))
                 continue
 
             assigned.add(key)
