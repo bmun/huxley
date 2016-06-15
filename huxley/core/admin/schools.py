@@ -10,6 +10,12 @@ from django.http import HttpResponse
 from huxley.core.models import School
 
 class SchoolAdmin(admin.ModelAdmin):
+
+    readonly_fields = ('balance',)
+
+    def calc_balance(self, obj):
+        return obj.balance()
+
     def info(self, request):
         ''' Returns a CSV file containing the current set of
             Schools registered with all of its fields. '''
