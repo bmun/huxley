@@ -117,11 +117,13 @@ class School(models.Model):
 
     registration_comments = models.TextField(default='', blank=True)
 
+    assignments_finalized = models.BooleanField(default=False)
+
     fees_owed = models.DecimalField(max_digits=6, decimal_places=2, default=Decimal('0.00'))
     fees_paid = models.DecimalField(max_digits=6, decimal_places=2, default=Decimal('0.00'))
-    balance   = models.DecimalField(max_digits=6, decimal_places=2, default=Decimal('0.00'))
 
-    assignments_finalized = models.BooleanField(default=False)
+    def balance(self):
+        return self.fees_owed - self.fees_paid
 
     def update_country_preferences(self, country_ids):
         '''Given a list of country IDs, first dedupe and filter out 0s, then
@@ -150,6 +152,8 @@ class School(models.Model):
 
         return processed_country_ids
 
+
+
     @classmethod
     def update_fees(cls, **kwargs):
         school = kwargs['instance']
@@ -162,7 +166,8 @@ class School(models.Model):
         registration_fee = Conference.get_current().registration_fee
         total_fees = registration_fee + delegate_fees
         school.fees_owed = Decimal(total_fees) + Decimal('0.00')
-        school.balance = school.fees_owed - school.fees_paid
+
+
 
     @classmethod
     def update_waitlist(cls, **kwargs):
