@@ -283,7 +283,7 @@ class Assignment(models.Model):
                 # given to more than one school in the upload
                 committee = str(committee.name)
                 country = str(country.name)
-                failed_assignments.append(str(committee,country) + ' - DUPLICATE ASSIGNMENT IN CSV')
+                failed_assignments.append(str((committee, country)) + ' - DUPLICATE ASSIGNMENT IN CSV')
                 continue
 
             # If the assignemnt contains no bad cells, then each value should
