@@ -283,20 +283,20 @@ class Assignment(models.Model):
                 # given to more than one school in the upload
                 committee = str(committee.name)
                 country = str(country.name)
-                failed_assignments.append(str((committee, country)) + ' - DUPLICATE ASSIGNMENT IN CSV')
+                failed_assignments.append(str((committee, country)) + ' - ASSIGNED TO MORE THAN ONE SCHOOL')
                 continue
 
             # If the assignemnt contains no bad cells, then each value should
             # have the type of its corresponding model.
             is_invalid = False
             if type(committee) is not Committee:
-                committee = Committee(name=str(committee)+' - DOES NOT EXIST')
+                committee = Committee(name=committee+' - DOES NOT EXIST')
                 is_invalid = True
             if type(country) is not Country:
-                country = Country(name=str(country)+' - DOES NOT EXIST')
+                country = Country(name=country+' - DOES NOT EXIST')
                 is_invalid = True
             if type(school) is not School:
-                school = School(name=str(school)+' - DOES NOT EXIST')
+                school = School(name=school+' - DOES NOT EXIST')
                 is_invalid = True
             if is_invalid:
                 failed_assignments.append(str((str(school.name), str(committee.name), str(country.name))))

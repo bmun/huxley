@@ -5,9 +5,9 @@ import csv
 
 from django.conf.urls import patterns, url
 from django.contrib import admin, messages
-from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect
+from django.utils import html
 
 from huxley.core.models import Assignment, Committee, Country, School
 
@@ -42,11 +42,11 @@ class AssignmentAdmin(admin.ModelAdmin):
         reader = csv.reader(assignments['csv'])
 
         def get_model(model, name, cache):
-            try:
-                if not name in cache:
+            if not name in cache:
+                try:
                     cache[name] = model.objects.get(name=name)
-            except ObjectDoesNotExist:
-                cache[name] = name
+                except model.DoesNotExist:
+                    cache[name] = name
             return cache[name]
 
         def generate_assignments(reader):
@@ -74,8 +74,9 @@ class AssignmentAdmin(admin.ModelAdmin):
     
         failed_rows = Assignment.update_assignments(generate_assignments(reader))
         if failed_rows:
+            # Format the message with HTML to put each failed assignment on a new line
             messages.error(request, 
-                'Assignment upload aborted. These assignments failed: ' + ' | '.join(failed_rows))
+                html.format_html('Assignment upload aborted. These assignments failed:<br/>' + '<br/>'.join(failed_rows)))
         
         return HttpResponseRedirect(reverse('admin:core_assignment_changelist'))
 
