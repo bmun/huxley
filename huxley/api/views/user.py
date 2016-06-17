@@ -15,7 +15,7 @@ from huxley.accounts.models import User
 from huxley.accounts.exceptions import AuthenticationError, PasswordChangeFailed
 from huxley.api.permissions import IsPostOrSuperuserOnly, IsUserOrSuperuser
 from huxley.api.serializers import CreateUserSerializer, UserSerializer
-from huxley.core.models import School, Conference
+from huxley.core.models import Conference, School
 
 
 class UserList(generics.ListCreateAPIView):
