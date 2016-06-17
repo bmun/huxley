@@ -5,7 +5,6 @@ from .conference import *
 from .main import *
 from .logging import *
 from .pipeline import *
-from .registration import *
 
 try:
     from .local import *

@@ -15,7 +15,7 @@ from huxley.accounts.models import User
 from huxley.accounts.exceptions import AuthenticationError, PasswordChangeFailed
 from huxley.api.permissions import IsPostOrSuperuserOnly, IsUserOrSuperuser
 from huxley.api.serializers import CreateUserSerializer, UserSerializer
-from huxley.core.models import School
+from huxley.core.models import Conference, School
 
 
 class UserList(generics.ListCreateAPIView):
@@ -24,7 +24,7 @@ class UserList(generics.ListCreateAPIView):
     permission_classes = (IsPostOrSuperuserOnly,)
 
     def create(self, request, *args, **kwargs):
-        if settings.REGISTRATION_OPEN:
+        if Conference.get_current().open_reg:
             return super(UserList, self).create(request, *args, **kwargs)
         raise PermissionDenied('Conference registration is closed.')
 

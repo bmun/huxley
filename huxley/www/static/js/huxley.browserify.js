@@ -12,7 +12,6 @@ var Router = require('react-router');
 
 var CurrentUserActions = require('./huxley/actions/CurrentUserActions');
 var Huxley = require('./huxley/components/Huxley');
-
 var AdvisorAssignmentsView = require('./huxley/components/AdvisorAssignmentsView');
 var AdvisorProfileView = require('./huxley/components/AdvisorProfileView');
 var ForgotPasswordView = require('./huxley/components/ForgotPasswordView');
@@ -21,7 +20,7 @@ var NotFoundView = require('./huxley/components/NotFoundView');
 var PasswordResetSuccessView = require('./huxley/components/PasswordResetSuccessView');
 var RedirectView = require('./huxley/components/RedirectView');
 var RegistrationView = require('./huxley/components/RegistrationView');
-//var RegistrationClosedView = require('./huxley/components/RegistrationClosedView');
+var RegistrationClosedView = require('./huxley/components/RegistrationClosedView');
 var RegistrationSuccessView = require('./huxley/components/RegistrationSuccessView');
 var RegistrationWaitlistView = require('./huxley/components/RegistrationWaitlistView');
 
@@ -35,7 +34,13 @@ var routes = (
     <Route path="/login" handler={LoginView} />
     <Route path="/password" handler={ForgotPasswordView} />
     <Route path="/password/reset" handler={PasswordResetSuccessView} />
-    <Route path="/register" handler={RegistrationView} />
+    <Route
+      path="/register"
+      handler={global.conference.registraton_open
+        ? RegistrationView
+        : RegistrationClosedView
+      }
+    />
     <Route path="/register/success" handler={RegistrationSuccessView} />
     <Route path="/register/waitlist" handler={RegistrationWaitlistView} />
     <Route path="/advisor/profile" handler={AdvisorProfileView} />
