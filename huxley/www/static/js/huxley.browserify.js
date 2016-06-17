@@ -15,7 +15,6 @@ var Huxley = require('./huxley/components/Huxley');
 
 var AdvisorAssignmentsView = require('./huxley/components/AdvisorAssignmentsView');
 var AdvisorProfileView = require('./huxley/components/AdvisorProfileView');
-var ConferenceContext
 var ForgotPasswordView = require('./huxley/components/ForgotPasswordView');
 var LoginView = require('./huxley/components/LoginView');
 var NotFoundView = require('./huxley/components/NotFoundView');
