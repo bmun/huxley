@@ -6,9 +6,9 @@ import json
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 from django.test.client import Client
-from django.test.utils import override_settings
 
 from huxley.accounts.models import User
+from huxley.core.models import Conference
 from huxley.api.tests import (CreateAPITestCase, DestroyAPITestCase,
                               ListAPITestCase, PartialUpdateAPITestCase,
                               RetrieveAPITestCase)
@@ -252,7 +252,6 @@ class UserListGetTestCase(ListAPITestCase):
              'committee': user2.committee_id}])
 
 
-@override_settings(REGISTRATION_OPEN=True)
 class UserListPostTestCase(CreateAPITestCase):
     url_name = 'api:user_list'
     params = {'username': 'Kunal',
@@ -325,12 +324,18 @@ class UserListPostTestCase(CreateAPITestCase):
         self.assertEqual(response.data, {
             'password': ['Password must be at least 6 characters.']})
 
-    @override_settings(REGISTRATION_OPEN=False)
     def test_invalid(self):
+        conf = Conference.get_current()
+        conf.open_reg = False
+        conf.save()
+
         params = self.get_params()
         response = self.get_response(params)
         self.assertEqual(response.data, {
             'detail': 'Conference registration is closed.'})
+
+        conf.open_reg = True
+        conf.save()
 
 
 class CurrentUserTestCase(TestCase):
