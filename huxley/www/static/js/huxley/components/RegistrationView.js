@@ -89,14 +89,6 @@ var RegistrationView = React.createClass({
     };
   },
 
-  componentWillMount: function() {
-    if (!conference.registration_open) {
-      this.transitionTo('/register/closed');
-    } else if (conference.registration_waitlist) {
-      this.transitionTo('register/waitlist');
-    }
-  },
-
   componentDidMount: function() {
     CountryStore.getCountries(function(countries) {
       this.setState({countries: countries});

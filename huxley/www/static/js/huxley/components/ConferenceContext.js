@@ -23,7 +23,7 @@ var ConferenceContext = {
     registration_fee: React.PropTypes.number,
     delegate_fee: React.PropTypes.number,
     registration_open: React.PropTypes.bool,
-    registration_waitlist:React.PropTypes.bool
+    registration_waitlist: React.PropTypes.bool,
 };
 
 module.exports = ConferenceContext;

@@ -15,6 +15,7 @@ var Huxley = require('./huxley/components/Huxley');
 
 var AdvisorAssignmentsView = require('./huxley/components/AdvisorAssignmentsView');
 var AdvisorProfileView = require('./huxley/components/AdvisorProfileView');
+var ConferenceContext
 var ForgotPasswordView = require('./huxley/components/ForgotPasswordView');
 var LoginView = require('./huxley/components/LoginView');
 var NotFoundView = require('./huxley/components/NotFoundView');
@@ -35,10 +36,11 @@ var routes = (
     <Route path="/login" handler={LoginView} />
     <Route path="/password" handler={ForgotPasswordView} />
     <Route path="/password/reset" handler={PasswordResetSuccessView} />
-    <Route path="/register/open" handler={RegistrationView} />
+    <Route path="/register" handler={ global.conference.registration_open ?
+                                      RegistrationView :
+                                      RegistrationClosedView} />
     <Route path="/register/success" handler={RegistrationSuccessView} />
     <Route path="/register/waitlist" handler={RegistrationWaitlistView} />
-    <Route path="/register/closed" handler={RegistrationClosedView} />
     <Route path="/advisor/profile" handler={AdvisorProfileView} />
     <Route path="/advisor/assignments" handler={AdvisorAssignmentsView} />
     <DefaultRoute handler={RedirectView} />
