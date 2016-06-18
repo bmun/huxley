@@ -5,14 +5,12 @@ from .roots import HUXLEY_ROOT
 
 
 DEBUG = True
-TEMPLATE_DEBUG = DEBUG
 
 # IMPORTANT: Override this in local settings!
 SECRET_KEY = '+42lz(cp=6t#dzpkah^chn760l)rmu$p&f-#7ggsde2l3%fm-i'
 
 ADMINS = (('BMUN Tech Officer', 'tech@bmun.org'))
 ADMIN_SECRET = 'OVERRIDE THIS IN PRODUCTION'
-MANAGERS = ADMINS
 
 SITE_ID = 1
 
@@ -30,15 +28,9 @@ DATABASES = {
 ROOT_URLCONF = 'huxley.urls'
 
 TIME_ZONE = 'America/Los_Angeles'
-LANGUAGE_CODE = 'en-us'
 USE_I18N = False
-USE_L10N = False
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-
-MEDIA_ROOT = ''
-MEDIA_URL = ''
-ADMIN_MEDIA_PREFIX = '/static/admin/'
 
 STATIC_ROOT = '%s/static/' % HUXLEY_ROOT
 STATIC_URL = '/static/'
@@ -50,25 +42,21 @@ STATICFILES_FINDERS = (
 )
 STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
 
-TEMPLATE_CONTEXT_PROCESSORS = (
-    'django.core.context_processors.debug',
-    'django.core.context_processors.i18n',
-    'django.core.context_processors.media',
-    'django.core.context_processors.static',
-    'django.contrib.auth.context_processors.auth',
-    'django.contrib.messages.context_processors.messages',
-)
-
-TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.Loader',
-    'django.template.loaders.app_directories.Loader',
-)
-
-TEMPLATE_DIRS = (
-    '%s/templates/' % HUXLEY_ROOT,
-)
-
-TEST_RUNNER = 'django.test.runner.DiscoverRunner'
+TEMPLATES = [{
+    'BACKEND': 'django.template.backends.django.DjangoTemplates',
+    'DIRS': [
+        '%s/templates/' % HUXLEY_ROOT,
+    ],
+    'APP_DIRS': True,
+    'OPTIONS': {
+        'context_processors': [
+            'django.template.context_processors.debug',
+            'django.template.context_processors.static',
+            'django.contrib.auth.context_processors.auth',
+            'django.contrib.messages.context_processors.messages',
+        ],
+    },
+}]
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
