@@ -13,7 +13,7 @@ from rest_framework import generics, status
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.response import Response
 from huxley.api.permissions import IsAdvisorOrSuperuser, IsSchoolAdvisorOrSuperuser
-from huxley.api.serializers import AssignmentSerializer, SchoolSerializer
+from huxley.api.serializers import AssignmentSerializer, DelegateSerializer, SchoolSerializer
 from huxley.core.models import Assignment, Conference, School
 
 class SchoolList(generics.CreateAPIView):
