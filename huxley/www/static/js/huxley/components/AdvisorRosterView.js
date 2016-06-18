@@ -32,6 +32,10 @@ var AdvisorRosterView = React.createClass({
       committees: {},
       countries: {},
       loading: false,
+      errors: {},
+      name: '',
+      email: '',
+      summary: '',
     };
   },
 
@@ -68,7 +72,8 @@ var AdvisorRosterView = React.createClass({
       <InnerView>
         <h2>Roster</h2>
         <p>
-          Here you can add your school's delegates to your roster.
+          REVERT BACK
+          // Here you can add your schools delegates to your roster.
           Any comments that chairs have about your delegate will appear here.
         </p>
         <form>
@@ -85,7 +90,7 @@ var AdvisorRosterView = React.createClass({
           </div>
         </form>
         <div>
-          <Button>Add Delegate</Button>
+          <Button onclick={this._addDelegatePressed}>Add Delegate</Button>
         </div>
       </InnerView>
     );
@@ -108,6 +113,51 @@ var AdvisorRosterView = React.createClass({
       )
     }.bind(this));
   },
+
+  _addDelegatePressed: function() {
+    return (
+      <form>
+        Name: <input type="text" placeholder="Name" valueLink={this.linkState('name')} /><br>
+        Email: <input type="text" placeholder="Email" valueLink={this.linkState('email')}/><br>
+        Summary: <input type="text" placeholder="Summary" valueLink={this.linkState('summary')}/><br>
+        <input type="submit" value="Submit" onclick={this._handleSubmit} />
+      </form>
+    )
+  },
+
+  _handleSubmit: function(data) {
+    this.setState({loading: true});
+    $.ajax({
+      type: 'POST',
+      url: '/api/delegate',
+      data: {
+        name: this.state.name,
+        email: this.state.email,
+        summary: this.state.summary
+      },
+      success: this._handleSuccess,
+      error: this._handleError,
+      dataType: 'json'
+    });
+    event.preventDefault();
+  },
+
+  _handleSuccess: function(data, status, jqXHR) {
+    console.log("success!");
+    //REMOVE SUBMIT FORM FROM SCREEN
+  },
+
+  _handleError: function(jqXHR, status, error) {
+    var response = jqXHR.responseJSON;
+    if (!response) {
+      return;
+    }
+
+    this.setState({
+      errors: response,
+      loading: false
+    }.bind(this));
+  }
 
 });
 
