@@ -1,9 +1,12 @@
 # Copyright (c) 2011-2015 Berkeley Model United Nations. All rights reserved.
 # Use of this source code is governed by a BSD License (see LICENSE).
 
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 
-urlpatterns = patterns('huxley.www.views',
+from huxley.www import views
+
+
+urlpatterns = [
     # Match any URL and let the client take care of routing.
-    url(r'', 'index', name='index'),
-)
+    url(r'', views.index, name='index'),
+]
