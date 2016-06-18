@@ -6,9 +6,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <link rel="shortcut icon" href="/favicon.ico" />
     <link rel="icon" type="image/png" href="/static/img/favicon.png" />
-    {% load compressed %}
+    {% load pipeline %}
     {% block css %}
-        {% compressed_css 'huxley' %}
+        {% stylesheet 'huxley' %}
         <link href="http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,700,600,400,300" rel="stylesheet" type="text/css">
     {% endblock css %}
     {% block js %}
@@ -19,7 +19,7 @@
             ContactTypes = {{ contact_types|safe }};
             ProgramTypes = {{ program_types|safe }};
         </script>
-        {% compressed_js 'huxley' %}
+        {% javascript 'huxley' %}
     {% endblock js %}
 </head>
 <body>
