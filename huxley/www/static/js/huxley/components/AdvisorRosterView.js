@@ -34,8 +34,7 @@ var AdvisorRosterView = React.createClass({
       loading: false,
       errors: {},
       name: '',
-      email: '',
-      summary: '',
+      email: ''
     };
   },
 
@@ -119,7 +118,6 @@ var AdvisorRosterView = React.createClass({
       <form>
         <br>Name: <input type="text" placeholder="Name" valueLink={this.linkState('name')} /></br>
         <br>Email: <input type="text" placeholder="Email" valueLink={this.linkState('email')}/></br>
-        <br>Summary: <input type="text" placeholder="Summary" valueLink={this.linkState('summary')}/></br>
         <input type="submit" value="Submit" onclick={this._handleSubmit} />
       </form>
     )
@@ -133,7 +131,6 @@ var AdvisorRosterView = React.createClass({
       data: {
         name: this.state.name,
         email: this.state.email,
-        summary: this.state.summary
       },
       success: this._handleSuccess,
       error: this._handleError,
@@ -144,7 +141,6 @@ var AdvisorRosterView = React.createClass({
 
   _handleSuccess: function(data, status, jqXHR) {
     console.log("success!");
-    //REMOVE SUBMIT FORM FROM SCREEN
   },
 
   _handleError: function(jqXHR, status, error) {
