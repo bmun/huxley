@@ -22,9 +22,7 @@ urlpatterns = [
     url(r'^schools/(?P<pk>[0-9]+)/?$', views.school.SchoolDetail.as_view(), name='school_detail'),
     url(r'^schools/(?P<pk>[0-9]+)/assignments/?$', views.school.SchoolAssignments.as_view(), name='school_assignments'),
     url(r'^schools/(?P<pk>[0-9]+)/delegates/?$', views.school.SchoolDelegates.as_view(), name='school_delegates'),
-    url(r'^schools/(?P<pk>[0-9]+)/invoice/?$', views.school.SchoolInvoice.as_view(), name='school_invoice')
-)
-
+    url(r'^schools/(?P<pk>[0-9]+)/invoice/?$', views.school.SchoolInvoice.as_view(), name='school_invoice'),
     url(r'^assignments/?$', views.assignment.AssignmentList.as_view(), name='assignment_list'),
     url(r'^assignments/(?P<pk>[0-9]+)/?$', views.assignment.AssignmentDetail.as_view(), name='assignment_detail'),
 

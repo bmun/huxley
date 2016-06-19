@@ -117,9 +117,9 @@ var AdvisorRosterView = React.createClass({
   _addDelegatePressed: function() {
     return (
       <form>
-        Name: <input type="text" placeholder="Name" valueLink={this.linkState('name')} /><br>
-        Email: <input type="text" placeholder="Email" valueLink={this.linkState('email')}/><br>
-        Summary: <input type="text" placeholder="Summary" valueLink={this.linkState('summary')}/><br>
+        <br>Name: <input type="text" placeholder="Name" valueLink={this.linkState('name')} /></br>
+        <br>Email: <input type="text" placeholder="Email" valueLink={this.linkState('email')}/></br>
+        <br>Summary: <input type="text" placeholder="Summary" valueLink={this.linkState('summary')}/></br>
         <input type="submit" value="Submit" onclick={this._handleSubmit} />
       </form>
     )
