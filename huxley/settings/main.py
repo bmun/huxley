@@ -30,7 +30,7 @@ ROOT_URLCONF = 'huxley.urls'
 TIME_ZONE = 'America/Los_Angeles'
 USE_I18N = False
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = 'huxley.logging.LoggingEmailBackend.DevLoggingEmailBackend'
 
 STATIC_ROOT = '%s/static/' % HUXLEY_ROOT
 STATIC_URL = '/static/'

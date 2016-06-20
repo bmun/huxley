@@ -8,7 +8,7 @@ LOGGING = {
     'disable_existing_loggers': False,
     'formatters': {
         'simple': {
-            'format': '%(asctime)s: %(levelname)s',
+            'format': '%(asctime)s: %(levelname)s %(message)s',
         },
     },
     'handlers': {
@@ -37,12 +37,12 @@ LOGGING = {
         'huxley.exception': {
             'handlers': ['database', 'mail_admins'],
             'level': 'ERROR',
-            'propagate': DEBUG,
+            'propagate': True,
         },
         'huxley.api': {
             'handlers': ['database'],
             'level': 'DEBUG',
-            'propagate': DEBUG, # Set to false to elimninate logs in the console
+            'propagate': True, # Set to false to elimninate logs in the console
         },
     },
 }
