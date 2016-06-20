@@ -3,7 +3,6 @@
 
 import json, logging, sys, traceback
 
-from huxley.settings.main import DEBUG
 
 class ExceptionLoggerMiddleware(object):
 
