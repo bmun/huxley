@@ -1,12 +1,14 @@
 # Copyright (c) 2011-2015 Berkeley Model United Nations. All rights reserved.
 # Use of this source code is governed by a BSD License (see LICENSE).
 
+from .main import DEBUG
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
     'formatters': {
         'simple': {
-            'format': '%(asctime)s: %(levelname)s %(message)s',
+            'format': '%(asctime)s: %(levelname)s',
         },
     },
     'handlers': {
@@ -23,7 +25,7 @@ LOGGING = {
         'mail_admins': {
             'level': 'ERROR',
             'class': 'django.utils.log.AdminEmailHandler',
-            'include_html': True,
+            'include_html': False,
         },
     },
     'loggers': {
@@ -32,15 +34,15 @@ LOGGING = {
             'level': 'DEBUG',
             'propagate': True,
         },
-        'huxley.server': {
+        'huxley.exception': {
             'handlers': ['database', 'mail_admins'],
             'level': 'ERROR',
-            'propagate': True,
+            'propagate': DEBUG,
         },
         'huxley.api': {
             'handlers': ['database'],
             'level': 'DEBUG',
-            'propagate': False, #Set to false to elimninate logs in the console
+            'propagate': DEBUG, # Set to false to elimninate logs in the console
         },
     },
 }

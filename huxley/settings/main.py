@@ -67,7 +67,6 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'huxley.core.middlewares.LoggingMiddleware',
     'huxley.core.middlewares.ExceptionLoggerMiddleware',
-    'huxley.core.middlewares.ServerLoggingMiddleware',
 )
 
 AUTHENTICATION_BACKENDS = (
