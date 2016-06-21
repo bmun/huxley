@@ -58,10 +58,10 @@ def update_python():
 def check_js():
     '''Check the installed dependencies against package.json.'''
     print ui.info('Checking JS dependencies...')
-    with hide('running'):
-        if not local('which npm', capture=True):
-            print ui.error('npm not found! Install it with `brew install npm`.')
-            return
+    
+    if not local('which npm', capture=True):
+        print ui.error('npm not found! Install it with `brew install npm`.')
+        return
 
     with open(join(env.huxley_root, 'package.json'), 'r') as p:
         package = json.loads(p.read())
