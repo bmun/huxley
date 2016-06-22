@@ -66,7 +66,7 @@ Finally, we use Pipeline to collect, compile, and compress our static assets. It
 
     $ python manage.py collectstatic --noinput
     
-If you run into an error here run `ulimit -n 512`.
+If you run into an error here run `ulimit -n 512`. This will increase the number of files the process running Huxley will be allowed to open.
 
 Lastly, spin up a development server so you can access Huxley at `localhost:8000`:
 
@@ -76,6 +76,8 @@ If you haven't created a superuser yet, you should do that now:
 
     $ python manage.py createsuperuser
     
-Your superuser credentials is what will allow you to login to the admin panel at `localhost:8000/admin/`
+Your superuser credentials is what will allow you to login to the admin panel at `localhost:8000/admin/`.
+
+To check out the other management commands at your disposal run `python manage.py`. This will list out all possible management commands. Many of these commands will be useful to keep your development environment in check.
 
 With that, you're ready to go; start hacking!
