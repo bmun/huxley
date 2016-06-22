@@ -47,21 +47,35 @@ Next, configure your author information. Use your name and email as they appear 
 Install the Python dependencies with the provided `requirements.txt` (remember to activate the `huxley` virtualenv!):
 
     $ pip install -r requirements.txt
+    
+Install the JS dependencies with the provided `package.json` using npm:
+
+    $ npm install
 
 ### Initial Setup
-The first is to prepare the database. Huxley uses South, a schema migration management tool for Django. We'll generate our database
-tables from the models, bring South's migration history up to speed, and load some test data:
+The first step is to prepare the database. We do that by running: 
 
-    $ python manage.py syncdb # Make a superuser if prompted.
+    $ python manage.py runserver
+
+Running the server will automatically create a database for us at `huxley/huxley.db`. Once you've run the server exit it (CONTROL-C), and then run:
+
     $ python manage.py migrate
-    $ python manage.py loaddata countries committees advisor chair
+    $ python manage.py loaddata countries committees advisor chair conference
 
-We use Pipeline to collect, compile, and compress our static assets. It simply hooks into Django's `collectstatic` management command:
+Finally, we use Pipeline to collect, compile, and compress our static assets. It simply hooks into Django's `collectstatic` management command:
 
     $ python manage.py collectstatic --noinput
+    
+If you run into an error here run `ulimit -n 512`.
 
 Lastly, spin up a development server so you can access Huxley at `localhost:8000`:
 
     $ python manage.py runserver
+    
+If you haven't created a superuser yet, you should do that now:
+
+    $ python manage.py createsuperuser
+    
+Your superuser credentials is what will allow you to login to the admin panel at `localhost:8000/admin/`
 
 With that, you're ready to go; start hacking!
