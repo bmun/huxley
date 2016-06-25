@@ -30,7 +30,7 @@ ROOT_URLCONF = 'huxley.urls'
 TIME_ZONE = 'America/Los_Angeles'
 USE_I18N = False
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = 'huxley.logging.mail.DevLoggingEmailBackend'
 
 STATIC_ROOT = '%s/static/' % HUXLEY_ROOT
 STATIC_URL = '/static/'
@@ -39,6 +39,7 @@ STATICFILES_DIRS = ()
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'pipeline.finders.PipelineFinder',
 )
 STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
 
@@ -66,7 +67,6 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'huxley.core.middlewares.LoggingMiddleware',
     'huxley.core.middlewares.ExceptionLoggerMiddleware',
-    'huxley.core.middlewares.ServerLoggingMiddleware',
 )
 
 AUTHENTICATION_BACKENDS = (

@@ -17,6 +17,9 @@ class PySCSSCompiler(SubProcessCompiler):
 
     def compile_file(self, infile, outfile, outdated=False, force=False):
         root = dirname(settings.HUXLEY_ROOT)
-        command = '%s/scripts/pyscss.sh %s %s' % (root, infile, outfile)
+        command = (
+            '%s/scripts/pyscss.sh' % root,
+            infile,
+            outfile,
+        )
         return self.execute_command(command, cwd=dirname(infile))
-

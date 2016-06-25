@@ -23,7 +23,7 @@ LOGGING = {
         'mail_admins': {
             'level': 'ERROR',
             'class': 'django.utils.log.AdminEmailHandler',
-            'include_html': True,
+            'include_html': False,
         },
     },
     'loggers': {
@@ -32,7 +32,7 @@ LOGGING = {
             'level': 'DEBUG',
             'propagate': True,
         },
-        'huxley.server': {
+        'huxley.exception': {
             'handlers': ['database', 'mail_admins'],
             'level': 'ERROR',
             'propagate': True,
@@ -40,7 +40,7 @@ LOGGING = {
         'huxley.api': {
             'handlers': ['database'],
             'level': 'DEBUG',
-            'propagate': False, #Set to false to elimninate logs in the console
+            'propagate': True, # Set to false to elimninate logs in the console
         },
     },
 }
