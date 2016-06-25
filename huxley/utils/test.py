@@ -105,13 +105,12 @@ class TestCountries():
 class TestDelegates():
     @staticmethod
     def new_delegate(**kwargs):
-        if 'assignment' in kwargs.keys():
-            a = kwargs.pop('assignment')
-        else:
-            a = TestAssignments.new_assignment()
+        a = kwargs.pop('assignment', None) or TestAssignments.new_assignment()
+        s = kwargs.pop('school', None) or TestSchools.new_school()
 
         c = Delegate(
-                assignment=kwargs.pop('assignment', a),
+                assignment=a,
+                school=s,
                 name=kwargs.pop('name', 'Nate Parke'),
                 email=kwargs.pop('email', 'nate@earthlink.gov'),
                 summary=kwargs.pop('summary', 'He did well!'),)
@@ -121,26 +120,15 @@ class TestDelegates():
 class TestAssignments():
     @staticmethod
     def new_assignment(**kwargs):
-        if 'committee' in kwargs.keys():
-            test_committee = kwargs.pop('committee')
-        else:
-            test_committee = TestCommittees.new_committee()
-
-        if 'school' in kwargs.keys():
-            test_school = kwargs.pop('school')
-        else:
-            test_school = TestSchools.new_school()
-
-        if 'country' in kwargs.keys():
-            test_country = kwargs.pop('country')
-        else:
-            test_country = TestCountries.new_country()
+        test_committee = kwargs.pop('committee', None) or TestCommittees.new_committee()
+        test_school = kwargs.pop('school', None) or TestSchools.new_school()
+        test_country = kwargs.pop('country', None) or TestCountries.new_country()
 
         a = Assignment(
-                committee=kwargs.pop('committee', test_committee),
-                school=kwargs.pop('school', test_school),
-                country=kwargs.pop('country', test_country),
-                rejected=kwargs.pop('rejected', False))
+                committee=test_committee,
+                school=test_school,
+                country=test_country,
+                rejected=kwargs.pop('rejected', False),)
         a.save()
         return a
 

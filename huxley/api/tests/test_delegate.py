@@ -39,7 +39,7 @@ class DelegateDetailPutTestCase(tests.UpdateAPITestCase):
         self.user = TestUsers.new_user(username='user', password='user')
         self.school = TestSchools.new_school(user=self.user)
         self.assignment = TestAssignments.new_assignment(school=self.school)
-        self.delegate = TestDelegates.new_delegate(assignment=self.assignment)
+        self.delegate = TestDelegates.new_delegate(assignment=self.assignment, school=self.school)
         self.params['assignment'] = self.assignment.id
 
     def test_anonymous_user(self):
@@ -54,10 +54,11 @@ class DelegateDetailPutTestCase(tests.UpdateAPITestCase):
         response.data.pop('created_at')
         self.assertEqual(response.data, {
             "id" : self.delegate.id,
-            "assignment" : self.delegate.assignment.id,
+            "assignment" : self.assignment.id,
+            "school" : self.school.id,
             "name" : unicode(self.params['name']),
             "email" : unicode(self.params['email']),
-            "summary" : unicode(self.params['summary'])}
+            "summary" : unicode(self.params['summary']),}
         )
 
     def test_superuser(self):
@@ -68,10 +69,11 @@ class DelegateDetailPutTestCase(tests.UpdateAPITestCase):
         response.data.pop('created_at')
         self.assertEqual(response.data, {
             "id" : self.delegate.id,
-            "assignment" : self.delegate.assignment.id,
+            "assignment" : self.assignment.id,
+            "school" : self.school.id,
             "name" : unicode(self.params['name']),
             "email" : unicode(self.params['email']),
-            "summary" : unicode(self.params['summary'])}
+            "summary" : unicode(self.params['summary']),}
         )
 
 
@@ -86,7 +88,7 @@ class DelegateDetailPatchTestCase(tests.PartialUpdateAPITestCase):
         self.user = TestUsers.new_user(username='user', password='user')
         self.school = TestSchools.new_school(user=self.user)
         self.assignment = TestAssignments.new_assignment(school=self.school)
-        self.delegate = TestDelegates.new_delegate(assignment=self.assignment)
+        self.delegate = TestDelegates.new_delegate(assignment=self.assignment, school=self.school)
 
     def test_anonymous_user(self):
         '''Unauthenticated users shouldn't be able to update assignments.'''
@@ -100,10 +102,11 @@ class DelegateDetailPatchTestCase(tests.PartialUpdateAPITestCase):
         response.data.pop('created_at')
         self.assertEqual(response.data, {
             "id" : self.delegate.id,
-            "assignment" : self.delegate.assignment.id,
+            "assignment" : self.assignment.id,
+            "school" : self.school.id,
             "name" : unicode(self.params['name']),
             "email" : unicode(self.params['email']),
-            "summary" : unicode(self.params['summary'])}
+            "summary" : unicode(self.params['summary']),}
         )
 
     def test_superuser(self):
@@ -114,10 +117,11 @@ class DelegateDetailPatchTestCase(tests.PartialUpdateAPITestCase):
         response.data.pop('created_at')
         self.assertEqual(response.data, {
             "id" : self.delegate.id,
-            "assignment" : self.delegate.assignment.id,
+            "assignment" : self.assignment.id,
+            "school" : self.school.id,
             "name" : unicode(self.params['name']),
             "email" : unicode(self.params['email']),
-            "summary" : unicode(self.params['summary'])}
+            "summary" : unicode(self.params['summary']),}
         )
 
 
@@ -164,6 +168,7 @@ class DelegateListCreateTestCase(tests.CreateAPITestCase):
         self.school = TestSchools.new_school(user=self.user)
         self.assignment = TestAssignments.new_assignment(school=self.school)
         self.params['assignment'] = self.assignment.id
+        self.params['school'] = self.school.id
 
     def test_anonymous_user(self):
         '''Should accept post request from any user.'''
@@ -172,9 +177,10 @@ class DelegateListCreateTestCase(tests.CreateAPITestCase):
         response.data.pop('id')
         self.assertEqual(response.data, {
             "assignment" : self.assignment.id,
+            "school" : self.school.id,
             "name" : unicode(self.params['name']),
             "email" : unicode(self.params['email']),
-            "summary" : unicode(self.params['summary'])}
+            "summary" : unicode(self.params['summary']),}
         )
 
     def test_advisor(self):
@@ -185,9 +191,10 @@ class DelegateListCreateTestCase(tests.CreateAPITestCase):
         response.data.pop('id')
         self.assertEqual(response.data, {
             "assignment" : self.assignment.id,
+            "school" : self.school.id,
             "name" : unicode(self.params['name']),
             "email" : unicode(self.params['email']),
-            "summary" : unicode(self.params['summary'])}
+            "summary" : unicode(self.params['summary']),}
         )
 
     def test_superuser(self):
@@ -199,7 +206,8 @@ class DelegateListCreateTestCase(tests.CreateAPITestCase):
         response.data.pop('id')
         self.assertEqual(response.data, {
             "assignment" : self.assignment.id,
+            "school" : self.school.id,
             "name" : unicode(self.params['name']),
             "email" : unicode(self.params['email']),
-            "summary" : unicode(self.params['summary'])}
+            "summary" : unicode(self.params['summary']),}
         )
