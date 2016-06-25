@@ -74,6 +74,7 @@ class SchoolDelegateGetTestCase(ListAPITestCase):
             {
                 'id': self.delegate1.id,
                 'assignment':self.assignment1.id,
+                'school':self.delegate1.school.id,
                 'name':unicode(self.delegate1.name),
                 'email':unicode(self.delegate1.email),
                 'summary':unicode(self.delegate1.summary),
@@ -83,6 +84,7 @@ class SchoolDelegateGetTestCase(ListAPITestCase):
             {
                 'id': self.delegate2.id,
                 'assignment':self.assignment2.id,
+                'school':self.delegate2.school.id,
                 'name':unicode(self.delegate2.name),
                 'email':unicode(self.delegate2.email),
                 'summary':unicode(self.delegate2.summary),
