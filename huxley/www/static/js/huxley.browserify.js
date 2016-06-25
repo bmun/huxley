@@ -37,7 +37,7 @@ var routes = (
     <Route path="/password/reset" handler={PasswordResetSuccessView} />
     <Route
       path="/register"
-      handler={global.conference.registraton_open
+      handler={global.conference.registration_open
         ? RegistrationView
         : RegistrationClosedView
       }
