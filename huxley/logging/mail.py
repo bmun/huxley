@@ -6,6 +6,8 @@ import json, logging
 from django.core.mail.backends import dummy, smtp
 from django.db import transaction
 
+from smtplib import SMTPException
+
 
 class DevLoggingEmailBackend(dummy.EmailBackend):
 
@@ -21,7 +23,18 @@ class LoggingEmailBackend(smtp.EmailBackend):
             for email in email_messages:
                 log_email(email)
 
-                return super(LoggingEmailBackend, self)._send(email)
+                try:
+                    return super(LoggingEmailBackend, self)._send(email)
+                except SMTPException:
+                    logger = logging.getLogger('huxley.api')
+                    exc_type, exc_value, exc_traceback = sys.exc_info()
+                    exc_traceback = ''.join(traceback.format_exception(exc_type, exc_value, exc_traceback))
+                    log = json.dumps({
+                          'message': exc_traceback,
+                          'uri': ', '.join(email.to),
+                          'status_code': 500,
+                          'username': ''})
+                    logger.error(log)
 
 
 def log_email(email):
