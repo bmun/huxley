@@ -15,8 +15,7 @@ class ExceptionLoggerMiddleware(object):
               'uri': request.path,
               'status_code': 500,
               'username': request.user.username})
-        logger.error(log)
-        logger.exception(exception)
+        logger.exception(log)
 
 
 class LoggingMiddleware(object):

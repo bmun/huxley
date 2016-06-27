@@ -198,7 +198,7 @@ class School(models.Model):
             send_mail('Registration Comments from '+ school.name, school.name +
                 ' made comments about registration: '
                 + school.registration_comments, 'tech@bmun.org',
-                ['external@bmun.org'], fail_silently=True)
+                ['external@bmun.org'], fail_silently=False)
 
     @classmethod
     def email_confirmation(cls, **kwargs):
@@ -213,7 +213,7 @@ class School(models.Model):
                           'For all other questions, please email info@bmun.org.\n\n'
                           'Thank you for using Huxley!' % conference.session,
                           'no-reply@bmun.org',
-                          [school.primary_email], fail_silently=True)
+                          [school.primary_email], fail_silently=False)
             else:
                 registration_fee = conference.registration_fee
                 delegate_fee = conference.delegate_fee
@@ -228,7 +228,7 @@ class School(models.Model):
                           'For all other questions, please email info@bmun.org.\n\n'
                           'Thank you for using Huxley!' % (conference.session, int(registration_fee), int(delegate_fee)),
                           'no-reply@bmun.org',
-                          [school.primary_email], fail_silently=True)
+                          [school.primary_email], fail_silently=False)
 
     def __unicode__(self):
         return self.name
