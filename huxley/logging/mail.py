@@ -34,7 +34,7 @@ class LoggingEmailBackend(smtp.EmailBackend):
                           'uri': ', '.join(email.to),
                           'status_code': 500,
                           'username': ''})
-                    logger.error(log)
+                    logger.exception(log)
 
 
 def log_email(email):
