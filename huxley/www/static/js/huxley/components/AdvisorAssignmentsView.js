@@ -68,7 +68,7 @@ var AdvisorAssignmentsView = React.createClass({
     var conference = this.context.conference;
     return (
       <InnerView>
-        <h2>Roster</h2>
+        <h2>Assignments</h2>
         <p>
           Here you can view your tentative assignments for BMUN {conference.session}. If you
           would like to request more slots, please email <a href="mailto:info@bmun.org">
