@@ -1,120 +1,33 @@
 # Copyright (c) 2011-2015 Berkeley Model United Nations. All rights reserved.
 # Use of this source code is governed by a BSD License (see LICENSE).
 
-from huxley.api.tests import (DestroyAPITestCase, ListAPITestCase,
-                              PartialUpdateAPITestCase, RetrieveAPITestCase)
+from huxley.api import tests
+from huxley.api.tests import auto
 from huxley.core.models import School
 from huxley.utils.test import TestSchools, TestUsers
 
+from huxley.api.views.school import SchoolDetail
 
-class SchoolDetailGetTestCase(RetrieveAPITestCase):
+
+class SchoolDetailGetTestCase(auto.RetrieveAPIAutoTestCase):
     url_name = 'api:school_detail'
+    view = SchoolDetail
 
-    def test_anonymous_user(self):
-        '''It should reject request from an anonymous user.'''
-        school = TestSchools.new_school()
-        response = self.get_response(school.id)
+    @classmethod
+    def get_test_object(cls):
+        return TestSchools.new_school()
 
-        self.assertNotAuthenticated(response)
-
-    def test_self(self):
-        '''It should allow the get request from the user.'''
-        school = TestSchools.new_school()
-
-        self.client.login(username=school.advisor.username, password='test')
-        response = self.get_response(school.id)
-        self.assertEqual(response.data, {
-            'id': school.id,
-            'registered': school.registered.isoformat(),
-            'name': school.name,
-            'address': school.address,
-            'city': school.city,
-            'state': school.state,
-            'zip_code': school.zip_code,
-            'country': school.country,
-            'primary_name': school.primary_name,
-            'primary_gender': school.primary_gender,
-            'primary_email': school.primary_email,
-            'primary_phone': school.primary_phone,
-            'primary_type': school.primary_type,
-            'secondary_name': school.secondary_name,
-            'secondary_gender': school.secondary_gender,
-            'secondary_email': school.secondary_email,
-            'secondary_phone': school.secondary_phone,
-            'secondary_type': school.secondary_type,
-            'program_type': school.program_type,
-            'times_attended': school.times_attended,
-            'international': school.international,
-            'waitlist': school.waitlist,
-            'beginner_delegates':school.beginner_delegates,
-            'intermediate_delegates': school.intermediate_delegates,
-            'advanced_delegates': school.advanced_delegates,
-            'spanish_speaking_delegates': school.spanish_speaking_delegates,
-            'chinese_speaking_delegates': school.chinese_speaking_delegates,
-            'countrypreferences': school.country_preference_ids,
-            'committeepreferences': list(school.committeepreferences.all()),
-            'registration_comments': school.registration_comments,
-            'fees_owed': float(school.fees_owed),
-            'fees_paid': float(school.fees_paid),
-            'assignments_finalized': school.assignments_finalized,
-        })
-
-    def test_other_user(self):
-        '''it should not allow a get request from another user.'''
-        school = TestSchools.new_school()
-        TestUsers.new_user(username='user2', password='user2')
-
-        self.client.login(username='user2', password='user2')
-        response = self.get_response(school.id)
-
-        self.assertPermissionDenied(response)
-
-    def test_superuser(self):
-        '''it should allow a get request from a superuser.'''
-        school = TestSchools.new_school()
+    @classmethod
+    def get_users(cls, test_object):
         TestUsers.new_superuser(username='user1', password='user1')
-
-        self.client.login(username='user1', password='user1')
-        response = self.get_response(school.id)
-
-        self.assertEqual(response.data, {
-            'id': school.id,
-            'registered': school.registered.isoformat(),
-            'name': school.name,
-            'address': school.address,
-            'city': school.city,
-            'state': school.state,
-            'zip_code': school.zip_code,
-            'country': school.country,
-            'primary_name': school.primary_name,
-            'primary_gender': school.primary_gender,
-            'primary_email': school.primary_email,
-            'primary_phone': school.primary_phone,
-            'primary_type': school.primary_type,
-            'secondary_name': school.secondary_name,
-            'secondary_gender': school.secondary_gender,
-            'secondary_email': school.secondary_email,
-            'secondary_phone': school.secondary_phone,
-            'secondary_type': school.secondary_type,
-            'program_type': school.program_type,
-            'times_attended': school.times_attended,
-            'international': school.international,
-            'waitlist': school.waitlist,
-            'beginner_delegates': school.beginner_delegates,
-            'intermediate_delegates': school.intermediate_delegates,
-            'advanced_delegates': school.advanced_delegates,
-            'spanish_speaking_delegates': school.spanish_speaking_delegates,
-            'chinese_speaking_delegates': school.chinese_speaking_delegates,
-            'countrypreferences': school.country_preference_ids,
-            'committeepreferences': list(school.committeepreferences.all()),
-            'registration_comments': school.registration_comments,
-            'fees_owed': float(school.fees_owed),
-            'fees_paid': float(school.fees_paid),
-            'assignments_finalized': school.assignments_finalized,
-        })
+        return (
+            (None, None, cls.NOT_AUTHENTICATED),
+            (test_object.advisor.username, 'test', None),
+            ('user1', 'user1', None),
+        )
 
 
-class SchoolDetailPatchTestCase(PartialUpdateAPITestCase):
+class SchoolDetailPatchTestCase(tests.PartialUpdateAPITestCase):
     url_name = 'api:school_detail'
     params = {'name': 'name', 'city': 'city'}
 
@@ -162,7 +75,7 @@ class SchoolDetailPatchTestCase(PartialUpdateAPITestCase):
         self.assertEqual(response.data['city'], self.school.city)
 
 
-class SchoolDetailDeleteTestCase(DestroyAPITestCase):
+class SchoolDetailDeleteTestCase(tests.DestroyAPITestCase):
     url_name = 'api:school_detail'
 
     def setUp(self):
@@ -203,7 +116,7 @@ class SchoolDetailDeleteTestCase(DestroyAPITestCase):
         self.assertTrue(School.objects.filter(id=self.school.id).exists())
 
 
-class SchoolListGetTestCase(ListAPITestCase):
+class SchoolListGetTestCase(tests.ListAPITestCase):
     url_name = 'api:school_list'
 
     def setUp(self):

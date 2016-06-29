@@ -3,12 +3,10 @@
 from rest_framework import serializers
 
 from huxley.api import validators
-from huxley.api.serializers.fields import DecimalField
 from huxley.core.models import School, Committee
 
 
 class SchoolSerializer(serializers.ModelSerializer):
-    registered = serializers.DateTimeField(format='iso-8601', required=False)
     fees_owed = serializers.FloatField(read_only=True)
     fees_paid = serializers.FloatField(read_only=True)
     assignments_finalized = serializers.BooleanField(required=False)

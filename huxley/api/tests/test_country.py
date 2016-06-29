@@ -1,26 +1,28 @@
 # Copyright (c) 2011-2015 Berkeley Model United Nations. All rights reserved.
 # Use of this source code is governed by a BSD License (see LICENSE).
 
-from huxley.api.tests import (CreateAPITestCase, DestroyAPITestCase,
-                              ListAPITestCase, PartialUpdateAPITestCase,
-                              RetrieveAPITestCase)
+from huxley.api import tests
+from huxley.api.tests import auto
+from huxley.api.views.country import CountryDetail
 from huxley.utils.test import TestCountries, TestUsers
 
 
-class CountryDetailGetTestCase(RetrieveAPITestCase):
+class CountryDetailGetTestCase(auto.RetrieveAPIAutoTestCase):
     url_name = 'api:country_detail'
+    view = CountryDetail
 
-    def test_anonymous_user(self):
-        '''Fields should be returned when accessed by any user.'''
-        country = TestCountries.new_country()
-        response = self.get_response(country.id)
-        self.assertEqual(response.data, {
-            'id': country.id,
-            'name': country.name,
-            'special': country.special})
+    @classmethod
+    def get_test_object(cls):
+        return TestCountries.new_country()
+
+    @classmethod
+    def get_users(cls, test_object):
+        return (
+            (None, None, None),
+        )
 
 
-class CountryListGetTestCase(ListAPITestCase):
+class CountryListGetTestCase(tests.ListAPITestCase):
     url_name = 'api:country_list'
 
     def test_anonymous_user(self):
@@ -42,7 +44,7 @@ class CountryListGetTestCase(ListAPITestCase):
              'name': country3.name}])
 
 
-class CountryDetailDeleteTestCase(DestroyAPITestCase):
+class CountryDetailDeleteTestCase(tests.DestroyAPITestCase):
     url_name = 'api:country_detail'
 
     def setUp(self):
@@ -70,7 +72,7 @@ class CountryDetailDeleteTestCase(DestroyAPITestCase):
         self.assertMethodNotAllowed(response, 'DELETE')
 
 
-class CountryDetailPatchTestCase(PartialUpdateAPITestCase):
+class CountryDetailPatchTestCase(tests.PartialUpdateAPITestCase):
     url_name = 'api:country_detail'
     params = {'name': 'Barbara Boxer',
               'special': True}
@@ -100,7 +102,7 @@ class CountryDetailPatchTestCase(PartialUpdateAPITestCase):
         self.assertMethodNotAllowed(response, 'PATCH')
 
 
-class CountryListPostTestCase(CreateAPITestCase):
+class CountryListPostTestCase(tests.CreateAPITestCase):
     url_name = 'api:country_list'
     params = {'name': 'USA',
               'special': False}

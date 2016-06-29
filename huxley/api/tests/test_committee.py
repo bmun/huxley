@@ -1,28 +1,28 @@
 # Copyright (c) 2011-2015 Berkeley Model United Nations. All rights reserved.
 # Use of this source code is governed by a BSD License (see LICENSE).
 
-from huxley.api.tests import (CreateAPITestCase, DestroyAPITestCase,
-                              ListAPITestCase, PartialUpdateAPITestCase,
-                              RetrieveAPITestCase, UpdateAPITestCase)
+from huxley.api import tests
+from huxley.api.tests import auto
+from huxley.api.views.committee import CommitteeDetail
 from huxley.utils.test import TestCommittees, TestUsers
 
 
-class CommitteeDetailGetTestCase(RetrieveAPITestCase):
+class CommitteeDetailGetTestCase(auto.RetrieveAPIAutoTestCase):
     url_name = 'api:committee_detail'
+    view = CommitteeDetail
 
-    def test_anonymous_user(self):
-        '''It should return the correct fields for a committee.'''
-        c = TestCommittees.new_committee()
-        response = self.get_response(c.id)
-        self.assertEqual(response.data, {
-            'id': c.id,
-            'name': c.name,
-            'full_name': c.full_name,
-            'delegation_size': c.delegation_size,
-            'special': c.special})
+    @classmethod
+    def get_test_object(cls):
+        return TestCommittees.new_committee()
+
+    @classmethod
+    def get_users(cls, test_object):
+        return (
+            (None, None, None),
+        )
 
 
-class CommitteeDetailPutTestCase(UpdateAPITestCase):
+class CommitteeDetailPutTestCase(tests.UpdateAPITestCase):
     url_name = 'api:committee_detail'
     params = {'name':'DISC',
               'special':True}
@@ -52,7 +52,7 @@ class CommitteeDetailPutTestCase(UpdateAPITestCase):
         self.assertMethodNotAllowed(response, 'PUT')
 
 
-class CommitteeDetailPatchTestCase(PartialUpdateAPITestCase):
+class CommitteeDetailPatchTestCase(tests.PartialUpdateAPITestCase):
     url_name = 'api:committee_detail'
     params = {'name':'DISC',
               'special':True}
@@ -82,7 +82,7 @@ class CommitteeDetailPatchTestCase(PartialUpdateAPITestCase):
         self.assertMethodNotAllowed(response, 'PATCH')
 
 
-class CommitteeDetailDeleteTestCase(DestroyAPITestCase):
+class CommitteeDetailDeleteTestCase(tests.DestroyAPITestCase):
     url_name = 'api:committee_detail'
 
     def setUp(self):
@@ -110,7 +110,7 @@ class CommitteeDetailDeleteTestCase(DestroyAPITestCase):
         self.assertMethodNotAllowed(response, 'DELETE')
 
 
-class CommitteeListGetTestCase(ListAPITestCase):
+class CommitteeListGetTestCase(tests.ListAPITestCase):
     url_name = 'api:committee_list'
 
     def test_anonymous_user(self):
@@ -133,7 +133,7 @@ class CommitteeListGetTestCase(ListAPITestCase):
              'name': c2.name}])
 
 
-class CommitteeListPostTestCase(CreateAPITestCase):
+class CommitteeListPostTestCase(tests.CreateAPITestCase):
     url_name = 'api:committee_list'
     params = {'name': 'DISC',
               'full_name': 'Disarmament and International Security',
