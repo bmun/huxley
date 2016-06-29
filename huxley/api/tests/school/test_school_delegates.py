@@ -56,6 +56,7 @@ class SchoolDelegateGetTestCase(ListAPITestCase):
         self.client.login(username='another', password='user')
 
         response = self.get_response(self.school.id)
+        print response
         self.assertPermissionDenied(response)
 
     def test_superuser(self):
@@ -64,6 +65,7 @@ class SchoolDelegateGetTestCase(ListAPITestCase):
         self.client.login(username='test', password='user')
 
         response = self.get_response(self.school.id)
+        print response
         self.assert_delegate_equal(response)
 
     def assert_delegate_equal(self, response):

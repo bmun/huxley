@@ -56,7 +56,7 @@ class SchoolDelegates(generics.ListAPIView):
         if not school_id:
             raise Http404
 
-        return Delegate.objects.filter(assignment__school_id=school_id)
+        return Delegate.objects.filter(school_id=school_id)
 
 
 class SchoolInvoice(PDFTemplateView):
