@@ -10,6 +10,7 @@
 var $ = require('jquery');
 var React = require('react');
 var Router = require('react-router');
+var Modal = require('react-modal');
 
 var AssignmentStore = require('../stores/AssignmentStore');
 var Button = require('./Button');
@@ -29,12 +30,6 @@ var AdvisorRosterView = React.createClass({
     return {
       assignments: [],
       delegates: [],
-      committees: {},
-      countries: {},
-      loading: false,
-      errors: {},
-      name: '',
-      email: ''
     };
   },
 
@@ -47,20 +42,6 @@ var AdvisorRosterView = React.createClass({
         }
       )});
     }.bind(this));
-    CommitteeStore.getCommittees(function(committees) {
-      var new_committees = {};
-      for (var i = 0; i < committees.length; i++) {
-        new_committees[committees[i].id] = committees[i];
-      }
-      this.setState({committees: new_committees});
-    }.bind(this));
-    CountryStore.getCountries(function(countries) {
-      var new_countries = {};
-      for (var i = 0; i <countries.length; i++) {
-        new_countries[countries[i].id] = countries[i];
-      }
-      this.setState({countries: new_countries})
-    }.bind(this));
     DelegateStore.getDelegates(user.school.id, function(delegates) {
       this.setState({delegates: delegates});
     }.bind(this));
@@ -71,8 +52,7 @@ var AdvisorRosterView = React.createClass({
       <InnerView>
         <h2>Roster</h2>
         <p>
-          REVERT BACK
-          // Here you can add your schools delegates to your roster.
+          Here you can add your schools delegates to your roster.
           Any comments that chairs have about your delegate will appear here.
         </p>
         <form>
@@ -85,11 +65,12 @@ var AdvisorRosterView = React.createClass({
                 <th>Summary</th>
               </tr>
               {this.renderRosterRows()}
+              {this._handleAddDelegate()}
             </table>
           </div>
         </form>
         <div>
-          <Button onclick={this._addDelegatePressed}>Add Delegate</Button>
+          <Button onClick={this._handleAddDelegate}>Add Delegate</Button>
         </div>
       </InnerView>
     );
@@ -113,7 +94,7 @@ var AdvisorRosterView = React.createClass({
     }.bind(this));
   },
 
-  _addDelegatePressed: function() {
+  _handleAddDelegate: function() {
     return (
       <form>
         <br>Name: <input type="text" placeholder="Name" valueLink={this.linkState('name')} /></br>
