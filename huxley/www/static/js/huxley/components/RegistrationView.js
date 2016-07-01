@@ -704,7 +704,7 @@ var RegistrationView = React.createClass({
     if (!response) {
       return;
     }
-    console.log(response)
+
     this.setState({
       errors: response,
       loading: false
