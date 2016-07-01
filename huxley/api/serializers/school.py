@@ -72,20 +72,42 @@ class SchoolSerializer(serializers.ModelSerializer):
 
 
     def validate(self, data):
+        invalid_fields = {}
         international = data.get('international')
         primary_phone = data.get('primary_phone')
         secondary_phone = data.get('secondary_phone')
+        beginner_delegates = data.get('beginner_delegates')
+        intermediate_delegates = data.get('intermediate_delegates')
+        advanced_delegates = data.get('advanced_delegates')
+        spanish_speaking_delegates = data.get('spanish_speaking_delegates')
+        chinese_speaking_delegates = data.get('chinese_speaking_delegates')
+        total_delegates = beginner_delegates + intermediate_delegates + advanced_delegates
 
         if primary_phone:
-            if international:
-                validators.phone_international(primary_phone)
-            else:
-                validators.phone_domestic(primary_phone)
+            try:
+                if international:
+                    validators.phone_international(primary_phone)
+                else:
+                    validators.phone_domestic(primary_phone)
+            except ValidationError:
+                invalid_fields['Primary Phone'] = 'Invalid phone number'
         if secondary_phone:
-            if international:
-                validators.phone_international(secondary_phone)
-            else:
-                validators.phone_domestic(secondary_phone)
+            try:
+                if international:
+                    validators.phone_international(secondary_phone)
+                else:
+                    validators.phone_domestic(secondary_phone)
+                except ValidationError:
+                    invalid_fields['Secondary Phone'] = "Invalid phone number"
+
+        if spanish_speaking_delegates > total_delegates:
+            invalid_fields['Spanish Speaking Delegates'] = 'Cannot exceed total delegates'
+        if chinese_speaking_delegates > total_delegates:
+            invalid_fields['Chinese Speaking Delegates'] = 'Cannont exeed total delegates'
+
+        if invalid_fields:
+            error_message = [field + ": " + invalid_fields[field] for field in invalid_fields].join('\n');
+            raise ValidationError(error_message)
 
         return data
 
