@@ -90,7 +90,7 @@ class SchoolSerializer(serializers.ModelSerializer):
                 else:
                     validators.phone_domestic(primary_phone)
             except serializers.ValidationError:
-                invalid_fields['primary_phone'] = 'This is an invalid phone number'
+                invalid_fields['primary_phone'] = 'This is an invalid phone number.'
         if secondary_phone:
             try:
                 if international:
@@ -98,7 +98,7 @@ class SchoolSerializer(serializers.ModelSerializer):
                 else:
                     validators.phone_domestic(secondary_phone)
             except serializers.ValidationError:
-                invalid_fields['secondary_phone'] = 'This is an invalid phone number'
+                invalid_fields['secondary_phone'] = 'This is an invalid phone number.'
 
         if spanish_speaking_delegates > total_delegates:
             invalid_fields['spanish_speaking_delegates'] = 'Cannot exceed total delegates'
