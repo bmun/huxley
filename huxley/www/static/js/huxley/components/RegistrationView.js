@@ -529,13 +529,6 @@ var RegistrationView = React.createClass({
           {this.state.errors.school[field]}
         </label>
       );
-    } else if (this.state.errors.school && 
-               this.state.errors.school['non_field_errors']) {
-      return (
-        <label className="hint error" >
-          {this.state.errors.school['non_field_errors']}
-        </label>
-      );
     }
 
     return null;
@@ -711,7 +704,7 @@ var RegistrationView = React.createClass({
     if (!response) {
       return;
     }
-
+    console.log(response)
     this.setState({
       errors: response,
       loading: false
