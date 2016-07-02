@@ -37,33 +37,44 @@ class RetrieveAPIAutoTestCase(RetrieveAPITestCase):
 
     def assert_response(self, response):
         serializer = self.view.serializer_class
-        expected_response = get_expected_response(
+        expected_data = get_expected_data(
             serializer,
             serializer.Meta.model,
             self.object,
         )
-        self.assertEqual(response.data, expected_response)
+        self.assertEqual(response.data, expected_data)
 
 
-def get_expected_response(serializer, model, test_object):
+def get_expected_data(serializer, model, test_object):
     serializer_fields = serializer._declared_fields
-    expected = {}
+    expected_data = {}
     for field_name in serializer.Meta.fields:
-        field = model._meta.get_field(field_name)
-        attr = getattr(test_object, field_name)
+        expected_data[field_name] = transform_attr(
+            getattr(test_object, field_name),
+            test_object,
+            model._meta.get_field(field_name),
+            serializer_fields.get(field_name, None),
+        )
 
-        if isinstance(field, models.DecimalField):
-            attr = float(attr)
+    return expected_data
 
-        serializer_field = serializer_fields.get(field_name, None)
-        if serializer_field:
-            if isinstance(serializer_field, serializers.DateTimeField):
-                attr = attr.isoformat()
-            elif isinstance(serializer_field, serializers.ListField):
-                attr = list(getattr(test_object, serializer_field.source))
-            elif isinstance(serializer_field, serializers.ManyRelatedField):
-                attr = list(attr.all())
 
-        expected[field_name] = attr
+def transform_attr(attr, test_object, model_field, serializer_field):
+    if isinstance(model_field, models.DecimalField):
+        return float(attr)
+    if isinstance(model_field, models.DateTimeField):
+        return attr.isoformat()
+    if isinstance(model_field, models.ForeignKey):
+        return attr.pk
 
-    return expected
+    if not serializer_field:
+        return attr
+
+    if isinstance(serializer_field, serializers.DateTimeField):
+        return attr.isoformat()
+    if isinstance(serializer_field, serializers.ListField):
+        return list(getattr(test_object, serializer_field.source))
+    if isinstance(serializer_field, serializers.ManyRelatedField):
+        return list(attr.all())
+
+    return attr
