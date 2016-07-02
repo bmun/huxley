@@ -1,8 +1,7 @@
 # Copyright (c) 2011-2015 Berkeley Model United Nations. All rights reserved.
 # Use of this source code is governed by a BSD License (see LICENSE).
 
-from huxley.api.tests import (CreateAPITestCase, DestroyAPITestCase,
-                              PartialUpdateAPITestCase, UpdateAPITestCase)
+from huxley.api import tests
 from huxley.api.tests import auto
 from huxley.api.views.delegate import DelegateDetail
 from huxley.utils.test import (TestUsers, TestSchools, TestAssignments,
@@ -30,7 +29,7 @@ class DelegateDetailGetTestCase(auto.RetrieveAPIAutoTestCase):
         )
 
 
-class DelegateDetailPutTestCase(UpdateAPITestCase):
+class DelegateDetailPutTestCase(tests.UpdateAPITestCase):
     url_name = 'api:delegate_detail'
     params = {
         'name':'Trevor Dowds',
@@ -77,7 +76,7 @@ class DelegateDetailPutTestCase(UpdateAPITestCase):
         )
 
 
-class DelegateDetailPatchTestCase(PartialUpdateAPITestCase):
+class DelegateDetailPatchTestCase(tests.PartialUpdateAPITestCase):
     url_name = 'api:delegate_detail'
     params = {
         'name':'Trevor Dowds',
@@ -123,7 +122,7 @@ class DelegateDetailPatchTestCase(PartialUpdateAPITestCase):
         )
 
 
-class DelegateDetailDeleteTestCase(DestroyAPITestCase):
+class DelegateDetailDeleteTestCase(tests.DestroyAPITestCase):
     url_name = 'api:delegate_detail'
 
     def setUp(self):
@@ -152,7 +151,7 @@ class DelegateDetailDeleteTestCase(DestroyAPITestCase):
         response = self.get_response(self.assignment.id)
         self.assert204(response)
 
-class DelegateListCreateTestCase(CreateAPITestCase):
+class DelegateListCreateTestCase(tests.CreateAPITestCase):
     url_name = 'api:delegate_list'
     params = {
         'name':'Trevor Dowds',
