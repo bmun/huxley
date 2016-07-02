@@ -81,7 +81,6 @@ class SchoolSerializer(serializers.ModelSerializer):
         advanced_delegates = data.get('advanced_delegates')
         spanish_speaking_delegates = data.get('spanish_speaking_delegates')
         chinese_speaking_delegates = data.get('chinese_speaking_delegates')
-        total_delegates = beginner_delegates + intermediate_delegates + advanced_delegates
 
         if primary_phone:
             try:
@@ -99,6 +98,14 @@ class SchoolSerializer(serializers.ModelSerializer):
                     validators.phone_domestic(secondary_phone)
             except serializers.ValidationError:
                 invalid_fields['secondary_phone'] = 'This is an invalid phone number.'
+
+        total_delegates = 0
+        if beginner_delegates:
+            total_delegates += beginner_delegates
+        if intermediate_delegates:
+            total_delegates += intermediate_delegates
+        if advanced_delegates:
+            total_delegates += advanced_delegates
 
         if spanish_speaking_delegates > total_delegates:
             invalid_fields['spanish_speaking_delegates'] = 'Cannot exceed total delegates'
