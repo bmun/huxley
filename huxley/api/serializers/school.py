@@ -82,35 +82,32 @@ class SchoolSerializer(serializers.ModelSerializer):
         spanish_speaking_delegates = data.get('spanish_speaking_delegates')
         chinese_speaking_delegates = data.get('chinese_speaking_delegates')
 
-        if primary_phone:
-            try:
-                if international:
-                    validators.phone_international(primary_phone)
-                else:
-                    validators.phone_domestic(primary_phone)
-            except serializers.ValidationError:
-                invalid_fields['primary_phone'] = 'This is an invalid phone number.'
+        total_delegates = sum((
+            beginner_delegates or 0,
+            intermediate_delegates or 0,
+            advanced_delegates or 0))
+
+        def validate_phone(phone, international):
+            if international:
+                validators.phone_international(phone)
+            else:
+                validators.phone_domestic(phone)
+
+        try:
+            validate_phone(primary_phone, international)
+        except serializers.ValidationError:
+            invalid_fields['primary_phone'] = 'This is an invalid phone number.'
+        
         if secondary_phone:
             try:
-                if international:
-                    validators.phone_international(secondary_phone)
-                else:
-                    validators.phone_domestic(secondary_phone)
+                validate_phone(secondary_phone, international)
             except serializers.ValidationError:
                 invalid_fields['secondary_phone'] = 'This is an invalid phone number.'
 
-        total_delegates = 0
-        if beginner_delegates:
-            total_delegates += beginner_delegates
-        if intermediate_delegates:
-            total_delegates += intermediate_delegates
-        if advanced_delegates:
-            total_delegates += advanced_delegates
-
         if spanish_speaking_delegates > total_delegates:
-            invalid_fields['spanish_speaking_delegates'] = 'Cannot exceed total delegates'
+            invalid_fields['spanish_speaking_delegates'] = 'Cannot exceed total number of delegates.'
         if chinese_speaking_delegates > total_delegates:
-            invalid_fields['chinese_speaking_delegates'] = 'Cannot exceed total delegates'
+            invalid_fields['chinese_speaking_delegates'] = 'Cannot exceed total number of delegates.'
 
         if invalid_fields:
             raise serializers.ValidationError(invalid_fields)

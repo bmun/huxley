@@ -109,7 +109,7 @@ var RegistrationView = React.createClass({
           onSubmit={this._handleSubmit}>
           <div>
             <h1>Register for Berkeley Model United Nations</h1>
-            <p>Pleasee fill out the following information to register your school
+            <p>Please fill out the following information to register your school
             for BMUN {conference.session}. All fields are required except for Secondary Contact
             information. Please note that BMUN is a high school level conference.</p>
             <NavLink direction="left" href="/login">
@@ -367,8 +367,6 @@ var RegistrationView = React.createClass({
               <li>
                 <input
                   type="text"
-                  id="input_delegates"
-                  name="input_delegates"
                   placeholder="Number of Chinese Speaking Delegates"
                   valueLink={this.linkState('chinese_speaking_delegates')}
                 />
