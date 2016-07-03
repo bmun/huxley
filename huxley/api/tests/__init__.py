@@ -97,7 +97,7 @@ class AbstractAPITestCase(APITestCase):
 
     def assertInvalidPhone(self, response, field):
         self.assertEqual(response.data, {
-            u'non_field_errors': [u'This is an invalid phone number.']})
+            '%s' % field: [u'This is an invalid phone number.']})
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
 
