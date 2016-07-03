@@ -93,11 +93,11 @@ class SchoolSerializer(serializers.ModelSerializer):
             else:
                 validators.phone_domestic(phone)
 
-        try:
-            validate_phone(primary_phone, international)
-        except serializers.ValidationError:
-            invalid_fields['primary_phone'] = 'This is an invalid phone number.'
-        
+        if primary_phone:
+            try:
+                validate_phone(primary_phone, international)
+            except serializers.ValidationError:
+                invalid_fields['primary_phone'] = 'This is an invalid phone number.'
         if secondary_phone:
             try:
                 validate_phone(secondary_phone, international)
