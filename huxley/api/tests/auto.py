@@ -3,6 +3,7 @@
 
 from collections import namedtuple
 
+from django.core.urlresolvers import resolve, reverse
 from django.db import models
 from rest_framework import serializers
 
@@ -31,6 +32,10 @@ class RetrieveAPIAutoTestCase(RetrieveAPITestCase):
         cls.object = cls.get_test_object()
         cls.users = cls.get_users(cls.object)
 
+        url_args = (cls.object.id,) if cls.is_resource else ()
+        view_func, _, _ = resolve(reverse(cls.url_name, args=url_args))
+        cls.serializer = view_func.cls.serializer_class
+
     def test(self):
         for user_data in self.users:
             username, password, expected_error = user_data
@@ -44,10 +49,9 @@ class RetrieveAPIAutoTestCase(RetrieveAPITestCase):
                 self.assert_response(response)
 
     def assert_response(self, response):
-        serializer = self.view.serializer_class
         expected_data = get_expected_data(
-            serializer,
-            serializer.Meta.model,
+            self.serializer,
+            self.serializer.Meta.model,
             self.object,
         )
         self.assertEqual(response.data, expected_data)

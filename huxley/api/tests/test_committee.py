@@ -3,13 +3,11 @@
 
 from huxley.api import tests
 from huxley.api.tests import auto
-from huxley.api.views.committee import CommitteeDetail
 from huxley.utils.test import TestCommittees, TestUsers
 
 
 class CommitteeDetailGetTestCase(auto.RetrieveAPIAutoTestCase):
     url_name = 'api:committee_detail'
-    view = CommitteeDetail
 
     @classmethod
     def get_test_object(cls):

@@ -3,14 +3,12 @@
 
 from huxley.api import tests
 from huxley.api.tests import auto
-from huxley.api.views.assignment import AssignmentDetail
 from huxley.utils.test import (TestUsers, TestSchools, TestAssignments,
                                TestCommittees, TestCountries)
 
 
 class AssignmentDetailGetTestCase(auto.RetrieveAPIAutoTestCase):
     url_name = 'api:assignment_detail'
-    view = AssignmentDetail
 
     @classmethod
     def get_test_object(cls):

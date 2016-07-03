@@ -3,14 +3,12 @@
 
 from huxley.api import tests
 from huxley.api.tests import auto
-from huxley.api.views.delegate import DelegateDetail
 from huxley.utils.test import (TestUsers, TestSchools, TestAssignments,
                                TestDelegates)
 
 
 class DelegateDetailGetTestCase(auto.RetrieveAPIAutoTestCase):
     url_name = 'api:delegate_detail'
-    view = DelegateDetail
 
     @classmethod
     def get_test_object(cls):

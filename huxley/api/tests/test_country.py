@@ -3,13 +3,11 @@
 
 from huxley.api import tests
 from huxley.api.tests import auto
-from huxley.api.views.country import CountryDetail
 from huxley.utils.test import TestCountries, TestUsers
 
 
 class CountryDetailGetTestCase(auto.RetrieveAPIAutoTestCase):
     url_name = 'api:country_detail'
-    view = CountryDetail
 
     @classmethod
     def get_test_object(cls):

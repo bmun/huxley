@@ -6,12 +6,9 @@ from huxley.api.tests import auto
 from huxley.core.models import School
 from huxley.utils.test import TestSchools, TestUsers
 
-from huxley.api.views.school import SchoolDetail
-
 
 class SchoolDetailGetTestCase(auto.RetrieveAPIAutoTestCase):
     url_name = 'api:school_detail'
-    view = SchoolDetail
 
     @classmethod
     def get_test_object(cls):
