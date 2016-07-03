@@ -1,17 +1,11 @@
 # Copyright (c) 2011-2016 Berkeley Model United Nations. All rights reserved.
 # Use of this source code is governed by a BSD License (see LICENSE).
 
-from collections import namedtuple
-
 from django.core.urlresolvers import resolve, reverse
 from django.db import models
 from rest_framework import serializers
 
 from huxley.api.tests import RetrieveAPITestCase
-
-
-User = namedtuple('User', ['username', 'password', 'expected_error'])
-User.__new__.__defaults__ = (None, None, None)
 
 
 EXP_NOT_AUTHENTICATED = 'exp_not_authenticated'
@@ -24,29 +18,22 @@ class RetrieveAPIAutoTestCase(RetrieveAPITestCase):
         raise NotImplementedError('You must provide a test object to retrieve.')
 
     @classmethod
-    def get_users(cls, obj):
-        raise NotImplementedError('You must provide test users.')
-
-    @classmethod
     def setUpTestData(cls):
         cls.object = cls.get_test_object()
-        cls.users = cls.get_users(cls.object)
 
         url_args = (cls.object.id,) if cls.is_resource else ()
         view_func, _, _ = resolve(reverse(cls.url_name, args=url_args))
         cls.serializer = view_func.cls.serializer_class
 
-    def test(self):
-        for user_data in self.users:
-            username, password, expected_error = user_data
-            if username and password:
-                self.client.login(username=username, password=password)
-            response = self.get_response(self.object.id)
+    def do_test(self, username=None, password=None, expected_error=None):
+        if username and password:
+            self.client.login(username=username, password=password)
+        response = self.get_response(self.object.id)
 
-            if expected_error == EXP_NOT_AUTHENTICATED:
-                self.assertNotAuthenticated(response)
-            else:
-                self.assert_response(response)
+        if expected_error == EXP_NOT_AUTHENTICATED:
+            self.assertNotAuthenticated(response)
+        else:
+            self.assert_response(response)
 
     def assert_response(self, response):
         expected_data = get_expected_data(

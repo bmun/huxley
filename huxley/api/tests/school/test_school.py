@@ -14,14 +14,15 @@ class SchoolDetailGetTestCase(auto.RetrieveAPIAutoTestCase):
     def get_test_object(cls):
         return TestSchools.new_school()
 
-    @classmethod
-    def get_users(cls, test_object):
+    def test_anonymous_user(self):
+        self.do_test(expected_error=auto.EXP_NOT_AUTHENTICATED)
+
+    def test_advisor(self):
+        self.do_test(username=self.object.advisor.username, password='test')
+
+    def test_superuser(self):
         TestUsers.new_superuser(username='user1', password='user1')
-        return (
-            auto.User(expected_error=auto.EXP_NOT_AUTHENTICATED),
-            auto.User(username=test_object.advisor.username, password='test'),
-            auto.User(username='user1', password='user1'),
-        )
+        self.do_test(username='user1', password='user1'),
 
 
 class SchoolDetailPatchTestCase(tests.PartialUpdateAPITestCase):

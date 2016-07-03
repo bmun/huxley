@@ -17,14 +17,15 @@ class DelegateDetailGetTestCase(auto.RetrieveAPIAutoTestCase):
         assignment = TestAssignments.new_assignment(school=school)
         return TestDelegates.new_delegate(assignment=assignment)
 
-    @classmethod
-    def get_users(cls, test_object):
+    def test_anonymous_user(self):
+        self.do_test(expected_error=auto.EXP_NOT_AUTHENTICATED)
+
+    def test_advisor(self):
+        self.do_test(username='user', password='user')
+
+    def test_superuser(self):
         TestUsers.new_superuser(username='superuser', password='superuser')
-        return (
-            auto.User(expected_error=auto.EXP_NOT_AUTHENTICATED),
-            auto.User(username='user', password='user'),
-            auto.User(username='superuser', password='superuser'),
-        )
+        self.do_test(username='superuser', password='superuser')
 
 
 class DelegateDetailPutTestCase(tests.UpdateAPITestCase):

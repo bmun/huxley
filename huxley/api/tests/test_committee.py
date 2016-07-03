@@ -13,11 +13,8 @@ class CommitteeDetailGetTestCase(auto.RetrieveAPIAutoTestCase):
     def get_test_object(cls):
         return TestCommittees.new_committee()
 
-    @classmethod
-    def get_users(cls, test_object):
-        return (
-            auto.User(),
-        )
+    def test_anonymous_user(self):
+        self.do_test()
 
 
 class CommitteeDetailPutTestCase(tests.UpdateAPITestCase):
