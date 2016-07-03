@@ -18,7 +18,7 @@ class CountryDetailGetTestCase(auto.RetrieveAPIAutoTestCase):
     @classmethod
     def get_users(cls, test_object):
         return (
-            (None, None, None),
+            auto.User(),
         )
 
 
