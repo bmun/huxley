@@ -23,9 +23,9 @@ class DelegateDetailGetTestCase(auto.RetrieveAPIAutoTestCase):
     def get_users(cls, test_object):
         TestUsers.new_superuser(username='superuser', password='superuser')
         return (
-            (None, None, cls.NOT_AUTHENTICATED),
-            ('user', 'user', None),
-            ('superuser', 'superuser', None),
+            auto.User(expected_error=auto.EXP_NOT_AUTHENTICATED),
+            auto.User(username='user', password='user'),
+            auto.User(username='superuser', password='superuser'),
         )
 
 

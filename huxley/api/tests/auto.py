@@ -1,14 +1,22 @@
 # Copyright (c) 2011-2016 Berkeley Model United Nations. All rights reserved.
 # Use of this source code is governed by a BSD License (see LICENSE).
 
+from collections import namedtuple
+
 from django.db import models
 from rest_framework import serializers
 
 from huxley.api.tests import RetrieveAPITestCase
 
 
+User = namedtuple('User', ['username', 'password', 'expected_error'])
+User.__new__.__defaults__ = (None, None, None)
+
+
+EXP_NOT_AUTHENTICATED = 'exp_not_authenticated'
+
+
 class RetrieveAPIAutoTestCase(RetrieveAPITestCase):
-    NOT_AUTHENTICATED = 'not_authenticated'
 
     @classmethod
     def get_test_object(cls):
@@ -30,7 +38,7 @@ class RetrieveAPIAutoTestCase(RetrieveAPITestCase):
                 self.client.login(username=username, password=password)
             response = self.get_response(self.object.id)
 
-            if expected_error == self.NOT_AUTHENTICATED:
+            if expected_error == EXP_NOT_AUTHENTICATED:
                 self.assertNotAuthenticated(response)
             else:
                 self.assert_response(response)

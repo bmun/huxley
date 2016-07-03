@@ -21,9 +21,9 @@ class SchoolDetailGetTestCase(auto.RetrieveAPIAutoTestCase):
     def get_users(cls, test_object):
         TestUsers.new_superuser(username='user1', password='user1')
         return (
-            (None, None, cls.NOT_AUTHENTICATED),
-            (test_object.advisor.username, 'test', None),
-            ('user1', 'user1', None),
+            auto.User(expected_error=auto.EXP_NOT_AUTHENTICATED),
+            auto.User(username=test_object.advisor.username, password='test'),
+            auto.User(username='user1', password='user1'),
         )
 
 
