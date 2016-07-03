@@ -39,32 +39,30 @@ class CountryListGetTestCase(tests.ListAPITestCase):
              'name': country3.name}])
 
 
-class CountryDetailDeleteTestCase(tests.DestroyAPITestCase):
+class CountryDetailDeleteTestCase(auto.DestroyAPIAutoTestCase):
     url_name = 'api:country_detail'
 
-    def setUp(self):
-        self.country = TestCountries.new_country()
+    @classmethod
+    def get_test_object(cls):
+        return TestCountries.new_country()
 
     def test_anonymous_user(self):
-        '''Unauthenticated users should not be able to delete countries.'''
-        response = self.get_response(self.country.id)
-        self.assertMethodNotAllowed(response, 'DELETE')
+        '''Anonymous users cannot delete countries.'''
+        self.do_test(expected_error=auto.EXP_DELETE_NOT_ALLOWED)
 
-    def test_self(self):
-        '''Authenticated users shouldn't have permission to delete countries.'''
+    def test_authenticated_user(self):
+        '''Authenticated users cannot delete countries.'''
         TestUsers.new_user(username='user', password='user')
-        self.client.login(username='user', password='user')
+        self.do_test(
+            username='user', password='user',
+            expected_error=auto.EXP_DELETE_NOT_ALLOWED)
 
-        response = self.get_response(self.country.id)
-        self.assertMethodNotAllowed(response, 'DELETE')
-
-    def test_super_user(self):
-        '''Countries should not be able to be deleted'''
+    def test_superuser(self):
+        '''Superusers cannot delete countries.'''
         TestUsers.new_superuser(username='user', password='user')
-        self.client.login(username='user', password='user')
-
-        response = self.get_response(self.country.id)
-        self.assertMethodNotAllowed(response, 'DELETE')
+        self.do_test(
+            username='user', password='user',
+            expected_error=auto.EXP_DELETE_NOT_ALLOWED)
 
 
 class CountryDetailPatchTestCase(tests.PartialUpdateAPITestCase):

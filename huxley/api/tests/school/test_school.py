@@ -73,45 +73,32 @@ class SchoolDetailPatchTestCase(tests.PartialUpdateAPITestCase):
         self.assertEqual(response.data['city'], self.school.city)
 
 
-class SchoolDetailDeleteTestCase(tests.DestroyAPITestCase):
+class SchoolDetailDeleteTestCase(auto.DestroyAPIAutoTestCase):
     url_name = 'api:school_detail'
 
-    def setUp(self):
-        self.school = TestSchools.new_school()
-        self.user = self.school.advisor
+    @classmethod
+    def get_test_object(cls):
+        return TestSchools.new_school()
 
     def test_anonymous_user(self):
-        '''Should not be able to delete anonymously.'''
-        response = self.get_response(self.school.id)
+        '''Anonymous users cannot delete a school.'''
+        self.do_test(expected_error=auto.EXP_NOT_AUTHENTICATED)
 
-        self.assertNotAuthenticated(response)
-        self.assertTrue(School.objects.filter(id=self.school.id).exists())
-
-    def test_self(self):
-        '''One user should be able to delete their own account.'''
-        self.client.login(username=self.user.username, password='test')
-        response = self.get_response(self.school.id)
-
-        self.assertEqual(response.data, None)
-        self.assertFalse(School.objects.filter(id=self.school.id).exists())
+    def test_advisor(self):
+        '''Advisors can delete their school.'''
+        self.do_test(username=self.object.advisor.username, password='test')
 
     def test_other_user(self):
-        '''One user should not be able to delete another user.'''
-        TestUsers.new_user(username='user2', password='user2')
-        self.client.login(username='user2', password='user2')
-        response = self.get_response(self.school.id)
-
-        self.assertPermissionDenied(response)
-        self.assertTrue(School.objects.filter(id=self.school.id).exists())
+        '''A user cannot delete another user's school.'''
+        TestUsers.new_user(username='joe', password='schmoe')
+        self.do_test(
+            username='joe', password='schmoe',
+            expected_error=auto.EXP_PERMISSION_DENIED)
 
     def test_superuser(self):
-        '''A superuser should not be able to delete an account.'''
-        TestUsers.new_user(username='user2', password='user2')
-        self.client.login(username='user2', password='user2')
-        response = self.get_response(self.school.id)
-
-        self.assertPermissionDenied(response)
-        self.assertTrue(School.objects.filter(id=self.school.id).exists())
+        '''A superuser can delete a school.'''
+        TestUsers.new_superuser(username='superuser', password='superuser')
+        self.do_test(username='superuser', password='superuser')
 
 
 class SchoolListGetTestCase(tests.ListAPITestCase):

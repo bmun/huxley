@@ -77,32 +77,30 @@ class CommitteeDetailPatchTestCase(tests.PartialUpdateAPITestCase):
         self.assertMethodNotAllowed(response, 'PATCH')
 
 
-class CommitteeDetailDeleteTestCase(tests.DestroyAPITestCase):
+class CommitteeDetailDeleteTestCase(auto.DestroyAPIAutoTestCase):
     url_name = 'api:committee_detail'
 
-    def setUp(self):
-        self.committee = TestCommittees.new_committee()
+    @classmethod
+    def get_test_object(cls):
+        return TestCommittees.new_committee()
 
     def test_anonymous_user(self):
-        '''Unauthenticated users should not be able to delete committees.'''
-        response = self.get_response(self.committee.id)
-        self.assertMethodNotAllowed(response, 'DELETE')
+        '''Anonymous users cannot delete committees.'''
+        self.do_test(expected_error=auto.EXP_DELETE_NOT_ALLOWED)
 
-    def test_self(self):
-        '''Authenticated users shouldn't have permission to delete committees.'''
+    def test_authenticated_user(self):
+        '''Authenticated users cannot delete committees.'''
         TestUsers.new_user(username='user', password='user')
-        self.client.login(username='user', password='user')
+        self.do_test(
+            username='user', password='user',
+            expected_error=auto.EXP_DELETE_NOT_ALLOWED)
 
-        response = self.get_response(self.committee.id)
-        self.assertMethodNotAllowed(response, 'DELETE')
-
-    def test_super_user(self):
-        '''Committees should not be able to be deleted'''
+    def test_superuser(self):
+        '''Superusers cannot delete committees.'''
         TestUsers.new_superuser(username='user', password='user')
-        self.client.login(username='user', password='user')
-
-        response = self.get_response(self.committee.id)
-        self.assertMethodNotAllowed(response, 'DELETE')
+        self.do_test(
+            username='user', password='user',
+            expected_error=auto.EXP_DELETE_NOT_ALLOWED)
 
 
 class CommitteeListGetTestCase(tests.ListAPITestCase):

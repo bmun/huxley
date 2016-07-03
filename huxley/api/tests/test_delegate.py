@@ -121,34 +121,36 @@ class DelegateDetailPatchTestCase(tests.PartialUpdateAPITestCase):
         )
 
 
-class DelegateDetailDeleteTestCase(tests.DestroyAPITestCase):
+class DelegateDetailDeleteTestCase(auto.DestroyAPIAutoTestCase):
     url_name = 'api:delegate_detail'
 
-    def setUp(self):
-        self.user = TestUsers.new_user(username='user', password='user')
-        self.school = TestSchools.new_school(user=self.user)
-        self.assignment = TestAssignments.new_assignment(school=self.school)
-        self.delegate = TestDelegates.new_delegate(assignment=self.assignment)
+    @classmethod
+    def get_test_object(cls):
+        return TestDelegates.new_delegate()
 
     def test_anonymous_user(self):
-        '''Unauthenticated users should not be able to delete assignments.'''
-        response = self.get_response(self.assignment.id)
-        self.assertNotAuthenticated(response)
+        '''Anonymous users cannot delete delegates.'''
+        self.do_test(expected_error=auto.EXP_NOT_AUTHENTICATED)
 
     def test_advisor(self):
-        '''Authenticated users shouldn't have permission to delete assignments.'''
-        self.client.login(username='user', password='user')
+        '''Advisors can delete their delegates.'''
+        self.do_test(
+            username=self.object.school.advisor.username,
+            password='test')
 
-        response = self.get_response(self.assignment.id)
-        self.assert204(response)
+    def test_other_user(self):
+        '''A user cannot delete another user's delegates.'''
+        joe = TestUsers.new_user(username='joe', password='schmoe')
+        TestSchools.new_school(user=joe)
+        self.do_test(
+            username='joe', password='schmoe',
+            expected_error=auto.EXP_PERMISSION_DENIED)
 
     def test_superuser(self):
-        '''Assignments should not be able to be deleted through API'''
-        TestUsers.new_superuser(username='s_user', password='s_user')
-        self.client.login(username='s_user', password='s_user')
+        '''A superuser can delete delegates.'''
+        TestUsers.new_superuser(username='super', password='super')
+        self.do_test(username='super', password='super')
 
-        response = self.get_response(self.assignment.id)
-        self.assert204(response)
 
 class DelegateListCreateTestCase(tests.CreateAPITestCase):
     url_name = 'api:delegate_list'
