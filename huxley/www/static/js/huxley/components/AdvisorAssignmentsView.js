@@ -75,7 +75,7 @@ var AdvisorAssignmentsView = React.createClass({
           would like to request more slots, please email <a href="mailto:info@bmun.org">
           info@bmun.org</a>. In the coming months
           we will ask that you finalize your assignment roster and input your
-          delegates' names.
+          delegates names.
         </p>
         <form>
           <div className="tablemenu header" />
