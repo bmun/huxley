@@ -31,6 +31,7 @@ class CreateSchoolTestCase(CreateAPITestCase):
         'chinese_speaking_delegates': 0,
         'countrypreferences': [1, 2],
         'assignments_finalized': False,
+        'delegate_names_finalized': False,
     }
 
     def test_empty_fields(self):
@@ -124,6 +125,7 @@ class CreateSchoolTestCase(CreateAPITestCase):
             'fees_owed': float(school.fees_owed),
             'fees_paid': float(school.fees_paid),
             'assignments_finalized': school.assignments_finalized,
+            'delegate_names_finalized': school.delegate_names_finalized,
         })
 
     def test_country_preferences(self):

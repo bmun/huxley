@@ -64,7 +64,8 @@ var AdvisorAssignmentsView = React.createClass({
   },
 
   render: function() {
-    var finalized = CurrentUserStore.getFinalized();
+    var assignmentsFinalized = CurrentUserStore.getAssignmentFinalized();
+    var delegateNamesFinalized = CurrentUserStore.getDelegateNameFinalized();
     var conference = this.context.conference;
     return (
       <InnerView>
@@ -84,21 +85,33 @@ var AdvisorAssignmentsView = React.createClass({
                 <th>Committee</th>
                 <th>Country</th>
                 <th>Delegation Size</th>
-                <th>{finalized ?
-                  "" :
+                <th>{assignmentsFinalized ?
+                  "Delegate" :
                   "Delete Assignments"}
+                </th>
+                <th>{assignmentsFinalized ?
+                  "Delegate" :
+                  ""}
                 </th>
               </tr>
               {this.renderAssignmentRows()}
             </table>
           </div>
           <div className="tablemenu footer" />
-          {finalized ?
-            <div> </div> :
+          {delegateNamesFinalized ?
+            <div/> :
+            assignmentsFinalized ?
+            <Button
+              color="blue"
+              size="large"
+              onClick={this._handleFinalizeNames}
+              loading={this.state.loading}>
+              Finalize Delegate Names
+            </Button> :
             <Button
               color="green"
               size="large"
-              onClick={this._handleFinalize}
+              onClick={this._handleFinalizeAssignments}
               loading={this.state.loading}>
               Finalize Assignments
             </Button>}
@@ -110,27 +123,38 @@ var AdvisorAssignmentsView = React.createClass({
   renderAssignmentRows: function() {
     var committees = this.state.committees;
     var countries = this.state.countries;
-    var finalized = CurrentUserStore.getFinalized();
+    var assignmentsFinalized = CurrentUserStore.getAssignmentFinalized();
+    var delegateNamesFinalized = CurrentUserStore.getDelegateNameFinalized();
     return this.state.assignments.map(function(assignment) {
       return (
         <tr>
           <td>{committees[assignment.committee].name}</td>
           <td>{countries[assignment.country].name}</td>
           <td>{committees[assignment.committee].delegation_size}</td>
-          <td>{finalized ?
-            <div/> :
+          <td>{delegateNamesFinalized ?
+            "delegate" : // Leaving this here as a placeholder for the delegate
+            assignmentsFinalized ?
+            <select>
+            </select> :
             <Button color="red"
                     size="small"
                     onClick={this._handleAssignmentDelete.bind(this, assignment)}>
                     Delete Assignment
             </Button>}
           </td>
+          <td>{delegateNamesFinalized ?
+            "delegate" : // Leaving this here as a placeholder for the delegate
+            assignmentsFinalized && committees[assignment.committee].delegation_size == 2 ?
+            <select>
+            </select> :
+            <div/>}
+          </td>
         </tr>
       )
     }.bind(this));
   },
 
-  _handleFinalize: function(event) {
+  _handleFinalizeAssignments: function(event) {
     var confirm = window.confirm("By pressing okay you are committing to the financial responsibility of each assingment. Are you sure you want to finalize assignments?");
     var school = CurrentUserStore.getCurrentUser().school;
     if (confirm) {
@@ -159,6 +183,35 @@ var AdvisorAssignmentsView = React.createClass({
         },
         success: this._handleAssignmentDeleteSuccess,
         error: this._handleError,
+      });
+    }
+  },
+
+  _handleFinalizeNames: function(event) {
+    /* Would appreciate some suggestions here. There are two things we need to do:
+      1. Update each delegate to have its assignment field set here.
+      2. Update the school model to know its names have been finalized.
+
+    To do that we could send a request to the delegate api and update all of their
+    assignment fields. We would need to do some validation there to ensure that:
+      1. A double delegate assignment has exactly two delegates
+      2. No delegate is assigned to more than one assignment
+
+    On a succesful response back, we then make another call to the school api to
+    update the school to know its names have been finalized.
+    */
+    var confirm = window.confirm("Are you sure you want to finalize your delegate names?");
+    var school = CurrentUserStore.getCurrentUser().school;
+    if (confirm) {
+      this.setState({loading: true});
+      $.ajax ({
+        type: 'PUT',
+        url: '/api/schools/'+school.id,
+        data: {
+          delegate_names_finalized: true,
+        },
+        success: this._handleFinalizedSuccess,
+        error: this._handleError
       });
     }
   },

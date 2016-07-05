@@ -23,9 +23,14 @@ class CurrentUserStore extends Store {
     return this._currentUser;
   }
 
-  getFinalized() {
+  getAssignmentFinalized() {
     this._assertBootstrapped();
     return this._currentUser.school.assignments_finalized;
+  }
+
+  getDelegateNameFinalized() {
+    this._assertBootstrapped();
+    return this._currentUser.school.delegate_names_finalized;
   }
 
   addListener(callback) {
