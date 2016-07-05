@@ -10,6 +10,7 @@ class SchoolSerializer(serializers.ModelSerializer):
     fees_owed = serializers.FloatField(read_only=True)
     fees_paid = serializers.FloatField(read_only=True)
     assignments_finalized = serializers.BooleanField(required=False)
+    delegate_names_finalized = serializers.BooleanField(required=False)
     countrypreferences = serializers.ListField(child=serializers.IntegerField(required=False), source='country_preference_ids')
     committeepreferences = serializers.PrimaryKeyRelatedField(allow_empty=True, many=True, queryset=Committee.objects.all(), required=False)
 
@@ -49,6 +50,7 @@ class SchoolSerializer(serializers.ModelSerializer):
             'fees_owed',
             'fees_paid',
             'assignments_finalized',
+            'delegate_names_finalized',
         )
         extra_kwargs = {
         'committeepreferences': {'required': False},
