@@ -5,8 +5,9 @@
 
 'use strict';
 
+var classNames = require('classnames');
 var Link = require('react-router').Link;
-var React = require('react/addons');
+var React = require('react');
 
 var NavLink = React.createClass({
   propTypes: {
@@ -15,10 +16,9 @@ var NavLink = React.createClass({
   },
 
   render: function() {
-    var cx = React.addons.classSet;
     return (
       <Link
-        className={cx({
+        className={classNames({
           'outer-nav': true,
           'arrow-left': this.props.direction == 'left',
           'arrow-right': this.props.direction == 'right'

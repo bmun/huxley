@@ -6,12 +6,14 @@
 'use strict';
 
 var $ = require('jquery');
-var React = require('react/addons');
+var classNames = require('classnames');
+var LinkedStateMixin = require('react-addons-linked-state-mixin');
+var React = require('react');
 
 var Button = require('./Button');
 
 var ChangePasswordView = React.createClass({
-  mixins: [React.addons.LinkedStateMixin],
+  mixins: [LinkedStateMixin],
 
   propTypes: {
     isVisible: React.PropTypes.bool.isRequired,
@@ -35,10 +37,9 @@ var ChangePasswordView = React.createClass({
   },
 
   render: function() {
-    var cx = React.addons.classSet;
     return (
       <div
-        className={cx({
+        className={classNames({
           'change-password': true,
           'rounded-bottom': true,
            'transparent': true,

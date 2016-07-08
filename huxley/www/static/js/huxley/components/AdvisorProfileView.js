@@ -5,7 +5,8 @@
 
 'use strict';
 
-var React = require('react/addons');
+var LinkedStateMixin = require('react-addons-linked-state-mixin');
+var React = require('react');
 
 var Button = require('./Button');
 var InnerView = require('./InnerView');
@@ -15,7 +16,7 @@ var ProgramTypes = require('../constants/ProgramTypes');
 var User = require('../utils/User');
 
 var AdvisorProfileView = React.createClass({
-  mixins: [React.addons.LinkedStateMixin],
+  mixins: [LinkedStateMixin],
 
   propTypes: {
     user: React.PropTypes.object.isRequired
@@ -61,169 +62,171 @@ var AdvisorProfileView = React.createClass({
           </div>
           <div id="welcomeinfocontainer" className="table-container">
             <table id="welcomeinfo" className="table highlight-cells">
-              <tr>
-                <th colSpan="2">Advisor Information</th>
-              </tr>
-              <tr>
-                <td className="fieldLabel">First Name</td>
-                <td className="field">
-                  {user.first_name}
-                </td>
-              </tr>
-              <tr>
-                <td className="fieldLabel">Last Name</td>
-                <td className="field">
-                  {user.last_name}
-                </td>
-              </tr>
-              <tr>
-                <th colSpan="2">School Information</th>
-              </tr>
-              <tr>
-                <td className="fieldLabel">Name</td>
-                <td className="field">
-                  {school.name}
-                </td>
-              </tr>
-              <tr>
-                <td className="fieldLabel">Address</td>
-                <td className="field">
-                  {school.address}
-                </td>
-              </tr>
-              <tr>
-                <td className="fieldLabel">City</td>
-                <td className="field">
-                  {school.city}
-                </td>
-              </tr>
-              <tr>
-                <td className="fieldLabel">Zip</td>
-                <td className="field">
-                  {school.zip_code}
-                </td>
-              </tr>
-              <tr>
-                <td className="fieldLabel">Waitlisted</td>
-                <td className="field">
-                  {school.waitlist == true ? 'Yes' : 'No'}
-                </td>
-              </tr>
-              <tr>
-                <th colSpan="2">Program Information</th>
-              </tr>
-              <tr>
-                <td className="fieldLabel">Program Type</td>
-                <td className="field">
-                  {school.program_type === 1 ? 'Club' : 'Class'}
-                </td>
-              </tr>
-              <tr>
-                <td className="fieldLabel">Times Attended</td>
-                <td className="field">
-                  {school.times_attended}
-                </td>
-              </tr>
-              <tr>
-                <td className="fieldLabel">Number of Beginner Delegates</td>
-                <td className="field">
-                  {school.beginner_delegates}
-                </td>
-              </tr>
-              <tr>
-                <td className="fieldLabel">Number of Intermediate Delegates</td>
-                <td className="field">
-                  {school.intermediate_delegates}
-                </td>
-              </tr>
-              <tr>
-                <td className="fieldLabel">Number of Advanced Delegates</td>
-                <td className="field">
-                  {school.advanced_delegates}
-                </td>
-              </tr>
-              <tr>
-                <td className="fieldLabel">Number of Spanish Speaking
-                Delegates</td>
-                <td className="field">
-                  {school.spanish_speaking_delegates}
-                </td>
-              </tr>
-              <tr>
-                <td className="fieldLabel">Number of Chinese Speaking
-                Delegates</td>
-                <td className="field">
-                  {school.chinese_speaking_delegates}
-                </td>
-              </tr>
-              <tr>
-                <th colSpan="2">Primary Contact Information</th>
-              </tr>
-              <tr>
-                <td className="fieldLabel">Name</td>
-                <td className="field">
-                  {school.primary_name}
-                </td>
-              </tr>
-              <tr>
-                <td className="fieldLabel">Email</td>
-                <td className="field">
-                  {school.primary_email}
-                </td>
-              </tr>
-              <tr>
-                <td className="fieldLabel">Phone</td>
-                <td className="field">
-                  {school.primary_phone}
-                </td>
-              </tr>
-              <tr>
-                <th colSpan="2">Secondary Contact Information</th>
-              </tr>
-              <tr>
-                <td className="fieldLabel">Name</td>
-                <td className="field">
-                  {school.secondary_name}
-                </td>
-              </tr>
-              <tr>
-                <td className="fieldLabel">Email</td>
-                <td className="field">
-                  {school.secondary_email}
-                </td>
-              </tr>
-              <tr>
-                <td className="fieldLabel">Phone</td>
-                <td className="field">
-                  {school.secondary_phone}
-                </td>
-              </tr>
-              <tr>
-                <th>Fees</th>
-                <td className="field">
-                  <a className="button button-green" href={invoiceUrl} target="_blank">
-                    Generate Your Invoice
-                  </a>
-                </td>
-              </tr>
-              <tr>
-                <td className="fieldLabel">Fees Owed</td>
-                <td className="field">
-                  {'$' + school.fees_owed.toFixed(2)}
-                </td>
-              </tr>
-              <tr>
-                <td className="fieldLabel">Fees Paid</td>
-                <td className="field">
-                  {'$' + school.fees_paid.toFixed(2)}
-                </td>
-              </tr>
-              <tr>
-                <td className="fieldLabel">Balance</td>
-                <td className="field">
-                  {'$' + (school.fees_owed - school.fees_paid).toFixed(2)}
-                </td>
-              </tr>
+              <tbody>
+                <tr>
+                  <th colSpan="2">Advisor Information</th>
+                </tr>
+                <tr>
+                  <td className="fieldLabel">First Name</td>
+                  <td className="field">
+                    {user.first_name}
+                  </td>
+                </tr>
+                <tr>
+                  <td className="fieldLabel">Last Name</td>
+                  <td className="field">
+                    {user.last_name}
+                  </td>
+                </tr>
+                <tr>
+                  <th colSpan="2">School Information</th>
+                </tr>
+                <tr>
+                  <td className="fieldLabel">Name</td>
+                  <td className="field">
+                    {school.name}
+                  </td>
+                </tr>
+                <tr>
+                  <td className="fieldLabel">Address</td>
+                  <td className="field">
+                    {school.address}
+                  </td>
+                </tr>
+                <tr>
+                  <td className="fieldLabel">City</td>
+                  <td className="field">
+                    {school.city}
+                  </td>
+                </tr>
+                <tr>
+                  <td className="fieldLabel">Zip</td>
+                  <td className="field">
+                    {school.zip_code}
+                  </td>
+                </tr>
+                <tr>
+                  <td className="fieldLabel">Waitlisted</td>
+                  <td className="field">
+                    {school.waitlist == true ? 'Yes' : 'No'}
+                  </td>
+                </tr>
+                <tr>
+                  <th colSpan="2">Program Information</th>
+                </tr>
+                <tr>
+                  <td className="fieldLabel">Program Type</td>
+                  <td className="field">
+                    {school.program_type === 1 ? 'Club' : 'Class'}
+                  </td>
+                </tr>
+                <tr>
+                  <td className="fieldLabel">Times Attended</td>
+                  <td className="field">
+                    {school.times_attended}
+                  </td>
+                </tr>
+                <tr>
+                  <td className="fieldLabel">Number of Beginner Delegates</td>
+                  <td className="field">
+                    {school.beginner_delegates}
+                  </td>
+                </tr>
+                <tr>
+                  <td className="fieldLabel">Number of Intermediate Delegates</td>
+                  <td className="field">
+                    {school.intermediate_delegates}
+                  </td>
+                </tr>
+                <tr>
+                  <td className="fieldLabel">Number of Advanced Delegates</td>
+                  <td className="field">
+                    {school.advanced_delegates}
+                  </td>
+                </tr>
+                <tr>
+                  <td className="fieldLabel">Number of Spanish Speaking
+                  Delegates</td>
+                  <td className="field">
+                    {school.spanish_speaking_delegates}
+                  </td>
+                </tr>
+                <tr>
+                  <td className="fieldLabel">Number of Chinese Speaking
+                  Delegates</td>
+                  <td className="field">
+                    {school.chinese_speaking_delegates}
+                  </td>
+                </tr>
+                <tr>
+                  <th colSpan="2">Primary Contact Information</th>
+                </tr>
+                <tr>
+                  <td className="fieldLabel">Name</td>
+                  <td className="field">
+                    {school.primary_name}
+                  </td>
+                </tr>
+                <tr>
+                  <td className="fieldLabel">Email</td>
+                  <td className="field">
+                    {school.primary_email}
+                  </td>
+                </tr>
+                <tr>
+                  <td className="fieldLabel">Phone</td>
+                  <td className="field">
+                    {school.primary_phone}
+                  </td>
+                </tr>
+                <tr>
+                  <th colSpan="2">Secondary Contact Information</th>
+                </tr>
+                <tr>
+                  <td className="fieldLabel">Name</td>
+                  <td className="field">
+                    {school.secondary_name}
+                  </td>
+                </tr>
+                <tr>
+                  <td className="fieldLabel">Email</td>
+                  <td className="field">
+                    {school.secondary_email}
+                  </td>
+                </tr>
+                <tr>
+                  <td className="fieldLabel">Phone</td>
+                  <td className="field">
+                    {school.secondary_phone}
+                  </td>
+                </tr>
+                <tr>
+                  <th>Fees</th>
+                  <td className="field">
+                    <a className="button button-green" href={invoiceUrl} target="_blank">
+                      Generate Your Invoice
+                    </a>
+                  </td>
+                </tr>
+                <tr>
+                  <td className="fieldLabel">Fees Owed</td>
+                  <td className="field">
+                    {'$' + school.fees_owed.toFixed(2)}
+                  </td>
+                </tr>
+                <tr>
+                  <td className="fieldLabel">Fees Paid</td>
+                  <td className="field">
+                    {'$' + school.fees_paid.toFixed(2)}
+                  </td>
+                </tr>
+                <tr>
+                  <td className="fieldLabel">Balance</td>
+                  <td className="field">
+                    {'$' + (school.fees_owed - school.fees_paid).toFixed(2)}
+                  </td>
+                </tr>
+              </tbody>
             </table>
           </div>
           <div className="tablemenu footer">

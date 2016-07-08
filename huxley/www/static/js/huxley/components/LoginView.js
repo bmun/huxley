@@ -8,8 +8,11 @@
 var console = require('console');
 
 var $ = require('jquery');
-var React = require('react/addons');
+var classNames = require('classnames');
+var LinkedStateMixin = require('react-addons-linked-state-mixin');
+var React = require('react');
 var Router = require('react-router');
+
 
 var Button = require('./Button');
 var ConferenceContext = require('./ConferenceContext');
@@ -22,7 +25,7 @@ require('jquery-ui/effect-shake');
 
 var LoginView = React.createClass({
   mixins: [
-    React.addons.LinkedStateMixin,
+    LinkedStateMixin,
     Router.Navigation,
   ],
 
@@ -50,7 +53,6 @@ var LoginView = React.createClass({
   },
 
   render: function() {
-    var cx = React.addons.classSet;
     return (
       <OuterView header={this.renderHeader()}>
         <form

@@ -5,7 +5,8 @@
 
 'use strict';
 
-var React = require('react/addons');
+var classNames = require('classnames');
+var React = require('react');
 var Router = require('react-router');
 
 var Button = React.createClass({
@@ -25,13 +26,12 @@ var Button = React.createClass({
   },
 
   render: function() {
-    var cx = React.addons.classSet;
     var ButtonComponent = this.props.href ? Router.Link : 'button';
 
     return (
       <ButtonComponent
         {...this.props}
-        className={cx({
+        className={classNames({
           'button': true,
           'button-small': this.props.size == 'small',
           'button-large': this.props.size == 'large',

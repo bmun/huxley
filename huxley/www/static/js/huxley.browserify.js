@@ -8,6 +8,7 @@
 var $ = require('jquery');
 var Cookie = require('js-cookie');
 var React = require('react');
+var ReactDOM = require('react-dom')
 var Router = require('react-router');
 
 var CurrentUserActions = require('./huxley/actions/CurrentUserActions');
@@ -52,7 +53,7 @@ var routes = (
 
 $(function() {
   Router.run(routes, function(Handler) {
-    React.render(
+    ReactDOM.render(
       <Handler />,
       document.getElementById('huxley-app')
     );
