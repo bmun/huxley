@@ -8,7 +8,9 @@
 var console = require('console');
 
 var $ = require('jquery');
-var React = require('react/addons');
+var cx = require('classnames');
+var LinkedStateMixin = require('react-addons-linked-state-mixin');
+var React = require('react');
 var Router = require('react-router');
 
 var Button = require('./Button');
@@ -30,7 +32,7 @@ var USA = 'United States of America';
 
 var RegistrationView = React.createClass({
   mixins: [
-    React.addons.LinkedStateMixin,
+    LinkedStateMixin,
     Router.Navigation,
   ],
 
@@ -99,7 +101,6 @@ var RegistrationView = React.createClass({
   },
 
   render: function() {
-    var cx = React.addons.classSet;
     var conference = this.context.conference;
     return (
       <OuterView>

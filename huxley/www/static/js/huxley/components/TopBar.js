@@ -5,7 +5,8 @@
 
 'use strict';
 
-var React = require('react/addons');
+var cx = require('classnames');
+var React = require('react');
 
 var ChangePasswordView = require('./ChangePasswordView');
 var LogoutButton = require('./LogoutButton');
@@ -27,7 +28,6 @@ var TopBar = React.createClass({
 
   render: function() {
     var {user} = this.props;
-    var cx = React.addons.classSet;
 
     return (
       <div>

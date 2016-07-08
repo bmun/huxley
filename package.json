@@ -6,13 +6,17 @@
   "license": "BSD",
   "dependencies": {
     "browserify": "6.3.2",
+    "classnames": "2.2.5",
     "es6-promise": "2.0.0",
     "flux": "^2.1.1",
+    "fbjs": "0.8.3",
     "jquery": "2.1.1",
     "jquery-ui": "1.10.5",
     "js-cookie": "~2.0.3",
-    "react": "~0.13.3",
-    "react-router": "~0.13.0"
+    "react": "0.14.0",
+    "react-dom": "0.14.0",
+    "react-router": "~0.13.0",
+    "react-addons-linked-state-mixin": "0.14.0"
   },
   "scripts": {
     "test": "jest"

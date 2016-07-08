@@ -80,16 +80,20 @@ var AdvisorAssignmentsView = React.createClass({
           <div className="tablemenu header" />
           <div className="table-container">
             <table className="table highlight-cells">
-              <tr>
-                <th>Committee</th>
-                <th>Country</th>
-                <th>Delegation Size</th>
-                <th>{finalized ?
-                  "" :
-                  "Delete Assignments"}
-                </th>
-              </tr>
-              {this.renderAssignmentRows()}
+              <thead>
+                <tr>
+                  <th>Committee</th>
+                  <th>Country</th>
+                  <th>Delegation Size</th>
+                  <th>{finalized ?
+                    "" :
+                    "Delete Assignments"}
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {this.renderAssignmentRows()}
+              </tbody>
             </table>
           </div>
           <div className="tablemenu footer" />
