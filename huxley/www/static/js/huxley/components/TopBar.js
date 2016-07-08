@@ -5,7 +5,7 @@
 
 'use strict';
 
-var classNames = require('classnames');
+var cx = require('classnames');
 var React = require('react');
 
 var ChangePasswordView = require('./ChangePasswordView');
@@ -39,7 +39,7 @@ var TopBar = React.createClass({
               </li>
               <li>
                 <a
-                  className={classNames({
+                  className={cx({
                     'change-password-link': true,
                     'active': this.state.changePasswordVisible,
                   })}

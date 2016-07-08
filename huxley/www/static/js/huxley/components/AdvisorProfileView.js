@@ -62,10 +62,12 @@ var AdvisorProfileView = React.createClass({
           </div>
           <div id="welcomeinfocontainer" className="table-container">
             <table id="welcomeinfo" className="table highlight-cells">
-              <tbody>
+              <thead>
                 <tr>
                   <th colSpan="2">Advisor Information</th>
                 </tr>
+              </thead>
+              <tbody>
                 <tr>
                   <td className="fieldLabel">First Name</td>
                   <td className="field">

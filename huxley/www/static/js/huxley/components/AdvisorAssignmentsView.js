@@ -80,7 +80,7 @@ var AdvisorAssignmentsView = React.createClass({
           <div className="tablemenu header" />
           <div className="table-container">
             <table className="table highlight-cells">
-              <tbody>
+              <thead>
                 <tr>
                   <th>Committee</th>
                   <th>Country</th>
@@ -90,6 +90,8 @@ var AdvisorAssignmentsView = React.createClass({
                     "Delete Assignments"}
                   </th>
                 </tr>
+              </thead>
+              <tbody>
                 {this.renderAssignmentRows()}
               </tbody>
             </table>

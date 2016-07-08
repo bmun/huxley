@@ -6,7 +6,7 @@
 'use strict';
 
 var $ = require('jquery');
-var classNames = require('classnames');
+var cx = require('classnames');
 var LinkedStateMixin = require('react-addons-linked-state-mixin');
 var React = require('react');
 
@@ -39,7 +39,7 @@ var ChangePasswordView = React.createClass({
   render: function() {
     return (
       <div
-        className={classNames({
+        className={cx({
           'change-password': true,
           'rounded-bottom': true,
            'transparent': true,

@@ -5,7 +5,7 @@
 
 'use strict';
 
-var classNames = require('classnames');
+var cx = require('classnames');
 var React = require('react');
 var Router = require('react-router');
 
@@ -31,7 +31,7 @@ var Button = React.createClass({
     return (
       <ButtonComponent
         {...this.props}
-        className={classNames({
+        className={cx({
           'button': true,
           'button-small': this.props.size == 'small',
           'button-large': this.props.size == 'large',

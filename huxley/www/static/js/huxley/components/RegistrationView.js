@@ -8,7 +8,7 @@
 var console = require('console');
 
 var $ = require('jquery');
-var classNames = require('classnames');
+var cx = require('classnames');
 var LinkedStateMixin = require('react-addons-linked-state-mixin');
 var React = require('react');
 var Router = require('react-router');

@@ -5,7 +5,7 @@
 
 'use strict';
 
-var classNames = require('classnames');
+var cx = require('classnames');
 var Link = require('react-router').Link;
 var React = require('react');
 
@@ -18,7 +18,7 @@ var NavLink = React.createClass({
   render: function() {
     return (
       <Link
-        className={classNames({
+        className={cx({
           'outer-nav': true,
           'arrow-left': this.props.direction == 'left',
           'arrow-right': this.props.direction == 'right'
