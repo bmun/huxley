@@ -11,7 +11,7 @@ var $ = require('jquery');
 var cx = require('classnames');
 var LinkedStateMixin = require('react-addons-linked-state-mixin');
 var React = require('react');
-var Router = require('react-router');
+var ReactRouter = require('react-router');
 
 var Button = require('./Button');
 var CommitteeStore = require('../stores/CommitteeStore');
@@ -33,7 +33,7 @@ var USA = 'United States of America';
 var RegistrationView = React.createClass({
   mixins: [
     LinkedStateMixin,
-    Router.Navigation,
+    ReactRouter.History,
   ],
 
   contextTypes: {
@@ -692,9 +692,9 @@ var RegistrationView = React.createClass({
 
   _handleSuccess: function(data, status, jqXHR) {
     if (data.school.waitlist) {
-      this.transitionTo('/register/waitlist');
+      this.history.pushState(null, '/register/waitlist');
     } else {
-      this.transitionTo('/register/success');
+      this.history.pushState(null, '/register/success');
     }
   },
 

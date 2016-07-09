@@ -9,7 +9,7 @@
 
 var $ = require('jquery');
 var React = require('react');
-var Router = require('react-router');
+var ReactRouter = require('react-router');
 
 var AssignmentStore = require('../stores/AssignmentStore');
 var Button = require('./Button');
@@ -22,7 +22,7 @@ var InnerView = require('./InnerView');
 
 var AdvisorAssignmentsView = React.createClass({
   mixins: [
-    Router.Navigation,
+    ReactRouter.History,
   ],
 
   contextTypes: {
@@ -170,7 +170,7 @@ var AdvisorAssignmentsView = React.createClass({
   _handleFinalizedSuccess: function(data, status, jqXHR) {
     CurrentUserActions.updateSchool(jqXHR.responseJSON);
     this.setState({loading: false});
-    this.transitionTo('/advisor/assignments');
+    this.history.pushState(null, '/advisor/assignments');
   },
 
   _handleAssignmentDeleteSuccess: function(data, status, jqXHR) {
@@ -180,7 +180,7 @@ var AdvisorAssignmentsView = React.createClass({
     })
     this.setState({assignments: assignments})
     this.setState({loading: false});
-    this.transitionTo('/advisor/assignments');
+    this.history.pushState(null, '/advisor/assignments');
   },
 
   _handleError: function(jqXHR, status, error) {
@@ -190,7 +190,7 @@ var AdvisorAssignmentsView = React.createClass({
 
    _handleSuccess: function(event) {
     this.setState({loading: false});
-    this.transitionTo('/advisor/assignments');
+    this.history.pushState(null, '/advisor/assignments');
   }
 });
 
