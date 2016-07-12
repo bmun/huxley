@@ -18,6 +18,7 @@ var User = require('../utils/User');
 var AdvisorProfileView = React.createClass({
   mixins: [LinkedStateMixin],
 
+  // #489
   // The below code was commented out due to
   // https://github.com/reactjs/react-router/blob/master/upgrade-guides/v1.0.0.md#routehandler
   // see the last section. I am wary to remove for fear that we won't validate
