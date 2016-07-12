@@ -8,7 +8,7 @@
 var $ = require('jquery');
 var LinkedStateMixin = require('react-addons-linked-state-mixin');
 var React = require('react');
-var Router = require('react-router');
+var ReactRouter = require('react-router');
 
 var Button = require('./Button');
 var NavLink = require('./NavLink');
@@ -19,7 +19,7 @@ require('jquery-ui/effect-shake');
 var ForgotPasswordView = React.createClass({
   mixins: [
     LinkedStateMixin,
-    Router.Navigation,
+    ReactRouter.History,
   ],
 
   getInitialState: function() {
@@ -92,7 +92,7 @@ var ForgotPasswordView = React.createClass({
   },
 
   _handleSuccess: function(data, status, jqXHR) {
-    this.transitionTo('/password/reset');
+    this.history.pushState(null, '/password/reset');
   },
 
   _handleError: function(jqXHR, status, error) {

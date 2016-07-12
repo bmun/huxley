@@ -11,7 +11,7 @@ var $ = require('jquery');
 var cx = require('classnames');
 var LinkedStateMixin = require('react-addons-linked-state-mixin');
 var React = require('react');
-var Router = require('react-router');
+var ReactRouter = require('react-router');
 
 var Button = require('./Button');
 var ConferenceContext = require('./ConferenceContext');
@@ -25,7 +25,7 @@ require('jquery-ui/effect-shake');
 var LoginView = React.createClass({
   mixins: [
     LinkedStateMixin,
-    Router.Navigation,
+    ReactRouter.History,
   ],
 
   contextTypes: {
@@ -47,7 +47,7 @@ var LoginView = React.createClass({
       return;
     }
     if (User.isAdvisor(user)) {
-      this.transitionTo('/advisor/profile');
+      this.history.pushState(null, '/advisor/profile');
     }
   },
 

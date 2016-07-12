@@ -6,7 +6,7 @@
 'use strict';
 
 var React = require('react');
-var Router = require('react-router');
+var ReactRouter = require('react-router');
 
 var OuterView = require('./OuterView');
 
