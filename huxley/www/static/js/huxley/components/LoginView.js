@@ -62,14 +62,16 @@ var LoginView = React.createClass({
               type="text"
               name="username"
               placeholder="Username"
-              valueLink={this.linkState('username')}
+              value={this.state.username}
+              onChange={this._handleUsernameChange}
             />
             <input
               className="text"
               type="password"
               name="password"
               placeholder="Password"
-              valueLink={this.linkState('password')}
+              value={this.state.password}
+              onChange={this._handlePasswordChange}
             />
           </div>
           <div className="login-register">
@@ -120,6 +122,14 @@ var LoginView = React.createClass({
     }
 
     return null;
+  },
+
+  _handlePasswordChange: function(event) {
+    this.setState({password: event.target.value});
+  },
+
+  _handleUsernameChange: function(event) {
+    this.setState({username: event.target.value});
   },
 
   _handleSubmit: function(event) {

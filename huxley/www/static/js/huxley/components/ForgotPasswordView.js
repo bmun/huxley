@@ -47,7 +47,8 @@ var ForgotPasswordView = React.createClass({
               className="text empty"
               type="text"
               placeholder="Username or Email"
-              valueLink={this.linkState('username')}
+              value={this.state.username}
+              onChange={this._handleUsernameChange}
             />
           </div>
           <Button
@@ -73,6 +74,10 @@ var ForgotPasswordView = React.createClass({
         </label>
       );
     }
+  },
+
+  _handleUsernameChange: function(event) {
+    this.setState({username: event.target.value});
   },
 
   _handleSubmit: function(event) {
