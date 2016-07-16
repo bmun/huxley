@@ -9,7 +9,6 @@ var console = require('console');
 
 var $ = require('jquery');
 var cx = require('classnames');
-var LinkedStateMixin = require('react-addons-linked-state-mixin');
 var React = require('react');
 var ReactRouter = require('react-router');
 
@@ -32,7 +31,6 @@ var USA = 'United States of America';
 
 var RegistrationView = React.createClass({
   mixins: [
-    LinkedStateMixin,
     ReactRouter.History,
   ],
 

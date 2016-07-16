@@ -6,7 +6,6 @@
 'use strict';
 
 var $ = require('jquery');
-var LinkedStateMixin = require('react-addons-linked-state-mixin');
 var React = require('react');
 var ReactRouter = require('react-router');
 
@@ -18,7 +17,6 @@ require('jquery-ui/effect-shake');
 
 var ForgotPasswordView = React.createClass({
   mixins: [
-    LinkedStateMixin,
     ReactRouter.History,
   ],
 

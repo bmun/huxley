@@ -7,13 +7,11 @@
 
 var $ = require('jquery');
 var cx = require('classnames');
-var LinkedStateMixin = require('react-addons-linked-state-mixin');
 var React = require('react');
 
 var Button = require('./Button');
 
 var ChangePasswordView = React.createClass({
-  mixins: [LinkedStateMixin],
 
   propTypes: {
     isVisible: React.PropTypes.bool.isRequired,
