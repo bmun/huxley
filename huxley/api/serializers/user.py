@@ -7,6 +7,8 @@ from rest_framework.serializers import ModelSerializer, ValidationError, CharFie
 
 from datetime import datetime
 
+from django.core.mail import send_mail
+
 from huxley.accounts.models import User, School
 from huxley.api import validators
 from huxley.api.serializers.school import SchoolSerializer
@@ -19,9 +21,24 @@ class UserSerializer(ModelSerializer):
         model = User
         fields = ('id', 'username', 'first_name', 'last_name', 'user_type',
                   'school', 'committee',)
-        read_only_fields = ('id', 'username', 'first_name', 'last_name',
-                            'user_type', 'committee',)
+        read_only_fields = ('id', 'username', 'user_type', 'committee',)
 
+    def update(self, instance, validated_data):
+        school_data = validated_data.pop('school')
+        School.objects.filter(name=instance.school).update(**school_data)
+        User.objects.filter(username=instance.username).update(**validated_data)
+
+        send_mail('{0} has updated its registration information'.format(instance.school),
+                  'New registraion information for {0}: \n\n'.format(instance.school) \
+                  + 'Advisor: \n' \
+                  + '\n'.join(['{0}: {1}'.format(field, validated_data[field]) for field in validated_data]) \
+                  + '\n\nSchool: \n' \
+                  + '\n'.join(['{0}: {1}'.format(field, school_data[field]) for field in school_data]),
+                  'tech@bmun.org',
+                  ['mmcodnald@bmun.org'], fail_silently=False)
+
+        return instance
+        
 
 class CreateUserSerializer(ModelSerializer):
     school = SchoolSerializer(required=False)

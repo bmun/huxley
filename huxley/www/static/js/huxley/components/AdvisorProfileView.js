@@ -5,6 +5,7 @@
 
 'use strict';
 
+var $ = require('jquery');
 var LinkedStateMixin = require('react-addons-linked-state-mixin');
 var React = require('react');
 
@@ -14,6 +15,8 @@ var LogoutButton = require('./LogoutButton');
 var ConferenceContext = require('./ConferenceContext');
 var ProgramTypes = require('../constants/ProgramTypes');
 var User = require('../utils/User');
+
+require('jquery-ui/effect-shake');
 
 var AdvisorProfileView = React.createClass({
   mixins: [LinkedStateMixin],
@@ -28,6 +31,26 @@ var AdvisorProfileView = React.createClass({
 
   contextTypes: {
     conference: React.PropTypes.shape(ConferenceContext)
+  },
+
+  getInitialState: function() {
+    var user = this.props.user;
+    var school = User.getSchool(user);
+    return {
+      errors: {},
+      first_name: user.first_name,
+      last_name: user.last_name,
+      school_name: school.name,
+      school_address: school.address,
+      school_city: school.city,
+      school_zip_code: school.zip_code,
+      primary_name: school.primary_name,
+      primary_email: school.primary_email,
+      primary_phone: school.primary_phone,
+      secondary_name: school.secondary_name,
+      secondary_email: school.secondary_email,
+      secondary_phone: school.secondary_phone
+    }
   },
 
   render: function() {
@@ -61,7 +84,9 @@ var AdvisorProfileView = React.createClass({
         <p><strong>{conference.external}
         <br />
         Under-Secretary General of External Relations, {conference.session}th Session.</strong></p>
-        <form id="welcomepage">
+        <form 
+          id="welcomepage" 
+          onSubmit={this._handleSubmit}>
           <div className="tablemenu header">
           </div>
           <div id="welcomeinfocontainer" className="table-container">
@@ -75,13 +100,21 @@ var AdvisorProfileView = React.createClass({
                 <tr>
                   <td className="fieldLabel">First Name</td>
                   <td className="field">
-                    {user.first_name}
+                    <input
+                      type="text"
+                      valueLink={this.linkState('first_name')}
+                    />
+                    {this.renderError('first_name')}
                   </td>
                 </tr>
                 <tr>
                   <td className="fieldLabel">Last Name</td>
                   <td className="field">
-                    {user.last_name}
+                    <input
+                      type="text"
+                      valueLink={this.linkState('last_name')}
+                    />
+                    {this.renderError('last_name')}
                   </td>
                 </tr>
                 <tr>
@@ -96,19 +129,31 @@ var AdvisorProfileView = React.createClass({
                 <tr>
                   <td className="fieldLabel">Address</td>
                   <td className="field">
-                    {school.address}
+                    <input
+                      type="text"
+                      valueLink={this.linkState('school_address')}
+                    />
+                    {this.renderError('address')}
                   </td>
                 </tr>
                 <tr>
                   <td className="fieldLabel">City</td>
                   <td className="field">
-                    {school.city}
+                    <input
+                      type="text"
+                      valueLink={this.linkState('school_city')}
+                    />
+                    {this.renderError('city')}
                   </td>
                 </tr>
                 <tr>
                   <td className="fieldLabel">Zip</td>
                   <td className="field">
-                    {school.zip_code}
+                    <input
+                      type="text"
+                      valueLink={this.linkState('school_zip_code')}
+                    />
+                    {this.renderError('zip_code')}
                   </td>
                 </tr>
                 <tr>
@@ -176,19 +221,32 @@ var AdvisorProfileView = React.createClass({
                 <tr>
                   <td className="fieldLabel">Name</td>
                   <td className="field">
-                    {school.primary_name}
+                    <input
+                      type="text"
+                      valueLink={this.linkState('primary_name')}
+                    />
+                    {this.renderError('primary_name')}
                   </td>
                 </tr>
                 <tr>
                   <td className="fieldLabel">Email</td>
                   <td className="field">
-                    {school.primary_email}
+                    <input
+                      type="text"
+                      valueLink={this.linkState('primary_email')}
+                    />
+                    {this.renderError('primary_email')}
                   </td>
                 </tr>
                 <tr>
                   <td className="fieldLabel">Phone</td>
                   <td className="field">
-                    {school.primary_phone}
+                    <PhoneInput
+                      onChange={this._handlePrimaryPhoneChange}
+                      value={this.state.primary_phone}
+                      isInternational={school.international}
+                    />
+                    {this.renderError('primary_phone')}
                   </td>
                 </tr>
                 <tr>
@@ -197,19 +255,32 @@ var AdvisorProfileView = React.createClass({
                 <tr>
                   <td className="fieldLabel">Name</td>
                   <td className="field">
-                    {school.secondary_name}
+                    <input
+                      type="text"
+                      valueLink={this.linkState('secondary_name')}
+                    />
+                    {this.renderError('secondary_name')}
                   </td>
                 </tr>
                 <tr>
                   <td className="fieldLabel">Email</td>
                   <td className="field">
-                    {school.secondary_email}
+                    <input
+                      type="text"
+                      valueLink={this.linkState('secondary_email')}
+                    />
+                    {this.renderError('secondary_email')}
                   </td>
                 </tr>
                 <tr>
                   <td className="fieldLabel">Phone</td>
                   <td className="field">
-                    {school.secondary_phone}
+                    <PhoneInput
+                      onChange={this._handleSecondaryPhoneChange}
+                      value={this.state.secondary_phone}
+                      isInternational={school.international}
+                    />
+                    {this.renderError('secondary_phone')}
                   </td>
                 </tr>
                 <tr>
@@ -243,9 +314,104 @@ var AdvisorProfileView = React.createClass({
           </div>
           <div className="tablemenu footer">
           </div>
+          <Button
+            color="green"
+            loading={this.state.loading}
+            type="submit">
+            Save
+          </Button>
+          <span className="help-text"><em> Remember to save any changes!</em></span>
         </form>
       </InnerView>
     );
   },
+
+  renderError: function(field) {
+    if (this.state.errors[field]) {
+      return (
+        <label className="hint error">
+          {this.state.errors[field]}
+        </label>
+      );
+    }
+
+    if (this.state.errors.school &&
+        this.state.errors.school[field]) {
+      return (
+        <label className="hint error">
+          {this.state.errors.school[field]}
+        </label>
+      );
+    }
+
+    return null;
+  },
+
+  _handleSubmit: function(event) {
+    var user = this.props.user;
+    var school = User.getSchool(user);
+    this.setState({loading: true});
+
+    $.ajax({
+      type: 'PATCH',
+      url: '/api/users/' + user.id,
+      data: JSON.stringify({
+        first_name: this.state.first_name.trim(),
+        last_name: this.state.last_name.trim(),
+        school: {
+          address: this.state.school_address.trim(),
+          city: this.state.school_city.trim(),
+          zip_code: this.state.school_zip_code.trim(),
+          primary_name: this.state.primary_name.trim(),
+          primary_email: this.state.primary_email.trim(),
+          primary_phone: this.state.primary_phone.trim(),
+          secondary_name: this.state.secondary_name.trim(),
+          secondary_email: this.state.secondary_email.trim(),
+          secondary_phone: this.state.secondary_phone.trim()
+        }
+      }),
+      success: this._handleSuccess,
+      error: this._handleError,
+      contentType: 'application/json'
+    });
+    event.preventDefault();
+  },
+
+  _handlePrimaryPhoneChange: function(number) {
+    this.setState({
+      primary_phone: number
+    });
+  },
+
+  _handleSecondaryPhoneChange: function(number) {
+    this.setState({
+      secondary_phone: number
+    });
+  },
+
+  _handleSuccess: function(data, status, jqXHR) {
+    this.setState({
+      errors: {},
+      loading: false
+    }, this.onSuccess);
+  },
+
+  _handleError: function(jqXHR, status, error) {
+    var response = jqXHR.responseJSON;
+    if (!response) {
+      return;
+    }
+
+    this.setState({
+      errors: response,
+      loading: false
+    }, function() {
+      $('#huxley-app').effect(
+        'shake',
+        {direction: 'up', times: 2, distance: 2},
+        250
+      );
+    });
+  }
 });
 module.exports = AdvisorProfileView;
