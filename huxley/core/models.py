@@ -105,6 +105,7 @@ class School(models.Model):
     times_attended      = models.PositiveSmallIntegerField(default=0)
     international       = models.BooleanField(default=False)
     waitlist            = models.BooleanField(default=False)
+    waivers_completed   = models.BooleanField(default=False)
 
     beginner_delegates         = models.PositiveSmallIntegerField()
     intermediate_delegates     = models.PositiveSmallIntegerField()
