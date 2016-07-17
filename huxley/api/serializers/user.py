@@ -8,6 +8,7 @@ from rest_framework.serializers import ModelSerializer, ValidationError, CharFie
 from datetime import datetime
 
 from django.core.mail import send_mail
+from django.utils import timezone
 
 from huxley.accounts.models import User, School
 from huxley.api import validators
@@ -15,7 +16,7 @@ from huxley.api.serializers.school import SchoolSerializer
 
 
 class UserSerializer(ModelSerializer):
-    school = SchoolSerializer(required=False, read_only=True)
+    school = SchoolSerializer(required=False)
 
     class Meta:
         model = User
@@ -26,7 +27,7 @@ class UserSerializer(ModelSerializer):
     def update(self, instance, validated_data):
         school_data = validated_data.pop('school')
         School.objects.filter(name=instance.school).update(**school_data)
-        User.objects.filter(username=instance.username).update(**validated_data)
+        User.objects.filter(username=instance).update(**validated_data)
 
         send_mail('{0} has updated its registration information'.format(instance.school),
                   'New registraion information for {0}: \n\n'.format(instance.school) \
@@ -35,7 +36,7 @@ class UserSerializer(ModelSerializer):
                   + '\n\nSchool: \n' \
                   + '\n'.join(['{0}: {1}'.format(field, school_data[field]) for field in school_data]),
                   'tech@bmun.org',
-                  ['mmcodnald@bmun.org'], fail_silently=False)
+                  ['external@bmun.org'], fail_silently=False)
 
         return instance
         

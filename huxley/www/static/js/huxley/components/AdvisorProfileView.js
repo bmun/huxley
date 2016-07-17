@@ -6,20 +6,19 @@
 'use strict';
 
 var $ = require('jquery');
-var LinkedStateMixin = require('react-addons-linked-state-mixin');
 var React = require('react');
 
 var Button = require('./Button');
 var InnerView = require('./InnerView');
 var LogoutButton = require('./LogoutButton');
 var ConferenceContext = require('./ConferenceContext');
+var PhoneInput = require('./PhoneInput');
 var ProgramTypes = require('../constants/ProgramTypes');
 var User = require('../utils/User');
 
 require('jquery-ui/effect-shake');
 
 var AdvisorProfileView = React.createClass({
-  mixins: [LinkedStateMixin],
 
   // #489
   // The below code was commented out due to
@@ -102,7 +101,9 @@ var AdvisorProfileView = React.createClass({
                   <td className="field">
                     <input
                       type="text"
-                      valueLink={this.linkState('first_name')}
+                      value={this.state.first_name}
+                      id="first_name"
+                      onChange={this._handleInputChange}
                     />
                     {this.renderError('first_name')}
                   </td>
@@ -112,7 +113,9 @@ var AdvisorProfileView = React.createClass({
                   <td className="field">
                     <input
                       type="text"
-                      valueLink={this.linkState('last_name')}
+                      value={this.state.last_name}
+                      id="last_name"
+                      onChange={this._handleInputChange}
                     />
                     {this.renderError('last_name')}
                   </td>
@@ -131,7 +134,9 @@ var AdvisorProfileView = React.createClass({
                   <td className="field">
                     <input
                       type="text"
-                      valueLink={this.linkState('school_address')}
+                      value={this.state.school_address}
+                      id="school_address"
+                      onChange={this._handleInputChange}
                     />
                     {this.renderError('address')}
                   </td>
@@ -141,7 +146,9 @@ var AdvisorProfileView = React.createClass({
                   <td className="field">
                     <input
                       type="text"
-                      valueLink={this.linkState('school_city')}
+                      value={this.state.school_city}
+                      id="school_city"
+                      onChange={this._handleInputChange}
                     />
                     {this.renderError('city')}
                   </td>
@@ -151,7 +158,9 @@ var AdvisorProfileView = React.createClass({
                   <td className="field">
                     <input
                       type="text"
-                      valueLink={this.linkState('school_zip_code')}
+                      value={this.state.school_zip_code}
+                      id='school_zip_code'
+                      onChange={this._handleInputChange}
                     />
                     {this.renderError('zip_code')}
                   </td>
@@ -223,7 +232,9 @@ var AdvisorProfileView = React.createClass({
                   <td className="field">
                     <input
                       type="text"
-                      valueLink={this.linkState('primary_name')}
+                      value={this.state.primary_name}
+                      id="primary_name"
+                      onChange={this._handleInputChange}
                     />
                     {this.renderError('primary_name')}
                   </td>
@@ -233,7 +244,9 @@ var AdvisorProfileView = React.createClass({
                   <td className="field">
                     <input
                       type="text"
-                      valueLink={this.linkState('primary_email')}
+                      value={this.state.primary_email}
+                      id="primary_email"
+                      onChange={this._handleInputChange}
                     />
                     {this.renderError('primary_email')}
                   </td>
@@ -242,9 +255,10 @@ var AdvisorProfileView = React.createClass({
                   <td className="fieldLabel">Phone</td>
                   <td className="field">
                     <PhoneInput
-                      onChange={this._handlePrimaryPhoneChange}
                       value={this.state.primary_phone}
                       isInternational={school.international}
+                      id="primary_phone"
+                      onChange={this._handlePrimaryPhoneChange}
                     />
                     {this.renderError('primary_phone')}
                   </td>
@@ -257,7 +271,9 @@ var AdvisorProfileView = React.createClass({
                   <td className="field">
                     <input
                       type="text"
-                      valueLink={this.linkState('secondary_name')}
+                      value={this.state.secondary_name}
+                      id="secondary_name"
+                      onChange={this._handleInputChange}
                     />
                     {this.renderError('secondary_name')}
                   </td>
@@ -267,7 +283,9 @@ var AdvisorProfileView = React.createClass({
                   <td className="field">
                     <input
                       type="text"
-                      valueLink={this.linkState('secondary_email')}
+                      value={this.state.secondary_email}
+                      id="secondary_email"
+                      onChange={this._handleInputChange}
                     />
                     {this.renderError('secondary_email')}
                   </td>
@@ -276,9 +294,10 @@ var AdvisorProfileView = React.createClass({
                   <td className="fieldLabel">Phone</td>
                   <td className="field">
                     <PhoneInput
-                      onChange={this._handleSecondaryPhoneChange}
                       value={this.state.secondary_phone}
                       isInternational={school.international}
+                      id="secondary_phone"
+                      onChange={this._handleSecondaryPhoneChange}
                     />
                     {this.renderError('secondary_phone')}
                   </td>
@@ -347,11 +366,29 @@ var AdvisorProfileView = React.createClass({
     return null;
   },
 
+  _handleInputChange: function(event) {
+    var change = {};
+    change[event.target.id] = event.target.value;
+    this.setState(change);
+  },
+
+  _handlePrimaryPhoneChange: function(number) {
+    this.setState({
+      primary_phone: number
+    });
+  },
+
+  _handleSecondaryPhoneChange: function(number) {
+    this.setState({
+      secondary_phone: number
+    });
+  },
+
   _handleSubmit: function(event) {
+    var currentDate = new Date();
     var user = this.props.user;
     var school = User.getSchool(user);
     this.setState({loading: true});
-
     $.ajax({
       type: 'PATCH',
       url: '/api/users/' + user.id,
@@ -367,7 +404,8 @@ var AdvisorProfileView = React.createClass({
           primary_phone: this.state.primary_phone.trim(),
           secondary_name: this.state.secondary_name.trim(),
           secondary_email: this.state.secondary_email.trim(),
-          secondary_phone: this.state.secondary_phone.trim()
+          secondary_phone: this.state.secondary_phone.trim(),
+          modified: currentDate
         }
       }),
       success: this._handleSuccess,
@@ -375,18 +413,6 @@ var AdvisorProfileView = React.createClass({
       contentType: 'application/json'
     });
     event.preventDefault();
-  },
-
-  _handlePrimaryPhoneChange: function(number) {
-    this.setState({
-      primary_phone: number
-    });
-  },
-
-  _handleSecondaryPhoneChange: function(number) {
-    this.setState({
-      secondary_phone: number
-    });
   },
 
   _handleSuccess: function(data, status, jqXHR) {
@@ -408,7 +434,7 @@ var AdvisorProfileView = React.createClass({
     }, function() {
       $('#huxley-app').effect(
         'shake',
-        {direction: 'up', times: 2, distance: 2},
+        {direction: 'up', times: 2},
         250
       );
     });

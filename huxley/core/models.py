@@ -123,6 +123,8 @@ class School(models.Model):
     fees_owed = models.DecimalField(max_digits=6, decimal_places=2, default=Decimal('0.00'))
     fees_paid = models.DecimalField(max_digits=6, decimal_places=2, default=Decimal('0.00'))
 
+    modified = models.DateTimeField()
+
     def balance(self):
         return self.fees_owed - self.fees_paid
 

@@ -631,6 +631,7 @@ var RegistrationView = React.createClass({
   },
 
   _handleSubmit: function(event) {
+    var currentDate = new Date();
     this.setState({loading: true});
     $.ajax({
       type: 'POST',
@@ -680,8 +681,9 @@ var RegistrationView = React.createClass({
             this.state.country_pref10
           ],
           committeepreferences: this.state.committee_prefs,
-          registration_comments: this.state.registration_comments.trim()
-        }
+          registration_comments: this.state.registration_comments.trim(),
+          modified: currentDate
+        },
       }),
       success: this._handleSuccess,
       error: this._handleError,
