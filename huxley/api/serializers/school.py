@@ -43,6 +43,7 @@ class SchoolSerializer(serializers.ModelSerializer):
             'advanced_delegates',
             'spanish_speaking_delegates',
             'chinese_speaking_delegates',
+            'waivers_completed',
             'countrypreferences',
             'committeepreferences',
             'registration_comments',

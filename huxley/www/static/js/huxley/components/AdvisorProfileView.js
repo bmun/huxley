@@ -165,6 +165,12 @@ var AdvisorProfileView = React.createClass({
                   </td>
                 </tr>
                 <tr>
+                  <td className="fieldLabel">Waivers Completed?</td>
+                  <td className="field">
+                    {school.waivers_completed ? "Yes" : "No"}
+                  </td>
+                </tr>
+                <tr>
                   <th colSpan="2">Primary Contact Information</th>
                 </tr>
                 <tr>

@@ -118,6 +118,7 @@ class CreateSchoolTestCase(CreateAPITestCase):
             'advanced_delegates': school.advanced_delegates,
             'spanish_speaking_delegates': school.spanish_speaking_delegates,
             'chinese_speaking_delegates': school.chinese_speaking_delegates,
+            'waivers_completed': school.waivers_completed,
             'countrypreferences': school.country_preference_ids,
             'registration_comments': school.registration_comments,
             'committeepreferences': list(school.committeepreferences.all()),
