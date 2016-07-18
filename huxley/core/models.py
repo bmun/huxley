@@ -4,12 +4,14 @@
 import json
 import requests
 
+from datetime import datetime
 from decimal import Decimal
 
 from django.conf import settings
 from django.core.mail import send_mail
 from django.db import models, transaction
 from django.db.models.signals import post_save, pre_save
+from django.utils import timezone
 
 from huxley.core.constants import ContactGender, ContactType, ProgramTypes
 
@@ -123,7 +125,7 @@ class School(models.Model):
     fees_owed = models.DecimalField(max_digits=6, decimal_places=2, default=Decimal('0.00'))
     fees_paid = models.DecimalField(max_digits=6, decimal_places=2, default=Decimal('0.00'))
 
-    modified = models.DateTimeField()
+    modified = models.DateTimeField(default=timezone.now)
 
     def balance(self):
         return self.fees_owed - self.fees_paid

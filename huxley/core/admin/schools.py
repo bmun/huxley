@@ -53,6 +53,7 @@ class SchoolAdmin(admin.ModelAdmin):
             "Registration Comments",
             "Fees Owed",
             "Fees Paid",
+            "Modified",
         ])
 
         for school in School.objects.all().order_by('name'):
@@ -86,6 +87,7 @@ class SchoolAdmin(admin.ModelAdmin):
                 school.registration_comments,
                 school.fees_owed,
                 school.fees_paid,
+                school.modified.isoformat(),
             ]])
 
         return schools

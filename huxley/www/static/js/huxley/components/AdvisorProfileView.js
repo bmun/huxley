@@ -258,7 +258,7 @@ var AdvisorProfileView = React.createClass({
                       value={this.state.primary_phone}
                       isInternational={school.international}
                       id="primary_phone"
-                      onChange={this._handlePrimaryPhoneChange}
+                      onChange={this._handleChange.bind(this, 'primary_phone')}
                     />
                     {this.renderError('primary_phone')}
                   </td>
@@ -297,7 +297,7 @@ var AdvisorProfileView = React.createClass({
                       value={this.state.secondary_phone}
                       isInternational={school.international}
                       id="secondary_phone"
-                      onChange={this._handleSecondaryPhoneChange}
+                      onChange={this._handleChange.bind(this, 'secondary_phone')}
                     />
                     {this.renderError('secondary_phone')}
                   </td>
@@ -366,22 +366,16 @@ var AdvisorProfileView = React.createClass({
     return null;
   },
 
+  _handleChange: function(fieldName, value) {
+    var change = {};
+    change[fieldName] = value;
+    this.setState(change);
+  },
+
   _handleInputChange: function(event) {
     var change = {};
     change[event.target.id] = event.target.value;
     this.setState(change);
-  },
-
-  _handlePrimaryPhoneChange: function(number) {
-    this.setState({
-      primary_phone: number
-    });
-  },
-
-  _handleSecondaryPhoneChange: function(number) {
-    this.setState({
-      secondary_phone: number
-    });
   },
 
   _handleSubmit: function(event) {

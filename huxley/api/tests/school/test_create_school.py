@@ -125,6 +125,7 @@ class CreateSchoolTestCase(CreateAPITestCase):
             'fees_owed': float(school.fees_owed),
             'fees_paid': float(school.fees_paid),
             'assignments_finalized': school.assignments_finalized,
+            'modified': school.modified.isoformat(),
         })
 
     def test_country_preferences(self):

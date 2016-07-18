@@ -681,8 +681,7 @@ var RegistrationView = React.createClass({
             this.state.country_pref10
           ],
           committeepreferences: this.state.committee_prefs,
-          registration_comments: this.state.registration_comments.trim(),
-          modified: currentDate
+          registration_comments: this.state.registration_comments.trim()
         },
       }),
       success: this._handleSuccess,

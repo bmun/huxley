@@ -25,20 +25,21 @@ class UserSerializer(ModelSerializer):
         read_only_fields = ('id', 'username', 'user_type', 'committee',)
 
     def update(self, instance, validated_data):
-        school_data = validated_data.pop('school')
-        School.objects.filter(name=instance.school).update(**school_data)
-        User.objects.filter(username=instance).update(**validated_data)
-
-        send_mail('{0} has updated its registration information'.format(instance.school),
-                  'New registraion information for {0}: \n\n'.format(instance.school) \
-                  + 'Advisor: \n' \
-                  + '\n'.join(['{0}: {1}'.format(field, validated_data[field]) for field in validated_data]) \
-                  + '\n\nSchool: \n' \
-                  + '\n'.join(['{0}: {1}'.format(field, school_data[field]) for field in school_data]),
-                  'tech@bmun.org',
-                  ['external@bmun.org'], fail_silently=False)
-
-        return instance
+        if validated_data.get('school'):
+            school_data = validated_data.pop('school')
+            School.objects.filter(name=instance.school).update(**school_data)
+            User.objects.filter(username=instance).update(**validated_data)
+            send_mail('{0} has updated its registration information'.format(instance.school),
+                      'New registraion information for {0}: \n\n'.format(instance.school) \
+                      + 'Advisor: \n' \
+                      + '\n'.join(['{0}: {1}'.format(field, validated_data[field]) for field in validated_data]) \
+                      + '\n\nSchool: \n' \
+                      + '\n'.join(['{0}: {1}'.format(field, school_data[field]) for field in school_data]),
+                      'tech@bmun.org',
+                      ['external@bmun.org'], fail_silently=False)
+            return instance
+        else:
+            return super(UserSerializer, self).update(instance, validated_data)
         
 
 class CreateUserSerializer(ModelSerializer):
