@@ -102,8 +102,7 @@ var AdvisorProfileView = React.createClass({
                     <input
                       type="text"
                       value={this.state.first_name}
-                      id="first_name"
-                      onChange={this._handleInputChange}
+                      onChange={this._handleChange.bind(this, 'first_name')}
                     />
                     {this.renderError('first_name')}
                   </td>
@@ -114,8 +113,7 @@ var AdvisorProfileView = React.createClass({
                     <input
                       type="text"
                       value={this.state.last_name}
-                      id="last_name"
-                      onChange={this._handleInputChange}
+                      onChange={this._handleChange.bind(this, 'last_name')}
                     />
                     {this.renderError('last_name')}
                   </td>
@@ -135,8 +133,7 @@ var AdvisorProfileView = React.createClass({
                     <input
                       type="text"
                       value={this.state.school_address}
-                      id="school_address"
-                      onChange={this._handleInputChange}
+                      onChange={this._handleChange.bind(this, 'school_address')}
                     />
                     {this.renderError('address')}
                   </td>
@@ -147,8 +144,7 @@ var AdvisorProfileView = React.createClass({
                     <input
                       type="text"
                       value={this.state.school_city}
-                      id="school_city"
-                      onChange={this._handleInputChange}
+                      onChange={this._handleChange.bind(this, 'school_city')}
                     />
                     {this.renderError('city')}
                   </td>
@@ -159,8 +155,7 @@ var AdvisorProfileView = React.createClass({
                     <input
                       type="text"
                       value={this.state.school_zip_code}
-                      id='school_zip_code'
-                      onChange={this._handleInputChange}
+                      onChange={this._handleChange.bind(this, 'school_zip_code')}
                     />
                     {this.renderError('zip_code')}
                   </td>
@@ -233,8 +228,7 @@ var AdvisorProfileView = React.createClass({
                     <input
                       type="text"
                       value={this.state.primary_name}
-                      id="primary_name"
-                      onChange={this._handleInputChange}
+                      onChange={this._handleChange.bind(this, 'primary_name')}
                     />
                     {this.renderError('primary_name')}
                   </td>
@@ -245,8 +239,7 @@ var AdvisorProfileView = React.createClass({
                     <input
                       type="text"
                       value={this.state.primary_email}
-                      id="primary_email"
-                      onChange={this._handleInputChange}
+                      onChange={this._handleChange.bind(this, 'primary_email')}
                     />
                     {this.renderError('primary_email')}
                   </td>
@@ -273,7 +266,7 @@ var AdvisorProfileView = React.createClass({
                       type="text"
                       value={this.state.secondary_name}
                       id="secondary_name"
-                      onChange={this._handleInputChange}
+                      onChange={this._handleChange.bind(this, 'secondary_name')}
                     />
                     {this.renderError('secondary_name')}
                   </td>
@@ -284,8 +277,7 @@ var AdvisorProfileView = React.createClass({
                     <input
                       type="text"
                       value={this.state.secondary_email}
-                      id="secondary_email"
-                      onChange={this._handleInputChange}
+                      onChange={this._handleChange.bind(this, 'secondary_email')}
                     />
                     {this.renderError('secondary_email')}
                   </td>
@@ -366,22 +358,22 @@ var AdvisorProfileView = React.createClass({
     return null;
   },
 
-  _handleChange: function(fieldName, value) {
+  _handleChange: function(fieldName, event) {
     var change = {};
-    change[fieldName] = value;
-    this.setState(change);
-  },
 
-  _handleInputChange: function(event) {
-    var change = {};
-    change[event.target.id] = event.target.value;
+    // Handles both changes from HTMl and custom components
+    if (event.target) {
+      change[fieldName] = event.target.value;
+    } else {
+      change[fieldName] = event
+    }
+
     this.setState(change);
   },
 
   _handleSubmit: function(event) {
-    var currentDate = new Date();
     var user = this.props.user;
-    var school = User.getSchool(user);
+    var currentDate = new Date();
     this.setState({loading: true});
     $.ajax({
       type: 'PATCH',
