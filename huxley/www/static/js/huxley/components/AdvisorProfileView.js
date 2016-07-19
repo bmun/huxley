@@ -15,6 +15,7 @@ var ConferenceContext = require('./ConferenceContext');
 var PhoneInput = require('./PhoneInput');
 var ProgramTypes = require('../constants/ProgramTypes');
 var User = require('../utils/User');
+var _handleChange = require('../utils/_handleChange')
 
 require('jquery-ui/effect-shake');
 
@@ -62,7 +63,7 @@ var AdvisorProfileView = React.createClass({
         <h2>Welcome, {user.first_name}!</h2>
         <p>
           We are very excited to see {school.name} at BMUN {conference.session} this year! Here,
-          you can view your registration information for the conference. Please
+          you can view and edit your registration information for the conference. Please
           note that fees are currently <strong>estimates</strong> based on the
           approximate delegation size given during registration.
         </p>
@@ -73,6 +74,8 @@ var AdvisorProfileView = React.createClass({
           the Fees tab. You will receive an invoice in your email within 2 business
           days.
         </p>
+        <br />
+        <p><strong>Remember to save!</strong></p>
         <br />
         <p><strong>Important Note:</strong> Please mail all checks to <strong>
         P.O. Box 4306 Berkeley, CA 94704-0306. If you have any other further
@@ -102,7 +105,7 @@ var AdvisorProfileView = React.createClass({
                     <input
                       type="text"
                       value={this.state.first_name}
-                      onChange={this._handleChange.bind(this, 'first_name')}
+                      onChange={_handleChange.bind(this, 'first_name')}
                     />
                     {this.renderError('first_name')}
                   </td>
@@ -113,7 +116,7 @@ var AdvisorProfileView = React.createClass({
                     <input
                       type="text"
                       value={this.state.last_name}
-                      onChange={this._handleChange.bind(this, 'last_name')}
+                      onChange={_handleChange.bind(this, 'last_name')}
                     />
                     {this.renderError('last_name')}
                   </td>
@@ -133,7 +136,7 @@ var AdvisorProfileView = React.createClass({
                     <input
                       type="text"
                       value={this.state.school_address}
-                      onChange={this._handleChange.bind(this, 'school_address')}
+                      onChange={_handleChange.bind(this, 'school_address')}
                     />
                     {this.renderError('address')}
                   </td>
@@ -144,7 +147,7 @@ var AdvisorProfileView = React.createClass({
                     <input
                       type="text"
                       value={this.state.school_city}
-                      onChange={this._handleChange.bind(this, 'school_city')}
+                      onChange={_handleChange.bind(this, 'school_city')}
                     />
                     {this.renderError('city')}
                   </td>
@@ -155,7 +158,7 @@ var AdvisorProfileView = React.createClass({
                     <input
                       type="text"
                       value={this.state.school_zip_code}
-                      onChange={this._handleChange.bind(this, 'school_zip_code')}
+                      onChange={_handleChange.bind(this, 'school_zip_code')}
                     />
                     {this.renderError('zip_code')}
                   </td>
@@ -228,7 +231,7 @@ var AdvisorProfileView = React.createClass({
                     <input
                       type="text"
                       value={this.state.primary_name}
-                      onChange={this._handleChange.bind(this, 'primary_name')}
+                      onChange={_handleChange.bind(this, 'primary_name')}
                     />
                     {this.renderError('primary_name')}
                   </td>
@@ -239,7 +242,7 @@ var AdvisorProfileView = React.createClass({
                     <input
                       type="text"
                       value={this.state.primary_email}
-                      onChange={this._handleChange.bind(this, 'primary_email')}
+                      onChange={_handleChange.bind(this, 'primary_email')}
                     />
                     {this.renderError('primary_email')}
                   </td>
@@ -250,8 +253,7 @@ var AdvisorProfileView = React.createClass({
                     <PhoneInput
                       value={this.state.primary_phone}
                       isInternational={school.international}
-                      id="primary_phone"
-                      onChange={this._handleChange.bind(this, 'primary_phone')}
+                      onChange={_handleChange.bind(this, 'primary_phone')}
                     />
                     {this.renderError('primary_phone')}
                   </td>
@@ -265,8 +267,7 @@ var AdvisorProfileView = React.createClass({
                     <input
                       type="text"
                       value={this.state.secondary_name}
-                      id="secondary_name"
-                      onChange={this._handleChange.bind(this, 'secondary_name')}
+                      onChange={_handleChange.bind(this, 'secondary_name')}
                     />
                     {this.renderError('secondary_name')}
                   </td>
@@ -277,7 +278,7 @@ var AdvisorProfileView = React.createClass({
                     <input
                       type="text"
                       value={this.state.secondary_email}
-                      onChange={this._handleChange.bind(this, 'secondary_email')}
+                      onChange={_handleChange.bind(this, 'secondary_email')}
                     />
                     {this.renderError('secondary_email')}
                   </td>
@@ -288,8 +289,7 @@ var AdvisorProfileView = React.createClass({
                     <PhoneInput
                       value={this.state.secondary_phone}
                       isInternational={school.international}
-                      id="secondary_phone"
-                      onChange={this._handleChange.bind(this, 'secondary_phone')}
+                      onChange={_handleChange.bind(this, 'secondary_phone')}
                     />
                     {this.renderError('secondary_phone')}
                   </td>
@@ -358,22 +358,8 @@ var AdvisorProfileView = React.createClass({
     return null;
   },
 
-  _handleChange: function(fieldName, event) {
-    var change = {};
-
-    // Handles both changes from HTMl and custom components
-    if (event.target) {
-      change[fieldName] = event.target.value;
-    } else {
-      change[fieldName] = event
-    }
-
-    this.setState(change);
-  },
-
   _handleSubmit: function(event) {
     var user = this.props.user;
-    var currentDate = new Date();
     this.setState({loading: true});
     $.ajax({
       type: 'PATCH',
@@ -391,7 +377,6 @@ var AdvisorProfileView = React.createClass({
           secondary_name: this.state.secondary_name.trim(),
           secondary_email: this.state.secondary_email.trim(),
           secondary_phone: this.state.secondary_phone.trim(),
-          modified: currentDate
         }
       }),
       success: this._handleSuccess,
@@ -405,7 +390,7 @@ var AdvisorProfileView = React.createClass({
     this.setState({
       errors: {},
       loading: false
-    }, this.onSuccess);
+    });
   },
 
   _handleError: function(jqXHR, status, error) {

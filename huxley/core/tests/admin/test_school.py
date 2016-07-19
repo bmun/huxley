@@ -54,7 +54,7 @@ class SchoolAdminTest(TestCase):
             "Registration Comments",
             "Fees Owed",
             "Fees Paid",
-            "Modified",
+            "Modified At",
         ]
 
         fields_csv = ",".join(map(str, header)) + "\r\n"
@@ -89,7 +89,7 @@ class SchoolAdminTest(TestCase):
             school.registration_comments,
             school.fees_owed,
             school.fees_paid,
-            school.modified.isoformat(),
+            school.modified_at.isoformat(),
         ]
 
         fields_csv += ",".join(map(str, fields))

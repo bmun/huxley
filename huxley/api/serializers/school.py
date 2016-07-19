@@ -50,7 +50,7 @@ class SchoolSerializer(serializers.ModelSerializer):
             'fees_owed',
             'fees_paid',
             'assignments_finalized',
-            'modified',
+            'modified_at',
         )
         extra_kwargs = {
         'committeepreferences': {'required': False},

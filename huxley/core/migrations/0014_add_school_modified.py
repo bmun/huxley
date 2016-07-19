@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from datetime import datetime
-
 from django.db import migrations, models
+from django.utils import timezone
 
 
 class Migration(migrations.Migration):
@@ -15,7 +14,7 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AddField(
             model_name='school',
-            name='modified',
-            field=models.DateTimeField(default=datetime.utcnow),
+            name='modified_at',
+            field=models.DateTimeField(default=timezone.now),
         ),
     ]
