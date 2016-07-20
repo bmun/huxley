@@ -100,6 +100,7 @@ class UserDetailGetTestCase(RetrieveAPITestCase):
                 'fees_owed': float(school.fees_owed),
                 'fees_paid': float(school.fees_paid),
                 'assignments_finalized': school.assignments_finalized,
+                'modified_at': school.modified_at.isoformat(),
             },
             'committee': user.committee_id})
 
@@ -434,4 +435,5 @@ class CurrentUserTestCase(TestCase):
             u'fees_owed': float(school.fees_owed),
             u'fees_paid': float(school.fees_paid),
             u'assignments_finalized': school.assignments_finalized,
+            u'modified_at': unicode(school.modified_at.isoformat()),
         })

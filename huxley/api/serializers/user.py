@@ -7,21 +7,39 @@ from rest_framework.serializers import ModelSerializer, ValidationError, CharFie
 
 from datetime import datetime
 
+from django.core.mail import send_mail
+from django.utils import timezone
+
 from huxley.accounts.models import User, School
 from huxley.api import validators
 from huxley.api.serializers.school import SchoolSerializer
 
 
 class UserSerializer(ModelSerializer):
-    school = SchoolSerializer(required=False, read_only=True)
+    school = SchoolSerializer(required=False)
 
     class Meta:
         model = User
         fields = ('id', 'username', 'first_name', 'last_name', 'user_type',
                   'school', 'committee',)
-        read_only_fields = ('id', 'username', 'first_name', 'last_name',
-                            'user_type', 'committee',)
+        read_only_fields = ('id', 'username', 'user_type', 'committee',)
 
+    def update(self, instance, validated_data):
+        if 'school' in validated_data:
+            school_data = validated_data.pop('school')
+            school_data['modified_at'] = timezone.now()
+            School.objects.filter(id=instance.school.id).update(**school_data)
+            send_mail('{0} has updated its registration information'.format(instance.school),
+                      'New registraion information for {0}: \n\n'.format(instance.school) \
+                      + 'Advisor: \n' \
+                      + '\n'.join(['{0}: {1}'.format(field, validated_data[field]) for field in validated_data]) \
+                      + '\n\nSchool: \n' \
+                      + '\n'.join(['{0}: {1}'.format(field, school_data[field]) for field in school_data]),
+                      'tech@bmun.org',
+                      ['external@bmun.org'], fail_silently=False)
+
+        return super(UserSerializer, self).update(instance, validated_data)
+        
 
 class CreateUserSerializer(ModelSerializer):
     school = SchoolSerializer(required=False)

@@ -50,6 +50,7 @@ class SchoolSerializer(serializers.ModelSerializer):
             'fees_owed',
             'fees_paid',
             'assignments_finalized',
+            'modified_at',
         )
         extra_kwargs = {
         'committeepreferences': {'required': False},
@@ -155,7 +156,7 @@ class SchoolSerializer(serializers.ModelSerializer):
 
         return value
 
-    def validate_zip(self, value):
+    def validate_zip_code(self, value):
         school_zip = value
 
         validators.numeric(school_zip)
