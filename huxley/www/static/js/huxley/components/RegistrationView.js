@@ -631,7 +631,6 @@ var RegistrationView = React.createClass({
   },
 
   _handleSubmit: function(event) {
-    var currentDate = new Date();
     this.setState({loading: true});
     $.ajax({
       type: 'POST',

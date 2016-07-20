@@ -28,7 +28,7 @@ class UserSerializer(ModelSerializer):
         if 'school' in validated_data:
             school_data = validated_data.pop('school')
             school_data['modified_at'] = timezone.now()
-            School.objects.filter(name=instance.school).update(**school_data)
+            School.objects.filter(id=instance.school.id).update(**school_data)
             send_mail('{0} has updated its registration information'.format(instance.school),
                       'New registraion information for {0}: \n\n'.format(instance.school) \
                       + 'Advisor: \n' \
