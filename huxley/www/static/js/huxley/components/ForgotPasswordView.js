@@ -6,8 +6,8 @@
 'use strict';
 
 var $ = require('jquery');
-var React = require('react/addons');
-var Router = require('react-router');
+var React = require('react');
+var ReactRouter = require('react-router');
 
 var Button = require('./Button');
 var NavLink = require('./NavLink');
@@ -17,8 +17,7 @@ require('jquery-ui/effect-shake');
 
 var ForgotPasswordView = React.createClass({
   mixins: [
-    React.addons.LinkedStateMixin,
-    Router.Navigation,
+    ReactRouter.History,
   ],
 
   getInitialState: function() {
@@ -48,7 +47,8 @@ var ForgotPasswordView = React.createClass({
               className="text empty"
               type="text"
               placeholder="Username or Email"
-              valueLink={this.linkState('username')}
+              value={this.state.username}
+              onChange={this._handleUsernameChange}
             />
           </div>
           <Button
@@ -76,6 +76,10 @@ var ForgotPasswordView = React.createClass({
     }
   },
 
+  _handleUsernameChange: function(event) {
+    this.setState({username: event.target.value});
+  },
+
   _handleSubmit: function(event) {
     this.setState({loading: true});
     $.ajax({
@@ -91,7 +95,7 @@ var ForgotPasswordView = React.createClass({
   },
 
   _handleSuccess: function(data, status, jqXHR) {
-    this.transitionTo('/password/reset');
+    this.history.pushState(null, '/password/reset');
   },
 
   _handleError: function(jqXHR, status, error) {

@@ -6,7 +6,7 @@
 'use strict';
 
 var React = require('react');
-var Router = require('react-router');
+var ReactRouter = require('react-router');
 
 var NavTab = require('./NavTab');
 var PermissionDeniedView = require('./PermissionDeniedView');
@@ -14,11 +14,11 @@ var TopBar = require('./TopBar');
 var User = require('../utils/User');
 
 var AdvisorView = React.createClass ({
-  mixins: [Router.Navigation],
+  mixins: [ReactRouter.History],
 
   componentDidMount: function() {
     if (User.isAnonymous(this.props.user)) {
-      this.transitionTo('/login');
+      this.history.pushState(null, '/login');
     }
   },
 

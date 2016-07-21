@@ -1,53 +1,33 @@
 # Copyright (c) 2011-2015 Berkeley Model United Nations. All rights reserved.
 # Use of this source code is governed by a BSD License (see LICENSE).
 
-from huxley.api.tests import (CreateAPITestCase, DestroyAPITestCase,
-                              ListAPITestCase, PartialUpdateAPITestCase,
-                              RetrieveAPITestCase, UpdateAPITestCase)
+from huxley.api import tests
+from huxley.api.tests import auto
 from huxley.utils.test import (TestUsers, TestSchools, TestAssignments,
                                TestCommittees, TestCountries)
 
 
-class AssignmentDetailGetTestCase(RetrieveAPITestCase):
+class AssignmentDetailGetTestCase(auto.RetrieveAPIAutoTestCase):
     url_name = 'api:assignment_detail'
 
-    def setUp(self):
-        self.user = TestUsers.new_user(username='user', password='user')
-        self.school = TestSchools.new_school(user=self.user)
-        self.assignment = TestAssignments.new_assignment(school=self.school)
+    @classmethod
+    def get_test_object(cls):
+        user = TestUsers.new_user(username='user', password='user')
+        school = TestSchools.new_school(user=user)
+        return TestAssignments.new_assignment(school=school)
 
     def test_anonymous_user(self):
-        '''It should fail due to missing authentication credentials.'''
-        response = self.get_response(self.assignment.id)
-        self.assertNotAuthenticated(response)
+        self.do_test(expected_error=auto.EXP_NOT_AUTHENTICATED)
 
     def test_advisor(self):
-        '''It should return correct data.'''
-        self.client.login(username='user', password='user')
-        response = self.get_response(self.assignment.id)
-        self.assertEqual(response.data, {
-            "id" : self.assignment.id,
-            "committee" : self.assignment.committee.id,
-            "country" : self.assignment.country.id,
-            "school" : self.school.id,
-            "rejected" : self.assignment.rejected,
-        })
+        self.do_test(username='user', password='user')
 
     def test_superuser(self):
-        '''It should return correct data.'''
-        superuser = TestUsers.new_superuser(username='s_user', password='s_user')
-        self.client.login(username='s_user', password='s_user')
-        response = self.get_response(self.assignment.id)
-        self.assertEqual(response.data, {
-            "id" : self.assignment.id,
-            "committee" : self.assignment.committee.id,
-            "country" : self.assignment.country.id,
-            "school" : self.school.id,
-            "rejected" : self.assignment.rejected,
-        })
+        TestUsers.new_superuser(username='superuser', password='superuser')
+        self.do_test(username='superuser', password='superuser')
 
 
-class AssignmentDetailPutTestCase(UpdateAPITestCase):
+class AssignmentDetailPutTestCase(tests.UpdateAPITestCase):
     url_name = 'api:assignment_detail'
     params = {'rejected':True}
 
@@ -87,7 +67,7 @@ class AssignmentDetailPutTestCase(UpdateAPITestCase):
         })
 
 
-class AssignmentDetailPatchTestCase(PartialUpdateAPITestCase):
+class AssignmentDetailPatchTestCase(tests.PartialUpdateAPITestCase):
     url_name = 'api:assignment_detail'
     params = {'rejected':True}
 
@@ -127,36 +107,40 @@ class AssignmentDetailPatchTestCase(PartialUpdateAPITestCase):
         })
 
 
-class AssignmentDetailDeleteTestCase(DestroyAPITestCase):
+class AssignmentDetailDeleteTestCase(auto.DestroyAPIAutoTestCase):
     url_name = 'api:assignment_detail'
 
-    def setUp(self):
-        self.user = TestUsers.new_user(username='user', password='user')
-        self.school = TestSchools.new_school(user=self.user)
-        self.assignment = TestAssignments.new_assignment(school=self.school)
+    @classmethod
+    def get_test_object(cls):
+        return TestAssignments.new_assignment()
 
     def test_anonymous_user(self):
-        '''Unauthenticated users should not be able to delete assignments.'''
-        response = self.get_response(self.assignment.id)
-        self.assertNotAuthenticated(response)
+        '''Anonymous users cannot delete assignments.'''
+        self.do_test(expected_error=auto.EXP_NOT_AUTHENTICATED)
 
     def test_advisor(self):
-        '''Authenticated users shouldn't have permission to delete assignments.'''
-        self.client.login(username='user', password='user')
+        '''Advisors cannot delete their assignments.'''
+        self.do_test(
+            username=self.object.school.advisor.username, password='test',
+            expected_error=auto.EXP_DELETE_NOT_ALLOWED)
 
-        response = self.get_response(self.assignment.id)
-        self.assertMethodNotAllowed(response, 'DELETE')
+    def test_other_user(self):
+        '''A user cannot delete another user's assignments.'''
+        joe = TestUsers.new_user(username='joe', password='schmoe')
+        TestSchools.new_school(user=joe)
+        self.do_test(
+            username='joe', password='schmoe',
+            expected_error=auto.EXP_PERMISSION_DENIED)
 
     def test_superuser(self):
-        '''Assignments should not be able to be deleted through API'''
-        TestUsers.new_superuser(username='s_user', password='s_user')
-        self.client.login(username='s_user', password='s_user')
+        '''A superuser cannot delete assignments.'''
+        TestUsers.new_superuser(username='super', password='super')
+        self.do_test(
+            username='super', password='super',
+            expected_error=auto.EXP_DELETE_NOT_ALLOWED)
 
-        response = self.get_response(self.assignment.id)
-        self.assertMethodNotAllowed(response, 'DELETE')
 
-
-class AssignmentListCreateTestCase(CreateAPITestCase):
+class AssignmentListCreateTestCase(tests.CreateAPITestCase):
     url_name = 'api:assignment_list'
     params = {'rejected':True}
 

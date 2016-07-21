@@ -9,7 +9,7 @@ var ActionConstants = require('../constants/ActionConstants');
 var Dispatcher = require('../dispatcher/Dispatcher');
 var {Store} = require('flux/utils');
 
-var invariant = require('react/lib/invariant');
+var invariant = require('fbjs/lib/invariant');
 
 class CurrentUserStore extends Store {
   constructor(dispatcher) {

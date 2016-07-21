@@ -93,12 +93,14 @@ class UserDetailGetTestCase(RetrieveAPITestCase):
                 'advanced_delegates': school.advanced_delegates,
                 'spanish_speaking_delegates': school.spanish_speaking_delegates,
                 'chinese_speaking_delegates': school.chinese_speaking_delegates,
+                'waivers_completed': school.waivers_completed,
                 'countrypreferences': school.country_preference_ids,
                 'committeepreferences': list(school.committeepreferences.all()),
                 'registration_comments': school.registration_comments,
                 'fees_owed': float(school.fees_owed),
                 'fees_paid': float(school.fees_paid),
                 'assignments_finalized': school.assignments_finalized,
+                'modified_at': school.modified_at.isoformat(),
             },
             'committee': user.committee_id})
 
@@ -426,10 +428,12 @@ class CurrentUserTestCase(TestCase):
             u'advanced_delegates': school.advanced_delegates,
             u'spanish_speaking_delegates': school.spanish_speaking_delegates,
             u'chinese_speaking_delegates': school.chinese_speaking_delegates,
+            u'waivers_completed': school.waivers_completed,
             u'countrypreferences': school.country_preference_ids,
             u'committeepreferences': list(school.committeepreferences.all()),
             u'registration_comments': unicode(school.registration_comments),
             u'fees_owed': float(school.fees_owed),
             u'fees_paid': float(school.fees_paid),
             u'assignments_finalized': school.assignments_finalized,
+            u'modified_at': unicode(school.modified_at.isoformat()),
         })

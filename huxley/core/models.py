@@ -10,6 +10,7 @@ from django.conf import settings
 from django.core.mail import send_mail
 from django.db import models, transaction
 from django.db.models.signals import post_save, pre_save
+from django.utils import timezone
 
 from huxley.core.constants import ContactGender, ContactType, ProgramTypes
 
@@ -105,6 +106,7 @@ class School(models.Model):
     times_attended      = models.PositiveSmallIntegerField(default=0)
     international       = models.BooleanField(default=False)
     waitlist            = models.BooleanField(default=False)
+    waivers_completed   = models.BooleanField(default=False)
 
     beginner_delegates         = models.PositiveSmallIntegerField()
     intermediate_delegates     = models.PositiveSmallIntegerField()
@@ -121,6 +123,8 @@ class School(models.Model):
 
     fees_owed = models.DecimalField(max_digits=6, decimal_places=2, default=Decimal('0.00'))
     fees_paid = models.DecimalField(max_digits=6, decimal_places=2, default=Decimal('0.00'))
+
+    modified_at = models.DateTimeField(default=timezone.now)
 
     def balance(self):
         return self.fees_owed - self.fees_paid
@@ -198,7 +202,7 @@ class School(models.Model):
             send_mail('Registration Comments from '+ school.name, school.name +
                 ' made comments about registration: '
                 + school.registration_comments, 'tech@bmun.org',
-                ['external@bmun.org'], fail_silently=True)
+                ['external@bmun.org'], fail_silently=False)
 
     @classmethod
     def email_confirmation(cls, **kwargs):
@@ -213,7 +217,7 @@ class School(models.Model):
                           'For all other questions, please email info@bmun.org.\n\n'
                           'Thank you for using Huxley!' % conference.session,
                           'no-reply@bmun.org',
-                          [school.primary_email], fail_silently=True)
+                          [school.primary_email], fail_silently=False)
             else:
                 registration_fee = conference.registration_fee
                 delegate_fee = conference.delegate_fee
@@ -228,7 +232,7 @@ class School(models.Model):
                           'For all other questions, please email info@bmun.org.\n\n'
                           'Thank you for using Huxley!' % (conference.session, int(registration_fee), int(delegate_fee)),
                           'no-reply@bmun.org',
-                          [school.primary_email], fail_silently=True)
+                          [school.primary_email], fail_silently=False)
 
     def __unicode__(self):
         return self.name

@@ -5,8 +5,9 @@
 
 'use strict';
 
-var React = require('react/addons');
-var Router = require('react-router');
+var cx = require('classnames');
+var React = require('react');
+var ReactRouter = require('react-router');
 
 var Button = React.createClass({
   propTypes: {
@@ -25,8 +26,7 @@ var Button = React.createClass({
   },
 
   render: function() {
-    var cx = React.addons.classSet;
-    var ButtonComponent = this.props.href ? Router.Link : 'button';
+    var ButtonComponent = this.props.href ? ReactRouter.Link : 'button';
 
     return (
       <ButtonComponent

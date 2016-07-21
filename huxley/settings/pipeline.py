@@ -9,7 +9,7 @@ from .roots import JS_ROOT, PROJECT_ROOT
 PIPELINE = {
     'COMPILERS': (
         'huxley.utils.pipeline.PySCSSCompiler',
-        'pipeline_browserify.compiler.BrowserifyCompiler',
+        'huxley.utils.pipeline.BrowserifyCompiler',
     ),
 
     'CSS_COMPRESSOR': 'pipeline.compressors.cssmin.CSSMinCompressor',

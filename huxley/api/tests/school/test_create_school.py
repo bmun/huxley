@@ -118,12 +118,14 @@ class CreateSchoolTestCase(CreateAPITestCase):
             'advanced_delegates': school.advanced_delegates,
             'spanish_speaking_delegates': school.spanish_speaking_delegates,
             'chinese_speaking_delegates': school.chinese_speaking_delegates,
+            'waivers_completed': school.waivers_completed,
             'countrypreferences': school.country_preference_ids,
             'registration_comments': school.registration_comments,
             'committeepreferences': list(school.committeepreferences.all()),
             'fees_owed': float(school.fees_owed),
             'fees_paid': float(school.fees_paid),
             'assignments_finalized': school.assignments_finalized,
+            'modified_at': school.modified_at.isoformat(),
         })
 
     def test_country_preferences(self):

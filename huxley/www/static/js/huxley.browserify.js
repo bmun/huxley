@@ -8,7 +8,8 @@
 var $ = require('jquery');
 var Cookie = require('js-cookie');
 var React = require('react');
-var Router = require('react-router');
+var ReactDOM = require('react-dom')
+var ReactRouter = require('react-router');
 
 var CurrentUserActions = require('./huxley/actions/CurrentUserActions');
 var Huxley = require('./huxley/components/Huxley');
@@ -25,41 +26,38 @@ var RegistrationClosedView = require('./huxley/components/RegistrationClosedView
 var RegistrationSuccessView = require('./huxley/components/RegistrationSuccessView');
 var RegistrationWaitlistView = require('./huxley/components/RegistrationWaitlistView');
 
-var DefaultRoute = Router.DefaultRoute;
-var NotFoundRoute = Router.NotFoundRoute;
-var Routes = Router.Routes;
-var Route = Router.Route;
+var IndexRoute = ReactRouter.IndexRoute;
+var Router = ReactRouter.Router;
+var Route = ReactRouter.Route;
 
 var routes = (
-  <Route path="/" handler={Huxley}>
-    <Route path="/login" handler={LoginView} />
-    <Route path="/password" handler={ForgotPasswordView} />
-    <Route path="/password/reset" handler={PasswordResetSuccessView} />
+  <Route path="/" component={Huxley}>
+    <Route path="/login" component={LoginView} />
+    <Route path="/password" component={ForgotPasswordView} />
+    <Route path="/password/reset" component={PasswordResetSuccessView} />
     <Route
       path="/register"
-      handler={global.conference.registration_open
+      component={global.conference.registration_open
         ? RegistrationView
         : RegistrationClosedView
       }
     />
-    <Route path="/register/success" handler={RegistrationSuccessView} />
-    <Route path="/register/waitlist" handler={RegistrationWaitlistView} />
-    <Route path="/advisor/profile" handler={AdvisorProfileView} />
-    <Route path="/advisor/assignments" handler={AdvisorAssignmentsView} />
+    <Route path="/register/success" component={RegistrationSuccessView} />
+    <Route path="/register/waitlist" component={RegistrationWaitlistView} />
+    <Route path="/advisor/profile" component={AdvisorProfileView} />
+    <Route path="/advisor/assignments" component={AdvisorAssignmentsView} />
     <Route path="/advisor/roster" handler={AdvisorRosterView} />
-    <DefaultRoute handler={RedirectView} />
-    <NotFoundRoute handler={NotFoundView} />
+    <IndexRoute component={RedirectView} />
+    <Route path="*" component={NotFoundView} />
   </Route>
 );
 
 $(function() {
-  Router.run(routes, function(Handler) {
-    React.render(
-      <Handler />,
-      document.getElementById('huxley-app')
-    );
-  });
-});
+  ReactDOM.render(
+    <Router>{routes}</Router>,
+    document.getElementById('huxley-app')
+  );}
+);
 
 CurrentUserActions.bootstrap();
 

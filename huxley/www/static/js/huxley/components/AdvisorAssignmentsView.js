@@ -9,7 +9,7 @@
 
 var $ = require('jquery');
 var React = require('react');
-var Router = require('react-router');
+var ReactRouter = require('react-router');
 
 var AssignmentStore = require('../stores/AssignmentStore');
 var Button = require('./Button');
@@ -22,7 +22,7 @@ var InnerView = require('./InnerView');
 
 var AdvisorAssignmentsView = React.createClass({
   mixins: [
-    Router.Navigation,
+    ReactRouter.History,
   ],
 
   contextTypes: {
@@ -68,7 +68,7 @@ var AdvisorAssignmentsView = React.createClass({
     var conference = this.context.conference;
     return (
       <InnerView>
-        <h2>Roster</h2>
+        <h2>Assignments</h2>
         <p>
           Here you can view your tentative assignments for BMUN {conference.session}. If you
           would like to request more slots, please email <a href="mailto:info@bmun.org">
@@ -80,16 +80,20 @@ var AdvisorAssignmentsView = React.createClass({
           <div className="tablemenu header" />
           <div className="table-container">
             <table className="table highlight-cells">
-              <tr>
-                <th>Committee</th>
-                <th>Country</th>
-                <th>Delegation Size</th>
-                <th>{finalized ?
-                  "" :
-                  "Delete Assignments"}
-                </th>
-              </tr>
-              {this.renderAssignmentRows()}
+              <thead>
+                <tr>
+                  <th>Committee</th>
+                  <th>Country</th>
+                  <th>Delegation Size</th>
+                  <th>{finalized ?
+                    "" :
+                    "Delete Assignments"}
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {this.renderAssignmentRows()}
+              </tbody>
             </table>
           </div>
           <div className="tablemenu footer" />
@@ -166,7 +170,7 @@ var AdvisorAssignmentsView = React.createClass({
   _handleFinalizedSuccess: function(data, status, jqXHR) {
     CurrentUserActions.updateSchool(jqXHR.responseJSON);
     this.setState({loading: false});
-    this.transitionTo('/advisor/assignments');
+    this.history.pushState(null, '/advisor/assignments');
   },
 
   _handleAssignmentDeleteSuccess: function(data, status, jqXHR) {
@@ -176,7 +180,7 @@ var AdvisorAssignmentsView = React.createClass({
     })
     this.setState({assignments: assignments})
     this.setState({loading: false});
-    this.transitionTo('/advisor/assignments');
+    this.history.pushState(null, '/advisor/assignments');
   },
 
   _handleError: function(jqXHR, status, error) {
@@ -186,7 +190,7 @@ var AdvisorAssignmentsView = React.createClass({
 
    _handleSuccess: function(event) {
     this.setState({loading: false});
-    this.transitionTo('/advisor/assignments');
+    this.history.pushState(null, '/advisor/assignments');
   }
 });
 

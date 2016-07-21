@@ -6,20 +6,20 @@
 'use strict';
 
 var React = require('react');
-var Router = require('react-router');
+var ReactRouter = require('react-router');
 
 var OuterView = require('./OuterView');
 var User = require('../utils/User');
 
 var RedirectView = React.createClass({
-  mixins: [Router.Navigation],
+  mixins: [ReactRouter.History],
 
   componentDidMount: function() {
     var {user} = this.props;
     if (User.isAnonymous(user)) {
-      this.transitionTo('/login');
+      this.history.pushState(null, '/login');
     } else if (User.isAdvisor(user)) {
-      this.transitionTo('/advisor/profile');
+      this.history.pushState(null, '/advisor/profile');
     }
   },
 

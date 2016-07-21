@@ -5,11 +5,9 @@
 
 'use strict';
 
-var keyMirror = require('react/lib/keyMirror');
-
-module.exports = keyMirror({
-  BOOTSTRAP: null,
-  LOGIN: null,
-  LOGOUT: null,
-  UPDATE_SCHOOL: null
-});
+module.exports = {
+  BOOTSTRAP: "BOOTSTRAP",
+  LOGIN: "LOGIN",
+  LOGOUT: "LOGOUT",
+  UPDATE_SCHOOL: "UPDATE_SCHOOL"
+};

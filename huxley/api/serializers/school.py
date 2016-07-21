@@ -3,12 +3,10 @@
 from rest_framework import serializers
 
 from huxley.api import validators
-from huxley.api.serializers.fields import DecimalField
 from huxley.core.models import School, Committee
 
 
 class SchoolSerializer(serializers.ModelSerializer):
-    registered = serializers.DateTimeField(format='iso-8601', required=False)
     fees_owed = serializers.FloatField(read_only=True)
     fees_paid = serializers.FloatField(read_only=True)
     assignments_finalized = serializers.BooleanField(required=False)
@@ -45,12 +43,14 @@ class SchoolSerializer(serializers.ModelSerializer):
             'advanced_delegates',
             'spanish_speaking_delegates',
             'chinese_speaking_delegates',
+            'waivers_completed',
             'countrypreferences',
             'committeepreferences',
             'registration_comments',
             'fees_owed',
             'fees_paid',
             'assignments_finalized',
+            'modified_at',
         )
         extra_kwargs = {
         'committeepreferences': {'required': False},
@@ -74,20 +74,45 @@ class SchoolSerializer(serializers.ModelSerializer):
 
 
     def validate(self, data):
+        invalid_fields = {}
         international = data.get('international')
         primary_phone = data.get('primary_phone')
         secondary_phone = data.get('secondary_phone')
+        beginner_delegates = data.get('beginner_delegates')
+        intermediate_delegates = data.get('intermediate_delegates')
+        advanced_delegates = data.get('advanced_delegates')
+        spanish_speaking_delegates = data.get('spanish_speaking_delegates')
+        chinese_speaking_delegates = data.get('chinese_speaking_delegates')
+
+        total_delegates = sum((
+            beginner_delegates or 0,
+            intermediate_delegates or 0,
+            advanced_delegates or 0))
+
+        def validate_phone(phone, international):
+            if international:
+                validators.phone_international(phone)
+            else:
+                validators.phone_domestic(phone)
 
         if primary_phone:
-            if international:
-                validators.phone_international(primary_phone)
-            else:
-                validators.phone_domestic(primary_phone)
+            try:
+                validate_phone(primary_phone, international)
+            except serializers.ValidationError:
+                invalid_fields['primary_phone'] = 'This is an invalid phone number.'
         if secondary_phone:
-            if international:
-                validators.phone_international(secondary_phone)
-            else:
-                validators.phone_domestic(secondary_phone)
+            try:
+                validate_phone(secondary_phone, international)
+            except serializers.ValidationError:
+                invalid_fields['secondary_phone'] = 'This is an invalid phone number.'
+
+        if spanish_speaking_delegates > total_delegates:
+            invalid_fields['spanish_speaking_delegates'] = 'Cannot exceed total number of delegates.'
+        if chinese_speaking_delegates > total_delegates:
+            invalid_fields['chinese_speaking_delegates'] = 'Cannot exceed total number of delegates.'
+
+        if invalid_fields:
+            raise serializers.ValidationError(invalid_fields)
 
         return data
 
@@ -131,7 +156,7 @@ class SchoolSerializer(serializers.ModelSerializer):
 
         return value
 
-    def validate_zip(self, value):
+    def validate_zip_code(self, value):
         school_zip = value
 
         validators.numeric(school_zip)

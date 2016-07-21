@@ -1,58 +1,34 @@
 # Copyright (c) 2011-2015 Berkeley Model United Nations. All rights reserved.
 # Use of this source code is governed by a BSD License (see LICENSE).
 
-from huxley.api.tests import (CreateAPITestCase, DestroyAPITestCase,
-                              ListAPITestCase, PartialUpdateAPITestCase,
-                              RetrieveAPITestCase, UpdateAPITestCase)
+from huxley.api import tests
+from huxley.api.tests import auto
 from huxley.utils.test import (TestUsers, TestSchools, TestAssignments,
-                              TestCommittees, TestDelegates)
+                               TestDelegates)
 
 
-class DelegateDetailGetTestCase(RetrieveAPITestCase):
+class DelegateDetailGetTestCase(auto.RetrieveAPIAutoTestCase):
     url_name = 'api:delegate_detail'
 
-    def setUp(self):
-        self.user = TestUsers.new_user(username='user', password='user')
-        self.school = TestSchools.new_school(user=self.user)
-        self.assignment = TestAssignments.new_assignment(school=self.school)
-        self.delegate = TestDelegates.new_delegate(assignment=self.assignment, school=self.school)
+    @classmethod
+    def get_test_object(cls):
+        user = TestUsers.new_user(username='user', password='user')
+        school = TestSchools.new_school(user=user)
+        assignment = TestAssignments.new_assignment(school=school)
+        return TestDelegates.new_delegate(assignment=assignment)
 
     def test_anonymous_user(self):
-        '''It should fail due to missing authentication credentials.'''
-        response = self.get_response(self.delegate.id)
-        self.assertNotAuthenticated(response)
+        self.do_test(expected_error=auto.EXP_NOT_AUTHENTICATED)
 
     def test_advisor(self):
-        '''It should return correct data.'''
-        self.client.login(username='user', password='user')
-        response = self.get_response(self.delegate.id)
-        response.data.pop('created_at')
-        self.assertEqual(response.data, {
-            "id" : self.delegate.id,
-            "assignment" : self.delegate.assignment.id,
-            "school" : self.delegate.school.id,
-            "name" : unicode(self.delegate.name),
-            "email" : unicode(self.delegate.email),
-            "summary" : unicode(self.delegate.summary)}
-        )
+        self.do_test(username='user', password='user')
 
     def test_superuser(self):
-        '''It should return correct data.'''
-        superuser = TestUsers.new_superuser(username='s_user', password='s_user')
-        self.client.login(username='s_user', password='s_user')
-        response = self.get_response(self.delegate.id)
-        response.data.pop('created_at')
-        self.assertEqual(response.data, {
-            "id" : self.delegate.id,
-            "assignment" : self.delegate.assignment.id,
-            "school" : self.delegate.school.id,
-            "name" : unicode(self.delegate.name),
-            "email" : unicode(self.delegate.email),
-            "summary" : unicode(self.delegate.summary)}
-        )
+        TestUsers.new_superuser(username='superuser', password='superuser')
+        self.do_test(username='superuser', password='superuser')
 
 
-class DelegateDetailPutTestCase(UpdateAPITestCase):
+class DelegateDetailPutTestCase(tests.UpdateAPITestCase):
     url_name = 'api:delegate_detail'
     params = {
         'name':'Trevor Dowds',
@@ -101,7 +77,7 @@ class DelegateDetailPutTestCase(UpdateAPITestCase):
         )
 
 
-class DelegateDetailPatchTestCase(PartialUpdateAPITestCase):
+class DelegateDetailPatchTestCase(tests.PartialUpdateAPITestCase):
     url_name = 'api:delegate_detail'
     params = {
         'name':'Trevor Dowds',
@@ -149,36 +125,38 @@ class DelegateDetailPatchTestCase(PartialUpdateAPITestCase):
         )
 
 
-class DelegateDetailDeleteTestCase(DestroyAPITestCase):
+class DelegateDetailDeleteTestCase(auto.DestroyAPIAutoTestCase):
     url_name = 'api:delegate_detail'
 
-    def setUp(self):
-        self.user = TestUsers.new_user(username='user', password='user')
-        self.school = TestSchools.new_school(user=self.user)
-        self.assignment = TestAssignments.new_assignment(school=self.school)
-        self.delegate = TestDelegates.new_delegate(assignment=self.assignment, school=self.school)
+    @classmethod
+    def get_test_object(cls):
+        return TestDelegates.new_delegate()
 
     def test_anonymous_user(self):
-        '''Unauthenticated users should not be able to delete delegates.'''
-        response = self.get_response(self.assignment.id)
-        self.assertNotAuthenticated(response)
+        '''Anonymous users cannot delete delegates.'''
+        self.do_test(expected_error=auto.EXP_NOT_AUTHENTICATED)
 
     def test_advisor(self):
-        '''Authenticated users shouldn't have permission to delete delegates.'''
-        self.client.login(username='user', password='user')
+        '''Advisors can delete their delegates.'''
+        self.do_test(
+            username=self.object.school.advisor.username,
+            password='test')
 
-        response = self.get_response(self.assignment.id)
-        self.assert204(response)
+    def test_other_user(self):
+        '''A user cannot delete another user's delegates.'''
+        joe = TestUsers.new_user(username='joe', password='schmoe')
+        TestSchools.new_school(user=joe)
+        self.do_test(
+            username='joe', password='schmoe',
+            expected_error=auto.EXP_PERMISSION_DENIED)
 
     def test_superuser(self):
-        '''Assignments should not be able to be deleted through API'''
-        TestUsers.new_superuser(username='s_user', password='s_user')
-        self.client.login(username='s_user', password='s_user')
+        '''A superuser can delete delegates.'''
+        TestUsers.new_superuser(username='super', password='super')
+        self.do_test(username='super', password='super')
 
-        response = self.get_response(self.assignment.id)
-        self.assert204(response)
 
-class DelegateListCreateTestCase(CreateAPITestCase):
+class DelegateListCreateTestCase(tests.CreateAPITestCase):
     url_name = 'api:delegate_list'
     params = {
         'name':'Trevor Dowds',

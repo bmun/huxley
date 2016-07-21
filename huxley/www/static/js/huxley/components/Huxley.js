@@ -5,18 +5,16 @@
 
 'use strict';
 
-var React = require('react/addons');
-var Router = require('react-router');
+var React = require('react');
+var ReactRouter = require('react-router');
 
 var AdvisorView = require('../components/AdvisorView');
 var ConferenceContext = require('../components/ConferenceContext');
 var CurrentUserStore = require('../stores/CurrentUserStore');
 var User = require('../utils/User');
 
-var RouteHandler = Router.RouteHandler;
-
 var Huxley = React.createClass({
-  mixins: [Router.Navigation],
+  mixins: [ReactRouter.History,],
 
   childContextTypes: {
     conference: React.PropTypes.shape(ConferenceContext)
@@ -33,9 +31,9 @@ var Huxley = React.createClass({
     CurrentUserStore.addListener(() => {
       var user = CurrentUserStore.getCurrentUser();
       if (User.isAnonymous(user)) {
-        this.transitionTo('/login');
+        this.history.pushState(null, '/login');
       } else if (User.isAdvisor(user)) {
-        this.transitionTo('/advisor/profile');
+        this.history.pushState(null, '/advisor/profile');
       }
     });
   },
@@ -43,11 +41,11 @@ var Huxley = React.createClass({
   render: function() {
     var user = CurrentUserStore.getCurrentUser();
     if (User.isAnonymous(user)) {
-      return <RouteHandler user={user} />;
+      return React.cloneElement(this.props.children, { user: user });
     } else if (User.isAdvisor(user)) {
       return (
         <AdvisorView user={user}>
-          <RouteHandler user={user} />
+          {React.cloneElement(this.props.children, { user: user })}
         </AdvisorView>
       );
     } else {

@@ -8,8 +8,9 @@
 var console = require('console');
 
 var $ = require('jquery');
-var React = require('react/addons');
-var Router = require('react-router');
+var cx = require('classnames');
+var React = require('react');
+var ReactRouter = require('react-router');
 
 var Button = require('./Button');
 var ConferenceContext = require('./ConferenceContext');
@@ -22,8 +23,7 @@ require('jquery-ui/effect-shake');
 
 var LoginView = React.createClass({
   mixins: [
-    React.addons.LinkedStateMixin,
-    Router.Navigation,
+    ReactRouter.History,
   ],
 
   contextTypes: {
@@ -45,12 +45,11 @@ var LoginView = React.createClass({
       return;
     }
     if (User.isAdvisor(user)) {
-      this.transitionTo('/advisor/profile');
+      this.history.pushState(null, '/advisor/profile');
     }
   },
 
   render: function() {
-    var cx = React.addons.classSet;
     return (
       <OuterView header={this.renderHeader()}>
         <form
@@ -63,14 +62,16 @@ var LoginView = React.createClass({
               type="text"
               name="username"
               placeholder="Username"
-              valueLink={this.linkState('username')}
+              value={this.state.username}
+              onChange={this._handleUsernameChange}
             />
             <input
               className="text"
               type="password"
               name="password"
               placeholder="Password"
-              valueLink={this.linkState('password')}
+              value={this.state.password}
+              onChange={this._handlePasswordChange}
             />
           </div>
           <div className="login-register">
@@ -121,6 +122,14 @@ var LoginView = React.createClass({
     }
 
     return null;
+  },
+
+  _handlePasswordChange: function(event) {
+    this.setState({password: event.target.value});
+  },
+
+  _handleUsernameChange: function(event) {
+    this.setState({username: event.target.value});
   },
 
   _handleSubmit: function(event) {
