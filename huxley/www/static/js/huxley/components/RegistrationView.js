@@ -131,10 +131,9 @@ var RegistrationView = React.createClass({
               value={this.state.last_name}
             />
             {this.renderError('last_name')}
-            <input
-              type="text"
+            <TextInput
               placeholder="Username"
-              onChange={this._handleUsernameChange}
+              onChange={this._handleRawInputChange.bind(this, 'username')}
               value={this.state.username}
             />
             {this.renderError('username')}
@@ -187,11 +186,10 @@ var RegistrationView = React.createClass({
               value={this.state.school_name}
             />
             {this.renderSchoolError('name')}
-            <input
-              type="text"
+            <TextInput
               placeholder="Street Address"
               value={this.state.school_address}
-              onChange={this._handleStreetAddressChange}
+              onChange={this._handleRawInputChange.bind(this, 'school_address')}
             />
             {this.renderSchoolError('address')}
             <TextInput
@@ -206,10 +204,9 @@ var RegistrationView = React.createClass({
               value={this.state.school_state}
             />
             {this.renderSchoolError('state')}
-            <input
-              type="text"
+            <TextInput
               placeholder="Zip"
-              onChange={this._handleSchoolZipChange}
+              onChange={this._handleRawInputChange.bind(this, 'school_zip')}
               value={this.state.school_zip}
             />
             {this.renderSchoolError('zip_code')}
@@ -298,10 +295,9 @@ var RegistrationView = React.createClass({
               value={this.state.primary_name}
             />
             {this.renderSchoolError('primary_name')}
-            <input
-              type="text"
+            <TextInput
               placeholder="Email"
-              onChange={this._handlePrimaryEmailChange}
+              onChange={this._handleRawInputChange.bind(this, 'primary_email')}
               value={this.state.primary_email}
             />
             {this.renderSchoolError('primary_email')}
@@ -321,10 +317,9 @@ var RegistrationView = React.createClass({
               value={this.state.secondary_name}
             />
             {this.renderSchoolError('secondary_name')}
-            <input
-              type="text"
+            <TextInput
               placeholder="Email"
-              onChange={this._handleSecondaryEmailChange}
+              onChange={this._handleRawInputChange.bind(this, 'secondary_email')}
               value={this.state.secondary_email}
             />
             {this.renderSchoolError('secondary_email')}
@@ -637,22 +632,6 @@ var RegistrationView = React.createClass({
     this.setState({password2: event.target.value});
   },
 
-  _handleStreetAddressChange: function(event) {
-    this.setState({school_address: event.target.value});
-  },
-
-  _handleSchoolZipChange: function(event) {
-    this.setState({school_zip: event.target.value});
-  },
-
-  _handlePrimaryEmailChange: function(event) {
-    this.setState({primary_email: event.target.value});
-  },
-
-  _handleSecondaryEmailChange: function(event) {
-    this.setState({secondary_email: event.target.value});
-  },
-
   _handleRegistrationCommentsChange: function(event) {
     this.setState({registration_comments: event.target.value});
   },
@@ -667,10 +646,6 @@ var RegistrationView = React.createClass({
     var change = {};
     change[name] = event.target.value;
     this.setState(change);
-  },
-
-  _handleUsernameChange: function(event) {
-    this.setState({username: event.target.value});
   },
 
   _getSchoolCountry: function() {
