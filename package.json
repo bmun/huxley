@@ -13,10 +13,9 @@
     "jquery": "2.1.1",
     "jquery-ui": "1.10.5",
     "js-cookie": "~2.0.3",
-    "react": "0.14.8",
-    "react-dom": "0.14.8",
-    "react-router": "1.0.0",
-    "react-addons-linked-state-mixin": "0.14.8"
+    "react": "15.0.0",
+    "react-dom": "15.0.0",
+    "react-router": "1.0.0"
   },
   "scripts": {
     "test": "jest"

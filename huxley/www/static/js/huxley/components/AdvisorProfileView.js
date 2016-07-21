@@ -15,7 +15,7 @@ var ConferenceContext = require('./ConferenceContext');
 var PhoneInput = require('./PhoneInput');
 var ProgramTypes = require('../constants/ProgramTypes');
 var User = require('../utils/User');
-var _handleChange = require('../utils/_handleChange')
+var _handleChange = require('../utils/_handleChange');
 
 require('jquery-ui/effect-shake');
 
@@ -86,8 +86,8 @@ var AdvisorProfileView = React.createClass({
         <p><strong>{conference.external}
         <br />
         Under-Secretary General of External Relations, {conference.session}th Session.</strong></p>
-        <form 
-          id="welcomepage" 
+        <form
+          id="welcomepage"
           onSubmit={this._handleSubmit}>
           <div className="tablemenu header">
           </div>

@@ -7,13 +7,11 @@
 
 var $ = require('jquery');
 var cx = require('classnames');
-var LinkedStateMixin = require('react-addons-linked-state-mixin');
 var React = require('react');
 
 var Button = require('./Button');
 
 var ChangePasswordView = React.createClass({
-  mixins: [LinkedStateMixin],
 
   propTypes: {
     isVisible: React.PropTypes.bool.isRequired,
@@ -50,19 +48,22 @@ var ChangePasswordView = React.createClass({
           <input
             type="password"
             className="rounded-small"
-            valueLink={this.linkState('currentPassword')}
+            value={this.state.currentPassword}
+            onChange={this._handleCurrentPasswordChange}
           />
           <label>Current Password</label>
           <input
             type="password"
             className="rounded-small"
-            valueLink={this.linkState('newPassword')}
+            value={this.state.newPassword}
+            onChange={this._handleNewPasswordChange}
           />
           <label>New Password</label>
           <input
             type="password"
             className="rounded-small"
-            valueLink={this.linkState('newPassword2')}
+            value={this.state.newPassword2}
+            onChange={this._handleNewPassword2Change}
           />
           <label>New Password (again)</label>
           <Button
@@ -94,6 +95,18 @@ var ChangePasswordView = React.createClass({
 
   onSuccess: function() {
     setTimeout(this.props.onSuccess, 750);
+  },
+
+  _handleCurrentPasswordChange: function(event) {
+    this.setState({currentPassword: event.target.value});
+  },
+
+  _handleNewPasswordChange: function(event) {
+    this.setState({newPassword: event.target.value});
+  },
+
+  _handleNewPassword2Change: function(event) {
+    this.setState({newPassword2: event.target.value});
   },
 
   _handleSubmit: function(event) {

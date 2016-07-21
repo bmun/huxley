@@ -9,7 +9,6 @@ var console = require('console');
 
 var $ = require('jquery');
 var cx = require('classnames');
-var LinkedStateMixin = require('react-addons-linked-state-mixin');
 var React = require('react');
 var ReactRouter = require('react-router');
 
@@ -25,6 +24,8 @@ var NumberInput = require('./NumberInput');
 var OuterView = require('./OuterView');
 var PhoneInput = require('./PhoneInput');
 var ProgramTypes = require('../constants/ProgramTypes');
+var TextInput = require('./TextInput');
+var _handleChange = require('../utils/_handleChange');
 
 require('jquery-ui/effect-shake');
 
@@ -32,7 +33,6 @@ var USA = 'United States of America';
 
 var RegistrationView = React.createClass({
   mixins: [
-    LinkedStateMixin,
     ReactRouter.History,
   ],
 
@@ -120,28 +120,29 @@ var RegistrationView = React.createClass({
           <div className="registration-fields">
             <hr />
             <h3>Account Information</h3>
-            <input
-              type="text"
+            <TextInput
               placeholder="First Name"
-              valueLink={this.linkState('first_name')}
+              onChange={_handleChange.bind(this, 'first_name')}
+              value={this.state.first_name}
             />
             {this.renderError('first_name')}
-            <input
-              type="text"
+            <TextInput
               placeholder="Last Name"
-              valueLink={this.linkState('last_name')}
+              onChange={_handleChange.bind(this, 'last_name')}
+              value={this.state.last_name}
             />
             {this.renderError('last_name')}
-            <input
-              type="text"
+            <TextInput
               placeholder="Username"
-              valueLink={this.linkState('username')}
+              onChange={_handleChange.bind(this, 'username')}
+              value={this.state.username}
             />
             {this.renderError('username')}
             <input
               type="password"
               placeholder="Password"
-              valueLink={this.linkState('password')}
+              value={this.state.password}
+              onChange={this._handlePasswordChange}
               onBlur={this._handlePasswordBlur}
               onFocus={this._handlePasswordFocus}
             />
@@ -149,7 +150,8 @@ var RegistrationView = React.createClass({
             <input
               type="password"
               placeholder="Password (confirm)"
-              valueLink={this.linkState('password2')}
+              value={this.state.password2}
+              onChange={this._handlePasswordConfirmChange}
               onBlur={this._handlePasswordBlur}
               onFocus={this._handlePasswordFocus}
             />
@@ -179,41 +181,41 @@ var RegistrationView = React.createClass({
                 </label>
               </li>
             </ul>
-            <input
-              type="text"
+            <TextInput
               placeholder="Official School Name"
-              valueLink={this.linkState('school_name')}
+              onChange={_handleChange.bind(this, 'school_name')}
+              value={this.state.school_name}
             />
             {this.renderSchoolError('name')}
-            <input
-              type="text"
+            <TextInput
               placeholder="Street Address"
-              valueLink={this.linkState('school_address')}
+              value={this.state.school_address}
+              onChange={_handleChange.bind(this, 'school_address')}
             />
             {this.renderSchoolError('address')}
-            <input
-              type="text"
+            <TextInput
               placeholder="City"
-              valueLink={this.linkState('school_city')}
+              onChange={_handleChange.bind(this, 'school_city')}
+              value={this.state.school_city}
             />
             {this.renderSchoolError('city')}
-            <input
-              type="text"
+            <TextInput
               placeholder="State"
-              valueLink={this.linkState('school_state')}
+              onChange={_handleChange.bind(this, 'school_state')}
+              value={this.state.school_state}
             />
             {this.renderSchoolError('state')}
-            <input
-              type="text"
+            <TextInput
               placeholder="Zip"
-              valueLink={this.linkState('school_zip')}
+              onChange={_handleChange.bind(this, 'school_zip')}
+              value={this.state.school_zip}
             />
             {this.renderSchoolError('zip_code')}
             <input
               type="text"
               placeholder="Country"
               value={this._getSchoolCountry()}
-              onChange={this._handleSchoolCountryChange}
+              onChange={_handleChange.bind(this, 'school_international')}
               disabled={!this.state.school_international}
             />
             {this.renderSchoolError('country')}
@@ -248,15 +250,15 @@ var RegistrationView = React.createClass({
               Try to provide us with realistic estimates for your delegate
               numbers in each category so we can provide your delegation with
               the appropriate number and type of assignments.</p>
-            <input
-              type="text"
+            <NumberInput
               placeholder="Number of BMUN sessions attended"
-              valueLink={this.linkState("times_attended")}
+              onChange={_handleChange.bind(this, 'times_attended')}
+              value={this.state.times_attended}
             />
             {this.renderSchoolError('times_attended')}
             <NumberInput
               placeholder="Tentative Number of Beginner Delegates"
-              onChange={this._handleNumDelChange.bind(this, 'beginner_delegates')}
+              onChange={_handleChange.bind(this, 'beginner_delegates')}
               value={this.state.beginner_delegates}
             />
             <label className="hint">
@@ -266,7 +268,7 @@ var RegistrationView = React.createClass({
             {this.renderSchoolError('beginner_delegates')}
             <NumberInput
               placeholder="Tentative Number of Intermediate Delegates"
-              onChange={this._handleNumDelChange.bind(this, 'intermediate_delegates')}
+              onChange={_handleChange.bind(this, 'intermediate_delegates')}
               value={this.state.intermediate_delegates}
             />
             <label className="hint">
@@ -276,7 +278,7 @@ var RegistrationView = React.createClass({
             {this.renderSchoolError('intermediate_delegates')}
             <NumberInput
               placeholder="Tentative Number of Advanced Delegates"
-              onChange={this._handleNumDelChange.bind(this, 'advanced_delegates')}
+              onChange={_handleChange.bind(this, 'advanced_delegates')}
               value={this.state.advanced_delegates}
             />
             <label className="hint">
@@ -288,16 +290,16 @@ var RegistrationView = React.createClass({
             <hr />
             <h3>Primary Contact</h3>
             {this.renderContactGenderField('primary_gender')}
-            <input
-              type="text"
+            <TextInput
               placeholder="Name"
-              valueLink={this.linkState('primary_name')}
+              onChange={_handleChange.bind(this, 'primary_name')}
+              value={this.state.primary_name}
             />
             {this.renderSchoolError('primary_name')}
-            <input
-              type="text"
+            <TextInput
               placeholder="Email"
-              valueLink={this.linkState('primary_email')}
+              onChange={_handleChange.bind(this, 'primary_email')}
+              value={this.state.primary_email}
             />
             {this.renderSchoolError('primary_email')}
             <PhoneInput
@@ -310,16 +312,16 @@ var RegistrationView = React.createClass({
             <hr />
             <h3>Secondary Contact</h3>
             {this.renderContactGenderField('secondary_gender')}
-            <input
-              type="text"
+            <TextInput
               placeholder="Name"
-              valueLink={this.linkState('secondary_name')}
+              onChange={_handleChange.bind(this, 'secondary_name')}
+              value={this.state.secondary_name}
             />
             {this.renderSchoolError('secondary_name')}
-            <input
-              type="text"
+            <TextInput
               placeholder="Email"
-              valueLink={this.linkState('secondary_email')}
+              onChange={_handleChange.bind(this, 'secondary_email')}
+              value={this.state.secondary_email}
             />
             {this.renderSchoolError('secondary_email')}
             <PhoneInput
@@ -358,18 +360,18 @@ var RegistrationView = React.createClass({
             <ul>
               {this.renderCommittees()}
               <li>
-                <input
-                  type="text"
+                <NumberInput
                   placeholder="Number of Spanish Speaking Delegates"
-                  valueLink={this.linkState('spanish_speaking_delegates')}
+                  onChange={_handleChange.bind(this, 'spanish_speaking_delegates')}
+                  value={this.state.spanish_speaking_delegates}
                 />
                 {this.renderSchoolError('spanish_speaking_delegates')}
               </li>
               <li>
-                <input
-                  type="text"
+                <NumberInput
                   placeholder="Number of Chinese Speaking Delegates"
-                  valueLink={this.linkState('chinese_speaking_delegates')}
+                  onChange={_handleChange.bind(this, 'chinese_speaking_delegates')}
+                  value={this.state.chinese_speaking_delegates}
                 />
                 {this.renderSchoolError('chinese_speaking_delegates')}
               </li>
@@ -383,7 +385,8 @@ var RegistrationView = React.createClass({
             <textarea
               cols="40"
               rows="7"
-              valueLink={this.linkState('registration_comments')}
+              onChange={_handleChange.bind(this, 'registration_comments')}
+              value={this.state.registration_comments}
             />
             <hr />
               <NavLink direction="left" href="/login">
@@ -409,7 +412,7 @@ var RegistrationView = React.createClass({
       <li>
         <label>{labelNum}</label>
         <CountrySelect
-          onChange={this._handleCountryPrefChange.bind(this, fieldName)}
+          onChange={_handleChange.bind(this, fieldName)}
           countries={this.state.countries}
           selectedCountryID={this.state[fieldName]}
           countryPreferences={[
@@ -450,7 +453,7 @@ var RegistrationView = React.createClass({
   renderContactGenderField: function(name) {
     return (
       <div className="contact-select">
-        <select valueLink={this.linkState(name)}>
+        <select value={this.state[name]} onChange={_handleChange.bind(this, name)}>
           <option
             key={GenderConstants.UNSPECFIED}
             value={GenderConstants.UNSPECFIED}>
@@ -479,7 +482,7 @@ var RegistrationView = React.createClass({
   renderContactTypeField: function(name) {
     return (
       <div className="contact-select">
-        <select valueLink={this.linkState(name)}>
+        <select value={this.state[name]} onChange={_handleChange.bind(this, name)}>
           <option
             key={ContactTypes.STUDENT}
             value={ContactTypes.STUDENT}>
@@ -545,12 +548,6 @@ var RegistrationView = React.createClass({
     return sum;
   },
 
-  _handleNumDelChange: function(fieldName, value) {
-    var change = {};
-    change[fieldName] = value;
-    this.setState(change);
-  },
-
   _handlePasswordBlur: function() {
     this.setState({passwordValidating: true});
   },
@@ -563,13 +560,7 @@ var RegistrationView = React.createClass({
     this.setState({program_type: event.target.value});
   },
 
-  _handleCountryPrefChange: function(fieldName, event) {
-    var change = {};
-    change[fieldName] = event.target.value;
-    this.setState(change);
-  },
-
-   _handleCommitteePreferenceChange: function(committee) {
+  _handleCommitteePreferenceChange: function(committee) {
     var index = this.state.committee_prefs.indexOf(committee.id);
     if (index < 0) {
       this.setState({
@@ -588,42 +579,20 @@ var RegistrationView = React.createClass({
     this.setState({school_international: !!event.target.value});
   },
 
-  _handleBilingualChange: function(event) {
-    this.setState({prefers_bilingual: !this.state.prefers_bilingual});
-  },
-
-  _handleSpecializedRegionalChange: function(event) {
-    this.setState({
-      prefers_specialized_regional: !this.state.prefers_specialized_regional
-    });
-  },
-
-  _handleCrisisChange: function(event) {
-    this.setState({prefers_crisis: !this.state.prefers_crisis});
-  },
-
-  _handleAlternativeChange: function(event) {
-    this.setState({prefers_alternative: !this.state.prefers_alternative});
-  },
-
-  _handlePressCorpsChange: function(event) {
-    this.setState({prefers_press_corps: !this.state.prefers_press_corps});
-  },
-
   _handlePrimaryPhoneChange: function(number) {
-    this.setState({
-      primary_phone: number
-    });
+    this.setState({primary_phone: number});
   },
 
   _handleSecondaryPhoneChange: function(number) {
-    this.setState({
-      secondary_phone: number
-    });
+    this.setState({secondary_phone: number});
   },
 
-  _handleSchoolCountryChange: function(event) {
-    this.setState({school_country: event.target.value});
+  _handlePasswordChange: function(event) {
+    this.setState({password: event.target.value});
+  },
+
+  _handlePasswordConfirmChange: function(event) {
+    this.setState({password2: event.target.value});
   },
 
   _getSchoolCountry: function() {
