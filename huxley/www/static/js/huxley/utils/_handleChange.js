@@ -8,9 +8,13 @@
  * Handles changes from both HTML and custom components
  */
 function _handleChange(fieldName, event) {
-    this.setState({
-      [fieldName]: event.target ? event.target.value : event,
-    });
+    try {
+        this.setState({
+          [fieldName]: event.target ? event.target.value : event,
+        });
+    } catch (err) {
+        console.log(err);
+    }
 }
 
 module.exports = _handleChange;

@@ -25,6 +25,7 @@ var OuterView = require('./OuterView');
 var PhoneInput = require('./PhoneInput');
 var ProgramTypes = require('../constants/ProgramTypes');
 var TextInput = require('./TextInput');
+var _handleChange = require('../utils/_handleChange');
 
 require('jquery-ui/effect-shake');
 
@@ -121,19 +122,19 @@ var RegistrationView = React.createClass({
             <h3>Account Information</h3>
             <TextInput
               placeholder="First Name"
-              onChange={this._handleRawInputChange.bind(this, 'first_name')}
+              onChange={_handleChange.bind(this, 'first_name')}
               value={this.state.first_name}
             />
             {this.renderError('first_name')}
             <TextInput
               placeholder="Last Name"
-              onChange={this._handleRawInputChange.bind(this, 'last_name')}
+              onChange={_handleChange.bind(this, 'last_name')}
               value={this.state.last_name}
             />
             {this.renderError('last_name')}
             <TextInput
               placeholder="Username"
-              onChange={this._handleRawInputChange.bind(this, 'username')}
+              onChange={_handleChange.bind(this, 'username')}
               value={this.state.username}
             />
             {this.renderError('username')}
@@ -182,31 +183,31 @@ var RegistrationView = React.createClass({
             </ul>
             <TextInput
               placeholder="Official School Name"
-              onChange={this._handleRawInputChange.bind(this, 'school_name')}
+              onChange={_handleChange.bind(this, 'school_name')}
               value={this.state.school_name}
             />
             {this.renderSchoolError('name')}
             <TextInput
               placeholder="Street Address"
               value={this.state.school_address}
-              onChange={this._handleRawInputChange.bind(this, 'school_address')}
+              onChange={_handleChange.bind(this, 'school_address')}
             />
             {this.renderSchoolError('address')}
             <TextInput
               placeholder="City"
-              onChange={this._handleRawInputChange.bind(this, 'school_city')}
+              onChange={_handleChange.bind(this, 'school_city')}
               value={this.state.school_city}
             />
             {this.renderSchoolError('city')}
             <TextInput
               placeholder="State"
-              onChange={this._handleRawInputChange.bind(this, 'school_state')}
+              onChange={_handleChange.bind(this, 'school_state')}
               value={this.state.school_state}
             />
             {this.renderSchoolError('state')}
             <TextInput
               placeholder="Zip"
-              onChange={this._handleRawInputChange.bind(this, 'school_zip')}
+              onChange={_handleChange.bind(this, 'school_zip')}
               value={this.state.school_zip}
             />
             {this.renderSchoolError('zip_code')}
@@ -214,7 +215,7 @@ var RegistrationView = React.createClass({
               type="text"
               placeholder="Country"
               value={this._getSchoolCountry()}
-              onChange={this._handleSchoolCountryChange}
+              onChange={_handleChange.bind(this, 'school_international')}
               disabled={!this.state.school_international}
             />
             {this.renderSchoolError('country')}
@@ -251,13 +252,13 @@ var RegistrationView = React.createClass({
               the appropriate number and type of assignments.</p>
             <NumberInput
               placeholder="Number of BMUN sessions attended"
-              onChange={this._handleRawInputChange.bind(this, 'times_attended')}
+              onChange={_handleChange.bind(this, 'times_attended')}
               value={this.state.times_attended}
             />
             {this.renderSchoolError('times_attended')}
             <NumberInput
               placeholder="Tentative Number of Beginner Delegates"
-              onChange={this._handleRawInputChange.bind(this, 'beginner_delegates')}
+              onChange={_handleChange.bind(this, 'beginner_delegates')}
               value={this.state.beginner_delegates}
             />
             <label className="hint">
@@ -267,7 +268,7 @@ var RegistrationView = React.createClass({
             {this.renderSchoolError('beginner_delegates')}
             <NumberInput
               placeholder="Tentative Number of Intermediate Delegates"
-              onChange={this._handleRawInputChange.bind(this, 'intermediate_delegates')}
+              onChange={_handleChange.bind(this, 'intermediate_delegates')}
               value={this.state.intermediate_delegates}
             />
             <label className="hint">
@@ -277,7 +278,7 @@ var RegistrationView = React.createClass({
             {this.renderSchoolError('intermediate_delegates')}
             <NumberInput
               placeholder="Tentative Number of Advanced Delegates"
-              onChange={this._handleRawInputChange.bind(this, 'advanced_delegates')}
+              onChange={_handleChange.bind(this, 'advanced_delegates')}
               value={this.state.advanced_delegates}
             />
             <label className="hint">
@@ -291,13 +292,13 @@ var RegistrationView = React.createClass({
             {this.renderContactGenderField('primary_gender')}
             <TextInput
               placeholder="Name"
-              onChange={this._handleRawInputChange.bind(this, 'primary_name')}
+              onChange={_handleChange.bind(this, 'primary_name')}
               value={this.state.primary_name}
             />
             {this.renderSchoolError('primary_name')}
             <TextInput
               placeholder="Email"
-              onChange={this._handleRawInputChange.bind(this, 'primary_email')}
+              onChange={_handleChange.bind(this, 'primary_email')}
               value={this.state.primary_email}
             />
             {this.renderSchoolError('primary_email')}
@@ -313,13 +314,13 @@ var RegistrationView = React.createClass({
             {this.renderContactGenderField('secondary_gender')}
             <TextInput
               placeholder="Name"
-              onChange={this._handleRawInputChange.bind(this, 'secondary_name')}
+              onChange={_handleChange.bind(this, 'secondary_name')}
               value={this.state.secondary_name}
             />
             {this.renderSchoolError('secondary_name')}
             <TextInput
               placeholder="Email"
-              onChange={this._handleRawInputChange.bind(this, 'secondary_email')}
+              onChange={_handleChange.bind(this, 'secondary_email')}
               value={this.state.secondary_email}
             />
             {this.renderSchoolError('secondary_email')}
@@ -361,7 +362,7 @@ var RegistrationView = React.createClass({
               <li>
                 <NumberInput
                   placeholder="Number of Spanish Speaking Delegates"
-                  onChange={this._handleRawInputChange.bind(this, 'spanish_speaking_delegates')}
+                  onChange={_handleChange.bind(this, 'spanish_speaking_delegates')}
                   value={this.state.spanish_speaking_delegates}
                 />
                 {this.renderSchoolError('spanish_speaking_delegates')}
@@ -369,7 +370,7 @@ var RegistrationView = React.createClass({
               <li>
                 <NumberInput
                   placeholder="Number of Chinese Speaking Delegates"
-                  onChange={this._handleRawInputChange.bind(this, 'chinese_speaking_delegates')}
+                  onChange={_handleChange.bind(this, 'chinese_speaking_delegates')}
                   value={this.state.chinese_speaking_delegates}
                 />
                 {this.renderSchoolError('chinese_speaking_delegates')}
@@ -384,7 +385,7 @@ var RegistrationView = React.createClass({
             <textarea
               cols="40"
               rows="7"
-              onChange={this._handleRegistrationCommentsChange}
+              onChange={_handleChange.bind(this, 'registration_comments')}
               value={this.state.registration_comments}
             />
             <hr />
@@ -411,7 +412,7 @@ var RegistrationView = React.createClass({
       <li>
         <label>{labelNum}</label>
         <CountrySelect
-          onChange={this._handleCountryPrefChange.bind(this, fieldName)}
+          onChange={_handleChange.bind(this, fieldName)}
           countries={this.state.countries}
           selectedCountryID={this.state[fieldName]}
           countryPreferences={[
@@ -452,7 +453,7 @@ var RegistrationView = React.createClass({
   renderContactGenderField: function(name) {
     return (
       <div className="contact-select">
-        <select value={this.state[name]} onChange={this._handleContactGenderField.bind(this, name)}>
+        <select value={this.state[name]} onChange={_handleChange.bind(this, name)}>
           <option
             key={GenderConstants.UNSPECFIED}
             value={GenderConstants.UNSPECFIED}>
@@ -481,7 +482,7 @@ var RegistrationView = React.createClass({
   renderContactTypeField: function(name) {
     return (
       <div className="contact-select">
-        <select value={this.state[name]} onChange={this._handleContactTypeChange.bind(this, name)}>
+        <select value={this.state[name]} onChange={_handleChange.bind(this, name)}>
           <option
             key={ContactTypes.STUDENT}
             value={ContactTypes.STUDENT}>
@@ -547,12 +548,6 @@ var RegistrationView = React.createClass({
     return sum;
   },
 
-  _handleRawInputChange: function(fieldName, value) {
-    var change = {};
-    change[fieldName] = value;
-    this.setState(change);
-  },
-
   _handlePasswordBlur: function() {
     this.setState({passwordValidating: true});
   },
@@ -563,12 +558,6 @@ var RegistrationView = React.createClass({
 
   _handleProgramTypeChange: function(event) {
     this.setState({program_type: event.target.value});
-  },
-
-  _handleCountryPrefChange: function(fieldName, event) {
-    var change = {};
-    change[fieldName] = event.target.value;
-    this.setState(change);
   },
 
   _handleCommitteePreferenceChange: function(committee) {
@@ -590,28 +579,6 @@ var RegistrationView = React.createClass({
     this.setState({school_international: !!event.target.value});
   },
 
-  _handleBilingualChange: function(event) {
-    this.setState({prefers_bilingual: !this.state.prefers_bilingual});
-  },
-
-  _handleSpecializedRegionalChange: function(event) {
-    this.setState({
-      prefers_specialized_regional: !this.state.prefers_specialized_regional
-    });
-  },
-
-  _handleCrisisChange: function(event) {
-    this.setState({prefers_crisis: !this.state.prefers_crisis});
-  },
-
-  _handleAlternativeChange: function(event) {
-    this.setState({prefers_alternative: !this.state.prefers_alternative});
-  },
-
-  _handlePressCorpsChange: function(event) {
-    this.setState({prefers_press_corps: !this.state.prefers_press_corps});
-  },
-
   _handlePrimaryPhoneChange: function(number) {
     this.setState({primary_phone: number});
   },
@@ -620,32 +587,12 @@ var RegistrationView = React.createClass({
     this.setState({secondary_phone: number});
   },
 
-  _handleSchoolCountryChange: function(event) {
-    this.setState({school_country: event.target.value});
-  },
-
   _handlePasswordChange: function(event) {
     this.setState({password: event.target.value});
   },
 
   _handlePasswordConfirmChange: function(event) {
     this.setState({password2: event.target.value});
-  },
-
-  _handleRegistrationCommentsChange: function(event) {
-    this.setState({registration_comments: event.target.value});
-  },
-
-  _handleContactGenderField: function(name, event) {
-    var change = {};
-    change[name] = event.target.value;
-    this.setState(change);
-  },
-
-  _handleContactTypeChange: function(name, event) {
-    var change = {};
-    change[name] = event.target.value;
-    this.setState(change);
   },
 
   _getSchoolCountry: function() {

@@ -27,8 +27,7 @@ var TextInput = React.createClass({
   },
 
   _handleChange: function(event) {
-    var value = event.target.value.trim();
-    this.props.onChange && this.props.onChange(value);
+    this.props.onChange && this.props.onChange(event.target.value);
   },
 });
 
