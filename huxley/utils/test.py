@@ -105,7 +105,7 @@ class TestCountries():
 class TestDelegates():
     @staticmethod
     def new_delegate(**kwargs):
-        a = kwargs.pop('assignment', None)
+        a = kwargs.pop('assignment', None) or TestAssignments.new_assignment()
         s = kwargs.pop('school', None) or a.school or TestSchools.new_school()
 
         c = Delegate(
