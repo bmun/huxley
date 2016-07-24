@@ -30,7 +30,7 @@ var AdvisorView = React.createClass ({
     return (
       <div>
         <TopBar user={this.props.user} />
-        <div id="appnavbar" className="titlebar rounded-top">
+        <div className="navbar rounded-top">
           <NavTab href="/advisor/profile">
             Profile
           </NavTab>
