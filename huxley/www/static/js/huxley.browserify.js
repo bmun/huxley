@@ -46,7 +46,7 @@ var routes = (
     <Route path="/register/waitlist" component={RegistrationWaitlistView} />
     <Route path="/advisor/profile" component={AdvisorProfileView} />
     <Route path="/advisor/assignments" component={AdvisorAssignmentsView} />
-    <Route path="/advisor/roster" handler={AdvisorRosterView} />
+    <Route path="/advisor/roster" component={AdvisorRosterView} />
     <IndexRoute component={RedirectView} />
     <Route path="*" component={NotFoundView} />
   </Route>
