@@ -41,10 +41,8 @@ var Huxley = React.createClass({
   render: function() {
     var user = CurrentUserStore.getCurrentUser();
     if (User.isAnonymous(user)) {
-      console.log(this)
       return React.cloneElement(this.props.children, { user: user });
     } else if (User.isAdvisor(user)) {
-      console.log(this.props)
       return (
         <AdvisorView user={user}>
           {React.cloneElement(this.props.children, { user: user })}
