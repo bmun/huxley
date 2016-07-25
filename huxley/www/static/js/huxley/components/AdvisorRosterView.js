@@ -9,28 +9,32 @@
 
 var $ = require('jquery');
 var React = require('react');
-var Router = require('react-router');
-var Modal = require('react-modal');
+var ReactRouter = require('react-router');
 
 var AssignmentStore = require('../stores/AssignmentStore');
 var Button = require('./Button');
 var CommitteeStore = require('../stores/CommitteeStore');
+var ConferenceContext = require('./ConferenceContext');
 var CountryStore = require('../stores/CountryStore');
 var CurrentUserStore = require('../stores/CurrentUserStore');
-var DelegateStore = require('../stores/DelegateStore');
 var CurrentUserActions = require('../actions/CurrentUserActions');
 var InnerView = require('./InnerView');
 
-
 var AdvisorRosterView = React.createClass({
   mixins: [
-    Router.Navigation,
+    ReactRouter.History,
   ],
+
+  contextTypes: {
+    conference: React.PropTypes.shape(ConferenceContext)
+  },
 
   getInitialState: function() {
     return {
       assignments: [],
-      delegates: [],
+      committees: {},
+      countries: {},
+      loading: false
     };
   },
 
@@ -43,100 +47,152 @@ var AdvisorRosterView = React.createClass({
         }
       )});
     }.bind(this));
-    DelegateStore.getDelegates(user.school.id, function(delegates) {
-      this.setState({delegates: delegates});
+    CommitteeStore.getCommittees(function(committees) {
+      var new_committees = {};
+      for (var i = 0; i < committees.length; i++) {
+        new_committees[committees[i].id] = committees[i];
+      }
+      this.setState({committees: new_committees});
+    }.bind(this));
+    CountryStore.getCountries(function(countries) {
+      var new_countries = {};
+      for (var i = 0; i <countries.length; i++) {
+        new_countries[countries[i].id] = countries[i];
+      }
+      this.setState({countries: new_countries})
     }.bind(this));
   },
 
   render: function() {
+    var finalized = CurrentUserStore.getFinalized();
+    var conference = this.context.conference;
     return (
       <InnerView>
-        <h2>Roster</h2>
+        <h2>Assignments</h2>
         <p>
-          Here you can add your schools delegates to your roster.
-          Any comments that chairs have about your delegate will appear here.
+          Here you can view your tentative assignments for BMUN {conference.session}. If you
+          would like to request more slots, please email <a href="mailto:info@bmun.org">
+          info@bmun.org</a>. In the coming months
+          we will ask that you finalize your assignment roster and input your
+          delegates' names.
         </p>
         <form>
           <div className="tablemenu header" />
           <div className="table-container">
             <table className="table highlight-cells">
-              <tr>
-                <th>Delegate</th>
-                <th>Email</th>
-                <th>Summary</th>
-              </tr>
-              {this.renderRosterRows()}
-              {this._handleAddDelegate()}
+              <thead>
+                <tr>
+                  <th>Committee</th>
+                  <th>Country</th>
+                  <th>Delegation Size</th>
+                  <th>{finalized ?
+                    "" :
+                    "Delete Assignments"}
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {this.renderAssignmentRows()}
+              </tbody>
             </table>
           </div>
+          <div className="tablemenu footer" />
+          {finalized ?
+            <div> </div> :
+            <Button
+              color="green"
+              size="large"
+              onClick={this._handleFinalize}
+              loading={this.state.loading}>
+              Finalize Assignments
+            </Button>}
         </form>
-        <div>
-          <Button onClick={this._handleAddDelegate}>Add Delegate</Button>
-        </div>
       </InnerView>
     );
   },
 
-  renderRosterRows: function() {
+  renderAssignmentRows: function() {
     var committees = this.state.committees;
     var countries = this.state.countries;
-    console.dir(this.state.delegates[0])
-    return this.state.delegates.map(function(delegate) {
+    var finalized = CurrentUserStore.getFinalized();
+    return this.state.assignments.map(function(assignment) {
       return (
         <tr>
-          <td>{delegate.name}</td>
-          <td>{delegate.email}</td>
-          <td>{delegate.summary}</td>
-          <td>
-            <Button>Delete</Button>
+          <td>{committees[assignment.committee].name}</td>
+          <td>{countries[assignment.country].name}</td>
+          <td>{committees[assignment.committee].delegation_size}</td>
+          <td>{finalized ?
+            <div/> :
+            <Button color="red"
+                    size="small"
+                    onClick={this._handleAssignmentDelete.bind(this, assignment)}>
+                    Delete Assignment
+            </Button>}
           </td>
         </tr>
       )
     }.bind(this));
   },
 
-  _handleAddDelegate: function() {
-    return (
-      <form>
-        <br>Name: <input type="text" placeholder="Name" valueLink={this.linkState('name')} /></br>
-        <br>Email: <input type="text" placeholder="Email" valueLink={this.linkState('email')}/></br>
-        <input type="submit" value="Submit" onclick={this._handleSubmit} />
-      </form>
-    )
+  _handleFinalize: function(event) {
+    var confirm = window.confirm("By pressing okay you are committing to the financial responsibility of each assingment. Are you sure you want to finalize assignments?");
+    var school = CurrentUserStore.getCurrentUser().school;
+    if (confirm) {
+      this.setState({loading: true});
+      $.ajax ({
+        type: 'PUT',
+        url: '/api/schools/'+school.id,
+        data: {
+          assignments_finalized: true,
+        },
+        success: this._handleFinalizedSuccess,
+        error: this._handleError
+      });
+    }
   },
 
-  _handleSubmit: function(data) {
-    this.setState({loading: true});
-    $.ajax({
-      type: 'POST',
-      url: '/api/delegate',
-      data: {
-        name: this.state.name,
-        email: this.state.email,
-      },
-      success: this._handleSuccess,
-      error: this._handleError,
-      dataType: 'json'
-    });
-    event.preventDefault();
+  _handleAssignmentDelete: function(assignment) {
+    var confirm = window.confirm("Are you sure you want to delete this assignment");
+    if (confirm) {
+      this.setState({loading: true});
+      $.ajax ({
+        type: 'PUT',
+        url: '/api/assignments/'+assignment.id,
+        data: {
+          rejected: true,
+        },
+        success: this._handleAssignmentDeleteSuccess,
+        error: this._handleError,
+      });
+    }
   },
 
-  _handleSuccess: function(data, status, jqXHR) {
-    console.log("success!");
+  _handleFinalizedSuccess: function(data, status, jqXHR) {
+    CurrentUserActions.updateSchool(jqXHR.responseJSON);
+    this.setState({loading: false});
+    this.history.pushState(null, '/advisor/assignments');
+  },
+
+  _handleAssignmentDeleteSuccess: function(data, status, jqXHR) {
+    var assignments = this.state.assignments
+    assignments = assignments.filter(function (assignment) {
+      return assignment.id != jqXHR.responseJSON.id
+    })
+    this.setState({assignments: assignments})
+    this.setState({loading: false});
+    this.history.pushState(null, '/advisor/assignments');
   },
 
   _handleError: function(jqXHR, status, error) {
-    var response = jqXHR.responseJSON;
-    if (!response) {
-      return;
-    }
+    window.alert("Something went wrong. Please try again.");
+    this.setState({loading: false});
+  },
 
-    this.setState({
-      errors: response,
-      loading: false
-    }.bind(this));
+   _handleSuccess: function(event) {
+    this.setState({loading: false});
+    this.history.pushState(null, '/advisor/assignments');
   }
-
 });
 
 module.exports = AdvisorRosterView;
+
