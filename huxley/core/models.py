@@ -355,8 +355,9 @@ class CountryPreference(models.Model):
 
 
 class Delegate(models.Model):
-    assignment    = models.ForeignKey(Assignment, related_name='delegates')
-    name          = models.CharField(max_length=64, blank=True)
+    school        = models.ForeignKey(School, related_name='delegates', null=True)
+    assignment    = models.ForeignKey(Assignment, related_name='delegates', blank=True)
+    name          = models.CharField(max_length=64)
     email         = models.EmailField(blank=True)
     created_at    = models.DateTimeField(auto_now_add=True)
     summary       = models.TextField(default='', null=True)
@@ -372,10 +373,6 @@ class Delegate(models.Model):
     def committee(self):
         return self.assignment.committee
 
-    @property
-    def school(self):
-        return self.assignment.school
-
     class Meta:
         db_table = u'delegate'
-        ordering = ['assignment__country']
+        ordering = ['school']
