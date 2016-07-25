@@ -356,11 +356,11 @@ class CountryPreference(models.Model):
 
 class Delegate(models.Model):
     school        = models.ForeignKey(School, related_name='delegates', null=True)
-    assignment    = models.ForeignKey(Assignment, related_name='delegates', blank=True)
+    assignment    = models.ForeignKey(Assignment, related_name='delegates', blank=True, null=True)
     name          = models.CharField(max_length=64)
-    email         = models.EmailField(blank=True)
+    email         = models.EmailField(blank=True, null=True)
     created_at    = models.DateTimeField(auto_now_add=True)
-    summary       = models.TextField(default='', null=True)
+    summary       = models.TextField(default='', blank=True, null=True)
 
     def __unicode__(self):
         return self.name

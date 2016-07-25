@@ -8,7 +8,7 @@
 'use strict';
 
 var $ = require('jquery');
-// var Modal = require('react-modal');
+var Modal = require('react-modal');
 var React = require('react');
 var ReactRouter = require('react-router');
 
@@ -21,6 +21,16 @@ var DelegateStore = require('../stores/DelegateStore');
 var CurrentUserActions = require('../actions/CurrentUserActions');
 var InnerView = require('./InnerView');
 
+const customStyles = {
+  content : {
+    top                   : '50%',
+    left                  : '50%',
+    right                 : 'auto',
+    bottom                : 'auto',
+    marginRight           : '-50%',
+    transform             : 'translate(-50%, -50%)'
+  }
+};
 
 var AdvisorRosterView = React.createClass({
   mixins: [
@@ -32,6 +42,7 @@ var AdvisorRosterView = React.createClass({
       assignments: [],
       delegates: [],
       loading: false,
+      adding_delegate: false,
     };
   },
 
@@ -49,6 +60,8 @@ var AdvisorRosterView = React.createClass({
     DelegateStore.getDelegates(user.school.id, function(delegates) {
       this.setState({delegates: delegates});
     }.bind(this));
+
+    Modal.setAppElement('body')
   },
 
   render: function() {
@@ -68,12 +81,37 @@ var AdvisorRosterView = React.createClass({
                   <th>Delegate</th>
                   <th>Email</th>
                   <th>Summary</th>
+                  <th>Delete Delegate</th>
                 </tr>
               </thead>
-              {this.renderRosterRows()}
+              <tbody>
+                {this.renderRosterRows()}
+              </tbody>
             </table>
           </div>
         </form>
+        <Button
+          color="green"
+          onClick={this.openModal}
+          loading={this.state.loading}>
+          Add Delegate
+        </Button>
+        <Modal
+          isOpen={this.state.adding_delegate}
+          onAfterOpen={this.afterOpenModal}
+          onRequestClose={this.closeModal}
+          style={customStyles} >
+          <h2 ref="subtitle">Hello</h2>
+          <button onClick={this.closeModal}>close</button>
+          <div>I am a modal</div>
+          <form>
+            <input />
+            <button>tab navigation</button>
+            <button>stays</button>
+            <button>inside</button>
+            <button>the modal</button>
+          </form>
+        </Modal>
       </InnerView>
     );
   },
@@ -89,22 +127,61 @@ var AdvisorRosterView = React.createClass({
           <td>{delegate.email}</td>
           <td>{delegate.summary}</td>
           <td>
-            <Button>Delete</Button>
+            <Button color="red"
+                    size="small"
+                    onClick={this._handleDeleteDelegate.bind(this, delegate)}>
+              Delete
+            </Button>
           </td>
         </tr>
       )
     }.bind(this));
   },
 
-  // _handleAddDelegate: function() {
-  //   return (
-  //     <form>
-  //       <br>Name: <input type="text" placeholder="Name" valueLink={this.linkState('name')} /></br>
-  //       <br>Email: <input type="text" placeholder="Email" valueLink={this.linkState('email')}/></br>
-  //       <input type="submit" value="Submit" onclick={this._handleSubmit} />
-  //     </form>
-  //   )
-  // },
+  _handleAddDelegate: function() {
+    this.setState({adding_delegate: true});
+    return (
+      <Modal
+        isOpen={this.state.adding_delegate}
+        closeTimeoutMS={5}>
+        <h1>Modal Content</h1>
+        <p>Etc.</p>
+      </Modal>
+    );
+  },
+
+  openModal: function() {
+    this.setState({adding_delegate: true});
+  },
+
+  afterOpenModal: function() {
+    // references are now sync'd and can be accessed.
+    this.refs.subtitle.style.color = '#f00';
+  },
+
+  closeModal: function() {
+    this.setState({adding_delegate: false});
+  },
+
+  _handleDeleteDelegate: function(delegate) {
+    this.setState({loading: true});
+    $.ajax ({
+      type: 'DELETE',
+      url: '/api/delegates/'+delegate.id,
+      success: this._handleDelegateDeleteSuccess,
+      error: this._handleError,
+    });
+  },
+
+  _handleDelegateDeleteSuccess: function(data, status, jqXHR) {
+    var delegates = this.state.delegates
+    delegates = delegates.filter(function (delegate) {
+      return delegate.id != jqXHR.responseJSON.delegate.id
+    });
+    this.setState({delegates: delegates})
+    this.setState({loading: false});
+    this.history.pushState(null, '/advisor/roster');
+  },
 
   _handleSubmit: function(data) {
     this.setState({loading: true});
