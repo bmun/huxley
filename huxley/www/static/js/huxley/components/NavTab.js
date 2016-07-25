@@ -15,7 +15,10 @@ var NavTab = React.createClass({
 
   render: function() {
     return (
-      <Link to={this.props.href} className='tab'>
+      <Link
+        activeClassName="current"
+        className='tab'
+        to={this.props.href}>
         {this.props.children}
       </Link>
     );

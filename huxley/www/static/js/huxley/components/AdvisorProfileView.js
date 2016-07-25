@@ -297,7 +297,10 @@ var AdvisorProfileView = React.createClass({
                 <tr>
                   <th>Fees</th>
                   <td className="field">
-                    <a className="button button-green" href={invoiceUrl} target="_blank">
+                    <a
+                      className="button button-small button-green rounded-small"
+                      href={invoiceUrl}
+                      target="_blank">
                       Generate Your Invoice
                     </a>
                   </td>
