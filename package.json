@@ -15,8 +15,8 @@
     "js-cookie": "~2.0.3",
     "react": "15.0.0",
     "react-dom": "15.0.0",
-    "react-modal": "1.4.0",
-    "react-router": "1.0.0"
+    "react-router": "1.0.0",
+    "react-modal": "1.4.0"
   },
   "scripts": {
     "test": "jest"
@@ -43,6 +43,7 @@
     "detachkify": "0.0.6",
     "envify": "~3.4.0",
     "jest-cli": "~0.4.0",
+    "react-modal": "^1.4.0",
     "uglify-js": "~2.4.15"
   }
 }

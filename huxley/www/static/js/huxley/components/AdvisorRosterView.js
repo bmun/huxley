@@ -43,6 +43,9 @@ var AdvisorRosterView = React.createClass({
       delegates: [],
       loading: false,
       adding_delegate: false,
+      isModalOpen: false,
+      name: '',
+      email: '',
     };
   },
 
@@ -67,6 +70,19 @@ var AdvisorRosterView = React.createClass({
   render: function() {
     return (
       <InnerView>
+        <Modal
+          isOpen={this.state.modalIsOpen}
+          onRequestClose={this._closeModal} >
+          <h2 ref="subtitle">Hello</h2>
+          <button onClick={this._closeModal}>close</button>
+          <div>I am a modal</div>
+          {/*} <form>
+          //   Name:
+          //   <input type="text" name="name" onChange={_handleChange.bind(this, 'name')}>
+          //   Email:
+          //   <input type="text" name="email" onChange={_handleChange.bind(this, 'email')}>
+          // </form>*/}
+        </Modal>
         <h2>Roster</h2>
         <p>
           Here you can add your schools delegates to your roster.
@@ -150,19 +166,6 @@ var AdvisorRosterView = React.createClass({
     );
   },
 
-  openModal: function() {
-    this.setState({adding_delegate: true});
-  },
-
-  afterOpenModal: function() {
-    // references are now sync'd and can be accessed.
-    this.refs.subtitle.style.color = '#f00';
-  },
-
-  closeModal: function() {
-    this.setState({adding_delegate: false});
-  },
-
   _handleDeleteDelegate: function(delegate) {
     this.setState({loading: true});
     $.ajax ({
@@ -181,10 +184,12 @@ var AdvisorRosterView = React.createClass({
     this.setState({delegates: delegates})
     this.setState({loading: false});
     this.history.pushState(null, '/advisor/roster');
+
+  _openModal: function() {
+    this.setState({modalIsOpen: true});
   },
 
-  _handleSubmit: function(data) {
-    this.setState({loading: true});
+  _closeModal: function() {
     $.ajax({
       type: 'POST',
       url: '/api/delegate',
@@ -197,6 +202,7 @@ var AdvisorRosterView = React.createClass({
       dataType: 'json'
     });
     event.preventDefault();
+    this.setState({modalIsOpen: false});
   },
 
   _handleSuccess: function(data, status, jqXHR) {
@@ -208,11 +214,6 @@ var AdvisorRosterView = React.createClass({
     if (!response) {
       return;
     }
-
-    this.setState({
-      errors: response,
-      loading: false
-    }.bind(this));
   }
 
 });
