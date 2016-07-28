@@ -251,7 +251,7 @@ var AdvisorAssignmentsView = React.createClass({
       type: 'PATCH',
       url: '/api/delegates',
       data: this.state.delegates,
-      success: this._handleAssignmentDeleteSuccess,
+      success: this._handleSuccess,
       error: this._handleError,
     });
   },
