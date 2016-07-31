@@ -373,6 +373,12 @@ class Delegate(models.Model):
     def committee(self):
         return self.assignment.committee
 
+    def save(self, *args, **kwargs):
+        if (self.assignment and self.school and self.school.id != self.assignment.school.id):
+            raise ValidationError('Delegate school and delegate assignment school do not match')
+
+        super(Delegate, self).save(*args, **kwargs)
+
     class Meta:
         db_table = u'delegate'
         ordering = ['school']
