@@ -27,7 +27,6 @@ class ListUpdateModelMixin(object):
 
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-
     def perform_list_update(self, serializer):
         serializer.save()
 

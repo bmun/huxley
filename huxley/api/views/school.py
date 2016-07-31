@@ -16,6 +16,7 @@ from huxley.api.permissions import IsAdvisorOrSuperuser, IsSchoolAdvisorOrSuperu
 from huxley.api.serializers import AssignmentSerializer, DelegateSerializer, SchoolSerializer
 from huxley.core.models import Assignment, Conference, Delegate, School
 
+
 class SchoolList(generics.CreateAPIView):
     authentication_classes = (SessionAuthentication,)
     queryset = School.objects.all()
@@ -44,6 +45,7 @@ class SchoolAssignments(generics.ListAPIView):
             raise Http404
 
         return Assignment.objects.filter(school_id=school_id)
+
 
 class SchoolDelegates(generics.ListAPIView, ListUpdateModelMixin):
     authentication_classes = (SessionAuthentication,)
