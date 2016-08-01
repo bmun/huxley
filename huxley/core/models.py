@@ -7,6 +7,7 @@ import requests
 from decimal import Decimal
 
 from django.conf import settings
+from django.core.exceptions import ValidationError
 from django.core.mail import send_mail
 from django.db import models, transaction
 from django.db.models.signals import post_save, pre_save
@@ -375,7 +376,7 @@ class Delegate(models.Model):
 
     def save(self, *args, **kwargs):
         if (self.assignment and self.school and self.school.id != self.assignment.school.id):
-            raise ValidationError('Delegate school and delegate assignment school do not match')
+            raise ValidationError('Delegate school and delegate assignment school do not match.')
 
         super(Delegate, self).save(*args, **kwargs)
 

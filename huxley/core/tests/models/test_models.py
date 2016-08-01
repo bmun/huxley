@@ -5,12 +5,14 @@
 from datetime import date
 
 from django.conf import settings
+from django.core.exceptions import ValidationError
 from django.db import IntegrityError
 from django.test import TestCase
 
 from huxley.core.models import (Assignment, Committee, Conference, Country,
-                                CountryPreference)
-from huxley.utils.test import TestCommittees, TestCountries, TestSchools
+                                CountryPreference, Delegate)
+from huxley.utils.test import (TestAssignments, TestCommittees, TestCountries,
+                               TestSchools)
 
 
 class ConferenceTest(TestCase):
@@ -184,3 +186,21 @@ class CountryPreferenceTest(TestCase):
         CountryPreference.objects.create(school_id=1, country_id=1, rank=1)
         with self.assertRaises(IntegrityError):
             CountryPreference.objects.create(school_id=1, country_id=1, rank=1)
+
+class DelegateTest(TestCase):
+
+    fixtures = ['conference']
+
+    def test_save(self):
+        """
+        A delegate's school field and a delegate's assignment's school field
+        should be the same if they both exist on the delegate.
+        """
+        school = TestSchools.new_school(name='S1')
+        assignment = TestAssignments.new_assignment()
+
+        self.assertRaises(ValidationError, Delegate.objects.create,
+            name="Test Delegate",
+            school=school,
+            assignment=assignment
+        )
