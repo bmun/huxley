@@ -182,7 +182,7 @@
    _handleDelegateDeleteSuccess: function(data, status, jqXHR) {
      var delegates = this.state.delegates
      delegates = delegates.filter(function (delegate) {
-       return delegate.id != jqXHR.responseJSON.delegate.id
+        return delegate.id != jqXHR.responseJSON.delegate.id;
      });
      this.setState({delegates: delegates})
      this.setState({loading: false});
@@ -191,12 +191,14 @@
  
    _handleSubmit: function(data) {
      this.setState({loading: true});
+     var user = CurrentUserStore.getCurrentUser();
      $.ajax({
        type: 'POST',
        url: '/api/delegates',
        data: JSON.stringify({
-         'name': this.state.add_name,
-         'email': this.state.add_email
+         name: this.state.add_name,
+         email: this.state.add_email,
+         school: user.school.id
        }),
        success: this._handleSuccess,
        error: this._handleError,
@@ -207,20 +209,15 @@
    },
  
    _handleSuccess: function(data, status, jqXHR) {
-     console.log("success!");
-     var user = CurrentUserStore.getCurrentUser();
- 
-     DelegateStore.getDelegates(user.school.id, function(delegates) {
-       this.setState({delegates: delegates});
-     }.bind(this));
+     var delegates = this.state.delegates;
+     delegates.push(data);
      this.setState({adding_delegate: false});
      this.setState({loading: false});
+
      this.history.pushState(null, '/advisor/roster');
-     console.log(this.getState("delegates"));
    },
  
    _handleError: function(jqXHR, status, error) {
-     console.log(error);
      var response = jqXHR.responseJSON;
      if (!response) {
        return;
