@@ -20,6 +20,8 @@
  var DelegateStore = require('../stores/DelegateStore');
  var CurrentUserActions = require('../actions/CurrentUserActions');
  var InnerView = require('./InnerView');
+ var TextInput = require('./TextInput');
+ var _handleChange = require('../utils/_handleChange');
  
  const customStyles = {
    content : {
@@ -43,6 +45,8 @@
        delegates: [],
        loading: false,
        adding_delegate: false,
+       add_name: '',
+       add_email: '',
      };
    },
  
@@ -99,17 +103,27 @@
          <Modal
            isOpen={this.state.adding_delegate}
            onAfterOpen={this.afterOpenModal}
-           onRequestClose={this.closeModal}
-           style={customStyles} >
-           <h2 ref="subtitle">Hello</h2>
+           onRequestClose={this._handleSubmit}
+           style={customStyles}>
            <button onClick={this.closeModal}>close</button>
-           <div>I am a modal</div>
+           <h2 ref="subtitle">Add Delegate</h2>
            <form>
-             <input />
-             <button>tab navigation</button>
-             <button>stays</button>
-             <button>inside</button>
-             <button>the modal</button>
+             <TextInput
+              placeholder="Name"
+              onChange={_handleChange.bind(this, 'add_name')}
+              value={this.state.add_name}
+            />
+            <br></br>
+            <TextInput
+              placeholder="Email"
+              onChange={_handleChange.bind(this, 'add_email')}
+              value={this.state.add_email}
+            />
+            <br></br>
+            <Button onClick={this._handleSubmit}
+            color="green"
+            loading={this.state.loading}>
+            Add</Button>
            </form>
          </Modal>
        </InnerView>
@@ -140,14 +154,6 @@
  
    _handleAddDelegate: function() {
      this.setState({adding_delegate: true});
-     return (
-       <Modal
-         isOpen={this.state.adding_delegate}
-         closeTimeoutMS={5}>
-         <h1>Modal Content</h1>
-         <p>Etc.</p>
-       </Modal>
-     );
    },
  
    openModal: function() {
@@ -187,30 +193,40 @@
      this.setState({loading: true});
      $.ajax({
        type: 'POST',
-       url: '/api/delegate',
-       data: {
-         name: this.state.name,
-         email: this.state.email,
-       },
+       url: '/api/delegates',
+       data: JSON.stringify({
+         'name': this.state.add_name,
+         'email': this.state.add_email
+       }),
        success: this._handleSuccess,
        error: this._handleError,
-       dataType: 'json'
+       dataType: 'json',
+       contentType: 'application/json'
      });
      event.preventDefault();
    },
  
    _handleSuccess: function(data, status, jqXHR) {
      console.log("success!");
+     var user = CurrentUserStore.getCurrentUser();
+ 
+     DelegateStore.getDelegates(user.school.id, function(delegates) {
+       this.setState({delegates: delegates});
+     }.bind(this));
+     this.setState({adding_delegate: false});
+     this.setState({loading: false});
+     this.history.pushState(null, '/advisor/roster');
+     console.log(this.getState("delegates"));
    },
  
    _handleError: function(jqXHR, status, error) {
+     console.log(error);
      var response = jqXHR.responseJSON;
      if (!response) {
        return;
      }
  
      this.setState({
-       errors: response,
        loading: false
      }.bind(this));
    }
