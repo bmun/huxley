@@ -4,14 +4,14 @@
  *
  * @jsx React.DOM
  */
- 
+
  'use strict';
- 
+
  var $ = require('jquery');
  var Modal = require('react-modal');
  var React = require('react');
  var ReactRouter = require('react-router');
- 
+
  var AssignmentStore = require('../stores/AssignmentStore');
  var Button = require('./Button');
  var CommitteeStore = require('../stores/CommitteeStore');
@@ -22,7 +22,7 @@
  var InnerView = require('./InnerView');
  var TextInput = require('./TextInput');
  var _handleChange = require('../utils/_handleChange');
- 
+
  const customStyles = {
    content : {
      top                   : '50%',
@@ -33,12 +33,12 @@
      transform             : 'translate(-50%, -50%)'
    }
  };
- 
+
  var AdvisorRosterView = React.createClass({
    mixins: [
      ReactRouter.History,
    ],
- 
+
    getInitialState: function() {
      return {
        assignments: [],
@@ -49,10 +49,10 @@
        add_email: '',
      };
    },
- 
+
    componentWillMount: function() {
      var user = CurrentUserStore.getCurrentUser();
- 
+
      AssignmentStore.getAssignments(user.school.id, function(assignments) {
        this.setState({assignments: assignments.filter(
          function(assignment) {
@@ -60,14 +60,14 @@
          }
        )});
      }.bind(this));
- 
+
      DelegateStore.getDelegates(user.school.id, function(delegates) {
        this.setState({delegates: delegates});
      }.bind(this));
- 
+
      Modal.setAppElement('body')
    },
- 
+
    render: function() {
      return (
        <InnerView>
@@ -129,11 +129,10 @@
        </InnerView>
      );
    },
- 
+
    renderRosterRows: function() {
      var committees = this.state.committees;
      var countries = this.state.countries;
-     console.dir(this.state.delegates[0])
      return this.state.delegates.map(function(delegate) {
        return (
          <tr>
@@ -151,44 +150,48 @@
        )
      }.bind(this));
    },
- 
+
    _handleAddDelegate: function() {
      this.setState({adding_delegate: true});
    },
- 
+
    openModal: function() {
      this.setState({adding_delegate: true});
    },
- 
+
    afterOpenModal: function() {
      // references are now sync'd and can be accessed.
      this.refs.subtitle.style.color = '#f00';
    },
- 
+
    closeModal: function() {
      this.setState({adding_delegate: false});
    },
- 
+
    _handleDeleteDelegate: function(delegate) {
      this.setState({loading: true});
      $.ajax ({
        type: 'DELETE',
        url: '/api/delegates/'+delegate.id,
-       success: this._handleDelegateDeleteSuccess,
+       success: this._handleDelegateDeleteSuccess.bind(this, delegate.id),
        error: this._handleError,
      });
    },
- 
-   _handleDelegateDeleteSuccess: function(data, status, jqXHR) {
-     var delegates = this.state.delegates
-     delegates = delegates.filter(function (delegate) {
-        return delegate.id != jqXHR.responseJSON.delegate.id;
-     });
-     this.setState({delegates: delegates})
-     this.setState({loading: false});
-     this.history.pushState(null, '/advisor/roster');
-   },
- 
+
+  _handleDelegateDeleteSuccess: function(id, data, status, jqXHR) {
+    var delegates = this.state.delegates
+    delegates = delegates.filter(function (delegate) {
+      return delegate.id != id;
+    });
+
+    this.setState({
+      delegates: delegates,
+      loading: false
+    });
+
+    this.history.pushState(null, '/advisor/roster');
+  },
+
    _handleSubmit: function(data) {
      this.setState({loading: true});
      var user = CurrentUserStore.getCurrentUser();
@@ -207,27 +210,31 @@
      });
      event.preventDefault();
    },
- 
-   _handleSuccess: function(data, status, jqXHR) {
-     var delegates = this.state.delegates;
-     delegates.push(data);
-     this.setState({adding_delegate: false});
-     this.setState({loading: false});
 
-     this.history.pushState(null, '/advisor/roster');
+  _handleSuccess: function(data, status, jqXHR) {
+    var delegates = this.state.delegates;
+    delegates.push(data);
+
+    this.setState({
+      delegates: delegates,
+      adding_delegate: false,
+      loading: false
+    })
+
+    this.history.pushState(null, '/advisor/roster');
    },
- 
+
    _handleError: function(jqXHR, status, error) {
      var response = jqXHR.responseJSON;
      if (!response) {
        return;
      }
- 
+
      this.setState({
        loading: false
      }.bind(this));
    }
- 
+
  });
- 
+
  module.exports = AdvisorRosterView;
