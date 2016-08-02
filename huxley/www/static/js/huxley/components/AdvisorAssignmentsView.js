@@ -250,11 +250,12 @@ var AdvisorAssignmentsView = React.createClass({
   },
 
   _handleSave: function(event) {
+    var school = CurrentUserStore.getCurrentUser().school;
     this.setState({loading: true});
     $.ajax ({
       type: 'PATCH',
-      url: '/api/delegates',
-      data: this.state.delegates,
+      url: '/api/schools/' + school.id + '/delegates',
+      data: JSON.stringify(this.state.delegates),
       success: this._handleSuccess,
       error: this._handleError,
     });

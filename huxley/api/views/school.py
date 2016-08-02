@@ -1,4 +1,3 @@
-
 # Copyright (c) 2011-2015 Berkeley Model United Nations. All rights reserved.
 # Use of this source code is governed by a BSD License (see LICENSE).
 
@@ -12,9 +11,11 @@ from django.template import Context
 from rest_framework import generics, status
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.response import Response
+from huxley.api.mixins import ListUpdateModelMixin
 from huxley.api.permissions import IsAdvisorOrSuperuser, IsSchoolAdvisorOrSuperuser
 from huxley.api.serializers import AssignmentSerializer, DelegateSerializer, SchoolSerializer
 from huxley.core.models import Assignment, Conference, Delegate, School
+
 
 class SchoolList(generics.CreateAPIView):
     authentication_classes = (SessionAuthentication,)
@@ -45,7 +46,8 @@ class SchoolAssignments(generics.ListAPIView):
 
         return Assignment.objects.filter(school_id=school_id)
 
-class SchoolDelegates(generics.ListAPIView):
+
+class SchoolDelegates(generics.ListAPIView, ListUpdateModelMixin):
     authentication_classes = (SessionAuthentication,)
     serializer_class = DelegateSerializer
     permission_classes = (IsSchoolAdvisorOrSuperuser,)
@@ -57,6 +59,12 @@ class SchoolDelegates(generics.ListAPIView):
             raise Http404
 
         return Delegate.objects.filter(school_id=school_id)
+
+    def put(self, request, *args, **kwargs):
+        return self.list_update(request, *args, **kwargs)
+
+    def patch(self, request, *args, **kwargs):
+        return self.partial_list_update(request, *args, **kwargs)
 
 
 class SchoolInvoice(PDFTemplateView):
