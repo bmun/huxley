@@ -107,53 +107,63 @@ var AdvisorRosterView = React.createClass({
         <Modal
           isOpen={this.state.adding_delegate}
           onAfterOpen={this.afterOpenModal}
-          onRequestClose={this._handleAddDelegate}
-          style={customStyles}>
-          <button onClick={this.closeModal.bind(this, 'add')}>close</button>
-          <h2 ref="subtitle">Add Delegate</h2>
+          className="content content-outer transparent ie-layout rounded">
           <form>
+            <h2>Add Delegate</h2>
+            <br />
             <TextInput
               placeholder="Name"
               onChange={_handleChange.bind(this, 'add_name')}
               value={this.state.add_name}
             />
-            <br></br>
             <TextInput
-              placeholder="Email"
+              placeholder="Email (Optional)"
               onChange={_handleChange.bind(this, 'add_email')}
               value={this.state.add_email}
             />
-            <br></br>
-            <Button onClick={this._handleAddDelegate}
-            color="green"
-            loading={this.state.loading}>
-            Add</Button>
+            <hr />
+            <div>
+              <Button onClick={this._handleAddDelegate}
+              color="green"
+              loading={this.state.loading}>
+              Save</Button>
+              <Button
+                onClick={this.closeModal.bind(this, 'add')}
+                color="red">
+                Cancel
+              </Button>
+            </div>
           </form>
         </Modal>
         <Modal
           isOpen={this.state.editing_delegate}
           onAfterOpen={this.afterOpenModal}
-          onRequestClose={this._handleEditDelegateSuccess}
-          style={customStyles}>
-          <button onClick={this.closeModal.bind(this, 'edit')}>close</button>
-          <h2 ref="subtitle">Edit Delegate</h2>
+          className="content content-outer transparent ie-layout rounded">
           <form>
+            <h2>Edit Delegate</h2>
+            <br />
             <TextInput
               placeholder="Name"
               onChange={_handleChange.bind(this, 'edit_name')}
               value={this.state.edit_name}
             />
-            <br></br>
             <TextInput
-               placeholder="Email"
+               placeholder="Email (Optional)"
                onChange={_handleChange.bind(this, 'edit_email')}
                value={this.state.edit_email}
             />
-            <br></br>
-            <Button onClick={this._handleEditDelegate}
-            color="green"
-            loading={this.state.loading}>
-            Save</Button>
+            <hr />
+            <div>
+              <Button onClick={this._handleEditDelegate}
+              color="green"
+              loading={this.state.loading}>
+              Save</Button>
+              <Button
+                onClick={this.closeModal.bind(this, 'edit')}
+                color="red">
+                Cancel
+              </Button>
+            </div>
           </form>
         </Modal>
       </InnerView>
@@ -216,7 +226,7 @@ var AdvisorRosterView = React.createClass({
     $.ajax ({
       type: 'DELETE',
       url: '/api/delegates/'+delegate.id,
-      success: this._handleDelegateDeleteSuccess,
+      success: this._handleDelegateDeleteSuccess.bind(this, delegate.id),
       error: this._handleError,
     });
   },
@@ -251,7 +261,7 @@ var AdvisorRosterView = React.createClass({
         email: this.state.edit_email,
         school: user.school.id
       }),
-      success: this._handleEditDelegateSuccess,
+      success: this._handleEditDelegateSuccess.bind(this, delegate.id),
       error: this._handleError,
       dataType: 'json',
       contentType: 'application/json'
@@ -259,10 +269,10 @@ var AdvisorRosterView = React.createClass({
     event.preventDefault();
   },
  
-  _handleDelegateDeleteSuccess: function(data, status, jqXHR) {
+  _handleDelegateDeleteSuccess: function(id, data, status, jqXHR) {
     var delegates = this.state.delegates;
     delegates = delegates.filter(function (delegate) {
-        return delegate.id != jqXHR.responseJSON.delegate.id;
+        return delegate.id != id;
     });
     this.setState({delegates: delegates});
     this.setState({loading: false});
@@ -277,10 +287,10 @@ var AdvisorRosterView = React.createClass({
     this.history.pushState(null, '/advisor/roster');
   },
 
-  _handleEditDelegateSuccess: function(data, status, jqXHR) {
+  _handleEditDelegateSuccess: function(id, data, status, jqXHR) {
     var delegates = this.state.delegates;
     delegates = delegates.filter(function (delegate) {
-        return delegate.id != jqXHR.responseJSON.delegate.id;
+        return delegate.id != id;
     });
     this.setState({editing_delegate: false});
     this.setState({delegates: delegates});
