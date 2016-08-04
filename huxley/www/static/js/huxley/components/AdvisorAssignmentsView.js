@@ -243,7 +243,7 @@ var AdvisorAssignmentsView = React.createClass({
         data: {
           rejected: true,
         },
-        success: this._handleAssignmentDeleteSuccess,
+        success: this._handleAssignmentDeleteSuccess.bind(this, assignment.id),
         error: this._handleError,
       });
     }
@@ -267,10 +267,10 @@ var AdvisorAssignmentsView = React.createClass({
     this.history.pushState(null, '/advisor/assignments');
   },
 
-  _handleAssignmentDeleteSuccess: function(data, status, jqXHR) {
+  _handleAssignmentDeleteSuccess: function(id, data, status, jqXHR) {
     var assignments = this.state.assignments
     assignments = assignments.filter(function (assignment) {
-      return assignment.id != jqXHR.responseJSON.id
+      return assignment.id != id
     })
     this.setState({assignments: assignments})
     this.setState({loading: false});
