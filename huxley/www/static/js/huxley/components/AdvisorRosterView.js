@@ -1,9 +1,9 @@
 /**
-* Copyright (c) 2011-2015 Berkeley Model United Nations. All rights reserved.
-* Use of this source code is governed by a BSD License (see LICENSE).
-*
-* @jsx React.DOM
-+*/
+ * Copyright (c) 2011-2015 Berkeley Model United Nations. All rights reserved.
+ * Use of this source code is governed by a BSD License (see LICENSE).
+ *
+ * @jsx React.DOM
+ */
 
 'use strict';
 
@@ -44,9 +44,11 @@ var AdvisorRosterView = React.createClass({
       assignments: [],
       delegates: [],
       loading: false,
-      adding_delegate: false,
-      add_name: '',
-      add_email: '',
+      modal_open: false,
+      modal_name: '',
+      modal_email: '',
+      modal_onClick: null,
+      errors: {}
     };
   },
 
@@ -85,7 +87,8 @@ var AdvisorRosterView = React.createClass({
                   <th>Delegate</th>
                   <th>Email</th>
                   <th>Summary</th>
-                  <th>Delete Delegate</th>
+                  <th>Edit</th>
+                  <th>Delete</th>
                 </tr>
               </thead>
               <tbody>
@@ -93,34 +96,36 @@ var AdvisorRosterView = React.createClass({
               </tbody>
             </table>
           </div>
+          <div className="tablemenu footer" />
+          <Button
+            color="green"
+            onClick={this.openModal.bind(this, '', '', this._handleAddDelegate)}
+            loading={this.state.loading}>
+            Add Delegate
+          </Button>
         </form>
-        <Button
-          color="green"
-          onClick={this.openModal}
-          loading={this.state.loading}>
-          Add Delegate
-        </Button>
         <Modal
-          isOpen={this.state.adding_delegate}
-          onAfterOpen={this.afterOpenModal}
+          isOpen={this.state.modal_open}
           className="content content-outer transparent ie-layout rounded">
           <form>
-            <h2>Add Delegate</h2>
+            <h3>Enter your delegate's information here</h3>
             <br />
             <TextInput
               placeholder="Name"
-              onChange={_handleChange.bind(this, 'add_name')}
-              value={this.state.add_name}
+              onChange={_handleChange.bind(this, 'modal_name')}
+              value={this.state.modal_name}
             />
+            {this.renderError("name")}
             <TextInput
               placeholder="Email (Optional)"
-              onChange={_handleChange.bind(this, 'add_email')}
-              value={this.state.add_email}
+              onChange={_handleChange.bind(this, 'modal_email')}
+              value={this.state.modal_email}
             />
+            {this.renderError("email")}
             <hr />
             <div>
               <Button
-                onClick={this._handleSubmit}
+                onClick={this.state.modal_onClick}
                 color="green"
                 loading={this.state.loading}>
                 Save
@@ -148,6 +153,18 @@ var AdvisorRosterView = React.createClass({
           <td>{delegate.summary}</td>
           <td>
             <Button
+              color="blue"
+              size="small"
+              onClick={this.openModal.bind(
+                this,
+                delegate.name,
+                delegate.email,
+                this._handleEditDelegate.bind(this, delegate.id))}>
+              Edit
+            </Button>
+          </td>
+          <td>
+            <Button
               color="red"
               size="small"
               onClick={this._handleDeleteDelegate.bind(this, delegate)}>
@@ -159,17 +176,30 @@ var AdvisorRosterView = React.createClass({
     }.bind(this));
   },
 
-  openModal: function() {
-    this.setState({adding_delegate: true});
-  },
-
-  afterOpenModal: function() {
-    // references are now sync'd and can be accessed.
-    this.refs.subtitle.style.color = '#f00';
+  openModal: function(name, email, fn) {
+    this.setState({
+      modal_open: true,
+      modal_name: name,
+      modal_email: email,
+      modal_onClick: fn,
+      errors: {}
+    });
   },
 
   closeModal: function() {
-    this.setState({adding_delegate: false});
+    this.setState({modal_open: false});
+  },
+
+  renderError: function(field) {
+    if (this.state.errors[field]) {
+      return (
+        <label className="hint error">
+          {this.state.errors[field]}
+        </label>
+      );
+    }
+
+    return null;
   },
 
   _handleDeleteDelegate: function(delegate) {
@@ -182,32 +212,18 @@ var AdvisorRosterView = React.createClass({
     });
   },
 
-  _handleDelegateDeleteSuccess: function(id, data, status, jqXHR) {
-    var delegates = this.state.delegates
-    delegates = delegates.filter(function (delegate) {
-      return delegate.id != id;
-    });
-
-    this.setState({
-      delegates: delegates,
-      loading: false
-    });
-
-    this.history.pushState(null, '/advisor/roster');
-  },
-
-  _handleSubmit: function(data) {
+  _handleAddDelegate: function(data) {
     this.setState({loading: true});
     var user = CurrentUserStore.getCurrentUser();
     $.ajax({
       type: 'POST',
-      url: '/api/delegates',
+      url: '/api/delegates/',
       data: JSON.stringify({
-        name: this.state.add_name,
-        email: this.state.add_email,
+        name: this.state.modal_name,
+        email: this.state.modal_email,
         school: user.school.id
       }),
-      success: this._handleSuccess,
+      success: this._handleAddDelegateSuccess,
       error: this._handleError,
       dataType: 'json',
       contentType: 'application/json'
@@ -215,17 +231,60 @@ var AdvisorRosterView = React.createClass({
     event.preventDefault();
   },
 
-  _handleSuccess: function(data, status, jqXHR) {
+  _handleEditDelegate: function(delegate_id) {
+    var user = CurrentUserStore.getCurrentUser();
+    this.setState({loading: true});
+    $.ajax ({
+      type: 'PATCH',
+      url: '/api/delegates/'+delegate_id,
+      data: JSON.stringify({
+        name: this.state.modal_name,
+        email: this.state.modal_email,
+        school: user.school.id
+      }),
+      success: this._handleEditDelegateSuccess,
+      error: this._handleError,
+      dataType: 'json',
+      contentType: 'application/json'
+    });
+    event.preventDefault();
+  },
+
+  _handleDelegateDeleteSuccess: function(id, data, status, jqXHR) {
+    var delegates = this.state.delegates;
+    delegates = delegates.filter(function (delegate) {
+        return delegate.id != id;
+    });
+
+    this.setState({
+      delegates: delegates,
+      loading: false
+    });
+  },
+
+  _handleAddDelegateSuccess: function(data, status, jqXHR) {
     var delegates = this.state.delegates;
     delegates.push(data);
 
     this.setState({
-      delegates: delegates,
-      adding_delegate: false,
+      modal_open: false,
       loading: false
     });
+  },
 
-    this.history.pushState(null, '/advisor/roster');
+  _handleEditDelegateSuccess: function(data, status, jqXHR) {
+    var delegates = this.state.delegates;
+    for (var i = 0; i < delegates.length; i++) {
+      if (delegates[i].id == data.id) {
+        delegates[i] = data;
+      }
+    }
+
+    this.setState({
+      modal_open: false,
+      delegates: delegates,
+      loading: false
+    });
   },
 
   _handleError: function(jqXHR, status, error) {
@@ -234,8 +293,12 @@ var AdvisorRosterView = React.createClass({
       return;
     }
 
-    this.setState({loading: false}).bind(this);
+    this.setState({
+      errors: response,
+      loading: false
+    });
   }
+
 });
 
 module.exports = AdvisorRosterView;
