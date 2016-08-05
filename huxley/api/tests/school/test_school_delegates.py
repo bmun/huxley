@@ -77,21 +77,21 @@ class SchoolDelegateGetTestCase(ListAPITestCase):
         self.assertEqual(dict(response.data[0]),
             {
                 'id': self.delegate1.id,
-                'assignment':self.assignment1.id,
-                'school':self.delegate1.school.id,
-                'name':unicode(self.delegate1.name),
-                'email':unicode(self.delegate1.email),
-                'summary':unicode(self.delegate1.summary),
+                'assignment': self.assignment1.id,
+                'school': self.delegate1.school.id,
+                'name': unicode(self.delegate1.name),
+                'email': unicode(self.delegate1.email),
+                'summary': unicode(self.delegate1.summary),
             },
         )
         self.assertEqual(dict(response.data[1]),
             {
                 'id': self.delegate2.id,
-                'assignment':self.assignment2.id,
-                'school':self.delegate2.school.id,
-                'name':unicode(self.delegate2.name),
-                'email':unicode(self.delegate2.email),
-                'summary':unicode(self.delegate2.summary),
+                'assignment': self.assignment2.id,
+                'school': self.delegate2.school.id,
+                'name': unicode(self.delegate2.name),
+                'email': unicode(self.delegate2.email),
+                'summary': unicode(self.delegate2.summary),
             },
         )
 
@@ -162,22 +162,22 @@ class SchoolDelegateListPartialUpdateTestCase(PartialUpdateAPITestCase):
             {
                 'id': self.delegate1.id,
                 'assignment': self.params[0]['assignment'],
-                'school':self.delegate1.school.id,
-                'name':unicode(self.delegate1.name),
-                'email':unicode(self.delegate1.email),
-                'summary':unicode(self.delegate1.summary),
-                'created_at':self.delegate1.created_at.isoformat()
+                'school': self.delegate1.school.id,
+                'name': unicode(self.delegate1.name),
+                'email': unicode(self.delegate1.email),
+                'summary': unicode(self.delegate1.summary),
+                'created_at': self.delegate1.created_at.isoformat()
             },
         )
         self.assertEqual(dict(response.data[1]),
             {
                 'id': self.delegate2.id,
                 'assignment': self.params[1]['assignment'],
-                'school':self.delegate2.school.id,
-                'name':unicode(self.delegate2.name),
-                'email':unicode(self.delegate2.email),
-                'summary':unicode(self.delegate2.summary),
-                'created_at':self.delegate2.created_at.isoformat()
+                'school': self.delegate2.school.id,
+                'name': unicode(self.delegate2.name),
+                'email': unicode(self.delegate2.email),
+                'summary': unicode(self.delegate2.summary),
+                'created_at': self.delegate2.created_at.isoformat()
             },
         )
 
@@ -213,22 +213,22 @@ class SchoolDelegateListPartialUpdateTestCase(PartialUpdateAPITestCase):
             {
                 'id': self.delegate1.id,
                 'assignment': self.params[0]['assignment'],
-                'school':self.delegate1.school.id,
-                'name':unicode(self.delegate1.name),
-                'email':unicode(self.delegate1.email),
-                'summary':unicode(self.delegate1.summary),
-                'created_at':self.delegate1.created_at.isoformat()
+                'school': self.delegate1.school.id,
+                'name': unicode(self.delegate1.name),
+                'email': unicode(self.delegate1.email),
+                'summary': unicode(self.delegate1.summary),
+                'created_at': self.delegate1.created_at.isoformat()
             },
         )
         self.assertEqual(dict(response.data[1]),
             {
                 'id': self.delegate2.id,
                 'assignment': self.params[1]['assignment'],
-                'school':self.delegate2.school.id,
-                'name':unicode(self.delegate2.name),
-                'email':unicode(self.delegate2.email),
-                'summary':unicode(self.delegate2.summary),
-                'created_at':self.delegate2.created_at.isoformat()
+                'school': self.delegate2.school.id,
+                'name': unicode(self.delegate2.name),
+                'email': unicode(self.delegate2.email),
+                'summary': unicode(self.delegate2.summary),
+                'created_at': self.delegate2.created_at.isoformat()
             },
         )
 

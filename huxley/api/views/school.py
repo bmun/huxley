@@ -64,7 +64,7 @@ class SchoolDelegates(generics.ListAPIView, ListUpdateModelMixin):
         return self.list_update(request, *args, **kwargs)
 
     def patch(self, request, *args, **kwargs):
-        return self.partial_list_update(request, *args, **kwargs)
+        return self.list_update(request, partial=True, *args, **kwargs)
 
 
 class SchoolInvoice(PDFTemplateView):
