@@ -76,7 +76,7 @@ var AdvisorAssignmentsView = React.createClass({
         </p>
         <form>
           <div className="table-container">
-            <table className="table highlight-cells">
+            <table>
               <thead>
                 <tr>
                   <th>Committee</th>

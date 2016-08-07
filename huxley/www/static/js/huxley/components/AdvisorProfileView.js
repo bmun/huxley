@@ -87,11 +87,9 @@ var AdvisorProfileView = React.createClass({
         <p><strong>{conference.external}
         <br />
         Under-Secretary General of External Relations, {conference.session}th Session.</strong></p>
-        <form
-          id="welcomepage"
-          onSubmit={this._handleSubmit}>
-          <div id="welcomeinfocontainer" className="table-container">
-            <table id="welcomeinfo" className="table highlight-cells">
+        <form onSubmit={this._handleSubmit}>
+          <div className="table-container">
+            <table>
               <thead>
                 <tr>
                   <th colSpan="2">Advisor Information</th>
@@ -99,8 +97,8 @@ var AdvisorProfileView = React.createClass({
               </thead>
               <tbody>
                 <tr>
-                  <td className="fieldLabel">First Name</td>
-                  <td className="field">
+                  <td>First Name</td>
+                  <td>
                     <TextInput
                       value={this.state.first_name}
                       onChange={_handleChange.bind(this, 'first_name')}
@@ -109,8 +107,8 @@ var AdvisorProfileView = React.createClass({
                   </td>
                 </tr>
                 <tr>
-                  <td className="fieldLabel">Last Name</td>
-                  <td className="field">
+                  <td>Last Name</td>
+                  <td>
                     <TextInput
                       value={this.state.last_name}
                       onChange={_handleChange.bind(this, 'last_name')}
@@ -122,14 +120,14 @@ var AdvisorProfileView = React.createClass({
                   <th colSpan="2">School Information</th>
                 </tr>
                 <tr>
-                  <td className="fieldLabel">Name</td>
-                  <td className="field">
+                  <td>Name</td>
+                  <td>
                     {school.name}
                   </td>
                 </tr>
                 <tr>
-                  <td className="fieldLabel">Address</td>
-                  <td className="field">
+                  <td>Address</td>
+                  <td>
                     <TextInput
                       value={this.state.school_address}
                       onChange={_handleChange.bind(this, 'school_address')}
@@ -138,8 +136,8 @@ var AdvisorProfileView = React.createClass({
                   </td>
                 </tr>
                 <tr>
-                  <td className="fieldLabel">City</td>
-                  <td className="field">
+                  <td>City</td>
+                  <td>
                     <TextInput
                       value={this.state.school_city}
                       onChange={_handleChange.bind(this, 'school_city')}
@@ -148,8 +146,8 @@ var AdvisorProfileView = React.createClass({
                   </td>
                 </tr>
                 <tr>
-                  <td className="fieldLabel">Zip</td>
-                  <td className="field">
+                  <td>Zip</td>
+                  <td>
                     <TextInput
                       value={this.state.school_zip_code}
                       onChange={_handleChange.bind(this, 'school_zip_code')}
@@ -158,8 +156,8 @@ var AdvisorProfileView = React.createClass({
                   </td>
                 </tr>
                 <tr>
-                  <td className="fieldLabel">Waitlisted</td>
-                  <td className="field">
+                  <td>Waitlisted</td>
+                  <td>
                     {school.waitlist == true ? 'Yes' : 'No'}
                   </td>
                 </tr>
@@ -167,52 +165,52 @@ var AdvisorProfileView = React.createClass({
                   <th colSpan="2">Program Information</th>
                 </tr>
                 <tr>
-                  <td className="fieldLabel">Program Type</td>
-                  <td className="field">
+                  <td>Program Type</td>
+                  <td>
                     {school.program_type === 1 ? 'Club' : 'Class'}
                   </td>
                 </tr>
                 <tr>
-                  <td className="fieldLabel">Times Attended</td>
-                  <td className="field">
+                  <td>Times Attended</td>
+                  <td>
                     {school.times_attended}
                   </td>
                 </tr>
                 <tr>
-                  <td className="fieldLabel">Number of Beginner Delegates</td>
-                  <td className="field">
+                  <td>Number of Beginner Delegates</td>
+                  <td>
                     {school.beginner_delegates}
                   </td>
                 </tr>
                 <tr>
-                  <td className="fieldLabel">Number of Intermediate Delegates</td>
-                  <td className="field">
+                  <td>Number of Intermediate Delegates</td>
+                  <td>
                     {school.intermediate_delegates}
                   </td>
                 </tr>
                 <tr>
-                  <td className="fieldLabel">Number of Advanced Delegates</td>
-                  <td className="field">
+                  <td>Number of Advanced Delegates</td>
+                  <td>
                     {school.advanced_delegates}
                   </td>
                 </tr>
                 <tr>
-                  <td className="fieldLabel">Number of Spanish Speaking
+                  <td>Number of Spanish Speaking
                   Delegates</td>
-                  <td className="field">
+                  <td>
                     {school.spanish_speaking_delegates}
                   </td>
                 </tr>
                 <tr>
-                  <td className="fieldLabel">Number of Chinese Speaking
+                  <td>Number of Chinese Speaking
                   Delegates</td>
-                  <td className="field">
+                  <td>
                     {school.chinese_speaking_delegates}
                   </td>
                 </tr>
                 <tr>
-                  <td className="fieldLabel">Waivers Completed?</td>
-                  <td className="field">
+                  <td>Waivers Completed?</td>
+                  <td>
                     {school.waivers_completed ? "Yes" : "No"}
                   </td>
                 </tr>
@@ -220,8 +218,8 @@ var AdvisorProfileView = React.createClass({
                   <th colSpan="2">Primary Contact Information</th>
                 </tr>
                 <tr>
-                  <td className="fieldLabel">Name</td>
-                  <td className="field">
+                  <td>Name</td>
+                  <td>
                     <TextInput
                       value={this.state.primary_name}
                       onChange={_handleChange.bind(this, 'primary_name')}
@@ -230,8 +228,8 @@ var AdvisorProfileView = React.createClass({
                   </td>
                 </tr>
                 <tr>
-                  <td className="fieldLabel">Email</td>
-                  <td className="field">
+                  <td>Email</td>
+                  <td>
                     <TextInput
                       value={this.state.primary_email}
                       onChange={_handleChange.bind(this, 'primary_email')}
@@ -240,8 +238,8 @@ var AdvisorProfileView = React.createClass({
                   </td>
                 </tr>
                 <tr>
-                  <td className="fieldLabel">Phone</td>
-                  <td className="field">
+                  <td>Phone</td>
+                  <td>
                     <PhoneInput
                       value={this.state.primary_phone}
                       isInternational={school.international}
@@ -254,8 +252,8 @@ var AdvisorProfileView = React.createClass({
                   <th colSpan="2">Secondary Contact Information</th>
                 </tr>
                 <tr>
-                  <td className="fieldLabel">Name</td>
-                  <td className="field">
+                  <td>Name</td>
+                  <td>
                     <TextInput
                       value={this.state.secondary_name}
                       onChange={_handleChange.bind(this, 'secondary_name')}
@@ -264,8 +262,8 @@ var AdvisorProfileView = React.createClass({
                   </td>
                 </tr>
                 <tr>
-                  <td className="fieldLabel">Email</td>
-                  <td className="field">
+                  <td>Email</td>
+                  <td>
                     <TextInput
                       value={this.state.secondary_email}
                       onChange={_handleChange.bind(this, 'secondary_email')}
@@ -274,8 +272,8 @@ var AdvisorProfileView = React.createClass({
                   </td>
                 </tr>
                 <tr>
-                  <td className="fieldLabel">Phone</td>
-                  <td className="field">
+                  <td>Phone</td>
+                  <td>
                     <PhoneInput
                       value={this.state.secondary_phone}
                       isInternational={school.international}
@@ -286,7 +284,7 @@ var AdvisorProfileView = React.createClass({
                 </tr>
                 <tr>
                   <th>Fees</th>
-                  <td className="field">
+                  <td>
                     <a
                       className="button button-small button-green rounded-small"
                       href={invoiceUrl}
@@ -296,20 +294,20 @@ var AdvisorProfileView = React.createClass({
                   </td>
                 </tr>
                 <tr>
-                  <td className="fieldLabel">Fees Owed</td>
-                  <td className="field">
+                  <td>Fees Owed</td>
+                  <td>
                     {'$' + school.fees_owed.toFixed(2)}
                   </td>
                 </tr>
                 <tr>
-                  <td className="fieldLabel">Fees Paid</td>
-                  <td className="field">
+                  <td>Fees Paid</td>
+                  <td>
                     {'$' + school.fees_paid.toFixed(2)}
                   </td>
                 </tr>
                 <tr>
-                  <td className="fieldLabel">Balance</td>
-                  <td className="field">
+                  <td>Balance</td>
+                  <td>
                     {'$' + (school.fees_owed - school.fees_paid).toFixed(2)}
                   </td>
                 </tr>
