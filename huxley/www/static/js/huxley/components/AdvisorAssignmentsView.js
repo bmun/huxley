@@ -75,7 +75,6 @@ var AdvisorAssignmentsView = React.createClass({
           delegates' names.
         </p>
         <form>
-          <div className="tablemenu header" />
           <div className="table-container">
             <table className="table highlight-cells">
               <thead>
@@ -94,7 +93,6 @@ var AdvisorAssignmentsView = React.createClass({
               </tbody>
             </table>
           </div>
-          <div className="tablemenu footer" />
           {finalized ?
             <div> </div> :
             <Button

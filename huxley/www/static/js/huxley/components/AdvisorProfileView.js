@@ -89,8 +89,6 @@ var AdvisorProfileView = React.createClass({
         <form
           id="welcomepage"
           onSubmit={this._handleSubmit}>
-          <div className="tablemenu header">
-          </div>
           <div id="welcomeinfocontainer" className="table-container">
             <table id="welcomeinfo" className="table highlight-cells">
               <thead>
@@ -325,8 +323,6 @@ var AdvisorProfileView = React.createClass({
                 </tr>
               </tbody>
             </table>
-          </div>
-          <div className="tablemenu footer">
           </div>
           <Button
             color="green"

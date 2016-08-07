@@ -1,67 +1,10 @@
-/* Tables */
-
-.tablemenu
-{
-    width:734px;
-    height: 20px;
-    margin: 0px auto;
-    background: #ccc;
-    border: 1px solid #aaa;
-    padding: 3px;
-    text-align: right;
-
-    &.header
-    {
-        border-top-left-radius: 4px;
-        border-top-right-radius: 4px;
-        margin-top: 20px;
-    }
-
-    &.footer
-    {
-        border-bottom-left-radius: 4px;
-        border-bottom-right-radius: 4px;
-    }
-
-    input[type=submit]
-    {
-        width: 70px;
-        height: 20px;
-        border-radius: 3px;
-        font: 12px Helvetica, Arial, sans-serif;
-        font-weight: 700;
-        text-align: left;
-        padding: 3px;
-
-        &:hover { cursor: pointer; }
-
-        &.saved
-        {
-            background: #0c0 url(/static/img/tick.png) right no-repeat;
-            border: 1px solid #090;
-            color: #cfc;
-            text-shadow: 0px 1px #090;
-        }
-
-        &.unsaved
-        {
-            background: #cc0 url(/static/img/warning_small.png) right no-repeat;
-            border: 1px solid #990;
-            color: #ffc;
-            text-shadow: 0px 1px #990;
-            /*icon from wefunction.com*/
-        }
-    }
-}
-
 .table-container
 {
+    border: 1px solid #ccc;
+    border-bottom: 1px solid #bbb;
+    border-radius: 5px;
+    margin: 20px auto;
     width: 740px;
-    border-left: 1px solid #ccc;
-    border-right: 1px solid #ccc;
-    border-top: 1px solid #fff;
-    border-bottom: 1px solid #fff;
-    margin: 0px auto;
 }
 
 .table
