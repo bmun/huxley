@@ -11,14 +11,14 @@ var DelegateSelect = React.createClass({
   propTypes: {
     onChange: React.PropTypes.func,
     delegates: React.PropTypes.array,
-    selectedDelegateId: React.PropTypes.number
+    selectedDelegateID: React.PropTypes.number
   },
 
   render: function() {
     return (
       <select
         onChange={this.props.onChange}
-        value={this.props.selectedDelegateId}>
+        value={this.props.selectedDelegateID}>
         <option value="0">None</option>
         {this.renderDelegateOptions()}
       </select>
@@ -26,13 +26,11 @@ var DelegateSelect = React.createClass({
   },
 
   renderDelegateOptions: function() {
-    return this.props.delegates.map(function(delegate) {
-      return (
-        <option key={delegate.id} value={delegate.id} disabled={delegate.assignment}>
-          {delegate.name}
-        </option>
-      );
-    }.bind(this));
+    return this.props.delegates.map((delegate) =>
+      <option key={delegate.id} value={delegate.id} disabled={delegate.assignment}>
+        {delegate.name}
+      </option>
+    );
   }
 });
 
