@@ -15,6 +15,7 @@ var ConferenceContext = require('./ConferenceContext');
 var CurrentUserActions = require('../actions/CurrentUserActions');
 var NavLink = require('./NavLink');
 var OuterView = require('./OuterView');
+var TextInput = require('./TextInput');
 var User = require('../utils/User');
 
 require('jquery-ui/effect-shake');
@@ -31,8 +32,8 @@ var LoginView = React.createClass({
   getInitialState: function() {
     return {
       error: null,
-      username: null,
-      password: null,
+      username: '',
+      password: '',
       loading: false
     };
   },
@@ -55,16 +56,13 @@ var LoginView = React.createClass({
           className="login-form"
           onSubmit={this._handleSubmit}>
           <div className="login-fields">
-            <input
-              className="text"
-              type="text"
+            <TextInput
               name="username"
               placeholder="Username"
               value={this.state.username}
               onChange={this._handleUsernameChange}
             />
-            <input
-              className="text"
+            <TextInput
               type="password"
               name="password"
               placeholder="Password"
@@ -122,12 +120,12 @@ var LoginView = React.createClass({
     return null;
   },
 
-  _handlePasswordChange: function(event) {
-    this.setState({password: event.target.value});
+  _handlePasswordChange: function(password) {
+    this.setState({password});
   },
 
-  _handleUsernameChange: function(event) {
-    this.setState({username: event.target.value});
+  _handleUsernameChange: function(username) {
+    this.setState({username});
   },
 
   _handleSubmit: function(event) {

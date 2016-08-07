@@ -5,7 +5,8 @@
 
 'use strict';
 
-var React = require('react')
+var React = require('react');
+var cx = require('classnames');
 
 var TextInput = React.createClass({
 
@@ -20,6 +21,7 @@ var TextInput = React.createClass({
     return (
       <input
         {...this.props}
+        className={cx('text-input', this.props.className)}
         type={this.props.type || 'text'}
         onChange={this._handleChange}
       />
