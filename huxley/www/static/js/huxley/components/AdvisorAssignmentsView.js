@@ -63,28 +63,13 @@ var AdvisorAssignmentsView = React.createClass({
       }
       this.setState({countries: new_countries})
     }.bind(this));
-    DelegateStore.getDelegates(user.school.id, function(delegates) {
-      // assigned is to manage the relation between an assignment and its delegates.
-      var assigned = {};
-      for (var i = 0; i < delegates.length; i++) {
-        if (delegates[i].assignment) {
-          if (delegates[i].assignment in assigned) {
-            assigned[delegates[i].assignment][1] = delegates[i].id;
-          } else {
-            // We assume each assignment has at most two delegates assigned to it.
-            // Single delegate assignments simply won't access the second slot.
-            var slots = new Array(2).fill(0);
-            slots[0] = delegates[i].id;
-            assigned[delegates[i].assignment] = slots;
-          }
-        }
-      }
-
+    DelegateStore.getDelegates(user.school.id, (delegates) => {
+      var assigned = this.prepareAssignedDelegates(delegates);
       this.setState({
         delegates: delegates,
         assigned: assigned
       });
-    }.bind(this));
+    });
   },
 
   render: function() {
@@ -97,8 +82,8 @@ var AdvisorAssignmentsView = React.createClass({
           Here you can view your tentative assignments for BMUN {conference.session}. If you
           would like to request more slots, please email <a href="mailto:info@bmun.org">
           info@bmun.org</a>. In the coming months
-          we will ask that you finalize your assignment roster and input your
-          delegates' names.
+          we will ask that you finalize your assignment roster and input the
+          names of your delegates.
         </p>
         <form>
           <div className="table-container">
@@ -170,13 +155,37 @@ var AdvisorAssignmentsView = React.createClass({
     }.bind(this));
   },
 
+  /*
+    To make it easier to assign and unassign delegates to assignments we maintain
+    a state variable called "assigned". "assigned" is a dictionary whose key is
+    an assignment id, and value is an array representing slots for two delegates
+    to be assigned to it. This way we can easily manage the relationship from
+    assignment to delegates via this object.
+  */
+  prepareAssignedDelegates: function(delegates) {
+    var assigned = {};
+    for (var i = 0; i < delegates.length; i++) {
+      if (delegates[i].assignment) {
+        if (delegates[i].assignment in assigned) {
+          assigned[delegates[i].assignment][1] = delegates[i].id;
+        } else {
+          var slots = [0, 0];
+          slots[0] = delegates[i].id;
+          assigned[delegates[i].assignment] = slots;
+        }
+      }
+    }
+
+    return assigned;
+  },
+
   renderDelegateDropdown: function(assignment, slot) {
-    var selectedDelegateId = assignment.id in this.state.assigned ? this.state.assigned[assignment.id][slot] : 0;
+    var selectedDelegateID = assignment.id in this.state.assigned ? this.state.assigned[assignment.id][slot] : 0;
     return (
       <DelegateSelect
         onChange={this._handleDelegateAssignment.bind(this, assignment.id, slot)}
         delegates={this.state.delegates}
-        selectedDelegateId={selectedDelegateId}
+        selectedDelegateID={selectedDelegateID}
       />
     );
   },
@@ -191,7 +200,7 @@ var AdvisorAssignmentsView = React.createClass({
       assigned[assignmentId][slot] = newDelegateId;
     } else {
       // This is the first time we're assigning a delegate to this assignment.
-      var slots = new Array(2).fill(0);
+      var slots = [0, 0];
       slots[slot] = newDelegateId;
       assigned[assignmentId] = slots;
     }

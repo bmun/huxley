@@ -16,22 +16,16 @@ class ListUpdateModelMixin(object):
     Update a queryset
     """
 
-    def list_update(self, request, *args, **kwargs):
-        partial = kwargs.pop('partial', False)
+    def list_update(self, request, partial=False, *args, **kwargs):
         data = request.data
         if isinstance(data, QueryDict):
             data = json.loads(request.data.items()[0][0])
 
+        updates = {delegate['id']: delegate for delegate in data}
         response_data = []
-        delegate_ids = []
-        updates = {}
-
-        for obj in data:
-            delegate_ids.append(obj['id'])
-            updates[obj["id"]] = obj
 
         with transaction.atomic():
-            delegates = Delegate.objects.filter(id__in=updates)
+            delegates = Delegate.objects.filter(id__in=updates.keys())
             for delegate in delegates:
                 serializer = self.get_serializer(
                     instance=delegate,
