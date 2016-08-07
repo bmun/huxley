@@ -136,7 +136,7 @@ var RegistrationView = React.createClass({
               value={this.state.username}
             />
             {this.renderError('username')}
-            <input
+            <TextInput
               type="password"
               placeholder="Password"
               value={this.state.password}
@@ -145,7 +145,7 @@ var RegistrationView = React.createClass({
               onFocus={this._handlePasswordFocus}
             />
             {this.renderError('password')}
-            <input
+            <TextInput
               type="password"
               placeholder="Password (confirm)"
               value={this.state.password2}
@@ -209,8 +209,7 @@ var RegistrationView = React.createClass({
               value={this.state.school_zip}
             />
             {this.renderSchoolError('zip_code')}
-            <input
-              type="text"
+            <TextInput
               placeholder="Country"
               value={this._getSchoolCountry()}
               onChange={_handleChange.bind(this, 'school_international')}

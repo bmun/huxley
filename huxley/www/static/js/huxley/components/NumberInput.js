@@ -5,7 +5,8 @@
 
 'use strict';
 
-var React = require('react')
+var React = require('react');
+var TextInput = require('./TextInput');
 
 var NumberInput = React.createClass({
 
@@ -17,18 +18,15 @@ var NumberInput = React.createClass({
 
   render: function() {
     return (
-      <input
-        type="text"
-        placeholder={this.props.placeholder}
+      <TextInput
+        {...this.props}
         onChange={this._handleChange}
-        value={this.props.value}
       />
     );
   },
 
-  _handleChange: function(event) {
-    var value = event.target.value.replace(/[^\d]/, '');
-    this.props.onChange && this.props.onChange(value);
+  _handleChange: function(value) {
+    this.props.onChange && this.props.onChange(value.replace(/[^\d]/, ''));
   },
 });
 

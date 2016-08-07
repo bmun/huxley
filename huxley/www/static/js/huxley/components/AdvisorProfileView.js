@@ -14,6 +14,7 @@ var LogoutButton = require('./LogoutButton');
 var ConferenceContext = require('./ConferenceContext');
 var PhoneInput = require('./PhoneInput');
 var ProgramTypes = require('../constants/ProgramTypes');
+var TextInput = require('./TextInput');
 var User = require('../utils/User');
 var _handleChange = require('../utils/_handleChange');
 
@@ -100,8 +101,7 @@ var AdvisorProfileView = React.createClass({
                 <tr>
                   <td className="fieldLabel">First Name</td>
                   <td className="field">
-                    <input
-                      type="text"
+                    <TextInput
                       value={this.state.first_name}
                       onChange={_handleChange.bind(this, 'first_name')}
                     />
@@ -111,8 +111,7 @@ var AdvisorProfileView = React.createClass({
                 <tr>
                   <td className="fieldLabel">Last Name</td>
                   <td className="field">
-                    <input
-                      type="text"
+                    <TextInput
                       value={this.state.last_name}
                       onChange={_handleChange.bind(this, 'last_name')}
                     />
@@ -131,8 +130,7 @@ var AdvisorProfileView = React.createClass({
                 <tr>
                   <td className="fieldLabel">Address</td>
                   <td className="field">
-                    <input
-                      type="text"
+                    <TextInput
                       value={this.state.school_address}
                       onChange={_handleChange.bind(this, 'school_address')}
                     />
@@ -142,8 +140,7 @@ var AdvisorProfileView = React.createClass({
                 <tr>
                   <td className="fieldLabel">City</td>
                   <td className="field">
-                    <input
-                      type="text"
+                    <TextInput
                       value={this.state.school_city}
                       onChange={_handleChange.bind(this, 'school_city')}
                     />
@@ -153,8 +150,7 @@ var AdvisorProfileView = React.createClass({
                 <tr>
                   <td className="fieldLabel">Zip</td>
                   <td className="field">
-                    <input
-                      type="text"
+                    <TextInput
                       value={this.state.school_zip_code}
                       onChange={_handleChange.bind(this, 'school_zip_code')}
                     />
@@ -226,8 +222,7 @@ var AdvisorProfileView = React.createClass({
                 <tr>
                   <td className="fieldLabel">Name</td>
                   <td className="field">
-                    <input
-                      type="text"
+                    <TextInput
                       value={this.state.primary_name}
                       onChange={_handleChange.bind(this, 'primary_name')}
                     />
@@ -237,8 +232,7 @@ var AdvisorProfileView = React.createClass({
                 <tr>
                   <td className="fieldLabel">Email</td>
                   <td className="field">
-                    <input
-                      type="text"
+                    <TextInput
                       value={this.state.primary_email}
                       onChange={_handleChange.bind(this, 'primary_email')}
                     />
@@ -262,8 +256,7 @@ var AdvisorProfileView = React.createClass({
                 <tr>
                   <td className="fieldLabel">Name</td>
                   <td className="field">
-                    <input
-                      type="text"
+                    <TextInput
                       value={this.state.secondary_name}
                       onChange={_handleChange.bind(this, 'secondary_name')}
                     />
@@ -273,8 +266,7 @@ var AdvisorProfileView = React.createClass({
                 <tr>
                   <td className="fieldLabel">Email</td>
                   <td className="field">
-                    <input
-                      type="text"
+                    <TextInput
                       value={this.state.secondary_email}
                       onChange={_handleChange.bind(this, 'secondary_email')}
                     />

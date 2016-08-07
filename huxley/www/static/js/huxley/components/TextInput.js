@@ -11,17 +11,17 @@ var TextInput = React.createClass({
 
   propTypes: {
     onChange: React.PropTypes.func,
-    value: React.PropTypes.string,
     placeholder: React.PropTypes.string,
+    value: React.PropTypes.string,
+    type: React.PropTypes.oneOf(['text', 'password']),
   },
 
   render: function() {
     return (
       <input
-        type="text"
-        placeholder={this.props.placeholder}
+        {...this.props}
+        type={this.props.type || 'text'}
         onChange={this._handleChange}
-        value={this.props.value}
       />
     );
   },

@@ -6,6 +6,7 @@
 'use strict';
 
 var React = require('react');
+var TextInput = require('./TextInput');
 
 var formatPhone = require('../utils/formatPhone');
 
@@ -28,20 +29,16 @@ var PhoneInput = React.createClass({
 
   render: function() {
     return (
-      <input
-        type="text"
+      <TextInput
+        {...this.props}
         placeholder="Phone Number"
         onChange={this._handleChange}
-        value={this.props.value}
       />
     );
   },
 
-  _handleChange: function(event) {
-    var number = this._formatValue(
-      event.target.value,
-      this.props.isInternational
-    );
+  _handleChange: function(value) {
+    var number = this._formatValue(value, this.props.isInternational);
     this.props.onChange && this.props.onChange(number);
   },
 
