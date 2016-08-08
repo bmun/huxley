@@ -283,7 +283,7 @@ var RegistrationView = React.createClass({
               in many diverse committees.
             </label>
             {this.renderSchoolError('advanced_delegates')}
-            <p>Tentative Total Number of Delegates: {this._handleDelegateSum()}</p>
+            <p className="instructions">Tentative Total Number of Delegates: {this._handleDelegateSum()}</p>
             <hr />
             <h3>Primary Contact</h3>
             {this.renderContactGenderField('primary_gender')}
@@ -356,23 +356,19 @@ var RegistrationView = React.createClass({
             here</a>.</p>
             <ul>
               {this.renderCommittees()}
-              <li>
-                <NumberInput
-                  placeholder="Number of Spanish Speaking Delegates"
-                  onChange={_handleChange.bind(this, 'spanish_speaking_delegates')}
-                  value={this.state.spanish_speaking_delegates}
-                />
-                {this.renderSchoolError('spanish_speaking_delegates')}
-              </li>
-              <li>
-                <NumberInput
-                  placeholder="Number of Chinese Speaking Delegates"
-                  onChange={_handleChange.bind(this, 'chinese_speaking_delegates')}
-                  value={this.state.chinese_speaking_delegates}
-                />
-                {this.renderSchoolError('chinese_speaking_delegates')}
-              </li>
             </ul>
+            <NumberInput
+              placeholder="Number of Spanish Speaking Delegates"
+              onChange={_handleChange.bind(this, 'spanish_speaking_delegates')}
+              value={this.state.spanish_speaking_delegates}
+            />
+            {this.renderSchoolError('spanish_speaking_delegates')}
+            <NumberInput
+              placeholder="Number of Chinese Speaking Delegates"
+              onChange={_handleChange.bind(this, 'chinese_speaking_delegates')}
+              value={this.state.chinese_speaking_delegates}
+            />
+            {this.renderSchoolError('chinese_speaking_delegates')}
             <hr />
             <h3>Comments</h3>
             <p className="instructions">If there are any further details you
@@ -380,6 +376,7 @@ var RegistrationView = React.createClass({
             general feedback about the registration process, please comment
             below.</p>
             <textarea
+              className="text-input"
               cols="40"
               rows="7"
               onChange={_handleChange.bind(this, 'registration_comments')}
@@ -449,49 +446,51 @@ var RegistrationView = React.createClass({
 
   renderContactGenderField: function(name) {
     return (
-      <div className="contact-select">
-        <select value={this.state[name]} onChange={_handleChange.bind(this, name)}>
-          <option
-            key={GenderConstants.UNSPECFIED}
-            value={GenderConstants.UNSPECFIED}>
-            Unspecified
-          </option>
-          <option
-            key={GenderConstants.MALE}
-            value={GenderConstants.MALE}>
-            Mr.
-          </option>
-          <option
-            key={GenderConstants.FEMALE}
-            value={GenderConstants.FEMALE}>
-            Mrs./Ms.
-          </option>
-          <option
-            key={GenderConstants.OTHER}
-            value={GenderConstants.OTHER}>
-            Other
-          </option>
-        </select>
-      </div>
+      <select
+        className="contact-select"
+        onChange={_handleChange.bind(this, name)}
+        value={this.state[name]}>
+        <option
+          key={GenderConstants.UNSPECFIED}
+          value={GenderConstants.UNSPECFIED}>
+          Unspecified
+        </option>
+        <option
+          key={GenderConstants.MALE}
+          value={GenderConstants.MALE}>
+          Mr.
+        </option>
+        <option
+          key={GenderConstants.FEMALE}
+          value={GenderConstants.FEMALE}>
+          Mrs./Ms.
+        </option>
+        <option
+          key={GenderConstants.OTHER}
+          value={GenderConstants.OTHER}>
+          Other
+        </option>
+      </select>
     );
   },
 
   renderContactTypeField: function(name) {
     return (
-      <div className="contact-select">
-        <select value={this.state[name]} onChange={_handleChange.bind(this, name)}>
-          <option
-            key={ContactTypes.STUDENT}
-            value={ContactTypes.STUDENT}>
-            Student
-          </option>
-          <option
-            key={ContactTypes.FACULTY}
-            value={ContactTypes.FACULTY}>
-            Faculty
-          </option>
-        </select>
-      </div>
+      <select
+        className="contact-select"
+        onChange={_handleChange.bind(this, name)}
+        value={this.state[name]}>
+        <option
+          key={ContactTypes.STUDENT}
+          value={ContactTypes.STUDENT}>
+          Student
+        </option>
+        <option
+          key={ContactTypes.FACULTY}
+          value={ContactTypes.FACULTY}>
+          Faculty
+        </option>
+      </select>
     );
   },
 

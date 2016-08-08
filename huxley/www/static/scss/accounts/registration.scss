@@ -1,8 +1,8 @@
-/* Registration Form */
-
 #registration
 {
-    .text-input + .text-input
+    .text-input + .text-input,
+    select + .text-input,
+    .text-input + select
     {
         margin-top: 15px;
     }
@@ -17,7 +17,10 @@
         font-size: 12px;
     }
 
-    input[type=radio], input[type=checkbox] { margin-right: 3px; }
+    input[type=radio], input[type=checkbox]
+    {
+        margin-right: 5px;
+    }
 
     select
     {
@@ -28,10 +31,9 @@
         margin-left: 3px;
     }
 
-    .contact-select select
+    .contact-select
     {
-        margin-top: 15px;
-        width:300px;
+        width: 100%;
         margin-left: 0px;
     }
 
@@ -43,11 +45,15 @@
         line-height: 1.4;
         padding: 3px 5px 0;
 
-        & + .text-input
+        & + .text-input,
+        & + .instructions
         {
             margin-top: 15px;
         }
     }
 
-    .instructions { font-weight: bold; }
+    .instructions
+    {
+        font-weight: 600;
+    }
 }
