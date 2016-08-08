@@ -105,9 +105,12 @@ class TestCountries():
 class TestDelegates():
     @staticmethod
     def new_delegate(**kwargs):
-        a = TestAssignments.new_assignment()
+        a = kwargs.pop('assignment', None) or TestAssignments.new_assignment()
+        s = kwargs.pop('school', None) or a.school or TestSchools.new_school()
+
         c = Delegate(
-                assignment=kwargs.pop('assignment', a),
+                assignment=a,
+                school=s,
                 name=kwargs.pop('name', 'Nate Parke'),
                 email=kwargs.pop('email', 'nate@earthlink.gov'),
                 summary=kwargs.pop('summary', 'He did well!'),)
@@ -117,15 +120,15 @@ class TestDelegates():
 class TestAssignments():
     @staticmethod
     def new_assignment(**kwargs):
-        test_committee = TestCommittees.new_committee()
-        test_school = TestSchools.new_school()
-        test_country = TestCountries.new_country()
+        test_committee = kwargs.pop('committee', None) or TestCommittees.new_committee()
+        test_school = kwargs.pop('school', None) or TestSchools.new_school()
+        test_country = kwargs.pop('country', None) or TestCountries.new_country()
 
         a = Assignment(
-                committee=kwargs.pop('committee', test_committee),
-                school=kwargs.pop('school', test_school),
-                country=kwargs.pop('country', test_country),
-                rejected=kwargs.pop('rejected', False))
+                committee=test_committee,
+                school=test_school,
+                country=test_country,
+                rejected=kwargs.pop('rejected', False),)
         a.save()
         return a
 

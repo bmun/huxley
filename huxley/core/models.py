@@ -7,6 +7,7 @@ import requests
 from decimal import Decimal
 
 from django.conf import settings
+from django.core.exceptions import ValidationError
 from django.core.mail import send_mail
 from django.db import models, transaction
 from django.db.models.signals import post_save, pre_save
@@ -355,11 +356,12 @@ class CountryPreference(models.Model):
 
 
 class Delegate(models.Model):
-    assignment    = models.ForeignKey(Assignment, related_name='delegates')
-    name          = models.CharField(max_length=64, blank=True)
-    email         = models.EmailField(blank=True)
+    school        = models.ForeignKey(School, related_name='delegates', null=True)
+    assignment    = models.ForeignKey(Assignment, related_name='delegates', blank=True, null=True)
+    name          = models.CharField(max_length=64)
+    email         = models.EmailField(blank=True, null=True)
     created_at    = models.DateTimeField(auto_now_add=True)
-    summary       = models.TextField(default='', null=True)
+    summary       = models.TextField(default='', blank=True, null=True)
 
     def __unicode__(self):
         return self.name
@@ -372,10 +374,12 @@ class Delegate(models.Model):
     def committee(self):
         return self.assignment.committee
 
-    @property
-    def school(self):
-        return self.assignment.school
+    def save(self, *args, **kwargs):
+        if (self.assignment_id and self.school_id and self.school_id != self.assignment.school_id):
+            raise ValidationError('Delegate school and delegate assignment school do not match.')
+
+        super(Delegate, self).save(*args, **kwargs)
 
     class Meta:
         db_table = u'delegate'
-        ordering = ['assignment__country']
+        ordering = ['school']
