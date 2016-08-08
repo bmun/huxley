@@ -2,12 +2,12 @@
 
 #registration
 {
-    input[type=text], input[type=password], textarea
+    .text-input + .text-input
     {
         margin-top: 15px;
     }
 
-    input[type=text], input[type=password]
+    .text-input
     {
         font-size: 14px;
     }
@@ -43,9 +43,9 @@
         line-height: 1.4;
         padding: 3px 5px 0;
 
-        & + input[type=text], & + input[type=password]
+        & + .text-input
         {
-            margin-top: 11px;
+            margin-top: 15px;
         }
     }
 

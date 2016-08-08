@@ -31,11 +31,11 @@ var TopBar = React.createClass({
 
     return (
       <div>
-        <div className="top-bar-wrapper transparent">
+        <div className="top-bar-wrapper">
           <div className="top-bar">
             <ul className="right">
               <li className="white">
-                {user.first_name} {user.last_name}
+                {`${user.first_name} ${user.last_name}`}
               </li>
               <li>
                 <a

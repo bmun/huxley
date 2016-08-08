@@ -61,32 +61,28 @@ var AdvisorProfileView = React.createClass({
     var invoiceUrl = '/api/schools/' + school.id + '/invoice/';
     return (
       <InnerView>
-        <h2>Welcome, {user.first_name}!</h2>
+        <h2>Profile</h2>
         <p>
-          We are very excited to see {school.name} at BMUN {conference.session} this year! Here,
+          Welcome, {user.first_name}! We are very excited to see {school.name} at BMUN {conference.session} this year! Here,
           you can view and edit your registration information for the conference. Please
           note that fees are currently <strong>estimates</strong> based on the
           approximate delegation size given during registration.
         </p>
-        <br />
         <p>
-          Advisors, if you wish to generate an invoice for your school with your
+          If you wish to generate an invoice for your school with your
           payment details, please click on the Generate Your Invoice button under
           the Fees tab. You will receive an invoice in your email within 2 business
           days.
         </p>
-        <br />
         <p><strong>Remember to save!</strong></p>
-        <br />
         <p><strong>Important Note:</strong> Please mail all checks to <strong>
-        P.O. Box 4306 Berkeley, CA 94704-0306. If you have any other further
+        P.O. Box 4306 Berkeley, CA 94704-0306.</strong> If you have any other further
         questions contact me at <a href="mailto:info@bmun.org">
         info@bmun.org</a> and I will respond to all requests efficiently.
-        See you soon!</strong></p>
-        <br />
+        See you soon!</p>
         <p><strong>{conference.external}
         <br />
-        Under-Secretary General of External Relations, {conference.session}th Session.</strong></p>
+        <em>Under-Secretary General of External Relations, {conference.session}th Session</em></strong></p>
         <form onSubmit={this._handleSubmit}>
           <div className="table-container">
             <table>

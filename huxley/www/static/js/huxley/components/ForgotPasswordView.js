@@ -12,6 +12,7 @@ var ReactRouter = require('react-router');
 var Button = require('./Button');
 var NavLink = require('./NavLink');
 var OuterView = require('./OuterView');
+var TextInput = require('./TextInput');
 
 require('jquery-ui/effect-shake');
 
@@ -43,9 +44,7 @@ var ForgotPasswordView = React.createClass({
           id="password-reset"
           onSubmit={this._handleSubmit}>
           <div className="login-fields">
-            <input
-              className="text empty"
-              type="text"
+            <TextInput
               placeholder="Username or Email"
               value={this.state.username}
               onChange={this._handleUsernameChange}
@@ -76,8 +75,8 @@ var ForgotPasswordView = React.createClass({
     }
   },
 
-  _handleUsernameChange: function(event) {
-    this.setState({username: event.target.value});
+  _handleUsernameChange: function(username) {
+    this.setState({username});
   },
 
   _handleSubmit: function(event) {

@@ -15,13 +15,6 @@
     text-shadow: 0px 1px #fff;
     border-top: 1px solid #fff;
 
-    /* Force image to be downloaded, but make it invisible. */
-    background-image: url(/static/img/loading.gif);
-    background-position: -9999px -9999px;
-    background-repeat: no-repeat;
-
-    &.loading { background-position: center 30px; }
-
     &.transparent
     {
         -moz-opacity: 0.875; /* Netscape? */
@@ -29,17 +22,37 @@
         opacity: 0.875; /* Not shitty browsers */
     }
 
+    a
+    {
+        font-weight: 600;
+        color: #333;
+
+        &[href^="mailto:"]
+        {
+            color: #39f;
+        }
+    }
+
+    p
+    {
+        font-smooth:always;
+        margin-bottom: 10px;
+        text-rendering: optimizeLegibility;
+    }
+
     h1
     {
         font-size: 24px;
         font-weight: 300;
         line-height: 26px;
+        margin-bottom: 10px;
     }
 
     h2
     {
         font-size: 20px;
         font-weight: 400;
+        margin-bottom: 10px;
     }
 
     h3
@@ -47,12 +60,20 @@
         font-size: 16px;
         font-weight: 400;
         padding-left: 2px;
+        margin-bottom: 10px;
     }
 
     img
     {
         margin-bottom: -1px;
         padding: 0px 2px;
+    }
+
+    .help-text
+    {
+        margin: 0 5px;
+        font-style: italic;
+        color: #a0a0a0;
     }
 }
 
@@ -63,10 +84,6 @@
 
     p
     {
-        margin: 10px 0 10px;
-        text-rendering: optimizeLegibility;
-        font-smooth:always;
-
         &.address { margin-left: 50px; }
     }
 
@@ -79,13 +96,6 @@
     }
 
     label.error { display: block; }
-
-    .help-text
-    {
-        margin: 0 5px;
-        font-style: italic;
-        color: #a0a0a0;
-    }
 
     .logo
     {
@@ -120,12 +130,6 @@ only screen and (        min-device-pixel-ratio: 2),
 only screen and (                min-resolution: 192dpi),
 only screen and (                min-resolution: 2dppx)
 {
-    .content
-    {
-        background-image: url(/static/img/loading-2x.gif);
-        background-size: 24px 24px;
-    }
-
     .content-outer
     {
         .logo
