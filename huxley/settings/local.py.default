@@ -35,5 +35,5 @@ DEFAULT_FROM_EMAIL = 'default_from_email'   # Default email for the From: field.
 SERVER_EMAIL = 'server_email'               # Inbox on the server.
 
 if not DEBUG:
-    from .pipeline import PIPELINE_BROWSERIFY_BINARY
-    PIPELINE_BROWSERIFY_BINARY = 'NODE_ENV=production ' + PIPELINE_BROWSERIFY_BINARY
+    from .pipeline import PIPELINE
+    PIPELINE['BROWSERIFY_BINARY'] = 'NODE_ENV=production ' + PIPELINE['BROWSERIFY_BINARY']
