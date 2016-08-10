@@ -6,6 +6,8 @@ from os.path import abspath, dirname, join
 from fabric.api import abort, env, local, settings, task
 from fabric.contrib.console import confirm
 
+from yapf.yapf_api import FormatFile
+
 from . import dependencies, migrations, pr, test
 from .utils import git, ui
 

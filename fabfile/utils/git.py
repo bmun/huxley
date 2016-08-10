@@ -56,6 +56,12 @@ def hub_installed():
         return local('hub').return_code != 127
 
 
+def diff_name_only(remote='upstream', branch='master'):
+    with hide('running'):
+        diff_list = local('git diff --name-only %s/%s...HEAD' % (remote, branch), capture=True)
+    return diff_list
+
+
 @master_guard
 def push(branch_name=None):
     branch_name = branch_name or current_branch()
