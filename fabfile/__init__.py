@@ -6,7 +6,7 @@ from os.path import abspath, dirname, join
 from fabric.api import abort, env, local, settings, task
 from fabric.contrib.console import confirm
 
-from yapf.yapf_api import FormatFile
+from yapf.yapflib.yapf_api import FormatFile
 
 from . import dependencies, migrations, pr, test
 from .utils import git, ui
@@ -36,6 +36,23 @@ def update():
     local('git clean -xf *.css')
     dependencies.check()
     migrations.check()
+
+
+@task
+def format():
+    '''Format python files committed on the current feature branch'''
+    diff_list = git.diff_name_only()
+    py_diff_list = [pyfile for pyfile in diff_list if pyfile[-3:] == '.py']
+
+    if confirm('Review formatting changes?'):
+        for pyfile in py_diff_list:
+            print(yapf.FormatFile(pyfile))
+            if ui.confirm('Accept changes to %s?' % pyfile):
+                yapf.FormatFile(pyfile, in_place=True)
+    else:
+        for pyfile in py_diff_list:
+            yapf.FormatFile(pyfile, in_place=True)
+    ui.info('Formatting complete')
 
 
 @task
