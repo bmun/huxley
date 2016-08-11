@@ -40,7 +40,7 @@ def update():
 
 @task
 def format():
-    '''Format python files committed on the current feature branch'''
+    '''Format and commit python files committed on the current feature branch'''
     diff_list = git.diff_name_only()
     py_diff_list = [pyfile for pyfile in diff_list if pyfile[-3:] == '.py']
 
@@ -55,6 +55,7 @@ def format():
         for pyfile in py_diff_list:
             FormatFile(pyfile, in_place=True)
     ui.info('Formatting complete')
+
     with hide('running'):
         local('git add --all')
         local('git commit -m "Ran autoformatter"')
