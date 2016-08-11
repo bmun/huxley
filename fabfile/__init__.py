@@ -11,7 +11,6 @@ from yapf.yapflib.yapf_api import FormatFile
 from . import dependencies, migrations, pr, test
 from .utils import git, ui
 
-
 env.huxley_root = abspath(dirname(dirname(__file__)))
 env.js_root = join(env.huxley_root, 'huxley/www/static/js')
 
@@ -24,7 +23,8 @@ def feature(branch_name=None):
         dependencies.check()
         migrations.check()
     else:
-        print ui.error('No branch name given. Usage: fab feature:<branch_name>')
+        print ui.error(
+            'No branch name given. Usage: fab feature:<branch_name>')
 
 
 @task
@@ -55,6 +55,9 @@ def format():
         for pyfile in py_diff_list:
             FormatFile(pyfile, in_place=True)
     ui.info('Formatting complete')
+    local('git add fabfile/__init__.py')
+    local('git add fabfile/utils/git.py')
+    local('git commit -m "Ran autoformatter"')
 
 
 @task
@@ -83,20 +86,23 @@ def submit(remote='origin', skip_tests=False):
         local('hub pull-request -b bmun:master -h %s -f' % current_branch)
         print ui.success('Pull request successfully issued.')
     else:
-        print ui.success('Branch successfully pushed. Go to GitHub to issue a pull request.')
+        print ui.success(
+            'Branch successfully pushed. Go to GitHub to issue a pull request.')
 
 
 @task
 def finish(branch_name=None, remote='origin'):
     '''Delete the current feature branch.'''
-    prompt = ui.warning('This will delete your local and remote topic branches. '
-                        'Make sure your pull request has been merged or closed. '
-                        'Are you sure you want to finish this branch?')
+    prompt = ui.warning(
+        'This will delete your local and remote topic branches. '
+        'Make sure your pull request has been merged or closed. '
+        'Are you sure you want to finish this branch?')
     if not confirm(prompt):
         abort('Branch deletion canceled.')
 
-    print ui.success('Branch %s successfully cleaned up.' % git.cleanup(branch_name,
-                                                                   remote))
+    print ui.success('Branch %s successfully cleaned up.' %
+                     git.cleanup(branch_name, remote))
+
 
 try:
     from deploy import deploy, restart

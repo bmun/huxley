@@ -12,6 +12,7 @@ def master_guard(fn):
                       'You probably don\'t want to do this. Aborting.')
             return
         fn(*args, **kwargs)
+
     return guarded_fn
 
 
@@ -28,14 +29,17 @@ def current_branch():
 def remote_branch_exists(branch_name=None, remote='upstream'):
     branch_name = branch_name or current_branch()
     with hide('running'):
-        heads_list = local('git ls-remote --heads %s' % remote, capture=True).split('\n')
+        heads_list = local(
+            'git ls-remote --heads %s' % remote, capture=True).split('\n')
     full_name = 'refs/heads/%s' % branch_name
     return any(full_name in head for head in heads_list)
 
 
 def commits_ahead(remote='upstream', branch='master'):
     with hide('running'):
-        commit_list = local('git rev-list --left-right %s/%s...HEAD' % (remote, branch), capture=True)
+        commit_list = local(
+            'git rev-list --left-right %s/%s...HEAD' % (remote, branch),
+            capture=True)
     return len(commit_list.split('\n'))
 
 
@@ -52,13 +56,16 @@ def pull(remote='upstream', rebase=True):
 
 
 def hub_installed():
-    with hide('running', 'warnings', 'stdout', 'stderr'), settings(warn_only=True):
+    with hide('running', 'warnings', 'stdout', 'stderr'), settings(
+            warn_only=True):
         return local('hub').return_code != 127
 
 
 def diff_name_only(remote='upstream', branch='master'):
     with hide('running'):
-        diff_list = local('git diff --name-only %s/%s...HEAD' % (remote, branch), capture=True)
+        diff_list = local(
+            'git diff --name-only %s/%s...HEAD' % (remote, branch),
+            capture=True)
     return diff_list.split('\n')
 
 
