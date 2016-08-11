@@ -46,7 +46,7 @@ def format():
 
     if confirm('Review formatting changes?'):
         for pyfile in py_diff_list:
-            for line in FormatFile(pyfile, print_diff=True, style_config='fabfile/setup.cfg'):
+            for line in FormatFile(pyfile, print_diff=True):
                 print(line)
             if confirm('Accept changes to %s?' % pyfile):
                 FormatFile(pyfile, in_place=True)
