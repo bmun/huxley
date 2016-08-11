@@ -55,8 +55,7 @@ def format():
         for pyfile in py_diff_list:
             FormatFile(pyfile, in_place=True)
     ui.info('Formatting complete')
-    local('git add fabfile/__init__.py')
-    local('git add fabfile/utils/git.py')
+    local('git add --all')
     local('git commit -m "Ran autoformatter"')
 
 
