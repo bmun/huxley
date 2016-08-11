@@ -45,10 +45,11 @@ def format():
     py_diff_list = [pyfile for pyfile in diff_list if pyfile.endswith('.py')]
 
     if confirm('Review formatting changes? (Select no to approve all)'):
+
         for pyfile in py_diff_list:
             print('\n')
             for line in FormatFile(pyfile, print_diff=True):
-                print(line)
+                print(line+'*')
             if confirm('Accept changes to %s?' % pyfile):
                 FormatFile(pyfile, in_place=True)
     else:
@@ -64,30 +65,30 @@ def format():
 def submit(remote='origin', skip_tests=False):
     '''Push the current feature branch and create/update pull request.'''
     format()
-    # if not skip_tests:
-    #     with settings(warn_only=True):
-    #         if not test.run():
-    #             if confirm(ui.warning('Tests failed. Continue anyway?')):
-    #                 print ui.warning('Ignoring failed tests. Be careful.')
-    #             else:
-    #                 print ui.error('Terminating due to failed tests.')
-    #                 return
-    #         else:
-    #             print ui.success('Tests OK!')
+    if not skip_tests:
+        with settings(warn_only=True):
+            if not test.run():
+                if confirm(ui.warning('Tests failed. Continue anyway?')):
+                    print ui.warning('Ignoring failed tests. Be careful.')
+                else:
+                    print ui.error('Terminating due to failed tests.')
+                    return
+            else:
+                print ui.success('Tests OK!')
 
-    # first_submission = not git.remote_branch_exists(remote=remote)
-    # git.pull()
-    # git.push()
+    first_submission = not git.remote_branch_exists(remote=remote)
+    git.pull()
+    git.push()
 
-    # if not first_submission:
-    #     print ui.success('Pull request sucessfully updated.')
-    # elif git.hub_installed():
-    #     current_branch = git.current_branch()
-    #     local('hub pull-request -b bmun:master -h %s -f' % current_branch)
-    #     print ui.success('Pull request successfully issued.')
-    # else:
-    #     print ui.success(
-    #         'Branch successfully pushed. Go to GitHub to issue a pull request.')
+    if not first_submission:
+        print ui.success('Pull request sucessfully updated.')
+    elif git.hub_installed():
+        current_branch = git.current_branch()
+        local('hub pull-request -b bmun:master -h %s -f' % current_branch)
+        print ui.success('Pull request successfully issued.')
+    else:
+        print ui.success(
+            'Branch successfully pushed. Go to GitHub to issue a pull request.')
 
 
 @task
