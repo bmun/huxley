@@ -47,9 +47,9 @@ def format():
     if confirm('Review formatting changes? (Select no to approve all)'):
 
         for pyfile in py_diff_list:
+
             print('\n')
-            for line in FormatFile(pyfile, print_diff=True):
-                print(line+'*')
+            print(FormatFile(pyfile, print_diff=True)[0])
             if confirm('Accept changes to %s?' % pyfile):
                 FormatFile(pyfile, in_place=True)
     else:
