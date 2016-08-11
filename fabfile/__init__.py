@@ -3,7 +3,7 @@
 
 from os.path import abspath, dirname, join
 
-from fabric.api import abort, env, execute, local, settings, task
+from fabric.api import abort, hide, env, execute, local, settings, task
 from fabric.contrib.console import confirm
 
 from yapf.yapflib.yapf_api import FormatFile
@@ -55,8 +55,9 @@ def format():
         for pyfile in py_diff_list:
             FormatFile(pyfile, in_place=True)
     ui.info('Formatting complete')
-    local('git add --all')
-    local('git commit -m "Ran autoformatter"')
+    with hide('running'):
+        local('git add --all')
+        local('git commit -m "Ran autoformatter"')
 
 
 @task
