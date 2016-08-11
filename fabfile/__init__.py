@@ -54,9 +54,9 @@ def format():
     else:
         for pyfile in py_diff_list:
             FormatFile(pyfile, in_place=True)
-    ui.info('Formatting complete')
+    print ui.info('Formatting complete')
 
-    with hide('running'):
+    if len(local('git status --porcelain', capture=True)) > 0:
         local('git add --all')
         local('git commit -m "Ran autoformatter"')
 
