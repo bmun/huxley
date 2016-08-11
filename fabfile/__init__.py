@@ -3,7 +3,7 @@
 
 from os.path import abspath, dirname, join
 
-from fabric.api import abort, env, local, settings, task
+from fabric.api import abort, env, execute, local, settings, task
 from fabric.contrib.console import confirm
 
 from yapf.yapflib.yapf_api import FormatFile
@@ -46,18 +46,20 @@ def format():
 
     if confirm('Review formatting changes?'):
         for pyfile in py_diff_list:
-            print(yapf.FormatFile(pyfile))
-            if ui.confirm('Accept changes to %s?' % pyfile):
-                yapf.FormatFile(pyfile, in_place=True)
+            for line in FormatFile(pyfile, print_diff=True, style_config='fabfile/setup.cfg'):
+                print(line)
+            if confirm('Accept changes to %s?' % pyfile):
+                FormatFile(pyfile, in_place=True)
     else:
         for pyfile in py_diff_list:
-            yapf.FormatFile(pyfile, in_place=True)
+            FormatFile(pyfile, in_place=True)
     ui.info('Formatting complete')
 
 
 @task
 def submit(remote='origin', skip_tests=False):
     '''Push the current feature branch and create/update pull request.'''
+    execute(format)
     if not skip_tests:
         with settings(warn_only=True):
             if not test.run():
@@ -70,17 +72,17 @@ def submit(remote='origin', skip_tests=False):
                 print ui.success('Tests OK!')
 
     first_submission = not git.remote_branch_exists(remote=remote)
-    git.pull()
-    git.push()
+    # git.pull()
+    # git.push()
 
-    if not first_submission:
-        print ui.success('Pull request sucessfully updated.')
-    elif git.hub_installed():
-        current_branch = git.current_branch()
-        local('hub pull-request -b bmun:master -h %s -f' % current_branch)
-        print ui.success('Pull request successfully issued.')
-    else:
-        print ui.success('Branch successfully pushed. Go to GitHub to issue a pull request.')
+    # if not first_submission:
+    #     print ui.success('Pull request sucessfully updated.')
+    # elif git.hub_installed():
+    #     current_branch = git.current_branch()
+    #     local('hub pull-request -b bmun:master -h %s -f' % current_branch)
+    #     print ui.success('Pull request successfully issued.')
+    # else:
+    #     print ui.success('Branch successfully pushed. Go to GitHub to issue a pull request.')
 
 
 @task
