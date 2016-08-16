@@ -7,7 +7,6 @@ from os.path import dirname
 
 from django.conf import settings
 from pipeline.compilers import SubProcessCompiler
-from pipeline_browserify.compiler import BrowserifyCompiler as BrowserifyCompilerBase
 
 
 class PySCSSCompiler(SubProcessCompiler):
@@ -24,16 +23,3 @@ class PySCSSCompiler(SubProcessCompiler):
             outfile,
         )
         return self.execute_command(command, cwd=dirname(infile))
-
-
-class BrowserifyCompiler(BrowserifyCompilerBase):
-    '''Always recompile the entire JS codebase by setting `force` to True.
-    This is because BrowserifyCompiler only takes the root file, and if
-    it hasn't changed, it won't recompile anything.'''
-
-    def compile_file(self, infile, outfile, outdated=False, force=False):
-        return super(BrowserifyCompiler, self).compile_file(
-            infile,
-            outfile,
-            outdated,
-            True)

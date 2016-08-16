@@ -1,4 +1,4 @@
-# Copyright (c) 2011-2013 Berkeley Model United Nations. All rights reserved.
+# Copyright (c) 2011-2016 Berkeley Model United Nations. All rights reserved.
 # Use of this source code is governed by a BSD License (see LICENSE).
 
 # These are the settings that will be different for your production deployment.
@@ -33,7 +33,3 @@ EMAIL_HOST_USER = 'email_host_user'         # Username for the mail server.
 EMAIL_HOST_PASSWORD = 'email_host_password' # Password
 DEFAULT_FROM_EMAIL = 'default_from_email'   # Default email for the From: field.
 SERVER_EMAIL = 'server_email'               # Inbox on the server.
-
-if not DEBUG:
-    from .pipeline import PIPELINE
-    PIPELINE['BROWSERIFY_BINARY'] = 'NODE_ENV=production ' + PIPELINE['BROWSERIFY_BINARY']
