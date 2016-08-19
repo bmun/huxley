@@ -1,7 +1,7 @@
 # Copyright (c) 2011-2015 Berkeley Model United Nations. All rights reserved.
 # Use of this source code is governed by a BSD License (see LICENSE).
 
-import json, logging
+import json, logging, sys, traceback
 
 from django.core.mail.backends import dummy, smtp
 from django.db import transaction
@@ -24,7 +24,7 @@ class LoggingEmailBackend(smtp.EmailBackend):
                 log_email(email)
 
                 try:
-                    return super(LoggingEmailBackend, self)._send(email)
+                    return super(LoggingEmailBackend, self).send_messages([email])
                 except SMTPException:
                     logger = logging.getLogger('huxley.api')
                     exc_type, exc_value, exc_traceback = sys.exc_info()
