@@ -583,12 +583,12 @@ var RegistrationView = React.createClass({
     this.setState({secondary_phone: number});
   },
 
-  _handlePasswordChange: function(event) {
-    this.setState({password: event.target.value});
+  _handlePasswordChange: function(password) {
+    this.setState({password});
   },
 
-  _handlePasswordConfirmChange: function(event) {
-    this.setState({password2: event.target.value});
+  _handlePasswordConfirmChange: function(password2) {
+    this.setState({password2});
   },
 
   _getSchoolCountry: function() {
