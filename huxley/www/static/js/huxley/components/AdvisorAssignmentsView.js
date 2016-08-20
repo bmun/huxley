@@ -81,9 +81,10 @@ var AdvisorAssignmentsView = React.createClass({
         <p>
           Here you can view your tentative assignments for BMUN {conference.session}. If you
           would like to request more slots, please email <a href="mailto:info@bmun.org">
-          info@bmun.org</a>. In the coming months
-          we will ask that you finalize your assignment roster and input the
-          names of your delegates.
+          info@bmun.org</a>. The assignment finalization deadline is January 23rd.
+          After assignment finalization we will ask that you assign the
+          delegates you have added in the delegates tab to the assignments
+          given to you.
         </p>
         <form>
           <div className="table-container">
@@ -222,7 +223,7 @@ var AdvisorAssignmentsView = React.createClass({
   },
 
   _handleFinalize: function(event) {
-    var confirm = window.confirm("By pressing okay you are committing to the financial responsibility of each assingment. Are you sure you want to finalize assignments?");
+    var confirm = window.confirm("By pressing okay you are committing to the financial responsibility of each assignment. Are you sure you want to finalize assignments?");
     var school = CurrentUserStore.getCurrentUser().school;
     if (confirm) {
       this.setState({loading: true});
