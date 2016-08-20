@@ -34,7 +34,7 @@ var RegistrationSuccessView = React.createClass({
           </ul>
           <h3>Delegate Registration Fee</h3>
           <ul>
-            <li>${conference.delegate_fee}</li>
+            <li>${conference.delegate_fee} (per delegate)</li>
           </ul>
           <h3>Payment Instructions</h3>
           <p>

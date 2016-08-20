@@ -66,13 +66,14 @@ var AdvisorProfileView = React.createClass({
           Welcome, {user.first_name}! We are very excited to see {school.name} at BMUN {conference.session} this year! Here,
           you can view and edit your registration information for the conference. Please
           note that fees are currently <strong>estimates</strong> based on the
-          approximate delegation size given during registration.
+          approximate delegation size given during registration. You can find
+          more information on our
+          fees <a href="http://www.bmun.org/conference-fees/" target="_blank">here</a>.
         </p>
         <p>
           If you wish to generate an invoice for your school with your
           payment details, please click on the Generate Your Invoice button under
-          the Fees tab. You will receive an invoice in your email within 2 business
-          days.
+          the Fees tab. You will receive an invoice in your email.
         </p>
         <p><strong>Remember to save!</strong></p>
         <p><strong>Important Note:</strong> Please mail all checks to <strong>

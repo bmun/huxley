@@ -332,7 +332,8 @@ var RegistrationView = React.createClass({
             <h3>Country Preferences</h3>
             <p className="instructions">Please choose 10 United Nations Member States or
             Observers your school would like to represent. A reference list of
-            countries and their relation to committees is available online.
+            countries and their relation to committees is
+            available <a href="http://www.un.org/en/member-states/" target="_blank">online</a>.
             Please diversify your selection.</p>
             <ul>
               {this.renderCountryDropdown('01', 'country_pref1')}
@@ -350,9 +351,9 @@ var RegistrationView = React.createClass({
             <h3>Special Committee Preferences</h3>
             <p className="instructions">Would your delegation be interested in
             being represented in the following small/specialized committees?
-            Positions are limited and we may not be able to accomodate all
+            Positions are limited and we may not be able to accommodate all
             preferences. You can find a reference to our
-            committees <a href="http://bmun.org/Committees.php" target="_blank">
+            committees <a href="http://www.bmun.org/committees" target="_blank">
             here</a>.</p>
             <ul>
               {this.renderCommittees()}
