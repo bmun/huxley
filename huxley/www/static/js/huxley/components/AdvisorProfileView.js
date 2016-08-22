@@ -77,8 +77,10 @@ var AdvisorProfileView = React.createClass({
         </p>
         <p><strong>Remember to save!</strong></p>
         <p><strong>Important Note:</strong> Please mail all checks to <strong>
-        P.O. Box 4306 Berkeley, CA 94704-0306.</strong> If you have any other further
-        questions contact me at <a href="mailto:info@bmun.org">
+        P.O. Box 4306 Berkeley, CA 94704-0306</strong> or, if online paying via
+        credit card, please email <a href="mailto:info@bmun.org">
+        info@bmun.org</a> to access the online payment portal. If you have any
+        other further questions contact me at <a href="mailto:info@bmun.org">
         info@bmun.org</a> and I will respond to all requests efficiently.
         See you soon!</p>
         <p><strong>{conference.external}

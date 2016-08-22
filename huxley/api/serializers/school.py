@@ -78,6 +78,7 @@ class SchoolSerializer(serializers.ModelSerializer):
         international = data.get('international')
         primary_phone = data.get('primary_phone')
         secondary_phone = data.get('secondary_phone')
+        school_zip = data.get('zip_code')
         beginner_delegates = data.get('beginner_delegates')
         intermediate_delegates = data.get('intermediate_delegates')
         advanced_delegates = data.get('advanced_delegates')
@@ -95,6 +96,10 @@ class SchoolSerializer(serializers.ModelSerializer):
             else:
                 validators.phone_domestic(phone)
 
+        def validate_zip_code(school_zip, international):
+            if not international:
+                validators.numeric(school_zip)
+
         if primary_phone:
             try:
                 validate_phone(primary_phone, international)
@@ -105,6 +110,12 @@ class SchoolSerializer(serializers.ModelSerializer):
                 validate_phone(secondary_phone, international)
             except serializers.ValidationError:
                 invalid_fields['secondary_phone'] = 'This is an invalid phone number.'
+
+        if school_zip:
+            try:
+                validate_zip_code(school_zip, international)
+            except serializers.ValidationError:
+                invalid_fields['zip_code'] = 'This field can only contain numbers and spaces.'
 
         if spanish_speaking_delegates > total_delegates:
             invalid_fields['spanish_speaking_delegates'] = 'Cannot exceed total number of delegates.'
@@ -153,13 +164,6 @@ class SchoolSerializer(serializers.ModelSerializer):
         school_city = value
 
         validators.name(school_city)
-
-        return value
-
-    def validate_zip_code(self, value):
-        school_zip = value
-
-        validators.numeric(school_zip)
 
         return value
 
