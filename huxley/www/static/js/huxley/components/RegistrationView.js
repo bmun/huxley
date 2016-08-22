@@ -212,7 +212,7 @@ var RegistrationView = React.createClass({
             <TextInput
               placeholder="Country"
               value={this._getSchoolCountry()}
-              onChange={_handleChange.bind(this, 'school_international')}
+              onChange={_handleChange.bind(this, 'school_country')}
               disabled={!this.state.school_international}
             />
             {this.renderSchoolError('country')}
