@@ -4,3 +4,4 @@
  */
 
  // Add any test framework setup here, like the Babel polyfill, etc.
+ require('core-js/es6');

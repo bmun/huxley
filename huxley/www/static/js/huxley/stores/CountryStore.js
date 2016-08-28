@@ -6,7 +6,6 @@
 'use strict';
 
 var $ = require('jquery');
-var Promise = require('es6-promise').Promise;
 var Dispatcher = require('../dispatcher/Dispatcher');
 var {Store} = require('flux/utils');
 
