@@ -29,6 +29,10 @@
       "<rootDir>/node_modules/react",
       "<rootDir>/node_modules/es6-promise"
     ],
+    "moduleDirectories": [
+      "node_modules",
+      "<rootDir>/huxley/www/static/js/huxley"
+    ],
     "testPathIgnorePatterns": [
       "/node_modules/",
       "huxley/static"

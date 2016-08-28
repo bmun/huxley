@@ -17,7 +17,7 @@ describe('DelegateStore', () => {
   beforeEach(() => {
     $ = require('jquery');
     DelegateStore = require('../DelegateStore');
-    Dispatcher = require('../../dispatcher/Dispatcher');
+    Dispatcher = require('dispatcher/Dispatcher');
 
     mockDelegates = [{id: 1, name: 'Jake'}, {id: 2, name: 'Nate'}];
     mockSchoolId = 0;
