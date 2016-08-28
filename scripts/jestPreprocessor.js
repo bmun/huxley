@@ -3,4 +3,4 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-require('babelify/polyfill');
+ // Add any test framework setup here, like the Babel polyfill, etc.
