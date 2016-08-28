@@ -27,7 +27,10 @@ class CountryStore extends Store {
       });
     }
 
-    _countryPromise.then(callback);
+    if (callback) {
+      _countryPromise.then(callback);
+    }
+    return _countryPromise;
   }
 
   __onDispatch(action) {

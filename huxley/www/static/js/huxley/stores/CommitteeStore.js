@@ -27,15 +27,20 @@ class CommitteeStore extends Store {
       });
     }
 
-    _committeePromise.then(callback);
+    if (callback) {
+      _committeePromise.then(callback);
+    }
+    return _committeePromise;
   }
 
   getSpecialCommittees(callback) {
-    this.getCommittees(function(committees) {
-      callback(committees.filter(function(committee) {
-        return committee.special;
-      }));
+    var p = this.getCommittees().then((committees) => {
+      return committees.filter((committee) => committee.special);
     });
+    if (callback) {
+      p.then(callback);
+    }
+    return p;
   }
 
   __onDispatch(action) {

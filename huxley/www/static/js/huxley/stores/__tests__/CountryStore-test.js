@@ -7,49 +7,43 @@
 
 jest.dontMock('../CountryStore');
 
-describe('CountryStore', function() {
+describe('CountryStore', () => {
   var $;
   var CountryStore;
+  var Dispatcher;
 
   var mockCountries;
 
-  beforeEach(function() {
+  beforeEach(() => {
     $ = require('jquery');
     CountryStore = require('../CountryStore');
     Dispatcher = require('../../dispatcher/Dispatcher');
 
     mockCountries = [{id: 1, name: 'USA'}, {id: 2, name: 'China'}];
-    $.ajax.mockImplementation(function(options) {
+    $.ajax.mockImplementation((options) => {
       options.success(null, null, {responseJSON: mockCountries});
     });
   });
 
-  it('subscribes to the dispatcher', function() {
+  it('subscribes to the dispatcher', () => {
     expect(Dispatcher.register).toBeCalled();
   });
 
-  it('requests the countries on first call and caches locally', function() {
-    var calls = 0;
-
-    CountryStore.getCountries(function(countries) {
-      calls++;
-      expect($.ajax).toBeCalledWith({
-        type: 'GET',
-        url: '/api/countries',
-        dataType: 'json',
-        success: jasmine.any(Function),
-      });
-      expect(countries).toEqual(mockCountries);
-    });
-    jest.runAllTimers();
-
-    CountryStore.getCountries(function(countries) {
-      calls++;
-      expect($.ajax.mock.calls.length).toBe(1);
-      expect(countries).toEqual(mockCountries);
-    });
-    jest.runAllTimers();
-
-    expect(calls).toBe(2);
+  it('requests the countries on first call and caches locally', () => {
+    return Promise.all([
+      CountryStore.getCountries().then((countries) => {
+        expect($.ajax).toBeCalledWith({
+          type: 'GET',
+          url: '/api/countries',
+          dataType: 'json',
+          success: jasmine.any(Function),
+        });
+        expect(countries).toEqual(mockCountries);
+      }),
+      CountryStore.getCountries().then((countries) => {
+        expect($.ajax.mock.calls.length).toBe(1);
+        expect(countries).toEqual(mockCountries);
+      }),
+    ]);
   });
 });

@@ -27,7 +27,10 @@ class AssignmentStore extends Store {
       });
     }
 
-    _assignmentPromise.then(callback);
+    if (callback) {
+      _assignmentPromise.then(callback);
+    }
+    return _assignmentPromise;
   }
 
   __onDispatch(action) {

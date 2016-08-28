@@ -27,7 +27,10 @@ class DelegateStore extends Store {
       });
     }
 
-    _delegatePromises[schoolID].then(callback);
+    if (callback) {
+      _delegatePromises[schoolID].then(callback);
+    }
+    return _delegatePromises[schoolID];
   }
 
   __onDispatch(action) {

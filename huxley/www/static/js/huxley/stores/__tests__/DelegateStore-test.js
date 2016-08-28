@@ -7,50 +7,44 @@
 
 jest.dontMock('../DelegateStore');
 
-describe('DelegateStore', function() {
+describe('DelegateStore', () => {
   var $;
   var DelegateStore;
+  var Dispatcher;
 
   var mockDelegates, mockSchoolId;
 
-  beforeEach(function() {
+  beforeEach(() => {
     $ = require('jquery');
     DelegateStore = require('../DelegateStore');
     Dispatcher = require('../../dispatcher/Dispatcher');
 
     mockDelegates = [{id: 1, name: 'Jake'}, {id: 2, name: 'Nate'}];
     mockSchoolId = 0;
-    $.ajax.mockImplementation(function(options) {
+    $.ajax.mockImplementation((options) => {
       options.success(null, null, {responseJSON: mockDelegates});
     });
   });
 
-  it('subscribes to the dispatcher', function() {
+  it('subscribes to the dispatcher', () => {
     expect(Dispatcher.register).toBeCalled();
   });
 
-  it('requests the delegates on first call and caches locally', function() {
-    var calls = 0;
-
-    DelegateStore.getDelegates(mockSchoolId, function(delegates) {
-      calls++;
-      expect($.ajax).toBeCalledWith({
-        type: 'GET',
-        url: '/api/schools/' + mockSchoolId + '/delegates',
-        dataType: 'json',
-        success: jasmine.any(Function),
-      });
-      expect(delegates).toEqual(mockDelegates);
-    });
-    jest.runAllTimers();
-
-    DelegateStore.getDelegates(mockSchoolId, function(delegates) {
-      calls++;
-      expect($.ajax.mock.calls.length).toBe(1);
-      expect(delegates).toEqual(mockDelegates);
-    });
-    jest.runAllTimers();
-
-    expect(calls).toBe(2);
+  it('requests the delegates on first call and caches locally', () => {
+    return Promise.all([
+      DelegateStore.getDelegates(mockSchoolId, (delegates) => {
+        expect($.ajax).toBeCalledWith({
+          type: 'GET',
+          url: '/api/schools/' + mockSchoolId + '/delegates',
+          dataType: 'json',
+          success: jasmine.any(Function),
+        });
+        expect(delegates).toEqual(mockDelegates);
+      }),
+      DelegateStore.getDelegates(mockSchoolId, (delegates) => {
+        expect($.ajax.mock.calls.length).toBe(1);
+        expect(delegates).toEqual(mockDelegates);
+      }),
+    ]);
   });
 });
