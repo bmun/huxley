@@ -7,6 +7,7 @@
 
 var $ = require('jquery');
 var Dispatcher = require('dispatcher/Dispatcher');
+var ServerAPI = require('lib/ServerAPI');
 var {Store} = require('flux/utils');
 
 
@@ -15,18 +16,8 @@ var _committeePromise = null;
 class CommitteeStore extends Store {
   getCommittees(callback) {
     if (!_committeePromise) {
-      _committeePromise = new Promise(function(resolve, reject) {
-        $.ajax({
-          type: 'GET',
-          url: '/api/committees',
-          dataType: 'json',
-          success: function(data, textStatus, jqXHR) {
-            resolve(jqXHR.responseJSON);
-          },
-        });
-      });
+      _committeePromise = ServerAPI.getCommittees();
     }
-
     if (callback) {
       _committeePromise.then(callback);
     }
