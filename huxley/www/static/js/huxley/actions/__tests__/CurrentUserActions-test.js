@@ -5,7 +5,7 @@
 
 'use strict';
 
-jest.dontMock('../CurrentUserActions');
+jest.dontMock('actions/CurrentUserActions');
 
 describe('CurrentUserActions', function() {
   var ActionConstants;
@@ -13,9 +13,9 @@ describe('CurrentUserActions', function() {
   var Dispatcher;
 
   beforeEach(function() {
-    ActionConstants = require('../../constants/ActionConstants');
-    CurrentUserActions = require('../CurrentUserActions');
-    Dispatcher = require('../../dispatcher/Dispatcher');
+    ActionConstants = require('constants/ActionConstants');
+    CurrentUserActions = require('actions/CurrentUserActions');
+    Dispatcher = require('dispatcher/Dispatcher');
   });
 
   it('dispatches the login action', function() {

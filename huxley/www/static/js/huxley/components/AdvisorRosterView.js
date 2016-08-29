@@ -10,16 +10,16 @@ var Modal = require('react-modal');
 var React = require('react');
 var ReactRouter = require('react-router');
 
-var AssignmentStore = require('../stores/AssignmentStore');
-var Button = require('./Button');
-var CommitteeStore = require('../stores/CommitteeStore');
-var CountryStore = require('../stores/CountryStore');
-var CurrentUserStore = require('../stores/CurrentUserStore');
-var DelegateStore = require('../stores/DelegateStore');
-var CurrentUserActions = require('../actions/CurrentUserActions');
-var InnerView = require('./InnerView');
-var TextInput = require('./TextInput');
-var _handleChange = require('../utils/_handleChange');
+var AssignmentStore = require('stores/AssignmentStore');
+var Button = require('components/Button');
+var CommitteeStore = require('stores/CommitteeStore');
+var CountryStore = require('stores/CountryStore');
+var CurrentUserStore = require('stores/CurrentUserStore');
+var DelegateStore = require('stores/DelegateStore');
+var CurrentUserActions = require('actions/CurrentUserActions');
+var InnerView = require('components/InnerView');
+var TextInput = require('components/TextInput');
+var _handleChange = require('utils/_handleChange');
 
 const customStyles = {
   content : {

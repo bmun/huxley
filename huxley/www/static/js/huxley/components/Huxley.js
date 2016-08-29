@@ -8,10 +8,10 @@
 var React = require('react');
 var ReactRouter = require('react-router');
 
-var AdvisorView = require('../components/AdvisorView');
-var ConferenceContext = require('../components/ConferenceContext');
-var CurrentUserStore = require('../stores/CurrentUserStore');
-var User = require('../utils/User');
+var AdvisorView = require('components/AdvisorView');
+var ConferenceContext = require('components/ConferenceContext');
+var CurrentUserStore = require('stores/CurrentUserStore');
+var User = require('utils/User');
 
 var Huxley = React.createClass({
   mixins: [ReactRouter.History,],

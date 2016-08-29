@@ -6,10 +6,10 @@
 'use strict';
 
 var $ = require('jquery');
-var Button = require('./Button');
+var Button = require('components/Button');
 var React = require('react');
 
-var User = require('../utils/User');
+var User = require('utils/User');
 
 var InvoiceButton = React.createClass({
   getInitialState: function() {

@@ -5,8 +5,8 @@
 
 'use strict';
 
-var ActionConstants = require('../constants/ActionConstants');
-var Dispatcher = require('../dispatcher/Dispatcher');
+var ActionConstants = require('constants/ActionConstants');
+var Dispatcher = require('dispatcher/Dispatcher');
 var {Store} = require('flux/utils');
 
 var invariant = require('fbjs/lib/invariant');

@@ -8,10 +8,10 @@
 var React = require('react');
 var ReactRouter = require('react-router');
 
-var NavTab = require('./NavTab');
-var PermissionDeniedView = require('./PermissionDeniedView');
-var TopBar = require('./TopBar');
-var User = require('../utils/User');
+var NavTab = require('components/NavTab');
+var PermissionDeniedView = require('components/PermissionDeniedView');
+var TopBar = require('components/TopBar');
+var User = require('utils/User');
 
 var AdvisorView = React.createClass ({
   mixins: [ReactRouter.History],

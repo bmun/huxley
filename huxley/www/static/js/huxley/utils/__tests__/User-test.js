@@ -5,13 +5,13 @@
 
 'use strict';
 
-jest.dontMock('../User');
+jest.dontMock('utils/User');
 
 describe('User', function() {
   var User;
 
   beforeEach(function() {
-    User = require('../User');
+    User = require('utils/User');
   });
 
   it('instantiates an anonymous user', function() {

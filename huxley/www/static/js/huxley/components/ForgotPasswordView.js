@@ -9,10 +9,10 @@ var $ = require('jquery');
 var React = require('react');
 var ReactRouter = require('react-router');
 
-var Button = require('./Button');
-var NavLink = require('./NavLink');
-var OuterView = require('./OuterView');
-var TextInput = require('./TextInput');
+var Button = require('components/Button');
+var NavLink = require('components/NavLink');
+var OuterView = require('components/OuterView');
+var TextInput = require('components/TextInput');
 
 require('jquery-ui/effect-shake');
 

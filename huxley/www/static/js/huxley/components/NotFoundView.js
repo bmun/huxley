@@ -8,7 +8,7 @@
 var React = require('react');
 var ReactRouter = require('react-router');
 
-var OuterView = require('./OuterView');
+var OuterView = require('components/OuterView');
 
 var NotFoundView = React.createClass ({
   render: function() {

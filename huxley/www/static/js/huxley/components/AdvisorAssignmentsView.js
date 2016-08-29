@@ -9,16 +9,16 @@ var $ = require('jquery');
 var React = require('react');
 var ReactRouter = require('react-router');
 
-var AssignmentStore = require('../stores/AssignmentStore');
-var Button = require('./Button');
-var CommitteeStore = require('../stores/CommitteeStore');
-var ConferenceContext = require('./ConferenceContext');
-var CountryStore = require('../stores/CountryStore');
-var CurrentUserStore = require('../stores/CurrentUserStore');
-var CurrentUserActions = require('../actions/CurrentUserActions');
-var DelegateSelect = require('./DelegateSelect');
-var DelegateStore = require('../stores/DelegateStore');
-var InnerView = require('./InnerView');
+var AssignmentStore = require('stores/AssignmentStore');
+var Button = require('components/Button');
+var CommitteeStore = require('stores/CommitteeStore');
+var ConferenceContext = require('components/ConferenceContext');
+var CountryStore = require('stores/CountryStore');
+var CurrentUserStore = require('stores/CurrentUserStore');
+var CurrentUserActions = require('actions/CurrentUserActions');
+var DelegateSelect = require('components/DelegateSelect');
+var DelegateStore = require('stores/DelegateStore');
+var InnerView = require('components/InnerView');
 
 var AdvisorAssignmentsView = React.createClass({
   mixins: [

@@ -10,13 +10,13 @@ var cx = require('classnames');
 var React = require('react');
 var ReactRouter = require('react-router');
 
-var Button = require('./Button');
-var ConferenceContext = require('./ConferenceContext');
-var CurrentUserActions = require('../actions/CurrentUserActions');
-var NavLink = require('./NavLink');
-var OuterView = require('./OuterView');
-var TextInput = require('./TextInput');
-var User = require('../utils/User');
+var Button = require('components/Button');
+var ConferenceContext = require('components/ConferenceContext');
+var CurrentUserActions = require('actions/CurrentUserActions');
+var NavLink = require('components/NavLink');
+var OuterView = require('components/OuterView');
+var TextInput = require('components/TextInput');
+var User = require('utils/User');
 
 require('jquery-ui/effect-shake');
 

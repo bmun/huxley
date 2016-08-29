@@ -6,7 +6,7 @@
 'use strict';
 
 var $ = require('jquery');
-var Dispatcher = require('../dispatcher/Dispatcher');
+var Dispatcher = require('dispatcher/Dispatcher');
 var {Store} = require('flux/utils');
 
 
