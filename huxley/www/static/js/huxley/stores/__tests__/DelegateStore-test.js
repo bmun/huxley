@@ -35,7 +35,7 @@ describe('DelegateStore', () => {
         expect(delegates).toEqual(mockDelegates);
       }),
       DelegateStore.getDelegates(mockSchoolId, (delegates) => {
-        expect(ServerAPI.getDelegates).toBeCalledWith(mockSchoolId);
+        expect(ServerAPI.getDelegates.mock.calls.length).toBe(1);
         expect(delegates).toEqual(mockDelegates);
       }),
     ]);

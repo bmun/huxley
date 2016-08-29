@@ -34,7 +34,7 @@ describe('AssignmentStore', () => {
         expect(assignments).toEqual(mockAssignments);
       }),
       AssignmentStore.getAssignments(1).then((assignments) => {
-        expect(ServerAPI.getAssignments).toBeCalledWith(1);
+        expect(ServerAPI.getAssignments.mock.calls.length).toBe(1);
         expect(assignments).toBe(mockAssignments);
       }),
     ]);
