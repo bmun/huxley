@@ -6,9 +6,9 @@
 'use strict';
 
 var React = require('react');
-var TextInput = require('./TextInput');
+var TextInput = require('components/TextInput');
 
-var formatPhone = require('../utils/formatPhone');
+var formatPhone = require('utils/formatPhone');
 
 var PhoneInput = React.createClass({
   propTypes: {

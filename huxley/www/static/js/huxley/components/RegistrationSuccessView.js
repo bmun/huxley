@@ -7,9 +7,9 @@
 
 var React = require('react');
 
-var ConferenceContext = require('./ConferenceContext');
-var NavLink = require('./NavLink');
-var OuterView = require('./OuterView');
+var ConferenceContext = require('components/ConferenceContext');
+var NavLink = require('components/NavLink');
+var OuterView = require('components/OuterView');
 
 var RegistrationSuccessView = React.createClass({
 

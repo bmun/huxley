@@ -8,8 +8,8 @@
 var $ = require('jquery');
 var React = require('react');
 
-var Button = require('./Button');
-var CurrentUserActions = require('../actions/CurrentUserActions');
+var Button = require('components/Button');
+var CurrentUserActions = require('actions/CurrentUserActions');
 
 var LogoutButton = React.createClass({
   getInitialState: function() {

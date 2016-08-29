@@ -5,7 +5,7 @@
 
 'use strict';
 
-jest.dontMock('../CommitteeStore');
+jest.dontMock('stores/CommitteeStore');
 
 describe('CommitteeStore', () => {
   var $;
@@ -18,8 +18,8 @@ describe('CommitteeStore', () => {
 
   beforeEach(() => {
     $ = require('jquery');
-    CommitteeStore = require('../CommitteeStore');
-    Dispatcher = require('../../dispatcher/Dispatcher');
+    CommitteeStore = require('stores/CommitteeStore');
+    Dispatcher = require('dispatcher/Dispatcher');
 
     disc = {id: 1, name: 'DISC', special: false};
     icj = {id: 2, name: 'ICJ', special: true};

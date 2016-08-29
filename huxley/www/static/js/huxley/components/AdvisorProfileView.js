@@ -8,15 +8,15 @@
 var $ = require('jquery');
 var React = require('react');
 
-var Button = require('./Button');
-var InnerView = require('./InnerView');
-var LogoutButton = require('./LogoutButton');
-var ConferenceContext = require('./ConferenceContext');
-var PhoneInput = require('./PhoneInput');
-var ProgramTypes = require('../constants/ProgramTypes');
-var TextInput = require('./TextInput');
-var User = require('../utils/User');
-var _handleChange = require('../utils/_handleChange');
+var Button = require('components/Button');
+var InnerView = require('components/InnerView');
+var LogoutButton = require('components/LogoutButton');
+var ConferenceContext = require('components/ConferenceContext');
+var PhoneInput = require('components/PhoneInput');
+var ProgramTypes = require('constants/ProgramTypes');
+var TextInput = require('components/TextInput');
+var User = require('utils/User');
+var _handleChange = require('utils/_handleChange');
 
 require('jquery-ui/effect-shake');
 

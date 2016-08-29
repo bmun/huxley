@@ -8,8 +8,8 @@
 var React = require('react');
 var ReactRouter = require('react-router');
 
-var OuterView = require('./OuterView');
-var User = require('../utils/User');
+var OuterView = require('components/OuterView');
+var User = require('utils/User');
 
 var RedirectView = React.createClass({
   mixins: [ReactRouter.History],

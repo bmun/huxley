@@ -8,8 +8,8 @@
 var cx = require('classnames');
 var React = require('react');
 
-var ChangePasswordView = require('./ChangePasswordView');
-var LogoutButton = require('./LogoutButton');
+var ChangePasswordView = require('components/ChangePasswordView');
+var LogoutButton = require('components/LogoutButton');
 
 var TopBar = React.createClass({
   getInitialState: function() {

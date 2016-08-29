@@ -5,7 +5,7 @@
 
 'use strict';
 
-jest.dontMock('../DelegateStore');
+jest.dontMock('stores/DelegateStore');
 
 describe('DelegateStore', () => {
   var $;
@@ -16,7 +16,7 @@ describe('DelegateStore', () => {
 
   beforeEach(() => {
     $ = require('jquery');
-    DelegateStore = require('../DelegateStore');
+    DelegateStore = require('stores/DelegateStore');
     Dispatcher = require('dispatcher/Dispatcher');
 
     mockDelegates = [{id: 1, name: 'Jake'}, {id: 2, name: 'Nate'}];

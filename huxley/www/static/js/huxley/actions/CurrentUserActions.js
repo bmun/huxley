@@ -5,8 +5,8 @@
 
 'use strict';
 
-var ActionConstants = require('../constants/ActionConstants');
-var Dispatcher = require('../dispatcher/Dispatcher');
+var ActionConstants = require('constants/ActionConstants');
+var Dispatcher = require('dispatcher/Dispatcher');
 
 var CurrentUserActions = {
   bootstrap() {

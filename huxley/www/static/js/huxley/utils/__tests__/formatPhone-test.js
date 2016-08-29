@@ -5,11 +5,11 @@
 
 'use strict';
 
-jest.dontMock('../formatPhone');
+jest.dontMock('utils/formatPhone');
 
 describe('formatPhone', function() {
   it('should format phone numbers correctly in progress', function() {
-    var formatPhone = require('../formatPhone');
+    var formatPhone = require('utils/formatPhone');
     var testCases = [
       ['-', ''],
       [' ', ''],

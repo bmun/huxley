@@ -5,7 +5,7 @@
 
 'use strict';
 
-jest.dontMock('../CountryStore');
+jest.dontMock('stores/CountryStore');
 
 describe('CountryStore', () => {
   var $;
@@ -16,8 +16,8 @@ describe('CountryStore', () => {
 
   beforeEach(() => {
     $ = require('jquery');
-    CountryStore = require('../CountryStore');
-    Dispatcher = require('../../dispatcher/Dispatcher');
+    CountryStore = require('stores/CountryStore');
+    Dispatcher = require('dispatcher/Dispatcher');
 
     mockCountries = [{id: 1, name: 'USA'}, {id: 2, name: 'China'}];
     $.ajax.mockImplementation((options) => {

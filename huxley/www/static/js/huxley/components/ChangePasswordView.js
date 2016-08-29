@@ -9,7 +9,7 @@ var $ = require('jquery');
 var cx = require('classnames');
 var React = require('react');
 
-var Button = require('./Button');
+var Button = require('components/Button');
 
 var ChangePasswordView = React.createClass({
 

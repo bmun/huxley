@@ -7,8 +7,8 @@
 
 var React = require('react');
 
-var NavLink = require('./NavLink');
-var OuterView = require('./OuterView');
+var NavLink = require('components/NavLink');
+var OuterView = require('components/OuterView');
 
 var RegistrationClosedView = React.createClass({
   render: function() {

@@ -5,7 +5,7 @@
 
 'use strict';
 
-jest.dontMock('../CurrentUserStore');
+jest.dontMock('stores/CurrentUserStore');
 
 describe('CurrentUserStore', function() {
   var ActionConstants;
@@ -15,9 +15,9 @@ describe('CurrentUserStore', function() {
   var registerCallback;
 
   beforeEach(function() {
-    ActionConstants = require('../../constants/ActionConstants');
-    CurrentUserStore = require('../CurrentUserStore');
-    Dispatcher = require('../../dispatcher/Dispatcher');
+    ActionConstants = require('constants/ActionConstants');
+    CurrentUserStore = require('stores/CurrentUserStore');
+    Dispatcher = require('dispatcher/Dispatcher');
 
     registerCallback = function(action) {
       Dispatcher.isDispatching.mockReturnValue(true);

@@ -10,20 +10,20 @@ var cx = require('classnames');
 var React = require('react');
 var ReactRouter = require('react-router');
 
-var Button = require('./Button');
-var CommitteeStore = require('../stores/CommitteeStore');
-var ContactTypes = require('../constants/ContactTypes');
-var ConferenceContext = require('./ConferenceContext');
-var CountrySelect = require('./CountrySelect');
-var CountryStore = require('../stores/CountryStore');
-var GenderConstants = require('../constants/GenderConstants');
-var NavLink = require('./NavLink');
-var NumberInput = require('./NumberInput');
-var OuterView = require('./OuterView');
-var PhoneInput = require('./PhoneInput');
-var ProgramTypes = require('../constants/ProgramTypes');
-var TextInput = require('./TextInput');
-var _handleChange = require('../utils/_handleChange');
+var Button = require('components/Button');
+var CommitteeStore = require('stores/CommitteeStore');
+var ContactTypes = require('constants/ContactTypes');
+var ConferenceContext = require('components/ConferenceContext');
+var CountrySelect = require('components/CountrySelect');
+var CountryStore = require('stores/CountryStore');
+var GenderConstants = require('constants/GenderConstants');
+var NavLink = require('components/NavLink');
+var NumberInput = require('components/NumberInput');
+var OuterView = require('components/OuterView');
+var PhoneInput = require('components/PhoneInput');
+var ProgramTypes = require('constants/ProgramTypes');
+var TextInput = require('components/TextInput');
+var _handleChange = require('utils/_handleChange');
 
 require('jquery-ui/effect-shake');
 
