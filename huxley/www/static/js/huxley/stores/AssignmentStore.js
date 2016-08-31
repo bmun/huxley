@@ -7,30 +7,21 @@
 
 var $ = require('jquery');
 var Dispatcher = require('dispatcher/Dispatcher');
+var ServerAPI = require('lib/ServerAPI');
 var {Store} = require('flux/utils');
 
 
-var _assignmentPromise = null;
+var _assignmentPromises = {};
 
 class AssignmentStore extends Store {
   getAssignments(schoolID, callback) {
-    if (!_assignmentPromise) {
-      _assignmentPromise = new Promise(function(resolve, reject) {
-        $.ajax({
-          type: 'GET',
-          url: '/api/schools/'+schoolID+'/assignments',
-          dataType: 'json',
-          success: function(data, textStatus, jqXHR) {
-            resolve(jqXHR.responseJSON);
-          },
-        });
-      });
+    if (!_assignmentPromises[schoolID]) {
+      _assignmentPromises[schoolID] = ServerAPI.getAssignments(schoolID);
     }
-
     if (callback) {
-      _assignmentPromise.then(callback);
+      _assignmentPromises[schoolID].then(callback);
     }
-    return _assignmentPromise;
+    return _assignmentPromises[schoolID];
   }
 
   __onDispatch(action) {

@@ -8,22 +8,20 @@
 jest.dontMock('stores/DelegateStore');
 
 describe('DelegateStore', () => {
-  var $;
   var DelegateStore;
   var Dispatcher;
+  var ServerAPI;
 
   var mockDelegates, mockSchoolId;
 
   beforeEach(() => {
-    $ = require('jquery');
     DelegateStore = require('stores/DelegateStore');
     Dispatcher = require('dispatcher/Dispatcher');
+    ServerAPI = require('lib/ServerAPI');
 
     mockDelegates = [{id: 1, name: 'Jake'}, {id: 2, name: 'Nate'}];
     mockSchoolId = 0;
-    $.ajax.mockImplementation((options) => {
-      options.success(null, null, {responseJSON: mockDelegates});
-    });
+    ServerAPI.getDelegates.mockReturnValue(Promise.resolve(mockDelegates));
   });
 
   it('subscribes to the dispatcher', () => {
@@ -33,16 +31,11 @@ describe('DelegateStore', () => {
   it('requests the delegates on first call and caches locally', () => {
     return Promise.all([
       DelegateStore.getDelegates(mockSchoolId, (delegates) => {
-        expect($.ajax).toBeCalledWith({
-          type: 'GET',
-          url: '/api/schools/' + mockSchoolId + '/delegates',
-          dataType: 'json',
-          success: jasmine.any(Function),
-        });
+        expect(ServerAPI.getDelegates).toBeCalledWith(mockSchoolId);
         expect(delegates).toEqual(mockDelegates);
       }),
       DelegateStore.getDelegates(mockSchoolId, (delegates) => {
-        expect($.ajax.mock.calls.length).toBe(1);
+        expect(ServerAPI.getDelegates.mock.calls.length).toBe(1);
         expect(delegates).toEqual(mockDelegates);
       }),
     ]);
