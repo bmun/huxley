@@ -206,7 +206,7 @@ var AdvisorProfileView = React.createClass({
                   </td>
                 </tr>
                 <tr>
-                  <td>Waivers Completed?</td>
+                  <td>All Waivers Completed?</td>
                   <td>
                     {school.waivers_completed ? "Yes" : "No"}
                   </td>

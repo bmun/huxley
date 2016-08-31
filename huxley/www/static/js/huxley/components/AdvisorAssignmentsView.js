@@ -109,21 +109,12 @@ var AdvisorAssignmentsView = React.createClass({
               </tbody>
             </table>
           </div>
-          {finalized ?
-            <Button
-              color="green"
-              size="large"
-              onClick={this._handleSave}
-              loading={this.state.loading}>
-              Save
-            </Button> :
-            <Button
-              color="green"
-              size="large"
-              onClick={this._handleFinalize}
-              loading={this.state.loading}>
-              Finalize Assignments
-            </Button>}
+          <Button
+            color="green"
+            onClick={finalized ? this._handleSave: this._handleFinalize}
+            loading={this.state.loading}>
+            {finalized? 'Save' : 'Finalize Assignments'}
+          </Button>
         </form>
       </InnerView>
     );

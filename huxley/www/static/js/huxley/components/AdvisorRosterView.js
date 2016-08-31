@@ -21,17 +21,6 @@ var InnerView = require('components/InnerView');
 var TextInput = require('components/TextInput');
 var _handleChange = require('utils/_handleChange');
 
-const customStyles = {
-  content : {
-    top                   : '50%',
-    left                  : '50%',
-    right                 : 'auto',
-    bottom                : 'auto',
-    marginRight           : '-50%',
-    transform             : 'translate(-50%, -50%)'
-  }
-};
-
 var AdvisorRosterView = React.createClass({
   mixins: [
     ReactRouter.History,
@@ -77,7 +66,6 @@ var AdvisorRosterView = React.createClass({
           Any comments that chairs have about your delegate will appear here.
         </p>
         <form>
-          <div className="tablemenu header" />
           <div className="table-container">
             <table className="table highlight-cells">
               <thead>
@@ -93,8 +81,8 @@ var AdvisorRosterView = React.createClass({
                 {this.renderRosterRows()}
               </tbody>
             </table>
+            {this.renderEmptyMessage()}
           </div>
-          <div className="tablemenu footer" />
           <Button
             color="green"
             onClick={this.openModal.bind(this, '', '', this._handleAddDelegate)}
@@ -104,7 +92,8 @@ var AdvisorRosterView = React.createClass({
         </form>
         <Modal
           isOpen={this.state.modal_open}
-          className="content content-outer transparent ie-layout rounded">
+          className="content content-outer transparent ie-layout rounded"
+          overlayClassName="modal-overlay">
           <form>
             <h3>Enter your delegate's information here</h3>
             <br />
@@ -172,6 +161,17 @@ var AdvisorRosterView = React.createClass({
         </tr>
       )
     }.bind(this));
+  },
+
+  renderEmptyMessage: function() {
+    if (this.state.delegates.length) {
+      return null;
+    }
+    return (
+      <div className="empty">
+        {"You don't have any delegates in your roster."}
+      </div>
+    );
   },
 
   openModal: function(name, email, fn) {
