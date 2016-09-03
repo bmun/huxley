@@ -21,7 +21,7 @@ var RegistrationClosedView = React.createClass({
     return (
       <OuterView>
         <div className="letter">
-          <h1>I'm Sorry</h1>
+          <h1>We're Sorry</h1>
           {conference.registration_waitlist ?
           <p>
             Thank you for your interest in participating in
