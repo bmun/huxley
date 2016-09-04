@@ -31,7 +31,7 @@
     ],
     "moduleDirectories": [
       "node_modules",
-      "<rootDir>/huxley/www/static/js/huxley"
+      "<rootDir>/huxley/www/js"
     ],
     "testPathIgnorePatterns": [
       "/node_modules/",

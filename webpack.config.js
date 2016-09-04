@@ -1,7 +1,8 @@
 var path = require('path');
 var webpack = require('webpack');
 
-var JS_ROOT = path.join(__dirname, 'huxley/www/static/js');
+var JS_ROOT = path.join(__dirname, 'huxley/www/js');
+var STATIC_ROOT = path.join(__dirname, 'huxley/www/static/js');
 
 var plugins = [
   new webpack.EnvironmentPlugin([
@@ -20,9 +21,9 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 module.exports = {
-  entry: path.join(JS_ROOT, 'huxley.browserify.js'),
+  entry: path.join(JS_ROOT, 'entry.js'),
   output: {
-    path: JS_ROOT,
+    path: STATIC_ROOT,
     filename: 'bundle.js',
   },
   module: {
@@ -39,6 +40,6 @@ module.exports = {
   },
   plugins: plugins,
   resolve: {
-    modulesDirectories: ['node_modules', path.join(JS_ROOT, 'huxley')],
+    modulesDirectories: ['node_modules', JS_ROOT],
   },
 };
