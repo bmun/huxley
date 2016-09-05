@@ -17,7 +17,9 @@
     "react-router": "1.0.0"
   },
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "build": "./node_modules/.bin/webpack --progress --watch",
+    "start": "python manage.py runserver & ./node_modules/.bin/webpack --watch"
   },
   "jest": {
     "scriptPreprocessor": "<rootDir>/node_modules/babel-jest",
