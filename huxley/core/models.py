@@ -17,19 +17,21 @@ from huxley.core.constants import ContactGender, ContactType, ProgramTypes
 
 
 class Conference(models.Model):
-    session          = models.PositiveSmallIntegerField(default=0, primary_key=True)
-    start_date       = models.DateField()
-    end_date         = models.DateField()
-    reg_open         = models.DateField()
-    early_reg_close  = models.DateField()
-    reg_close        = models.DateField()
-    min_attendance   = models.PositiveSmallIntegerField(default=0)
-    max_attendance   = models.PositiveSmallIntegerField(default=0)
-    open_reg         = models.BooleanField(default=True)
-    waitlist_reg     = models.BooleanField(default=False)
-    external         = models.CharField(max_length=128)
-    registration_fee = models.DecimalField(max_digits=6, decimal_places=2, default=Decimal('50.00'))
-    delegate_fee     = models.DecimalField(max_digits=6, decimal_places=2, default=Decimal('50.00'))
+    session = models.PositiveSmallIntegerField(default=0, primary_key=True)
+    start_date = models.DateField()
+    end_date = models.DateField()
+    reg_open = models.DateField()
+    early_reg_close = models.DateField()
+    reg_close = models.DateField()
+    min_attendance = models.PositiveSmallIntegerField(default=0)
+    max_attendance = models.PositiveSmallIntegerField(default=0)
+    open_reg = models.BooleanField(default=True)
+    waitlist_reg = models.BooleanField(default=False)
+    external = models.CharField(max_length=128)
+    registration_fee = models.DecimalField(
+        max_digits=6, decimal_places=2, default=Decimal('50.00'))
+    delegate_fee = models.DecimalField(
+        max_digits=6, decimal_places=2, default=Decimal('50.00'))
 
     @classmethod
     def get_current(cls):
@@ -44,7 +46,7 @@ class Conference(models.Model):
 
 
 class Country(models.Model):
-    name    = models.CharField(max_length=128)
+    name = models.CharField(max_length=128)
     special = models.BooleanField(default=False)
 
     def __unicode__(self):
@@ -55,11 +57,11 @@ class Country(models.Model):
 
 
 class Committee(models.Model):
-    name            = models.CharField(max_length=8)
-    full_name       = models.CharField(max_length=128)
-    countries       = models.ManyToManyField(Country, through='Assignment')
+    name = models.CharField(max_length=8)
+    full_name = models.CharField(max_length=128)
+    countries = models.ManyToManyField(Country, through='Assignment')
     delegation_size = models.PositiveSmallIntegerField(default=2)
-    special         = models.BooleanField(default=False)
+    special = models.BooleanField(default=False)
 
     def __unicode__(self):
         return self.name
@@ -69,61 +71,64 @@ class Committee(models.Model):
 
 
 class School(models.Model):
-    PROGRAM_TYPE_OPTIONS = (
-        (ProgramTypes.CLUB, 'Club'),
-        (ProgramTypes.CLASS, 'Class'),
-    )
+    PROGRAM_TYPE_OPTIONS = ((ProgramTypes.CLUB, 'Club'),
+                            (ProgramTypes.CLASS, 'Class'), )
 
-    CONTACT_TYPE_OPTIONS = (
-        (ContactType.FACULTY, 'Faculty'),
-        (ContactType.STUDENT, 'Student'),
-    )
+    CONTACT_TYPE_OPTIONS = ((ContactType.FACULTY, 'Faculty'),
+                            (ContactType.STUDENT, 'Student'), )
 
-    GENDER_OPTIONS = (
-        (ContactGender.MALE, 'Male'),
-        (ContactGender.FEMALE, 'Female'),
-        (ContactGender.OTHER, 'Other'),
-        (ContactGender.UNSPECIFIED, 'Unspecified'),
-    )
+    GENDER_OPTIONS = ((ContactGender.MALE, 'Male'),
+                      (ContactGender.FEMALE, 'Female'),
+                      (ContactGender.OTHER, 'Other'),
+                      (ContactGender.UNSPECIFIED, 'Unspecified'), )
 
-    registered          = models.DateTimeField(auto_now_add=True)
-    name                = models.CharField(max_length=128)
-    address             = models.CharField(max_length=128)
-    city                = models.CharField(max_length=128)
-    state               = models.CharField(max_length=16)
-    zip_code            = models.CharField(max_length=16)
-    country             = models.CharField(max_length=64)
-    primary_name        = models.CharField(max_length=128)
-    primary_gender      = models.PositiveSmallIntegerField(choices=GENDER_OPTIONS, default=ContactGender.UNSPECIFIED)
-    primary_email       = models.EmailField()
-    primary_phone       = models.CharField(max_length=32)
-    primary_type        = models.PositiveSmallIntegerField(choices=CONTACT_TYPE_OPTIONS, default=ContactType.FACULTY)
-    secondary_name      = models.CharField(max_length=128, blank=True)
-    secondary_gender    = models.PositiveSmallIntegerField(choices=GENDER_OPTIONS, blank=True, default=ContactGender.UNSPECIFIED)
-    secondary_email     = models.EmailField(blank=True)
-    secondary_phone     = models.CharField(max_length=32, blank=True)
-    secondary_type      = models.PositiveSmallIntegerField(choices=CONTACT_TYPE_OPTIONS, blank=True, default=ContactType.FACULTY)
-    program_type        = models.PositiveSmallIntegerField(choices=PROGRAM_TYPE_OPTIONS, default=ProgramTypes.CLUB)
-    times_attended      = models.PositiveSmallIntegerField(default=0)
-    international       = models.BooleanField(default=False)
-    waitlist            = models.BooleanField(default=False)
-    waivers_completed   = models.BooleanField(default=False)
+    registered = models.DateTimeField(auto_now_add=True)
+    name = models.CharField(max_length=128)
+    address = models.CharField(max_length=128)
+    city = models.CharField(max_length=128)
+    state = models.CharField(max_length=16)
+    zip_code = models.CharField(max_length=16)
+    country = models.CharField(max_length=64)
+    primary_name = models.CharField(max_length=128)
+    primary_gender = models.PositiveSmallIntegerField(
+        choices=GENDER_OPTIONS, default=ContactGender.UNSPECIFIED)
+    primary_email = models.EmailField()
+    primary_phone = models.CharField(max_length=32)
+    primary_type = models.PositiveSmallIntegerField(
+        choices=CONTACT_TYPE_OPTIONS, default=ContactType.FACULTY)
+    secondary_name = models.CharField(max_length=128, blank=True)
+    secondary_gender = models.PositiveSmallIntegerField(
+        choices=GENDER_OPTIONS, blank=True, default=ContactGender.UNSPECIFIED)
+    secondary_email = models.EmailField(blank=True)
+    secondary_phone = models.CharField(max_length=32, blank=True)
+    secondary_type = models.PositiveSmallIntegerField(
+        choices=CONTACT_TYPE_OPTIONS, blank=True, default=ContactType.FACULTY)
+    program_type = models.PositiveSmallIntegerField(
+        choices=PROGRAM_TYPE_OPTIONS, default=ProgramTypes.CLUB)
+    times_attended = models.PositiveSmallIntegerField(default=0)
+    international = models.BooleanField(default=False)
+    waitlist = models.BooleanField(default=False)
+    waivers_completed = models.BooleanField(default=False)
 
-    beginner_delegates         = models.PositiveSmallIntegerField()
-    intermediate_delegates     = models.PositiveSmallIntegerField()
-    advanced_delegates         = models.PositiveSmallIntegerField()
+    beginner_delegates = models.PositiveSmallIntegerField()
+    intermediate_delegates = models.PositiveSmallIntegerField()
+    advanced_delegates = models.PositiveSmallIntegerField()
     spanish_speaking_delegates = models.PositiveSmallIntegerField()
     chinese_speaking_delegates = models.PositiveSmallIntegerField()
 
-    countrypreferences   = models.ManyToManyField(Country, through='CountryPreference')
-    committeepreferences = models.ManyToManyField(Committee, limit_choices_to={'special': True})
+    countrypreferences = models.ManyToManyField(
+        Country, through='CountryPreference')
+    committeepreferences = models.ManyToManyField(
+        Committee, limit_choices_to={'special': True})
 
     registration_comments = models.TextField(default='', blank=True)
 
     assignments_finalized = models.BooleanField(default=False)
 
-    fees_owed = models.DecimalField(max_digits=6, decimal_places=2, default=Decimal('0.00'))
-    fees_paid = models.DecimalField(max_digits=6, decimal_places=2, default=Decimal('0.00'))
+    fees_owed = models.DecimalField(
+        max_digits=6, decimal_places=2, default=Decimal('0.00'))
+    fees_paid = models.DecimalField(
+        max_digits=6, decimal_places=2, default=Decimal('0.00'))
 
     modified_at = models.DateTimeField(default=timezone.now)
 
@@ -146,9 +151,7 @@ class School(models.Model):
                 CountryPreference(
                     school=self,
                     country_id=country_id,
-                    rank=rank,
-                )
-            )
+                    rank=rank, ))
 
         if country_preferences:
             with transaction.atomic():
@@ -161,11 +164,9 @@ class School(models.Model):
     def update_fees(cls, **kwargs):
         school = kwargs['instance']
         delegate_fee = Conference.get_current().delegate_fee
-        delegate_fees = delegate_fee * sum((
-            school.beginner_delegates,
-            school.intermediate_delegates,
-            school.advanced_delegates,
-        ))
+        delegate_fees = delegate_fee * sum((school.beginner_delegates,
+                                            school.intermediate_delegates,
+                                            school.advanced_delegates, ))
         registration_fee = Conference.get_current().registration_fee
         total_fees = registration_fee + delegate_fees
         school.fees_owed = Decimal(total_fees) + Decimal('0.00')
@@ -181,7 +182,9 @@ class School(models.Model):
     @property
     def country_preference_ids(self):
         '''Return an ordered list of the school's preferred countries.'''
-        return [country.id for country in self.countrypreferences.all().order_by('countrypreference')]
+        return [country.id
+                for country in self.countrypreferences.all().order_by(
+                    'countrypreference')]
 
     @country_preference_ids.setter
     def country_preference_ids(self, country_ids):
@@ -193,17 +196,20 @@ class School(models.Model):
         '''Save the school normally, then update its country preferences.'''
         super(School, self).save(*args, **kwargs)
         if getattr(self, '_pending_country_preference_ids', []):
-            self.update_country_preferences(self._pending_country_preference_ids)
+            self.update_country_preferences(
+                self._pending_country_preference_ids)
             self._pending_country_preference_ids = []
 
     @classmethod
     def email_comments(cls, **kwargs):
         school = kwargs['instance']
         if kwargs['created'] and school.registration_comments:
-            send_mail('Registration Comments from '+ school.name, school.name +
-                ' made comments about registration: '
-                + school.registration_comments, 'tech@bmun.org',
-                ['external@bmun.org'], fail_silently=False)
+            send_mail(
+                'Registration Comments from ' + school.name,
+                school.name + ' made comments about registration: ' +
+                school.registration_comments,
+                'tech@bmun.org', ['info@bmun.org'],
+                fail_silently=False)
 
     @classmethod
     def email_confirmation(cls, **kwargs):
@@ -211,35 +217,40 @@ class School(models.Model):
         if kwargs['created']:
             school = kwargs['instance']
             if school.waitlist:
-                send_mail('BMUN %d Waitlist Confirmation' % conference.session,
-                          'You have officially been put on the waitlist for BMUN %d. '
-                          'We will inform you if and when you are taken off the waitlist.\n\n'
-                          'If you have any tech related questions, please email tech@bmun.org. '
-                          'For all other questions, please email info@bmun.org.\n\n'
-                          'Thank you for using Huxley!' % conference.session,
-                          'no-reply@bmun.org',
-                          [school.primary_email], fail_silently=False)
+                send_mail(
+                    'BMUN %d Waitlist Confirmation' % conference.session,
+                    'You have officially been put on the waitlist for BMUN %d. '
+                    'We will inform you if and when you are taken off the waitlist.\n\n'
+                    'If you have any tech related questions, please email tech@bmun.org. '
+                    'For all other questions, please email info@bmun.org.\n\n'
+                    'Thank you for using Huxley!' % conference.session,
+                    'no-reply@bmun.org', [school.primary_email],
+                    fail_silently=False)
             else:
                 registration_fee = conference.registration_fee
                 delegate_fee = conference.delegate_fee
-                send_mail('BMUN %d Registration Confirmation' % conference.session,
-                          'You have officially been registered for BMUN %d. '
-                          'To access your account, please log in at huxley.bmun.org.\n\n'
-                          'The school registration fee is $%d. The delegate registration '
-                          'fee is $%d per student. You will be able to view your balance '
-                          'on huxley.bmun.org in November, at which point we will begin '
-                          'accepting payments.\n\n'
-                          'If you have any tech related questions, please email tech@bmun.org. '
-                          'For all other questions, please email info@bmun.org.\n\n'
-                          'Thank you for using Huxley!' % (conference.session, int(registration_fee), int(delegate_fee)),
-                          'no-reply@bmun.org',
-                          [school.primary_email], fail_silently=False)
+                send_mail(
+                    'BMUN %d Registration Confirmation' % conference.session,
+                    'You have officially been registered for BMUN %d. '
+                    'To access your account, please log in at huxley.bmun.org.\n\n'
+                    'The school registration fee is $%d. The delegate registration '
+                    'fee is $%d per student. You will be able to view your balance '
+                    'on huxley.bmun.org in November, at which point we will begin '
+                    'accepting payments.\n\n'
+                    'If you have any tech related questions, please email tech@bmun.org. '
+                    'For all other questions, please email info@bmun.org.\n\n'
+                    'Thank you for using Huxley!' %
+                    (conference.session, int(registration_fee),
+                     int(delegate_fee)),
+                    'no-reply@bmun.org', [school.primary_email],
+                    fail_silently=False)
 
     def __unicode__(self):
         return self.name
 
     class Meta:
         db_table = u'school'
+
 
 pre_save.connect(School.update_fees, sender=School)
 pre_save.connect(School.update_waitlist, sender=School)
@@ -249,9 +260,9 @@ post_save.connect(School.email_confirmation, sender=School)
 
 class Assignment(models.Model):
     committee = models.ForeignKey(Committee)
-    country   = models.ForeignKey(Country)
-    school    = models.ForeignKey(School, null=True, blank=True, default=None)
-    rejected  = models.BooleanField(default=False)
+    country = models.ForeignKey(Country)
+    school = models.ForeignKey(School, null=True, blank=True, default=None)
+    rejected = models.BooleanField(default=False)
 
     @classmethod
     def update_assignments(cls, new_assignments):
@@ -271,12 +282,11 @@ class Assignment(models.Model):
         failed_assignments = []
 
         def add(committee, country, school, rejected):
-            additions.append(cls(
-                committee_id=committee.id,
-                country_id=country.id,
-                school_id=school.id,
-                rejected=rejected,
-            ))
+            additions.append(
+                cls(committee_id=committee.id,
+                    country_id=country.id,
+                    school_id=school.id,
+                    rejected=rejected, ))
 
         def remove(assignment_data):
             deletions.append(assignment_data['id'])
@@ -288,23 +298,27 @@ class Assignment(models.Model):
                 # given to more than one school in the upload
                 committee = str(committee.name)
                 country = str(country.name)
-                failed_assignments.append(str((committee, country)) + ' - ASSIGNED TO MORE THAN ONE SCHOOL')
+                failed_assignments.append(
+                    str((committee, country)) +
+                    ' - ASSIGNED TO MORE THAN ONE SCHOOL')
                 continue
 
             # If the assignemnt contains no bad cells, then each value should
             # have the type of its corresponding model.
             is_invalid = False
             if type(committee) is not Committee:
-                committee = Committee(name=committee+' - DOES NOT EXIST')
+                committee = Committee(name=committee + ' - DOES NOT EXIST')
                 is_invalid = True
             if type(country) is not Country:
-                country = Country(name=country+' - DOES NOT EXIST')
+                country = Country(name=country + ' - DOES NOT EXIST')
                 is_invalid = True
             if type(school) is not School:
-                school = School(name=school+' - DOES NOT EXIST')
+                school = School(name=school + ' - DOES NOT EXIST')
                 is_invalid = True
             if is_invalid:
-                failed_assignments.append(str((str(school.name), str(committee.name), str(country.name))))
+                failed_assignments.append(
+                    str((str(school.name), str(committee.name), str(
+                        country.name))))
                 continue
 
             assigned.add(key)
@@ -334,7 +348,8 @@ class Assignment(models.Model):
         return failed_assignments
 
     def __unicode__(self):
-        return self.committee.name + " : " + self.country.name + " : " + (self.school.name if self.school else "Unassigned")
+        return self.committee.name + " : " + self.country.name + " : " + (
+            self.school.name if self.school else "Unassigned")
 
     class Meta:
         db_table = u'assignment'
@@ -342,26 +357,28 @@ class Assignment(models.Model):
 
 
 class CountryPreference(models.Model):
-    school  = models.ForeignKey(School)
+    school = models.ForeignKey(School)
     country = models.ForeignKey(Country, limit_choices_to={'special': False})
-    rank    = models.PositiveSmallIntegerField()
+    rank = models.PositiveSmallIntegerField()
 
     def __unicode__(self):
-        return '%s : %s (%d)' % (self.school.name, self.country.name, self.rank)
+        return '%s : %s (%d)' % (self.school.name, self.country.name,
+                                 self.rank)
 
     class Meta:
         db_table = u'country_preference'
-        ordering = ['-school','rank']
+        ordering = ['-school', 'rank']
         unique_together = ('country', 'school')
 
 
 class Delegate(models.Model):
-    school        = models.ForeignKey(School, related_name='delegates', null=True)
-    assignment    = models.ForeignKey(Assignment, related_name='delegates', blank=True, null=True)
-    name          = models.CharField(max_length=64)
-    email         = models.EmailField(blank=True, null=True)
-    created_at    = models.DateTimeField(auto_now_add=True)
-    summary       = models.TextField(default='', blank=True, null=True)
+    school = models.ForeignKey(School, related_name='delegates', null=True)
+    assignment = models.ForeignKey(
+        Assignment, related_name='delegates', blank=True, null=True)
+    name = models.CharField(max_length=64)
+    email = models.EmailField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    summary = models.TextField(default='', blank=True, null=True)
 
     def __unicode__(self):
         return self.name
@@ -375,8 +392,10 @@ class Delegate(models.Model):
         return self.assignment.committee
 
     def save(self, *args, **kwargs):
-        if (self.assignment_id and self.school_id and self.school_id != self.assignment.school_id):
-            raise ValidationError('Delegate school and delegate assignment school do not match.')
+        if (self.assignment_id and self.school_id and
+                self.school_id != self.assignment.school_id):
+            raise ValidationError(
+                'Delegate school and delegate assignment school do not match.')
 
         super(Delegate, self).save(*args, **kwargs)
 

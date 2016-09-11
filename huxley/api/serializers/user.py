@@ -20,9 +20,17 @@ class UserSerializer(ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('id', 'username', 'first_name', 'last_name', 'user_type',
-                  'school', 'committee',)
-        read_only_fields = ('id', 'username', 'user_type', 'committee',)
+        fields = ('id',
+                  'username',
+                  'first_name',
+                  'last_name',
+                  'user_type',
+                  'school',
+                  'committee', )
+        read_only_fields = ('id',
+                            'username',
+                            'user_type',
+                            'committee', )
 
     def update(self, instance, validated_data):
         if 'school' in validated_data:
@@ -30,16 +38,16 @@ class UserSerializer(ModelSerializer):
             school_data['modified_at'] = timezone.now()
             School.objects.filter(id=instance.school.id).update(**school_data)
             send_mail('{0} has updated its registration information'.format(instance.school),
-                      'New registraion information for {0}: \n\n'.format(instance.school) \
+                      'New registration information for {0}: \n\n'.format(instance.school) \
                       + 'Advisor: \n' \
                       + '\n'.join(['{0}: {1}'.format(field, validated_data[field]) for field in validated_data]) \
                       + '\n\nSchool: \n' \
                       + '\n'.join(['{0}: {1}'.format(field, school_data[field]) for field in school_data]),
                       'tech@bmun.org',
-                      ['external@bmun.org'], fail_silently=False)
+                      ['info@bmun.org'], fail_silently=False)
 
         return super(UserSerializer, self).update(instance, validated_data)
-        
+
 
 class CreateUserSerializer(ModelSerializer):
     school = SchoolSerializer(required=False)
@@ -70,9 +78,11 @@ class CreateUserSerializer(ModelSerializer):
                 school.committeepreferences.add(pref)
             school.save()
 
-            user = User.objects.create(school=school, last_login=datetime.now(), **validated_data)
+            user = User.objects.create(
+                school=school, last_login=datetime.now(), **validated_data)
         else:
-            user = User.objects.create(last_login=datetime.now(), **validated_data)
+            user = User.objects.create(
+                last_login=datetime.now(), **validated_data)
 
         if 'password' in original_validated_data:
             user.set_password(original_validated_data['password'])
@@ -94,7 +104,8 @@ class CreateUserSerializer(ModelSerializer):
     def validate_password(self, value):
         password = value
 
-        match = re.match("^[A-Za-z0-9\_\.!@#\$%\^&\*\(\)~\-=\+`\?]+$", password)
+        match = re.match("^[A-Za-z0-9\_\.!@#\$%\^&\*\(\)~\-=\+`\?]+$",
+                         password)
         if match is None:
             raise ValidationError('Password contains invalid characters.')
 
@@ -112,4 +123,3 @@ class CreateUserSerializer(ModelSerializer):
         last_name = value
         validators.nonempty(last_name)
         return value
-

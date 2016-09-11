@@ -58,7 +58,6 @@ var AdvisorProfileView = React.createClass({
     var conference = this.context.conference;
     var user = this.props.user;
     var school = User.getSchool(user);
-    var invoiceUrl = '/api/schools/' + school.id + '/invoice/';
     return (
       <InnerView>
         <h2>Profile</h2>
@@ -70,15 +69,10 @@ var AdvisorProfileView = React.createClass({
           more information on our
           fees <a href="http://www.bmun.org/conference-fees/" target="_blank">here</a>.
         </p>
-        <p>
-          If you wish to generate an invoice for your school with your
-          payment details, please click on the Generate Your Invoice button under
-          the Fees tab. You will receive an invoice in your email.
-        </p>
         <p><strong>Remember to save!</strong></p>
-        <p><strong>Important Note:</strong> Please mail all checks 
+        <p><strong>Important Note:</strong> Please mail all checks
         to <strong>P.O. Box 4306 Berkeley, CA 94704-0306</strong>. If you'd like to pay online via
-        credit card, or if you have any further questions, please contact me 
+        credit card, or if you have any further questions, please contact me
         at <a href="mailto:info@bmun.org">info@bmun.org</a> and I will respond promptly.
         See you soon!</p>
         <p><strong>{conference.external}
@@ -280,15 +274,7 @@ var AdvisorProfileView = React.createClass({
                   </td>
                 </tr>
                 <tr>
-                  <th>Fees</th>
-                  <td>
-                    <a
-                      className="button button-small button-green rounded-small"
-                      href={invoiceUrl}
-                      target="_blank">
-                      Generate Your Invoice
-                    </a>
-                  </td>
+                  <th colSpan="2">Fees</th>
                 </tr>
                 <tr>
                   <td>Fees Owed</td>
