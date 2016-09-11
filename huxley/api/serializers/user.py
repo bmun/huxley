@@ -30,16 +30,16 @@ class UserSerializer(ModelSerializer):
             school_data['modified_at'] = timezone.now()
             School.objects.filter(id=instance.school.id).update(**school_data)
             send_mail('{0} has updated its registration information'.format(instance.school),
-                      'New registraion information for {0}: \n\n'.format(instance.school) \
+                      'New registration information for {0}: \n\n'.format(instance.school) \
                       + 'Advisor: \n' \
                       + '\n'.join(['{0}: {1}'.format(field, validated_data[field]) for field in validated_data]) \
                       + '\n\nSchool: \n' \
                       + '\n'.join(['{0}: {1}'.format(field, school_data[field]) for field in school_data]),
                       'tech@bmun.org',
-                      ['external@bmun.org'], fail_silently=False)
+                      ['info@bmun.org'], fail_silently=False)
 
         return super(UserSerializer, self).update(instance, validated_data)
-        
+
 
 class CreateUserSerializer(ModelSerializer):
     school = SchoolSerializer(required=False)

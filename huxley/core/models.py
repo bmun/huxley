@@ -203,7 +203,7 @@ class School(models.Model):
             send_mail('Registration Comments from '+ school.name, school.name +
                 ' made comments about registration: '
                 + school.registration_comments, 'tech@bmun.org',
-                ['external@bmun.org'], fail_silently=False)
+                ['info@bmun.org'], fail_silently=False)
 
     @classmethod
     def email_confirmation(cls, **kwargs):
