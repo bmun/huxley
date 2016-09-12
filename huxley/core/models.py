@@ -231,15 +231,28 @@ class School(models.Model):
                 delegate_fee = conference.delegate_fee
                 send_mail(
                     'BMUN %d Registration Confirmation' % conference.session,
-                    'You have officially been registered for BMUN %d. '
+                    'Congratulations, you have officially been registered for BMUN %d. '
                     'To access your account, please log in at huxley.bmun.org.\n\n'
-                    'The school registration fee is $%d. The delegate registration '
-                    'fee is $%d per student. You will be able to view your balance '
-                    'on huxley.bmun.org in November, at which point we will begin '
-                    'accepting payments.\n\n'
-                    'If you have any tech related questions, please email tech@bmun.org. '
-                    'For all other questions, please email info@bmun.org.\n\n'
-                    'Thank you for using Huxley!' %
+                    'In order to confirm your spot on our registration list, ' 
+                    'you must pay the non-refundable school fee of $%d. '
+                    'In 24-48 hours, you will receive an invoice from QuickBooks, '
+                    'our accounting system, for your school fee. '
+                    'You can either pay online through the QuickBooks payment portal '
+                    'or mail a check to the address listed on the invoice. '
+                    'More information on payment methods and deadlines can be found '
+                    'in the invoice or at http://www.bmun.org/conference-fees/. '
+                    'If you do not pay by the deadline, then you will be dropped to our waitlist.\n\n'
+                    'In addition to the school fee, there is also delegate fee of $%d per student. '
+                    'The invoice for this will be sent out with country assignments '
+                    'in November and is due shortly after that.\n\n'
+                    'If you have any students that need financial assistance, '
+                    'we encourage them to apply for our Alumni Scholarship '
+                    'at http://bmun.org/alumni-scholarship/. This year we will be '
+                    'awarding up to $13,000 to those that apply.\n\n'
+                    'If you have any questions, please contact info@bmun.org.\n\n'
+                    'Thank you for registering for BMUN, and we look forward to ' 
+                    'seeing you at the oldest high school conference in the world '
+                    'on March 3-5, 2017.' %
                     (conference.session, int(registration_fee),
                      int(delegate_fee)),
                     'no-reply@bmun.org', [school.primary_email],
