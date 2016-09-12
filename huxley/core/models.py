@@ -242,7 +242,7 @@ class School(models.Model):
                     'More information on payment methods and deadlines can be found '
                     'in the invoice or at http://www.bmun.org/conference-fees/. '
                     'If you do not pay by the deadline, then you will be dropped to our waitlist.\n\n'
-                    'In addition to the school fee, there is also delegate fee of $%d per student. '
+                    'In addition to the school fee, there is also a delegate fee of $%d per student. '
                     'The invoice for this will be sent out with country assignments '
                     'in November and is due shortly after that.\n\n'
                     'If you have any students that need financial assistance, '
