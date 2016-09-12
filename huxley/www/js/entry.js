@@ -7,7 +7,6 @@
 
 require('core-js/es6');
 
-var $ = require('jquery');
 var React = require('react');
 var ReactDOM = require('react-dom')
 var ReactRouter = require('react-router');
@@ -53,11 +52,11 @@ var routes = (
   </Route>
 );
 
-$(function() {
+window.addEventListener('DOMContentLoaded', () => {
   ReactDOM.render(
     <Router>{routes}</Router>,
     document.getElementById('huxley-app')
-  );}
-);
+  );
+});
 
 CurrentUserActions.bootstrap();
