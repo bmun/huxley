@@ -106,13 +106,13 @@ var ForgotPasswordView = React.createClass({
     this.setState({
       error: "Sorry, we couldn't find a user with that username.",
       loading: false
-    }, function() {
-      $(this.getDOMNode()).effect(
+    }, () => {
+      $('#huxley-app').effect(
         'shake',
         {direction: 'up', times: 2, distance: 2},
         250
       );
-    }.bind(this));
+    });
   },
 });
 
