@@ -4,6 +4,7 @@
  */
 
 var $ = require('jquery');
+var Cookie = require('js-cookie');
 
 /**
  * The ServerAPI exists to centralize and abstract calls to the server. Any
@@ -51,5 +52,14 @@ function _get(uri) {
     });
   });
 }
+
+$.ajaxSetup({
+  beforeSend: (xhr, settings) => {
+    if (!/^(GET|HEAD|OPTIONS|TRACE)$/.test(settings.type)) {
+      // TODO: check that it's same origin.
+      xhr.setRequestHeader('X-CSRFToken', Cookie.get('csrftoken'));
+    }
+  },
+});
 
 module.exports = ServerAPI;

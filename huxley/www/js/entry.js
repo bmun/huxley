@@ -8,7 +8,6 @@
 require('core-js/es6');
 
 var $ = require('jquery');
-var Cookie = require('js-cookie');
 var React = require('react');
 var ReactDOM = require('react-dom')
 var ReactRouter = require('react-router');
@@ -62,12 +61,3 @@ $(function() {
 );
 
 CurrentUserActions.bootstrap();
-
-$.ajaxSetup({
-  beforeSend: function(xhr, settings) {
-    if (!/^(GET|HEAD|OPTIONS|TRACE)$/.test(settings.type)) {
-      // TODO: check that it's same origin.
-      xhr.setRequestHeader('X-CSRFToken', Cookie.get('csrftoken'));
-    }
-  }
-});
