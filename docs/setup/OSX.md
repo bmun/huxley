@@ -60,7 +60,7 @@ The first step is to prepare the database. We do that by running:
 Running the server will automatically create a database for us at `huxley/huxley.db`. Once you've run the server exit it (CONTROL-C), and then run:
 
     $ python manage.py migrate
-    $ python manage.py loaddata countries committees advisor chair conference
+    $ python manage.py loaddata conference countries committees advisor chair
 
 Finally, we use Pipeline to collect, compile, and compress our static assets. It simply hooks into Django's `collectstatic` management command:
 
