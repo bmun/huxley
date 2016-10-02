@@ -5,7 +5,6 @@
 
 'use strict';
 
-var $ = require('jquery');
 var React = require('react');
 var ReactRouter = require('react-router');
 
@@ -19,6 +18,7 @@ var CurrentUserActions = require('actions/CurrentUserActions');
 var DelegateSelect = require('components/DelegateSelect');
 var DelegateStore = require('stores/DelegateStore');
 var InnerView = require('components/InnerView');
+var ServerAPI = require('lib/ServerAPI');
 
 var AdvisorAssignmentsView = React.createClass({
   mixins: [
@@ -218,68 +218,52 @@ var AdvisorAssignmentsView = React.createClass({
     var school = CurrentUserStore.getCurrentUser().school;
     if (confirm) {
       this.setState({loading: true});
-      $.ajax ({
-        type: 'PUT',
-        url: '/api/schools/'+school.id,
-        data: {
-          assignments_finalized: true,
-        },
-        success: this._handleFinalizedSuccess,
-        error: this._handleError
-      });
+      ServerAPI.updateSchool(school.id, {assignments_finalized: true})
+        .then(this._handleFinalizedSuccess, this._handleError);
     }
   },
 
   _handleAssignmentDelete: function(assignment) {
-    var confirm = window.confirm("Are you sure you want to delete this assignment");
+    var confirm = window.confirm("Are you sure you want to delete this assignment?");
     if (confirm) {
       this.setState({loading: true});
-      $.ajax ({
-        type: 'PUT',
-        url: '/api/assignments/'+assignment.id,
-        data: {
-          rejected: true,
-        },
-        success: this._handleAssignmentDeleteSuccess.bind(this, assignment.id),
-        error: this._handleError,
-      });
+      ServerAPI.updateAssignment(assignment.id, {rejected: true}).then(
+        this._handleAssignmentDeleteSuccess.bind(this, assignment.id),
+        this.handleError
+      );
     }
   },
 
   _handleSave: function(event) {
     var school = CurrentUserStore.getCurrentUser().school;
     this.setState({loading: true});
-    $.ajax ({
-      type: 'PATCH',
-      url: '/api/schools/' + school.id + '/delegates',
-      data: JSON.stringify(this.state.delegates),
-      success: this._handleSuccess,
-      error: this._handleError,
+    ServerAPI.updateSchoolDelegates(
+      school.id,
+      JSON.stringify(this.state.delegates)
+    ).then(this._handleSuccess, this._handleError);
+  },
+
+  _handleFinalizedSuccess: function(response) {
+    CurrentUserActions.updateSchool(response);
+    this.setState({loading: false});
+    this.history.pushState(null, '/advisor/assignments');
+  },
+
+  _handleAssignmentDeleteSuccess: function(id, response) {
+    const assignments = this.state.assignments;
+    this.setState({
+      loading: false,
+      assignments: assignments.filter((assignment) => assignment.id != id),
     });
-  },
-
-  _handleFinalizedSuccess: function(data, status, jqXHR) {
-    CurrentUserActions.updateSchool(jqXHR.responseJSON);
-    this.setState({loading: false});
     this.history.pushState(null, '/advisor/assignments');
   },
 
-  _handleAssignmentDeleteSuccess: function(id, data, status, jqXHR) {
-    var assignments = this.state.assignments
-    assignments = assignments.filter(function (assignment) {
-      return assignment.id != id
-    })
-    this.setState({assignments: assignments})
-    this.setState({loading: false});
-    this.history.pushState(null, '/advisor/assignments');
-  },
-
-  _handleError: function(jqXHR, status, error) {
+  _handleError: function(response) {
     window.alert("Something went wrong. Please try again.");
     this.setState({loading: false});
   },
 
-   _handleSuccess: function(event) {
+   _handleSuccess: function(response) {
     this.setState({loading: false});
     this.history.pushState(null, '/advisor/assignments');
   }
