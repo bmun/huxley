@@ -5,7 +5,6 @@
 
 'use strict';
 
-var $ = require('jquery');
 var Modal = require('react-modal');
 var React = require('react');
 var ReactRouter = require('react-router');
@@ -18,6 +17,7 @@ var CurrentUserStore = require('stores/CurrentUserStore');
 var DelegateStore = require('stores/DelegateStore');
 var CurrentUserActions = require('actions/CurrentUserActions');
 var InnerView = require('components/InnerView');
+var ServerAPI = require('lib/ServerAPI');
 var TextInput = require('components/TextInput');
 var _handleChange = require('utils/_handleChange');
 
@@ -201,80 +201,60 @@ var AdvisorRosterView = React.createClass({
   },
 
   _handleDeleteDelegate: function(delegate) {
-    this.setState({loading: true});
-    $.ajax ({
-      type: 'DELETE',
-      url: '/api/delegates/'+delegate.id,
-      success: this._handleDelegateDeleteSuccess.bind(this, delegate.id),
-      error: this._handleError,
-    });
+    const confirmed = window.confirm(
+      `Are you sure you want to delete this delegate (${delegate.name})?`
+    );
+    if (confirmed) {
+      this.setState({loading: true});
+      ServerAPI.deleteDelegate(delegate.id).then(
+        this._handleDelegateDeleteSuccess.bind(this, delegate.id),
+        this._handleError
+      );
+    }
   },
 
   _handleAddDelegate: function(data) {
     this.setState({loading: true});
     var user = CurrentUserStore.getCurrentUser();
-    $.ajax({
-      type: 'POST',
-      url: '/api/delegates/',
-      data: JSON.stringify({
-        name: this.state.modal_name,
-        email: this.state.modal_email,
-        school: user.school.id
-      }),
-      success: this._handleAddDelegateSuccess,
-      error: this._handleError,
-      dataType: 'json',
-      contentType: 'application/json'
-    });
+    ServerAPI.createDelegate(
+      this.state.modal_name,
+      this.state.modal_email,
+      user.school.id
+    ).then(this._handleAddDelegateSuccess, this._handleError);
     event.preventDefault();
   },
 
-  _handleEditDelegate: function(delegate_id) {
+  _handleEditDelegate: function(delegateID) {
     var user = CurrentUserStore.getCurrentUser();
     this.setState({loading: true});
-    $.ajax ({
-      type: 'PATCH',
-      url: '/api/delegates/'+delegate_id,
-      data: JSON.stringify({
-        name: this.state.modal_name,
-        email: this.state.modal_email,
-        school: user.school.id
-      }),
-      success: this._handleEditDelegateSuccess,
-      error: this._handleError,
-      dataType: 'json',
-      contentType: 'application/json'
-    });
+    ServerAPI.updateDelegate(delegateID, {
+      name: this.state.modal_name,
+      email: this.state.modal_email,
+      school: user.school.id,
+    }).then(this._handleEditDelegateSuccess, this._handleError);
     event.preventDefault();
   },
 
-  _handleDelegateDeleteSuccess: function(id, data, status, jqXHR) {
-    var delegates = this.state.delegates;
-    delegates = delegates.filter(function (delegate) {
-        return delegate.id != id;
-    });
-
+  _handleDelegateDeleteSuccess: function(id, response) {
     this.setState({
-      delegates: delegates,
-      loading: false
+      delegates: this.state.delegates.filter((delegate) => delegate.id != id),
+      loading: false,
     });
   },
 
-  _handleAddDelegateSuccess: function(data, status, jqXHR) {
-    var delegates = this.state.delegates;
-    delegates.push(data);
-
+  _handleAddDelegateSuccess: function(response) {
     this.setState({
+      delegates: this.state.delegates.concat(response),
+      loading: false,
       modal_open: false,
-      loading: false
     });
   },
 
-  _handleEditDelegateSuccess: function(data, status, jqXHR) {
+  _handleEditDelegateSuccess: function(response) {
     var delegates = this.state.delegates;
     for (var i = 0; i < delegates.length; i++) {
-      if (delegates[i].id == data.id) {
-        delegates[i] = data;
+      if (delegates[i].id == response.id) {
+        delegates[i] = response;
       }
     }
 
@@ -285,12 +265,7 @@ var AdvisorRosterView = React.createClass({
     });
   },
 
-  _handleError: function(jqXHR, status, error) {
-    var response = jqXHR.responseJSON;
-    if (!response) {
-      return;
-    }
-
+  _handleError: function(response) {
     this.setState({
       errors: response,
       loading: false

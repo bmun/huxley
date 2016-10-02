@@ -11,6 +11,14 @@ var Cookie = require('js-cookie');
  * code interacting with the server should go through this interface.
  */
 var ServerAPI = {
+  createDelegate(name, email, school) {
+    return _post('/api/delegates', {name, email, school});
+  },
+
+  deleteDelegate(delegateID) {
+    return _delete(`/api/delegates/${delegateID}`);
+  },
+
   /**
    * Get a list of all assignments for the given school ID.
    */
@@ -49,6 +57,10 @@ var ServerAPI = {
 
   updateAssignment(assignmentID, data) {
     return _patch(`/api/assignments/${assignmentID}`, data);
+  },
+
+  updateDelegate(delegateID, data) {
+    return _patch(`/api/delegates/${delegateID}`, data);
   },
 
   updateSchool(schoolID, data) {
