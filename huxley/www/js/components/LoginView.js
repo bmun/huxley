@@ -15,6 +15,7 @@ var ConferenceContext = require('components/ConferenceContext');
 var CurrentUserActions = require('actions/CurrentUserActions');
 var NavLink = require('components/NavLink');
 var OuterView = require('components/OuterView');
+var ServerAPI = require('lib/ServerAPI');
 var TextInput = require('components/TextInput');
 var User = require('utils/User');
 
@@ -130,40 +131,30 @@ var LoginView = React.createClass({
 
   _handleSubmit: function(event) {
     this.setState({loading: true});
-    $.ajax({
-      type: 'POST',
-      url: '/api/users/me',
-      data: {
-        username: this.state.username,
-        password: this.state.password
-      },
-      success: this._handleSuccess,
-      error: this._handleError,
-      dataType: 'json'
-    });
+    ServerAPI.login(this.state.username, this.state.password)
+      .then(this._handleSuccess, this._handleError);
     event.preventDefault();
   },
 
-  _handleSuccess: function(data, status, jqXHR) {
-    CurrentUserActions.login(jqXHR.responseJSON);
+  _handleSuccess: function(responseJSON) {
+    CurrentUserActions.login(responseJSON);
   },
 
-  _handleError: function(jqXHR, status, error) {
-    var response = jqXHR.responseJSON;
-    if (!response.detail) {
+  _handleError: function(responseJSON) {
+    if (!responseJSON.detail) {
       return;
     }
 
     this.setState({
-      error: response.detail,
-      loading: false
-    }, function() {
+      error: responseJSON.detail,
+      loading: false,
+    }, () => {
       $('#huxley-app').effect(
         'shake',
         {direction: 'up', times: 2, distance: 2},
         250
       );
-    }.bind(this));
+    });
   }
 });
 

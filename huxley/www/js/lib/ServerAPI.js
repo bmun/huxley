@@ -38,7 +38,31 @@ var ServerAPI = {
   getDelegates(schoolID) {
     return _get(`/api/schools/${schoolID}/delegates`);
   },
+
+  login(username, password) {
+    return _post('/api/users/me', {username, password});
+  },
+
+  logout() {
+    return _delete('/api/users/me');
+  },
 };
+
+function _delete(uri) {
+  return new Promise((resolve, reject) => {
+    $.ajax({
+      type: 'DELETE',
+      url: uri,
+      dataType: 'json',
+      success: (data, textStatus, jqXHR) => {
+        resolve(jqXHR.responseJSON);
+      },
+      error: (jqXHR, status, error) => {
+        reject(jqXHR.responseJSON);
+      },
+    });
+  });
+}
 
 function _get(uri) {
   return new Promise((resolve, reject) => {
@@ -48,6 +72,26 @@ function _get(uri) {
       dataType: 'json',
       success: (data, textStatus, jqXHR) => {
         resolve(jqXHR.responseJSON);
+      },
+      error: (jqXHR, status, error) => {
+        reject(jqXHR.responseJSON);
+      },
+    });
+  });
+}
+
+function _post(uri, data) {
+  return new Promise((resolve, reject) => {
+    $.ajax({
+      type: 'POST',
+      url: uri,
+      data: data,
+      dataType: 'json',
+      success: (data, textStatus, jqXHR) => {
+        resolve(jqXHR.responseJSON);
+      },
+      error: (jqXHR, status, error) => {
+        reject(jqXHR.responseJSON);
       },
     });
   });

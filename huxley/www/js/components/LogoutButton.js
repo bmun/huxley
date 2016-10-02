@@ -5,11 +5,11 @@
 
 'use strict';
 
-var $ = require('jquery');
 var React = require('react');
 
 var Button = require('components/Button');
 var CurrentUserActions = require('actions/CurrentUserActions');
+var ServerAPI = require('lib/ServerAPI');
 
 var LogoutButton = React.createClass({
   getInitialState: function() {
@@ -32,22 +32,12 @@ var LogoutButton = React.createClass({
 
   _handleLogout: function(e) {
     this.setState({loggingOut: true});
-    $.ajax({
-      type: 'DELETE',
-      url: '/api/users/me',
-      success: this._handleLogoutSuccess,
-      error: this._handleLogoutError,
-      dataType: 'json'
-    });
+    ServerAPI.logout().then(this._handleLogoutSuccess);
   },
 
-  _handleLogoutSuccess: function(data, status, jqXHR) {
+  _handleLogoutSuccess: function(responseJSON) {
     CurrentUserActions.logout();
   },
-
-  _handleLogoutError: function(jqXHR, status, error) {
-    var response = jqXHR.responseJSON;
-  }
 });
 
 module.exports = LogoutButton;
