@@ -72,42 +72,10 @@ var ServerAPI = {
   },
 };
 
-function _delete(uri) {
+function _ajax(method, uri, data) {
   return new Promise((resolve, reject) => {
     $.ajax({
-      type: 'DELETE',
-      url: uri,
-      dataType: 'json',
-      success: (data, textStatus, jqXHR) => {
-        resolve(jqXHR.responseJSON);
-      },
-      error: (jqXHR, status, error) => {
-        reject(jqXHR.responseJSON);
-      },
-    });
-  });
-}
-
-function _get(uri) {
-  return new Promise((resolve, reject) => {
-    $.ajax({
-      type: 'GET',
-      url: uri,
-      dataType: 'json',
-      success: (data, textStatus, jqXHR) => {
-        resolve(jqXHR.responseJSON);
-      },
-      error: (jqXHR, status, error) => {
-        reject(jqXHR.responseJSON);
-      },
-    });
-  });
-}
-
-function _patch(uri, data) {
-  return new Promise((resolve, reject) => {
-    $.ajax({
-      type: 'PATCH',
+      type: method,
       url: uri,
       data: data,
       dataType: 'json',
@@ -121,22 +89,10 @@ function _patch(uri, data) {
   });
 }
 
-function _post(uri, data) {
-  return new Promise((resolve, reject) => {
-    $.ajax({
-      type: 'POST',
-      url: uri,
-      data: data,
-      dataType: 'json',
-      success: (data, textStatus, jqXHR) => {
-        resolve(jqXHR.responseJSON);
-      },
-      error: (jqXHR, status, error) => {
-        reject(jqXHR.responseJSON);
-      },
-    });
-  });
-}
+const _delete = _ajax.bind(null, 'DELETE');
+const _get = _ajax.bind(null, 'GET');
+const _patch = _ajax.bind(null, 'PATCH');
+const _post = _ajax.bind(null, 'POST');
 
 $.ajaxSetup({
   beforeSend: (xhr, settings) => {
