@@ -68,10 +68,17 @@ Finally, we use Pipeline to collect, compile, and compress our static assets. It
     
 If you run into an error here run `ulimit -n 512`. This will increase the number of files the process running Huxley will be allowed to open.
 
-Lastly, spin up a development server so you can access Huxley at `localhost:8000`:
+Next, you need to compile your JS code by running:
+
+    $ npm run build
+
+Lastly, open up a new tab in your terminal (make sure you're still in your virtualenv), and spin up a development server:
 
     $ python manage.py runserver
-    
+
+You can access Huxley at `localhost:8000`.
+
+
 If you haven't created a superuser yet, you should do that now:
 
     $ python manage.py createsuperuser
