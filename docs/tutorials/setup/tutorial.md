@@ -33,7 +33,8 @@ After you've ensured you've downloaded python it's time to check to make sure yo
 1.8
 ```
 
-If you get an error or nothing prints. Download version 1.7 of Django [here](https://docs.djangoproject.com/en/1.8/intro/install/#install-django).
+If you get an error or nothing prints. Download version 1.7 of Django [here](https://docs.djangoproject.com/en/1.8/intro/install/#install-django). It's easiest to install using pip, so make sure that you have pip installed/updated here: https://pip.pypa.io/en/stable/installing/#upgrading-pip
+(You can test to make sure you have pip by running the "which pip" command from terminal).
 
 Now that we've verified Python and Django are installed, let's create a django project. In your `huxleytutorial` directory run
 ```
