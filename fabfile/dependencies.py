@@ -5,7 +5,7 @@ import json
 
 from os.path import join
 
-from fabric.api import abort, env, hide, lcd, local, task
+from fabric.api import abort, env, hide, lcd, local, settings, task
 from fabric.contrib.console import confirm
 
 from .utils import ui
@@ -44,7 +44,7 @@ def check_python():
 
     expected, actual = parse(requirements), parse(installed)
     if not check_versions(expected, actual):
-        if confirm('Update dependences?'):
+        if confirm('Update dependencies?'):
             update_python()
 
 
@@ -58,22 +58,16 @@ def update_python():
 def check_js():
     '''Check the installed dependencies against package.json.'''
     print ui.info('Checking JS dependencies...')
-    with hide('running'):
-        if not local('which npm', capture=True):
-            print ui.error('npm not found! Install it with `brew install npm`.')
+    with hide('running', 'warnings'), settings(warn_only=True):
+        result = local(join(env.huxley_root,
+                       'node_modules/.bin/check-dependencies'))
+        if result.succeeded:
+            print ui.success('Dependencies are up-to-date.')
             return
 
-    with open(join(env.huxley_root, 'package.json'), 'r') as p:
-        package = json.loads(p.read())
-        required = package['dependencies']
-    with lcd(env.huxley_root), hide('running'):
-        npm_list = json.loads(local('npm list --json', capture=True))
-        modules = npm_list.get('dependencies', {}).items()
-        installed = {name: info['version'] for name, info in modules}
-
-    if not check_versions(required, installed):
-        if confirm('Update dependencies?'):
-            update_js()
+    print ui.warning('Some dependencies are out of date!')
+    if confirm('Update dependencies?'):
+        update_js()
 
 
 def update_js():
