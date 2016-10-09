@@ -42,7 +42,7 @@ def update():
 
 @task
 def lint():
-    '''Format and commit python files committed on the current feature branch'''
+    '''Run linter evaluation of files committed on current feature branch'''
     diff_list = git.diff_name_only()
     py_diff_list = [pyfile for pyfile in diff_list if pyfile.endswith('.py')]
 
@@ -77,6 +77,11 @@ def format():
 @task
 def submit(remote='origin', skip_tests=False):
     '''Push the current feature branch and create/update pull request.'''
+    if confirm('View linter evluation? (Will not change code)'):
+        lint()
+        if not confirm('Continue submit?'):
+            return
+
     format()
     if not skip_tests:
         with settings(warn_only=True):
