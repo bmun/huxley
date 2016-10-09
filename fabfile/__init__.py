@@ -77,7 +77,7 @@ def format():
 @task
 def submit(remote='origin', skip_tests=False):
     '''Push the current feature branch and create/update pull request.'''
-    if confirm('View linter evluation? (Will not change code)'):
+    if confirm('View linter evaluation? (Will not change code)'):
         lint()
         if not confirm('Continue submit?'):
             return
