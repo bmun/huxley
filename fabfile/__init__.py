@@ -6,6 +6,8 @@ from os.path import abspath, dirname, join
 from fabric.api import abort, hide, env, execute, local, settings, task
 from fabric.contrib.console import confirm
 
+from pylint import epylint
+
 from yapf.yapflib.yapf_api import FormatFile
 
 from . import dependencies, migrations, pr, test
@@ -39,6 +41,19 @@ def update():
 
 
 @task
+def lint():
+    '''Format and commit python files committed on the current feature branch'''
+    diff_list = git.diff_name_only()
+    py_diff_list = [pyfile for pyfile in diff_list if pyfile.endswith('.py')]
+
+    print ui.info('Pylint evaluation of code:')
+
+    for pyfile in py_diff_list:
+        print '\n%s\n' % pyfile
+        epylint.py_run(pyfile)
+
+
+@task
 def format():
     '''Format and commit python files committed on the current feature branch'''
     diff_list = git.diff_name_only()
@@ -47,7 +62,7 @@ def format():
     if confirm('Review formatting changes? (Select no to approve all)'):
 
         for pyfile in py_diff_list:
-            print('Changes:\n' + FormatFile(pyfile, print_diff=True)[0])
+            print 'Changes:\n' + FormatFile(pyfile, print_diff=True)[0]
             if confirm('Accept changes to %s?' % pyfile):
                 FormatFile(pyfile, in_place=True)
     else:
