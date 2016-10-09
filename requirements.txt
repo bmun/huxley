@@ -20,5 +20,5 @@ six==1.7.3
 wsgiref==0.1.2
 xhtml2pdf==0.0.6
 yapf==0.11.0
-astroid=1.4.8
-pylint=1.6.4
+astroid==1.4.8
+pylint==1.6.4
