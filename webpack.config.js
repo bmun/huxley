@@ -33,7 +33,8 @@ module.exports = {
         loader: 'babel-loader',
         exclude: /node_modules/,
         query: {
-          presets: ['es2015', 'react'],
+          plugins: ['transform-object-rest-spread'],
+          presets: ['es2015', 'es2017', 'react'],
         },
       },
     ],
