@@ -1,0 +1,36 @@
+.text-input
+{
+    padding: 5px;
+    width: 288px;
+    font-family: "Segoe UI", "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 300;
+    color: #666;
+    border: 1px solid #ccc;
+
+    border-radius: 3px;
+    moz-border-radius: 3px;
+    webkit-border-radius: 3px;
+
+    box-shadow: inset 0 1px 5px rgba(0, 0, 0, 0.1);
+    webkit-box-shadow: inset 0 1px 5px rgba(0, 0, 0, 0.1);
+    moz-box-shadow: inset 0 1px 5px rgba(0, 0, 0, 0.1);
+
+    -webkit-transition: box-shadow linear 0.1s, border linear 0.05s;
+    -moz-transition: box-shadow linear 0.1s, background linear 0.05s;
+    -ms-transition: box-shadow linear 0.1s, background linear 0.05s;
+    -o-transition: box-shadow linear 0.1s, background linear 0.05s;
+    transition: box-shadow linear 0.1s, background linear 0.05s;
+
+    &:hover { border-color: #bbb; }
+
+    &:focus
+    {
+        background-color: #f9fcff;
+        border-color: #39f;
+        outline: 0;
+
+        box-shadow: inset 0 1px 5px rgba(0, 85, 255, 0.15);
+        webkit-box-shadow: inset 0 1px 5px rgba(0, 85, 255, 0.15);
+        moz-box-shadow: inset 0 1px 5px rgba(0, 85, 255, 0.15);
+    }
+}
