@@ -11,6 +11,8 @@ var cx = require('classnames');
 var TextInput = React.createClass({
 
   propTypes: {
+    defaultValue: React.PropTypes.string,
+    isControlled: React.PropTypes.bool,
     onChange: React.PropTypes.func,
     placeholder: React.PropTypes.string,
     value: React.PropTypes.string,
@@ -18,14 +20,27 @@ var TextInput = React.createClass({
   },
 
   render: function() {
-    return (
-      <input
-        {...this.props}
-        className={cx('text-input', this.props.className)}
-        type={this.props.type || 'text'}
-        onChange={this._handleChange}
-      />
-    );
+    if (!this.props.isControlled) {
+      return (
+        <input
+          defaultValue={this.props.defaultValue || ''}
+          onChange={this.props.onChange}
+          placeholder={this.props.placeholder}
+          className={cx('text-input', this.props.className)}
+          type={this.props.type || 'text'}
+          onChange={this._handleChange}
+        />
+      );
+    } else {
+      return (
+        <input
+          {...this.props}
+          className={cx('text-input', this.props.className)}
+          type={this.props.type || 'text'}
+          onChange={this._handleChange}
+        />
+      );
+    }
   },
 
   _handleChange: function(event) {

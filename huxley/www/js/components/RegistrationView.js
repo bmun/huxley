@@ -119,16 +119,19 @@ var RegistrationView = React.createClass({
               error={this.state.errors['first_name']}
               placeholder="First Name"
               onChange={_handleChange.bind(this, 'first_name')}
+              value={this.state.first_name}
             />
             <RegistrationTextInput
               error={this.state.errors['last_name']}
               placeholder="Last Name"
               onChange={_handleChange.bind(this, 'last_name')}
+              value={this.state.last_name}
             />
             <RegistrationTextInput
               error={this.state.errors['username']}
               placeholder="Username"
               onChange={_handleChange.bind(this, 'username')}
+              value={this.state.username}
             />
             <RegistrationTextInput
               error={this.state.errors['password']}
@@ -181,22 +184,26 @@ var RegistrationView = React.createClass({
             {this.renderSchoolError('name')}
             <TextInput
               placeholder="Street Address"
+              value={this.state.school_address}
               onChange={_handleChange.bind(this, 'school_address')}
             />
             {this.renderSchoolError('address')}
             <TextInput
               placeholder="City"
               onChange={_handleChange.bind(this, 'school_city')}
+              value={this.state.school_city}
             />
             {this.renderSchoolError('city')}
             <TextInput
               placeholder="State"
               onChange={_handleChange.bind(this, 'school_state')}
+              value={this.state.school_state}
             />
             {this.renderSchoolError('state')}
             <TextInput
               placeholder="Zip"
               onChange={_handleChange.bind(this, 'school_zip')}
+              value={this.state.school_zip}
             />
             {this.renderSchoolError('zip_code')}
             <TextInput
@@ -204,6 +211,7 @@ var RegistrationView = React.createClass({
               value={this._getSchoolCountry()}
               onChange={_handleChange.bind(this, 'school_country')}
               disabled={!this.state.school_international}
+              isControlled={true}
             />
             {this.renderSchoolError('country')}
             <hr />
@@ -280,11 +288,13 @@ var RegistrationView = React.createClass({
             <TextInput
               placeholder="Name"
               onChange={_handleChange.bind(this, 'primary_name')}
+              value={this.state.primary_name}
             />
             {this.renderSchoolError('primary_name')}
             <TextInput
               placeholder="Email"
               onChange={_handleChange.bind(this, 'primary_email')}
+              value={this.state.primary_email}
             />
             {this.renderSchoolError('primary_email')}
             <PhoneInput
@@ -300,11 +310,13 @@ var RegistrationView = React.createClass({
             <TextInput
               placeholder="Name"
               onChange={_handleChange.bind(this, 'secondary_name')}
+              value={this.state.secondary_name}
             />
             {this.renderSchoolError('secondary_name')}
             <TextInput
               placeholder="Email"
               onChange={_handleChange.bind(this, 'secondary_email')}
+              value={this.state.secondary_email}
             />
             {this.renderSchoolError('secondary_email')}
             <PhoneInput
