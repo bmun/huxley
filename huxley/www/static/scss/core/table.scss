@@ -1,0 +1,114 @@
+/* Tables */
+
+.tablemenu
+{
+    width:734px;
+    height: 20px;
+    margin: 0px auto;
+    background: #ccc;
+    border: 1px solid #aaa;
+    padding: 3px;
+    text-align: right;
+
+    &.header
+    {
+        border-top-left-radius: 4px;
+        border-top-right-radius: 4px;
+        margin-top: 20px;
+    }
+
+    &.footer
+    {
+        border-bottom-left-radius: 4px;
+        border-bottom-right-radius: 4px;
+    }
+
+    input[type=submit]
+    {
+        width: 70px;
+        height: 20px;
+        border-radius: 3px;
+        font: 12px Helvetica, Arial, sans-serif;
+        font-weight: 700;
+        text-align: left;
+        padding: 3px;
+
+        &:hover { cursor: pointer; }
+
+        &.saved
+        {
+            background: #0c0 url(/static/img/tick.png) right no-repeat;
+            border: 1px solid #090;
+            color: #cfc;
+            text-shadow: 0px 1px #090;
+        }
+
+        &.unsaved
+        {
+            background: #cc0 url(/static/img/warning_small.png) right no-repeat;
+            border: 1px solid #990;
+            color: #ffc;
+            text-shadow: 0px 1px #990;
+            /*icon from wefunction.com*/
+        }
+    }
+}
+
+.table-container
+{
+    width: 740px;
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    border-top: 1px solid #fff;
+    border-bottom: 1px solid #fff;
+    margin: 0px auto;
+}
+
+.table
+{
+    width: 700px;
+    margin: 10px auto 20px auto;
+    font-size: 13px;
+    font-weight: 400;
+    border-collapse: collapse;
+    background: #eee;
+
+    thead
+    {
+        font-size: 13px;
+
+        th
+        {
+            text-align:left;
+            color: #222;
+        }
+    }
+
+    tr
+    {
+        height:28px;
+        padding: 0px;
+        border-bottom: 1px solid #ddd;
+    }
+
+    input[type=text]
+    {
+        border: none;
+        background: none;
+        height: 20px;
+        margin: 0px;
+        font-family: "Segoe UI", "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-weight: 300;
+        font-size: 13px;
+        color: #111;
+        text-shadow: 0px 1px #fff;
+        margin: 0;
+        padding: 0;
+        width: 200px;
+    }
+
+    td.field
+    {
+        width: 375px;
+    }
+}
