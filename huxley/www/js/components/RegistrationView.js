@@ -211,6 +211,7 @@ var RegistrationView = React.createClass({
               value={this._getSchoolCountry()}
               onChange={_handleChange.bind(this, 'school_country')}
               disabled={!this.state.school_international}
+              isControlled={true}
             />
             {this.renderSchoolError('country')}
             <hr />

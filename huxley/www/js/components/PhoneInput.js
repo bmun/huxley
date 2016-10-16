@@ -31,6 +31,7 @@ var PhoneInput = React.createClass({
     return (
       <TextInput
         {...this.props}
+        isControlled={true}
         placeholder="Phone Number"
         onChange={this._handleChange}
       />

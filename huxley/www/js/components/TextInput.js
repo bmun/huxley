@@ -8,9 +8,16 @@
 var React = require('react');
 var cx = require('classnames');
 
+/**
+ * TextInput is uncontrolled by default to preserve cursor position.
+ * Controlled inputs cannot preserve cursor position upon rendering. 
+ * See issue #519.
+ */
 var TextInput = React.createClass({
 
   propTypes: {
+    defaultValue: React.PropTypes.string,
+    isControlled: React.PropTypes.bool,
     onChange: React.PropTypes.func,
     placeholder: React.PropTypes.string,
     value: React.PropTypes.string,
@@ -22,8 +29,9 @@ var TextInput = React.createClass({
       <input
         {...this.props}
         className={cx('text-input', this.props.className)}
-        type={this.props.type || 'text'}
         onChange={this._handleChange}
+        type={this.props.type || 'text'}
+        value={this.props.isControlled ? this.props.value : undefined}
       />
     );
   },

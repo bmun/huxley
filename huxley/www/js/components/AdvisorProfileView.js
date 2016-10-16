@@ -91,6 +91,7 @@ var AdvisorProfileView = React.createClass({
                   <td>First Name</td>
                   <td>
                     <TextInput
+                      defaultValue={this.state.first_name}
                       value={this.state.first_name}
                       onChange={_handleChange.bind(this, 'first_name')}
                     />
@@ -101,6 +102,7 @@ var AdvisorProfileView = React.createClass({
                   <td>Last Name</td>
                   <td>
                     <TextInput
+                      defaultValue={this.state.last_name}
                       value={this.state.last_name}
                       onChange={_handleChange.bind(this, 'last_name')}
                     />
@@ -120,6 +122,7 @@ var AdvisorProfileView = React.createClass({
                   <td>Address</td>
                   <td>
                     <TextInput
+                      defaultValue={this.state.school_address}
                       value={this.state.school_address}
                       onChange={_handleChange.bind(this, 'school_address')}
                     />
@@ -130,6 +133,7 @@ var AdvisorProfileView = React.createClass({
                   <td>City</td>
                   <td>
                     <TextInput
+                      defaultValue={this.state.school_city}
                       value={this.state.school_city}
                       onChange={_handleChange.bind(this, 'school_city')}
                     />
@@ -140,6 +144,7 @@ var AdvisorProfileView = React.createClass({
                   <td>Zip</td>
                   <td>
                     <TextInput
+                      defaultValue={this.state.school_zip_code}
                       value={this.state.school_zip_code}
                       onChange={_handleChange.bind(this, 'school_zip_code')}
                     />
@@ -212,6 +217,7 @@ var AdvisorProfileView = React.createClass({
                   <td>Name</td>
                   <td>
                     <TextInput
+                      defaultValue={this.state.primary_name}
                       value={this.state.primary_name}
                       onChange={_handleChange.bind(this, 'primary_name')}
                     />
@@ -222,6 +228,7 @@ var AdvisorProfileView = React.createClass({
                   <td>Email</td>
                   <td>
                     <TextInput
+                      defaultValue={this.state.primary_email}
                       value={this.state.primary_email}
                       onChange={_handleChange.bind(this, 'primary_email')}
                     />
@@ -246,6 +253,7 @@ var AdvisorProfileView = React.createClass({
                   <td>Name</td>
                   <td>
                     <TextInput
+                      defaultValue={this.state.secondary_name}
                       value={this.state.secondary_name}
                       onChange={_handleChange.bind(this, 'secondary_name')}
                     />
@@ -256,6 +264,7 @@ var AdvisorProfileView = React.createClass({
                   <td>Email</td>
                   <td>
                     <TextInput
+                      defaultValue={this.state.secondary_email}
                       value={this.state.secondary_email}
                       onChange={_handleChange.bind(this, 'secondary_email')}
                     />
