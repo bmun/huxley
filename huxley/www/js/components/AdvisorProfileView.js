@@ -91,7 +91,7 @@ var AdvisorProfileView = React.createClass({
                   <td>First Name</td>
                   <td>
                     <TextInput
-                      value={this.state.first_name}
+                      placeholder={this.state.first_name}
                       onChange={_handleChange.bind(this, 'first_name')}
                     />
                     {this.renderError('first_name')}
@@ -101,7 +101,7 @@ var AdvisorProfileView = React.createClass({
                   <td>Last Name</td>
                   <td>
                     <TextInput
-                      value={this.state.last_name}
+                      placeholder={this.state.last_name}
                       onChange={_handleChange.bind(this, 'last_name')}
                     />
                     {this.renderError('last_name')}
@@ -120,7 +120,7 @@ var AdvisorProfileView = React.createClass({
                   <td>Address</td>
                   <td>
                     <TextInput
-                      value={this.state.school_address}
+                      placeholder={this.state.school_address}
                       onChange={_handleChange.bind(this, 'school_address')}
                     />
                     {this.renderError('address')}
@@ -130,7 +130,7 @@ var AdvisorProfileView = React.createClass({
                   <td>City</td>
                   <td>
                     <TextInput
-                      value={this.state.school_city}
+                      placeholder={this.state.school_city}
                       onChange={_handleChange.bind(this, 'school_city')}
                     />
                     {this.renderError('city')}
@@ -140,7 +140,7 @@ var AdvisorProfileView = React.createClass({
                   <td>Zip</td>
                   <td>
                     <TextInput
-                      value={this.state.school_zip_code}
+                      placeholder={this.state.school_zip_code}
                       onChange={_handleChange.bind(this, 'school_zip_code')}
                     />
                     {this.renderError('zip_code')}
@@ -212,7 +212,7 @@ var AdvisorProfileView = React.createClass({
                   <td>Name</td>
                   <td>
                     <TextInput
-                      value={this.state.primary_name}
+                      placeholder={this.state.primary_name}
                       onChange={_handleChange.bind(this, 'primary_name')}
                     />
                     {this.renderError('primary_name')}
@@ -222,7 +222,7 @@ var AdvisorProfileView = React.createClass({
                   <td>Email</td>
                   <td>
                     <TextInput
-                      value={this.state.primary_email}
+                      placeholder={this.state.primary_email}
                       onChange={_handleChange.bind(this, 'primary_email')}
                     />
                     {this.renderError('primary_email')}
@@ -246,7 +246,7 @@ var AdvisorProfileView = React.createClass({
                   <td>Name</td>
                   <td>
                     <TextInput
-                      value={this.state.secondary_name}
+                      placeholder={this.state.secondary_name}
                       onChange={_handleChange.bind(this, 'secondary_name')}
                     />
                     {this.renderError('secondary_name')}
@@ -256,7 +256,7 @@ var AdvisorProfileView = React.createClass({
                   <td>Email</td>
                   <td>
                     <TextInput
-                      value={this.state.secondary_email}
+                      placeholder={this.state.secondary_email}
                       onChange={_handleChange.bind(this, 'secondary_email')}
                     />
                     {this.renderError('secondary_email')}
