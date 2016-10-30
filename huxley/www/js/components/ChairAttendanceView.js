@@ -19,11 +19,19 @@ var DelegateSelect = require('components/DelegateSelect');
 var DelegateStore = require('stores/DelegateStore');
 var InnerView = require('components/InnerView');
 var ServerAPI = require('lib/ServerAPI');
+var User = require('utils/User');
 
 var ChairAttendanceView = React.createClass({
   mixins: [
     ReactRouter.History,
   ],
+
+  componentDidMount: function() {
+    console.log(this.props.user);
+    if (!User.isChair(this.props.user)) {
+      this.history.pushState(null, '/login');
+    }
+  },
 
   render: function() {
     return (
