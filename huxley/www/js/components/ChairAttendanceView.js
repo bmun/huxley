@@ -42,9 +42,9 @@ var ChairAttendanceView = React.createClass({
   },
 
   renderAttendanceRows: function() {
-  return this.state.countries.map(function(country) {
-    return (
-      <tr>
+    return this.state.countries.map(function(country) {
+      return (
+        <tr>
           <td>
             {country.name}
           </td>
@@ -76,8 +76,7 @@ var ChairAttendanceView = React.createClass({
               </label>
           </td>
         </tr>
-            )
-    }.bind(this));
+      )}.bind(this));
   },
 
   render: function() {
