@@ -21,25 +21,99 @@ var InnerView = require('components/InnerView');
 var ServerAPI = require('lib/ServerAPI');
 
 var ChairAttendanceView = React.createClass({
+
+  getInitialState: function() {
+    return {
+      countries: [],
+    };
+  },
+
   mixins: [
     ReactRouter.History,
   ],
 
+  componentWillMount: function() {
+    var user = CurrentUserStore.getCurrentUser();
+     CountryStore.getCountries(function(countries) {
+      this.setState({countries: countries});
+    }.bind(this));
+  },
+
+  renderAttendanceRows: function() {
+  return this.state.countries.map(function(country) {
+    return (
+      <tr>
+          <td>
+            {country.name}
+          </td>
+          <td>
+              <label name="committee_prefs">
+                <input
+                  className="choice"
+                  type="checkbox"
+                  name="committee_prefs"
+                />
+              </label>
+          </td>
+          <td>
+              <label name="committee_prefs">
+                <input
+                  className="choice"
+                  type="checkbox"
+                  name="committee_prefs"
+                />
+              </label>
+          </td>
+          <td>
+              <label name="committee_prefs">
+                <input
+                  className="choice"
+                  type="checkbox"
+                  name="committee_prefs"
+                />
+              </label>
+          </td>
+        </tr>
+            )
+    }.bind(this));
+  },
+
   render: function() {
     return (
       <InnerView>
-        <h2>Assignments</h2>
+        <h2>Attendance</h2>
         <p>
-          Here you can view your tentative assignments for BMUN {conference.session}. If you
-          would like to request more slots, please email <a href="mailto:info@bmun.org">
-          info@bmun.org</a>. The assignment finalization deadline is January 23rd.
-          After assignment finalization we will ask that you assign the
-          delegates you have added in the delegates tab to the assignments
-          given to you.
+          Here you can take attendance for delegates. Note that confirming attendance will alert
+          the advisor as to if there delegates have shown up to committee.
         </p>
+          <form>
+          <div className="table-container">
+            <table className="table highlight-cells">
+              <thead>
+                <tr>
+                  <th>Assignment</th>
+                  <th>Present</th>
+                  <th>Present2</th>
+                  <th>Present3</th>
+                </tr>
+              </thead>
+              <tbody>
+                  {this.renderAttendanceRows()}
+              </tbody>
+            </table>
+          </div>
+          <Button
+            color="green">
+            Confirm Attendance
+          </Button>
+        </form>
+
       </InnerView>
     );
   },
 });
+    
+
+
 
 module.exports = ChairAttendanceView;
