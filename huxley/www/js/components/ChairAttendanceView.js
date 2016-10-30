@@ -18,6 +18,7 @@ var CurrentUserActions = require('actions/CurrentUserActions');
 var DelegateSelect = require('components/DelegateSelect');
 var DelegateStore = require('stores/DelegateStore');
 var InnerView = require('components/InnerView');
+var PermissionDeniedView = require('components/PermissionDeniedView');
 var ServerAPI = require('lib/ServerAPI');
 var User = require('utils/User');
 
@@ -26,27 +27,26 @@ var ChairAttendanceView = React.createClass({
     ReactRouter.History,
   ],
 
-  componentDidMount: function() {
-    console.log(this.props.user);
-    if (!User.isChair(this.props.user)) {
-      this.history.pushState(null, '/login');
-    }
-  },
-
   render: function() {
-    return (
-      <InnerView>
-        <h2>Assignments</h2>
-        <p>
-          Here you can view your tentative assignments for BMUN {conference.session}. If you
-          would like to request more slots, please email <a href="mailto:info@bmun.org">
-          info@bmun.org</a>. The assignment finalization deadline is January 23rd.
-          After assignment finalization we will ask that you assign the
-          delegates you have added in the delegates tab to the assignments
-          given to you.
-        </p>
-      </InnerView>
-    );
+    if (User.isChair(this.props.user)) {
+      return (
+        <InnerView>
+          <h2>Chair View</h2>
+          <p>
+            Here you can view your tentative assignments for BMUN {conference.session}. If you
+            would like to request more slots, please email <a href="mailto:info@bmun.org">
+            info@bmun.org</a>. The assignment finalization deadline is January 23rd.
+            After assignment finalization we will ask that you assign the
+            delegates you have added in the delegates tab to the assignments
+            given to you.
+          </p>
+        </InnerView>
+      );
+    } else {
+      return (
+        <PermissionDeniedView />
+      );
+    }
   },
 });
 
