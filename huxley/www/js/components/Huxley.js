@@ -9,6 +9,7 @@ var React = require('react');
 var ReactRouter = require('react-router');
 
 var AdvisorView = require('components/AdvisorView');
+var ChairView = require('components/ChairView');
 var ConferenceContext = require('components/ConferenceContext');
 var CurrentUserStore = require('stores/CurrentUserStore');
 var User = require('utils/User');
@@ -34,6 +35,8 @@ var Huxley = React.createClass({
         this.history.pushState(null, '/login');
       } else if (User.isAdvisor(user)) {
         this.history.pushState(null, '/advisor/profile');
+      } else if (User.isChair(user)) {
+        this.history.pushState(null, '/chair/attendance');
       }
     });
   },
@@ -47,6 +50,12 @@ var Huxley = React.createClass({
         <AdvisorView user={user}>
           {React.cloneElement(this.props.children, { user: user })}
         </AdvisorView>
+      );
+    } else if (User.isChair(user)) {
+      return (
+        <ChairView user={user}>
+          {React.cloneElement(this.props.children, { user: user })}
+        </ChairView>
       );
     } else {
       // TODO: Chairs
