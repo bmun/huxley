@@ -28,7 +28,7 @@ class DelegateStore extends Store {
     return _delegates;
   }
 
-  deleteDelegate(schoolID, delegate) {
+  deleteDelegate(delegate) {
     ServerAPI.deleteDelegate(delegate.id);
     var index = _delegates.indexOf(delegate);
     if (index != -1) {
@@ -39,7 +39,7 @@ class DelegateStore extends Store {
   __onDispatch(action) {
     switch (action.actionType) {
       case ActionConstants.DELETE_DELEGATE:
-        this.deleteDelegate(action.schoolID, action.delegate);
+        this.deleteDelegate(action.delegate);
         break;
       default:
         return;

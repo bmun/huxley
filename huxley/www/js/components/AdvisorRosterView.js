@@ -216,8 +216,7 @@ var AdvisorRosterView = React.createClass({
       `Are you sure you want to delete this delegate (${delegate.name})?`
     );
     if (confirmed) {
-      var user = CurrentUserStore.getCurrentUser();
-      DelegateActions.deleteDelegate(user.school.id, delegate);
+      DelegateActions.deleteDelegate(delegate);
     }
   },
 

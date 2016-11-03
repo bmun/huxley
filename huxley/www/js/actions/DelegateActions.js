@@ -9,10 +9,9 @@ var ActionConstants = require('constants/ActionConstants');
 var Dispatcher = require('dispatcher/Dispatcher');
 
 var DelegateActions = {
-  deleteDelegate(schoolID, delegate)  {
+  deleteDelegate(delegate)  {
     Dispatcher.dispatch({
       actionType: ActionConstants.DELETE_DELEGATE,
-      schoolID: schoolID,
       delegate: delegate
     });
   }
