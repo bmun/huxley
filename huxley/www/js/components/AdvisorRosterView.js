@@ -14,6 +14,7 @@ var Button = require('components/Button');
 var CommitteeStore = require('stores/CommitteeStore');
 var CountryStore = require('stores/CountryStore');
 var CurrentUserStore = require('stores/CurrentUserStore');
+var DelegateActions = require('actions/DelegateActions');
 var DelegateStore = require('stores/DelegateStore');
 var CurrentUserActions = require('actions/CurrentUserActions');
 var InnerView = require('components/InnerView');
@@ -55,6 +56,14 @@ var AdvisorRosterView = React.createClass({
     }.bind(this));
 
     Modal.setAppElement('body')
+  },
+
+  componentDidMount: function() {
+    DelegateStore.addListener(function() {
+      var schoolID =  CurrentUserStore.getCurrentUser().school.id;
+      var delegates = DelegateStore.getDelegates(schoolID);
+      this.setState({delegates: delegates});
+    }.bind(this));
   },
 
   render: function() {
@@ -207,11 +216,8 @@ var AdvisorRosterView = React.createClass({
       `Are you sure you want to delete this delegate (${delegate.name})?`
     );
     if (confirmed) {
-      this.setState({loading: true});
-      ServerAPI.deleteDelegate(delegate.id).then(
-        this._handleDelegateDeleteSuccess.bind(this, delegate.id),
-        this._handleError
-      );
+      var user = CurrentUserStore.getCurrentUser();
+      DelegateActions.deleteDelegate(user.school.id, delegate);
     }
   },
 
