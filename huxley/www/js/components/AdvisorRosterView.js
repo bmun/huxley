@@ -247,33 +247,11 @@ var AdvisorRosterView = React.createClass({
     event.preventDefault();
   },
 
-  _handleDelegateDeleteSuccess: function(id, response) {
-    this.setState({
-      delegates: this.state.delegates.filter((delegate) => delegate.id != id),
-      loading: false,
-    });
-  },
-
   _handleAddDelegateSuccess: function(response) {
     DelegateActions.addDelegate(response);
     this.setState({
       loading: false,
       modal_open: false,
-    });
-  },
-
-  _handleEditDelegateSuccess: function(response) {
-    var delegates = this.state.delegates;
-    for (var i = 0; i < delegates.length; i++) {
-      if (delegates[i].id == response.id) {
-        delegates[i] = response;
-      }
-    }
-
-    this.setState({
-      modal_open: false,
-      delegates: delegates,
-      loading: false
     });
   },
 
