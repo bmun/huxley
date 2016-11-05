@@ -78,5 +78,5 @@ describe('DelegateStore', () => {
         expect(delegates).toEqual(mockDelegates);
       })
     ]);
-  })
+  });
 });
