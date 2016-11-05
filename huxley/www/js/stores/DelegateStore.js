@@ -36,10 +36,38 @@ class DelegateStore extends Store {
     }
   }
 
+  addDelegate(delegate) {
+    _delegates.push(delegate);
+  }
+
+  updateDelegate(delegateID, name, email, schoolID) {
+    ServerAPI.updateDelegate(delegateID, {
+      name: name,
+      email: email,
+      school: schoolID
+    });
+    var _delegate = _delegates.find(function(delegate) {
+      return delegate.id == delegateID;
+    });
+    _delegate.name = name;
+    _delegate.email = email;
+  }
+
   __onDispatch(action) {
     switch (action.actionType) {
       case ActionConstants.DELETE_DELEGATE:
         this.deleteDelegate(action.delegate);
+        break;
+      case ActionConstants.ADD_DELEGATE:
+        this.addDelegate(action.delegate);
+        break;
+      case ActionConstants.UPDATE_DELEGATE:
+        this.updateDelegate(
+          action.delegateID,
+          action.name,
+          action.email,
+          action.schoolID
+        );
         break;
       default:
         return;

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011-2015 Berkeley Model United Nations. All rights reserved.
+ * Copyright (c) 2011-2016 Berkeley Model United Nations. All rights reserved.
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
@@ -8,6 +8,7 @@
 jest.dontMock('stores/DelegateStore');
 
 describe('DelegateStore', () => {
+  var ActionConstants
   var DelegateStore;
   var Dispatcher;
   var ServerAPI;
@@ -15,11 +16,12 @@ describe('DelegateStore', () => {
   var mockDelegates, mockSchoolId;
 
   beforeEach(() => {
+    ActionConstants = require('constants/ActionConstants');
     DelegateStore = require('stores/DelegateStore');
     Dispatcher = require('dispatcher/Dispatcher');
     ServerAPI = require('lib/ServerAPI');
 
-    mockDelegates = [{id: 1, name: 'Jake'}, {id: 2, name: 'Nate'}];
+    mockDelegates = [{id: 1, name: 'Jake', email: ''}, {id: 2, name: 'Nate', email: ''}];
     mockSchoolId = 0;
     ServerAPI.getDelegates.mockReturnValue(Promise.resolve(mockDelegates));
   });
@@ -40,4 +42,41 @@ describe('DelegateStore', () => {
       }),
     ]);
   });
+
+  it('adds a delegate', () => {
+    return Promise.all([
+      DelegateStore.getDelegates(mockSchoolId, (delegates) => {
+        expect(delegates).toEqual(mockDelegates);
+        DelegateStore.addDelegate({id: 3, name: 'Trevor', email: ''});
+        expect(DelegateStore.getDelegates(mockSchoolId).length).toEqual(3);
+      })
+    ]);
+  });
+
+  it('deletes a delegate', () => {
+    return Promise.all([
+      DelegateStore.getDelegates(mockSchoolId, (delegates) => {
+        expect(delegates).toEqual(mockDelegates);
+        DelegateStore.deleteDelegate(mockDelegates[0]);
+        expect(DelegateStore.getDelegates(mockSchoolId).length).toEqual(1);
+      })
+    ]);
+  });
+
+  it('updates a delegate', () => {
+    return Promise.all([
+      DelegateStore.getDelegates(mockSchoolId, (delegates) => {
+        expect(delegates).toEqual(mockDelegates);
+        var updatedDelegate = mockDelegates[0]
+        updatedDelegate.name = 'Jake Moskowitz';
+        DelegateStore.updateDelegate(
+          updatedDelegate.id,
+          updatedDelegate.name,
+          updatedDelegate.email,
+          mockSchoolId
+        );
+        expect(delegates).toEqual(mockDelegates);
+      })
+    ]);
+  })
 });

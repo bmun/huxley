@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011-2015 Berkeley Model United Nations. All rights reserved.
+ * Copyright (c) 2011-2016 Berkeley Model United Nations. All rights reserved.
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
@@ -62,7 +62,11 @@ var AdvisorRosterView = React.createClass({
     DelegateStore.addListener(function() {
       var schoolID =  CurrentUserStore.getCurrentUser().school.id;
       var delegates = DelegateStore.getDelegates(schoolID);
-      this.setState({delegates: delegates});
+      this.setState({
+        delegates: delegates,
+        loading: false,
+        modal_open: false
+      });
     }.bind(this));
   },
 
@@ -234,11 +238,12 @@ var AdvisorRosterView = React.createClass({
   _handleEditDelegate: function(delegateID) {
     var user = CurrentUserStore.getCurrentUser();
     this.setState({loading: true});
-    ServerAPI.updateDelegate(delegateID, {
-      name: this.state.modal_name,
-      email: this.state.modal_email,
-      school: user.school.id,
-    }).then(this._handleEditDelegateSuccess, this._handleError);
+    DelegateActions.updateDelegate(
+      delegateID,
+      this.state.modal_name,
+      this.state.modal_email,
+      user.school.id
+    );
     event.preventDefault();
   },
 
@@ -250,8 +255,8 @@ var AdvisorRosterView = React.createClass({
   },
 
   _handleAddDelegateSuccess: function(response) {
+    DelegateActions.addDelegate(response);
     this.setState({
-      delegates: this.state.delegates.concat(response),
       loading: false,
       modal_open: false,
     });
