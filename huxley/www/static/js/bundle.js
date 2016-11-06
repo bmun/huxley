@@ -58,7 +58,6 @@
 	var ReactRouter = __webpack_require__(410);
 
 	var CurrentUserActions = __webpack_require__(457);
-	var CurrentUserStore = __webpack_require__(478);
 	var Huxley = __webpack_require__(463);
 	var AdvisorAssignmentsView = __webpack_require__(496);
 	var AdvisorProfileView = __webpack_require__(503);
@@ -79,8 +78,6 @@
 	var Router = ReactRouter.Router;
 	var Route = ReactRouter.Route;
 
-	var User = __webpack_require__(475);
-
 	var routes = React.createElement(
 	  Route,
 	  { path: '/', component: Huxley },
@@ -96,8 +93,7 @@
 	  React.createElement(Route, { path: '/advisor/profile', component: AdvisorProfileView }),
 	  React.createElement(Route, { path: '/advisor/assignments', component: AdvisorAssignmentsView }),
 	  React.createElement(Route, { path: '/advisor/roster', component: AdvisorRosterView }),
-	  React.createElement(Route, { path: '/chair/attendance', component: User.isChair(global.currentUser) ? ChairAttendanceView : PermissionDeniedView
-	  }),
+	  React.createElement(Route, { path: '/chair/attendance', component: ChairAttendanceView }),
 	  React.createElement(Route, { path: '/permissiondenied', component: PermissionDeniedView }),
 	  React.createElement(IndexRoute, { component: RedirectView }),
 	  React.createElement(Route, { path: '*', component: NotFoundView })
