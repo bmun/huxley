@@ -24,8 +24,7 @@ class DelegateDetailGetTestCase(auto.RetrieveAPIAutoTestCase):
         self.do_test(username='user', password='user')
 
     def test_superuser(self):
-        TestUsers.new_superuser(username='superuser', password='superuser')
-        self.do_test(username='superuser', password='superuser')
+        self.as_superuser().do_test()
 
 
 class DelegateDetailPutTestCase(tests.UpdateAPITestCase):
@@ -152,8 +151,7 @@ class DelegateDetailDeleteTestCase(auto.DestroyAPIAutoTestCase):
 
     def test_superuser(self):
         '''A superuser can delete delegates.'''
-        TestUsers.new_superuser(username='super', password='super')
-        self.do_test(username='super', password='super')
+        self.as_superuser().do_test()
 
 
 class DelegateListCreateTestCase(tests.CreateAPITestCase):

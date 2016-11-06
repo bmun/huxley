@@ -147,8 +147,7 @@ class UserDetailDeleteTestCase(auto.DestroyAPIAutoTestCase):
 
     def test_superuser(self):
         '''It should allow a superuser to delete a user.'''
-        TestUsers.new_superuser(username='super', password='super')
-        self.do_test(username='super', password='super')
+        self.as_superuser().do_test()
 
 
 class UserDetailPatchTestCase(tests.PartialUpdateAPITestCase):

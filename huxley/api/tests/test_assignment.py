@@ -23,8 +23,7 @@ class AssignmentDetailGetTestCase(auto.RetrieveAPIAutoTestCase):
         self.do_test(username='user', password='user')
 
     def test_superuser(self):
-        TestUsers.new_superuser(username='superuser', password='superuser')
-        self.do_test(username='superuser', password='superuser')
+        self.as_superuser().do_test()
 
 
 class AssignmentDetailPutTestCase(tests.UpdateAPITestCase):
@@ -134,10 +133,7 @@ class AssignmentDetailDeleteTestCase(auto.DestroyAPIAutoTestCase):
 
     def test_superuser(self):
         '''A superuser cannot delete assignments.'''
-        TestUsers.new_superuser(username='super', password='super')
-        self.do_test(
-            username='super', password='super',
-            expected_error=auto.EXP_DELETE_NOT_ALLOWED)
+        self.as_superuser().do_test(expected_error=auto.EXP_DELETE_NOT_ALLOWED)
 
 
 class AssignmentListCreateTestCase(tests.CreateAPITestCase):

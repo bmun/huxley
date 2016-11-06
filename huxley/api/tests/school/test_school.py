@@ -21,8 +21,7 @@ class SchoolDetailGetTestCase(auto.RetrieveAPIAutoTestCase):
         self.do_test(username=self.object.advisor.username, password='test')
 
     def test_superuser(self):
-        TestUsers.new_superuser(username='user1', password='user1')
-        self.do_test(username='user1', password='user1'),
+        self.as_superuser().do_test()
 
 
 class SchoolDetailPatchTestCase(tests.PartialUpdateAPITestCase):
@@ -97,8 +96,7 @@ class SchoolDetailDeleteTestCase(auto.DestroyAPIAutoTestCase):
 
     def test_superuser(self):
         '''A superuser can delete a school.'''
-        TestUsers.new_superuser(username='superuser', password='superuser')
-        self.do_test(username='superuser', password='superuser')
+        self.as_superuser().do_test()
 
 
 class SchoolListGetTestCase(tests.ListAPITestCase):
