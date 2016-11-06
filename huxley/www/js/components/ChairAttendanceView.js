@@ -39,6 +39,10 @@ var ChairAttendanceView = React.createClass({
      CountryStore.getCountries(function(countries) {
       this.setState({countries: countries});
     }.bind(this));
+
+    if (!User.isChair(user)) {
+      this.history.pushState(null, '/');
+    }
   },
 
   renderAttendanceRows: function() {
@@ -80,7 +84,6 @@ var ChairAttendanceView = React.createClass({
   },
 
   render: function() {
-    if (User.isChair(this.props.user)) {
       return (
         <InnerView>
           <h2>Attendance</h2>
@@ -112,13 +115,7 @@ var ChairAttendanceView = React.createClass({
 
         </InnerView>
       );
-    } else {
-      return (
-        <PermissionDeniedView />
-      );
-    }
-
-  },
+    },
 });
     
 

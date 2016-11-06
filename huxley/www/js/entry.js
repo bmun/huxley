@@ -12,6 +12,7 @@ var ReactDOM = require('react-dom')
 var ReactRouter = require('react-router');
 
 var CurrentUserActions = require('actions/CurrentUserActions');
+var CurrentUserStore = require('stores/CurrentUserStore');
 var Huxley = require('components/Huxley');
 var AdvisorAssignmentsView = require('components/AdvisorAssignmentsView');
 var AdvisorProfileView = require('components/AdvisorProfileView');
@@ -32,6 +33,8 @@ var IndexRoute = ReactRouter.IndexRoute;
 var Router = ReactRouter.Router;
 var Route = ReactRouter.Route;
 
+var User = require('utils/User');
+
 var routes = (
   <Route path="/" component={Huxley}>
     <Route path="/login" component={LoginView} />
@@ -49,7 +52,11 @@ var routes = (
     <Route path="/advisor/profile" component={AdvisorProfileView} />
     <Route path="/advisor/assignments" component={AdvisorAssignmentsView} />
     <Route path="/advisor/roster" component={AdvisorRosterView} />
-    <Route path="/chair/attendance" component={ChairAttendanceView} />
+    <Route path="/chair/attendance" component={User.isChair(global.currentUser)
+        ? ChairAttendanceView
+        : PermissionDeniedView
+      } 
+    />
     <Route path="/permissiondenied" component={PermissionDeniedView} />
     <IndexRoute component={RedirectView} />
     <Route path="*" component={NotFoundView} />

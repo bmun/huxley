@@ -58,6 +58,7 @@
 	var ReactRouter = __webpack_require__(410);
 
 	var CurrentUserActions = __webpack_require__(457);
+	var CurrentUserStore = __webpack_require__(478);
 	var Huxley = __webpack_require__(463);
 	var AdvisorAssignmentsView = __webpack_require__(496);
 	var AdvisorProfileView = __webpack_require__(503);
@@ -78,6 +79,8 @@
 	var Router = ReactRouter.Router;
 	var Route = ReactRouter.Route;
 
+	var User = __webpack_require__(475);
+
 	var routes = React.createElement(
 	  Route,
 	  { path: '/', component: Huxley },
@@ -93,7 +96,8 @@
 	  React.createElement(Route, { path: '/advisor/profile', component: AdvisorProfileView }),
 	  React.createElement(Route, { path: '/advisor/assignments', component: AdvisorAssignmentsView }),
 	  React.createElement(Route, { path: '/advisor/roster', component: AdvisorRosterView }),
-	  React.createElement(Route, { path: '/chair/attendance', component: ChairAttendanceView }),
+	  React.createElement(Route, { path: '/chair/attendance', component: User.isChair(global.currentUser) ? ChairAttendanceView : PermissionDeniedView
+	  }),
 	  React.createElement(Route, { path: '/permissiondenied', component: PermissionDeniedView }),
 	  React.createElement(IndexRoute, { component: RedirectView }),
 	  React.createElement(Route, { path: '*', component: NotFoundView })
@@ -52962,6 +52966,10 @@
 	    CountryStore.getCountries(function (countries) {
 	      this.setState({ countries: countries });
 	    }.bind(this));
+
+	    if (!User.isChair(user)) {
+	      this.history.pushState(null, '/');
+	    }
 	  },
 
 	  renderAttendanceRows: function renderAttendanceRows() {
@@ -53018,75 +53026,71 @@
 	  },
 
 	  render: function render() {
-	    if (User.isChair(this.props.user)) {
-	      return React.createElement(
-	        InnerView,
+	    return React.createElement(
+	      InnerView,
+	      null,
+	      React.createElement(
+	        'h2',
+	        null,
+	        'Attendance'
+	      ),
+	      React.createElement(
+	        'p',
+	        null,
+	        'Here you can take attendance for delegates. Note that confirming attendance will alert the advisor as to if there delegates have shown up to committee.'
+	      ),
+	      React.createElement(
+	        'form',
 	        null,
 	        React.createElement(
-	          'h2',
-	          null,
-	          'Attendance'
-	        ),
-	        React.createElement(
-	          'p',
-	          null,
-	          'Here you can take attendance for delegates. Note that confirming attendance will alert the advisor as to if there delegates have shown up to committee.'
-	        ),
-	        React.createElement(
-	          'form',
-	          null,
+	          'div',
+	          { className: 'table-container' },
 	          React.createElement(
-	            'div',
-	            { className: 'table-container' },
+	            'table',
+	            { className: 'table highlight-cells' },
 	            React.createElement(
-	              'table',
-	              { className: 'table highlight-cells' },
+	              'thead',
+	              null,
 	              React.createElement(
-	                'thead',
+	                'tr',
 	                null,
 	                React.createElement(
-	                  'tr',
+	                  'th',
 	                  null,
-	                  React.createElement(
-	                    'th',
-	                    null,
-	                    'Assignment'
-	                  ),
-	                  React.createElement(
-	                    'th',
-	                    null,
-	                    'Present'
-	                  ),
-	                  React.createElement(
-	                    'th',
-	                    null,
-	                    'Present2'
-	                  ),
-	                  React.createElement(
-	                    'th',
-	                    null,
-	                    'Present3'
-	                  )
+	                  'Assignment'
+	                ),
+	                React.createElement(
+	                  'th',
+	                  null,
+	                  'Present'
+	                ),
+	                React.createElement(
+	                  'th',
+	                  null,
+	                  'Present2'
+	                ),
+	                React.createElement(
+	                  'th',
+	                  null,
+	                  'Present3'
 	                )
-	              ),
-	              React.createElement(
-	                'tbody',
-	                null,
-	                this.renderAttendanceRows()
 	              )
+	            ),
+	            React.createElement(
+	              'tbody',
+	              null,
+	              this.renderAttendanceRows()
 	            )
-	          ),
-	          React.createElement(
-	            Button,
-	            {
-	              color: 'green' },
-	            'Confirm Attendance'
 	          )
+	        ),
+	        React.createElement(
+	          Button,
+	          {
+	            color: 'green' },
+	          'Confirm Attendance'
 	        )
-	      );
-	    } else {
-	      return React.createElement(PermissionDeniedView, null);
-	    }
+	      )
+	    );
 	  }
 	});
 
