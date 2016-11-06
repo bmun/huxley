@@ -59,18 +59,20 @@
 
 	var CurrentUserActions = __webpack_require__(457);
 	var Huxley = __webpack_require__(463);
-	var AdvisorAssignmentsView = __webpack_require__(495);
-	var AdvisorProfileView = __webpack_require__(502);
-	var AdvisorRosterView = __webpack_require__(510);
-	var ForgotPasswordView = __webpack_require__(531);
-	var LoginView = __webpack_require__(534);
-	var NotFoundView = __webpack_require__(535);
-	var PasswordResetSuccessView = __webpack_require__(536);
-	var RedirectView = __webpack_require__(537);
-	var RegistrationView = __webpack_require__(538);
-	var RegistrationClosedView = __webpack_require__(543);
-	var RegistrationSuccessView = __webpack_require__(544);
-	var RegistrationWaitlistView = __webpack_require__(545);
+	var AdvisorAssignmentsView = __webpack_require__(496);
+	var AdvisorProfileView = __webpack_require__(503);
+	var AdvisorRosterView = __webpack_require__(511);
+	var ChairAttendanceView = __webpack_require__(532);
+	var ForgotPasswordView = __webpack_require__(533);
+	var LoginView = __webpack_require__(536);
+	var NotFoundView = __webpack_require__(537);
+	var PasswordResetSuccessView = __webpack_require__(538);
+	var PermissionDeniedView = __webpack_require__(466);
+	var RedirectView = __webpack_require__(539);
+	var RegistrationView = __webpack_require__(540);
+	var RegistrationClosedView = __webpack_require__(545);
+	var RegistrationSuccessView = __webpack_require__(546);
+	var RegistrationWaitlistView = __webpack_require__(547);
 
 	var IndexRoute = ReactRouter.IndexRoute;
 	var Router = ReactRouter.Router;
@@ -91,6 +93,8 @@
 	  React.createElement(Route, { path: '/advisor/profile', component: AdvisorProfileView }),
 	  React.createElement(Route, { path: '/advisor/assignments', component: AdvisorAssignmentsView }),
 	  React.createElement(Route, { path: '/advisor/roster', component: AdvisorRosterView }),
+	  React.createElement(Route, { path: '/chair/attendance', component: ChairAttendanceView }),
+	  React.createElement(Route, { path: '/permissiondenied', component: PermissionDeniedView }),
 	  React.createElement(IndexRoute, { component: RedirectView }),
 	  React.createElement(Route, { path: '*', component: NotFoundView })
 	);
@@ -30818,8 +30822,9 @@
 	var ReactRouter = __webpack_require__(410);
 
 	var AdvisorView = __webpack_require__(464);
-	var ConferenceContext = __webpack_require__(476);
-	var CurrentUserStore = __webpack_require__(477);
+	var ChairView = __webpack_require__(476);
+	var ConferenceContext = __webpack_require__(477);
+	var CurrentUserStore = __webpack_require__(478);
 	var User = __webpack_require__(475);
 
 	var Huxley = React.createClass({
@@ -30847,6 +30852,8 @@
 	        _this.history.pushState(null, '/login');
 	      } else if (User.isAdvisor(user)) {
 	        _this.history.pushState(null, '/advisor/profile');
+	      } else if (User.isChair(user)) {
+	        _this.history.pushState(null, '/chair/attendance');
 	      }
 	    });
 	  },
@@ -30858,6 +30865,12 @@
 	    } else if (User.isAdvisor(user)) {
 	      return React.createElement(
 	        AdvisorView,
+	        { user: user },
+	        React.cloneElement(this.props.children, { user: user })
+	      );
+	    } else if (User.isChair(user)) {
+	      return React.createElement(
+	        ChairView,
 	        { user: user },
 	        React.cloneElement(this.props.children, { user: user })
 	      );
@@ -40984,6 +40997,50 @@
 	'use strict';
 
 	var React = __webpack_require__(246);
+	var ReactRouter = __webpack_require__(410);
+
+	var NavTab = __webpack_require__(465);
+	var TopBar = __webpack_require__(467);
+	var User = __webpack_require__(475);
+
+	var ChairView = React.createClass({
+	  displayName: 'ChairView',
+
+	  mixins: [ReactRouter.History],
+
+	  render: function render() {
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(TopBar, { user: this.props.user }),
+	      React.createElement(
+	        'div',
+	        { className: 'navbar rounded-top' },
+	        React.createElement(
+	          NavTab,
+	          { href: '/chair/attendance' },
+	          'Attendance'
+	        )
+	      ),
+	      this.props.children
+	    );
+	  }
+	});
+
+	module.exports = ChairView;
+
+/***/ },
+/* 477 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Copyright (c) 2011-2015 Berkeley Model United Nations. All rights reserved.
+	 * Use of this source code is governed by a BSD License (see LICENSE).
+	 */
+
+	'use strict';
+
+	var React = __webpack_require__(246);
 
 	var ConferenceContext = {
 	    session: React.PropTypes.number,
@@ -41007,7 +41064,7 @@
 	module.exports = ConferenceContext;
 
 /***/ },
-/* 477 */
+/* 478 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/**
@@ -41030,7 +41087,7 @@
 	var ActionConstants = __webpack_require__(458);
 	var Dispatcher = __webpack_require__(459);
 
-	var _require = __webpack_require__(478);
+	var _require = __webpack_require__(479);
 
 	var Store = _require.Store;
 
@@ -41114,7 +41171,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 478 */
+/* 479 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -41126,15 +41183,15 @@
 	 * of patent rights can be found in the PATENTS file in the same directory.
 	 */
 
-	module.exports.Container = __webpack_require__(479);
-	module.exports.MapStore = __webpack_require__(482);
-	module.exports.Mixin = __webpack_require__(494);
-	module.exports.ReduceStore = __webpack_require__(483);
-	module.exports.Store = __webpack_require__(484);
+	module.exports.Container = __webpack_require__(480);
+	module.exports.MapStore = __webpack_require__(483);
+	module.exports.Mixin = __webpack_require__(495);
+	module.exports.ReduceStore = __webpack_require__(484);
+	module.exports.Store = __webpack_require__(485);
 
 
 /***/ },
-/* 479 */
+/* 480 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -41156,10 +41213,10 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var FluxStoreGroup = __webpack_require__(480);
+	var FluxStoreGroup = __webpack_require__(481);
 
 	var invariant = __webpack_require__(462);
-	var shallowEqual = __webpack_require__(481);
+	var shallowEqual = __webpack_require__(482);
 
 	var DEFAULT_OPTIONS = {
 	  pure: true,
@@ -41316,7 +41373,7 @@
 	module.exports = { create: create };
 
 /***/ },
-/* 480 */
+/* 481 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -41396,7 +41453,7 @@
 	module.exports = FluxStoreGroup;
 
 /***/ },
-/* 481 */
+/* 482 */
 /***/ function(module, exports) {
 
 	/**
@@ -41451,7 +41508,7 @@
 	module.exports = shallowEqual;
 
 /***/ },
-/* 482 */
+/* 483 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -41472,8 +41529,8 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var FluxReduceStore = __webpack_require__(483);
-	var Immutable = __webpack_require__(493);
+	var FluxReduceStore = __webpack_require__(484);
+	var Immutable = __webpack_require__(494);
 
 	var invariant = __webpack_require__(462);
 
@@ -41600,7 +41657,7 @@
 	module.exports = FluxMapStore;
 
 /***/ },
-/* 483 */
+/* 484 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -41621,9 +41678,9 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var FluxStore = __webpack_require__(484);
+	var FluxStore = __webpack_require__(485);
 
-	var abstractMethod = __webpack_require__(492);
+	var abstractMethod = __webpack_require__(493);
 	var invariant = __webpack_require__(462);
 
 	var FluxReduceStore = (function (_FluxStore) {
@@ -41706,7 +41763,7 @@
 	module.exports = FluxReduceStore;
 
 /***/ },
-/* 484 */
+/* 485 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -41725,7 +41782,7 @@
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-	var _require = __webpack_require__(485);
+	var _require = __webpack_require__(486);
 
 	var EventEmitter = _require.EventEmitter;
 
@@ -41888,7 +41945,7 @@
 	// protected, available to subclasses
 
 /***/ },
-/* 485 */
+/* 486 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -41901,15 +41958,15 @@
 	 */
 
 	var fbemitter = {
-	  EventEmitter: __webpack_require__(486),
-	  EmitterSubscription : __webpack_require__(487)
+	  EventEmitter: __webpack_require__(487),
+	  EmitterSubscription : __webpack_require__(488)
 	};
 
 	module.exports = fbemitter;
 
 
 /***/ },
-/* 486 */
+/* 487 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -41928,11 +41985,11 @@
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-	var EmitterSubscription = __webpack_require__(487);
-	var EventSubscriptionVendor = __webpack_require__(489);
+	var EmitterSubscription = __webpack_require__(488);
+	var EventSubscriptionVendor = __webpack_require__(490);
 
-	var emptyFunction = __webpack_require__(491);
-	var invariant = __webpack_require__(490);
+	var emptyFunction = __webpack_require__(492);
+	var invariant = __webpack_require__(491);
 
 	/**
 	 * @class BaseEventEmitter
@@ -42105,7 +42162,7 @@
 	module.exports = BaseEventEmitter;
 
 /***/ },
-/* 487 */
+/* 488 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -42126,7 +42183,7 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var EventSubscription = __webpack_require__(488);
+	var EventSubscription = __webpack_require__(489);
 
 	/**
 	 * EmitterSubscription represents a subscription with listener and context data.
@@ -42158,7 +42215,7 @@
 	module.exports = EmitterSubscription;
 
 /***/ },
-/* 488 */
+/* 489 */
 /***/ function(module, exports) {
 
 	/**
@@ -42212,7 +42269,7 @@
 	module.exports = EventSubscription;
 
 /***/ },
-/* 489 */
+/* 490 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -42231,7 +42288,7 @@
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-	var invariant = __webpack_require__(490);
+	var invariant = __webpack_require__(491);
 
 	/**
 	 * EventSubscriptionVendor stores a set of EventSubscriptions that are
@@ -42320,7 +42377,7 @@
 	module.exports = EventSubscriptionVendor;
 
 /***/ },
-/* 490 */
+/* 491 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -42374,7 +42431,7 @@
 	module.exports = invariant;
 
 /***/ },
-/* 491 */
+/* 492 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -42417,7 +42474,7 @@
 	module.exports = emptyFunction;
 
 /***/ },
-/* 492 */
+/* 493 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -42443,7 +42500,7 @@
 	module.exports = abstractMethod;
 
 /***/ },
-/* 493 */
+/* 494 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -47427,7 +47484,7 @@
 	}));
 
 /***/ },
-/* 494 */
+/* 495 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -47444,7 +47501,7 @@
 
 	'use strict';
 
-	var FluxStoreGroup = __webpack_require__(480);
+	var FluxStoreGroup = __webpack_require__(481);
 
 	var invariant = __webpack_require__(462);
 
@@ -47549,7 +47606,7 @@
 	module.exports = FluxMixinLegacy;
 
 /***/ },
-/* 495 */
+/* 496 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -47562,16 +47619,16 @@
 	var React = __webpack_require__(246);
 	var ReactRouter = __webpack_require__(410);
 
-	var AssignmentStore = __webpack_require__(496);
+	var AssignmentStore = __webpack_require__(497);
 	var Button = __webpack_require__(471);
-	var CommitteeStore = __webpack_require__(497);
-	var ConferenceContext = __webpack_require__(476);
-	var CountryStore = __webpack_require__(498);
-	var CurrentUserStore = __webpack_require__(477);
+	var CommitteeStore = __webpack_require__(498);
+	var ConferenceContext = __webpack_require__(477);
+	var CountryStore = __webpack_require__(499);
+	var CurrentUserStore = __webpack_require__(478);
 	var CurrentUserActions = __webpack_require__(457);
-	var DelegateSelect = __webpack_require__(499);
-	var DelegateStore = __webpack_require__(500);
-	var InnerView = __webpack_require__(501);
+	var DelegateSelect = __webpack_require__(500);
+	var DelegateStore = __webpack_require__(501);
+	var InnerView = __webpack_require__(502);
 	var ServerAPI = __webpack_require__(473);
 
 	var AdvisorAssignmentsView = React.createClass({
@@ -47873,7 +47930,7 @@
 	module.exports = AdvisorAssignmentsView;
 
 /***/ },
-/* 496 */
+/* 497 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -47895,7 +47952,7 @@
 	var Dispatcher = __webpack_require__(459);
 	var ServerAPI = __webpack_require__(473);
 
-	var _require = __webpack_require__(478);
+	var _require = __webpack_require__(479);
 
 	var Store = _require.Store;
 
@@ -47938,7 +47995,7 @@
 	module.exports = new AssignmentStore(Dispatcher);
 
 /***/ },
-/* 497 */
+/* 498 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -47960,7 +48017,7 @@
 	var Dispatcher = __webpack_require__(459);
 	var ServerAPI = __webpack_require__(473);
 
-	var _require = __webpack_require__(478);
+	var _require = __webpack_require__(479);
 
 	var Store = _require.Store;
 
@@ -48016,7 +48073,7 @@
 	module.exports = new CommitteeStore(Dispatcher);
 
 /***/ },
-/* 498 */
+/* 499 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -48038,7 +48095,7 @@
 	var Dispatcher = __webpack_require__(459);
 	var ServerAPI = __webpack_require__(473);
 
-	var _require = __webpack_require__(478);
+	var _require = __webpack_require__(479);
 
 	var Store = _require.Store;
 
@@ -48081,7 +48138,7 @@
 	module.exports = new CountryStore(Dispatcher);
 
 /***/ },
-/* 499 */
+/* 500 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -48131,7 +48188,7 @@
 	module.exports = DelegateSelect;
 
 /***/ },
-/* 500 */
+/* 501 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -48153,7 +48210,7 @@
 	var Dispatcher = __webpack_require__(459);
 	var ServerAPI = __webpack_require__(473);
 
-	var _require = __webpack_require__(478);
+	var _require = __webpack_require__(479);
 
 	var Store = _require.Store;
 
@@ -48196,7 +48253,7 @@
 	module.exports = new DelegateStore(Dispatcher);
 
 /***/ },
-/* 501 */
+/* 502 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -48223,7 +48280,7 @@
 	module.exports = InnerView;
 
 /***/ },
-/* 502 */
+/* 503 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -48237,16 +48294,16 @@
 	var React = __webpack_require__(246);
 
 	var Button = __webpack_require__(471);
-	var InnerView = __webpack_require__(501);
+	var InnerView = __webpack_require__(502);
 	var LogoutButton = __webpack_require__(472);
-	var ConferenceContext = __webpack_require__(476);
-	var PhoneInput = __webpack_require__(503);
-	var ProgramTypes = __webpack_require__(506);
-	var TextInput = __webpack_require__(504);
+	var ConferenceContext = __webpack_require__(477);
+	var PhoneInput = __webpack_require__(504);
+	var ProgramTypes = __webpack_require__(507);
+	var TextInput = __webpack_require__(505);
 	var User = __webpack_require__(475);
-	var _handleChange = __webpack_require__(507);
+	var _handleChange = __webpack_require__(508);
 
-	__webpack_require__(508);
+	__webpack_require__(509);
 
 	var AdvisorProfileView = React.createClass({
 	  displayName: 'AdvisorProfileView',
@@ -48924,7 +48981,7 @@
 	module.exports = AdvisorProfileView;
 
 /***/ },
-/* 503 */
+/* 504 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -48937,9 +48994,9 @@
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 	var React = __webpack_require__(246);
-	var TextInput = __webpack_require__(504);
+	var TextInput = __webpack_require__(505);
 
-	var formatPhone = __webpack_require__(505);
+	var formatPhone = __webpack_require__(506);
 
 	var PhoneInput = React.createClass({
 	  displayName: 'PhoneInput',
@@ -48979,7 +49036,7 @@
 	module.exports = PhoneInput;
 
 /***/ },
-/* 504 */
+/* 505 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -49029,7 +49086,7 @@
 	module.exports = TextInput;
 
 /***/ },
-/* 505 */
+/* 506 */
 /***/ function(module, exports) {
 
 	/**
@@ -49154,7 +49211,7 @@
 	module.exports = formatPhone;
 
 /***/ },
-/* 506 */
+/* 507 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/**
@@ -49175,7 +49232,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 507 */
+/* 508 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -49198,11 +49255,11 @@
 	module.exports = _handleChange;
 
 /***/ },
-/* 508 */
+/* 509 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var jQuery = __webpack_require__(470);
-	__webpack_require__(509);
+	__webpack_require__(510);
 
 	/*!
 	 * jQuery UI Effects Shake 1.10.4
@@ -49281,7 +49338,7 @@
 
 
 /***/ },
-/* 509 */
+/* 510 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var jQuery = __webpack_require__(470);
@@ -50578,7 +50635,7 @@
 
 
 /***/ },
-/* 510 */
+/* 511 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -50588,21 +50645,21 @@
 
 	'use strict';
 
-	var Modal = __webpack_require__(511);
+	var Modal = __webpack_require__(512);
 	var React = __webpack_require__(246);
 	var ReactRouter = __webpack_require__(410);
 
-	var AssignmentStore = __webpack_require__(496);
+	var AssignmentStore = __webpack_require__(497);
 	var Button = __webpack_require__(471);
-	var CommitteeStore = __webpack_require__(497);
-	var CountryStore = __webpack_require__(498);
-	var CurrentUserStore = __webpack_require__(477);
-	var DelegateStore = __webpack_require__(500);
+	var CommitteeStore = __webpack_require__(498);
+	var CountryStore = __webpack_require__(499);
+	var CurrentUserStore = __webpack_require__(478);
+	var DelegateStore = __webpack_require__(501);
 	var CurrentUserActions = __webpack_require__(457);
-	var InnerView = __webpack_require__(501);
+	var InnerView = __webpack_require__(502);
 	var ServerAPI = __webpack_require__(473);
-	var TextInput = __webpack_require__(504);
-	var _handleChange = __webpack_require__(507);
+	var TextInput = __webpack_require__(505);
+	var _handleChange = __webpack_require__(508);
 
 	var AdvisorRosterView = React.createClass({
 	  displayName: 'AdvisorRosterView',
@@ -50736,7 +50793,7 @@
 	          React.createElement(TextInput, {
 	            placeholder: 'Email (Optional)',
 	            onChange: _handleChange.bind(this, 'modal_email'),
-	            defaultValue: this.this.state.modal_email,
+	            defaultValue: this.state.modal_email,
 	            value: this.state.modal_email
 	          }),
 	          this.renderError("email"),
@@ -50922,25 +50979,25 @@
 	module.exports = AdvisorRosterView;
 
 /***/ },
-/* 511 */
+/* 512 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(512);
+	module.exports = __webpack_require__(513);
 
 
 
 /***/ },
-/* 512 */
+/* 513 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(246);
 	var ReactDOM = __webpack_require__(276);
-	var ExecutionEnvironment = __webpack_require__(513);
-	var ModalPortal = React.createFactory(__webpack_require__(514));
-	var ariaAppHider = __webpack_require__(529);
-	var elementClass = __webpack_require__(530);
+	var ExecutionEnvironment = __webpack_require__(514);
+	var ModalPortal = React.createFactory(__webpack_require__(515));
+	var ariaAppHider = __webpack_require__(530);
+	var elementClass = __webpack_require__(531);
 	var renderSubtreeIntoContainer = __webpack_require__(276).unstable_renderSubtreeIntoContainer;
-	var Assign = __webpack_require__(518);
+	var Assign = __webpack_require__(519);
 
 	var SafeHTMLElement = ExecutionEnvironment.canUseDOM ? window.HTMLElement : {};
 	var AppElement = ExecutionEnvironment.canUseDOM ? document.body : {appendChild: function() {}};
@@ -51047,7 +51104,7 @@
 
 
 /***/ },
-/* 513 */
+/* 514 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -51092,14 +51149,14 @@
 
 
 /***/ },
-/* 514 */
+/* 515 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(246);
 	var div = React.DOM.div;
-	var focusManager = __webpack_require__(515);
-	var scopeTab = __webpack_require__(517);
-	var Assign = __webpack_require__(518);
+	var focusManager = __webpack_require__(516);
+	var scopeTab = __webpack_require__(518);
+	var Assign = __webpack_require__(519);
 
 	// so that our CSS is statically analyzable
 	var CLASS_NAMES = {
@@ -51290,10 +51347,10 @@
 
 
 /***/ },
-/* 515 */
+/* 516 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var findTabbable = __webpack_require__(516);
+	var findTabbable = __webpack_require__(517);
 	var modalElement = null;
 	var focusLaterElement = null;
 	var needToFocus = false;
@@ -51364,7 +51421,7 @@
 
 
 /***/ },
-/* 516 */
+/* 517 */
 /***/ function(module, exports) {
 
 	/*!
@@ -51420,10 +51477,10 @@
 
 
 /***/ },
-/* 517 */
+/* 518 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var findTabbable = __webpack_require__(516);
+	var findTabbable = __webpack_require__(517);
 
 	module.exports = function(node, event) {
 	  var tabbable = findTabbable(node);
@@ -51445,7 +51502,7 @@
 
 
 /***/ },
-/* 518 */
+/* 519 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -51456,9 +51513,9 @@
 	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
 	 * Available under MIT license <https://lodash.com/license>
 	 */
-	var baseAssign = __webpack_require__(519),
-	    createAssigner = __webpack_require__(525),
-	    keys = __webpack_require__(521);
+	var baseAssign = __webpack_require__(520),
+	    createAssigner = __webpack_require__(526),
+	    keys = __webpack_require__(522);
 
 	/**
 	 * A specialized version of `_.assign` for customizing assigned values without
@@ -51531,7 +51588,7 @@
 
 
 /***/ },
-/* 519 */
+/* 520 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -51542,8 +51599,8 @@
 	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
 	 * Available under MIT license <https://lodash.com/license>
 	 */
-	var baseCopy = __webpack_require__(520),
-	    keys = __webpack_require__(521);
+	var baseCopy = __webpack_require__(521),
+	    keys = __webpack_require__(522);
 
 	/**
 	 * The base implementation of `_.assign` without support for argument juggling,
@@ -51564,7 +51621,7 @@
 
 
 /***/ },
-/* 520 */
+/* 521 */
 /***/ function(module, exports) {
 
 	/**
@@ -51602,7 +51659,7 @@
 
 
 /***/ },
-/* 521 */
+/* 522 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -51613,9 +51670,9 @@
 	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
 	 * Available under MIT license <https://lodash.com/license>
 	 */
-	var getNative = __webpack_require__(522),
-	    isArguments = __webpack_require__(523),
-	    isArray = __webpack_require__(524);
+	var getNative = __webpack_require__(523),
+	    isArguments = __webpack_require__(524),
+	    isArray = __webpack_require__(525);
 
 	/** Used to detect unsigned integer values. */
 	var reIsUint = /^\d+$/;
@@ -51844,7 +51901,7 @@
 
 
 /***/ },
-/* 522 */
+/* 523 */
 /***/ function(module, exports) {
 
 	/**
@@ -51987,7 +52044,7 @@
 
 
 /***/ },
-/* 523 */
+/* 524 */
 /***/ function(module, exports) {
 
 	/**
@@ -52222,7 +52279,7 @@
 
 
 /***/ },
-/* 524 */
+/* 525 */
 /***/ function(module, exports) {
 
 	/**
@@ -52408,7 +52465,7 @@
 
 
 /***/ },
-/* 525 */
+/* 526 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -52419,9 +52476,9 @@
 	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
 	 * Available under MIT license <https://lodash.com/license>
 	 */
-	var bindCallback = __webpack_require__(526),
-	    isIterateeCall = __webpack_require__(527),
-	    restParam = __webpack_require__(528);
+	var bindCallback = __webpack_require__(527),
+	    isIterateeCall = __webpack_require__(528),
+	    restParam = __webpack_require__(529);
 
 	/**
 	 * Creates a function that assigns properties of source object(s) to a given
@@ -52466,7 +52523,7 @@
 
 
 /***/ },
-/* 526 */
+/* 527 */
 /***/ function(module, exports) {
 
 	/**
@@ -52537,7 +52594,7 @@
 
 
 /***/ },
-/* 527 */
+/* 528 */
 /***/ function(module, exports) {
 
 	/**
@@ -52675,7 +52732,7 @@
 
 
 /***/ },
-/* 528 */
+/* 529 */
 /***/ function(module, exports) {
 
 	/**
@@ -52748,7 +52805,7 @@
 
 
 /***/ },
-/* 529 */
+/* 530 */
 /***/ function(module, exports) {
 
 	var _element = typeof document !== 'undefined' ? document.body : null;
@@ -52796,7 +52853,7 @@
 
 
 /***/ },
-/* 530 */
+/* 531 */
 /***/ function(module, exports) {
 
 	module.exports = function(opts) {
@@ -52861,7 +52918,182 @@
 
 
 /***/ },
-/* 531 */
+/* 532 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	* Copyright (c) 2011-2015 Berkeley Model United Nations. All rights reserved.
+	* Use of this source code is governed by a BSD License (see LICENSE).
+	+*/
+
+	'use strict';
+
+	var React = __webpack_require__(246);
+	var ReactRouter = __webpack_require__(410);
+
+	var AssignmentStore = __webpack_require__(497);
+	var Button = __webpack_require__(471);
+	var CommitteeStore = __webpack_require__(498);
+	var ConferenceContext = __webpack_require__(477);
+	var CountryStore = __webpack_require__(499);
+	var CurrentUserStore = __webpack_require__(478);
+	var CurrentUserActions = __webpack_require__(457);
+	var DelegateSelect = __webpack_require__(500);
+	var DelegateStore = __webpack_require__(501);
+	var InnerView = __webpack_require__(502);
+	var PermissionDeniedView = __webpack_require__(466);
+	var ServerAPI = __webpack_require__(473);
+	var User = __webpack_require__(475);
+
+	var ChairAttendanceView = React.createClass({
+	  displayName: 'ChairAttendanceView',
+
+
+	  getInitialState: function getInitialState() {
+	    return {
+	      countries: []
+	    };
+	  },
+
+	  mixins: [ReactRouter.History],
+
+	  componentWillMount: function componentWillMount() {
+	    var user = CurrentUserStore.getCurrentUser();
+	    CountryStore.getCountries(function (countries) {
+	      this.setState({ countries: countries });
+	    }.bind(this));
+	  },
+
+	  renderAttendanceRows: function renderAttendanceRows() {
+	    return this.state.countries.map(function (country) {
+	      return React.createElement(
+	        'tr',
+	        null,
+	        React.createElement(
+	          'td',
+	          null,
+	          country.name
+	        ),
+	        React.createElement(
+	          'td',
+	          null,
+	          React.createElement(
+	            'label',
+	            { name: 'committee_prefs' },
+	            React.createElement('input', {
+	              className: 'choice',
+	              type: 'checkbox',
+	              name: 'committee_prefs'
+	            })
+	          )
+	        ),
+	        React.createElement(
+	          'td',
+	          null,
+	          React.createElement(
+	            'label',
+	            { name: 'committee_prefs' },
+	            React.createElement('input', {
+	              className: 'choice',
+	              type: 'checkbox',
+	              name: 'committee_prefs'
+	            })
+	          )
+	        ),
+	        React.createElement(
+	          'td',
+	          null,
+	          React.createElement(
+	            'label',
+	            { name: 'committee_prefs' },
+	            React.createElement('input', {
+	              className: 'choice',
+	              type: 'checkbox',
+	              name: 'committee_prefs'
+	            })
+	          )
+	        )
+	      );
+	    }.bind(this));
+	  },
+
+	  render: function render() {
+	    if (User.isChair(this.props.user)) {
+	      return React.createElement(
+	        InnerView,
+	        null,
+	        React.createElement(
+	          'h2',
+	          null,
+	          'Attendance'
+	        ),
+	        React.createElement(
+	          'p',
+	          null,
+	          'Here you can take attendance for delegates. Note that confirming attendance will alert the advisor as to if there delegates have shown up to committee.'
+	        ),
+	        React.createElement(
+	          'form',
+	          null,
+	          React.createElement(
+	            'div',
+	            { className: 'table-container' },
+	            React.createElement(
+	              'table',
+	              { className: 'table highlight-cells' },
+	              React.createElement(
+	                'thead',
+	                null,
+	                React.createElement(
+	                  'tr',
+	                  null,
+	                  React.createElement(
+	                    'th',
+	                    null,
+	                    'Assignment'
+	                  ),
+	                  React.createElement(
+	                    'th',
+	                    null,
+	                    'Present'
+	                  ),
+	                  React.createElement(
+	                    'th',
+	                    null,
+	                    'Present2'
+	                  ),
+	                  React.createElement(
+	                    'th',
+	                    null,
+	                    'Present3'
+	                  )
+	                )
+	              ),
+	              React.createElement(
+	                'tbody',
+	                null,
+	                this.renderAttendanceRows()
+	              )
+	            )
+	          ),
+	          React.createElement(
+	            Button,
+	            {
+	              color: 'green' },
+	            'Confirm Attendance'
+	          )
+	        )
+	      );
+	    } else {
+	      return React.createElement(PermissionDeniedView, null);
+	    }
+	  }
+	});
+
+	module.exports = ChairAttendanceView;
+
+/***/ },
+/* 533 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -52876,11 +53108,11 @@
 	var ReactRouter = __webpack_require__(410);
 
 	var Button = __webpack_require__(471);
-	var NavLink = __webpack_require__(532);
-	var OuterView = __webpack_require__(533);
-	var TextInput = __webpack_require__(504);
+	var NavLink = __webpack_require__(534);
+	var OuterView = __webpack_require__(535);
+	var TextInput = __webpack_require__(505);
 
-	__webpack_require__(508);
+	__webpack_require__(509);
 
 	var ForgotPasswordView = React.createClass({
 	  displayName: 'ForgotPasswordView',
@@ -53002,7 +53234,7 @@
 	module.exports = ForgotPasswordView;
 
 /***/ },
-/* 532 */
+/* 534 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -53042,7 +53274,7 @@
 	module.exports = NavLink;
 
 /***/ },
-/* 533 */
+/* 535 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -53079,7 +53311,7 @@
 	module.exports = OuterView;
 
 /***/ },
-/* 534 */
+/* 536 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -53095,15 +53327,15 @@
 	var ReactRouter = __webpack_require__(410);
 
 	var Button = __webpack_require__(471);
-	var ConferenceContext = __webpack_require__(476);
+	var ConferenceContext = __webpack_require__(477);
 	var CurrentUserActions = __webpack_require__(457);
-	var NavLink = __webpack_require__(532);
-	var OuterView = __webpack_require__(533);
+	var NavLink = __webpack_require__(534);
+	var OuterView = __webpack_require__(535);
 	var ServerAPI = __webpack_require__(473);
-	var TextInput = __webpack_require__(504);
+	var TextInput = __webpack_require__(505);
 	var User = __webpack_require__(475);
 
-	__webpack_require__(508);
+	__webpack_require__(509);
 
 	var LoginView = React.createClass({
 	  displayName: 'LoginView',
@@ -53276,7 +53508,7 @@
 	module.exports = LoginView;
 
 /***/ },
-/* 535 */
+/* 537 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -53289,7 +53521,7 @@
 	var React = __webpack_require__(246);
 	var ReactRouter = __webpack_require__(410);
 
-	var OuterView = __webpack_require__(533);
+	var OuterView = __webpack_require__(535);
 
 	var NotFoundView = React.createClass({
 	  displayName: 'NotFoundView',
@@ -53315,7 +53547,7 @@
 	module.exports = NotFoundView;
 
 /***/ },
-/* 536 */
+/* 538 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -53327,8 +53559,8 @@
 
 	var React = __webpack_require__(246);
 
-	var NavLink = __webpack_require__(532);
-	var OuterView = __webpack_require__(533);
+	var NavLink = __webpack_require__(534);
+	var OuterView = __webpack_require__(535);
 
 	var PasswordResetSuccessView = React.createClass({
 	  displayName: 'PasswordResetSuccessView',
@@ -53359,7 +53591,7 @@
 	module.exports = PasswordResetSuccessView;
 
 /***/ },
-/* 537 */
+/* 539 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -53372,7 +53604,7 @@
 	var React = __webpack_require__(246);
 	var ReactRouter = __webpack_require__(410);
 
-	var OuterView = __webpack_require__(533);
+	var OuterView = __webpack_require__(535);
 	var User = __webpack_require__(475);
 
 	var RedirectView = React.createClass({
@@ -53400,7 +53632,7 @@
 	module.exports = RedirectView;
 
 /***/ },
-/* 538 */
+/* 540 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -53418,21 +53650,21 @@
 	var ReactRouter = __webpack_require__(410);
 
 	var Button = __webpack_require__(471);
-	var CommitteeStore = __webpack_require__(497);
-	var ContactTypes = __webpack_require__(539);
-	var ConferenceContext = __webpack_require__(476);
-	var CountrySelect = __webpack_require__(540);
-	var CountryStore = __webpack_require__(498);
-	var GenderConstants = __webpack_require__(541);
-	var NavLink = __webpack_require__(532);
-	var NumberInput = __webpack_require__(542);
-	var OuterView = __webpack_require__(533);
-	var PhoneInput = __webpack_require__(503);
-	var ProgramTypes = __webpack_require__(506);
-	var TextInput = __webpack_require__(504);
-	var _handleChange = __webpack_require__(507);
+	var CommitteeStore = __webpack_require__(498);
+	var ContactTypes = __webpack_require__(541);
+	var ConferenceContext = __webpack_require__(477);
+	var CountrySelect = __webpack_require__(542);
+	var CountryStore = __webpack_require__(499);
+	var GenderConstants = __webpack_require__(543);
+	var NavLink = __webpack_require__(534);
+	var NumberInput = __webpack_require__(544);
+	var OuterView = __webpack_require__(535);
+	var PhoneInput = __webpack_require__(504);
+	var ProgramTypes = __webpack_require__(507);
+	var TextInput = __webpack_require__(505);
+	var _handleChange = __webpack_require__(508);
 
-	__webpack_require__(508);
+	__webpack_require__(509);
 
 	var USA = 'United States of America';
 
@@ -54230,7 +54462,7 @@
 	module.exports = RegistrationView;
 
 /***/ },
-/* 539 */
+/* 541 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/**
@@ -54251,7 +54483,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 540 */
+/* 542 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -54314,7 +54546,7 @@
 	module.exports = CountrySelect;
 
 /***/ },
-/* 541 */
+/* 543 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/**
@@ -54335,7 +54567,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 542 */
+/* 544 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -54348,7 +54580,7 @@
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 	var React = __webpack_require__(246);
-	var TextInput = __webpack_require__(504);
+	var TextInput = __webpack_require__(505);
 
 	var NumberInput = React.createClass({
 	  displayName: 'NumberInput',
@@ -54375,7 +54607,7 @@
 	module.exports = NumberInput;
 
 /***/ },
-/* 543 */
+/* 545 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -54387,9 +54619,9 @@
 
 	var React = __webpack_require__(246);
 
-	var ConferenceContext = __webpack_require__(476);
-	var NavLink = __webpack_require__(532);
-	var OuterView = __webpack_require__(533);
+	var ConferenceContext = __webpack_require__(477);
+	var NavLink = __webpack_require__(534);
+	var OuterView = __webpack_require__(535);
 
 	var RegistrationClosedView = React.createClass({
 	  displayName: 'RegistrationClosedView',
@@ -54444,7 +54676,7 @@
 	module.exports = RegistrationClosedView;
 
 /***/ },
-/* 544 */
+/* 546 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -54456,9 +54688,9 @@
 
 	var React = __webpack_require__(246);
 
-	var ConferenceContext = __webpack_require__(476);
-	var NavLink = __webpack_require__(532);
-	var OuterView = __webpack_require__(533);
+	var ConferenceContext = __webpack_require__(477);
+	var NavLink = __webpack_require__(534);
+	var OuterView = __webpack_require__(535);
 
 	var RegistrationSuccessView = React.createClass({
 	  displayName: 'RegistrationSuccessView',
@@ -54605,7 +54837,7 @@
 	module.exports = RegistrationSuccessView;
 
 /***/ },
-/* 545 */
+/* 547 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -54617,8 +54849,8 @@
 
 	var React = __webpack_require__(246);
 
-	var NavLink = __webpack_require__(532);
-	var OuterView = __webpack_require__(533);
+	var NavLink = __webpack_require__(534);
+	var OuterView = __webpack_require__(535);
 
 	var RegistrationWaitlistView = React.createClass({
 	  displayName: 'RegistrationWaitlistView',
