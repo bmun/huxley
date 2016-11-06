@@ -30990,7 +30990,7 @@
 	        AdvisorView,
 	        { user: user },
 	        React.cloneElement(this.props.children, { user: user })
-	      );
+	      );q;
 	    } else if (User.isChair(user)) {
 	      return React.createElement(
 	        ChairView,
@@ -41123,7 +41123,6 @@
 	var ReactRouter = __webpack_require__(410);
 
 	var NavTab = __webpack_require__(467);
-	var PermissionDeniedView = __webpack_require__(468);
 	var TopBar = __webpack_require__(469);
 	var User = __webpack_require__(477);
 
@@ -53072,35 +53071,144 @@
 	var ChairAttendanceView = React.createClass({
 	  displayName: 'ChairAttendanceView',
 
+
+	  getInitialState: function getInitialState() {
+	    return {
+	      countries: []
+	    };
+	  },
+
 	  mixins: [ReactRouter.History],
 
-	  render: function render() {
-	    if (User.isChair(this.props.user)) {
+	  componentWillMount: function componentWillMount() {
+	    var user = CurrentUserStore.getCurrentUser();
+	    CountryStore.getCountries(function (countries) {
+	      this.setState({ countries: countries });
+	    }.bind(this));
+	    if (!User.isChair(this.props.user)) {
+	      this.history.pushState(null, '/');
+	    }
+	  },
+
+	  renderAttendanceRows: function renderAttendanceRows() {
+	    return this.state.countries.map(function (country) {
 	      return React.createElement(
-	        InnerView,
+	        'tr',
 	        null,
 	        React.createElement(
-	          'h2',
+	          'td',
 	          null,
-	          'Chair View'
+	          country.name
 	        ),
 	        React.createElement(
-	          'p',
+	          'td',
 	          null,
-	          'Here you can view your tentative assignments for BMUN ',
-	          conference.session,
-	          '. If you would like to request more slots, please email ',
 	          React.createElement(
-	            'a',
-	            { href: 'mailto:info@bmun.org' },
-	            'info@bmun.org'
-	          ),
-	          '. The assignment finalization deadline is January 23rd. After assignment finalization we will ask that you assign the delegates you have added in the delegates tab to the assignments given to you.'
+	            'label',
+	            { name: 'committee_prefs' },
+	            React.createElement('input', {
+	              className: 'choice',
+	              type: 'checkbox',
+	              name: 'committee_prefs'
+	            })
+	          )
+	        ),
+	        React.createElement(
+	          'td',
+	          null,
+	          React.createElement(
+	            'label',
+	            { name: 'committee_prefs' },
+	            React.createElement('input', {
+	              className: 'choice',
+	              type: 'checkbox',
+	              name: 'committee_prefs'
+	            })
+	          )
+	        ),
+	        React.createElement(
+	          'td',
+	          null,
+	          React.createElement(
+	            'label',
+	            { name: 'committee_prefs' },
+	            React.createElement('input', {
+	              className: 'choice',
+	              type: 'checkbox',
+	              name: 'committee_prefs'
+	            })
+	          )
 	        )
 	      );
-	    } else {
-	      return React.createElement(PermissionDeniedView, null);
-	    }
+	    }.bind(this));
+	  },
+
+	  render: function render() {
+	    return React.createElement(
+	      InnerView,
+	      null,
+	      React.createElement(
+	        'h2',
+	        null,
+	        'Attendance'
+	      ),
+	      React.createElement(
+	        'p',
+	        null,
+	        'Here you can take attendance for delegates. Note that confirming attendance will alert the advisor as to if there delegates have shown up to committee.'
+	      ),
+	      React.createElement(
+	        'form',
+	        null,
+	        React.createElement(
+	          'div',
+	          { className: 'table-container' },
+	          React.createElement(
+	            'table',
+	            { className: 'table highlight-cells' },
+	            React.createElement(
+	              'thead',
+	              null,
+	              React.createElement(
+	                'tr',
+	                null,
+	                React.createElement(
+	                  'th',
+	                  null,
+	                  'Assignment'
+	                ),
+	                React.createElement(
+	                  'th',
+	                  null,
+	                  'Present'
+	                ),
+	                React.createElement(
+	                  'th',
+	                  null,
+	                  'Present2'
+	                ),
+	                React.createElement(
+	                  'th',
+	                  null,
+	                  'Present3'
+	                )
+	              )
+	            ),
+	            React.createElement(
+	              'tbody',
+	              null,
+	              this.renderAttendanceRows()
+	            )
+	          )
+	        ),
+	        React.createElement(
+	          Button,
+	          {
+	            color: 'green' },
+	          'Confirm Attendance'
+	        )
+	      )
+	    );
 	  }
 	});
 
@@ -53633,6 +53741,8 @@
 	      this.history.pushState(null, '/login');
 	    } else if (User.isAdvisor(user)) {
 	      this.history.pushState(null, '/advisor/profile');
+	    } else if (User.isChair(user)) {
+	      this.history.pushState(null, '/chair/attendance');
 	    }
 	  },
 
