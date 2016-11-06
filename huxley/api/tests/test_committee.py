@@ -90,10 +90,7 @@ class CommitteeDetailDeleteTestCase(auto.DestroyAPIAutoTestCase):
 
     def test_authenticated_user(self):
         '''Authenticated users cannot delete committees.'''
-        TestUsers.new_user(username='user', password='user')
-        self.do_test(
-            username='user', password='user',
-            expected_error=auto.EXP_DELETE_NOT_ALLOWED)
+        self.as_default_user().do_test(expected_error=auto.EXP_DELETE_NOT_ALLOWED)
 
     def test_superuser(self):
         '''Superusers cannot delete committees.'''

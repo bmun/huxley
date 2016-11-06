@@ -13,9 +13,12 @@ from huxley.core.models import School, Committee, Country, Delegate, Assignment
 class TestUsers():
     @staticmethod
     def new_user(**kwargs):
-        u = User(username=kwargs.pop('username', 'testuser'),
-                 email=kwargs.pop('email', 'test@user.in'))
-        u.set_password(kwargs.pop('password', 'test'))
+        username = kwargs.pop('username', None) or str(uuid.uuid4())
+        u = User(username=username, email=kwargs.pop('email', 'test@user.in'))
+
+        password = kwargs.pop('password', 'test')
+        u.set_password(password)
+        u.PASSWORD_FOR_TESTS_ONLY = password
 
         u.first_name = kwargs.pop('first_name', 'Test')
         u.last_name = kwargs.pop('last_name', 'User')
@@ -106,7 +109,7 @@ class TestDelegates():
     @staticmethod
     def new_delegate(**kwargs):
         a = kwargs.pop('assignment', None) or TestAssignments.new_assignment()
-        s = kwargs.pop('school', None) or a.school or TestSchools.new_school()
+        s = kwargs.pop('school', None) or a.school
 
         c = Delegate(
                 assignment=a,

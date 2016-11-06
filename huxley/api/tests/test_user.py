@@ -105,7 +105,9 @@ class UserDetailGetTestCase(tests.RetrieveAPITestCase):
 
     def test_chair(self):
         '''It should have the correct fields for chairs.'''
-        user = TestUsers.new_user(user_type=User.TYPE_CHAIR,
+        user = TestUsers.new_user(username='testuser',
+                                  password='test',
+                                  user_type=User.TYPE_CHAIR,
                                   committee_id=4)
         self.client.login(username='testuser', password='test')
         response = self.get_response(user.id)
@@ -125,7 +127,7 @@ class UserDetailDeleteTestCase(auto.DestroyAPIAutoTestCase):
 
     @classmethod
     def get_test_object(cls):
-        return TestUsers.new_user(username='user1', password='user1')
+        return TestUsers.new_user()
 
     def test_anonymous_user(self):
         '''It should reject the request from an anonymous user.'''
@@ -133,17 +135,12 @@ class UserDetailDeleteTestCase(auto.DestroyAPIAutoTestCase):
 
     def test_other_user(self):
         '''It should reject the request from another user.'''
-        joe = TestUsers.new_user(username='joe', password='schmoe')
-        TestSchools.new_school(user=joe)
-        self.do_test(
-            username='joe', password='schmoe',
-            expected_error=auto.EXP_PERMISSION_DENIED)
+        TestSchools.new_school(user=self.default_user)
+        self.as_default_user().do_test(expected_error=auto.EXP_PERMISSION_DENIED)
 
     def test_self(self):
         '''It should allow a user to delete themself.'''
-        self.do_test(
-            username=self.object.username,
-            password='user1')
+        self.as_user(self.object).do_test()
 
     def test_superuser(self):
         '''It should allow a superuser to delete a user.'''

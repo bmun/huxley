@@ -12,15 +12,13 @@ class AssignmentDetailGetTestCase(auto.RetrieveAPIAutoTestCase):
 
     @classmethod
     def get_test_object(cls):
-        user = TestUsers.new_user(username='user', password='user')
-        school = TestSchools.new_school(user=user)
-        return TestAssignments.new_assignment(school=school)
+        return TestAssignments.new_assignment()
 
     def test_anonymous_user(self):
         self.do_test(expected_error=auto.EXP_NOT_AUTHENTICATED)
 
     def test_advisor(self):
-        self.do_test(username='user', password='user')
+        self.as_user(self.object.school.advisor).do_test()
 
     def test_superuser(self):
         self.as_superuser().do_test()
@@ -119,17 +117,12 @@ class AssignmentDetailDeleteTestCase(auto.DestroyAPIAutoTestCase):
 
     def test_advisor(self):
         '''Advisors cannot delete their assignments.'''
-        self.do_test(
-            username=self.object.school.advisor.username, password='test',
-            expected_error=auto.EXP_DELETE_NOT_ALLOWED)
+        self.as_user(self.object.school.advisor).do_test(expected_error=auto.EXP_DELETE_NOT_ALLOWED)
 
     def test_other_user(self):
         '''A user cannot delete another user's assignments.'''
-        joe = TestUsers.new_user(username='joe', password='schmoe')
-        TestSchools.new_school(user=joe)
-        self.do_test(
-            username='joe', password='schmoe',
-            expected_error=auto.EXP_PERMISSION_DENIED)
+        TestSchools.new_school(user=self.default_user)
+        self.as_default_user().do_test(expected_error=auto.EXP_PERMISSION_DENIED)
 
     def test_superuser(self):
         '''A superuser cannot delete assignments.'''

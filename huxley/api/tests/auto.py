@@ -33,15 +33,22 @@ class AutoTestMixin(object):
 
     @classmethod
     def class_setup(cls):
-        TestUsers.new_superuser(username='super999', password='super999')
+        cls.superuser = TestUsers.new_superuser()
+        cls.default_user = TestUsers.new_user()
 
-    def as_superuser(self):
-        self.client.login(username='super999', password='super999')
+    def as_user(self, user):
+        self.client.login(
+            username=user.username,
+            password=user.PASSWORD_FOR_TESTS_ONLY)
         return self
 
-    def do_test(self, username=None, password=None, expected_error=None):
-        if username and password:
-            self.client.login(username=username, password=password)
+    def as_default_user(self):
+        return self.as_user(self.default_user)
+
+    def as_superuser(self):
+        return self.as_user(self.superuser)
+
+    def do_test(self, expected_error=None):
         response = self.get_response(self.object.id)
 
         self.assert_error(response, expected_error)
