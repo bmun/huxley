@@ -9,13 +9,12 @@ from django.test.client import Client
 
 from huxley.accounts.models import User
 from huxley.core.models import Conference
-from huxley.api.tests import (CreateAPITestCase, DestroyAPITestCase,
-                              ListAPITestCase, PartialUpdateAPITestCase,
-                              RetrieveAPITestCase)
+from huxley.api import tests
+from huxley.api.tests import auto
 from huxley.utils.test import TestSchools, TestUsers
 
 
-class UserDetailGetTestCase(RetrieveAPITestCase):
+class UserDetailGetTestCase(tests.RetrieveAPITestCase):
     url_name = 'api:user_detail'
 
     def test_anonymous_user(self):
@@ -121,47 +120,38 @@ class UserDetailGetTestCase(RetrieveAPITestCase):
             'committee': user.committee_id})
 
 
-class UserDetailDeleteTestCase(DestroyAPITestCase):
+class UserDetailDeleteTestCase(auto.DestroyAPIAutoTestCase):
     url_name = 'api:user_detail'
 
-    def setUp(self):
-        self.user = TestUsers.new_user(username='user1', password='user1')
+    @classmethod
+    def get_test_object(cls):
+        return TestUsers.new_user(username='user1', password='user1')
 
     def test_anonymous_user(self):
         '''It should reject the request from an anonymous user.'''
-        response = self.get_response(self.user.id)
-
-        self.assertNotAuthenticated(response)
-        self.assertTrue(User.objects.filter(id=self.user.id).exists())
+        self.do_test(expected_error=auto.EXP_NOT_AUTHENTICATED)
 
     def test_other_user(self):
         '''It should reject the request from another user.'''
-        TestUsers.new_user(username='user2', password='user2')
-        self.client.login(username='user2', password='user2')
-
-        response = self.get_response(self.user.id)
-        self.assertPermissionDenied(response)
-        self.assertTrue(User.objects.filter(id=self.user.id).exists())
+        joe = TestUsers.new_user(username='joe', password='schmoe')
+        TestSchools.new_school(user=joe)
+        self.do_test(
+            username='joe', password='schmoe',
+            expected_error=auto.EXP_PERMISSION_DENIED)
 
     def test_self(self):
         '''It should allow a user to delete themself.'''
-        self.client.login(username='user1', password='user1')
-
-        response = self.get_response(self.user.id)
-        self.assertEqual(response.status_code, 204)
-        self.assertFalse(User.objects.filter(id=self.user.id).exists())
+        self.do_test(
+            username=self.object.username,
+            password='user1')
 
     def test_superuser(self):
         '''It should allow a superuser to delete a user.'''
-        TestUsers.new_superuser(username='user2', password='user2')
-        self.client.login(username='user2', password='user2')
-
-        response = self.get_response(self.user.id)
-        self.assertEqual(response.status_code, 204)
-        self.assertFalse(User.objects.filter(id=self.user.id).exists())
+        TestUsers.new_superuser(username='super', password='super')
+        self.do_test(username='super', password='super')
 
 
-class UserDetailPatchTestCase(PartialUpdateAPITestCase):
+class UserDetailPatchTestCase(tests.PartialUpdateAPITestCase):
     url_name = 'api:user_detail'
     params = {'first_name': 'first',
               'last_name': 'last'}
@@ -210,7 +200,7 @@ class UserDetailPatchTestCase(PartialUpdateAPITestCase):
         self.assertEqual(response.data['last_name'], user.last_name)
 
 
-class UserListGetTestCase(ListAPITestCase):
+class UserListGetTestCase(tests.ListAPITestCase):
     url_name = 'api:user_list'
 
     def test_anonymous_user(self):
@@ -254,7 +244,7 @@ class UserListGetTestCase(ListAPITestCase):
              'committee': user2.committee_id}])
 
 
-class UserListPostTestCase(CreateAPITestCase):
+class UserListPostTestCase(tests.CreateAPITestCase):
     url_name = 'api:user_list'
     params = {'username': 'Kunal',
               'password': 'password',
