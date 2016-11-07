@@ -53,69 +53,70 @@ var ChairAttendanceView = React.createClass({
             {country.name}
           </td>
           <td>
-              <label name="committee_prefs">
-                <input
-                  className="choice"
-                  type="checkbox"
-                  name="committee_prefs"
-                />
-              </label>
+            <label name="committee_prefs">
+              <input
+                className="choice"
+                type="checkbox"
+                name="committee_prefs"
+              />
+            </label>
           </td>
           <td>
-              <label name="committee_prefs">
-                <input
-                  className="choice"
-                  type="checkbox"
-                  name="committee_prefs"
-                />
-              </label>
+            <label name="committee_prefs">
+              <input
+                className="choice"
+                type="checkbox"
+                name="committee_prefs"
+              />
+            </label>
           </td>
           <td>
-              <label name="committee_prefs">
-                <input
-                  className="choice"
-                  type="checkbox"
-                  name="committee_prefs"
-                />
-              </label>
+            <label name="committee_prefs">
+              <input
+                className="choice"
+                type="checkbox"
+                name="committee_prefs"
+              />
+            </label>
           </td>
         </tr>
       )}.bind(this));
   },
 
   render: function() {
-      return (
-        <InnerView>
-          <h2>Attendance</h2>
-          <p>
-            Here you can take attendance for delegates. Note that confirming attendance will alert
-            the advisor as to if there delegates have shown up to committee.
-          </p>
-            <form>
-            <div className="table-container">
-              <table className="table highlight-cells">
-                <thead>
-                  <tr>
-                    <th>Assignment</th>
-                    <th>Present</th>
-                    <th>Present2</th>
-                    <th>Present3</th>
-                  </tr>
-                </thead>
-                <tbody>
-                    {this.renderAttendanceRows()}
-                </tbody>
-              </table>
-            </div>
-            <Button
-              color="green">
-              Confirm Attendance
-            </Button>
-          </form>
+    return (
+      <InnerView>
+        <h2>Attendance</h2>
+        <p>
+          Here you can take attendance for delegates. Note that confirming 
+          attendance will alert the advisor as to if there delegates have 
+          shown up to committee.
+        </p>
+          <form>
+          <div className="table-container">
+            <table className="table highlight-cells">
+              <thead>
+                <tr>
+                  <th>Assignment</th>
+                  <th>Present</th>
+                  <th>Present2</th>
+                  <th>Present3</th>
+                </tr>
+              </thead>
+              <tbody>
+                {this.renderAttendanceRows()}
+              </tbody>
+            </table>
+          </div>
+          <Button
+            color="green">
+            Confirm Attendance
+          </Button>
+        </form>
 
-        </InnerView>
-      );
-    },
+      </InnerView>
+    );
+  },
 });
     
 

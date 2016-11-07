@@ -21,7 +21,6 @@ var ForgotPasswordView = require('components/ForgotPasswordView');
 var LoginView = require('components/LoginView');
 var NotFoundView = require('components/NotFoundView');
 var PasswordResetSuccessView = require('components/PasswordResetSuccessView');
-var PermissionDeniedView = require('components/PermissionDeniedView');
 var RedirectView = require('components/RedirectView');
 var RegistrationView = require('components/RegistrationView');
 var RegistrationClosedView = require('components/RegistrationClosedView');
@@ -50,7 +49,6 @@ var routes = (
     <Route path="/advisor/assignments" component={AdvisorAssignmentsView} />
     <Route path="/advisor/roster" component={AdvisorRosterView} />
     <Route path="/chair/attendance" component={ChairAttendanceView} />
-    <Route path="/permissiondenied" component={PermissionDeniedView} />
     <IndexRoute component={RedirectView} />
     <Route path="*" component={NotFoundView} />
   </Route>
