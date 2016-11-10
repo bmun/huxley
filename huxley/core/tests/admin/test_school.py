@@ -109,41 +109,32 @@ class SchoolAdminTest(TestCase):
         self.assertTrue(response)
 
         header = [
-            "Name",
-            "Assignments Requested",
-            "Beginners",
-            "Intermediates",
-            "Advanced",
-            "Spanish Speakers",
-            "Chinese Speakers",
-            "Country 1",
-            "Country 2",
-            "Country 3",
-            "Country 4",
-            "Country 5",
-            "Country 6",
-            "Country 7",
-            "Country 8",
-            "Country 9",
-            "Country 10",
-            "Committee Preferences",
-            "Registration Comments"
-            ]
+            "Name", "Assignments Requested", "Beginners", "Intermediates",
+            "Advanced", "Spanish Speakers", "Chinese Speakers", "Country 1",
+            "Country 2", "Country 3", "Country 4", "Country 5", "Country 6",
+            "Country 7", "Country 8", "Country 9", "Country 10",
+            "Committee Preferences", "Registration Comments"
+        ]
 
         fields_csv = ",".join(map(str, header)) + "\r\n"
 
-        countryprefs = [c for c in school.countrypreferences.all().order_by('countrypreference')]
+        countryprefs = [c
+                        for c in school.countrypreferences.all().order_by(
+                            'countrypreference')]
         countryprefs += [''] * (10 - len(countryprefs))
-        committeeprefs = [', '.join([c.name for c in school.committeepreferences.all()])]
+        committeeprefs = [', '.join(
+            [c.name for c in school.committeepreferences.all()])]
 
         fields = [
-                school.name,
-                school.beginner_delegates + school.intermediate_delegates + school.advanced_delegates,
-                school.beginner_delegates,
-                school.intermediate_delegates,
-                school.advanced_delegates,
-                school.spanish_speaking_delegates,
-                school.chinese_speaking_delegates,]
+            school.name,
+            school.beginner_delegates + school.intermediate_delegates +
+            school.advanced_delegates,
+            school.beginner_delegates,
+            school.intermediate_delegates,
+            school.advanced_delegates,
+            school.spanish_speaking_delegates,
+            school.chinese_speaking_delegates,
+        ]
         fields.extend(countryprefs)
         fields.extend(committeeprefs)
         fields.append(school.registration_comments)
