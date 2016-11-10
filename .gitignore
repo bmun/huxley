@@ -21,3 +21,5 @@ fabfile/deploy.py
 htmlcov/
 
 node_modules/
+
+huxley/wwww/static/js/

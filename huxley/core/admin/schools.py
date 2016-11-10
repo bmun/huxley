@@ -117,12 +117,14 @@ class SchoolAdmin(admin.ModelAdmin):
                 "Country 8",
                 "Country 9",
                 "Country 10",
+                "Committee Preferences"
                 "Registration Comments"
                 ])
 
         for school in School.objects.all().order_by('name'):
             countryprefs = [c for c in school.countrypreferences.all().order_by('countrypreference')]
             countryprefs += [''] * (10 - len(countryprefs))
+            committeeprefs = [', '.join([c.name for c in school.committeepreferences.all()])]
 
             writer.writerow([unicode(field).encode('utf8') for field in [
                 school.name,
@@ -133,6 +135,7 @@ class SchoolAdmin(admin.ModelAdmin):
                 school.spanish_speaking_delegates,
                 school.chinese_speaking_delegates]] +
                 countryprefs +
+                committeeprefs +
                 [unicode(school.registration_comments).encode('utf8')
             ])
 
