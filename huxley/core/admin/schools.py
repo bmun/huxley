@@ -107,7 +107,7 @@ class SchoolAdmin(admin.ModelAdmin):
             "Advanced", "Spanish Speakers", "Chinese Speakers", "Country 1",
             "Country 2", "Country 3", "Country 4", "Country 5", "Country 6",
             "Country 7", "Country 8", "Country 9", "Country 10",
-            "Committee Preferences"
+            "Committee Preferences",
             "Registration Comments"
         ])
 

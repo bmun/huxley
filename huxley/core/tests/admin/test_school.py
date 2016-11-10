@@ -126,6 +126,7 @@ class SchoolAdminTest(TestCase):
             "Country 8",
             "Country 9",
             "Country 10",
+            "Committee Preferences",
             "Registration Comments"
             ]
 
@@ -133,6 +134,7 @@ class SchoolAdminTest(TestCase):
 
         countryprefs = [c for c in school.countrypreferences.all().order_by('countrypreference')]
         countryprefs += [''] * (10 - len(countryprefs))
+        committeeprefs = [', '.join([c.name for c in school.committeepreferences.all()])]
 
         fields = [
                 school.name,
@@ -143,6 +145,7 @@ class SchoolAdminTest(TestCase):
                 school.spanish_speaking_delegates,
                 school.chinese_speaking_delegates,]
         fields.extend(countryprefs)
+        fields.extend(committeeprefs)
         fields.append(school.registration_comments)
 
         fields_csv += ",".join(map(str, fields))
