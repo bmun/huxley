@@ -22,4 +22,4 @@ htmlcov/
 
 node_modules/
 
-huxley/www/static/js/
+huxley/www/static/js/bundle.js
