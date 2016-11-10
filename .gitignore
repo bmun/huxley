@@ -21,3 +21,5 @@ fabfile/deploy.py
 htmlcov/
 
 node_modules/
+
+huxley/www/static/js/bundle.js
