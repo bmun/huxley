@@ -8,25 +8,17 @@
 var React = require('react');
 var ReactRouter = require('react-router');
 
-var AssignmentStore = require('stores/AssignmentStore');
 var Button = require('components/Button');
-var CommitteeStore = require('stores/CommitteeStore');
 var ConferenceContext = require('components/ConferenceContext');
-var CountryStore = require('stores/CountryStore');
 var CurrentUserStore = require('stores/CurrentUserStore');
-var CurrentUserActions = require('actions/CurrentUserActions');
-var DelegateSelect = require('components/DelegateSelect');
-var DelegateStore = require('stores/DelegateStore');
 var InnerView = require('components/InnerView');
-var PermissionDeniedView = require('components/PermissionDeniedView');
-var ServerAPI = require('lib/ServerAPI');
 var User = require('utils/User');
 
 var ChairAttendanceView = React.createClass({
 
   getInitialState: function() {
     return {
-      countries: [],
+      assigments: {},
     };
   },
 
@@ -36,50 +28,51 @@ var ChairAttendanceView = React.createClass({
 
   componentWillMount: function() {
     var user = CurrentUserStore.getCurrentUser();
-    CountryStore.getCountries(function(countries) {
-      this.setState({countries: countries});
-    }.bind(this));
-    if (!User.isChair(this.props.user)) {
+    if (!User.isChair(user)) {
       this.history.pushState(null, '/');
     }
   },
 
   renderAttendanceRows: function() {
-    return this.state.countries.map(function(country) {
-      return (
-        <tr>
-          <td>
-            {country.name}
-          </td>
-          <td>
-              <label name="committee_prefs">
-                <input
-                  className="choice"
-                  type="checkbox"
-                  name="committee_prefs"
-                />
-              </label>
-          </td>
-          <td>
-              <label name="committee_prefs">
-                <input
-                  className="choice"
-                  type="checkbox"
-                  name="committee_prefs"
-                />
-              </label>
-          </td>
-          <td>
-              <label name="committee_prefs">
-                <input
-                  className="choice"
-                  type="checkbox"
-                  name="committee_prefs"
-                />
-              </label>
-          </td>
-        </tr>
-      )}.bind(this));
+    /*
+     * This will not be used, and is just a dummy example of what the code might
+     * look like in the final page
+     */
+    // return this.state.countries.map(function(country) {
+    //   return (
+    //     <tr>
+    //       <td>
+    //         {country.name}
+    //       </td>
+    //       <td>
+    //           <label name="committee_prefs">
+    //             <input
+    //               className="choice"
+    //               type="checkbox"
+    //               name="committee_prefs"
+    //             />
+    //           </label>
+    //       </td>
+    //       <td>
+    //           <label name="committee_prefs">
+    //             <input
+    //               className="choice"
+    //               type="checkbox"
+    //               name="committee_prefs"
+    //             />
+    //           </label>
+    //       </td>
+    //       <td>
+    //           <label name="committee_prefs">
+    //             <input
+    //               className="choice"
+    //               type="checkbox"
+    //               name="committee_prefs"
+    //             />
+    //           </label>
+    //       </td>
+    //     </tr>
+    //   )}.bind(this));
   },
 
   render: function() {
@@ -101,9 +94,9 @@ var ChairAttendanceView = React.createClass({
                   <th>Present3</th>
                 </tr>
               </thead>
-              <tbody>
-                  {this.renderAttendanceRows()}
-              </tbody>
+              // <tbody>
+              //     {this.renderAttendanceRows()}
+              // </tbody>
             </table>
           </div>
           <Button
