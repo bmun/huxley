@@ -25,7 +25,7 @@ var ChairAttendanceView = React.createClass({
     };
   },
 
-    componentWillMount: function() {
+  componentWillMount: function() {
     var user = CurrentUserStore.getCurrentUser();
     if (!User.isChair(user)) {
       this.history.pushState(null, '/');
