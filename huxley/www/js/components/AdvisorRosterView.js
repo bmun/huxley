@@ -51,23 +51,21 @@ var AdvisorRosterView = React.createClass({
       )});
     }.bind(this));
 
-    DelegateStore.getDelegates(user.school.id, function(delegates) {
-      this.setState({delegates: delegates});
-    }.bind(this));
+    this.setState({delegates: DelegateStore.getDelegates(user.school.id)});
 
     Modal.setAppElement('body')
   },
 
   componentDidMount: function() {
-    DelegateStore.addListener(function() {
+    DelegateStore.addListener(() => {
       var schoolID =  CurrentUserStore.getCurrentUser().school.id;
       var delegates = DelegateStore.getDelegates(schoolID);
       this.setState({
         delegates: delegates,
-        loading: false,
-        modal_open: false
+        modal_open: false,
+        loading: false
       });
-    }.bind(this));
+    });
   },
 
   render: function() {
@@ -161,7 +159,7 @@ var AdvisorRosterView = React.createClass({
                 this,
                 delegate.name,
                 delegate.email,
-                this._handleEditDelegate.bind(this, delegate.id))}>
+                this._handleEditDelegate.bind(this, delegate))}>
               Edit
             </Button>
           </td>
@@ -220,7 +218,7 @@ var AdvisorRosterView = React.createClass({
       `Are you sure you want to delete this delegate (${delegate.name})?`
     );
     if (confirmed) {
-      DelegateActions.deleteDelegate(delegate);
+      DelegateActions.deleteDelegate(delegate.id);
     }
   },
 
@@ -235,15 +233,11 @@ var AdvisorRosterView = React.createClass({
     event.preventDefault();
   },
 
-  _handleEditDelegate: function(delegateID) {
+  _handleEditDelegate: function(delegate) {
     var user = CurrentUserStore.getCurrentUser();
     this.setState({loading: true});
-    DelegateActions.updateDelegate(
-      delegateID,
-      this.state.modal_name,
-      this.state.modal_email,
-      user.school.id
-    );
+    var delta = {name: this.state.modal_name, email: this.state.modal_email};
+    DelegateActions.updateDelegate(delegate.id, delta);
     event.preventDefault();
   },
 

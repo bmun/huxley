@@ -6,69 +6,84 @@
 'use strict';
 
 var ActionConstants = require('constants/ActionConstants');
+var DelegateActions = require('actions/DelegateActions');
 var Dispatcher = require('dispatcher/Dispatcher');
 var ServerAPI = require('lib/ServerAPI');
 var {Store} = require('flux/utils');
 
 
-var _delegatePromises = {};
-var _delegates = []
+var _schoolsDelegates = {};
+var _delegates = {};
 
 class DelegateStore extends Store {
-  getDelegates(schoolID, callback) {
-    if (!_delegatePromises[schoolID]) {
-      _delegatePromises[schoolID] = ServerAPI.getDelegates(schoolID);
+  getDelegates(schoolID) {
+    if (_schoolsDelegates[schoolID]) {
+      return _schoolsDelegates[schoolID];
     }
-    if (callback) {
-      _delegatePromises[schoolID].then(function(value) {
-        _delegates = value;
-        callback(value);
-      });
-    }
-    return _delegates;
+
+    ServerAPI.getDelegates(schoolID).then(value => {
+      _schoolsDelegates[schoolID] = value;
+      for (var i = 0; i < value.length; i++) {
+        var delegate = value[i];
+        _delegates[delegate.id] = delegate;
+      }
+      DelegateActions.delegatesFetched();
+    });
+
+    return [];
   }
 
-  deleteDelegate(delegate) {
-    ServerAPI.deleteDelegate(delegate.id);
-    var index = _delegates.indexOf(delegate);
-    if (index != -1) {
-      _delegates.splice(index,1);
-    }
+  deleteDelegate(delegateID) {
+    ServerAPI.deleteDelegate(delegateID);
+    var schoolID = _delegates[delegateID].school;
+    delete _delegates[delegateID];
+    _schoolsDelegates[schoolID] = _schoolsDelegates[schoolID].filter(d => d.id !== delegateID);
   }
 
   addDelegate(delegate) {
-    _delegates.push(delegate);
+    _delegates[delegate.id] = delegate;
+    _schoolsDelegates[delegate.school].push(delegate);
   }
 
-  updateDelegate(delegateID, name, email, schoolID) {
+  updateDelegate(delegateID, delta) {
     ServerAPI.updateDelegate(delegateID, {
-      name: name,
-      email: email,
-      school: schoolID
+      name: delta.name,
+      email: delta.email,
     });
-    var _delegate = _delegates.find(function(delegate) {
-      return delegate.id == delegateID;
-    });
-    _delegate.name = name;
-    _delegate.email = email;
+    var delegate = _delegates[delegateID];
+    delegate.name = delta.name;
+    delegate.email = delta.email;
+    _delegates[delegateID] = delegate;
+    _schoolsDelegates[delegate.school] = _schoolsDelegates[delegate.school].map(d => d.id == delegate.id ? delegate : d);
+  }
+
+  updateDelegates(schoolID, delegates) {
+    ServerAPI.updateSchoolDelegates(
+      schoolID,
+      JSON.stringify(delegates)
+    )
+    for (var i = 0; i < delegates.length; i++) {
+      var delegate = delegates[i];
+      _delegates[delegate.id] = delegate;
+    }
+    _schoolsDelegates[schoolID] = delegates;
   }
 
   __onDispatch(action) {
     switch (action.actionType) {
       case ActionConstants.DELETE_DELEGATE:
-        this.deleteDelegate(action.delegate);
+        this.deleteDelegate(action.delegateID);
         break;
       case ActionConstants.ADD_DELEGATE:
         this.addDelegate(action.delegate);
         break;
       case ActionConstants.UPDATE_DELEGATE:
-        this.updateDelegate(
-          action.delegateID,
-          action.name,
-          action.email,
-          action.schoolID
-        );
+        this.updateDelegate(action.delegateID, action.delta);
         break;
+      case ActionConstants.DELEGATES_FETCHED:
+        break;
+      case ActionConstants.UPDATE_DELEGATES:
+        this.updateDelegates(action.schoolID, action.delegates);
       default:
         return;
     }

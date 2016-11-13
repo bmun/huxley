@@ -8,7 +8,7 @@
 jest.dontMock('stores/DelegateStore');
 
 describe('DelegateStore', () => {
-  var ActionConstants
+  var ActionConstants;
   var DelegateStore;
   var Dispatcher;
   var ServerAPI;
@@ -44,38 +44,52 @@ describe('DelegateStore', () => {
   });
 
   it('adds a delegate', () => {
-    return Promise.all([
+    return Promise.resolve(
       DelegateStore.getDelegates(mockSchoolId, (delegates) => {
         expect(delegates).toEqual(mockDelegates);
         DelegateStore.addDelegate({id: 3, name: 'Trevor', email: ''});
         expect(DelegateStore.getDelegates(mockSchoolId).length).toEqual(3);
       })
-    ]);
+    );
   });
 
   it('deletes a delegate', () => {
-    return Promise.all([
+    return Promise.resolve(
       DelegateStore.getDelegates(mockSchoolId, (delegates) => {
         expect(delegates).toEqual(mockDelegates);
         DelegateStore.deleteDelegate(mockDelegates[0]);
         expect(DelegateStore.getDelegates(mockSchoolId).length).toEqual(1);
       })
-    ]);
+    );
   });
 
   it('updates a delegate', () => {
     return Promise.all([
       DelegateStore.getDelegates(mockSchoolId, (delegates) => {
         expect(delegates).toEqual(mockDelegates);
-        var updatedDelegate = mockDelegates[0]
-        updatedDelegate.name = 'Jake Moskowitz';
-        DelegateStore.updateDelegate(
-          updatedDelegate.id,
-          updatedDelegate.name,
-          updatedDelegate.email,
-          mockSchoolId
-        );
+        var delta = {name: "Jake Moskowitz", email: "jake@bmun.org"};
+        DelegateStore.updateDelegate(1, delta);
+      }),
+      DelegateStore.getDelegates(mockSchoolId, (delegates) => {
+        var updatedDelegate = delegates[0];
+        expect(updatedDelegate.name).toBe("Jake Moskowitz");
+        expect(updatedDelegate.email).toBe("jake@bmun.org");
+      })
+    ]);
+  });
+
+  it('updates delegates in bulk', () => {
+    var updatedDelegates = [
+      {id: 1, name: 'Jake Moskowitz', email: ''},
+      {id: 2, name: 'Nathaniel Parke', email: ''}
+    ];
+    return Promise.all([
+      DelegateStore.getDelegates(mockSchoolId, (delegates) => {
         expect(delegates).toEqual(mockDelegates);
+        DelegateStore.updateDelegates(mockSchoolId, updateDelegates);
+      }),
+      DelegateStore.getDelegates(mockSchoolId, (delegates) => {
+        expect(delegates).toEqual(updatedDelegates);
       })
     ]);
   });
