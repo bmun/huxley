@@ -15,6 +15,9 @@ var InnerView = require('components/InnerView');
 var User = require('utils/User');
 
 var ChairAttendanceView = React.createClass({
+  mixins: [
+    ReactRouter.History,
+  ],
 
   getInitialState: function() {
     return {
@@ -22,20 +25,50 @@ var ChairAttendanceView = React.createClass({
     };
   },
 
-  mixins: [
-    ReactRouter.History,
-  ],
-
-  componentWillMount: function() {
+    componentWillMount: function() {
     var user = CurrentUserStore.getCurrentUser();
     if (!User.isChair(user)) {
       this.history.pushState(null, '/');
     }
   },
 
+  render: function() {
+    return (
+      <InnerView>
+        <h2>Attendance</h2>
+        <p>
+          Here you can take attendance for delegates. Note that confirming 
+          attendance will alert the advisor as to if there delegates have 
+          shown up to committee.
+        </p>
+          <form>
+          <div className="table-container">
+            <table className="table highlight-cells">
+              <thead>
+                <tr>
+                  <th>Assignment</th>
+                  <th>Present</th>
+                  <th>Present2</th>
+                  <th>Present3</th>
+                </tr>
+              </thead>
+              <tbody>
+                {this.renderAttendanceRows()}
+              </tbody>
+            </table>
+          </div>
+          <Button
+            color="green">
+            Confirm Attendance
+          </Button>
+        </form>
+      </InnerView>
+    );
+  },
+
   renderAttendanceRows: function() {
     /*
-     * This will not be used, and is just a dummy example of what the code might
+     * This will not be used, and is just a dummy example of what the code will
      * look like in the final page
      */
     // return this.state.countries.map(function(country) {
@@ -78,42 +111,6 @@ var ChairAttendanceView = React.createClass({
     );
   },
 
-  render: function() {
-    return (
-      <InnerView>
-        <h2>Attendance</h2>
-        <p>
-          Here you can take attendance for delegates. Note that confirming 
-          attendance will alert the advisor as to if there delegates have 
-          shown up to committee.
-        </p>
-          <form>
-          <div className="table-container">
-            <table className="table highlight-cells">
-              <thead>
-                <tr>
-                  <th>Assignment</th>
-                  <th>Present</th>
-                  <th>Present2</th>
-                  <th>Present3</th>
-                </tr>
-              </thead>
-              <tbody>
-                {this.renderAttendanceRows()}
-              </tbody>
-            </table>
-          </div>
-          <Button
-            color="green">
-            Confirm Attendance
-          </Button>
-        </form>
-      </InnerView>
-    );
-  },
 });
     
-
-
-
 module.exports = ChairAttendanceView;
