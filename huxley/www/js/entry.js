@@ -52,12 +52,7 @@ var routes = (
     <Route path="/advisor/profile" component={AdvisorProfileView} />
     <Route path="/advisor/assignments" component={AdvisorAssignmentsView} />
     <Route path="/advisor/roster" component={AdvisorRosterView} />
-    <Route path="/chair/attendance" component={User.isChair(global.currentUser)
-        ? ChairAttendanceView
-        : PermissionDeniedView
-      } 
-    />
-    <Route path="/permissiondenied" component={PermissionDeniedView} />
+    <Route path="/chair/attendance" component={ChairAttendanceView} />
     <IndexRoute component={RedirectView} />
     <Route path="*" component={NotFoundView} />
   </Route>
