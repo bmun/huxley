@@ -50,7 +50,7 @@ var Huxley = React.createClass({
         <AdvisorView user={user}>
           {React.cloneElement(this.props.children, { user: user })}
         </AdvisorView>
-      )
+      );
     } else if (User.isChair(user)) {
       return (
         <ChairView user={user}>
