@@ -12,7 +12,6 @@ var ReactDOM = require('react-dom')
 var ReactRouter = require('react-router');
 
 var CurrentUserActions = require('actions/CurrentUserActions');
-var CurrentUserStore = require('stores/CurrentUserStore');
 var Huxley = require('components/Huxley');
 var AdvisorAssignmentsView = require('components/AdvisorAssignmentsView');
 var AdvisorProfileView = require('components/AdvisorProfileView');
@@ -22,7 +21,6 @@ var ForgotPasswordView = require('components/ForgotPasswordView');
 var LoginView = require('components/LoginView');
 var NotFoundView = require('components/NotFoundView');
 var PasswordResetSuccessView = require('components/PasswordResetSuccessView');
-var PermissionDeniedView = require('components/PermissionDeniedView');
 var RedirectView = require('components/RedirectView');
 var RegistrationView = require('components/RegistrationView');
 var RegistrationClosedView = require('components/RegistrationClosedView');
@@ -32,8 +30,6 @@ var RegistrationWaitlistView = require('components/RegistrationWaitlistView');
 var IndexRoute = ReactRouter.IndexRoute;
 var Router = ReactRouter.Router;
 var Route = ReactRouter.Route;
-
-var User = require('utils/User');
 
 var routes = (
   <Route path="/" component={Huxley}>

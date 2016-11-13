@@ -73,6 +73,9 @@ var ChairAttendanceView = React.createClass({
     //       </td>
     //     </tr>
     //   )}.bind(this));
+    return (
+      <tr></tr>
+    );
   },
 
   render: function() {
@@ -80,8 +83,9 @@ var ChairAttendanceView = React.createClass({
       <InnerView>
         <h2>Attendance</h2>
         <p>
-          Here you can take attendance for delegates. Note that confirming attendance will alert
-          the advisor as to if there delegates have shown up to committee.
+          Here you can take attendance for delegates. Note that confirming 
+          attendance will alert the advisor as to if there delegates have 
+          shown up to committee.
         </p>
           <form>
           <div className="table-container">

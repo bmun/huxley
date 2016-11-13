@@ -57,6 +57,7 @@
 	var ReactDOM = __webpack_require__(276);
 	var ReactRouter = __webpack_require__(410);
 
+<<<<<<< HEAD
 	var CurrentUserActions = __webpack_require__(459);
 	var Huxley = __webpack_require__(465);
 	var AdvisorAssignmentsView = __webpack_require__(498);
@@ -73,6 +74,24 @@
 	var RegistrationClosedView = __webpack_require__(547);
 	var RegistrationSuccessView = __webpack_require__(548);
 	var RegistrationWaitlistView = __webpack_require__(549);
+=======
+	var CurrentUserActions = __webpack_require__(457);
+	var Huxley = __webpack_require__(463);
+	var AdvisorAssignmentsView = __webpack_require__(496);
+	var AdvisorProfileView = __webpack_require__(503);
+	var AdvisorRosterView = __webpack_require__(511);
+	var ChairAttendanceView = __webpack_require__(532);
+	var ForgotPasswordView = __webpack_require__(533);
+	var LoginView = __webpack_require__(536);
+	var NotFoundView = __webpack_require__(537);
+	var PasswordResetSuccessView = __webpack_require__(538);
+	var PermissionDeniedView = __webpack_require__(466);
+	var RedirectView = __webpack_require__(539);
+	var RegistrationView = __webpack_require__(540);
+	var RegistrationClosedView = __webpack_require__(545);
+	var RegistrationSuccessView = __webpack_require__(546);
+	var RegistrationWaitlistView = __webpack_require__(547);
+>>>>>>> c46c760a79679f859a0bf894bc250a800d4e0267
 
 	var IndexRoute = ReactRouter.IndexRoute;
 	var Router = ReactRouter.Router;
