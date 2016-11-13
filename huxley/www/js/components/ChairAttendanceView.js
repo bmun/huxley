@@ -98,9 +98,9 @@ var ChairAttendanceView = React.createClass({
                   <th>Present3</th>
                 </tr>
               </thead>
-              // <tbody>
-              //     {this.renderAttendanceRows()}
-              // </tbody>
+              <tbody>
+                {this.renderAttendanceRows()}
+              </tbody>
             </table>
           </div>
           <Button
