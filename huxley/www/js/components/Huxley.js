@@ -57,8 +57,6 @@ var Huxley = React.createClass({
           {React.cloneElement(this.props.children, { user: user })}
         </ChairView>
       );
-    } else {
-      // TODO: Chairs
     }
   },
 });

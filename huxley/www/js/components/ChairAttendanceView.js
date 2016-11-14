@@ -19,20 +19,20 @@ var ChairAttendanceView = React.createClass({
     ReactRouter.History,
   ],
 
-  getInitialState: function() {
+  getInitialState() {
     return {
       assigments: {},
     };
   },
 
-  componentWillMount: function() {
+  componentWillMount() {
     var user = CurrentUserStore.getCurrentUser();
     if (!User.isChair(user)) {
       this.history.pushState(null, '/');
     }
   },
 
-  render: function() {
+  render() {
     return (
       <InnerView>
         <h2>Attendance</h2>
@@ -66,7 +66,7 @@ var ChairAttendanceView = React.createClass({
     );
   },
 
-  renderAttendanceRows: function() {
+  renderAttendanceRows() {
     /*
      * This will not be used, and is just a dummy example of what the code will
      * look like in the final page
