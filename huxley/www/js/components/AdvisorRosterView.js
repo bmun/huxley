@@ -28,9 +28,11 @@ var AdvisorRosterView = React.createClass({
   ],
 
   getInitialState: function() {
+    var user = CurrentUserStore.getCurrentUser();
+    var delegates = DelegateStore.getDelegates(user.school.id)
     return {
       assignments: [],
-      delegates: [],
+      delegates: delegates,
       loading: false,
       modal_open: false,
       modal_name: '',
@@ -50,8 +52,6 @@ var AdvisorRosterView = React.createClass({
         }
       )});
     }.bind(this));
-
-    this.setState({delegates: DelegateStore.getDelegates(user.school.id)});
 
     Modal.setAppElement('body')
   },

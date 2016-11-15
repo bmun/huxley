@@ -23,8 +23,7 @@ class DelegateStore extends Store {
 
     ServerAPI.getDelegates(schoolID).then(value => {
       _schoolsDelegates[schoolID] = value;
-      for (var i = 0; i < value.length; i++) {
-        var delegate = value[i];
+      for (const delegate of value) {
         _delegates[delegate.id] = delegate;
       }
       DelegateActions.delegatesFetched();
@@ -42,19 +41,15 @@ class DelegateStore extends Store {
 
   addDelegate(delegate) {
     _delegates[delegate.id] = delegate;
-    _schoolsDelegates[delegate.school].push(delegate);
+    _schoolsDelegates[delegate.school] = [..._schoolsDelegates[delegate.school], delegate];
   }
 
   updateDelegate(delegateID, delta) {
-    ServerAPI.updateDelegate(delegateID, {
-      name: delta.name,
-      email: delta.email,
-    });
-    var delegate = _delegates[delegateID];
-    delegate.name = delta.name;
-    delegate.email = delta.email;
+    const delegate = {..._delegates[delegateID], ...delta};
+    ServerAPI.updateDelegate(delegateID, delegate);
     _delegates[delegateID] = delegate;
-    _schoolsDelegates[delegate.school] = _schoolsDelegates[delegate.school].map(d => d.id == delegate.id ? delegate : d);
+    _schoolsDelegates[delegate.school] =
+      _schoolsDelegates[delegate.school].map(d => d.id == delegate.id ? delegate : d);
   }
 
   updateDelegates(schoolID, delegates) {
@@ -62,8 +57,7 @@ class DelegateStore extends Store {
       schoolID,
       JSON.stringify(delegates)
     )
-    for (var i = 0; i < delegates.length; i++) {
-      var delegate = delegates[i];
+    for (const delegate of delegates) {
       _delegates[delegate.id] = delegate;
     }
     _schoolsDelegates[schoolID] = delegates;

@@ -31,12 +31,15 @@ var AdvisorAssignmentsView = React.createClass({
   },
 
   getInitialState: function() {
+    var user = CurrentUserStore.getCurrentUser();
+    var delegates = DelegateStore.getDelegates(user.school.id);
+    var assigned = this.prepareAssignedDelegates(delegates);
     return {
-      assigned: {},
+      assigned: assigned,
       assignments: [],
       committees: {},
       countries: {},
-      delegates: [],
+      delegates: delegates,
       loading: false
     };
   },
@@ -64,12 +67,6 @@ var AdvisorAssignmentsView = React.createClass({
       }
       this.setState({countries: new_countries})
     }.bind(this));
-    var delegates = DelegateStore.getDelegates(user.school.id);
-    var assigned = this.prepareAssignedDelegates(delegates);
-    this.setState({
-      delegates: delegates,
-      assigned: assigned
-    });
   },
 
   componentDidMount: function() {
