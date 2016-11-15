@@ -9,7 +9,6 @@ var Modal = require('react-modal');
 var React = require('react');
 var ReactRouter = require('react-router');
 
-var AssignmentStore = require('stores/AssignmentStore');
 var Button = require('components/Button');
 var CommitteeStore = require('stores/CommitteeStore');
 var CountryStore = require('stores/CountryStore');
@@ -31,33 +30,23 @@ var AdvisorRosterView = React.createClass({
     var user = CurrentUserStore.getCurrentUser();
     var delegates = DelegateStore.getDelegates(user.school.id)
     return {
-      assignments: [],
       delegates: delegates,
       loading: false,
       modal_open: false,
       modal_name: '',
       modal_email: '',
       modal_onClick: null,
-      errors: {}
+      errors: {},
+      delegateToken: {}
     };
   },
 
   componentWillMount: function() {
-    var user = CurrentUserStore.getCurrentUser();
-
-    AssignmentStore.getAssignments(user.school.id, function(assignments) {
-      this.setState({assignments: assignments.filter(
-        function(assignment) {
-          return !assignment.rejected
-        }
-      )});
-    }.bind(this));
-
     Modal.setAppElement('body')
   },
 
   componentDidMount: function() {
-    DelegateStore.addListener(() => {
+    var delegateToken = DelegateStore.addListener(() => {
       var schoolID =  CurrentUserStore.getCurrentUser().school.id;
       var delegates = DelegateStore.getDelegates(schoolID);
       this.setState({
@@ -66,6 +55,11 @@ var AdvisorRosterView = React.createClass({
         loading: false
       });
     });
+    this.setState({delegateToken: delegateToken});
+  },
+
+  componentWillUnmount: function() {
+    this.state.delegateToken.remove();
   },
 
   render: function() {
