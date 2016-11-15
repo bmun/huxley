@@ -20,6 +20,8 @@ var RedirectView = React.createClass({
       this.history.pushState(null, '/login');
     } else if (User.isAdvisor(user)) {
       this.history.pushState(null, '/advisor/profile');
+    } else if (User.isChair(user)) {
+      this.history.pushState(null, '/chair/attendance');
     }
   },
 
