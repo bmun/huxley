@@ -15,6 +15,7 @@ var ConferenceContext = require('components/ConferenceContext');
 var CountryStore = require('stores/CountryStore');
 var CurrentUserStore = require('stores/CurrentUserStore');
 var CurrentUserActions = require('actions/CurrentUserActions');
+var DelegateActions = require('actions/DelegateActions');
 var DelegateSelect = require('components/DelegateSelect');
 var DelegateStore = require('stores/DelegateStore');
 var InnerView = require('components/InnerView');
@@ -30,12 +31,15 @@ var AdvisorAssignmentsView = React.createClass({
   },
 
   getInitialState: function() {
+    var user = CurrentUserStore.getCurrentUser();
+    var delegates = DelegateStore.getDelegates(user.school.id);
+    var assigned = this.prepareAssignedDelegates(delegates);
     return {
-      assigned: {},
+      assigned: assigned,
       assignments: [],
       committees: {},
       countries: {},
-      delegates: [],
+      delegates: delegates,
       loading: false
     };
   },
@@ -63,7 +67,12 @@ var AdvisorAssignmentsView = React.createClass({
       }
       this.setState({countries: new_countries})
     }.bind(this));
-    DelegateStore.getDelegates(user.school.id, (delegates) => {
+  },
+
+  componentDidMount: function() {
+    DelegateStore.addListener(() => {
+      var schoolID =  CurrentUserStore.getCurrentUser().school.id;
+      var delegates = DelegateStore.getDelegates(schoolID);
       var assigned = this.prepareAssignedDelegates(delegates);
       this.setState({
         delegates: delegates,
@@ -236,11 +245,7 @@ var AdvisorAssignmentsView = React.createClass({
 
   _handleSave: function(event) {
     var school = CurrentUserStore.getCurrentUser().school;
-    this.setState({loading: true});
-    ServerAPI.updateSchoolDelegates(
-      school.id,
-      JSON.stringify(this.state.delegates)
-    ).then(this._handleSuccess, this._handleError);
+    DelegateActions.updateDelegates(school.id, this.state.delegates);
   },
 
   _handleFinalizedSuccess: function(response) {

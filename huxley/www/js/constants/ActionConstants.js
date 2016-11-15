@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011-2015 Berkeley Model United Nations. All rights reserved.
+ * Copyright (c) 2011-2016 Berkeley Model United Nations. All rights reserved.
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
@@ -9,5 +9,10 @@ module.exports = {
   BOOTSTRAP: "BOOTSTRAP",
   LOGIN: "LOGIN",
   LOGOUT: "LOGOUT",
-  UPDATE_SCHOOL: "UPDATE_SCHOOL"
+  UPDATE_SCHOOL: "UPDATE_SCHOOL",
+  DELETE_DELEGATE: "DELETE_DELEGATE",
+  ADD_DELEGATE: "ADD_DELEGATE",
+  UPDATE_DELEGATE: "UPDATE_DELEGATE",
+  DELEGATES_FETCHED: "DELEGATES_FETCHED",
+  UPDATE_DELEGATES: "UPDATE_DELEGATES"
 };

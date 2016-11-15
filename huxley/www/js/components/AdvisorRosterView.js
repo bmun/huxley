@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011-2015 Berkeley Model United Nations. All rights reserved.
+ * Copyright (c) 2011-2016 Berkeley Model United Nations. All rights reserved.
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
@@ -14,6 +14,7 @@ var Button = require('components/Button');
 var CommitteeStore = require('stores/CommitteeStore');
 var CountryStore = require('stores/CountryStore');
 var CurrentUserStore = require('stores/CurrentUserStore');
+var DelegateActions = require('actions/DelegateActions');
 var DelegateStore = require('stores/DelegateStore');
 var CurrentUserActions = require('actions/CurrentUserActions');
 var InnerView = require('components/InnerView');
@@ -27,9 +28,11 @@ var AdvisorRosterView = React.createClass({
   ],
 
   getInitialState: function() {
+    var user = CurrentUserStore.getCurrentUser();
+    var delegates = DelegateStore.getDelegates(user.school.id)
     return {
       assignments: [],
-      delegates: [],
+      delegates: delegates,
       loading: false,
       modal_open: false,
       modal_name: '',
@@ -50,11 +53,19 @@ var AdvisorRosterView = React.createClass({
       )});
     }.bind(this));
 
-    DelegateStore.getDelegates(user.school.id, function(delegates) {
-      this.setState({delegates: delegates});
-    }.bind(this));
-
     Modal.setAppElement('body')
+  },
+
+  componentDidMount: function() {
+    DelegateStore.addListener(() => {
+      var schoolID =  CurrentUserStore.getCurrentUser().school.id;
+      var delegates = DelegateStore.getDelegates(schoolID);
+      this.setState({
+        delegates: delegates,
+        modal_open: false,
+        loading: false
+      });
+    });
   },
 
   render: function() {
@@ -148,7 +159,7 @@ var AdvisorRosterView = React.createClass({
                 this,
                 delegate.name,
                 delegate.email,
-                this._handleEditDelegate.bind(this, delegate.id))}>
+                this._handleEditDelegate.bind(this, delegate))}>
               Edit
             </Button>
           </td>
@@ -207,11 +218,7 @@ var AdvisorRosterView = React.createClass({
       `Are you sure you want to delete this delegate (${delegate.name})?`
     );
     if (confirmed) {
-      this.setState({loading: true});
-      ServerAPI.deleteDelegate(delegate.id).then(
-        this._handleDelegateDeleteSuccess.bind(this, delegate.id),
-        this._handleError
-      );
+      DelegateActions.deleteDelegate(delegate.id);
     }
   },
 
@@ -226,44 +233,19 @@ var AdvisorRosterView = React.createClass({
     event.preventDefault();
   },
 
-  _handleEditDelegate: function(delegateID) {
+  _handleEditDelegate: function(delegate) {
     var user = CurrentUserStore.getCurrentUser();
     this.setState({loading: true});
-    ServerAPI.updateDelegate(delegateID, {
-      name: this.state.modal_name,
-      email: this.state.modal_email,
-      school: user.school.id,
-    }).then(this._handleEditDelegateSuccess, this._handleError);
+    var delta = {name: this.state.modal_name, email: this.state.modal_email};
+    DelegateActions.updateDelegate(delegate.id, delta);
     event.preventDefault();
   },
 
-  _handleDelegateDeleteSuccess: function(id, response) {
-    this.setState({
-      delegates: this.state.delegates.filter((delegate) => delegate.id != id),
-      loading: false,
-    });
-  },
-
   _handleAddDelegateSuccess: function(response) {
+    DelegateActions.addDelegate(response);
     this.setState({
-      delegates: this.state.delegates.concat(response),
       loading: false,
       modal_open: false,
-    });
-  },
-
-  _handleEditDelegateSuccess: function(response) {
-    var delegates = this.state.delegates;
-    for (var i = 0; i < delegates.length; i++) {
-      if (delegates[i].id == response.id) {
-        delegates[i] = response;
-      }
-    }
-
-    this.setState({
-      modal_open: false,
-      delegates: delegates,
-      loading: false
     });
   },
 
