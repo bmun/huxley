@@ -40,8 +40,7 @@ var AdvisorAssignmentsView = React.createClass({
       committees: {},
       countries: {},
       delegates: delegates,
-      loading: false,
-      delegateToken: {}
+      loading: false
     };
   },
 
@@ -71,7 +70,7 @@ var AdvisorAssignmentsView = React.createClass({
   },
 
   componentDidMount: function() {
-    var delegateToken = DelegateStore.addListener(() => {
+    this._delegatesToken = DelegateStore.addListener(() => {
       var schoolID =  CurrentUserStore.getCurrentUser().school.id;
       var delegates = DelegateStore.getDelegates(schoolID);
       var assigned = this.prepareAssignedDelegates(delegates);
@@ -80,11 +79,10 @@ var AdvisorAssignmentsView = React.createClass({
         assigned: assigned
       });
     });
-    this.setState({delegateToken: delegateToken});
   },
 
   componentWillUnmount: function() {
-    this.state.delegateToken.remove();
+    this._delegatesToken.remove();
   },
 
   render: function() {

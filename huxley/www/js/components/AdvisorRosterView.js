@@ -36,8 +36,7 @@ var AdvisorRosterView = React.createClass({
       modal_name: '',
       modal_email: '',
       modal_onClick: null,
-      errors: {},
-      delegateToken: {}
+      errors: {}
     };
   },
 
@@ -46,7 +45,7 @@ var AdvisorRosterView = React.createClass({
   },
 
   componentDidMount: function() {
-    var delegateToken = DelegateStore.addListener(() => {
+    this._delegatesToken = DelegateStore.addListener(() => {
       var schoolID =  CurrentUserStore.getCurrentUser().school.id;
       var delegates = DelegateStore.getDelegates(schoolID);
       this.setState({
@@ -55,11 +54,10 @@ var AdvisorRosterView = React.createClass({
         loading: false
       });
     });
-    this.setState({delegateToken: delegateToken});
   },
 
   componentWillUnmount: function() {
-    this.state.delegateToken.remove();
+    this._delegatesToken.remove();
   },
 
   render: function() {
