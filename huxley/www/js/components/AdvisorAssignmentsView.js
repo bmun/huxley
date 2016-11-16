@@ -70,7 +70,7 @@ var AdvisorAssignmentsView = React.createClass({
   },
 
   componentDidMount: function() {
-    DelegateStore.addListener(() => {
+    this._delegatesToken = DelegateStore.addListener(() => {
       var schoolID =  CurrentUserStore.getCurrentUser().school.id;
       var delegates = DelegateStore.getDelegates(schoolID);
       var assigned = this.prepareAssignedDelegates(delegates);
@@ -79,6 +79,10 @@ var AdvisorAssignmentsView = React.createClass({
         assigned: assigned
       });
     });
+  },
+
+  componentWillUnmount: function() {
+    this._delegatesToken && this._delegatesToken.remove();
   },
 
   render: function() {
