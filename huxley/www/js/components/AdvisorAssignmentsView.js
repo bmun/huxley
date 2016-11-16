@@ -82,7 +82,7 @@ var AdvisorAssignmentsView = React.createClass({
   },
 
   componentWillUnmount: function() {
-    this._delegatesToken.remove();
+    this._delegatesToken && this._delegatesToken.remove();
   },
 
   render: function() {
