@@ -176,7 +176,8 @@ class School(models.Model):
         '''If the school is about to be created (i.e. has no ID) and
         registration is closed, add it to the waitlist.'''
         school = kwargs['instance']
-        if not school.id and settings.CONFERENCE_WAITLIST_OPEN:
+        conference = Conference.get_current()
+        if not school.id and conference.waitlist_reg:
             school.waitlist = True
 
     @property
@@ -233,7 +234,7 @@ class School(models.Model):
                     'BMUN %d Registration Confirmation' % conference.session,
                     'Congratulations, you have officially been registered for BMUN %d. '
                     'To access your account, please log in at huxley.bmun.org.\n\n'
-                    'In order to confirm your spot on our registration list, ' 
+                    'In order to confirm your spot on our registration list, '
                     'you must pay the non-refundable school fee of $%d. '
                     'In 24-48 hours, you will receive an invoice from QuickBooks, '
                     'our accounting system, for your school fee. '
@@ -250,7 +251,7 @@ class School(models.Model):
                     'at http://bmun.org/alumni-scholarship/. This year we will be '
                     'awarding up to $13,000 to those that apply.\n\n'
                     'If you have any questions, please contact info@bmun.org.\n\n'
-                    'Thank you for registering for BMUN, and we look forward to ' 
+                    'Thank you for registering for BMUN, and we look forward to '
                     'seeing you at the oldest high school conference in the world '
                     'on March 3-5, 2017.' %
                     (conference.session, int(registration_fee),
