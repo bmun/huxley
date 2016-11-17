@@ -122,18 +122,18 @@ class SchoolTest(TestCase):
         )
 
     def test_update_waitlist(self):
-        '''New schools should be waitlisted based on the conference settings.'''
-        self.assertTrue(hasattr(settings, 'CONFERENCE_WAITLIST_OPEN'))
+        '''New schools should be waitlisted based on the conference waitlist field.'''
+        s1 = TestSchools.new_school()
+        self.assertFalse(s1.waitlist)
 
-        with self.settings(CONFERENCE_WAITLIST_OPEN=False):
-            s1 = TestSchools.new_school()
-            self.assertFalse(s1.waitlist)
+        conference = Conference.get_current()
+        conference.waitlist_reg = True
+        conference.save()
 
-        with self.settings(CONFERENCE_WAITLIST_OPEN=True):
-            s1.save()
-            self.assertFalse(s1.waitlist)
-            s2 = TestSchools.new_school()
-            self.assertTrue(s2.waitlist)
+        s1.save()
+        self.assertFalse(s1.waitlist)
+        s2 = TestSchools.new_school()
+        self.assertTrue(s2.waitlist)
 
 
 class AssignmentTest(TestCase):
