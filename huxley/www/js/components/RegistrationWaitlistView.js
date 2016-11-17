@@ -18,6 +18,7 @@ var RegistrationWaitlistView = React.createClass({
   },
 
   render: function() {
+    var conference = this.context.conference;
     return (
       <OuterView>
         <div class="letter">
