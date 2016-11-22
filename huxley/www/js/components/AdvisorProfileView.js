@@ -17,6 +17,8 @@ var ProgramTypes = require('constants/ProgramTypes');
 var TextInput = require('components/TextInput');
 var User = require('utils/User');
 var _handleChange = require('utils/_handleChange');
+var NotificationSystem = require('react-notification-system');
+var ReactDOM = require('react-dom');
 
 require('jquery-ui/effect-shake');
 
@@ -71,7 +73,7 @@ var AdvisorProfileView = React.createClass({
         </p>
         <p><strong>Remember to save!</strong></p>
         <p><strong>Important Note:</strong> Please mail all checks
-        to <strong>P.O. Box 4306 Berkeley, CA 94704-0306</strong>. If you'd like to pay online via
+        to <strong>P.O. Box 4306 Berkeley, CA 94704-0306</strong>. If you would like to pay online via
         credit card, or if you have any further questions, please contact me
         at <a href="mailto:info@bmun.org">info@bmun.org</a> and I will respond promptly.
         See you soon!</p>
@@ -313,6 +315,7 @@ var AdvisorProfileView = React.createClass({
             Save
           </Button>
           <span className="help-text"><em> Remember to save any changes!</em></span>
+          <NotificationSystem ref="notificationSystem" />
         </form>
       </InnerView>
     );
@@ -368,11 +371,34 @@ var AdvisorProfileView = React.createClass({
   },
 
   _handleSuccess: function(data, status, jqXHR) {
+    this._addNotification();
     this.setState({
       errors: {},
       loading: false
     });
   },
+
+  _notificationSystem: null,
+
+  _addNotification: function(event) {
+    event && event.preventDefault();
+    this._notificationSystem.addNotification({
+      message: 'Save Successful',
+      level: 'success',
+      autoDismiss: 3,
+      position: 'bc'
+    });
+  },
+
+  componentDidMount: function() {
+    this._notificationSystem = this.refs.notificationSystem;
+  },
+
+  _getNotificationSystemInstance: function() {
+    return this._notificationSystem
+  },
+
+
 
   _handleError: function(jqXHR, status, error) {
     var response = jqXHR.responseJSON;
