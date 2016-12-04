@@ -242,9 +242,21 @@ class DelegateListCreateTestCase(tests.CreateAPITestCase):
         self.params['school'] = self.school.id
 
     def test_anonymous_user(self):
-        '''Anonymous users can't create delegates.'''
+        '''Should accept post request from any user.'''
         response = self.get_response(params=self.params)
-        self.assertNotAuthenticated(response)
+        response.data.pop('created_at')
+        response.data.pop('id')
+        self.assertEqual(response.data, {
+            "assignment" : self.assignment.id,
+            "school" : self.school.id,
+            "name" : unicode(self.params['name']),
+            "email" : unicode(self.params['email']),
+            "summary" : unicode(self.params['summary']),
+            "friday_attendance": False,
+            "saturday_morning_attendance": False,
+            "saturday_afternoon_attendance": False,
+            "sunday_attendance": False,}
+        )
 
     def test_advisor(self):
         '''Should allow advisors to create new delegates.'''

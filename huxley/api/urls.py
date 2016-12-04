@@ -24,9 +24,11 @@ urlpatterns = [
 
     url(r'^assignments/?$', views.assignment.AssignmentList.as_view(), name='assignment_list'),
     url(r'^assignments/(?P<pk>[0-9]+)/?$', views.assignment.AssignmentDetail.as_view(), name='assignment_detail'),
+    url(r'^assignments/committee/(?P<pk>[0-9]+)/?$', views.assignment.AssignmentCommitteeDetail.as_view(), name='assignment__committee_detail'),
 
     url(r'^delegates/?$', views.delegate.DelegateList.as_view(), name='delegate_list'),
     url(r'^delegates/(?P<pk>[0-9]+)/?$', views.delegate.DelegateDetail.as_view(), name='delegate_detail'),
+    url(r'^delegates/committee/(?P<pk>[0-9]+)/?$', views.delegate.DelegateCommitteeDetail.as_view(), name='delegate__committee_detail'),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
