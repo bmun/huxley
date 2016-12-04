@@ -34,6 +34,20 @@ var ServerAPI = {
   },
 
   /**
+   * Get a list of all assignments for the given school ID.
+   */
+  getCommitteeAssignments(committeeID) {
+    return _get(`/api/assignments/committee/${committeeID}`);
+  },
+
+  /**
+   * Get a list of all delegates for the given committee ID.
+   */
+  getCommitteeDelegates(committeeID) {
+    return _get(`/api/delegates/committee/${committeeID}`);
+  },
+
+  /**
    * Get a list of all countries.
    */
   getCountries() {
@@ -70,6 +84,11 @@ var ServerAPI = {
   updateSchoolDelegates(schoolID, delegates) {
     return _patch('/api/delegates', delegates);
   },
+
+  updateCommitteeDelegates(committeeID, delegates) {
+    return _patch(`/api/delegates/committee/${committeeID}`, delegates);
+  },
+
 };
 
 function _ajax(method, uri, data) {

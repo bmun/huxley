@@ -13,6 +13,7 @@ var {Store} = require('flux/utils');
 
 
 var _schoolsDelegates = {};
+var _committeeDelegates = {};
 var _delegates = {};
 
 class DelegateStore extends Store {
@@ -23,6 +24,22 @@ class DelegateStore extends Store {
 
     ServerAPI.getDelegates(schoolID).then(value => {
       DelegateActions.delegatesFetched(schoolID, value);
+    });
+
+    return [];
+  }
+
+  getCommitteeDelegates(committeeID) {
+    if (_committeeDelegates[committeeID]) {
+      return _committeeDelegates[committeeID];
+    }
+    
+    ServerAPI.getCommitteeDelegates(committeeID).then(value => {
+      _committeeDelegates[committeeID] = value;
+      for (const delegate of value) {
+        _delegates[delegate.id] = delegate;
+      }
+      DelegateActions.delegatesFetched();
     });
 
     return [];
@@ -56,6 +73,17 @@ class DelegateStore extends Store {
     _schoolsDelegates[schoolID] = delegates;
   }
 
+  updateCommitteeDelegates(committeeID, delegates) {
+    ServerAPI.updateCommitteeDelegates(
+      committeeID,
+      JSON.stringify(delegates)
+    )
+    for (const delegate of delegates) {
+      _delegates[delegate.id] = delegate;
+    }
+    _committeeDelegates[committeeID] = delegates;
+  }
+
   __onDispatch(action) {
     switch (action.actionType) {
       case ActionConstants.DELETE_DELEGATE:
@@ -75,6 +103,9 @@ class DelegateStore extends Store {
         break;
       case ActionConstants.UPDATE_DELEGATES:
         this.updateDelegates(action.schoolID, action.delegates);
+        break;
+      case ActionConstants.UPDATE_COMMITTEE_DELEGATES:
+        this.updateCommitteeDelegates(action.committeeID, action.delegates);
         break;
       default:
         return;
