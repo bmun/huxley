@@ -12,23 +12,24 @@ from huxley.core.models import Delegate
 
 
 class DelegateList(generics.CreateAPIView):
-    authentication_classes = (SessionAuthentication,)
+    authentication_classes = (SessionAuthentication, )
     queryset = Delegate.objects.all()
-    permission_classes = (IsPostOrSuperuserOnly,)
+    permission_classes = (IsPostOrSuperuserOnly, )
     serializer_class = DelegateSerializer
 
 
 class DelegateDetail(generics.RetrieveUpdateDestroyAPIView):
-    authentication_classes = (SessionAuthentication,)
+    authentication_classes = (SessionAuthentication, )
     queryset = Delegate.objects.all()
-    permission_classes = (IsSchoolDelegateAdvisorOrSuperuser,)
+    permission_classes = (IsSchoolDelegateAdvisorOrSuperuser, )
     serializer_class = DelegateSerializer
 
+
 class DelegateCommitteeDetail(generics.ListAPIView, ListUpdateModelMixin):
-    authentication_classes = (SessionAuthentication,)
+    authentication_classes = (SessionAuthentication, )
     queryset = Delegate.objects.all()
     serializer_class = DelegateSerializer
-    permission_classes = (IsChairOrSuperuser,)
+    permission_classes = (IsChairOrSuperuser, )
 
     def get_queryset(self):
         '''Filter schools by the given pk param.'''
