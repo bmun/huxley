@@ -37,11 +37,12 @@ class DelegateDetail(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = (permissions.DelegateDetailPermission, )
     serializer_class = DelegateSerializer
 
+
 class DelegateCommitteeDetail(generics.ListAPIView, ListUpdateModelMixin):
-    authentication_classes = (SessionAuthentication,)
+    authentication_classes = (SessionAuthentication, )
     queryset = Delegate.objects.all()
     serializer_class = DelegateSerializer
-    permission_classes = (IsChairOrSuperuser,)
+    permission_classes = (IsChairOrSuperuser, )
 
     def get_queryset(self):
         '''Filter schools by the given pk param.'''
