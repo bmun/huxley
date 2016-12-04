@@ -50,6 +50,19 @@ class AssignmentStore extends Store {
     _assignments[assignmentID] = assignment;
   }
 
+  getCommitteeAssignments(committeeID, callback) {
+    if (!_committeeAssignments[committeeID]) {
+      _committeeAssignments[committeeID] = ServerAPI.getCommitteeAssignments(committeeID);
+    }
+
+    if (callback) {
+      _committeeAssignments[committeeID].then(callback);
+    }
+
+    return _committeeAssignments[committeeID];
+
+  }
+
   __onDispatch(action) {
     switch (action.actionType) {
       case ActionConstants.ASSIGNMENTS_FETCHED:

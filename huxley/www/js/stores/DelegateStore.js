@@ -74,6 +74,17 @@ class DelegateStore extends Store {
     }
   }
 
+  updateCommitteeDelegates(committeeID, delegates) {
+    ServerAPI.updateCommitteeDelegates(
+      committeeID,
+      JSON.stringify(delegates)
+    )
+    for (const delegate of delegates) {
+      _delegates[delegate.id] = delegate;
+    }
+    _committeeDelegates[committeeID] = delegates;
+  }
+
   __onDispatch(action) {
     switch (action.actionType) {
       case ActionConstants.DELETE_DELEGATE:
@@ -102,6 +113,9 @@ class DelegateStore extends Store {
           _delegates = {};
           _previousUserID = userID;
         }
+        break;
+      case ActionConstants.UPDATE_COMMITTEE_DELEGATES:
+        this.updateCommitteeDelegates(action.committeeID, action.delegates);
         break;
       default:
         return;
