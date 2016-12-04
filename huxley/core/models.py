@@ -409,6 +409,11 @@ class Delegate(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     summary = models.TextField(default='', blank=True, null=True)
 
+    friday_attendance = models.BooleanField(default=False)
+    saturday_morning_attendance = models.BooleanField(default=False)
+    saturday_afternoon_attendance = models.BooleanField(default=False)
+    sunday_attendance = models.BooleanField(default=False)
+
     def __unicode__(self):
         return self.name
 
