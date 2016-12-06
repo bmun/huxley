@@ -72,7 +72,8 @@ var AdvisorProfileView = React.createClass({
         <p><strong>Remember to save!</strong></p>
         <p><strong>Important Note:</strong> Please mail all checks
         to <strong>P.O. Box 4306 Berkeley, CA 94704-0306</strong>. If you'd like to pay online via
-        credit card, or if you have any further questions, please contact me
+        credit card using our online booking service called Quickbooks, 
+        or if you have any further questions, please contact me
         at <a href="mailto:info@bmun.org">info@bmun.org</a> and I will respond promptly.
         See you soon!</p>
         <p><strong>{conference.external}
