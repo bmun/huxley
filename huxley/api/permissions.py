@@ -32,7 +32,7 @@ class IsAdvisorOrSuperuser(permissions.BasePermission):
 
 
 class IsChairOrSuperuser(permissions.BasePermission):
-    '''Accept only the school's advisor or superusers.'''
+    '''Accept only the committee's chair or superusers.'''
 
     def has_object_permission(self, request, view, obj):
         return request.user.is_superuser or request.user == obj.chair

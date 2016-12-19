@@ -4,39 +4,31 @@
 from rest_framework import generics, status
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.response import Response
+import rest_framework
 
 from huxley.api.permissions import IsChairOrSuperuser, IsSchoolAssignmentAdvisorOrSuperuser, IsSuperuserOrReadOnly
 from huxley.api.serializers import AssignmentSerializer
 from huxley.core.models import Assignment
 
 
-class AssignmentList(generics.CreateAPIView):
-    authentication_classes = (SessionAuthentication, )
-    queryset = Assignment.objects.all()
-    permission_classes = (IsSuperuserOrReadOnly, )
+class AssignmentList(generics.ListAPIView):
+    authentication_classes = (SessionAuthentication,)
+    permission_classes = [rest_framework.permissions.AllowAny,]
     serializer_class = AssignmentSerializer
+
+    def get_queryset(self):
+        '''Filter assignments by the given assignment_id param.'''
+        assignment_id = self.request.query_params.get('assignment_id', None)
+        if assignment_id:
+            return Assignment.objects.filter(assignment_id=assignment_id)
+        return Assignment.objects.all()
 
 
 class AssignmentDetail(generics.RetrieveUpdateAPIView):
-    authentication_classes = (SessionAuthentication, )
+    authentication_classes = (SessionAuthentication,)
     queryset = Assignment.objects.all()
-    permission_classes = (IsSchoolAssignmentAdvisorOrSuperuser, )
+    permission_classes = (IsSchoolAssignmentAdvisorOrSuperuser,)
     serializer_class = AssignmentSerializer
 
     def put(self, request, *args, **kwargs):
         return self.partial_update(request, *args, **kwargs)
-
-
-class AssignmentCommitteeDetail(generics.ListAPIView):
-    authentication_classes = (SessionAuthentication, )
-    queryset = Assignment.objects.all()
-    serializer_class = AssignmentSerializer
-    permission_classes = (IsChairOrSuperuser, )
-
-    def get_queryset(self):
-        '''Filter schools by the given pk param.'''
-        committee_id = self.kwargs.get('pk', None)
-        if not committee_id:
-            raise Http404
-
-        return Assignment.objects.filter(committee_id=committee_id)

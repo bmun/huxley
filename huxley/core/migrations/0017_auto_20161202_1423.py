@@ -6,23 +6,29 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    dependencies = [('core', '0016_auto_20160724_2344'), ]
+    dependencies = [
+        ('core', '0016_auto_20160724_2344'),
+    ]
 
     operations = [
         migrations.AddField(
             model_name='delegate',
-            name='friday_attendance',
-            field=models.BooleanField(default=False), ),
+            name='session_one',
+            field=models.BooleanField(default=False),
+        ),
         migrations.AddField(
             model_name='delegate',
-            name='saturday_afternoon_attendance',
-            field=models.BooleanField(default=False), ),
+            name='session_two',
+            field=models.BooleanField(default=False),
+        ),
         migrations.AddField(
             model_name='delegate',
-            name='saturday_morning_attendance',
-            field=models.BooleanField(default=False), ),
+            name='session_three',
+            field=models.BooleanField(default=False),
+        ),
         migrations.AddField(
             model_name='delegate',
-            name='sunday_attendance',
-            field=models.BooleanField(default=False), ),
+            name='session_four',
+            field=models.BooleanField(default=False),
+        ),
     ]

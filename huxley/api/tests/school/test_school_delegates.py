@@ -79,10 +79,10 @@ class SchoolDelegateGetTestCase(ListAPITestCase):
                 'name': unicode(self.delegate1.name),
                 'email': unicode(self.delegate1.email),
                 'summary': unicode(self.delegate1.summary),
-                'friday_attendance': False,
-                'saturday_morning_attendance': False,
-                'saturday_afternoon_attendance': False,
-                'sunday_attendance': False,
+                'session_one': False,
+                'session_two': False,
+                'session_three': False,
+                'session_four': False,
             }, )
         self.assertEqual(
             dict(response.data[1]),
@@ -93,10 +93,10 @@ class SchoolDelegateGetTestCase(ListAPITestCase):
                 'name': unicode(self.delegate2.name),
                 'email': unicode(self.delegate2.email),
                 'summary': unicode(self.delegate2.summary),
-                'friday_attendance': False,
-                'saturday_morning_attendance': False,
-                'saturday_afternoon_attendance': False,
-                'sunday_attendance': False,
+                'session_one': False,
+                'session_two': False,
+                'session_three': False,
+                'session_four': False,
             }, )
 
 
@@ -165,12 +165,10 @@ class SchoolDelegateListPartialUpdateTestCase(PartialUpdateAPITestCase):
                 'email': unicode(self.delegate1.email),
                 'summary': unicode(self.delegate1.summary),
                 'created_at': self.delegate1.created_at.isoformat(),
-                'friday_attendance': self.delegate1.friday_attendance,
-                'saturday_morning_attendance':
-                self.delegate1.saturday_morning_attendance,
-                'saturday_afternoon_attendance':
-                self.delegate1.saturday_afternoon_attendance,
-                'sunday_attendance': self.delegate1.sunday_attendance,
+                'session_one': False,
+                'session_two': False,
+                'session_three': False,
+                'session_four': False,
             }, )
         self.assertEqual(
             dict(response.data[1]),
@@ -182,12 +180,10 @@ class SchoolDelegateListPartialUpdateTestCase(PartialUpdateAPITestCase):
                 'email': unicode(self.delegate2.email),
                 'summary': unicode(self.delegate2.summary),
                 'created_at': self.delegate2.created_at.isoformat(),
-                'friday_attendance': self.delegate2.friday_attendance,
-                'saturday_morning_attendance':
-                self.delegate2.saturday_morning_attendance,
-                'saturday_afternoon_attendance':
-                self.delegate2.saturday_afternoon_attendance,
-                'sunday_attendance': self.delegate2.sunday_attendance,
+                'session_one': False,
+                'session_two': False,
+                'session_three': False,
+                'session_four': False,
             }, )
 
     def test_advisor_fail(self):
@@ -230,12 +226,10 @@ class SchoolDelegateListPartialUpdateTestCase(PartialUpdateAPITestCase):
                 'email': unicode(self.delegate1.email),
                 'summary': unicode(self.delegate1.summary),
                 'created_at': self.delegate1.created_at.isoformat(),
-                'friday_attendance': self.delegate1.friday_attendance,
-                'saturday_morning_attendance':
-                self.delegate1.saturday_morning_attendance,
-                'saturday_afternoon_attendance':
-                self.delegate1.saturday_afternoon_attendance,
-                'sunday_attendance': self.delegate1.sunday_attendance,
+                'session_one': False,
+                'session_two': False,
+                'session_three': False,
+                'session_four': False,
             }, )
         self.assertEqual(
             dict(response.data[1]),
@@ -247,12 +241,10 @@ class SchoolDelegateListPartialUpdateTestCase(PartialUpdateAPITestCase):
                 'email': unicode(self.delegate2.email),
                 'summary': unicode(self.delegate2.summary),
                 'created_at': self.delegate2.created_at.isoformat(),
-                'friday_attendance': self.delegate2.friday_attendance,
-                'saturday_morning_attendance':
-                self.delegate2.saturday_morning_attendance,
-                'saturday_afternoon_attendance':
-                self.delegate2.saturday_afternoon_attendance,
-                'sunday_attendance': self.delegate2.sunday_attendance,
+                'session_one': False,
+                'session_two': False,
+                'session_three': False,
+                'session_four': False,
             }, )
 
     def test_superuser_fail(self):

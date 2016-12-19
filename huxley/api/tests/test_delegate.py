@@ -57,12 +57,10 @@ class DelegateDetailPutTestCase(tests.UpdateAPITestCase):
             "name": unicode(self.params['name']),
             "email": unicode(self.params['email']),
             "summary": unicode(self.params['summary']),
-            "friday_attendance": self.delegate.friday_attendance,
-            "saturday_morning_attendance":
-            self.delegate.saturday_morning_attendance,
-            "saturday_afternoon_attendance":
-            self.delegate.saturday_afternoon_attendance,
-            "sunday_attendance": self.delegate.sunday_attendance,
+            "session_one": False,
+            "session_two": False,
+            "session_three": False,
+            "session_four": False,
         })
 
     def test_superuser(self):
@@ -79,12 +77,10 @@ class DelegateDetailPutTestCase(tests.UpdateAPITestCase):
             "name": unicode(self.params['name']),
             "email": unicode(self.params['email']),
             "summary": unicode(self.params['summary']),
-            "friday_attendance": self.delegate.friday_attendance,
-            "saturday_morning_attendance":
-            self.delegate.saturday_morning_attendance,
-            "saturday_afternoon_attendance":
-            self.delegate.saturday_afternoon_attendance,
-            "sunday_attendance": self.delegate.sunday_attendance,
+            "session_one": False,
+            "session_two": False,
+            "session_three": False,
+            "session_four": False,
         })
 
 
@@ -120,12 +116,10 @@ class DelegateDetailPatchTestCase(tests.PartialUpdateAPITestCase):
             "name": unicode(self.params['name']),
             "email": unicode(self.params['email']),
             "summary": unicode(self.params['summary']),
-            "friday_attendance": self.delegate.friday_attendance,
-            "saturday_morning_attendance":
-            self.delegate.saturday_morning_attendance,
-            "saturday_afternoon_attendance":
-            self.delegate.saturday_afternoon_attendance,
-            "sunday_attendance": self.delegate.sunday_attendance,
+            "session_one": False,
+            "session_two": False,
+            "session_three": False,
+            "session_four": False,
         })
 
     def test_superuser(self):
@@ -142,12 +136,10 @@ class DelegateDetailPatchTestCase(tests.PartialUpdateAPITestCase):
             "name": unicode(self.params['name']),
             "email": unicode(self.params['email']),
             "summary": unicode(self.params['summary']),
-            "friday_attendance": self.delegate.friday_attendance,
-            "saturday_morning_attendance":
-            self.delegate.saturday_morning_attendance,
-            "saturday_afternoon_attendance":
-            self.delegate.saturday_afternoon_attendance,
-            "sunday_attendance": self.delegate.sunday_attendance,
+            "session_one": False,
+            "session_two": False,
+            "session_three": False,
+            "session_four": False,
         })
 
 
@@ -203,10 +195,10 @@ class DelegateListCreateTestCase(tests.CreateAPITestCase):
             "name": unicode(self.params['name']),
             "email": unicode(self.params['email']),
             "summary": unicode(self.params['summary']),
-            "friday_attendance": False,
-            "saturday_morning_attendance": False,
-            "saturday_afternoon_attendance": False,
-            "sunday_attendance": False,
+            "session_one": False,
+            "session_two": False,
+            "session_three": False,
+            "session_four": False,
         })
 
     def test_advisor(self):
@@ -221,10 +213,10 @@ class DelegateListCreateTestCase(tests.CreateAPITestCase):
             "name": unicode(self.params['name']),
             "email": unicode(self.params['email']),
             "summary": unicode(self.params['summary']),
-            "friday_attendance": False,
-            "saturday_morning_attendance": False,
-            "saturday_afternoon_attendance": False,
-            "sunday_attendance": False,
+            "session_one": False,
+            "session_two": False,
+            "session_three": False,
+            "session_four": False,
         })
 
     def test_superuser(self):
@@ -241,8 +233,8 @@ class DelegateListCreateTestCase(tests.CreateAPITestCase):
             "name": unicode(self.params['name']),
             "email": unicode(self.params['email']),
             "summary": unicode(self.params['summary']),
-            "friday_attendance": False,
-            "saturday_morning_attendance": False,
-            "saturday_afternoon_attendance": False,
-            "sunday_attendance": False,
+            "session_one": False,
+            "session_two": False,
+            "session_three": False,
+            "session_four": False,
         })
