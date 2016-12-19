@@ -4,6 +4,7 @@
 from rest_framework import generics, status
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.response import Response
+import rest_framework
 
 from huxley.api.mixins import ListUpdateModelMixin
 from huxley.api import permissions
@@ -38,18 +39,8 @@ class DelegateDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = DelegateSerializer
 
 
-class DelegateCommitteeDetail(generics.ListAPIView, ListUpdateModelMixin):
-    authentication_classes = (SessionAuthentication, )
+class DelegateDetail(generics.RetrieveUpdateDestroyAPIView):
+    authentication_classes = (SessionAuthentication,)
     queryset = Delegate.objects.all()
+    permission_classes = (IsSchoolDelegateAdvisorOrSuperuser,)
     serializer_class = DelegateSerializer
-    permission_classes = (IsChairOrSuperuser, )
-
-    def get_queryset(self):
-        '''Filter schools by the given pk param.'''
-        committee_id = self.kwargs.get('pk', None)
-        if not committee_id:
-            raise Http404
-        return Delegate.objects.filter(assignment__committee_id=committee_id)
-
-    def patch(self, request, *args, **kwargs):
-        return self.list_update(request, partial=True, *args, **kwargs)

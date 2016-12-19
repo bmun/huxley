@@ -256,10 +256,10 @@ class DelegateListCreateTestCase(tests.CreateAPITestCase):
             "name": unicode(self.params['name']),
             "email": unicode(self.params['email']),
             "summary": unicode(self.params['summary']),
-            "friday_attendance": False,
-            "saturday_morning_attendance": False,
-            "saturday_afternoon_attendance": False,
-            "sunday_attendance": False,
+            "session_one": False,
+            "session_two": False,
+            "session_three": False,
+            "session_four": False,
         })
 
     def test_advisor(self):
