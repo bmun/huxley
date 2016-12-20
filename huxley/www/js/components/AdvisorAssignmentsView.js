@@ -32,11 +32,12 @@ var AdvisorAssignmentsView = React.createClass({
 
   getInitialState: function() {
     var user = CurrentUserStore.getCurrentUser();
+    var assignments = AssignmentStore.getAssignments(user.school.id);
     var delegates = DelegateStore.getDelegates(user.school.id);
     var assigned = this.prepareAssignedDelegates(delegates);
     return {
       assigned: assigned,
-      assignments: [],
+      assignments: assignments,
       committees: {},
       countries: {},
       delegates: delegates,
@@ -46,13 +47,6 @@ var AdvisorAssignmentsView = React.createClass({
 
   componentWillMount: function() {
     var user = CurrentUserStore.getCurrentUser();
-    AssignmentStore.getAssignments(user.school.id, function(assignments) {
-      this.setState({assignments: assignments.filter(
-        function(assignment) {
-          return !assignment.rejected
-        }
-      )});
-    }.bind(this));
     CommitteeStore.getCommittees(function(committees) {
       var new_committees = {};
       for (var i = 0; i < committees.length; i++) {
@@ -71,7 +65,7 @@ var AdvisorAssignmentsView = React.createClass({
 
   componentDidMount: function() {
     this._delegatesToken = DelegateStore.addListener(() => {
-      var schoolID =  CurrentUserStore.getCurrentUser().school.id;
+      var schoolID = CurrentUserStore.getCurrentUser().school.id;
       var delegates = DelegateStore.getDelegates(schoolID);
       var assigned = this.prepareAssignedDelegates(delegates);
       this.setState({
@@ -79,10 +73,17 @@ var AdvisorAssignmentsView = React.createClass({
         assigned: assigned
       });
     });
+
+    this._assignmentsToken = AssignmentStore.addListener(() => {
+      var schoolID = CurrentUserStore.getCurrentUser().school.id;
+      var assignments = AssignmentStore.getAssignments(schoolID).filter(assignment => !assignment.rejected);
+      this.setState({assignments: assignments});
+    });
   },
 
   componentWillUnmount: function() {
     this._delegatesToken && this._delegatesToken.remove();
+    this._assignmentsToken && this._assignmentsToken.remove();
   },
 
   render: function() {
