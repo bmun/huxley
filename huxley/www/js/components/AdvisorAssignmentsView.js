@@ -8,6 +8,7 @@
 var React = require('react');
 var ReactRouter = require('react-router');
 
+var AssignmentActions = require('actions/AssignmentActions');
 var AssignmentStore = require('stores/AssignmentStore');
 var Button = require('components/Button');
 var CommitteeStore = require('stores/CommitteeStore');
@@ -32,7 +33,7 @@ var AdvisorAssignmentsView = React.createClass({
 
   getInitialState: function() {
     var user = CurrentUserStore.getCurrentUser();
-    var assignments = AssignmentStore.getAssignments(user.school.id);
+    var assignments = AssignmentStore.getAssignments(user.school.id).filter(assignment => !assignment.rejected);
     var committees = this._makeMap(CommitteeStore.getCommittees());
     var countries = this._makeMap(CountryStore.getCountries());
     var delegates = DelegateStore.getDelegates(user.school.id);
@@ -244,11 +245,8 @@ var AdvisorAssignmentsView = React.createClass({
   _handleAssignmentDelete: function(assignment) {
     var confirm = window.confirm("Are you sure you want to delete this assignment?");
     if (confirm) {
-      this.setState({loading: true});
-      ServerAPI.updateAssignment(assignment.id, {rejected: true}).then(
-        this._handleAssignmentDeleteSuccess.bind(this, assignment.id),
-        this.handleError
-      );
+      var delta = {rejected: true};
+      AssignmentActions.updateAssignment(assignment.id, delta);
     }
   },
 

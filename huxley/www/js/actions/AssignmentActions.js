@@ -13,6 +13,14 @@ var AssignmentActions = {
     Dispatcher.dispatch({
       actionType: ActionConstants.ASSIGNMENTS_FETCHED
     });
+  },
+
+  updateAssignment(assignmentID, delta) {
+  	Dispatcher.dispatch({
+  		actionType: ActionConstants.UPDATE_ASSIGNMENT,
+  		assignmentID: assignmentID,
+  		delta: delta
+  	});
   }
 };
 
