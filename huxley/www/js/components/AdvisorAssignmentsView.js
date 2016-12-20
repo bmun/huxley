@@ -236,9 +236,8 @@ var AdvisorAssignmentsView = React.createClass({
     var confirm = window.confirm("By pressing okay you are committing to the financial responsibility of each assignment. Are you sure you want to finalize assignments?");
     var school = CurrentUserStore.getCurrentUser().school;
     if (confirm) {
-      this.setState({loading: true});
-      ServerAPI.updateSchool(school.id, {assignments_finalized: true})
-        .then(this._handleFinalizedSuccess, this._handleError);
+      var delta = {assignments_finalized: true};
+      CurrentUserActions.updateSchool(school.id, delta);
     }
   },
 
@@ -248,36 +247,6 @@ var AdvisorAssignmentsView = React.createClass({
       var delta = {rejected: true};
       AssignmentActions.updateAssignment(assignment.id, delta);
     }
-  },
-
-  _handleSave: function(event) {
-    var school = CurrentUserStore.getCurrentUser().school;
-    DelegateActions.updateDelegates(school.id, this.state.delegates);
-  },
-
-  _handleFinalizedSuccess: function(response) {
-    CurrentUserActions.updateSchool(response);
-    this.setState({loading: false});
-    this.history.pushState(null, '/advisor/assignments');
-  },
-
-  _handleAssignmentDeleteSuccess: function(id, response) {
-    const assignments = this.state.assignments;
-    this.setState({
-      loading: false,
-      assignments: assignments.filter((assignment) => assignment.id != id),
-    });
-    this.history.pushState(null, '/advisor/assignments');
-  },
-
-  _handleError: function(response) {
-    window.alert("Something went wrong. Please try again.");
-    this.setState({loading: false});
-  },
-
-   _handleSuccess: function(response) {
-    this.setState({loading: false});
-    this.history.pushState(null, '/advisor/assignments');
   }
 });
 

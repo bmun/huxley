@@ -7,6 +7,7 @@
 
 var ActionConstants = require('constants/ActionConstants');
 var Dispatcher = require('dispatcher/Dispatcher');
+var ServerAPI = require('lib/ServerAPI');
 var {Store} = require('flux/utils');
 
 var invariant = require('fbjs/lib/invariant');
@@ -33,6 +34,12 @@ class CurrentUserStore extends Store {
     return super.addListener(callback);
   }
 
+  updateSchool(schoolID, delta) {
+    const school = {...this._currentUser.school, ...delta};
+    ServerAPI.updateSchool(schoolID, delta);
+    this._currentUser.school = school;
+  }
+
   __onDispatch(action) {
     switch (action.actionType) {
       case ActionConstants.BOOTSTRAP:
@@ -45,7 +52,7 @@ class CurrentUserStore extends Store {
         this._currentUser = {};
         break;
       case ActionConstants.UPDATE_SCHOOL:
-        this._currentUser.school = action.school;
+        this.updateSchool(action.schoolID, action.delta);
         break;
       default:
         return;
