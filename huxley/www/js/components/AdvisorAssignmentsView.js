@@ -33,37 +33,31 @@ var AdvisorAssignmentsView = React.createClass({
   getInitialState: function() {
     var user = CurrentUserStore.getCurrentUser();
     var assignments = AssignmentStore.getAssignments(user.school.id);
+    var committees = this._makeMap(CommitteeStore.getCommittees());
+    var countries = this._makeMap(CountryStore.getCountries());
     var delegates = DelegateStore.getDelegates(user.school.id);
     var assigned = this.prepareAssignedDelegates(delegates);
     return {
       assigned: assigned,
       assignments: assignments,
-      committees: {},
-      countries: {},
+      committees: committees,
+      countries: countries,
       delegates: delegates,
       loading: false
     };
   },
 
-  componentWillMount: function() {
-    var user = CurrentUserStore.getCurrentUser();
-    CommitteeStore.getCommittees(function(committees) {
-      var new_committees = {};
-      for (var i = 0; i < committees.length; i++) {
-        new_committees[committees[i].id] = committees[i];
-      }
-      this.setState({committees: new_committees});
-    }.bind(this));
-    CountryStore.getCountries(function(countries) {
-      var new_countries = {};
-      for (var i = 0; i < countries.length; i++) {
-        new_countries[countries[i].id] = countries[i];
-      }
-      this.setState({countries: new_countries})
-    }.bind(this));
-  },
-
   componentDidMount: function() {
+    this._committeesToken = CommitteeStore.addListener(() => {
+      var committees = this._makeMap(CommitteeStore.getCommittees());
+      this.setState({committees: committees});
+    });
+
+    this._countriesToken = CountryStore.addListener(() => {
+      var countries = this._makeMap(CountryStore.getCountries());
+      this.setState({countries: countries});
+    });
+
     this._delegatesToken = DelegateStore.addListener(() => {
       var schoolID = CurrentUserStore.getCurrentUser().school.id;
       var delegates = DelegateStore.getDelegates(schoolID);
@@ -82,6 +76,8 @@ var AdvisorAssignmentsView = React.createClass({
   },
 
   componentWillUnmount: function() {
+    this._committeesToken && this._committeesToken.remove();
+    this._countriesToken && this._countriesToken.remove();
     this._delegatesToken && this._delegatesToken.remove();
     this._assignmentsToken && this._assignmentsToken.remove();
   },
@@ -194,6 +190,14 @@ var AdvisorAssignmentsView = React.createClass({
         selectedDelegateID={selectedDelegateID}
       />
     );
+  },
+
+  _makeMap: function(objectList) {
+    var objectMap = {};
+    for (const object of objectList) {
+      objectMap[object.id] = object;
+    }
+    return objectMap;
   },
 
   _handleDelegateAssignment: function(assignmentId, slot, event) {

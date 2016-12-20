@@ -5,38 +5,42 @@
 
 'use strict';
 
-var $ = require('jquery');
+var ActionConstants = require('constants/ActionConstants');
+var CommitteeActions = require('actions/CommitteeActions');
 var Dispatcher = require('dispatcher/Dispatcher');
 var ServerAPI = require('lib/ServerAPI');
 var {Store} = require('flux/utils');
 
 
-var _committeePromise = null;
+var _committees = [];
 
 class CommitteeStore extends Store {
-  getCommittees(callback) {
-    if (!_committeePromise) {
-      _committeePromise = ServerAPI.getCommittees();
+  getCommittees() {
+    if (_committees.length) {
+      return _committees;
     }
-    if (callback) {
-      _committeePromise.then(callback);
-    }
-    return _committeePromise;
+
+    ServerAPI.getCommittees().then(value => {
+      _committees = value;
+      CommitteeActions.committeesFetched();
+    });
+
+    return [];
   }
 
-  getSpecialCommittees(callback) {
-    var p = this.getCommittees().then((committees) => {
-      return committees.filter((committee) => committee.special);
-    });
-    if (callback) {
-      p.then(callback);
-    }
-    return p;
+  getSpecialCommittees() {
+    return this.getCommittees().filter(committee => committee.special);
   }
 
   __onDispatch(action) {
-    // This method must be overwritten
-    return;
+    switch (action.actionType) {
+      case ActionConstants.COMMITTEES_FETCHED:
+        break;
+      default:
+        return;
+    }
+
+    this.__emitChange();
   }
 };
 
