@@ -1,4 +1,4 @@
-# Copyright (c) 2011-2015 Berkeley Model United Nations. All rights reserved.
+# Copyright (c) 2011-2016 Berkeley Model United Nations. All rights reserved.
 # Use of this source code is governed by a BSD License (see LICENSE).
 
 import json
@@ -306,7 +306,7 @@ class Assignment(models.Model):
             deletions.append(assignment_data['id'])
 
         for committee, country, school, rejected in new_assignments:
-            key = (committee, country)
+            key = (committee.id, country.id)
             if key in assigned:
                 # Make sure that the same committee/country pair is not being
                 # given to more than one school in the upload
@@ -361,6 +361,20 @@ class Assignment(models.Model):
 
         return failed_assignments
 
+    @classmethod
+    def update_assignment(cls, **kwargs):
+        assignment = kwargs['instance']
+        # Check that this assignment already exists
+        if assignment.id:
+            old_assignment = cls.objects.get(id=assignment.id)
+            # Check if school changed
+            if not assignment.school.id == old_assignment.school.id:
+                assignment.rejected = False
+                delegates = Delegate.objects.filter(assignment_id=old_assignment.id)
+                for delegate in delegates:
+                    delegate.assignment = None
+                    delegate.save()
+
     def __unicode__(self):
         return self.committee.name + " : " + self.country.name + " : " + (
             self.school.name if self.school else "Unassigned")
@@ -369,6 +383,7 @@ class Assignment(models.Model):
         db_table = u'assignment'
         unique_together = ('committee', 'country')
 
+pre_save.connect(Assignment.update_assignment, sender=Assignment)
 
 class CountryPreference(models.Model):
     school = models.ForeignKey(School)

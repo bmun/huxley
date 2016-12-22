@@ -1,4 +1,4 @@
-# Copyright (c) 2011-2015 Berkeley Model United Nations. All rights reserved.
+# Copyright (c) 2011-2016 Berkeley Model United Nations. All rights reserved.
 # Use of this source code is governed by a BSD License (see LICENSE).
 
 import csv
@@ -111,14 +111,14 @@ class TestDelegates():
         a = kwargs.pop('assignment', None) or TestAssignments.new_assignment()
         s = kwargs.pop('school', None) or a.school
 
-        c = Delegate(
+        d = Delegate(
                 assignment=a,
                 school=s,
                 name=kwargs.pop('name', 'Nate Parke'),
                 email=kwargs.pop('email', 'nate@earthlink.gov'),
                 summary=kwargs.pop('summary', 'He did well!'),)
-        c.save()
-        return c
+        d.save()
+        return d
 
 class TestAssignments():
     @staticmethod

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright (c) 2011-2015 Berkeley Model United Nations. All rights reserved.
+# Copyright (c) 2011-2016 Berkeley Model United Nations. All rights reserved.
 # Use of this source code is governed by a BSD License (see LICENSE).
 
 from datetime import date
@@ -12,7 +12,7 @@ from django.test import TestCase
 from huxley.core.models import (Assignment, Committee, Conference, Country,
                                 CountryPreference, Delegate)
 from huxley.utils.test import (TestAssignments, TestCommittees, TestCountries,
-                               TestSchools)
+                               TestDelegates, TestSchools)
 
 
 class ConferenceTest(TestCase):
@@ -162,6 +162,10 @@ class AssignmentTest(TestCase):
             for cm in [cm1, cm2]
         ])
 
+        a = Assignment.objects.get(committee_id=cm2.id, country_id=ct2.id)
+        d1 = TestDelegates.new_delegate(school=s1, assignment=a)
+        d2 = TestDelegates.new_delegate(school=s1, assignment=a)
+
         # TODO: Also assert on delegate deletion.
         updates = [
             (cm1, ct1, s1, False),
@@ -174,10 +178,29 @@ class AssignmentTest(TestCase):
 
         Assignment.update_assignments(updates)
         new_assignments = [a[1:] for a in Assignment.objects.all().values_list()]
-
+        delegates = Delegate.objects.all()
         updates = [(cm.id, ct.id, s.id, rej) for cm, ct, s, rej in updates]
         self.assertEquals(set(updates), set(new_assignments))
+        self.assertEquals(len(delegates), 0)
 
+    def test_update_assignment(self):
+        '''Tests that when an assignment changes schools, its rejected
+           field is set to False and any delegates assigned to it are
+           no longer assigned to it.'''
+        s1 = TestSchools.new_school(name='S1')
+        s2 = TestSchools.new_school(name='S2')
+        a = TestAssignments.new_assignment(school=s1, rejected=True)
+        d1 = TestDelegates.new_delegate(school=s1, assignment=a)
+        d2 = TestDelegates.new_delegate(school=s1, assignment=a)
+
+        a.school = s2
+        a.save()
+
+        delegates = Delegate.objects.all()
+        for delegate in delegates:
+            self.assertTrue(delegate.id in [d1.id, d2.id])
+            self.assertEquals(delegate.assignment, None)
+        self.assertEquals(a.rejected, False)
 
 class CountryPreferenceTest(TestCase):
 
