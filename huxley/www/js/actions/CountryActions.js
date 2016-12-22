@@ -9,9 +9,10 @@ var ActionConstants = require('constants/ActionConstants');
 var Dispatcher = require('dispatcher/Dispatcher');
 
 var CountryActions = {
-  countriesFetched() {
+  countriesFetched(countries) {
     Dispatcher.dispatch({
-      actionType: ActionConstants.COUNTRIES_FETCHED
+      actionType: ActionConstants.COUNTRIES_FETCHED,
+      countries: countries,
     });
   }
 };

@@ -9,18 +9,20 @@ var ActionConstants = require('constants/ActionConstants');
 var Dispatcher = require('dispatcher/Dispatcher');
 
 var AssignmentActions = {
-  assignmentsFetched() {
+  assignmentsFetched(schoolID, assignments) {
     Dispatcher.dispatch({
-      actionType: ActionConstants.ASSIGNMENTS_FETCHED
+      actionType: ActionConstants.ASSIGNMENTS_FETCHED,
+      schoolID: schoolID,
+      assignments: assignments,
     });
   },
 
   updateAssignment(assignmentID, delta) {
-  	Dispatcher.dispatch({
-  		actionType: ActionConstants.UPDATE_ASSIGNMENT,
-  		assignmentID: assignmentID,
-  		delta: delta
-  	});
+    Dispatcher.dispatch({
+      actionType: ActionConstants.UPDATE_ASSIGNMENT,
+      assignmentID: assignmentID,
+      delta: delta,
+    });
   }
 };
 

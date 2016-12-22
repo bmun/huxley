@@ -21,8 +21,7 @@ class CountryStore extends Store {
     }
 
     ServerAPI.getCountries().then(value => {
-      _countries = value;
-      CountryActions.countriesFetched();
+      CountryActions.countriesFetched(value);
     });
 
     return [];
@@ -31,6 +30,7 @@ class CountryStore extends Store {
   __onDispatch(action) {
     switch (action.actionType) {
       case ActionConstants.COUNTRIES_FETCHED:
+        _countries = action.countries;
         break;
       default:
         return;

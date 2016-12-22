@@ -9,9 +9,10 @@ var ActionConstants = require('constants/ActionConstants');
 var Dispatcher = require('dispatcher/Dispatcher');
 
 var CommitteeActions = {
-  committeesFetched() {
+  committeesFetched(committees) {
     Dispatcher.dispatch({
-      actionType: ActionConstants.COMMITTEES_FETCHED
+      actionType: ActionConstants.COMMITTEES_FETCHED,
+      committees: committees,
     });
   }
 };

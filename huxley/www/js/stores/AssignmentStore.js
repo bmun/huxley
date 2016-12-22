@@ -22,11 +22,7 @@ class AssignmentStore extends Store {
     }
 
     ServerAPI.getAssignments(schoolID).then(value => {
-      _schoolsAssignments[schoolID] = value;
-      for (const assignment of value) {
-        _assignments[assignment.id] = assignment;
-      }
-      AssignmentActions.assignmentsFetched();
+      AssignmentActions.assignmentsFetched(schoolID, value);
     });
 
     return [];
@@ -43,6 +39,10 @@ class AssignmentStore extends Store {
   __onDispatch(action) {
     switch (action.actionType) {
       case ActionConstants.ASSIGNMENTS_FETCHED:
+        _schoolsAssignments[action.schoolID] = action.assignments;
+        for (const assignment of action.assignments) {
+          _assignments[assignment.id] = assignment;
+        }
         break;
       case ActionConstants.UPDATE_ASSIGNMENT:
         this.updateAssignment(action.assignmentID, action.delta);

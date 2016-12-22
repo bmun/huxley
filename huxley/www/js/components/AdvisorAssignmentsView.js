@@ -236,17 +236,24 @@ var AdvisorAssignmentsView = React.createClass({
     var confirm = window.confirm("By pressing okay you are committing to the financial responsibility of each assignment. Are you sure you want to finalize assignments?");
     var school = CurrentUserStore.getCurrentUser().school;
     if (confirm) {
-      var delta = {assignments_finalized: true};
-      CurrentUserActions.updateSchool(school.id, delta);
+      CurrentUserActions.updateSchool(school.id, {
+        assignments_finalized: true,
+      });
     }
   },
 
   _handleAssignmentDelete: function(assignment) {
     var confirm = window.confirm("Are you sure you want to delete this assignment?");
     if (confirm) {
-      var delta = {rejected: true};
-      AssignmentActions.updateAssignment(assignment.id, delta);
+      AssignmentActions.updateAssignment(assignment.id, {
+        rejected: true,
+      });
     }
+  },
+
+  _handleSave: function(event) {
+    var school = CurrentUserStore.getCurrentUser().school;
+    DelegateActions.updateDelegates(school.id, this.state.delegates);
   }
 });
 

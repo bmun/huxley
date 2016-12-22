@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011-2015 Berkeley Model United Nations. All rights reserved.
+ * Copyright (c) 2011-2016 Berkeley Model United Nations. All rights reserved.
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
@@ -21,10 +21,9 @@ class CommitteeStore extends Store {
     }
 
     ServerAPI.getCommittees().then(value => {
-      _committees = value;
-      CommitteeActions.committeesFetched();
+      CommitteeActions.committeesFetched(value);
     });
-
+    
     return [];
   }
 
@@ -35,6 +34,7 @@ class CommitteeStore extends Store {
   __onDispatch(action) {
     switch (action.actionType) {
       case ActionConstants.COMMITTEES_FETCHED:
+        _committees = action.committees;
         break;
       default:
         return;

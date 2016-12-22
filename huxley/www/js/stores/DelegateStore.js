@@ -22,11 +22,7 @@ class DelegateStore extends Store {
     }
 
     ServerAPI.getDelegates(schoolID).then(value => {
-      _schoolsDelegates[schoolID] = value;
-      for (const delegate of value) {
-        _delegates[delegate.id] = delegate;
-      }
-      DelegateActions.delegatesFetched();
+      DelegateActions.delegatesFetched(schoolID, value);
     });
 
     return [];
@@ -75,6 +71,10 @@ class DelegateStore extends Store {
         this.updateDelegate(action.delegateID, action.delta);
         break;
       case ActionConstants.DELEGATES_FETCHED:
+        _schoolsDelegates[action.schoolID] = action.delegates;
+        for (const delegate of action.delegates) {
+          _delegates[delegate.id] = delegate;
+        }
         break;
       case ActionConstants.UPDATE_DELEGATES:
         this.updateDelegates(action.schoolID, action.delegates);

@@ -33,7 +33,7 @@ var CurrentUserActions = {
     Dispatcher.dispatch({
       actionType: ActionConstants.UPDATE_SCHOOL,
       schoolID: schoolID,
-      delta: delta
+      delta: delta,
     });
   }
 };
