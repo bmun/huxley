@@ -10,8 +10,6 @@ var React = require('react');
 var ReactRouter = require('react-router');
 
 var Button = require('components/Button');
-var CommitteeStore = require('stores/CommitteeStore');
-var CountryStore = require('stores/CountryStore');
 var CurrentUserStore = require('stores/CurrentUserStore');
 var DelegateActions = require('actions/DelegateActions');
 var DelegateStore = require('stores/DelegateStore');
