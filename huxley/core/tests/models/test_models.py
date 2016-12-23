@@ -192,14 +192,12 @@ class AssignmentTest(TestCase):
         a = TestAssignments.new_assignment(school=s1, rejected=True)
         d1 = TestDelegates.new_delegate(school=s1, assignment=a)
         d2 = TestDelegates.new_delegate(school=s1, assignment=a)
+        self.assertEquals(a.delegates.count(), 2)
 
         a.school = s2
         a.save()
 
-        delegates = Delegate.objects.all()
-        for delegate in delegates:
-            self.assertTrue(delegate.id in [d1.id, d2.id])
-            self.assertEquals(delegate.assignment, None)
+        self.assertEquals(a.delegates.count(), 0)
         self.assertEquals(a.rejected, False)
 
 class CountryPreferenceTest(TestCase):

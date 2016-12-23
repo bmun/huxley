@@ -363,17 +363,17 @@ class Assignment(models.Model):
 
     @classmethod
     def update_assignment(cls, **kwargs):
+        '''Ensures that when an assignment's school field changes,
+           any delegates assigned to that assignment are no longer
+           assigned to it and that its rejected field is false.'''
         assignment = kwargs['instance']
-        # Check that this assignment already exists
-        if assignment.id:
-            old_assignment = cls.objects.get(id=assignment.id)
-            # Check if school changed
-            if not assignment.school.id == old_assignment.school.id:
-                assignment.rejected = False
-                delegates = Delegate.objects.filter(assignment_id=old_assignment.id)
-                for delegate in delegates:
-                    delegate.assignment = None
-                    delegate.save()
+        if not assignment.id:
+            return
+
+        old_assignment = cls.objects.get(id=assignment.id)
+        if not assignment.school.id == old_assignment.school.id:
+            assignment.rejected = False
+            Delegate.objects.filter(assignment_id=old_assignment.id).update(assignment=None)
 
     def __unicode__(self):
         return self.committee.name + " : " + self.country.name + " : " + (
