@@ -193,6 +193,7 @@ class AssignmentTest(TestCase):
         d1 = TestDelegates.new_delegate(school=s1, assignment=a)
         d2 = TestDelegates.new_delegate(school=s1, assignment=a)
         self.assertEquals(a.delegates.count(), 2)
+        self.assertTrue(a.rejected)
 
         a.school = s2
         a.save()

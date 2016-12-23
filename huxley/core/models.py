@@ -371,7 +371,7 @@ class Assignment(models.Model):
             return
 
         old_assignment = cls.objects.get(id=assignment.id)
-        if not assignment.school.id == old_assignment.school.id:
+        if assignment.school_id != old_assignment.school_id:
             assignment.rejected = False
             Delegate.objects.filter(assignment_id=old_assignment.id).update(assignment=None)
 
