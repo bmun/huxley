@@ -1,32 +1,57 @@
 /**
- * Copyright (c) 2011-2015 Berkeley Model United Nations. All rights reserved.
+ * Copyright (c) 2011-2016 Berkeley Model United Nations. All rights reserved.
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
 'use strict';
 
-var $ = require('jquery');
+var ActionConstants = require('constants/ActionConstants');
+var AssignmentActions = require('actions/AssignmentActions');
 var Dispatcher = require('dispatcher/Dispatcher');
 var ServerAPI = require('lib/ServerAPI');
 var {Store} = require('flux/utils');
 
 
-var _assignmentPromises = {};
+var _schoolsAssignments = {};
+var _assignments = {};
 
 class AssignmentStore extends Store {
-  getAssignments(schoolID, callback) {
-    if (!_assignmentPromises[schoolID]) {
-      _assignmentPromises[schoolID] = ServerAPI.getAssignments(schoolID);
+  getAssignments(schoolID) {
+    if (_schoolsAssignments[schoolID]) {
+      return _schoolsAssignments[schoolID];
     }
-    if (callback) {
-      _assignmentPromises[schoolID].then(callback);
-    }
-    return _assignmentPromises[schoolID];
+
+    ServerAPI.getAssignments(schoolID).then(value => {
+      AssignmentActions.assignmentsFetched(schoolID, value);
+    });
+
+    return [];
+  }
+
+  updateAssignment(assignmentID, delta) {
+    const assignment = {..._assignments[assignmentID], ...delta};
+    ServerAPI.updateAssignment(assignmentID, assignment);
+    _assignments[assignmentID] = assignment;
+    _schoolsAssignments[assignment.school] =
+      _schoolsAssignments[assignment.school].map(a => a.id == assignment.id ? assignment : a);
   }
 
   __onDispatch(action) {
-    // This method must be overwritten
-    return;
+    switch (action.actionType) {
+      case ActionConstants.ASSIGNMENTS_FETCHED:
+        _schoolsAssignments[action.schoolID] = action.assignments;
+        for (const assignment of action.assignments) {
+          _assignments[assignment.id] = assignment;
+        }
+        break;
+      case ActionConstants.UPDATE_ASSIGNMENT:
+        this.updateAssignment(action.assignmentID, action.delta);
+        break;
+      default:
+        return;
+    }
+
+    this.__emitChange();
   }
 };
 

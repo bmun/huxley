@@ -10,8 +10,6 @@ var React = require('react');
 var ReactRouter = require('react-router');
 
 var Button = require('components/Button');
-var CommitteeStore = require('stores/CommitteeStore');
-var CountryStore = require('stores/CountryStore');
 var CurrentUserStore = require('stores/CurrentUserStore');
 var DelegateActions = require('actions/DelegateActions');
 var DelegateStore = require('stores/DelegateStore');
@@ -27,10 +25,9 @@ var AdvisorRosterView = React.createClass({
   ],
 
   getInitialState: function() {
-    var user = CurrentUserStore.getCurrentUser();
-    var delegates = DelegateStore.getDelegates(user.school.id)
+    var schoolID = CurrentUserStore.getCurrentUser().school.id;
     return {
-      delegates: delegates,
+      delegates: DelegateStore.getDelegates(schoolID),
       loading: false,
       modal_open: false,
       modal_name: '',
@@ -46,10 +43,9 @@ var AdvisorRosterView = React.createClass({
 
   componentDidMount: function() {
     this._delegatesToken = DelegateStore.addListener(() => {
-      var schoolID =  CurrentUserStore.getCurrentUser().school.id;
-      var delegates = DelegateStore.getDelegates(schoolID);
+      var schoolID = CurrentUserStore.getCurrentUser().school.id;
       this.setState({
-        delegates: delegates,
+        delegates: DelegateStore.getDelegates(schoolID),
         modal_open: false,
         loading: false
       });

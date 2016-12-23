@@ -29,10 +29,11 @@ var CurrentUserActions = {
   },
 
 
-  updateSchool(school) {
+  updateSchool(schoolID, delta) {
     Dispatcher.dispatch({
       actionType: ActionConstants.UPDATE_SCHOOL,
-      school: school
+      schoolID: schoolID,
+      delta: delta,
     });
   }
 };

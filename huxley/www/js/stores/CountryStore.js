@@ -1,32 +1,44 @@
 /**
- * Copyright (c) 2011-2015 Berkeley Model United Nations. All rights reserved.
+ * Copyright (c) 2011-2016 Berkeley Model United Nations. All rights reserved.
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
 'use strict';
 
-var $ = require('jquery');
+var ActionConstants = require('constants/ActionConstants');
+var CountryActions = require('actions/CountryActions');
 var Dispatcher = require('dispatcher/Dispatcher');
 var ServerAPI = require('lib/ServerAPI');
 var {Store} = require('flux/utils');
 
 
-var _countryPromise = null;
+var _countries = {};
 
 class CountryStore extends Store {
-  getCountries(callback) {
-    if (!_countryPromise) {
-      _countryPromise = ServerAPI.getCountries();
+  getCountries() {
+    if (Object.keys(_countries).length) {
+      return _countries;
     }
-    if (callback) {
-      _countryPromise.then(callback);
-    }
-    return _countryPromise;
+
+    ServerAPI.getCountries().then(value => {
+      CountryActions.countriesFetched(value);
+    });
+
+    return {};
   }
 
   __onDispatch(action) {
-    // This method must be overwritten
-    return;
+    switch (action.actionType) {
+      case ActionConstants.COUNTRIES_FETCHED:
+        for (const country of action.countries) {
+          _countries[country.id] = country;
+        }
+        break;
+      default:
+        return;
+    }
+
+    this.__emitChange();
   }
 };
 

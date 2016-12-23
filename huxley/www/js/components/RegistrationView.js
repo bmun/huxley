@@ -41,8 +41,8 @@ var RegistrationView = React.createClass({
   getInitialState: function() {
     return {
       errors: {},
-      countries: [],
-      committees: [],
+      countries: Object.values(CountryStore.getCountries()),
+      committees: Object.values(CommitteeStore.getSpecialCommittees()),
       first_name: '',
       last_name: '',
       username: '',
@@ -90,12 +90,20 @@ var RegistrationView = React.createClass({
   },
 
   componentDidMount: function() {
-    CountryStore.getCountries(function(countries) {
-      this.setState({countries: countries});
-    }.bind(this));
-    CommitteeStore.getSpecialCommittees(function(committees) {
-      this.setState({committees: committees});
-    }.bind(this));
+    this._committeesToken = CommitteeStore.addListener(() => {
+      this.setState({
+        committees: Object.values(CommitteeStore.getSpecialCommittees())
+      });
+    });
+
+    this._countriesToken = CountryStore.addListener(() => {
+      this.setState({countries: Object.values(CountryStore.getCountries())});
+    });
+  },
+
+  componentWillUnmount: function() {
+    this._committeesToken && this._committeesToken.remove();
+    this._countriesToken && this._countriesToken.remove();
   },
 
   render: function() {

@@ -11,6 +11,7 @@ describe('CurrentUserStore', function() {
   var ActionConstants;
   var CurrentUserStore;
   var Dispatcher;
+  var ServerAPI;
 
   var registerCallback;
 
@@ -18,6 +19,7 @@ describe('CurrentUserStore', function() {
     ActionConstants = require('constants/ActionConstants');
     CurrentUserStore = require('stores/CurrentUserStore');
     Dispatcher = require('dispatcher/Dispatcher');
+    ServerAPI = require('lib/ServerAPI');
 
     registerCallback = function(action) {
       Dispatcher.isDispatching.mockReturnValue(true);
@@ -72,5 +74,30 @@ describe('CurrentUserStore', function() {
       user: {id: 1, user_type: 1}
     });
     expect(callback).toBeCalled();
+  });
+
+  it('updates the school of a user and emits a change', function() {
+    registerCallback({
+      actionType: ActionConstants.LOGIN,
+      user: {id: 2, user_type: 1, school: {id: 1}}
+    });
+    var mockUser = CurrentUserStore.getCurrentUser();
+
+    var callback = jest.genMockFunction();
+    CurrentUserStore.addListener(callback);
+    expect(callback).not.toBeCalled();
+
+    var delta = {name: 'School', assignments_finalized: true};
+    registerCallback({
+      actionType: ActionConstants.UPDATE_SCHOOL,
+      schoolID: 1,
+      delta: delta
+    });
+    expect(callback).toBeCalled();
+    expect(ServerAPI.updateSchool).toBeCalledWith(1, delta);
+
+    mockUser = CurrentUserStore.getCurrentUser();
+    expect(mockUser.school.name).toEqual(delta.name);
+    expect(mockUser.school.assignments_finalized).toBe(true);
   });
 });
