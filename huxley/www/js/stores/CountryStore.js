@@ -12,11 +12,11 @@ var ServerAPI = require('lib/ServerAPI');
 var {Store} = require('flux/utils');
 
 
-var _countries = [];
+var _countries = {};
 
 class CountryStore extends Store {
   getCountries() {
-    if (_countries.length) {
+    if (Object.keys(_countries).length) {
       return _countries;
     }
 
@@ -24,13 +24,15 @@ class CountryStore extends Store {
       CountryActions.countriesFetched(value);
     });
 
-    return [];
+    return {};
   }
 
   __onDispatch(action) {
     switch (action.actionType) {
       case ActionConstants.COUNTRIES_FETCHED:
-        _countries = action.countries;
+        for (const country of action.countries) {
+          _countries[country.id] = country;
+        }
         break;
       default:
         return;

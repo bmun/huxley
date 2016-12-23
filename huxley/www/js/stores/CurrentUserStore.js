@@ -35,9 +35,12 @@ class CurrentUserStore extends Store {
   }
 
   updateSchool(schoolID, delta) {
-    const school = {...this._currentUser.school, ...delta};
     ServerAPI.updateSchool(schoolID, delta);
-    this._currentUser.school = school;
+    const user = this._currentUser.school;
+    this._currentUser = {
+      ...user,
+      school: {...user.school, ...delta},
+    };
   }
 
   __onDispatch(action) {

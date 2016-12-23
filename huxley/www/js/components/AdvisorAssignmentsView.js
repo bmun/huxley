@@ -32,17 +32,14 @@ var AdvisorAssignmentsView = React.createClass({
   },
 
   getInitialState: function() {
-    var user = CurrentUserStore.getCurrentUser();
-    var assignments = AssignmentStore.getAssignments(user.school.id).filter(assignment => !assignment.rejected);
-    var committees = this._makeMap(CommitteeStore.getCommittees());
-    var countries = this._makeMap(CountryStore.getCountries());
-    var delegates = DelegateStore.getDelegates(user.school.id);
+    var schoolID = CurrentUserStore.getCurrentUser().school.id;
+    var delegates = DelegateStore.getDelegates(schoolID);
     var assigned = this.prepareAssignedDelegates(delegates);
     return {
       assigned: assigned,
-      assignments: assignments,
-      committees: committees,
-      countries: countries,
+      assignments: AssignmentStore.getAssignments(schoolID).filter(assignment => !assignment.rejected),
+      committees: CommitteeStore.getCommittees(),
+      countries: CountryStore.getCountries(),
       delegates: delegates,
       loading: false
     };
@@ -50,13 +47,11 @@ var AdvisorAssignmentsView = React.createClass({
 
   componentDidMount: function() {
     this._committeesToken = CommitteeStore.addListener(() => {
-      var committees = this._makeMap(CommitteeStore.getCommittees());
-      this.setState({committees: committees});
+      this.setState({committees: CommitteeStore.getCommittees()});
     });
 
     this._countriesToken = CountryStore.addListener(() => {
-      var countries = this._makeMap(CountryStore.getCountries());
-      this.setState({countries: countries});
+      this.setState({countries: CountryStore.getCountries()});
     });
 
     this._delegatesToken = DelegateStore.addListener(() => {
@@ -71,8 +66,9 @@ var AdvisorAssignmentsView = React.createClass({
 
     this._assignmentsToken = AssignmentStore.addListener(() => {
       var schoolID = CurrentUserStore.getCurrentUser().school.id;
-      var assignments = AssignmentStore.getAssignments(schoolID).filter(assignment => !assignment.rejected);
-      this.setState({assignments: assignments});
+      this.setState({
+        assignments: AssignmentStore.getAssignments(schoolID).filter(assignment => !assignment.rejected)
+      });
     });
   },
 
@@ -191,14 +187,6 @@ var AdvisorAssignmentsView = React.createClass({
         selectedDelegateID={selectedDelegateID}
       />
     );
-  },
-
-  _makeMap: function(objectList) {
-    var objectMap = {};
-    for (const object of objectList) {
-      objectMap[object.id] = object;
-    }
-    return objectMap;
   },
 
   _handleDelegateAssignment: function(assignmentId, slot, event) {

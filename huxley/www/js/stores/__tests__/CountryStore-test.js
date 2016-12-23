@@ -38,7 +38,7 @@ describe('CountryStore', () => {
 
   it('requests the countries on first call and caches locally', () => {
     var countries = CountryStore.getCountries();
-    expect(countries.length).toEqual(0);
+    expect(countries).toEqual({});
     expect(ServerAPI.getCountries).toBeCalled();
 
     registerCallback({
@@ -47,7 +47,7 @@ describe('CountryStore', () => {
     });
 
     countries = CountryStore.getCountries();
-    expect(countries).toEqual(mockCountries);
+    expect(Object.values(countries)).toEqual(mockCountries);
     expect(ServerAPI.getCountries.mock.calls.length).toEqual(1);
   });
 

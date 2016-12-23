@@ -12,29 +12,37 @@ var ServerAPI = require('lib/ServerAPI');
 var {Store} = require('flux/utils');
 
 
-var _committees = [];
+var _committees = {};
 
 class CommitteeStore extends Store {
   getCommittees() {
-    if (_committees.length) {
+    if (Object.keys(_committees).length) {
       return _committees;
     }
 
     ServerAPI.getCommittees().then(value => {
       CommitteeActions.committeesFetched(value);
     });
-    
-    return [];
+
+    return {};
   }
 
   getSpecialCommittees() {
-    return this.getCommittees().filter(committee => committee.special);
+    var specialCommitteesArray = Object.values(this.getCommittees())
+                                    .filter(committee => committee.special);
+    var specialCommittees = {};
+    for (const committee of specialCommitteesArray) {
+      specialCommittees[committee.id] = committee;
+    }
+    return specialCommittees;
   }
 
   __onDispatch(action) {
     switch (action.actionType) {
       case ActionConstants.COMMITTEES_FETCHED:
-        _committees = action.committees;
+        for (const committee of action.committees) {
+          _committees[committee.id] = committee;
+        }
         break;
       default:
         return;

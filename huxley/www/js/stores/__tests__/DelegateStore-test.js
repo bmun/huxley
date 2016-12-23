@@ -89,7 +89,7 @@ describe('DelegateStore', () => {
 
     var delegates = DelegateStore.getDelegates(mockSchoolID);
     expect(delegates.length).toEqual(3);
-    expect(new_delegate in delegates);
+    expect(new_delegate).toEqual(delegates[2]);
   });
 
   it('deletes a delegate and emits a change', () => {
@@ -166,7 +166,7 @@ describe('DelegateStore', () => {
 
     var updated_delegates = DelegateStore.getDelegates(mockSchoolID);
     expect(updated_delegates.length).toEqual(2);
-    expect(updated_jake in updated_delegates);
-    expect(udpated_nate in updated_delegates);
+    expect(updated_jake).toEqual(updated_delegates[0]);
+    expect(udpated_nate).toEqual(updated_delegates[1]);
   });
 });

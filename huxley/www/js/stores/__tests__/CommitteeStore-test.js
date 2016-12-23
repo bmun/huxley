@@ -43,7 +43,7 @@ describe('CommitteeStore', () => {
 
   it('requests the committees on first call and caches locally', () => {
     var committees = CommitteeStore.getCommittees();
-    expect(committees.length).toEqual(0);
+    expect(committees).toEqual({});
     expect(ServerAPI.getCommittees).toBeCalled();
 
     registerCallback({
@@ -52,7 +52,7 @@ describe('CommitteeStore', () => {
     });
 
     committees = CommitteeStore.getCommittees();
-    expect(committees).toEqual(mockCommittees);
+    expect(Object.values(committees)).toEqual(mockCommittees);
     expect(ServerAPI.getCommittees.mock.calls.length).toEqual(1);
   });
 
@@ -63,7 +63,7 @@ describe('CommitteeStore', () => {
     });
 
     var committees = CommitteeStore.getSpecialCommittees();
-    expect(committees).toEqual([icj]);
+    expect(committees).toEqual({2: icj});
   });
 
   it('emits a change when the committees are loaded', function() {

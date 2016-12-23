@@ -98,6 +98,6 @@ describe('CurrentUserStore', function() {
 
     mockUser = CurrentUserStore.getCurrentUser();
     expect(mockUser.school.name).toEqual(delta.name);
-    expect(mockUser.school.assignments_finalized);
+    expect(mockUser.school.assignments_finalized).toBe(true);
   });
 });
