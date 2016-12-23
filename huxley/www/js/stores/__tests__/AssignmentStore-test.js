@@ -88,6 +88,6 @@ describe('AssignmentStore', () => {
 
     expect(ServerAPI.updateAssignment).toBeCalled();
     var assignments = AssignmentStore.getAssignments(mockSchoolID);
-    expect(assignments[0]['rejected']);
+    expect(assignments[0]['rejected']).toBe(true);
   });
 });
