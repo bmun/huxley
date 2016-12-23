@@ -403,7 +403,7 @@ class CountryPreference(models.Model):
 class Delegate(models.Model):
     school = models.ForeignKey(School, related_name='delegates', null=True)
     assignment = models.ForeignKey(
-        Assignment, related_name='delegates', blank=True, null=True)
+        Assignment, related_name='delegates', blank=True, null=True, on_delete=models.SET_NULL)
     name = models.CharField(max_length=64)
     email = models.EmailField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
