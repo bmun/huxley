@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011-2015 Berkeley Model United Nations. All rights reserved.
+ * Copyright (c) 2011-2016 Berkeley Model United Nations. All rights reserved.
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
@@ -8,16 +8,25 @@
 jest.dontMock('stores/CountryStore');
 
 describe('CountryStore', () => {
+  var ActionConstants;
   var CountryStore;
   var Dispatcher;
   var ServerAPI;
 
   var mockCountries;
+  var registerCallback;
 
   beforeEach(() => {
+    ActionConstants = require('constants/ActionConstants');
     CountryStore = require('stores/CountryStore');
     Dispatcher = require('dispatcher/Dispatcher');
     ServerAPI = require('lib/ServerAPI');
+
+    registerCallback = function(action) {
+      Dispatcher.isDispatching.mockReturnValue(true);
+      Dispatcher.register.mock.calls[0][0](action);
+      Dispatcher.isDispatching.mockReturnValue(false);
+    };
 
     mockCountries = [{id: 1, name: 'USA'}, {id: 2, name: 'China'}];
     ServerAPI.getCountries.mockReturnValue(Promise.resolve(mockCountries));
@@ -28,13 +37,28 @@ describe('CountryStore', () => {
   });
 
   it('requests the countries on first call and caches locally', () => {
-    return Promise.all([
-      CountryStore.getCountries().then((countries) => {
-        expect(countries).toEqual(mockCountries);
-      }),
-      CountryStore.getCountries().then((countries) => {
-        expect(countries).toEqual(mockCountries);
-      }),
-    ]);
+    var countries = CountryStore.getCountries();
+    expect(countries.length).toEqual(0);
+    expect(ServerAPI.getCountries).toBeCalled();
+
+    registerCallback({
+      actionType: ActionConstants.COUNTRIES_FETCHED,
+      countries: mockCountries
+    });
+
+    countries = CountryStore.getCountries();
+    expect(countries).toEqual(mockCountries);
+    expect(ServerAPI.getCountries.mock.calls.length).toEqual(1);
+  });
+
+  it('emits a change when the countries are loaded', function() {
+    var callback = jest.genMockFunction();
+    CountryStore.addListener(callback);
+    expect(callback).not.toBeCalled();
+    registerCallback({
+      actionType: ActionConstants.COUNTRIES_FETCHED,
+      countries: mockCountries
+    });
+    expect(callback).toBeCalled();
   });
 });
