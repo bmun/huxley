@@ -181,7 +181,7 @@ class AssignmentTest(TestCase):
         delegates = Delegate.objects.all()
         updates = [(cm.id, ct.id, s.id, rej) for cm, ct, s, rej in updates]
         self.assertEquals(set(updates), set(new_assignments))
-        self.assertEquals(len(delegates), 0)
+        self.assertEquals(len(delegates), 2)
 
     def test_update_assignment(self):
         '''Tests that when an assignment changes schools, its rejected
