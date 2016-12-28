@@ -63,6 +63,7 @@ class IsSchoolAssignmentAdvisorOrSuperuser(permissions.BasePermission):
         return (user.is_authenticated() and user.is_advisor() and
                 user.school.id == assignment.school.id)
 
+
 class IsSchoolDelegateAdvisorOrSuperuser(permissions.BasePermission):
     '''Accept only the advisor of the given school with a given assignment.'''
 
@@ -76,3 +77,21 @@ class IsSchoolDelegateAdvisorOrSuperuser(permissions.BasePermission):
 
         return (user.is_authenticated() and user.is_advisor() and
                 user.school.id == delegate.school.id)
+
+
+class AssignmentListPermission(permissions.BasePermission):
+
+    def has_permission(self, request, view):
+        if request.user.is_superuser:
+            return True
+
+        if request.method in permissions.SAFE_METHODS:
+            return user_is_advisor(request, view)
+
+        return False
+
+
+def user_is_advisor(request, view):
+    user = request.user
+    school_id = request.GET.get('school_id', -1)
+    return user.is_authenticated() and user.school_id == int(school_id)

@@ -33,20 +33,6 @@ class SchoolDetail(generics.RetrieveUpdateDestroyAPIView):
         return self.partial_update(request, *args, **kwargs)
 
 
-class SchoolAssignments(generics.ListAPIView):
-    authentication_classes = (SessionAuthentication,)
-    serializer_class = AssignmentSerializer
-    permission_classes = (IsSchoolAdvisorOrSuperuser,)
-
-    def get_queryset(self):
-        '''Filter schools by the given pk param.'''
-        school_id = self.kwargs.get('pk', None)
-        if not school_id:
-            raise Http404
-
-        return Assignment.objects.filter(school_id=school_id)
-
-
 class SchoolDelegates(generics.ListAPIView, ListUpdateModelMixin):
     authentication_classes = (SessionAuthentication,)
     serializer_class = DelegateSerializer

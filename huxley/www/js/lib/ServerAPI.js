@@ -23,7 +23,7 @@ var ServerAPI = {
    * Get a list of all assignments for the given school ID.
    */
   getAssignments(schoolID) {
-    return _get(`/api/schools/${schoolID}/assignments`);
+    return _get('/api/assignments', {school_id: schoolID});
   },
 
   /**

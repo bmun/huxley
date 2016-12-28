@@ -167,3 +167,64 @@ class AssignmentListCreateTestCase(tests.CreateAPITestCase):
             "rejected" : True,
         })
 
+
+class AssignmentListGetTestCase(tests.ListAPITestCase):
+    url_name = 'api:assignment_list'
+
+    def setUp(self):
+        self.user = TestUsers.new_user(username='regular', password='user')
+        self.school = TestSchools.new_school(user=self.user)
+        self.a1 = TestAssignments.new_assignment(school=self.school)
+        self.a2 = TestAssignments.new_assignment(school=self.school)
+        self.a3 = TestAssignments.new_assignment()
+
+    def test_anonymous_user(self):
+        '''It rejects a request from an anonymous user.'''
+        response = self.get_response()
+        self.assertNotAuthenticated(response)
+
+        response = self.get_response(params={'school_id': self.school.id})
+        self.assertNotAuthenticated(response)
+
+    def test_advisor(self):
+        '''It returns the assignments for the school's advisor.'''
+        self.client.login(username='regular', password='user')
+
+        response = self.get_response()
+        self.assertPermissionDenied(response)
+
+        response = self.get_response(params={'school_id': self.school.id})
+        self.assert_assignments_equal(response, [self.a1, self.a2])
+
+    def test_other_user(self):
+        '''It rejects a request from another user.'''
+        user2 = TestUsers.new_user(username='another', password='user')
+        TestSchools.new_school(user=user2)
+        self.client.login(username='another', password='user')
+
+        response = self.get_response()
+        self.assertPermissionDenied(response)
+
+        response = self.get_response(params={'school_id': self.school.id})
+        self.assertPermissionDenied(response)
+
+    def test_superuser(self):
+        '''It returns the assignments for a superuser.'''
+        TestUsers.new_superuser(username='test', password='user')
+        self.client.login(username='test', password='user')
+
+        response = self.get_response()
+        self.assert_assignments_equal(response, [self.a1, self.a2, self.a3])
+
+        response = self.get_response(params={'school_id': self.school.id})
+        self.assert_assignments_equal(response, [self.a1, self.a2])
+
+    def assert_assignments_equal(self, response, assignments):
+        '''Assert that the response contains the assignments in order.'''
+        self.assertEqual(response.data, [{
+            'id': a.id,
+            'country': a.country_id,
+            'committee': a.committee_id,
+            'school': a.school_id,
+            'rejected': a.rejected,
+        } for a in assignments])
