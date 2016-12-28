@@ -11,7 +11,7 @@ from huxley.accounts.models import User
 from huxley.core.models import Conference
 from huxley.api import tests
 from huxley.api.tests import auto
-from huxley.utils.test import TestSchools, TestUsers
+from huxley.utils.test import models
 
 
 class UserDetailGetTestCase(tests.RetrieveAPITestCase):
@@ -19,15 +19,15 @@ class UserDetailGetTestCase(tests.RetrieveAPITestCase):
 
     def test_anonymous_user(self):
         '''It should reject request from an anonymous user.'''
-        user = TestUsers.new_user()
+        user = models.new_user()
         response = self.get_response(user.id)
 
         self.assertNotAuthenticated(response)
 
     def test_other_user(self):
         '''It should reject request from another user.'''
-        user1 = TestUsers.new_user(username='user1')
-        user2 = TestUsers.new_user(username='user2', password='user2')
+        user1 = models.new_user(username='user1')
+        user2 = models.new_user(username='user2', password='user2')
 
         self.client.login(username='user2', password='user2')
         response = self.get_response(user1.id)
@@ -36,8 +36,8 @@ class UserDetailGetTestCase(tests.RetrieveAPITestCase):
 
     def test_superuser(self):
         '''It should return the correct fields for a superuser.'''
-        user1 = TestUsers.new_user(username='user1')
-        user2 = TestUsers.new_superuser(username='user2', password='user2')
+        user1 = models.new_user(username='user1')
+        user2 = models.new_superuser(username='user2', password='user2')
 
         self.client.login(username='user2', password='user2')
         response = self.get_response(user1.id)
@@ -53,7 +53,7 @@ class UserDetailGetTestCase(tests.RetrieveAPITestCase):
 
     def test_self(self):
         '''It should return the correct fields for a single user.'''
-        school = TestSchools.new_school()
+        school = models.new_school()
         user = school.advisor
         self.client.login(username=user.username, password='test')
         response = self.get_response(user.id)
@@ -105,7 +105,7 @@ class UserDetailGetTestCase(tests.RetrieveAPITestCase):
 
     def test_chair(self):
         '''It should have the correct fields for chairs.'''
-        user = TestUsers.new_user(username='testuser',
+        user = models.new_user(username='testuser',
                                   password='test',
                                   user_type=User.TYPE_CHAIR,
                                   committee_id=4)
@@ -127,7 +127,7 @@ class UserDetailDeleteTestCase(auto.DestroyAPIAutoTestCase):
 
     @classmethod
     def get_test_object(cls):
-        return TestUsers.new_user()
+        return models.new_user()
 
     def test_anonymous_user(self):
         '''It should reject the request from an anonymous user.'''
@@ -135,7 +135,7 @@ class UserDetailDeleteTestCase(auto.DestroyAPIAutoTestCase):
 
     def test_other_user(self):
         '''It should reject the request from another user.'''
-        TestSchools.new_school(user=self.default_user)
+        models.new_school(user=self.default_user)
         self.as_default_user().do_test(expected_error=auto.EXP_PERMISSION_DENIED)
 
     def test_self(self):
@@ -153,7 +153,7 @@ class UserDetailPatchTestCase(tests.PartialUpdateAPITestCase):
               'last_name': 'last'}
 
     def setUp(self):
-        self.user = TestUsers.new_user(username='user1', password='user1')
+        self.user = models.new_user(username='user1', password='user1')
 
     def test_anonymous_user(self):
         '''An anonymous user should not be able to change information.'''
@@ -166,7 +166,7 @@ class UserDetailPatchTestCase(tests.PartialUpdateAPITestCase):
 
     def test_other_user(self):
         '''Another user should not be able to change information about any other user.'''
-        TestUsers.new_user(username='user2', password='user2')
+        models.new_user(username='user2', password='user2')
         self.client.login(username='user2', password='user2')
 
         response = self.get_response(self.user.id, params=self.params)
@@ -187,7 +187,7 @@ class UserDetailPatchTestCase(tests.PartialUpdateAPITestCase):
 
     def test_superuser(self):
         '''A superuser should be allowed to change information about a user.'''
-        TestUsers.new_superuser(username='user2', password='user2')
+        models.new_superuser(username='user2', password='user2')
         self.client.login(username='user2', password='user2')
 
         response = self.get_response(self.user.id, params=self.params)
@@ -201,16 +201,16 @@ class UserListGetTestCase(tests.ListAPITestCase):
 
     def test_anonymous_user(self):
         '''It should reject the request from an anonymous user.'''
-        TestUsers.new_user(username='user1')
-        TestUsers.new_user(username='user2')
+        models.new_user(username='user1')
+        models.new_user(username='user2')
 
         response = self.get_response()
         self.assertNotAuthenticated(response)
 
     def test_user(self):
         '''It should reject the request from a regular user.'''
-        TestUsers.new_user(username='user1', password='user1')
-        TestUsers.new_user(username='user2')
+        models.new_user(username='user1', password='user1')
+        models.new_user(username='user2')
         self.client.login(username='user1', password='user1')
 
         response = self.get_response()
@@ -218,8 +218,8 @@ class UserListGetTestCase(tests.ListAPITestCase):
 
     def test_superuser(self):
         '''It should allow a superuser to list all users.'''
-        user1 = TestUsers.new_superuser(username='user1', password='user1')
-        user2 = TestUsers.new_user(username='user2')
+        user1 = models.new_superuser(username='user1', password='user1')
+        user2 = models.new_user(username='user2')
         self.client.login(username='user1', password='user1')
 
         response = self.get_response()
@@ -270,7 +270,7 @@ class UserListPostTestCase(tests.CreateAPITestCase):
             'username': [u'This field may not be blank.']})
 
     def test_taken_username(self):
-        TestUsers.new_user(username='_Kunal', password='pass')
+        models.new_user(username='_Kunal', password='pass')
         response = self.get_response(params=self.get_params(username='_Kunal'))
         self.assertEqual(response.data, {
             'username': [u'A user with that username already exists.']})
@@ -338,8 +338,8 @@ class CurrentUserTestCase(TestCase):
         return json.loads(self.client.get(url).content)
 
     def test_login(self):
-        user = TestUsers.new_user(username='lol', password='lol')
-        user2 = TestUsers.new_user(username='bunny', password='bunny')
+        user = models.new_user(username='lol', password='lol')
+        user2 = models.new_user(username='bunny', password='bunny')
 
         credentials = {'username': 'lol', 'password': 'lol'}
         response = self.client.post(self.url,
@@ -360,7 +360,7 @@ class CurrentUserTestCase(TestCase):
                          'Another user is currently logged in.')
 
     def test_logout(self):
-        user = TestUsers.new_user(username='lol', password='lol')
+        user = models.new_user(username='lol', password='lol')
 
         self.client.login(username='lol', password='lol')
         self.assertEqual(int(self.client.session['_auth_user_id']), user.id)
@@ -375,7 +375,7 @@ class CurrentUserTestCase(TestCase):
         self.assertEqual(len(data.keys()), 1)
         self.assertEqual(data['detail'], u'Not found.')
 
-        school = TestSchools.new_school()
+        school = models.new_school()
         user = school.advisor
         self.client.login(username=user.username, password='test')
 

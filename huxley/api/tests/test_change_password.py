@@ -4,7 +4,7 @@
 from huxley.accounts.exceptions import PasswordChangeFailed
 from huxley.accounts.models import User
 from huxley.api.tests import UpdateAPITestCase
-from huxley.utils.test import TestUsers
+from huxley.utils.test import models
 
 
 class ChangePasswordTestCase(UpdateAPITestCase):
@@ -14,8 +14,7 @@ class ChangePasswordTestCase(UpdateAPITestCase):
               'new_password': 'newhotness'}
 
     def setUp(self):
-        self.user = TestUsers.new_user(username='old&busted',
-                                       password='old&busted')
+        self.user = models.new_user(username='old&busted', password='old&busted')
 
     def login(self):
         self.client.login(username='old&busted', password='old&busted')

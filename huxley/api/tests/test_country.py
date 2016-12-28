@@ -3,7 +3,7 @@
 
 from huxley.api import tests
 from huxley.api.tests import auto
-from huxley.utils.test import TestCountries, TestUsers
+from huxley.utils.test import models
 
 
 class CountryDetailGetTestCase(auto.RetrieveAPIAutoTestCase):
@@ -11,7 +11,7 @@ class CountryDetailGetTestCase(auto.RetrieveAPIAutoTestCase):
 
     @classmethod
     def get_test_object(cls):
-        return TestCountries.new_country()
+        return models.new_country()
 
     def test_anonymous_user(self):
         self.do_test()
@@ -22,9 +22,9 @@ class CountryListGetTestCase(tests.ListAPITestCase):
 
     def test_anonymous_user(self):
         '''Anyone should be able to access a list of all the countries.'''
-        country1 = TestCountries.new_country(name='USA')
-        country2 = TestCountries.new_country(name='China')
-        country3 = TestCountries.new_country(name='Barbara Boxer', special=True)
+        country1 = models.new_country(name='USA')
+        country2 = models.new_country(name='China')
+        country3 = models.new_country(name='Barbara Boxer', special=True)
 
         response = self.get_response()
         self.assertEqual(response.data, [
@@ -44,7 +44,7 @@ class CountryDetailDeleteTestCase(auto.DestroyAPIAutoTestCase):
 
     @classmethod
     def get_test_object(cls):
-        return TestCountries.new_country()
+        return models.new_country()
 
     def test_anonymous_user(self):
         '''Anonymous users cannot delete countries.'''
@@ -65,7 +65,7 @@ class CountryDetailPatchTestCase(tests.PartialUpdateAPITestCase):
               'special': True}
 
     def setUp(self):
-        self.country = TestCountries.new_country(name='USA', special=False)
+        self.country = models.new_country(name='USA', special=False)
 
     def test_anonymous_user(self):
         '''Unauthenticated users shouldn't be able to update countries.'''
@@ -74,7 +74,7 @@ class CountryDetailPatchTestCase(tests.PartialUpdateAPITestCase):
 
     def test_authenticated_user(self):
         '''Authenticated users shouldn't be able to update countries.'''
-        TestUsers.new_user(username='user', password='user')
+        models.new_user(username='user', password='user')
         self.client.login(username='user', password='user')
 
         response = self.get_response(self.country.id, params=self.params)
@@ -82,7 +82,7 @@ class CountryDetailPatchTestCase(tests.PartialUpdateAPITestCase):
 
     def test_superuser(self):
         '''Superusers shouldn't be able to update countries.'''
-        TestUsers.new_superuser(username='user', password='user')
+        models.new_superuser(username='user', password='user')
         self.client.login(username='user', password='user')
 
         response = self.get_response(self.country.id, params=self.params)
@@ -101,7 +101,7 @@ class CountryListPostTestCase(tests.CreateAPITestCase):
 
     def test_self(self):
         '''Authenticated users shouldn't be able to create countries.'''
-        TestUsers.new_user(username='user', password='user')
+        models.new_user(username='user', password='user')
         self.client.login(username='user', password='user')
 
         response = self.get_response(self.params)
@@ -109,7 +109,7 @@ class CountryListPostTestCase(tests.CreateAPITestCase):
 
     def test_super_user(self):
         '''Superusers shouldn't be able to create countries.'''
-        TestUsers.new_superuser(username='user', password='user')
+        models.new_superuser(username='user', password='user')
         self.client.login(username='user', password='user')
 
         response = self.get_response(self.params)

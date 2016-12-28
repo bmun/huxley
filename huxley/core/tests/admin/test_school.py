@@ -4,7 +4,7 @@
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 
-from huxley.utils.test import TestSchools, TestUsers
+from huxley.utils.test import models
 
 
 class SchoolAdminTest(TestCase):
@@ -13,10 +13,10 @@ class SchoolAdminTest(TestCase):
 
     def test_info_export(self):
         '''Test that the admin panel can properly export a list of schools.'''
-        TestUsers.new_user(username='testuser1', password='test1')
-        TestUsers.new_superuser(username='testuser2', password='test2')
+        models.new_user(username='testuser1', password='test1')
+        models.new_superuser(username='testuser2', password='test2')
         self.client.login(username='testuser1', password='test1')
-        school = TestSchools.new_school()
+        school = models.new_school()
         self.client.logout()
         self.client.login(username='testuser2', password='test2')
 
@@ -97,10 +97,10 @@ class SchoolAdminTest(TestCase):
 
     def test_preference_export(self):
         '''Test that the admin panel can properly export school preferences.'''
-        TestUsers.new_user(username='testuser1', password='test1')
-        TestUsers.new_superuser(username='testuser2', password='test2')
+        models.new_user(username='testuser1', password='test1')
+        models.new_superuser(username='testuser2', password='test2')
         self.client.login(username='testuser1', password='test1')
-        school = TestSchools.new_school()
+        school = models.new_school()
         self.client.logout()
         self.client.login(username='testuser2', password='test2')
 

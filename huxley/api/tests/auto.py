@@ -6,7 +6,7 @@ from django.db import models
 from rest_framework import serializers
 
 from huxley.api.tests import DestroyAPITestCase, RetrieveAPITestCase
-from huxley.utils.test import TestUsers
+from huxley.utils.test import models as test_models
 
 
 EXP_NOT_AUTHENTICATED = 'exp_not_authenticated'
@@ -33,8 +33,8 @@ class AutoTestMixin(object):
 
     @classmethod
     def class_setup(cls):
-        cls.superuser = TestUsers.new_superuser()
-        cls.default_user = TestUsers.new_user()
+        cls.superuser = test_models.new_superuser()
+        cls.default_user = test_models.new_user()
 
     def as_user(self, user):
         self.client.login(
