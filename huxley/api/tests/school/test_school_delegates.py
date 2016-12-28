@@ -1,14 +1,10 @@
 # Copyright (c) 2011-2015 Berkeley Model United Nations. All rights reserved.
 # Use of this source code is governed by a BSD License (see LICENSE).
 
-import json
-
 from django.core.exceptions import ValidationError
 
 from huxley.api.tests import ListAPITestCase, PartialUpdateAPITestCase
-from huxley.core.models import Assignment, Delegate, School
-from huxley.utils.test import (TestCommittees, TestCountries, TestSchools,
-                               TestUsers, TestAssignments, TestDelegates)
+from huxley.utils.test import models
 
 
 class SchoolDelegateGetTestCase(ListAPITestCase):
@@ -16,25 +12,25 @@ class SchoolDelegateGetTestCase(ListAPITestCase):
     is_resource = True
 
     def setUp(self):
-        self.user = TestUsers.new_user(username='regular', password='user')
-        self.school = TestSchools.new_school(user=self.user)
-        self.country = TestCountries.new_country()
-        self.committee1 = TestCommittees.new_committee()
-        self.committee2 = TestCommittees.new_committee()
-        self.assignment1 = TestAssignments.new_assignment(
+        self.user = models.new_user(username='regular', password='user')
+        self.school = models.new_school(user=self.user)
+        self.country = models.new_country()
+        self.committee1 = models.new_committee()
+        self.committee2 = models.new_committee()
+        self.assignment1 = models.new_assignment(
             committee=self.committee1,
             country=self.country,
             school=self.school,
         )
-        self.assignment2 = TestAssignments.new_assignment(
+        self.assignment2 = models.new_assignment(
             committee=self.committee2,
             country=self.country,
             school=self.school,
         )
-        self.delegate1 = TestDelegates.new_delegate(
+        self.delegate1 = models.new_delegate(
             assignment=self.assignment1,
         )
-        self.delegate2 = TestDelegates.new_delegate(
+        self.delegate2 = models.new_delegate(
             assignment=self.assignment2,
             name='Trevor Dowds',
             email='t@dowds.com',
@@ -55,8 +51,8 @@ class SchoolDelegateGetTestCase(ListAPITestCase):
 
     def test_other_user(self):
         '''It rejects a request from another user.'''
-        user2 = TestUsers.new_user(username='another', password='user')
-        TestSchools.new_school(user=user2)
+        user2 = models.new_user(username='another', password='user')
+        models.new_school(user=user2)
         self.client.login(username='another', password='user')
 
         response = self.get_response(self.school.id)
@@ -64,7 +60,7 @@ class SchoolDelegateGetTestCase(ListAPITestCase):
 
     def test_superuser(self):
         '''It returns the delegates for a superuser.'''
-        TestUsers.new_superuser(username='test', password='user')
+        models.new_superuser(username='test', password='user')
         self.client.login(username='test', password='user')
 
         response = self.get_response(self.school.id)
@@ -99,45 +95,45 @@ class SchoolDelegateListPartialUpdateTestCase(PartialUpdateAPITestCase):
     url_name = 'api:school_delegates'
 
     def setUp(self):
-        self.user = TestUsers.new_user(username='regular', password='user')
-        self.school = TestSchools.new_school(user=self.user)
+        self.user = models.new_user(username='regular', password='user')
+        self.school = models.new_school(user=self.user)
 
-        self.country = TestCountries.new_country()
-        self.committee1 = TestCommittees.new_committee()
-        self.committee2 = TestCommittees.new_committee()
-        self.committee3 = TestCommittees.new_committee()
-        self.committee4 = TestCommittees.new_committee()
+        self.country = models.new_country()
+        self.committee1 = models.new_committee()
+        self.committee2 = models.new_committee()
+        self.committee3 = models.new_committee()
+        self.committee4 = models.new_committee()
 
-        self.assignment1 = TestAssignments.new_assignment(
+        self.assignment1 = models.new_assignment(
             school=self.school,
             country=self.country,
             commitee=self.committee3
         )
 
-        self.assignment2 = TestAssignments.new_assignment(
+        self.assignment2 = models.new_assignment(
             school=self.school,
             country=self.country,
             committee=self.committee2
         )
 
-        self.new_assignment = TestAssignments.new_assignment(
+        self.new_assignment = models.new_assignment(
             school=self.school,
             country=self.country,
             committee=self.committee3
         )
 
-        self.faulty_assignment = TestAssignments.new_assignment(
+        self.faulty_assignment = models.new_assignment(
             country=self.country,
             committee=self.committee4
         )
 
-        self.delegate1 = TestDelegates.new_delegate(
+        self.delegate1 = models.new_delegate(
             name="Nathaniel Parke",
             school=self.school,
             assignment=self.assignment1
         )
 
-        self.delegate2 = TestDelegates.new_delegate(
+        self.delegate2 = models.new_delegate(
             name='Trevor Dowds',
             school=self.school,
             assignment=self.assignment2
@@ -196,8 +192,8 @@ class SchoolDelegateListPartialUpdateTestCase(PartialUpdateAPITestCase):
 
     def test_other_user(self):
         '''It rejects a request from another user.'''
-        user2 = TestUsers.new_user(username='another', password='user')
-        TestSchools.new_school(user=user2)
+        user2 = models.new_user(username='another', password='user')
+        models.new_school(user=user2)
         self.client.login(username='another', password='user')
 
         response = self.get_response(self.school.id)
@@ -205,7 +201,7 @@ class SchoolDelegateListPartialUpdateTestCase(PartialUpdateAPITestCase):
 
     def test_superuser(self):
         '''It updates the delegates for a superuser.'''
-        TestUsers.new_superuser(username='test', password='user')
+        models.new_superuser(username='test', password='user')
         self.client.login(username='test', password='user')
 
         response = self.get_response(self.school.id)

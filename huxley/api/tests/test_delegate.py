@@ -3,8 +3,7 @@
 
 from huxley.api import tests
 from huxley.api.tests import auto
-from huxley.utils.test import (TestUsers, TestSchools, TestAssignments,
-                               TestDelegates)
+from huxley.utils.test import models
 
 
 class DelegateDetailGetTestCase(auto.RetrieveAPIAutoTestCase):
@@ -12,7 +11,7 @@ class DelegateDetailGetTestCase(auto.RetrieveAPIAutoTestCase):
 
     @classmethod
     def get_test_object(cls):
-        return TestDelegates.new_delegate()
+        return models.new_delegate()
 
     def test_anonymous_user(self):
         self.do_test(expected_error=auto.EXP_NOT_AUTHENTICATED)
@@ -32,10 +31,10 @@ class DelegateDetailPutTestCase(tests.UpdateAPITestCase):
         'summary':'He did awful!'}
 
     def setUp(self):
-        self.user = TestUsers.new_user(username='user', password='user')
-        self.school = TestSchools.new_school(user=self.user)
-        self.assignment = TestAssignments.new_assignment(school=self.school)
-        self.delegate = TestDelegates.new_delegate(assignment=self.assignment, school=self.school)
+        self.user = models.new_user(username='user', password='user')
+        self.school = models.new_school(user=self.user)
+        self.assignment = models.new_assignment(school=self.school)
+        self.delegate = models.new_delegate(assignment=self.assignment, school=self.school)
         self.params['assignment'] = self.assignment.id
 
     def test_anonymous_user(self):
@@ -59,7 +58,7 @@ class DelegateDetailPutTestCase(tests.UpdateAPITestCase):
 
     def test_superuser(self):
         '''It should return correct data.'''
-        superuser = TestUsers.new_superuser(username='s_user', password='s_user')
+        superuser = models.new_superuser(username='s_user', password='s_user')
         self.client.login(username='s_user', password='s_user')
         response = self.get_response(self.delegate.id, params=self.params)
         response.data.pop('created_at')
@@ -81,10 +80,10 @@ class DelegateDetailPatchTestCase(tests.PartialUpdateAPITestCase):
         'summary':'He did awful!'}
 
     def setUp(self):
-        self.user = TestUsers.new_user(username='user', password='user')
-        self.school = TestSchools.new_school(user=self.user)
-        self.assignment = TestAssignments.new_assignment(school=self.school)
-        self.delegate = TestDelegates.new_delegate(assignment=self.assignment, school=self.school)
+        self.user = models.new_user(username='user', password='user')
+        self.school = models.new_school(user=self.user)
+        self.assignment = models.new_assignment(school=self.school)
+        self.delegate = models.new_delegate(assignment=self.assignment, school=self.school)
 
     def test_anonymous_user(self):
         '''Unauthenticated users shouldn't be able to update assignments.'''
@@ -107,7 +106,7 @@ class DelegateDetailPatchTestCase(tests.PartialUpdateAPITestCase):
 
     def test_superuser(self):
         '''It should return correct data allowing a partial update.'''
-        superuser = TestUsers.new_superuser(username='s_user', password='s_user')
+        superuser = models.new_superuser(username='s_user', password='s_user')
         self.client.login(username='s_user', password='s_user')
         response = self.get_response(self.delegate.id, params=self.params)
         response.data.pop('created_at')
@@ -126,7 +125,7 @@ class DelegateDetailDeleteTestCase(auto.DestroyAPIAutoTestCase):
 
     @classmethod
     def get_test_object(cls):
-        return TestDelegates.new_delegate()
+        return models.new_delegate()
 
     def test_anonymous_user(self):
         '''Anonymous users cannot delete delegates.'''
@@ -138,7 +137,7 @@ class DelegateDetailDeleteTestCase(auto.DestroyAPIAutoTestCase):
 
     def test_other_user(self):
         '''A user cannot delete another user's delegates.'''
-        TestSchools.new_school(user=self.default_user)
+        models.new_school(user=self.default_user)
         self.as_default_user().do_test(expected_error=auto.EXP_PERMISSION_DENIED)
 
     def test_superuser(self):
@@ -154,9 +153,9 @@ class DelegateListCreateTestCase(tests.CreateAPITestCase):
         'summary':'He did awful!'}
 
     def setUp(self):
-        self.user = TestUsers.new_user(username='user', password='user')
-        self.school = TestSchools.new_school(user=self.user)
-        self.assignment = TestAssignments.new_assignment(school=self.school)
+        self.user = models.new_user(username='user', password='user')
+        self.school = models.new_school(user=self.user)
+        self.assignment = models.new_assignment(school=self.school)
         self.params['assignment'] = self.assignment.id
         self.params['school'] = self.school.id
 
@@ -189,7 +188,7 @@ class DelegateListCreateTestCase(tests.CreateAPITestCase):
 
     def test_superuser(self):
         '''Should allow superuser to create delegate.'''
-        superuser = TestUsers.new_superuser(username='s_user', password='s_user')
+        superuser = models.new_superuser(username='s_user', password='s_user')
         self.client.login(username='s_user', password='s_user')
         response = self.get_response(params=self.params)
         response.data.pop('created_at')

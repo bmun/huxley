@@ -8,6 +8,7 @@ import StringIO
 from huxley.accounts.models import User
 from huxley.core.constants import ContactGender, ContactType, ProgramTypes
 from huxley.core.models import School, Committee, Country, Delegate, Assignment
+from huxley.utils.test import models
 
 
 class TestUsers():
@@ -108,7 +109,7 @@ class TestCountries():
 class TestDelegates():
     @staticmethod
     def new_delegate(**kwargs):
-        a = kwargs.pop('assignment', None) or TestAssignments.new_assignment()
+        a = kwargs.pop('assignment', None) or models.new_assignment()
         s = kwargs.pop('school', None) or a.school
 
         d = Delegate(
@@ -120,20 +121,6 @@ class TestDelegates():
         d.save()
         return d
 
-class TestAssignments():
-    @staticmethod
-    def new_assignment(**kwargs):
-        test_committee = kwargs.pop('committee', None) or TestCommittees.new_committee()
-        test_school = kwargs.pop('school', None) or TestSchools.new_school()
-        test_country = kwargs.pop('country', None) or TestCountries.new_country()
-
-        a = Assignment(
-                committee=test_committee,
-                school=test_school,
-                country=test_country,
-                rejected=kwargs.pop('rejected', False),)
-        a.save()
-        return a
 
 class TestFiles():
     @staticmethod
