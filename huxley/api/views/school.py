@@ -4,17 +4,13 @@
 import datetime
 
 from easy_pdf.views import PDFTemplateView
-from easy_pdf.rendering import render_to_pdf_response
-from django.conf import settings
 from django.http import Http404
-from django.template import Context
-from rest_framework import generics, status
+from rest_framework import generics
 from rest_framework.authentication import SessionAuthentication
-from rest_framework.response import Response
 from huxley.api.mixins import ListUpdateModelMixin
 from huxley.api.permissions import IsAdvisorOrSuperuser, IsSchoolAdvisorOrSuperuser
-from huxley.api.serializers import AssignmentSerializer, DelegateSerializer, SchoolSerializer
-from huxley.core.models import Assignment, Conference, Delegate, School
+from huxley.api.serializers import DelegateSerializer, SchoolSerializer
+from huxley.core.models import Conference, Delegate, School
 
 
 class SchoolList(generics.CreateAPIView):
@@ -54,10 +50,9 @@ class SchoolDelegates(generics.ListAPIView, ListUpdateModelMixin):
 
 
 class SchoolInvoice(PDFTemplateView):
+    template_name = 'invoice.html'
 
-    def get(self, request, *args, **kwargs):
-        template_name = "invoice.html"
-
+    def get_context_data(self, **kwargs):
         conference = Conference.get_current()
         school = School.objects.get(pk=kwargs['pk'])
         due_date = school.registered + datetime.timedelta(days=21)
@@ -67,23 +62,21 @@ class SchoolInvoice(PDFTemplateView):
             school.advanced_delegates,
         ))
         delegate_fee = conference.delegate_fee
-        delegate_fees = delegate_total*delegate_fee
+        delegate_fees = delegate_total * delegate_fee
         fees_owed = school.fees_owed
         fees_paid = school.fees_paid
         amount_due = fees_owed - fees_paid
 
-        context = Context({
-            "name": school.name,
-            "date_registered": school.registered.strftime("%m/%d/%y"),
-            "due_date": due_date.strftime("%m/%d/%y"),
-            "delegate_total": delegate_total,
-            "delegate_fee": delegate_fee,
-            "delegate_fees": delegate_fees,
-            "registration_fee": conference.registration_fee,
-            "fees_owed": fees_owed,
-            "fees_paid": fees_paid,
-            "amount_due": amount_due})
-
-        return render_to_pdf_response(request, template_name, context, **kwargs)
-
-
+        return super(SchoolInvoice, self).get_context_data(
+            name=school.name,
+            date_registered=school.registered.strftime("%m/%d/%y"),
+            due_date=due_date.strftime("%m/%d/%y"),
+            delegate_total=delegate_total,
+            delegate_fee=delegate_fee,
+            delegate_fees=delegate_fees,
+            registration_fee=conference.registration_fee,
+            fees_owed=fees_owed,
+            fees_paid=fees_paid,
+            amount_due=amount_due,
+            **kwargs
+        )
