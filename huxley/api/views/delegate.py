@@ -38,6 +38,9 @@ class DelegateDetail(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = (permissions.DelegateDetailPermission, )
     serializer_class = DelegateSerializer
 
+    def put(self, request, *args, **kwargs):
+        return self.list_update(request, *args, **kwargs)
+
 
 class DelegateDetail(generics.RetrieveUpdateDestroyAPIView):
     authentication_classes = (SessionAuthentication,)

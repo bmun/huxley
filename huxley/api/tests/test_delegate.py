@@ -226,7 +226,7 @@ class DelegateDetailDeleteTestCase(auto.DestroyAPIAutoTestCase):
         self.as_superuser().do_test()
 
 
-class DelegateListCreateTestCase(tests.CreateAPITestCase):
+class DelegateListCreateTestCase(tests.ListAPITestCase):
     url_name = 'api:delegate_list'
     params = {
         'name':'Trevor Dowds',
