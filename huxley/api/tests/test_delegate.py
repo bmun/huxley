@@ -210,19 +210,8 @@ class DelegateListGetTestCase(tests.ListAPITestCase):
     def setUp(self):
         self.user = models.new_user(username='regular', password='user')
         self.school = models.new_school(user=self.user)
-        self.country = models.new_country()
-        self.committee1 = models.new_committee()
-        self.committee2 = models.new_committee()
-        self.assignment1 = models.new_assignment(
-            committee=self.committee1,
-            country=self.country,
-            school=self.school,
-        )
-        self.assignment2 = models.new_assignment(
-            committee=self.committee2,
-            country=self.country,
-            school=self.school,
-        )
+        self.assignment1 = models.new_assignment(school=self.school)
+        self.assignment2 = models.new_assignment(school=self.school)
         self.delegate1 = models.new_delegate(
             assignment=self.assignment1,
         )
