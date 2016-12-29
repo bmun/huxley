@@ -4,7 +4,6 @@
 from rest_framework import generics, status
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.response import Response
-import rest_framework
 
 from huxley.api.mixins import ListUpdateModelMixin
 from huxley.api import permissions
