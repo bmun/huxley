@@ -157,22 +157,16 @@ class DelegateListCreateTestCase(tests.CreateAPITestCase):
     def setUp(self):
         self.user = models.new_user(username='user', password='user')
         self.school = models.new_school(user=self.user)
+        self.user2 = models.new_user(username='user2', password='user2')
+        self.school2 = models.new_school(user=self.user2)
         self.assignment = models.new_assignment(school=self.school)
         self.params['assignment'] = self.assignment.id
         self.params['school'] = self.school.id
 
     def test_anonymous_user(self):
-        '''Should accept post request from any user.'''
+        '''Anonymous users can't create delegates.'''
         response = self.get_response(params=self.params)
-        response.data.pop('created_at')
-        response.data.pop('id')
-        self.assertEqual(response.data, {
-            "assignment" : self.assignment.id,
-            "school" : self.school.id,
-            "name" : unicode(self.params['name']),
-            "email" : unicode(self.params['email']),
-            "summary" : unicode(self.params['summary']),}
-        )
+        self.assertNotAuthenticated(response)
 
     def test_advisor(self):
         '''Should allow advisors to create new delegates.'''
@@ -187,6 +181,12 @@ class DelegateListCreateTestCase(tests.CreateAPITestCase):
             "email" : unicode(self.params['email']),
             "summary" : unicode(self.params['summary']),}
         )
+
+    def test_other_advisor(self):
+        '''Should not allow other advisor to create new delegates.'''
+        self.client.login(username='user2', password='user2')
+        response = self.get_response(params=self.params)
+        self.assertPermissionDenied(response)
 
     def test_superuser(self):
         '''Should allow superuser to create delegate.'''
@@ -235,7 +235,7 @@ class DelegateListGetTestCase(tests.ListAPITestCase):
 
     def test_anonymous_user(self):
         '''It rejects a request from an anonymous user.'''
-        response = self.get_response(self.school.id)
+        response = self.get_response(params={'school_id': self.school.id})
         self.assertNotAuthenticated(response)
 
     def test_advisor(self):
@@ -254,7 +254,7 @@ class DelegateListGetTestCase(tests.ListAPITestCase):
         models.new_school(user=user2)
         self.client.login(username='another', password='user')
 
-        response = self.get_response(self.school.id)
+        response = self.get_response(params={'school_id': self.school.id})
         self.assertPermissionDenied(response)
 
     def test_superuser(self):
@@ -262,7 +262,7 @@ class DelegateListGetTestCase(tests.ListAPITestCase):
         models.new_superuser(username='test', password='user')
         self.client.login(username='test', password='user')
 
-        response = self.get_response(self.school.id)
+        response = self.get_response(params={'school_id': self.school.id})
         self.assert_delegate_equal(response)
 
     def assert_delegate_equal(self, response):
@@ -297,36 +297,15 @@ class DelegateListPartialUpdateTestCase(tests.PartialUpdateAPITestCase):
 
     def setUp(self):
         self.user = models.new_user(username='regular', password='user')
+        self.user2 = models.new_user(username='user2', password='user2')
         self.school = models.new_school(user=self.user)
+        self.school2 = models.new_school(user=self.user2)
 
-        self.country = models.new_country()
-        self.committee1 = models.new_committee()
-        self.committee2 = models.new_committee()
-        self.committee3 = models.new_committee()
-        self.committee4 = models.new_committee()
-
-        self.assignment1 = models.new_assignment(
-            school=self.school,
-            country=self.country,
-            commitee=self.committee3
-        )
-
-        self.assignment2 = models.new_assignment(
-            school=self.school,
-            country=self.country,
-            committee=self.committee2
-        )
-
-        self.new_assignment = models.new_assignment(
-            school=self.school,
-            country=self.country,
-            committee=self.committee3
-        )
-
-        self.faulty_assignment = models.new_assignment(
-            country=self.country,
-            committee=self.committee4
-        )
+        self.assignment1 = models.new_assignment(school=self.school)
+        self.assignment2 = models.new_assignment(school=self.school)
+        self.assignment3 = models.new_assignment(school=self.school2)
+        self.new_assignment = models.new_assignment(school=self.school)
+        self.faulty_assignment = models.new_assignment()
 
         self.delegate1 = models.new_delegate(
             name="Nathaniel Parke",
@@ -340,36 +319,21 @@ class DelegateListPartialUpdateTestCase(tests.PartialUpdateAPITestCase):
             assignment=self.assignment2
         )
 
+        self.delegate3 = models.new_delegate(
+            name='Kunal Mehta',
+            school=self.school2,
+            assignment=self.assignment3
+        )
+
         self.params = [
             {'id': self.delegate1.id, 'assignment': self.new_assignment.id},
             {'id': self.delegate2.id, 'assignment': None}
         ]
 
     def test_anonymous_user(self):
-        '''Should accept a partial update from any user.'''
+        '''Rejects partial update from an anonymous user.'''
         response = self.get_response()
-        self.assertEqual(dict(response.data[0]),
-            {
-                'id': self.delegate1.id,
-                'assignment': self.params[0]['assignment'],
-                'school': self.delegate1.school.id,
-                'name': unicode(self.delegate1.name),
-                'email': unicode(self.delegate1.email),
-                'summary': unicode(self.delegate1.summary),
-                'created_at': self.delegate1.created_at.isoformat()
-            },
-        )
-        self.assertEqual(dict(response.data[1]),
-            {
-                'id': self.delegate2.id,
-                'assignment': self.params[1]['assignment'],
-                'school': self.delegate2.school.id,
-                'name': unicode(self.delegate2.name),
-                'email': unicode(self.delegate2.email),
-                'summary': unicode(self.delegate2.summary),
-                'created_at': self.delegate2.created_at.isoformat()
-            },
-        )
+        self.assertNotAuthenticated(response)
 
     def test_advisor(self):
         '''It updates the delegates for the school's advisor.'''
@@ -413,34 +377,17 @@ class DelegateListPartialUpdateTestCase(tests.PartialUpdateAPITestCase):
         self.assertRaises(ValidationError, self.get_response, self.school.id)
 
     def test_other_user(self):
-        '''Should accept a partial update from another user.'''
-        user2 = models.new_user(username='another', password='user')
-        models.new_school(user=user2)
-        self.client.login(username='another', password='user')
+        '''Should reject a partial update from another user.'''
+        self.client.login(username='user2', password='user2')
+
+        self.params = [
+            {'id': self.delegate1.id, 'assignment': self.new_assignment.id},
+            {'id': self.delegate2.id, 'assignment': None},
+            {'id': self.delegate3.id, 'assignment': None}
+        ]
 
         response = self.get_response()
-        self.assertEqual(dict(response.data[0]),
-            {
-                'id': self.delegate1.id,
-                'assignment': self.params[0]['assignment'],
-                'school': self.delegate1.school.id,
-                'name': unicode(self.delegate1.name),
-                'email': unicode(self.delegate1.email),
-                'summary': unicode(self.delegate1.summary),
-                'created_at': self.delegate1.created_at.isoformat()
-            },
-        )
-        self.assertEqual(dict(response.data[1]),
-            {
-                'id': self.delegate2.id,
-                'assignment': self.params[1]['assignment'],
-                'school': self.delegate2.school.id,
-                'name': unicode(self.delegate2.name),
-                'email': unicode(self.delegate2.email),
-                'summary': unicode(self.delegate2.summary),
-                'created_at': self.delegate2.created_at.isoformat()
-            },
-        )
+        self.assertPermissionDenied(response)
 
     def test_superuser(self):
         '''It updates the delegates for a superuser.'''

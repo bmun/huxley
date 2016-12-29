@@ -17,14 +17,14 @@ class DelegateList(generics.ListCreateAPIView, ListUpdateModelMixin):
     serializer_class = DelegateSerializer
 
     def get_queryset(self):
-    	queryset = Delegate.objects.all()
-    	query_params = self.request.GET
+        queryset = Delegate.objects.all()
+        query_params = self.request.GET
 
-    	school_id = query_params.get('school_id', None)
-    	if school_id:
-    		queryset = queryset.filter(school_id=school_id)
+        school_id = query_params.get('school_id', None)
+        if school_id:
+            queryset = queryset.filter(school_id=school_id)
 
-    	return queryset
+        return queryset
 
 
 class DelegateDetail(generics.RetrieveUpdateDestroyAPIView):

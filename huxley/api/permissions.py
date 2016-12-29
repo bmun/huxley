@@ -1,9 +1,13 @@
-# Copyright (c) 2011-2015 Berkeley Model United Nations. All rights reserved.
+# Copyright (c) 2011-2016 Berkeley Model United Nations. All rights reserved.
 # Use of this source code is governed by a BSD License (see LICENSE).
 
-from rest_framework import permissions
+import json
+
+from django.http import QueryDict
 
 from huxley.core.models import Assignment, Delegate
+
+from rest_framework import permissions
 
 
 class IsSuperuserOrReadOnly(permissions.BasePermission):
@@ -99,11 +103,23 @@ class DelegateListPermission(permissions.BasePermission):
             return True
 
         method = request.method
-        if method == 'POST' or method == 'PUT' or method == 'PATCH':
-            return True
-
-        if request.method in permissions.SAFE_METHODS:
+        if method in permissions.SAFE_METHODS:
             return user_is_advisor(request, view)
+
+        if method in ('POST', 'PUT', 'PATCH'):
+            school_id = user.is_authenticated() and user.school_id
+            if not school_id:
+                False
+
+            if method == 'POST':
+                return int(request.data['school']) == school_id
+            else:
+                data = request.data
+                if isinstance(data, QueryDict):
+                    data = json.loads(request.data.items()[0][0])
+
+                delegate_ids = [delegate['id'] for delegate in data]
+                return not Delegate.objects.filter(id__in=delegate_ids).exclude(school_id=school_id).exists()
 
         return False
 
