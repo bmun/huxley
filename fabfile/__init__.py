@@ -82,7 +82,7 @@ def submit(remote='origin', skip_tests=False):
         if not confirm('Continue submit?'):
             return
 
-    format()
+    # format()
     if not skip_tests:
         with settings(warn_only=True):
             if not test.run():
