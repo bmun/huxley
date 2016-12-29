@@ -4,31 +4,17 @@
 from rest_framework import generics, status
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.response import Response
-import rest_framework
 
-from huxley.api.mixins import ListUpdateModelMixin
-from huxley.api.permissions import IsChairOrSuperuser, IsSchoolDelegateAdvisorOrSuperuser, IsPostOrSuperuserOnly
+from huxley.api.permissions import IsSchoolDelegateAdvisorOrSuperuser, IsPostOrSuperuserOnly
 from huxley.api.serializers import DelegateSerializer
 from huxley.core.models import Delegate
 
 
-class DelegateList(generics.ListAPIView, ListUpdateModelMixin):
+class DelegateList(generics.CreateAPIView):
     authentication_classes = (SessionAuthentication,)
-    permission_classes = (IsPostOrSuperuserOnly, IsChairOrSuperuser,)
+    queryset = Delegate.objects.all()
+    permission_classes = (IsPostOrSuperuserOnly,)
     serializer_class = DelegateSerializer
-
-    def get_queryset(self):
-        '''Filter delegates by the given committee_id param.'''
-        committee_id = self.request.query_params.get('committee_id', None)
-        if committee_id:
-            return Delegate.objects.filter(assignment__committee_id=committee_id)
-        return Delegate.objects.all()
-
-    def patch(self, request, *args, **kwargs):
-        return self.list_update(request, partial=True, *args, **kwargs)
-
-    def put(self, request, *args, **kwargs):
-        return self.list_update(request, *args, **kwargs)
 
 
 class DelegateDetail(generics.RetrieveUpdateDestroyAPIView):
