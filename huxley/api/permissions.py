@@ -35,7 +35,14 @@ class IsChairOrSuperuser(permissions.BasePermission):
     '''Accept only the committee's chair or superusers.'''
 
     def has_object_permission(self, request, view, obj):
-        return request.user.is_superuser or request.user == obj.chair
+        if request.user.is_superuser:
+            return True
+
+        committee_id = self.request.query_params.get('committee_id', None)
+        user = request.user
+
+        return (user.is_authenticated() and user.is_chair() and
+                user.assignment.committee.id == committee_id)
 
 
 class IsSchoolAdvisorOrSuperuser(permissions.BasePermission):

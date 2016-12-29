@@ -11,9 +11,9 @@ from huxley.api.serializers import AssignmentSerializer
 from huxley.core.models import Assignment
 
 
-class AssignmentList(generics.ListAPIView):
+class AssignmentList(generics.CreateAPIView):
     authentication_classes = (SessionAuthentication,)
-    permission_classes = [rest_framework.permissions.AllowAny,]
+    permission_classes = (IsSuperuserOrReadOnly, IsChairOrSuperuser,)
     serializer_class = AssignmentSerializer
 
     def get_queryset(self):

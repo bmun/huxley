@@ -7,14 +7,14 @@ from rest_framework.response import Response
 import rest_framework
 
 from huxley.api.mixins import ListUpdateModelMixin
-from huxley.api.permissions import IsSchoolDelegateAdvisorOrSuperuser, IsPostOrSuperuserOnly, IsChairOrSuperuser
+from huxley.api.permissions import IsChairOrSuperuser, IsSchoolDelegateAdvisorOrSuperuser, IsPostOrSuperuserOnly
 from huxley.api.serializers import DelegateSerializer
 from huxley.core.models import Delegate
 
 
 class DelegateList(generics.ListAPIView, ListUpdateModelMixin):
     authentication_classes = (SessionAuthentication,)
-    permission_classes = [rest_framework.permissions.AllowAny,]
+    permission_classes = (IsPostOrSuperuserOnly, IsChairOrSuperuser,)
     serializer_class = DelegateSerializer
 
     def get_queryset(self):
@@ -26,6 +26,9 @@ class DelegateList(generics.ListAPIView, ListUpdateModelMixin):
 
     def patch(self, request, *args, **kwargs):
         return self.list_update(request, partial=True, *args, **kwargs)
+
+    def put(self, request, *args, **kwargs):
+        return self.list_update(request, *args, **kwargs)
 
 
 class DelegateDetail(generics.RetrieveUpdateDestroyAPIView):
