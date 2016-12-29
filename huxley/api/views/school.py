@@ -7,7 +7,7 @@ from easy_pdf.views import PDFTemplateView
 from django.http import Http404
 from rest_framework import generics
 from rest_framework.authentication import SessionAuthentication
-from huxley.api.mixins import ListUpdateModelMixin
+
 from huxley.api.permissions import IsAdvisorOrSuperuser, IsSchoolAdvisorOrSuperuser
 from huxley.api.serializers import DelegateSerializer, SchoolSerializer
 from huxley.core.models import Conference, Delegate, School
@@ -27,26 +27,6 @@ class SchoolDetail(generics.RetrieveUpdateDestroyAPIView):
 
     def put(self, request, *args, **kwargs):
         return self.partial_update(request, *args, **kwargs)
-
-
-class SchoolDelegates(generics.ListAPIView, ListUpdateModelMixin):
-    authentication_classes = (SessionAuthentication,)
-    serializer_class = DelegateSerializer
-    permission_classes = (IsSchoolAdvisorOrSuperuser,)
-
-    def get_queryset(self):
-        '''Filter schools by the given pk param.'''
-        school_id = self.kwargs.get('pk', None)
-        if not school_id:
-            raise Http404
-
-        return Delegate.objects.filter(school_id=school_id)
-
-    def put(self, request, *args, **kwargs):
-        return self.list_update(request, *args, **kwargs)
-
-    def patch(self, request, *args, **kwargs):
-        return self.list_update(request, partial=True, *args, **kwargs)
 
 
 class SchoolInvoice(PDFTemplateView):

@@ -91,6 +91,23 @@ class AssignmentListPermission(permissions.BasePermission):
         return False
 
 
+class DelegateListPermission(permissions.BasePermission):
+
+    def has_permission(self, request, view):
+        user = request.user
+        if user.is_superuser:
+            return True
+
+        method = request.method
+        if method == 'POST' or method == 'PUT' or method == 'PATCH':
+            return True
+
+        if request.method in permissions.SAFE_METHODS:
+            return user_is_advisor(request, view)
+
+        return False
+
+
 def user_is_advisor(request, view):
     user = request.user
     school_id = request.GET.get('school_id', -1)
