@@ -37,3 +37,9 @@ class ListUpdateModelMixin(object):
                 response_data.append(serializer.data)
 
         return Response(response_data, status=status.HTTP_200_OK)
+
+    def put(self, request, *args, **kwargs):
+        return self.list_update(request, *args, **kwargs)
+
+    def patch(self, request, *args, **kwargs):
+        return self.list_update(request, partial=True, *args, **kwargs)

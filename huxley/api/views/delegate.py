@@ -26,12 +26,6 @@ class DelegateList(generics.ListCreateAPIView, ListUpdateModelMixin):
 
     	return queryset
 
-   	def put(self, request, *args, **kwargs):
-   		return self.list_update(request, *args, **kwargs)
-
-   	def patch(self, request, *args, **kwargs):
-   		return self.list_update(request, partial=True, *args, **kwargs)
-
 
 class DelegateDetail(generics.RetrieveUpdateDestroyAPIView):
     authentication_classes = (SessionAuthentication,)
