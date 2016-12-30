@@ -206,7 +206,7 @@ var AdvisorRosterView = React.createClass({
       `Are you sure you want to delete this delegate (${delegate.name})?`
     );
     if (confirmed) {
-      DelegateActions.deleteDelegate(delegate.id);
+      DelegateActions.deleteDelegate(delegate.id, this._handleDeleteError);
     }
   },
 
@@ -225,7 +225,7 @@ var AdvisorRosterView = React.createClass({
     var user = CurrentUserStore.getCurrentUser();
     this.setState({loading: true});
     var delta = {name: this.state.modal_name, email: this.state.modal_email};
-    DelegateActions.updateDelegate(delegate.id, delta);
+    DelegateActions.updateDelegate(delegate.id, delta, this._handleError);
     event.preventDefault();
   },
 
@@ -237,10 +237,17 @@ var AdvisorRosterView = React.createClass({
     });
   },
 
+  _handleDeleteError: function(response) {
+    window.confirm(
+      `There was an issue processing your request. Please refresh you page and try again.`
+    );
+  },
+
   _handleError: function(response) {
     this.setState({
       errors: response,
-      loading: false
+      loading: false,
+      modal_open: true
     });
   }
 
