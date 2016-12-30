@@ -35,6 +35,14 @@ var CurrentUserActions = {
       schoolID: schoolID,
       delta: delta,
     });
+  },
+
+  updateUser(userID, delta) {
+    Dispatcher.dispatch({
+      actionType: ActionConstants.UPDATE_USER,
+      userID: userID,
+      delta: delta,
+    })
   }
 };
 

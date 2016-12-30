@@ -1,9 +1,11 @@
 /**
- * Copyright (c) 2011-2015 Berkeley Model United Nations. All rights reserved.
+ * Copyright (c) 2011-2016 Berkeley Model United Nations. All rights reserved.
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
 'use strict';
+
+var $ = require('jquery');
 
 var ActionConstants = require('constants/ActionConstants');
 var Dispatcher = require('dispatcher/Dispatcher');
@@ -36,10 +38,29 @@ class CurrentUserStore extends Store {
 
   updateSchool(schoolID, delta) {
     ServerAPI.updateSchool(schoolID, delta);
-    const user = this._currentUser.school;
+    const user = this._currentUser;
     this._currentUser = {
       ...user,
       school: {...user.school, ...delta},
+    };
+  }
+
+  updateUser(userID, delta) {
+    $.ajax({
+      type: 'PATCH',
+      url: '/api/users/' + userID,
+      data: JSON.stringify(delta),
+      contentType: 'application/json',
+    });
+
+    const user = {
+      ...this._currentUser,
+      first_name: delta.first_name,
+      last_name: delta.last_name,
+    };
+    this._currentUser = {
+      ...user,
+      school: {...user.school, ...delta.school},
     };
   }
 
@@ -56,6 +77,9 @@ class CurrentUserStore extends Store {
         break;
       case ActionConstants.UPDATE_SCHOOL:
         this.updateSchool(action.schoolID, action.delta);
+        break;
+      case ActionConstants.UPDATE_USER:
+        this.updateUser(action.userID, action.delta);
         break;
       default:
         return;
