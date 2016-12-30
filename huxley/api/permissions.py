@@ -115,11 +115,7 @@ class DelegateListPermission(permissions.BasePermission):
             if method == 'POST':
                 return int(request.data['school']) == school_id
             else:
-                data = request.data
-                if isinstance(data, QueryDict):
-                    data = json.loads(request.data.items()[0][0])
-
-                delegate_ids = [delegate['id'] for delegate in data]
+                delegate_ids = [delegate['id'] for delegate in request.data]
                 return not Delegate.objects.filter(id__in=delegate_ids).exclude(school_id=school_id).exists()
 
         return False
