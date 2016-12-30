@@ -20,7 +20,6 @@ urlpatterns = [
 
     url(r'^schools/?$', views.school.SchoolList.as_view(), name='school_list'),
     url(r'^schools/(?P<pk>[0-9]+)/?$', views.school.SchoolDetail.as_view(), name='school_detail'),
-    url(r'^schools/(?P<pk>[0-9]+)/delegates/?$', views.school.SchoolDelegates.as_view(), name='school_delegates'),
     url(r'^schools/(?P<pk>[0-9]+)/invoice/?$', views.school.SchoolInvoice.as_view(), name='school_invoice'),
 
     url(r'^assignments/?$', views.assignment.AssignmentList.as_view(), name='assignment_list'),
