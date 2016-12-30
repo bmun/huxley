@@ -4,10 +4,9 @@
 import json
 
 from django.http import QueryDict
+from rest_framework import permissions
 
 from huxley.core.models import Assignment, Delegate
-
-from rest_framework import permissions
 
 
 class IsSuperuserOrReadOnly(permissions.BasePermission):
@@ -96,6 +95,8 @@ class AssignmentListPermission(permissions.BasePermission):
 
 
 class DelegateListPermission(permissions.BasePermission):
+    '''Accept requests to create, get and update delegates in bulk from
+       the superuser and from the advisor of the school of the delegates.'''
 
     def has_permission(self, request, view):
         user = request.user
@@ -109,7 +110,7 @@ class DelegateListPermission(permissions.BasePermission):
         if method in ('POST', 'PUT', 'PATCH'):
             school_id = user.is_authenticated() and user.school_id
             if not school_id:
-                False
+                return False
 
             if method == 'POST':
                 return int(request.data['school']) == school_id
