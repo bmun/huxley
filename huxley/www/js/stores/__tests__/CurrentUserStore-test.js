@@ -100,4 +100,59 @@ describe('CurrentUserStore', function() {
     expect(mockUser.school.name).toEqual(delta.name);
     expect(mockUser.school.assignments_finalized).toBe(true);
   });
+
+  it('updates a user and emits a change', function() {
+    registerCallback({
+      actionType: ActionConstants.LOGIN,
+      user: {
+        id: 2,
+        user_type: 1,
+        first_name: "Trevor",
+        last_name: "Dowds",
+        school: {
+          address: "1 School Way",
+          city: "School City",
+          zip_code: "123456",
+          primary_name: "Trevor",
+          primary_email: "t@d.com",
+          primary_phone: "123456789",
+          secondary_name: "",
+          secondary_email: "",
+          secondary_phone: "",
+        }
+      }
+    });
+    var mockUser = CurrentUserStore.getCurrentUser();
+
+    var callback = jest.genMockFunction();
+    CurrentUserStore.addListener(callback);
+    expect(callback).not.toBeCalled();
+
+    var delta = {
+      first_name: "Trev",
+      last_name: "Dowds",
+      school: {
+        address: "1 School Way",
+        city: "School City",
+        zip_code: "123456",
+        primary_name: "Trevor",
+        primary_email: "trev@d.com",
+        primary_phone: "123456789",
+        secondary_name: "",
+        secondary_email: "",
+        secondary_phone: "",
+      }
+    };
+    registerCallback({
+      actionType: ActionConstants.UPDATE_USER,
+      userID: 2,
+      delta: delta
+    });
+    expect(callback).toBeCalled();
+
+    mockUser = CurrentUserStore.getCurrentUser();
+    expect(mockUser.first_name).toEqual(delta.first_name);
+    expect(mockUser.last_name).toEqual(delta.last_name);
+    expect(mockUser.school).toEqual(delta.school);
+  });
 });
