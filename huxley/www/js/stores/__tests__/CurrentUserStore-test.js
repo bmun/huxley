@@ -109,7 +109,18 @@ describe('CurrentUserStore', function() {
         user_type: 1,
         first_name: "Trevor",
         last_name: "Dowds",
-        school: {id: 1, primary_email: "t@d.com"}}
+        school: {
+          address: "1 School Way",
+          city: "School City",
+          zip_code: "123456",
+          primary_name: "Trevor",
+          primary_email: "t@d.com",
+          primary_phone: "123456789",
+          secondary_name: "",
+          secondary_email: "",
+          secondary_phone: "",
+        }
+      }
     });
     var mockUser = CurrentUserStore.getCurrentUser();
 
@@ -117,7 +128,21 @@ describe('CurrentUserStore', function() {
     CurrentUserStore.addListener(callback);
     expect(callback).not.toBeCalled();
 
-    var delta = {first_name: 'Trev', school: {primary_email: "trev@d.com"}};
+    var delta = {
+      first_name: "Trev",
+      last_name: "Dowds",
+      school: {
+        address: "1 School Way",
+        city: "School City",
+        zip_code: "123456",
+        primary_name: "Trevor",
+        primary_email: "trev@d.com",
+        primary_phone: "123456789",
+        secondary_name: "",
+        secondary_email: "",
+        secondary_phone: "",
+      }
+    };
     registerCallback({
       actionType: ActionConstants.UPDATE_USER,
       userID: 2,
@@ -127,6 +152,7 @@ describe('CurrentUserStore', function() {
 
     mockUser = CurrentUserStore.getCurrentUser();
     expect(mockUser.first_name).toEqual(delta.first_name);
-    expect(mockUser.school.primary_email).toEqual(delta.school.primary_email);
+    expect(mockUser.last_name).toEqual(delta.last_name);
+    expect(mockUser.school).toEqual(delta.school);
   });
 });
