@@ -78,7 +78,9 @@ function _ajax(method, uri, data) {
       type: method,
       url: uri,
       contentType: 'application/json; charset=UTF-8',
-      data: typeof data === 'string' ? data : JSON.stringify(data),
+      data: typeof data === 'string' || method === 'GET'
+        ? data
+        : JSON.stringify(data),
       dataType: 'json',
       success: (data, textStatus, jqXHR) => {
         resolve(jqXHR.responseJSON);
