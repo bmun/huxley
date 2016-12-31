@@ -1,18 +1,16 @@
 # -*- coding: utf-8 -*-
-# Copyright (c) 2011-2015 Berkeley Model United Nations. All rights reserved.
+# Copyright (c) 2011-2016 Berkeley Model United Nations. All rights reserved.
 # Use of this source code is governed by a BSD License (see LICENSE).
 
 from datetime import date
 
-from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError
 from django.test import TestCase
 
 from huxley.core.models import (Assignment, Committee, Conference, Country,
                                 CountryPreference, Delegate)
-from huxley.utils.test import (TestAssignments, TestCommittees, TestCountries,
-                               TestSchools)
+from huxley.utils.test import models
 
 
 class ConferenceTest(TestCase):
@@ -75,11 +73,11 @@ class SchoolTest(TestCase):
 
     def test_update_country_preferences(self):
         '''It should filter and replace the school's country preferences.'''
-        s1 = TestSchools.new_school()
-        s2 = TestSchools.new_school()
-        c1 = TestCountries.new_country().id
-        c2 = TestCountries.new_country().id
-        c3 = TestCountries.new_country().id
+        s1 = models.new_school()
+        s2 = models.new_school()
+        c1 = models.new_country().id
+        c2 = models.new_country().id
+        c3 = models.new_country().id
 
         country_ids = [0, c1, c2, c2, 0, c3]
         self.assertEquals(0, CountryPreference.objects.all().count())
@@ -97,7 +95,7 @@ class SchoolTest(TestCase):
     def test_update_fees(self):
         '''Fees should be calculated when a School is created/updated.'''
         b, i, a = 3, 5, 7
-        school = TestSchools.new_school(
+        school = models.new_school(
             beginner_delegates=b,
             intermediate_delegates=i,
             advanced_delegates=a,
@@ -122,18 +120,18 @@ class SchoolTest(TestCase):
         )
 
     def test_update_waitlist(self):
-        '''New schools should be waitlisted based on the conference settings.'''
-        self.assertTrue(hasattr(settings, 'CONFERENCE_WAITLIST_OPEN'))
+        '''New schools should be waitlisted based on the conference waitlist field.'''
+        s1 = models.new_school()
+        self.assertFalse(s1.waitlist)
 
-        with self.settings(CONFERENCE_WAITLIST_OPEN=False):
-            s1 = TestSchools.new_school()
-            self.assertFalse(s1.waitlist)
+        conference = Conference.get_current()
+        conference.waitlist_reg = True
+        conference.save()
 
-        with self.settings(CONFERENCE_WAITLIST_OPEN=True):
-            s1.save()
-            self.assertFalse(s1.waitlist)
-            s2 = TestSchools.new_school()
-            self.assertTrue(s2.waitlist)
+        s1.save()
+        self.assertFalse(s1.waitlist)
+        s2 = models.new_school()
+        self.assertTrue(s2.waitlist)
 
 
 class AssignmentTest(TestCase):
@@ -148,19 +146,23 @@ class AssignmentTest(TestCase):
 
     def test_update_assignments(self):
         '''It should correctly update the set of country assignments.'''
-        cm1 = TestCommittees.new_committee(name='CM1')
-        cm2 = TestCommittees.new_committee(name='CM2')
-        ct1 = TestCountries.new_country(name='CT1')
-        ct2 = TestCountries.new_country(name='CT2')
-        ct3 = TestCountries.new_country(name='CT3')
-        s1 = TestSchools.new_school(name='S1')
-        s2 = TestSchools.new_school(name='S2')
+        cm1 = models.new_committee(name='CM1')
+        cm2 = models.new_committee(name='CM2')
+        ct1 = models.new_country(name='CT1')
+        ct2 = models.new_country(name='CT2')
+        ct3 = models.new_country(name='CT3')
+        s1 = models.new_school(name='S1')
+        s2 = models.new_school(name='S2')
 
         Assignment.objects.bulk_create([
             Assignment(committee_id=cm.id, country_id=ct.id, school_id=s1.id)
             for ct in [ct1, ct2]
             for cm in [cm1, cm2]
         ])
+
+        a = Assignment.objects.get(committee_id=cm2.id, country_id=ct2.id)
+        d1 = models.new_delegate(school=s1, assignment=a)
+        d2 = models.new_delegate(school=s1, assignment=a)
 
         # TODO: Also assert on delegate deletion.
         updates = [
@@ -174,10 +176,28 @@ class AssignmentTest(TestCase):
 
         Assignment.update_assignments(updates)
         new_assignments = [a[1:] for a in Assignment.objects.all().values_list()]
-
+        delegates = Delegate.objects.all()
         updates = [(cm.id, ct.id, s.id, rej) for cm, ct, s, rej in updates]
         self.assertEquals(set(updates), set(new_assignments))
+        self.assertEquals(len(delegates), 2)
 
+    def test_update_assignment(self):
+        '''Tests that when an assignment changes schools, its rejected
+           field is set to False and any delegates assigned to it are
+           no longer assigned to it.'''
+        s1 = models.new_school(name='S1')
+        s2 = models.new_school(name='S2')
+        a = models.new_assignment(school=s1, rejected=True)
+        d1 = models.new_delegate(school=s1, assignment=a)
+        d2 = models.new_delegate(school=s1, assignment=a)
+        self.assertEquals(a.delegates.count(), 2)
+        self.assertTrue(a.rejected)
+
+        a.school = s2
+        a.save()
+
+        self.assertEquals(a.delegates.count(), 0)
+        self.assertEquals(a.rejected, False)
 
 class CountryPreferenceTest(TestCase):
 
@@ -196,8 +216,8 @@ class DelegateTest(TestCase):
         A delegate's school field and a delegate's assignment's school field
         should be the same if they both exist on the delegate.
         """
-        school = TestSchools.new_school(name='S1')
-        assignment = TestAssignments.new_assignment()
+        school = models.new_school(name='S1')
+        assignment = models.new_assignment()
 
         self.assertRaises(ValidationError, Delegate.objects.create,
             name="Test Delegate",

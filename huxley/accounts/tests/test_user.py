@@ -5,7 +5,7 @@ from django.test import TestCase
 
 from huxley.accounts.exceptions import AuthenticationError, PasswordChangeFailed
 from huxley.accounts.models import User
-from huxley.utils.test import TestUsers
+from huxley.utils.test import models
 
 
 class UserTestCase(TestCase):
@@ -33,7 +33,7 @@ class UserTestCase(TestCase):
         assert_raises('kunal', 'mehta', AuthenticationError.INACTIVE_ACCOUNT)
 
         kunal.is_active = True
-        kunal.save();
+        kunal.save()
 
         user = User.authenticate('kunal', 'mehta')
         self.assertEqual(user, kunal)
@@ -70,7 +70,7 @@ class UserTestCase(TestCase):
     def test_reset_password(self):
         '''It should correctly reset a user's password or raise an error.'''
         password = 'password'
-        user = TestUsers.new_user(username='lololol', password=password)
+        user = models.new_user(username='lololol', password=password)
         self.assertTrue(user.check_password(password))
 
         User.reset_password('lololol')
@@ -78,5 +78,5 @@ class UserTestCase(TestCase):
         self.assertFalse(user.check_password(password))
 
         with self.assertRaises(User.DoesNotExist):
-            TestUsers.new_user(username='', email='')
+            models.new_user(username='', email='')
             User.reset_password('')

@@ -6,6 +6,7 @@ from django.db import models
 from rest_framework import serializers
 
 from huxley.api.tests import DestroyAPITestCase, RetrieveAPITestCase
+from huxley.utils.test import models as test_models
 
 
 EXP_NOT_AUTHENTICATED = 'exp_not_authenticated'
@@ -28,10 +29,26 @@ class AutoTestMixin(object):
     def setUpTestData(cls):
         cls.object = cls.get_test_object()
         cls.view = cls.get_view()
+        cls.class_setup()
 
-    def do_test(self, username=None, password=None, expected_error=None):
-        if username and password:
-            self.client.login(username=username, password=password)
+    @classmethod
+    def class_setup(cls):
+        cls.superuser = test_models.new_superuser()
+        cls.default_user = test_models.new_user()
+
+    def as_user(self, user):
+        self.client.login(
+            username=user.username,
+            password=user.PASSWORD_FOR_TESTS_ONLY)
+        return self
+
+    def as_default_user(self):
+        return self.as_user(self.default_user)
+
+    def as_superuser(self):
+        return self.as_user(self.superuser)
+
+    def do_test(self, expected_error=None):
         response = self.get_response(self.object.id)
 
         self.assert_error(response, expected_error)
@@ -69,6 +86,7 @@ class DestroyAPIAutoTestCase(AutoTestMixin, DestroyAPITestCase):
     @classmethod
     def setUpTestData(cls):
         cls.view = cls.get_view()
+        cls.class_setup()
 
     def setUp(self):
         self.object = self.get_test_object()

@@ -3,8 +3,7 @@
 
 from huxley.api import tests
 from huxley.api.tests import auto
-from huxley.utils.test import (TestUsers, TestSchools, TestAssignments,
-                               TestCommittees, TestCountries)
+from huxley.utils.test import models
 
 
 class AssignmentDetailGetTestCase(auto.RetrieveAPIAutoTestCase):
@@ -12,19 +11,16 @@ class AssignmentDetailGetTestCase(auto.RetrieveAPIAutoTestCase):
 
     @classmethod
     def get_test_object(cls):
-        user = TestUsers.new_user(username='user', password='user')
-        school = TestSchools.new_school(user=user)
-        return TestAssignments.new_assignment(school=school)
+        return models.new_assignment()
 
     def test_anonymous_user(self):
         self.do_test(expected_error=auto.EXP_NOT_AUTHENTICATED)
 
     def test_advisor(self):
-        self.do_test(username='user', password='user')
+        self.as_user(self.object.school.advisor).do_test()
 
     def test_superuser(self):
-        TestUsers.new_superuser(username='superuser', password='superuser')
-        self.do_test(username='superuser', password='superuser')
+        self.as_superuser().do_test()
 
 
 class AssignmentDetailPutTestCase(tests.UpdateAPITestCase):
@@ -32,9 +28,9 @@ class AssignmentDetailPutTestCase(tests.UpdateAPITestCase):
     params = {'rejected':True}
 
     def setUp(self):
-        self.user = TestUsers.new_user(username='user', password='user')
-        self.school = TestSchools.new_school(user=self.user)
-        self.assignment = TestAssignments.new_assignment(school=self.school)
+        self.user = models.new_user(username='user', password='user')
+        self.school = models.new_school(user=self.user)
+        self.assignment = models.new_assignment(school=self.school)
 
     def test_anonymous_user(self):
         '''Unauthenticated users shouldn't be able to update assignments.'''
@@ -55,7 +51,7 @@ class AssignmentDetailPutTestCase(tests.UpdateAPITestCase):
 
     def test_superuser(self):
         '''It should return correct data.'''
-        superuser = TestUsers.new_superuser(username='s_user', password='s_user')
+        superuser = models.new_superuser(username='s_user', password='s_user')
         self.client.login(username='s_user', password='s_user')
         response = self.get_response(self.assignment.id)
         self.assertEqual(response.data, {
@@ -72,9 +68,9 @@ class AssignmentDetailPatchTestCase(tests.PartialUpdateAPITestCase):
     params = {'rejected':True}
 
     def setUp(self):
-        self.user = TestUsers.new_user(username='user', password='user')
-        self.school = TestSchools.new_school(user=self.user)
-        self.assignment = TestAssignments.new_assignment(school=self.school)
+        self.user = models.new_user(username='user', password='user')
+        self.school = models.new_school(user=self.user)
+        self.assignment = models.new_assignment(school=self.school)
 
     def test_anonymous_user(self):
         '''Unauthenticated users shouldn't be able to update assignments.'''
@@ -95,7 +91,7 @@ class AssignmentDetailPatchTestCase(tests.PartialUpdateAPITestCase):
 
     def test_superuser(self):
         '''It should return correct data.'''
-        superuser = TestUsers.new_superuser(username='s_user', password='s_user')
+        superuser = models.new_superuser(username='s_user', password='s_user')
         self.client.login(username='s_user', password='s_user')
         response = self.get_response(self.assignment.id)
         self.assertEqual(response.data, {
@@ -112,7 +108,7 @@ class AssignmentDetailDeleteTestCase(auto.DestroyAPIAutoTestCase):
 
     @classmethod
     def get_test_object(cls):
-        return TestAssignments.new_assignment()
+        return models.new_assignment()
 
     def test_anonymous_user(self):
         '''Anonymous users cannot delete assignments.'''
@@ -120,24 +116,16 @@ class AssignmentDetailDeleteTestCase(auto.DestroyAPIAutoTestCase):
 
     def test_advisor(self):
         '''Advisors cannot delete their assignments.'''
-        self.do_test(
-            username=self.object.school.advisor.username, password='test',
-            expected_error=auto.EXP_DELETE_NOT_ALLOWED)
+        self.as_user(self.object.school.advisor).do_test(expected_error=auto.EXP_DELETE_NOT_ALLOWED)
 
     def test_other_user(self):
         '''A user cannot delete another user's assignments.'''
-        joe = TestUsers.new_user(username='joe', password='schmoe')
-        TestSchools.new_school(user=joe)
-        self.do_test(
-            username='joe', password='schmoe',
-            expected_error=auto.EXP_PERMISSION_DENIED)
+        models.new_school(user=self.default_user)
+        self.as_default_user().do_test(expected_error=auto.EXP_PERMISSION_DENIED)
 
     def test_superuser(self):
         '''A superuser cannot delete assignments.'''
-        TestUsers.new_superuser(username='super', password='super')
-        self.do_test(
-            username='super', password='super',
-            expected_error=auto.EXP_DELETE_NOT_ALLOWED)
+        self.as_superuser().do_test(expected_error=auto.EXP_DELETE_NOT_ALLOWED)
 
 
 class AssignmentListCreateTestCase(tests.CreateAPITestCase):
@@ -145,10 +133,10 @@ class AssignmentListCreateTestCase(tests.CreateAPITestCase):
     params = {'rejected':True}
 
     def setUp(self):
-        self.user = TestUsers.new_user(username='user', password='user')
-        self.school = TestSchools.new_school(user=self.user)
-        self.committee = TestCommittees.new_committee()
-        self.country = TestCountries.new_country()
+        self.user = models.new_user(username='user', password='user')
+        self.school = models.new_school(user=self.user)
+        self.committee = models.new_committee()
+        self.country = models.new_country()
         self.params['committee'] = self.committee.id
         self.params['school'] = self.school.id
         self.params['country'] = self.country.id
@@ -166,7 +154,7 @@ class AssignmentListCreateTestCase(tests.CreateAPITestCase):
 
     def test_superuser(self):
         '''Superusers should be able to create assignments.'''
-        TestUsers.new_superuser(username='s_user', password='s_user')
+        models.new_superuser(username='s_user', password='s_user')
         self.client.login(username='s_user', password='s_user')
 
         response = self.get_response(params=self.params)
@@ -178,3 +166,64 @@ class AssignmentListCreateTestCase(tests.CreateAPITestCase):
             "rejected" : True,
         })
 
+
+class AssignmentListGetTestCase(tests.ListAPITestCase):
+    url_name = 'api:assignment_list'
+
+    def setUp(self):
+        self.user = models.new_user(username='regular', password='user')
+        self.school = models.new_school(user=self.user)
+        self.a1 = models.new_assignment(school=self.school)
+        self.a2 = models.new_assignment(school=self.school)
+        self.a3 = models.new_assignment()
+
+    def test_anonymous_user(self):
+        '''It rejects a request from an anonymous user.'''
+        response = self.get_response()
+        self.assertNotAuthenticated(response)
+
+        response = self.get_response(params={'school_id': self.school.id})
+        self.assertNotAuthenticated(response)
+
+    def test_advisor(self):
+        '''It returns the assignments for the school's advisor.'''
+        self.client.login(username='regular', password='user')
+
+        response = self.get_response()
+        self.assertPermissionDenied(response)
+
+        response = self.get_response(params={'school_id': self.school.id})
+        self.assert_assignments_equal(response, [self.a1, self.a2])
+
+    def test_other_user(self):
+        '''It rejects a request from another user.'''
+        user2 = models.new_user(username='another', password='user')
+        models.new_school(user=user2)
+        self.client.login(username='another', password='user')
+
+        response = self.get_response()
+        self.assertPermissionDenied(response)
+
+        response = self.get_response(params={'school_id': self.school.id})
+        self.assertPermissionDenied(response)
+
+    def test_superuser(self):
+        '''It returns the assignments for a superuser.'''
+        models.new_superuser(username='test', password='user')
+        self.client.login(username='test', password='user')
+
+        response = self.get_response()
+        self.assert_assignments_equal(response, [self.a1, self.a2, self.a3])
+
+        response = self.get_response(params={'school_id': self.school.id})
+        self.assert_assignments_equal(response, [self.a1, self.a2])
+
+    def assert_assignments_equal(self, response, assignments):
+        '''Assert that the response contains the assignments in order.'''
+        self.assertEqual(response.data, [{
+            'id': a.id,
+            'country': a.country_id,
+            'committee': a.committee_id,
+            'school': a.school_id,
+            'rejected': a.rejected,
+        } for a in assignments])

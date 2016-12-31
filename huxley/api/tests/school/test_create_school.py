@@ -5,8 +5,8 @@ from rest_framework import status
 
 from huxley.accounts.models import User
 from huxley.api.tests import CreateAPITestCase
-from huxley.core.models import CountryPreference, School
-from huxley.utils.test import TestCountries, TestSchools
+from huxley.core.models import School
+from huxley.utils.test import models
 
 
 class CreateSchoolTestCase(CreateAPITestCase):
@@ -130,8 +130,8 @@ class CreateSchoolTestCase(CreateAPITestCase):
 
     def test_country_preferences(self):
         '''It should save a school's country preferences.'''
-        c1 = TestCountries.new_country().id
-        c2 = TestCountries.new_country().id
+        c1 = models.new_country().id
+        c2 = models.new_country().id
         params = self.get_params(countrypreferences=[0, c1, c2, 0, c1])
         response = self.get_response(params=params)
 
@@ -257,7 +257,7 @@ class CreateSchoolTestCase(CreateAPITestCase):
     def test_duplicate_school_name(self):
         '''Validators should not allow for duplicated school names.'''
         params = self.get_params()
-        school = TestSchools.new_school(name=params['name'])
+        school = models.new_school(name=params['name'])
 
         response = self.get_response(params=params)
 

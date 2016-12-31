@@ -4,7 +4,7 @@
 from rest_framework import status
 
 from huxley.api.tests import CreateAPITestCase
-from huxley.utils.test import TestUsers
+from huxley.utils.test import models
 
 
 class ResetPasswordTestCase(CreateAPITestCase):
@@ -13,7 +13,7 @@ class ResetPasswordTestCase(CreateAPITestCase):
     params = {'username': 'mikejones'}
 
     def setUp(self):
-        self.user = TestUsers.new_user(username='mikejones', email='who@mj.com')
+        self.user = models.new_user(username='mikejones', email='who@mj.com')
 
     def test_username(self):
         response = self.get_response()

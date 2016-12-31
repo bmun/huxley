@@ -41,8 +41,8 @@ var RegistrationView = React.createClass({
   getInitialState: function() {
     return {
       errors: {},
-      countries: [],
-      committees: [],
+      countries: Object.values(CountryStore.getCountries()),
+      committees: Object.values(CommitteeStore.getSpecialCommittees()),
       first_name: '',
       last_name: '',
       username: '',
@@ -90,22 +90,27 @@ var RegistrationView = React.createClass({
   },
 
   componentDidMount: function() {
-    CountryStore.getCountries(function(countries) {
-      this.setState({countries: countries});
-    }.bind(this));
-    CommitteeStore.getSpecialCommittees(function(committees) {
-      this.setState({committees: committees});
-    }.bind(this));
+    this._committeesToken = CommitteeStore.addListener(() => {
+      this.setState({
+        committees: Object.values(CommitteeStore.getSpecialCommittees())
+      });
+    });
+
+    this._countriesToken = CountryStore.addListener(() => {
+      this.setState({countries: Object.values(CountryStore.getCountries())});
+    });
+  },
+
+  componentWillUnmount: function() {
+    this._committeesToken && this._committeesToken.remove();
+    this._countriesToken && this._countriesToken.remove();
   },
 
   render: function() {
     var conference = this.context.conference;
     return (
       <OuterView>
-        <form
-          id="registration"
-          className="registration-form"
-          onSubmit={this._handleSubmit}>
+        <form id="registration" onSubmit={this._handleSubmit}>
           <div>
             <h1>Register for Berkeley Model United Nations</h1>
             <p>Please fill out the following information to register your school
@@ -115,28 +120,29 @@ var RegistrationView = React.createClass({
               Back to Login
             </NavLink>
           </div>
-          <div className="registration-fields">
+          <div>
             <hr />
             <h3>Account Information</h3>
-            <TextInput
+            <RegistrationTextInput
+              error={this.state.errors['first_name']}
               placeholder="First Name"
               onChange={_handleChange.bind(this, 'first_name')}
               value={this.state.first_name}
             />
-            {this.renderError('first_name')}
-            <TextInput
+            <RegistrationTextInput
+              error={this.state.errors['last_name']}
               placeholder="Last Name"
               onChange={_handleChange.bind(this, 'last_name')}
               value={this.state.last_name}
             />
-            {this.renderError('last_name')}
-            <TextInput
+            <RegistrationTextInput
+              error={this.state.errors['username']}
               placeholder="Username"
               onChange={_handleChange.bind(this, 'username')}
               value={this.state.username}
             />
-            {this.renderError('username')}
-            <TextInput
+            <RegistrationTextInput
+              error={this.state.errors['password']}
               type="password"
               placeholder="Password"
               value={this.state.password}
@@ -144,8 +150,8 @@ var RegistrationView = React.createClass({
               onBlur={this._handlePasswordBlur}
               onFocus={this._handlePasswordFocus}
             />
-            {this.renderError('password')}
-            <TextInput
+            <RegistrationTextInput
+              error={this._getPasswordConfirmError()}
               type="password"
               placeholder="Password (confirm)"
               value={this.state.password2}
@@ -153,7 +159,6 @@ var RegistrationView = React.createClass({
               onBlur={this._handlePasswordBlur}
               onFocus={this._handlePasswordFocus}
             />
-            {this.renderPasswordConfirmError()}
             <hr />
             <h3>School Information</h3>
             <p className="instructions">Where is your school located?</p>
@@ -214,6 +219,7 @@ var RegistrationView = React.createClass({
               value={this._getSchoolCountry()}
               onChange={_handleChange.bind(this, 'school_country')}
               disabled={!this.state.school_international}
+              isControlled={true}
             />
             {this.renderSchoolError('country')}
             <hr />
@@ -507,17 +513,11 @@ var RegistrationView = React.createClass({
     return null;
   },
 
-  renderPasswordConfirmError: function() {
+  _getPasswordConfirmError() {
     if (this.state.passwordValidating &&
         this.state.password !== this.state.password2) {
-      return (
-        <label className="hint error">
-          Please enter the same password again.
-        </label>
-      );
+      return 'Please enter the same password again.';
     }
-
-    return null;
   },
 
   renderSchoolError: function(field) {
@@ -531,6 +531,12 @@ var RegistrationView = React.createClass({
     }
 
     return null;
+  },
+
+  _getSchoolError(field) {
+    if (this.state.errors.school) {
+      return this.state.errors.school[field];
+    }
   },
 
   _handleDelegateSum: function() {
@@ -681,6 +687,26 @@ var RegistrationView = React.createClass({
       );
     }.bind(this));
   }
+});
+
+const RegistrationTextInput = React.createClass({
+  propTypes: {
+    error: React.PropTypes.string,
+    onChange: React.PropTypes.func,
+    placeholder: React.PropTypes.string,
+    value: React.PropTypes.string,
+    type: React.PropTypes.oneOf(['text', 'password']),
+  },
+
+  render() {
+    const {error, ...inputProps} = this.props;
+    return (
+      <div className="reg-field">
+        <TextInput {...inputProps} />
+        {error && <label className="hint error">{error}</label>}
+      </div>
+    );
+  },
 });
 
 module.exports = RegistrationView;

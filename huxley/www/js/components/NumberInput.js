@@ -20,6 +20,7 @@ var NumberInput = React.createClass({
     return (
       <TextInput
         {...this.props}
+        isControlled={true}
         onChange={this._handleChange}
       />
     );

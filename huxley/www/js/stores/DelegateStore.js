@@ -1,32 +1,89 @@
 /**
- * Copyright (c) 2011-2015 Berkeley Model United Nations. All rights reserved.
+ * Copyright (c) 2011-2016 Berkeley Model United Nations. All rights reserved.
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
 'use strict';
 
-var $ = require('jquery');
+var ActionConstants = require('constants/ActionConstants');
+var DelegateActions = require('actions/DelegateActions');
 var Dispatcher = require('dispatcher/Dispatcher');
 var ServerAPI = require('lib/ServerAPI');
 var {Store} = require('flux/utils');
 
 
-var _delegatePromises = {};
+var _schoolsDelegates = {};
+var _delegates = {};
 
 class DelegateStore extends Store {
-  getDelegates(schoolID, callback) {
-    if (!_delegatePromises[schoolID]) {
-      _delegatePromises[schoolID] = ServerAPI.getDelegates(schoolID);
+  getDelegates(schoolID) {
+    if (_schoolsDelegates[schoolID]) {
+      return _schoolsDelegates[schoolID];
     }
-    if (callback) {
-      _delegatePromises[schoolID].then(callback);
+
+    ServerAPI.getDelegates(schoolID).then(value => {
+      DelegateActions.delegatesFetched(schoolID, value);
+    });
+
+    return [];
+  }
+
+  deleteDelegate(delegateID) {
+    ServerAPI.deleteDelegate(delegateID);
+    var schoolID = _delegates[delegateID].school;
+    delete _delegates[delegateID];
+    _schoolsDelegates[schoolID] = _schoolsDelegates[schoolID].filter(d => d.id !== delegateID);
+  }
+
+  addDelegate(delegate) {
+    _delegates[delegate.id] = delegate;
+    _schoolsDelegates[delegate.school] = [..._schoolsDelegates[delegate.school], delegate];
+  }
+
+  updateDelegate(delegateID, delta) {
+    const delegate = {..._delegates[delegateID], ...delta};
+    ServerAPI.updateDelegate(delegateID, delegate);
+    _delegates[delegateID] = delegate;
+    _schoolsDelegates[delegate.school] =
+      _schoolsDelegates[delegate.school].map(d => d.id == delegate.id ? delegate : d);
+  }
+
+  updateDelegates(schoolID, delegates) {
+    ServerAPI.updateSchoolDelegates(
+      schoolID,
+      JSON.stringify(delegates)
+    )
+    for (const delegate of delegates) {
+      _delegates[delegate.id] = delegate;
     }
-    return _delegatePromises[schoolID];
+    _schoolsDelegates[schoolID] = delegates;
   }
 
   __onDispatch(action) {
-    // This method must be overwritten
-    return;
+    switch (action.actionType) {
+      case ActionConstants.DELETE_DELEGATE:
+        this.deleteDelegate(action.delegateID);
+        break;
+      case ActionConstants.ADD_DELEGATE:
+        this.addDelegate(action.delegate);
+        break;
+      case ActionConstants.UPDATE_DELEGATE:
+        this.updateDelegate(action.delegateID, action.delta);
+        break;
+      case ActionConstants.DELEGATES_FETCHED:
+        _schoolsDelegates[action.schoolID] = action.delegates;
+        for (const delegate of action.delegates) {
+          _delegates[delegate.id] = delegate;
+        }
+        break;
+      case ActionConstants.UPDATE_DELEGATES:
+        this.updateDelegates(action.schoolID, action.delegates);
+        break;
+      default:
+        return;
+    }
+
+    this.__emitChange();
   }
 };
 

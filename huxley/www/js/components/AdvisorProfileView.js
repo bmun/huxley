@@ -12,6 +12,7 @@ var Button = require('components/Button');
 var InnerView = require('components/InnerView');
 var LogoutButton = require('components/LogoutButton');
 var ConferenceContext = require('components/ConferenceContext');
+var CurrentUserActions = require('actions/CurrentUserActions');
 var PhoneInput = require('components/PhoneInput');
 var ProgramTypes = require('constants/ProgramTypes');
 var TextInput = require('components/TextInput');
@@ -72,7 +73,8 @@ var AdvisorProfileView = React.createClass({
         <p><strong>Remember to save!</strong></p>
         <p><strong>Important Note:</strong> Please mail all checks
         to <strong>P.O. Box 4306 Berkeley, CA 94704-0306</strong>. If you'd like to pay online via
-        credit card, or if you have any further questions, please contact me
+        credit card using our online booking service called Quickbooks,
+        or if you have any further questions, please contact me
         at <a href="mailto:info@bmun.org">info@bmun.org</a> and I will respond promptly.
         See you soon!</p>
         <p><strong>{conference.external}
@@ -91,6 +93,7 @@ var AdvisorProfileView = React.createClass({
                   <td>First Name</td>
                   <td>
                     <TextInput
+                      defaultValue={this.state.first_name}
                       value={this.state.first_name}
                       onChange={_handleChange.bind(this, 'first_name')}
                     />
@@ -101,6 +104,7 @@ var AdvisorProfileView = React.createClass({
                   <td>Last Name</td>
                   <td>
                     <TextInput
+                      defaultValue={this.state.last_name}
                       value={this.state.last_name}
                       onChange={_handleChange.bind(this, 'last_name')}
                     />
@@ -120,6 +124,7 @@ var AdvisorProfileView = React.createClass({
                   <td>Address</td>
                   <td>
                     <TextInput
+                      defaultValue={this.state.school_address}
                       value={this.state.school_address}
                       onChange={_handleChange.bind(this, 'school_address')}
                     />
@@ -130,6 +135,7 @@ var AdvisorProfileView = React.createClass({
                   <td>City</td>
                   <td>
                     <TextInput
+                      defaultValue={this.state.school_city}
                       value={this.state.school_city}
                       onChange={_handleChange.bind(this, 'school_city')}
                     />
@@ -140,6 +146,7 @@ var AdvisorProfileView = React.createClass({
                   <td>Zip</td>
                   <td>
                     <TextInput
+                      defaultValue={this.state.school_zip_code}
                       value={this.state.school_zip_code}
                       onChange={_handleChange.bind(this, 'school_zip_code')}
                     />
@@ -212,6 +219,7 @@ var AdvisorProfileView = React.createClass({
                   <td>Name</td>
                   <td>
                     <TextInput
+                      defaultValue={this.state.primary_name}
                       value={this.state.primary_name}
                       onChange={_handleChange.bind(this, 'primary_name')}
                     />
@@ -222,6 +230,7 @@ var AdvisorProfileView = React.createClass({
                   <td>Email</td>
                   <td>
                     <TextInput
+                      defaultValue={this.state.primary_email}
                       value={this.state.primary_email}
                       onChange={_handleChange.bind(this, 'primary_email')}
                     />
@@ -246,6 +255,7 @@ var AdvisorProfileView = React.createClass({
                   <td>Name</td>
                   <td>
                     <TextInput
+                      defaultValue={this.state.secondary_name}
                       value={this.state.secondary_name}
                       onChange={_handleChange.bind(this, 'secondary_name')}
                     />
@@ -256,6 +266,7 @@ var AdvisorProfileView = React.createClass({
                   <td>Email</td>
                   <td>
                     <TextInput
+                      defaultValue={this.state.secondary_email}
                       value={this.state.secondary_email}
                       onChange={_handleChange.bind(this, 'secondary_email')}
                     />
@@ -332,28 +343,20 @@ var AdvisorProfileView = React.createClass({
 
   _handleSubmit: function(event) {
     var user = this.props.user;
-    this.setState({loading: true});
-    $.ajax({
-      type: 'PATCH',
-      url: '/api/users/' + user.id,
-      data: JSON.stringify({
-        first_name: this.state.first_name.trim(),
-        last_name: this.state.last_name.trim(),
-        school: {
-          address: this.state.school_address.trim(),
-          city: this.state.school_city.trim(),
-          zip_code: this.state.school_zip_code.trim(),
-          primary_name: this.state.primary_name.trim(),
-          primary_email: this.state.primary_email.trim(),
-          primary_phone: this.state.primary_phone.trim(),
-          secondary_name: this.state.secondary_name.trim(),
-          secondary_email: this.state.secondary_email.trim(),
-          secondary_phone: this.state.secondary_phone.trim(),
-        }
-      }),
-      success: this._handleSuccess,
-      error: this._handleError,
-      contentType: 'application/json'
+    CurrentUserActions.updateUser(user.id, {
+      first_name: this.state.first_name.trim(),
+      last_name: this.state.last_name.trim(),
+      school: {
+        address: this.state.school_address.trim(),
+        city: this.state.school_city.trim(),
+        zip_code: this.state.school_zip_code.trim(),
+        primary_name: this.state.primary_name.trim(),
+        primary_email: this.state.primary_email.trim(),
+        primary_phone: this.state.primary_phone.trim(),
+        secondary_name: this.state.secondary_name.trim(),
+        secondary_email: this.state.secondary_email.trim(),
+        secondary_phone: this.state.secondary_phone.trim(),
+      }
     });
     event.preventDefault();
   },

@@ -8,6 +8,7 @@
 var React = require('react');
 var ReactRouter = require('react-router');
 
+var AssignmentActions = require('actions/AssignmentActions');
 var AssignmentStore = require('stores/AssignmentStore');
 var Button = require('components/Button');
 var CommitteeStore = require('stores/CommitteeStore');
@@ -15,6 +16,7 @@ var ConferenceContext = require('components/ConferenceContext');
 var CountryStore = require('stores/CountryStore');
 var CurrentUserStore = require('stores/CurrentUserStore');
 var CurrentUserActions = require('actions/CurrentUserActions');
+var DelegateActions = require('actions/DelegateActions');
 var DelegateSelect = require('components/DelegateSelect');
 var DelegateStore = require('stores/DelegateStore');
 var InnerView = require('components/InnerView');
@@ -30,46 +32,51 @@ var AdvisorAssignmentsView = React.createClass({
   },
 
   getInitialState: function() {
+    var schoolID = CurrentUserStore.getCurrentUser().school.id;
+    var delegates = DelegateStore.getDelegates(schoolID);
+    var assigned = this.prepareAssignedDelegates(delegates);
     return {
-      assigned: {},
-      assignments: [],
-      committees: {},
-      countries: {},
-      delegates: [],
+      assigned: assigned,
+      assignments: AssignmentStore.getAssignments(schoolID).filter(assignment => !assignment.rejected),
+      committees: CommitteeStore.getCommittees(),
+      countries: CountryStore.getCountries(),
+      delegates: delegates,
       loading: false
     };
   },
 
-  componentWillMount: function() {
-    var user = CurrentUserStore.getCurrentUser();
-    AssignmentStore.getAssignments(user.school.id, function(assignments) {
-      this.setState({assignments: assignments.filter(
-        function(assignment) {
-          return !assignment.rejected
-        }
-      )});
-    }.bind(this));
-    CommitteeStore.getCommittees(function(committees) {
-      var new_committees = {};
-      for (var i = 0; i < committees.length; i++) {
-        new_committees[committees[i].id] = committees[i];
-      }
-      this.setState({committees: new_committees});
-    }.bind(this));
-    CountryStore.getCountries(function(countries) {
-      var new_countries = {};
-      for (var i = 0; i < countries.length; i++) {
-        new_countries[countries[i].id] = countries[i];
-      }
-      this.setState({countries: new_countries})
-    }.bind(this));
-    DelegateStore.getDelegates(user.school.id, (delegates) => {
+  componentDidMount: function() {
+    this._committeesToken = CommitteeStore.addListener(() => {
+      this.setState({committees: CommitteeStore.getCommittees()});
+    });
+
+    this._countriesToken = CountryStore.addListener(() => {
+      this.setState({countries: CountryStore.getCountries()});
+    });
+
+    this._delegatesToken = DelegateStore.addListener(() => {
+      var schoolID = CurrentUserStore.getCurrentUser().school.id;
+      var delegates = DelegateStore.getDelegates(schoolID);
       var assigned = this.prepareAssignedDelegates(delegates);
       this.setState({
         delegates: delegates,
         assigned: assigned
       });
     });
+
+    this._assignmentsToken = AssignmentStore.addListener(() => {
+      var schoolID = CurrentUserStore.getCurrentUser().school.id;
+      this.setState({
+        assignments: AssignmentStore.getAssignments(schoolID).filter(assignment => !assignment.rejected)
+      });
+    });
+  },
+
+  componentWillUnmount: function() {
+    this._committeesToken && this._committeesToken.remove();
+    this._countriesToken && this._countriesToken.remove();
+    this._delegatesToken && this._delegatesToken.remove();
+    this._assignmentsToken && this._assignmentsToken.remove();
   },
 
   render: function() {
@@ -217,55 +224,24 @@ var AdvisorAssignmentsView = React.createClass({
     var confirm = window.confirm("By pressing okay you are committing to the financial responsibility of each assignment. Are you sure you want to finalize assignments?");
     var school = CurrentUserStore.getCurrentUser().school;
     if (confirm) {
-      this.setState({loading: true});
-      ServerAPI.updateSchool(school.id, {assignments_finalized: true})
-        .then(this._handleFinalizedSuccess, this._handleError);
+      CurrentUserActions.updateSchool(school.id, {
+        assignments_finalized: true,
+      });
     }
   },
 
   _handleAssignmentDelete: function(assignment) {
     var confirm = window.confirm("Are you sure you want to delete this assignment?");
     if (confirm) {
-      this.setState({loading: true});
-      ServerAPI.updateAssignment(assignment.id, {rejected: true}).then(
-        this._handleAssignmentDeleteSuccess.bind(this, assignment.id),
-        this.handleError
-      );
+      AssignmentActions.updateAssignment(assignment.id, {
+        rejected: true,
+      });
     }
   },
 
   _handleSave: function(event) {
     var school = CurrentUserStore.getCurrentUser().school;
-    this.setState({loading: true});
-    ServerAPI.updateSchoolDelegates(
-      school.id,
-      JSON.stringify(this.state.delegates)
-    ).then(this._handleSuccess, this._handleError);
-  },
-
-  _handleFinalizedSuccess: function(response) {
-    CurrentUserActions.updateSchool(response);
-    this.setState({loading: false});
-    this.history.pushState(null, '/advisor/assignments');
-  },
-
-  _handleAssignmentDeleteSuccess: function(id, response) {
-    const assignments = this.state.assignments;
-    this.setState({
-      loading: false,
-      assignments: assignments.filter((assignment) => assignment.id != id),
-    });
-    this.history.pushState(null, '/advisor/assignments');
-  },
-
-  _handleError: function(response) {
-    window.alert("Something went wrong. Please try again.");
-    this.setState({loading: false});
-  },
-
-   _handleSuccess: function(response) {
-    this.setState({loading: false});
-    this.history.pushState(null, '/advisor/assignments');
+    DelegateActions.updateDelegates(school.id, this.state.delegates);
   }
 });
 

@@ -1,6 +1,9 @@
-# Copyright (c) 2011-2015 Berkeley Model United Nations. All rights reserved.
+# Copyright (c) 2011-2016 Berkeley Model United Nations. All rights reserved.
 # Use of this source code is governed by a BSD License (see LICENSE).
 
+import json
+
+from django.http import QueryDict
 from rest_framework import permissions
 
 from huxley.core.models import Assignment, Delegate
@@ -63,6 +66,7 @@ class IsSchoolAssignmentAdvisorOrSuperuser(permissions.BasePermission):
         return (user.is_authenticated() and user.is_advisor() and
                 user.school.id == assignment.school.id)
 
+
 class IsSchoolDelegateAdvisorOrSuperuser(permissions.BasePermission):
     '''Accept only the advisor of the given school with a given assignment.'''
 
@@ -76,3 +80,52 @@ class IsSchoolDelegateAdvisorOrSuperuser(permissions.BasePermission):
 
         return (user.is_authenticated() and user.is_advisor() and
                 user.school.id == delegate.school.id)
+
+
+class AssignmentListPermission(permissions.BasePermission):
+
+    def has_permission(self, request, view):
+        if request.user.is_superuser:
+            return True
+
+        if request.method in permissions.SAFE_METHODS:
+            return user_is_advisor(request, view)
+
+        return False
+
+
+class DelegateListPermission(permissions.BasePermission):
+    '''Accept requests to create, get and update delegates in bulk from
+       the superuser and from the advisor of the school of the delegates.'''
+
+    def has_permission(self, request, view):
+        user = request.user
+        if user.is_superuser:
+            return True
+
+        method = request.method
+        if method in permissions.SAFE_METHODS:
+            return user_is_advisor(request, view)
+
+        if method in ('POST', 'PUT', 'PATCH'):
+            school_id = user.is_authenticated() and user.school_id
+            if not school_id:
+                return False
+
+            if method == 'POST':
+                return int(request.data['school']) == school_id
+            else:
+                data = request.data
+                if isinstance(data, QueryDict):
+                    data = json.loads(request.data.items()[0][0])
+
+                delegate_ids = [delegate['id'] for delegate in data]
+                return not Delegate.objects.filter(id__in=delegate_ids).exclude(school_id=school_id).exists()
+
+        return False
+
+
+def user_is_advisor(request, view):
+    user = request.user
+    school_id = request.GET.get('school_id', -1)
+    return user.is_authenticated() and user.school_id == int(school_id)

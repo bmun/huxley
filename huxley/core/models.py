@@ -1,4 +1,4 @@
-# Copyright (c) 2011-2015 Berkeley Model United Nations. All rights reserved.
+# Copyright (c) 2011-2016 Berkeley Model United Nations. All rights reserved.
 # Use of this source code is governed by a BSD License (see LICENSE).
 
 import json
@@ -176,7 +176,8 @@ class School(models.Model):
         '''If the school is about to be created (i.e. has no ID) and
         registration is closed, add it to the waitlist.'''
         school = kwargs['instance']
-        if not school.id and settings.CONFERENCE_WAITLIST_OPEN:
+        conference = Conference.get_current()
+        if not school.id and conference.waitlist_reg:
             school.waitlist = True
 
     @property
@@ -233,7 +234,7 @@ class School(models.Model):
                     'BMUN %d Registration Confirmation' % conference.session,
                     'Congratulations, you have officially been registered for BMUN %d. '
                     'To access your account, please log in at huxley.bmun.org.\n\n'
-                    'In order to confirm your spot on our registration list, ' 
+                    'In order to confirm your spot on our registration list, '
                     'you must pay the non-refundable school fee of $%d. '
                     'In 24-48 hours, you will receive an invoice from QuickBooks, '
                     'our accounting system, for your school fee. '
@@ -250,7 +251,7 @@ class School(models.Model):
                     'at http://bmun.org/alumni-scholarship/. This year we will be '
                     'awarding up to $13,000 to those that apply.\n\n'
                     'If you have any questions, please contact info@bmun.org.\n\n'
-                    'Thank you for registering for BMUN, and we look forward to ' 
+                    'Thank you for registering for BMUN, and we look forward to '
                     'seeing you at the oldest high school conference in the world '
                     'on March 3-5, 2017.' %
                     (conference.session, int(registration_fee),
@@ -305,7 +306,7 @@ class Assignment(models.Model):
             deletions.append(assignment_data['id'])
 
         for committee, country, school, rejected in new_assignments:
-            key = (committee, country)
+            key = (committee.id, country.id)
             if key in assigned:
                 # Make sure that the same committee/country pair is not being
                 # given to more than one school in the upload
@@ -360,6 +361,20 @@ class Assignment(models.Model):
 
         return failed_assignments
 
+    @classmethod
+    def update_assignment(cls, **kwargs):
+        '''Ensures that when an assignment's school field changes,
+           any delegates assigned to that assignment are no longer
+           assigned to it and that its rejected field is false.'''
+        assignment = kwargs['instance']
+        if not assignment.id:
+            return
+
+        old_assignment = cls.objects.get(id=assignment.id)
+        if assignment.school_id != old_assignment.school_id:
+            assignment.rejected = False
+            Delegate.objects.filter(assignment_id=old_assignment.id).update(assignment=None)
+
     def __unicode__(self):
         return self.committee.name + " : " + self.country.name + " : " + (
             self.school.name if self.school else "Unassigned")
@@ -368,6 +383,7 @@ class Assignment(models.Model):
         db_table = u'assignment'
         unique_together = ('committee', 'country')
 
+pre_save.connect(Assignment.update_assignment, sender=Assignment)
 
 class CountryPreference(models.Model):
     school = models.ForeignKey(School)
@@ -387,7 +403,7 @@ class CountryPreference(models.Model):
 class Delegate(models.Model):
     school = models.ForeignKey(School, related_name='delegates', null=True)
     assignment = models.ForeignKey(
-        Assignment, related_name='delegates', blank=True, null=True)
+        Assignment, related_name='delegates', blank=True, null=True, on_delete=models.SET_NULL)
     name = models.CharField(max_length=64)
     email = models.EmailField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)

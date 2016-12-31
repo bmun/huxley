@@ -4,7 +4,7 @@
 from huxley.api import tests
 from huxley.api.tests import auto
 from huxley.core.models import School
-from huxley.utils.test import TestSchools, TestUsers
+from huxley.utils.test import models
 
 
 class SchoolDetailGetTestCase(auto.RetrieveAPIAutoTestCase):
@@ -12,17 +12,16 @@ class SchoolDetailGetTestCase(auto.RetrieveAPIAutoTestCase):
 
     @classmethod
     def get_test_object(cls):
-        return TestSchools.new_school()
+        return models.new_school()
 
     def test_anonymous_user(self):
         self.do_test(expected_error=auto.EXP_NOT_AUTHENTICATED)
 
     def test_advisor(self):
-        self.do_test(username=self.object.advisor.username, password='test')
+        self.as_user(self.object.advisor).do_test()
 
     def test_superuser(self):
-        TestUsers.new_superuser(username='user1', password='user1')
-        self.do_test(username='user1', password='user1'),
+        self.as_superuser().do_test()
 
 
 class SchoolDetailPatchTestCase(tests.PartialUpdateAPITestCase):
@@ -30,7 +29,7 @@ class SchoolDetailPatchTestCase(tests.PartialUpdateAPITestCase):
     params = {'name': 'name', 'city': 'city'}
 
     def setUp(self):
-        self.school = TestSchools.new_school()
+        self.school = models.new_school()
         self.user = self.school.advisor
 
     def test_anonymous_user(self):
@@ -53,7 +52,7 @@ class SchoolDetailPatchTestCase(tests.PartialUpdateAPITestCase):
 
     def test_other_user(self):
         '''Should not allow another user to change a school's data'''
-        TestUsers.new_user(username='user2', password='user2')
+        models.new_user(username='user2', password='user2')
         self.client.login(username='user2', password='user2')
         response = self.get_response(self.school.id, params=self.params)
         updated_school = School.objects.get(id=self.school.id)
@@ -64,7 +63,7 @@ class SchoolDetailPatchTestCase(tests.PartialUpdateAPITestCase):
 
     def test_superuser(self):
         '''This should allow  a superuser to change school data.'''
-        TestUsers.new_superuser(username='user2', password='user2')
+        models.new_superuser(username='user2', password='user2')
         self.client.login(username='user2', password='user2')
         response = self.get_response(self.school.id, params=self.params)
         self.school = School.objects.get(id=self.school.id)
@@ -78,7 +77,7 @@ class SchoolDetailDeleteTestCase(auto.DestroyAPIAutoTestCase):
 
     @classmethod
     def get_test_object(cls):
-        return TestSchools.new_school()
+        return models.new_school()
 
     def test_anonymous_user(self):
         '''Anonymous users cannot delete a school.'''
@@ -86,26 +85,22 @@ class SchoolDetailDeleteTestCase(auto.DestroyAPIAutoTestCase):
 
     def test_advisor(self):
         '''Advisors can delete their school.'''
-        self.do_test(username=self.object.advisor.username, password='test')
+        self.as_user(self.object.advisor).do_test()
 
     def test_other_user(self):
         '''A user cannot delete another user's school.'''
-        TestUsers.new_user(username='joe', password='schmoe')
-        self.do_test(
-            username='joe', password='schmoe',
-            expected_error=auto.EXP_PERMISSION_DENIED)
+        self.as_default_user().do_test(expected_error=auto.EXP_PERMISSION_DENIED)
 
     def test_superuser(self):
         '''A superuser can delete a school.'''
-        TestUsers.new_superuser(username='superuser', password='superuser')
-        self.do_test(username='superuser', password='superuser')
+        self.as_superuser().do_test()
 
 
 class SchoolListGetTestCase(tests.ListAPITestCase):
     url_name = 'api:school_list'
 
     def setUp(self):
-        self.school = TestSchools.new_school()
+        self.school = models.new_school()
         self.user = self.school.advisor
 
     def test_anonymous_user(self):
@@ -123,7 +118,7 @@ class SchoolListGetTestCase(tests.ListAPITestCase):
 
     def test_superuser(self):
         '''It should reject a request from a superuser.'''
-        TestUsers.new_superuser(username='user', password='user')
+        models.new_superuser(username='user', password='user')
 
         self.client.login(username='user', password='user')
         response = self.get_response()

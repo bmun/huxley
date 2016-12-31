@@ -4,7 +4,7 @@
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 
-from huxley.utils.test import TestSchools, TestUsers
+from huxley.utils.test import models
 
 
 class SchoolAdminTest(TestCase):
@@ -13,10 +13,10 @@ class SchoolAdminTest(TestCase):
 
     def test_info_export(self):
         '''Test that the admin panel can properly export a list of schools.'''
-        TestUsers.new_user(username='testuser1', password='test1')
-        TestUsers.new_superuser(username='testuser2', password='test2')
+        models.new_user(username='testuser1', password='test1')
+        models.new_superuser(username='testuser2', password='test2')
         self.client.login(username='testuser1', password='test1')
-        school = TestSchools.new_school()
+        school = models.new_school()
         self.client.logout()
         self.client.login(username='testuser2', password='test2')
 
@@ -97,10 +97,10 @@ class SchoolAdminTest(TestCase):
 
     def test_preference_export(self):
         '''Test that the admin panel can properly export school preferences.'''
-        TestUsers.new_user(username='testuser1', password='test1')
-        TestUsers.new_superuser(username='testuser2', password='test2')
+        models.new_user(username='testuser1', password='test1')
+        models.new_superuser(username='testuser2', password='test2')
         self.client.login(username='testuser1', password='test1')
-        school = TestSchools.new_school()
+        school = models.new_school()
         self.client.logout()
         self.client.login(username='testuser2', password='test2')
 
@@ -109,40 +109,34 @@ class SchoolAdminTest(TestCase):
         self.assertTrue(response)
 
         header = [
-            "Name",
-            "Assignments Requested",
-            "Beginners",
-            "Intermediates",
-            "Advanced",
-            "Spanish Speakers",
-            "Chinese Speakers",
-            "Country 1",
-            "Country 2",
-            "Country 3",
-            "Country 4",
-            "Country 5",
-            "Country 6",
-            "Country 7",
-            "Country 8",
-            "Country 9",
-            "Country 10",
-            "Registration Comments"
-            ]
+            "Name", "Assignments Requested", "Beginners", "Intermediates",
+            "Advanced", "Spanish Speakers", "Chinese Speakers", "Country 1",
+            "Country 2", "Country 3", "Country 4", "Country 5", "Country 6",
+            "Country 7", "Country 8", "Country 9", "Country 10",
+            "Committee Preferences", "Registration Comments"
+        ]
 
         fields_csv = ",".join(map(str, header)) + "\r\n"
 
-        countryprefs = [c for c in school.countrypreferences.all().order_by('countrypreference')]
+        countryprefs = [c
+                        for c in school.countrypreferences.all().order_by(
+                            'countrypreference')]
         countryprefs += [''] * (10 - len(countryprefs))
+        committeeprefs = [', '.join(
+            [c.name for c in school.committeepreferences.all()])]
 
         fields = [
-                school.name,
-                school.beginner_delegates + school.intermediate_delegates + school.advanced_delegates,
-                school.beginner_delegates,
-                school.intermediate_delegates,
-                school.advanced_delegates,
-                school.spanish_speaking_delegates,
-                school.chinese_speaking_delegates,]
+            school.name,
+            school.beginner_delegates + school.intermediate_delegates +
+            school.advanced_delegates,
+            school.beginner_delegates,
+            school.intermediate_delegates,
+            school.advanced_delegates,
+            school.spanish_speaking_delegates,
+            school.chinese_speaking_delegates,
+        ]
         fields.extend(countryprefs)
+        fields.extend(committeeprefs)
         fields.append(school.registration_comments)
 
         fields_csv += ",".join(map(str, fields))

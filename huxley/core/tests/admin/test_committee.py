@@ -8,14 +8,14 @@ from django.core.urlresolvers import reverse
 from django.test import TestCase
 
 from huxley.core.models import Committee
-from huxley.utils.test import TestFiles, TestUsers
+from huxley.utils.test import models, TestFiles
 
 
 class CommitteeAdminTest(TestCase):
 
     def test_import(self):
         '''Test that the admin panel can import committees.'''
-        TestUsers.new_superuser(username='testuser', password='test')
+        models.new_superuser(username='testuser', password='test')
         self.client.login(username='testuser', password='test')
 
         f = TestFiles.new_csv([

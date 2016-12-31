@@ -42,6 +42,7 @@ class AssignmentAdmin(admin.ModelAdmin):
         reader = csv.reader(assignments['csv'])
 
         def get_model(model, name, cache):
+            name = name.strip()
             if not name in cache:
                 try:
                     cache[name] = model.objects.get(name=name)
@@ -60,7 +61,7 @@ class AssignmentAdmin(admin.ModelAdmin):
 
                 while len(row) < 3:
                     row.append("") # extend the row to have the minimum proper num of columns
-                
+
                 if len(row) < 4:
                     rejected = False # allow for the rejected field to be null
                 else:
@@ -71,13 +72,13 @@ class AssignmentAdmin(admin.ModelAdmin):
                 school = get_model(School, row[0], schools)
                 yield (committee, country, school, rejected)
 
-    
+
         failed_rows = Assignment.update_assignments(generate_assignments(reader))
         if failed_rows:
             # Format the message with HTML to put each failed assignment on a new line
-            messages.error(request, 
+            messages.error(request,
                 html.format_html('Assignment upload aborted. These assignments failed:<br/>' + '<br/>'.join(failed_rows)))
-        
+
         return HttpResponseRedirect(reverse('admin:core_assignment_changelist'))
 
 

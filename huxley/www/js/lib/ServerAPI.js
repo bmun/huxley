@@ -23,7 +23,7 @@ var ServerAPI = {
    * Get a list of all assignments for the given school ID.
    */
   getAssignments(schoolID) {
-    return _get(`/api/schools/${schoolID}/assignments`);
+    return _get('/api/assignments', {school_id: schoolID});
   },
 
   /**
@@ -44,7 +44,7 @@ var ServerAPI = {
    * Get a list of all delegates for the given school ID.
    */
   getDelegates(schoolID) {
-    return _get(`/api/schools/${schoolID}/delegates`);
+    return _get('/api/delegates', {school_id: schoolID});
   },
 
   login(username, password) {
@@ -68,7 +68,7 @@ var ServerAPI = {
   },
 
   updateSchoolDelegates(schoolID, delegates) {
-    return _patch(`/api/schools/${schoolID}/delegates`, delegates);
+    return _patch('/api/delegates', delegates);
   },
 };
 

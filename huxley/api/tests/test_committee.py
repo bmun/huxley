@@ -3,7 +3,7 @@
 
 from huxley.api import tests
 from huxley.api.tests import auto
-from huxley.utils.test import TestCommittees, TestUsers
+from huxley.utils.test import models
 
 
 class CommitteeDetailGetTestCase(auto.RetrieveAPIAutoTestCase):
@@ -11,7 +11,7 @@ class CommitteeDetailGetTestCase(auto.RetrieveAPIAutoTestCase):
 
     @classmethod
     def get_test_object(cls):
-        return TestCommittees.new_committee()
+        return models.new_committee()
 
     def test_anonymous_user(self):
         self.do_test()
@@ -23,7 +23,7 @@ class CommitteeDetailPutTestCase(tests.UpdateAPITestCase):
               'special':True}
 
     def setUp(self):
-        self.committee = TestCommittees.new_committee()
+        self.committee = models.new_committee()
 
     def test_anonymous_user(self):
         '''Unauthenticated users shouldn't be able to update committees.'''
@@ -32,7 +32,7 @@ class CommitteeDetailPutTestCase(tests.UpdateAPITestCase):
 
     def test_authenticated_user(self):
         '''Authenticated users shouldn't be able to update committees.'''
-        TestUsers.new_user(username='user', password='user')
+        models.new_user(username='user', password='user')
         self.client.login(username='user', password='user')
 
         response = self.get_response(self.committee.id, params=self.params)
@@ -40,7 +40,7 @@ class CommitteeDetailPutTestCase(tests.UpdateAPITestCase):
 
     def test_superuser(self):
         '''Superusers shouldn't be able to update committees.'''
-        TestUsers.new_superuser(username='user', password='user')
+        models.new_superuser(username='user', password='user')
         self.client.login(username='user', password='user')
 
         response = self.get_response(self.committee.id, params=self.params)
@@ -53,7 +53,7 @@ class CommitteeDetailPatchTestCase(tests.PartialUpdateAPITestCase):
               'special':True}
 
     def setUp(self):
-        self.committee = TestCommittees.new_committee()
+        self.committee = models.new_committee()
 
     def test_anonymous_user(self):
         '''Unauthenticated users shouldn't be able to update committees.'''
@@ -62,7 +62,7 @@ class CommitteeDetailPatchTestCase(tests.PartialUpdateAPITestCase):
 
     def test_authenticated_user(self):
         '''Authenticated users shouldn't be able to update committees.'''
-        TestUsers.new_user(username='user', password='user')
+        models.new_user(username='user', password='user')
         self.client.login(username='user', password='user')
 
         response = self.get_response(self.committee.id, params=self.params)
@@ -70,7 +70,7 @@ class CommitteeDetailPatchTestCase(tests.PartialUpdateAPITestCase):
 
     def test_superuser(self):
         '''Superusers shouldn't be able to update committees.'''
-        TestUsers.new_superuser(username='user', password='user')
+        models.new_superuser(username='user', password='user')
         self.client.login(username='user', password='user')
 
         response = self.get_response(self.committee.id, params=self.params)
@@ -82,7 +82,7 @@ class CommitteeDetailDeleteTestCase(auto.DestroyAPIAutoTestCase):
 
     @classmethod
     def get_test_object(cls):
-        return TestCommittees.new_committee()
+        return models.new_committee()
 
     def test_anonymous_user(self):
         '''Anonymous users cannot delete committees.'''
@@ -90,17 +90,11 @@ class CommitteeDetailDeleteTestCase(auto.DestroyAPIAutoTestCase):
 
     def test_authenticated_user(self):
         '''Authenticated users cannot delete committees.'''
-        TestUsers.new_user(username='user', password='user')
-        self.do_test(
-            username='user', password='user',
-            expected_error=auto.EXP_DELETE_NOT_ALLOWED)
+        self.as_default_user().do_test(expected_error=auto.EXP_DELETE_NOT_ALLOWED)
 
     def test_superuser(self):
         '''Superusers cannot delete committees.'''
-        TestUsers.new_superuser(username='user', password='user')
-        self.do_test(
-            username='user', password='user',
-            expected_error=auto.EXP_DELETE_NOT_ALLOWED)
+        self.as_superuser().do_test(expected_error=auto.EXP_DELETE_NOT_ALLOWED)
 
 
 class CommitteeListGetTestCase(tests.ListAPITestCase):
@@ -108,8 +102,8 @@ class CommitteeListGetTestCase(tests.ListAPITestCase):
 
     def test_anonymous_user(self):
         '''Anyone should be able to access a list of all the committees.'''
-        c1 = TestCommittees.new_committee(name='DISC', delegation_size=100)
-        c2 = TestCommittees.new_committee(name='JCC', special=True,
+        c1 = models.new_committee(name='DISC', delegation_size=100)
+        c2 = models.new_committee(name='JCC', special=True,
                                           delegation_size=30)
 
         response = self.get_response()
@@ -139,7 +133,7 @@ class CommitteeListPostTestCase(tests.CreateAPITestCase):
 
     def test_authenticated_user(self):
         '''Authenticated users shouldn't be able to create committees.'''
-        TestUsers.new_user(username='user', password='user')
+        models.new_user(username='user', password='user')
         self.client.login(username='user', password='user')
 
         response = self.get_response(self.params)
@@ -147,7 +141,7 @@ class CommitteeListPostTestCase(tests.CreateAPITestCase):
 
     def test_superuser(self):
         '''Superusers shouldn't be able to create committees.'''
-        TestUsers.new_superuser(username='user', password='user')
+        models.new_superuser(username='user', password='user')
         self.client.login(username='user', password='user')
 
         response = self.get_response(self.params)

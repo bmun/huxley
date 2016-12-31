@@ -12,8 +12,7 @@ PIPELINE = {
     'STYLESHEETS': {
         'huxley': {
             'source_filenames': (
-                'scss/core/*.scss',
-                'scss/accounts/*.scss',
+                'scss/*.scss',
             ),
             'output_filename': 'css/huxley.css',
         },
