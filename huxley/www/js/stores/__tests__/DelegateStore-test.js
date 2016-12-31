@@ -161,7 +161,7 @@ describe('DelegateStore', () => {
     expect(callback).toBeCalled();
     expect(ServerAPI.updateSchoolDelegates).toBeCalledWith(
       mockSchoolID,
-      JSON.stringify([updated_jake, udpated_nate])
+      [updated_jake, udpated_nate]
     );
 
     var updated_delegates = DelegateStore.getDelegates(mockSchoolID);

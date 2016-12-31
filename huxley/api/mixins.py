@@ -4,12 +4,11 @@
 import json
 
 from django.db import transaction
-from django.http import QueryDict
+from rest_framework import status
+from rest_framework.response import Response
 
 from huxley.core.models import Delegate
 
-from rest_framework import status
-from rest_framework.response import Response
 
 class ListUpdateModelMixin(object):
     """
@@ -17,11 +16,7 @@ class ListUpdateModelMixin(object):
     """
 
     def list_update(self, request, partial=False, *args, **kwargs):
-        data = request.data
-        if isinstance(data, QueryDict):
-            data = json.loads(request.data.items()[0][0])
-
-        updates = {delegate['id']: delegate for delegate in data}
+        updates = {delegate['id']: delegate for delegate in request.data}
         response_data = []
 
         with transaction.atomic():

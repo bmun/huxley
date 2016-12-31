@@ -49,10 +49,7 @@ class DelegateStore extends Store {
   }
 
   updateDelegates(schoolID, delegates) {
-    ServerAPI.updateSchoolDelegates(
-      schoolID,
-      JSON.stringify(delegates)
-    )
+    ServerAPI.updateSchoolDelegates(schoolID, delegates);
     for (const delegate of delegates) {
       _delegates[delegate.id] = delegate;
     }
