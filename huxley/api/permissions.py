@@ -89,23 +89,10 @@ class AssignmentListPermission(permissions.BasePermission):
             return True
 
         if request.method in permissions.SAFE_METHODS:
-            return user_is_advisor(request, view)
+            return user_is_chair(request, view) or user_is_advisor(request, view)
 
         return False
         
-
-class DelegateListPermission(permissions.BasePermission):
-
-    def has_permission(self, request, view):
-        if request.user.is_superuser or request.method == 'POST':
-            return True
-
-        committee_id = view.request.GET.get('committee_id', None)
-        user = request.user
-
-        return (user.is_authenticated() and user.is_chair() and
-                user.assignment.committee.id == int(committee_id))
-
 
 class DelegateListPermission(permissions.BasePermission):
     '''Accept requests to create, get and update delegates in bulk from
@@ -118,16 +105,26 @@ class DelegateListPermission(permissions.BasePermission):
 
         method = request.method
         if method in permissions.SAFE_METHODS:
-            return user_is_advisor(request, view)
+            return user_is_chair(request, view) or user_is_advisor(request, view)
 
         if method in ('POST', 'PUT', 'PATCH'):
-            school_id = user.is_authenticated() and user.school_id
-            if not school_id:
-                return False
+            if user.is_authenticated() and user.is_chair():
+                committee_id = user.is_authenticated() and user.committee_id
+                if not committee_id:
+                    return False
+                if method == 'POST':
+                    return int(request.data['committee']) == committee_id
 
-            if method == 'POST':
-                return int(request.data['school']) == school_id
-            else:
+                delegate_ids = [delegate['id'] for delegate in request.data]
+                return not Delegate.objects.filter(id__in=delegate_ids).exclude(assignment__committee_id=committee_id).exists()
+
+            if user.is_advisor():
+                school_id = user.is_authenticated() and user.school_id
+                if not school_id:
+                    return False
+                if method == 'POST':
+                    return int(request.data['school']) == school_id
+
                 delegate_ids = [delegate['id'] for delegate in request.data]
                 return not Delegate.objects.filter(id__in=delegate_ids).exclude(school_id=school_id).exists()
 
@@ -138,3 +135,8 @@ def user_is_advisor(request, view):
     user = request.user
     school_id = request.GET.get('school_id', -1)
     return user.is_authenticated() and user.school_id == int(school_id)
+
+def user_is_chair(request, view):
+    user = request.user
+    committee_id = request.GET.get('committee_id', -1)
+    return user.is_authenticated() and user.is_chair() and user.committee_id == int(committee_id)
