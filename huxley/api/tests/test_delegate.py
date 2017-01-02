@@ -6,8 +6,7 @@ from django.core.exceptions import ValidationError
 from huxley.accounts.models import User
 from huxley.api import tests
 from huxley.api.tests import auto
-from huxley.utils.test import (TestUsers, TestSchools, TestAssignments,
-                               TestDelegates)
+from huxley.utils.test import models
 
 
 class DelegateDetailGetTestCase(auto.RetrieveAPIAutoTestCase):
@@ -15,7 +14,7 @@ class DelegateDetailGetTestCase(auto.RetrieveAPIAutoTestCase):
 
     @classmethod
     def get_test_object(cls):
-        return TestDelegates.new_delegate()
+        return models.new_delegate()
 
     def test_anonymous_user(self):
         self.do_test(expected_error=auto.EXP_NOT_AUTHENTICATED)
@@ -94,8 +93,7 @@ class DelegateDetailPutTestCase(tests.UpdateAPITestCase):
 
     def test_superuser(self):
         '''It should return correct data.'''
-        superuser = TestUsers.new_superuser(
-            username='s_user', password='s_user')
+        superuser = models.new_superuser(username='s_user', password='s_user')
         self.client.login(username='s_user', password='s_user')
         response = self.get_response(self.delegate.id, params=self.params)
         response.data.pop('created_at')
@@ -175,8 +173,7 @@ class DelegateDetailPatchTestCase(tests.PartialUpdateAPITestCase):
 
     def test_superuser(self):
         '''It should return correct data allowing a partial update.'''
-        superuser = TestUsers.new_superuser(
-            username='s_user', password='s_user')
+        superuser = models.new_superuser(username='s_user', password='s_user')
         self.client.login(username='s_user', password='s_user')
         response = self.get_response(self.delegate.id, params=self.params)
         response.data.pop('created_at')
@@ -200,7 +197,7 @@ class DelegateDetailDeleteTestCase(auto.DestroyAPIAutoTestCase):
 
     @classmethod
     def get_test_object(cls):
-        return TestDelegates.new_delegate()
+        return models.new_delegate()
 
     def test_anonymous_user(self):
         '''Anonymous users cannot delete delegates.'''
@@ -217,16 +214,15 @@ class DelegateDetailDeleteTestCase(auto.DestroyAPIAutoTestCase):
 
     def test_other_user(self):
         '''A user cannot delete another user's delegates.'''
-        TestSchools.new_school(user=self.default_user)
-        self.as_default_user().do_test(
-            expected_error=auto.EXP_PERMISSION_DENIED)
+        models.new_school(user=self.default_user)
+        self.as_default_user().do_test(expected_error=auto.EXP_PERMISSION_DENIED)
 
     def test_superuser(self):
         '''A superuser can delete delegates.'''
         self.as_superuser().do_test()
 
 
-class DelegateListCreateTestCase(tests.ListAPITestCase):
+class DelegateListCreateTestCase(tests.CreateAPITestCase):
     url_name = 'api:delegate_list'
     params = {
         'name':'Trevor Dowds',
@@ -246,21 +242,9 @@ class DelegateListCreateTestCase(tests.ListAPITestCase):
         self.params['school'] = self.school.id
 
     def test_anonymous_user(self):
-        '''Should accept post request from any user.'''
+        '''Anonymous users can't create delegates.'''
         response = self.get_response(params=self.params)
-        response.data.pop('created_at')
-        response.data.pop('id')
-        self.assertEqual(response.data, {
-            "assignment": self.assignment.id,
-            "school": self.school.id,
-            "name": unicode(self.params['name']),
-            "email": unicode(self.params['email']),
-            "summary": unicode(self.params['summary']),
-            "session_one": False,
-            "session_two": False,
-            "session_three": False,
-            "session_four": False,
-        })
+        self.assertNotAuthenticated(response)
 
     def test_advisor(self):
         '''Should allow advisors to create new delegates.'''
@@ -295,8 +279,7 @@ class DelegateListCreateTestCase(tests.ListAPITestCase):
 
     def test_superuser(self):
         '''Should allow superuser to create delegate.'''
-        superuser = TestUsers.new_superuser(
-            username='s_user', password='s_user')
+        superuser = models.new_superuser(username='s_user', password='s_user')
         self.client.login(username='s_user', password='s_user')
         response = self.get_response(params=self.params)
         response.data.pop('created_at')

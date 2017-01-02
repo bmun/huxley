@@ -23,7 +23,7 @@ class AssignmentList(generics.ListCreateAPIView):
             queryset = queryset.filter(school_id=school_id)
 
         committee_id = query_params.get('committee_id', None)
-        if school_id:
+        if committee_id:
             queryset = queryset.filter(committee_id=committee_id)
 
         return queryset
