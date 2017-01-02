@@ -6,37 +6,36 @@ from rest_framework.authentication import SessionAuthentication
 from rest_framework.response import Response
 
 from huxley.api.mixins import ListUpdateModelMixin
-from huxley.api.permissions import IsSchoolDelegateAdvisorOrSuperuser, IsPostOrSuperuserOnly, IsChairOrSuperuser
+from huxley.api import permissions
 from huxley.api.serializers import DelegateSerializer
 from huxley.core.models import Delegate
 
 
-class DelegateList(generics.CreateAPIView):
+class DelegateList(generics.ListCreateAPIView, ListUpdateModelMixin):
     authentication_classes = (SessionAuthentication, )
-    queryset = Delegate.objects.all()
-    permission_classes = (IsPostOrSuperuserOnly, )
+    permission_classes = (permissions.DelegateListPermission, )
     serializer_class = DelegateSerializer
+
+    def get_queryset(self):
+        queryset = Delegate.objects.all()
+        query_params = self.request.GET
+
+        school_id = query_params.get('school_id', None)
+        if school_id:
+            queryset = queryset.filter(school_id=school_id)
+
+        committee_id = query_params.get('committee_id', None)
+        if school_id:
+            queryset = queryset.filter(assignment__committee_id=committee_id)
+
+        return queryset
+
+    def patch(self, request, *args, **kwargs):
+        return self.list_update(request, partial=True, *args, **kwargs)
 
 
 class DelegateDetail(generics.RetrieveUpdateDestroyAPIView):
     authentication_classes = (SessionAuthentication, )
     queryset = Delegate.objects.all()
-    permission_classes = (IsSchoolDelegateAdvisorOrSuperuser, )
+    permission_classes = (permissions.IsSchoolDelegateAdvisorOrSuperuser, )
     serializer_class = DelegateSerializer
-
-
-class DelegateCommitteeDetail(generics.ListAPIView, ListUpdateModelMixin):
-    authentication_classes = (SessionAuthentication, )
-    queryset = Delegate.objects.all()
-    serializer_class = DelegateSerializer
-    permission_classes = (IsChairOrSuperuser, )
-
-    def get_queryset(self):
-        '''Filter schools by the given pk param.'''
-        committee_id = self.kwargs.get('pk', None)
-        if not committee_id:
-            raise Http404
-        return Delegate.objects.filter(assignment__committee_id=committee_id)
-
-    def patch(self, request, *args, **kwargs):
-        return self.list_update(request, partial=True, *args, **kwargs)
