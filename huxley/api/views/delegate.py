@@ -41,25 +41,22 @@ class DelegateDetail(generics.RetrieveUpdateDestroyAPIView):
         return self.list_update(request, *args, **kwargs)
 
 
-class DelegateDetail(generics.RetrieveUpdateDestroyAPIView):
-    authentication_classes = (SessionAuthentication, )
-    queryset = Delegate.objects.all()
-    permission_classes = (IsSchoolDelegateAdvisorOrSuperuser, )
-    serializer_class = DelegateSerializer
+        school_id = query_params.get('school_id', None)
+        if school_id:
+            queryset = queryset.filter(school_id=school_id)
 
+        committee_id = query_params.get('committee_id', None)
+        if school_id:
+            queryset = queryset.filter(assignment__committee_id=committee_id)
 
-class DelegateCommitteeDetail(generics.ListAPIView, ListUpdateModelMixin):
-    authentication_classes = (SessionAuthentication, )
-    queryset = Delegate.objects.all()
-    serializer_class = DelegateSerializer
-    permission_classes = (IsChairOrSuperuser, )
-
-    def get_queryset(self):
-        '''Filter schools by the given pk param.'''
-        committee_id = self.kwargs.get('pk', None)
-        if not committee_id:
-            raise Http404
-        return Delegate.objects.filter(assignment__committee_id=committee_id)
+        return queryset
 
     def patch(self, request, *args, **kwargs):
         return self.list_update(request, partial=True, *args, **kwargs)
+
+
+class DelegateDetail(generics.RetrieveUpdateDestroyAPIView):
+    authentication_classes = (SessionAuthentication, )
+    queryset = Delegate.objects.all()
+    permission_classes = (permissions.IsSchoolDelegateAdvisorOrSuperuser, )
+    serializer_class = DelegateSerializer
