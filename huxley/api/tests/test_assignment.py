@@ -1,6 +1,7 @@
 # Copyright (c) 2011-2015 Berkeley Model United Nations. All rights reserved.
 # Use of this source code is governed by a BSD License (see LICENSE).
 
+from huxley.accounts.models import User
 from huxley.api import tests
 from huxley.api.tests import auto
 from huxley.utils.test import models
@@ -19,6 +20,9 @@ class AssignmentDetailGetTestCase(auto.RetrieveAPIAutoTestCase):
     def test_advisor(self):
         self.as_user(self.object.school.advisor).do_test()
 
+    def test_chair(self):
+        self.as_user(self.object.committee.chair).do_test(expected_error=auto.EXP_PERMISSION_DENIED)
+
     def test_superuser(self):
         self.as_superuser().do_test()
 
@@ -28,9 +32,11 @@ class AssignmentDetailPutTestCase(tests.UpdateAPITestCase):
     params = {'rejected':True}
 
     def setUp(self):
-        self.user = models.new_user(username='user', password='user')
-        self.school = models.new_school(user=self.user)
-        self.assignment = models.new_assignment(school=self.school)
+        self.advisor = models.new_user(username='advisor', password='advisor')
+        self.school = models.new_school(user=self.advisor)
+        self.chair = models.new_user(username='chair', password='chair', user_type=User.TYPE_CHAIR)
+        self.committee = models.new_committee(user=self.chair)
+        self.assignment = models.new_assignment(committee=self.committee, school=self.school)
 
     def test_anonymous_user(self):
         '''Unauthenticated users shouldn't be able to update assignments.'''
@@ -39,7 +45,7 @@ class AssignmentDetailPutTestCase(tests.UpdateAPITestCase):
 
     def test_advisor(self):
         '''It should return correct data.'''
-        self.client.login(username='user', password='user')
+        self.client.login(username='advisor', password='advisor')
         response = self.get_response(self.assignment.id, params=self.params)
         self.assertEqual(response.data, {
             "id" : self.assignment.id,
@@ -48,6 +54,12 @@ class AssignmentDetailPutTestCase(tests.UpdateAPITestCase):
             "school" : self.school.id,
             "rejected" : True,
         })
+
+    def test_chair(self):
+        '''Chairs should not be able to update assignments'''
+        self.client.login(username='chair', password='chair')
+        response = self.get_response(self.assignment.id, params=self.params)
+        self.assertPermissionDenied(response)
 
     def test_superuser(self):
         '''It should return correct data.'''
@@ -68,9 +80,11 @@ class AssignmentDetailPatchTestCase(tests.PartialUpdateAPITestCase):
     params = {'rejected':True}
 
     def setUp(self):
-        self.user = models.new_user(username='user', password='user')
-        self.school = models.new_school(user=self.user)
-        self.assignment = models.new_assignment(school=self.school)
+        self.advisor = models.new_user(username='advisor', password='advisor')
+        self.school = models.new_school(user=self.advisor)
+        self.chair = models.new_user(username='chair', password='chair', user_type=User.TYPE_CHAIR)
+        self.committee = models.new_committee(user=self.chair)
+        self.assignment = models.new_assignment(committee=self.committee, school=self.school)
 
     def test_anonymous_user(self):
         '''Unauthenticated users shouldn't be able to update assignments.'''
@@ -79,7 +93,7 @@ class AssignmentDetailPatchTestCase(tests.PartialUpdateAPITestCase):
 
     def test_advisor(self):
         '''It should return correct data.'''
-        self.client.login(username='user', password='user')
+        self.client.login(username='advisor', password='advisor')
         response = self.get_response(self.assignment.id, params=self.params)
         self.assertEqual(response.data, {
             "id" : self.assignment.id,
@@ -88,6 +102,12 @@ class AssignmentDetailPatchTestCase(tests.PartialUpdateAPITestCase):
             "school" : self.school.id,
             "rejected" : True,
         })
+
+    def test_chair(self):
+        '''Chairs should not be able to update assignments'''
+        self.client.login(username='chair', password='chair')
+        response = self.get_response(self.assignment.id, params=self.params)
+        self.assertPermissionDenied(response)
 
     def test_superuser(self):
         '''It should return correct data.'''
@@ -118,6 +138,10 @@ class AssignmentDetailDeleteTestCase(auto.DestroyAPIAutoTestCase):
         '''Advisors cannot delete their assignments.'''
         self.as_user(self.object.school.advisor).do_test(expected_error=auto.EXP_DELETE_NOT_ALLOWED)
 
+    def test_chair(self):
+        '''Chairs cannot delete their assignments.'''
+        self.as_user(self.object.committee.chair).do_test(expected_error=auto.EXP_PERMISSION_DENIED)
+
     def test_other_user(self):
         '''A user cannot delete another user's assignments.'''
         models.new_school(user=self.default_user)
@@ -133,9 +157,10 @@ class AssignmentListCreateTestCase(tests.CreateAPITestCase):
     params = {'rejected':True}
 
     def setUp(self):
-        self.user = models.new_user(username='user', password='user')
-        self.school = models.new_school(user=self.user)
-        self.committee = models.new_committee()
+        self.advisor = models.new_user(username='advisor', password='advisor')
+        self.chair = models.new_user(username='chair', password='chair', user_type=User.TYPE_CHAIR)
+        self.school = models.new_school(user=self.advisor)
+        self.committee = models.new_committee(user=self.chair)
         self.country = models.new_country()
         self.params['committee'] = self.committee.id
         self.params['school'] = self.school.id
@@ -148,7 +173,13 @@ class AssignmentListCreateTestCase(tests.CreateAPITestCase):
 
     def test_advisor(self):
         '''Advisors should not be able to create Assignments.'''
-        self.client.login(username='user', password='user')
+        self.client.login(username='advisor', password='advisor')
+        response = self.get_response(params=self.params)
+        self.assertPermissionDenied(response)
+
+    def test_chair(self):
+        '''Chairs should not be able to create Assignments'''
+        self.client.login(username='chair', password='chair')
         response = self.get_response(params=self.params)
         self.assertPermissionDenied(response)
 
@@ -171,10 +202,12 @@ class AssignmentListGetTestCase(tests.ListAPITestCase):
     url_name = 'api:assignment_list'
 
     def setUp(self):
-        self.user = models.new_user(username='regular', password='user')
-        self.school = models.new_school(user=self.user)
-        self.a1 = models.new_assignment(school=self.school)
-        self.a2 = models.new_assignment(school=self.school)
+        self.advisor = models.new_user(username='advisor', password='advisor')
+        self.chair = models.new_user(username='chair', password='chair', user_type=User.TYPE_CHAIR)
+        self.school = models.new_school(user=self.advisor)
+        self.committee = models.new_committee(user=self.chair)
+        self.a1 = models.new_assignment(school=self.school, committee=self.committee)
+        self.a2 = models.new_assignment(school=self.school, committee=self.committee)
         self.a3 = models.new_assignment()
 
     def test_anonymous_user(self):
@@ -187,12 +220,22 @@ class AssignmentListGetTestCase(tests.ListAPITestCase):
 
     def test_advisor(self):
         '''It returns the assignments for the school's advisor.'''
-        self.client.login(username='regular', password='user')
+        self.client.login(username='advisor', password='advisor')
 
         response = self.get_response()
         self.assertPermissionDenied(response)
 
         response = self.get_response(params={'school_id': self.school.id})
+        self.assert_assignments_equal(response, [self.a1, self.a2])
+
+    def test_chair(self):
+        '''It returns the assignments associated with the chair's committee'''
+        self.client.login(username='chair', password='chair')
+
+        response = self.get_response()
+        self.assertPermissionDenied(response)
+
+        response = self.get_response(params={'committee_id': self.committee.id})
         self.assert_assignments_equal(response, [self.a1, self.a2])
 
     def test_other_user(self):

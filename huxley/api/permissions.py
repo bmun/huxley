@@ -103,30 +103,26 @@ class DelegateListPermission(permissions.BasePermission):
         if user.is_superuser:
             return True
 
+        if not user.is_authenticated():
+            return False
+
         method = request.method
         if method in permissions.SAFE_METHODS:
             return user_is_chair(request, view) or user_is_advisor(request, view)
 
-        if method in ('POST', 'PUT', 'PATCH'):
-            if user.is_authenticated() and user.is_chair():
-                committee_id = user.is_authenticated() and user.committee_id
-                if not committee_id:
-                    return False
-                if method == 'POST':
-                    return int(request.data['committee']) == committee_id
+        if method == 'POST':
+            school_id = user.school_id
+            return user.is_advisor() and school_id and int(request.data['school']) == school_id
 
-                delegate_ids = [delegate['id'] for delegate in request.data]
-                return not Delegate.objects.filter(id__in=delegate_ids).exclude(assignment__committee_id=committee_id).exists()
-
+        if method in ('PUT', 'PATCH'):
+            delegate_ids = [delegate['id'] for delegate in request.data]
+            delegates = Delegate.objects.filter(id__in=delegate_ids)
+            if user.is_chair():
+                committee_id = user.committee_id
+                return committee_id and not delegates.exclude(assignment__committee_id=committee_id).exists()
             if user.is_advisor():
-                school_id = user.is_authenticated() and user.school_id
-                if not school_id:
-                    return False
-                if method == 'POST':
-                    return int(request.data['school']) == school_id
-
-                delegate_ids = [delegate['id'] for delegate in request.data]
-                return not Delegate.objects.filter(id__in=delegate_ids).exclude(school_id=school_id).exists()
+                school_id = user.school_id
+                return school_id and not delegates.exclude(school_id=school_id).exists()
 
         return False
 

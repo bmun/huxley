@@ -82,6 +82,18 @@ def new_committee(**kwargs):
         delegation_size=kwargs.pop('delegation_size', 10),
         special=kwargs.pop('special', False))
     c.save()
+
+    user = kwargs.pop('user', None)
+    for attr, value in kwargs.items():
+        setattr(c, attr, value)
+
+    c.save()
+
+    if user is None:
+        new_user(username=str(uuid.uuid4()), committee=c, user_type=User.TYPE_CHAIR)
+    else:
+        user.committee = c
+        user.save()
     return c
 
 

@@ -25,7 +25,7 @@ class DelegateList(generics.ListCreateAPIView, ListUpdateModelMixin):
             queryset = queryset.filter(school_id=school_id)
 
         committee_id = query_params.get('committee_id', None)
-        if school_id:
+        if committee_id:
             queryset = queryset.filter(assignment__committee_id=committee_id)
 
         return queryset
