@@ -91,6 +91,12 @@ class DelegateDetailPutTestCase(tests.UpdateAPITestCase):
             "session_four": self.delegate.session_four}
         )
 
+    def test_chair(self):
+        '''Chairs should not be able to update delegates individually'''
+        self.client.login(username='chair', password='chair')
+        response = self.get_response(self.delegate.id, params=self.params)
+        self.assertPermissionDenied(response)
+
     def test_superuser(self):
         '''It should return correct data.'''
         superuser = models.new_superuser(username='s_user', password='s_user')
@@ -170,6 +176,12 @@ class DelegateDetailPatchTestCase(tests.PartialUpdateAPITestCase):
             "session_three": self.delegate.session_three,
             "session_four": self.delegate.session_four}
         )
+
+    def test_chair(self):
+        '''Chairs should not be able to update delegates individually'''
+        self.client.login(username='chair', password='chair')
+        response = self.get_response(self.delegate.id, params=self.params)
+        self.assertPermissionDenied(response)
 
     def test_superuser(self):
         '''It should return correct data allowing a partial update.'''

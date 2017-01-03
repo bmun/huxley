@@ -21,8 +21,12 @@ class AssignmentDetailGetTestCase(auto.RetrieveAPIAutoTestCase):
         self.as_user(self.object.school.advisor).do_test()
 
     def test_chair(self):
+<<<<<<< HEAD
         chair = models.new_user(user_type=User.TYPE_CHAIR)
         self.as_user(chair).do_test(expected_error=auto.EXP_PERMISSION_DENIED)
+=======
+        self.as_user(self.object.committee.chair).do_test(expected_error=auto.EXP_PERMISSION_DENIED)
+>>>>>>> Updated permissions and unit tests
 
     def test_superuser(self):
         self.as_superuser().do_test()
@@ -141,8 +145,12 @@ class AssignmentDetailDeleteTestCase(auto.DestroyAPIAutoTestCase):
 
     def test_chair(self):
         '''Chairs cannot delete their assignments.'''
+<<<<<<< HEAD
         chair = models.new_user(user_type=User.TYPE_CHAIR)
         self.as_user(chair).do_test(expected_error=auto.EXP_PERMISSION_DENIED)
+=======
+        self.as_user(self.object.committee.chair).do_test(expected_error=auto.EXP_PERMISSION_DENIED)
+>>>>>>> Updated permissions and unit tests
 
     def test_other_user(self):
         '''A user cannot delete another user's assignments.'''

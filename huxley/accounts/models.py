@@ -22,7 +22,7 @@ class User(AbstractUser):
 
     user_type = models.PositiveSmallIntegerField(choices=USER_TYPE_CHOICES, default=TYPE_ADVISOR)
     school = models.OneToOneField(School, related_name='advisor', null=True, blank=True)  # Advisors only
-    committee = models.ForeignKey(Committee, related_name='chair', null=True, blank=True) # Chairs only
+    committee = models.OneToOneField(Committee, related_name='chair', null=True, blank=True) # Chairs only
     assignment = models.ForeignKey(Assignment, related_name='delegate', null=True, blank=True) # Delegate only (Note you can access school and committee through assignment)
 
     def is_advisor(self):
