@@ -37,5 +37,5 @@ class DelegateList(generics.ListCreateAPIView, ListUpdateModelMixin):
 class DelegateDetail(generics.RetrieveUpdateDestroyAPIView):
     authentication_classes = (SessionAuthentication, )
     queryset = Delegate.objects.all()
-    permission_classes = (permissions.IsSchoolDelegateAdvisorOrSuperuser, )
+    permission_classes = (permissions.DelegateDetailPermission, )
     serializer_class = DelegateSerializer
