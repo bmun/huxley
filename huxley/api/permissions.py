@@ -103,7 +103,7 @@ class DelegateDetailPermission(permissions.BasePermission):
             return True
 
         return False
-        
+
 
 class DelegateListPermission(permissions.BasePermission):
 
@@ -153,7 +153,9 @@ class DelegateListPermission(permissions.BasePermission):
             delegates = Delegate.objects.filter(id__in=delegate_ids)
             if user.is_chair():
                 committee_id = user.committee_id
-                return committee_id and not delegates.exclude(assignment__committee_id=committee_id).exists()
+                return (committee_id and 
+                        not delegates.exclude(assignment__committee_id=committee_id).exists())
+
             if user.is_advisor():
                 return not delegates.exclude(school_id=user.school_id).exists()
 

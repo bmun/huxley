@@ -92,10 +92,22 @@ class DelegateDetailPutTestCase(tests.UpdateAPITestCase):
         )
 
     def test_chair(self):
-        '''Chairs should not be able to update delegates individually'''
+        '''It should return correct data.'''
         self.client.login(username='chair', password='chair')
         response = self.get_response(self.delegate.id, params=self.params)
-        self.assertPermissionDenied(response)
+        response.data.pop('created_at')
+        self.assertEqual(response.data, {
+            "id" : self.delegate.id,
+            "assignment" : self.assignment.id,
+            "school" : self.school.id,
+            "name" : unicode(self.params['name']),
+            "email" : unicode(self.params['email']),
+            "summary" : unicode(self.params['summary']),
+            "session_one": self.delegate.session_one,
+            "session_two": self.delegate.session_two,
+            "session_three": self.delegate.session_three,
+            "session_four": self.delegate.session_four}
+        )
 
     def test_superuser(self):
         '''It should return correct data.'''
@@ -178,10 +190,22 @@ class DelegateDetailPatchTestCase(tests.PartialUpdateAPITestCase):
         )
 
     def test_chair(self):
-        '''Chairs should not be able to update delegates individually'''
+        '''It should return correct data allowing a partial update.'''
         self.client.login(username='chair', password='chair')
         response = self.get_response(self.delegate.id, params=self.params)
-        self.assertPermissionDenied(response)
+        response.data.pop('created_at')
+        self.assertEqual(response.data, {
+            "id" : self.delegate.id,
+            "assignment" : self.assignment.id,
+            "school" : self.school.id,
+            "name" : unicode(self.params['name']),
+            "email" : unicode(self.params['email']),
+            "summary" : unicode(self.params['summary']),
+            "session_one": self.delegate.session_one,
+            "session_two": self.delegate.session_two,
+            "session_three": self.delegate.session_three,
+            "session_four": self.delegate.session_four}
+        )
 
     def test_superuser(self):
         '''It should return correct data allowing a partial update.'''
