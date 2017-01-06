@@ -1,4 +1,4 @@
-# Copyright (c) 2011-2015 Berkeley Model United Nations. All rights reserved.
+# Copyright (c) 2011-2016 Berkeley Model United Nations. All rights reserved.
 # Use of this source code is governed by a BSD License (see LICENSE).
 
 from rest_framework import generics, status
@@ -29,9 +29,6 @@ class DelegateList(generics.ListCreateAPIView, ListUpdateModelMixin):
             queryset = queryset.filter(assignment__committee_id=committee_id)
 
         return queryset
-
-    def patch(self, request, *args, **kwargs):
-        return self.list_update(request, partial=True, *args, **kwargs)
 
 
 class DelegateDetail(generics.RetrieveUpdateDestroyAPIView):
