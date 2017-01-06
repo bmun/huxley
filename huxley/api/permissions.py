@@ -152,9 +152,7 @@ class DelegateListPermission(permissions.BasePermission):
             delegate_ids = [delegate['id'] for delegate in request.data]
             delegates = Delegate.objects.filter(id__in=delegate_ids)
             if user.is_chair():
-                committee_id = user.committee_id
-                return (committee_id and 
-                        not delegates.exclude(assignment__committee_id=committee_id).exists())
+                return not delegates.exclude(assignment__committee_id=user.committee_id).exists()
 
             if user.is_advisor():
                 return not delegates.exclude(school_id=user.school_id).exists()
