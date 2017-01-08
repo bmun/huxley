@@ -146,8 +146,32 @@ var ChairAttendanceView = React.createClass({
       delegate[session] = !delegate[session];
     }
 
+<<<<<<< HEAD
     this.setState({country_assignments: country_assignments});
   },
+=======
+  _handleGetAssignments() {
+    var user = CurrentUserStore.getCurrentUser();
+    var country_assignments = {};
+    var delegates = DelegateStore.getCommitteeDelegates(user.committee);
+
+    AssignmentStore.getCommitteeAssignments(user.committee, function(assignments) {
+        for (var delegate of delegates) {
+          var assignment = assignments.find(assignment => assignment.id == delegate.assignment)
+          var countryID = assignment.country;
+          if (countryID in country_assignments) {
+            country_assignments[countryID].push(delegate)
+          } else {
+            country_assignments[countryID] = [delegate]
+          }
+        }
+        this.setState({
+          country_assignments: country_assignments,
+          assignments: assignments,
+        });
+      }.bind(this));
+  }, 
+>>>>>>> Finalized country retrieval and fixed bug in delegate retrieval
 
   _handleSaveAttendance(event) {
     var committee = CurrentUserStore.getCurrentUser().committee;
@@ -157,6 +181,10 @@ var ChairAttendanceView = React.createClass({
       delegates = delegates.concat(country_assignments[country]);
     }
     DelegateActions.updateCommitteeDelegates(committee, delegates);
+<<<<<<< HEAD
+=======
+    window.alert("Attendance Saved.");
+>>>>>>> Finalized country retrieval and fixed bug in delegate retrieval
     event.preventDefault();
   },
 
