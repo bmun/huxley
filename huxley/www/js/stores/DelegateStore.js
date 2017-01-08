@@ -75,10 +75,7 @@ class DelegateStore extends Store {
   }
 
   updateCommitteeDelegates(committeeID, delegates) {
-    ServerAPI.updateCommitteeDelegates(
-      committeeID,
-      JSON.stringify(delegates)
-    )
+    ServerAPI.updateCommitteeDelegates(committeeID, delegates)
     for (const delegate of delegates) {
       _delegates[delegate.id] = delegate;
     }
@@ -116,6 +113,12 @@ class DelegateStore extends Store {
         break;
       case ActionConstants.UPDATE_COMMITTEE_DELEGATES:
         this.updateCommitteeDelegates(action.committeeID, action.delegates);
+        break;
+      case ActionConstants.COMMITTEE_DELEGATES_FETCHED:
+        _committeeDelegates[action.committeeID] = action.delegates;
+        for (const delegate of action.delegates) {
+          _delegates[delegate.id] = delegate;
+        }
         break;
       default:
         return;
