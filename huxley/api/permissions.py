@@ -91,11 +91,8 @@ class DelegateDetailPermission(permissions.BasePermission):
         if user.is_superuser:
             return True
 
-        delegate_id = view.kwargs.get('pk', None)
-        try:
-            delegate = Delegate.objects.get(id=delegate_id)
-        except Delegate.DoesNotExist:
-            return False
+        delegate_id = view.kwargs['pk']
+        delegate = Delegate.objects.get(id=delegate_id)
 
         if user_is_advisor(request, view, delegate.school_id):
             return True
