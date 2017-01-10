@@ -9,4 +9,16 @@ from huxley.core.models import Delegate
 class DelegateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Delegate
-        fields = ('id', 'assignment', 'name', 'email', 'created_at', 'summary', 'school')
+        fields = (
+        	'id', 
+        	'assignment', 
+        	'name', 
+        	'email', 
+        	'created_at', 
+        	'summary', 
+        	'school',
+        	'session_one',
+        	'session_two',
+        	'session_three',
+        	'session_four',
+        )

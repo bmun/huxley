@@ -41,8 +41,7 @@ class IsSchoolAdvisorOrSuperuser(permissions.BasePermission):
         school_id = view.kwargs.get('pk', None)
         user = request.user
 
-        return (user.is_authenticated() and user.is_advisor() and
-                user.school_id == int(school_id))
+        return user_is_advisor(request, view, school_id)
 
 
 class IsPostOrSuperuserOnly(permissions.BasePermission):
@@ -63,23 +62,7 @@ class IsSchoolAssignmentAdvisorOrSuperuser(permissions.BasePermission):
         assignment = Assignment.objects.get(id=assignment_id)
         user = request.user
 
-        return (user.is_authenticated() and user.is_advisor() and
-                user.school.id == assignment.school.id)
-
-
-class IsSchoolDelegateAdvisorOrSuperuser(permissions.BasePermission):
-    '''Accept only the advisor of the given school with a given assignment.'''
-
-    def has_permission(self, request, view):
-        if request.user.is_superuser:
-            return True
-
-        delegate_id = view.kwargs.get('pk', None)
-        delegate = Delegate.objects.get(id=delegate_id)
-        user = request.user
-
-        return (user.is_authenticated() and user.is_advisor() and
-                user.school.id == delegate.school.id)
+        return user_is_advisor(request, view, assignment.school_id)
 
 
 class AssignmentListPermission(permissions.BasePermission):
@@ -89,39 +72,81 @@ class AssignmentListPermission(permissions.BasePermission):
             return True
 
         if request.method in permissions.SAFE_METHODS:
-            return user_is_advisor(request, view)
+            school_id = request.query_params.get('school_id', -1)
+            committee_id = request.query_params.get('committee_id', -1)
+            return (user_is_chair(request, view, committee_id) or 
+                    user_is_advisor(request, view, school_id))
 
         return False
+        
 
-
-class DelegateListPermission(permissions.BasePermission):
-    '''Accept requests to create, get and update delegates in bulk from
-       the superuser and from the advisor of the school of the delegates.'''
+class DelegateDetailPermission(permissions.BasePermission):
+    '''Accept requests to retrieve, update, and destroy a delegate from the
+       superuser and the advisor of the school of the delegate. Accept requests
+       to retrieve and update a delegate from the chair of the committee of 
+       the delegate.'''
 
     def has_permission(self, request, view):
         user = request.user
         if user.is_superuser:
             return True
 
-        method = request.method
-        if method in permissions.SAFE_METHODS:
-            return user_is_advisor(request, view)
+        delegate_id = view.kwargs['pk']
+        delegate = Delegate.objects.get(id=delegate_id)
 
-        if method in ('POST', 'PUT', 'PATCH'):
-            school_id = user.is_authenticated() and user.school_id
-            if not school_id:
-                return False
+        if user_is_advisor(request, view, delegate.school_id):
+            return True
 
-            if method == 'POST':
-                return int(request.data['school']) == school_id
-            else:
-                delegate_ids = [delegate['id'] for delegate in request.data]
-                return not Delegate.objects.filter(id__in=delegate_ids).exclude(school_id=school_id).exists()
+        if (delegate.assignment and
+            user_is_chair(request, view, delegate.assignment.committee_id) and
+            request.method != 'DELETE'):
+            return True
 
         return False
 
 
-def user_is_advisor(request, view):
+class DelegateListPermission(permissions.BasePermission):
+    '''Accept requests to create, retrieve, and update delegates in bulk from
+       the superuser and from the advisor of the school of the delegates.
+       Accept requests to retrieve and update delegates from the chair of the
+       committee of the delegates.'''
+
+    def has_permission(self, request, view):
+        user = request.user
+        if user.is_superuser:
+            return True
+
+        if not user.is_authenticated():
+            return False
+
+        method = request.method
+        if method in permissions.SAFE_METHODS:
+            school_id = request.query_params.get('school_id', -1)
+            committee_id = request.query_params.get('committee_id', -1)
+            return (user_is_chair(request, view, committee_id) or 
+                    user_is_advisor(request, view, school_id))
+
+        if method == 'POST':
+            return user_is_advisor(request, view, request.data['school'])
+
+        if method in ('PUT', 'PATCH'):
+            delegate_ids = [delegate['id'] for delegate in request.data]
+            delegates = Delegate.objects.filter(id__in=delegate_ids)
+            if user.is_chair():
+                return not delegates.exclude(assignment__committee_id=user.committee_id).exists()
+
+            if user.is_advisor():
+                return not delegates.exclude(school_id=user.school_id).exists()
+
+        return False
+
+
+def user_is_advisor(request, view, school_id):
     user = request.user
-    school_id = request.GET.get('school_id', -1)
-    return user.is_authenticated() and user.school_id == int(school_id)
+    return (user.is_authenticated() and user.is_advisor() and 
+            user.school_id == int(school_id))
+
+def user_is_chair(request, view, committee_id):
+    user = request.user
+    return (user.is_authenticated() and user.is_chair() and 
+            user.committee_id == int(committee_id))

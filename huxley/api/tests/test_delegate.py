@@ -3,6 +3,7 @@
 
 from django.core.exceptions import ValidationError
 
+from huxley.accounts.models import User
 from huxley.api import tests
 from huxley.api.tests import auto
 from huxley.utils.test import models
@@ -21,6 +22,11 @@ class DelegateDetailGetTestCase(auto.RetrieveAPIAutoTestCase):
     def test_advisor(self):
         self.as_user(self.object.school.advisor).do_test()
 
+    def test_chair(self):
+        chair = models.new_user(user_type=User.TYPE_CHAIR, 
+                                committee=self.object.assignment.committee)
+        self.as_user(chair).do_test()
+
     def test_superuser(self):
         self.as_superuser().do_test()
 
@@ -33,20 +39,22 @@ class DelegateDetailPutTestCase(tests.UpdateAPITestCase):
         'summary':'He did awful!'}
 
     def setUp(self):
-        self.user = models.new_user(username='user', password='user')
-        self.school = models.new_school(user=self.user)
-        self.assignment = models.new_assignment(school=self.school)
+        self.advisor = models.new_user(username='advisor', password='advisor')
+        self.chair = models.new_user(username='chair', password='chair', user_type=User.TYPE_CHAIR)
+        self.school = models.new_school(user=self.advisor)
+        self.committee = models.new_committee(user=self.chair)
+        self.assignment = models.new_assignment(school=self.school, committee=self.committee)
         self.delegate = models.new_delegate(assignment=self.assignment, school=self.school)
         self.params['assignment'] = self.assignment.id
 
     def test_anonymous_user(self):
-        '''Unauthenticated users shouldn't be able to update assignments.'''
+        '''Unauthenticated users shouldn't be able to update delegates.'''
         response = self.get_response(self.delegate.id, params=self.params)
         self.assertNotAuthenticated(response)
 
     def test_advisor(self):
         '''It should return correct data.'''
-        self.client.login(username='user', password='user')
+        self.client.login(username='advisor', password='advisor')
         response = self.get_response(self.delegate.id, params=self.params)
         response.data.pop('created_at')
         self.assertEqual(response.data, {
@@ -55,7 +63,29 @@ class DelegateDetailPutTestCase(tests.UpdateAPITestCase):
             "school" : self.school.id,
             "name" : unicode(self.params['name']),
             "email" : unicode(self.params['email']),
-            "summary" : unicode(self.params['summary']),}
+            "summary" : unicode(self.params['summary']),
+            "session_one": self.delegate.session_one,
+            "session_two": self.delegate.session_two,
+            "session_three": self.delegate.session_three,
+            "session_four": self.delegate.session_four}
+        )
+
+    def test_chair(self):
+        '''It should return correct data.'''
+        self.client.login(username='chair', password='chair')
+        response = self.get_response(self.delegate.id, params=self.params)
+        response.data.pop('created_at')
+        self.assertEqual(response.data, {
+            "id" : self.delegate.id,
+            "assignment" : self.assignment.id,
+            "school" : self.school.id,
+            "name" : unicode(self.params['name']),
+            "email" : unicode(self.params['email']),
+            "summary" : unicode(self.params['summary']),
+            "session_one": self.delegate.session_one,
+            "session_two": self.delegate.session_two,
+            "session_three": self.delegate.session_three,
+            "session_four": self.delegate.session_four}
         )
 
     def test_superuser(self):
@@ -70,7 +100,11 @@ class DelegateDetailPutTestCase(tests.UpdateAPITestCase):
             "school" : self.school.id,
             "name" : unicode(self.params['name']),
             "email" : unicode(self.params['email']),
-            "summary" : unicode(self.params['summary']),}
+            "summary" : unicode(self.params['summary']),
+            "session_one": self.delegate.session_one,
+            "session_two": self.delegate.session_two,
+            "session_three": self.delegate.session_three,
+            "session_four": self.delegate.session_four}
         )
 
 
@@ -82,9 +116,11 @@ class DelegateDetailPatchTestCase(tests.PartialUpdateAPITestCase):
         'summary':'He did awful!'}
 
     def setUp(self):
-        self.user = models.new_user(username='user', password='user')
-        self.school = models.new_school(user=self.user)
-        self.assignment = models.new_assignment(school=self.school)
+        self.advisor = models.new_user(username='advisor', password='advisor')
+        self.chair = models.new_user(username='chair', password='chair', user_type=User.TYPE_CHAIR)
+        self.school = models.new_school(user=self.advisor)
+        self.committee = models.new_committee(user=self.chair)
+        self.assignment = models.new_assignment(school=self.school, committee=self.committee)
         self.delegate = models.new_delegate(assignment=self.assignment, school=self.school)
 
     def test_anonymous_user(self):
@@ -94,7 +130,7 @@ class DelegateDetailPatchTestCase(tests.PartialUpdateAPITestCase):
 
     def test_advisor(self):
         '''It should return correct data allowing a partial update.'''
-        self.client.login(username='user', password='user')
+        self.client.login(username='advisor', password='advisor')
         response = self.get_response(self.delegate.id, params=self.params)
         response.data.pop('created_at')
         self.assertEqual(response.data, {
@@ -103,7 +139,29 @@ class DelegateDetailPatchTestCase(tests.PartialUpdateAPITestCase):
             "school" : self.school.id,
             "name" : unicode(self.params['name']),
             "email" : unicode(self.params['email']),
-            "summary" : unicode(self.params['summary']),}
+            "summary" : unicode(self.params['summary']),
+            "session_one": self.delegate.session_one,
+            "session_two": self.delegate.session_two,
+            "session_three": self.delegate.session_three,
+            "session_four": self.delegate.session_four}
+        )
+
+    def test_chair(self):
+        '''It should return correct data allowing a partial update.'''
+        self.client.login(username='chair', password='chair')
+        response = self.get_response(self.delegate.id, params=self.params)
+        response.data.pop('created_at')
+        self.assertEqual(response.data, {
+            "id" : self.delegate.id,
+            "assignment" : self.assignment.id,
+            "school" : self.school.id,
+            "name" : unicode(self.params['name']),
+            "email" : unicode(self.params['email']),
+            "summary" : unicode(self.params['summary']),
+            "session_one": self.delegate.session_one,
+            "session_two": self.delegate.session_two,
+            "session_three": self.delegate.session_three,
+            "session_four": self.delegate.session_four}
         )
 
     def test_superuser(self):
@@ -118,7 +176,11 @@ class DelegateDetailPatchTestCase(tests.PartialUpdateAPITestCase):
             "school" : self.school.id,
             "name" : unicode(self.params['name']),
             "email" : unicode(self.params['email']),
-            "summary" : unicode(self.params['summary']),}
+            "summary" : unicode(self.params['summary']),
+            "session_one": self.delegate.session_one,
+            "session_two": self.delegate.session_two,
+            "session_three": self.delegate.session_three,
+            "session_four": self.delegate.session_four}
         )
 
 
@@ -136,6 +198,11 @@ class DelegateDetailDeleteTestCase(auto.DestroyAPIAutoTestCase):
     def test_advisor(self):
         '''Advisors can delete their delegates.'''
         self.as_user(self.object.school.advisor).do_test()
+
+    def test_chair(self):
+        '''Chairs cannot delete their delegates.'''
+        chair = models.new_user(user_type=User.TYPE_CHAIR)
+        self.as_user(chair).do_test(expected_error=auto.EXP_PERMISSION_DENIED)
 
     def test_other_user(self):
         '''A user cannot delete another user's delegates.'''
@@ -155,11 +222,13 @@ class DelegateListCreateTestCase(tests.CreateAPITestCase):
         'summary':'He did awful!'}
 
     def setUp(self):
-        self.user = models.new_user(username='user', password='user')
-        self.school = models.new_school(user=self.user)
-        self.user2 = models.new_user(username='user2', password='user2')
-        self.school2 = models.new_school(user=self.user2)
-        self.assignment = models.new_assignment(school=self.school)
+        self.advisor = models.new_user(username='advisor', password='advisor')
+        self.advisor2 = models.new_user(username='advisor2', password='advisor2')
+        self.chair = models.new_user(username='chair', password='chair', user_type=User.TYPE_CHAIR)
+        self.school = models.new_school(user=self.advisor)
+        self.school2 = models.new_school(user=self.advisor2)
+        self.committee = models.new_committee(user=self.chair)
+        self.assignment = models.new_assignment(school=self.school, committee=self.committee)
         self.params['assignment'] = self.assignment.id
         self.params['school'] = self.school.id
 
@@ -170,7 +239,7 @@ class DelegateListCreateTestCase(tests.CreateAPITestCase):
 
     def test_advisor(self):
         '''Should allow advisors to create new delegates.'''
-        self.client.login(username='user', password='user')
+        self.client.login(username='advisor', password='advisor')
         response = self.get_response(params=self.params)
         response.data.pop('created_at')
         response.data.pop('id')
@@ -179,12 +248,22 @@ class DelegateListCreateTestCase(tests.CreateAPITestCase):
             "school" : self.school.id,
             "name" : unicode(self.params['name']),
             "email" : unicode(self.params['email']),
-            "summary" : unicode(self.params['summary']),}
+            "summary" : unicode(self.params['summary']),
+            "session_one": False,
+            "session_two": False,
+            "session_three": False,
+            "session_four": False}
         )
+
+    def test_chair(self):
+        '''Chairs should not be able to create delegates'''
+        self.client.login(username='chair', password='chair')
+        response = self.get_response(params=self.params)
+        self.assertPermissionDenied(response)
 
     def test_other_advisor(self):
         '''Should not allow other advisor to create new delegates.'''
-        self.client.login(username='user2', password='user2')
+        self.client.login(username='advisor2', password='advisor2')
         response = self.get_response(params=self.params)
         self.assertPermissionDenied(response)
 
@@ -200,7 +279,11 @@ class DelegateListCreateTestCase(tests.CreateAPITestCase):
             "school" : self.school.id,
             "name" : unicode(self.params['name']),
             "email" : unicode(self.params['email']),
-            "summary" : unicode(self.params['summary']),}
+            "summary" : unicode(self.params['summary']),
+            "session_one": False,
+            "session_two": False,
+            "session_three": False,
+            "session_four": False}
         )
 
 
@@ -208,9 +291,11 @@ class DelegateListGetTestCase(tests.ListAPITestCase):
     url_name = 'api:delegate_list'
 
     def setUp(self):
-        self.user = models.new_user(username='regular', password='user')
-        self.school = models.new_school(user=self.user)
-        self.assignment1 = models.new_assignment(school=self.school)
+        self.advisor = models.new_user(username='advisor', password='advisor')
+        self.chair = models.new_user(username='chair', password='chair', user_type=User.TYPE_CHAIR)
+        self.school = models.new_school(user=self.advisor)
+        self.committee = models.new_committee(user=self.chair)
+        self.assignment1 = models.new_assignment(school=self.school, committee=self.committee)
         self.assignment2 = models.new_assignment(school=self.school)
         self.delegate1 = models.new_delegate(
             assignment=self.assignment1,
@@ -229,13 +314,23 @@ class DelegateListGetTestCase(tests.ListAPITestCase):
 
     def test_advisor(self):
         '''It returns the delegates for the school's advisor.'''
-        self.client.login(username='regular', password='user')
+        self.client.login(username='advisor', password='advisor')
 
         response = self.get_response()
         self.assertPermissionDenied(response)
 
         response = self.get_response(params={'school_id': self.school.id})
-        self.assert_delegate_equal(response)
+        self.assert_delegates_equal(response, [self.delegate1, self.delegate2])
+
+    def test_chair(self):
+        '''It returns the delegates associated with a chair's committee'''
+        self.client.login(username='chair', password='chair')
+
+        response = self.get_response()
+        self.assertPermissionDenied(response)
+
+        response = self.get_response(params={'committee_id': self.committee.id})
+        self.assert_delegates_equal(response, [self.delegate1])
 
     def test_other_user(self):
         '''It rejects a request from another user.'''
@@ -252,32 +347,26 @@ class DelegateListGetTestCase(tests.ListAPITestCase):
         self.client.login(username='test', password='user')
 
         response = self.get_response(params={'school_id': self.school.id})
-        self.assert_delegate_equal(response)
+        self.assert_delegates_equal(response, [self.delegate1, self.delegate2])
 
-    def assert_delegate_equal(self, response):
-        '''Assert that the response contains the delegates in order.'''
-        response.data[0].pop('created_at')
-        response.data[1].pop('created_at')
-        self.assertEqual(dict(response.data[0]),
-            {
-                'id': self.delegate1.id,
-                'assignment': self.assignment1.id,
-                'school': self.delegate1.school.id,
-                'name': unicode(self.delegate1.name),
-                'email': unicode(self.delegate1.email),
-                'summary': unicode(self.delegate1.summary),
-            },
-        )
-        self.assertEqual(dict(response.data[1]),
-            {
-                'id': self.delegate2.id,
-                'assignment': self.assignment2.id,
-                'school': self.delegate2.school.id,
-                'name': unicode(self.delegate2.name),
-                'email': unicode(self.delegate2.email),
-                'summary': unicode(self.delegate2.summary),
-            },
-        )
+    def assert_delegates_equal(self, response, delegates):
+        '''Assert the response contains each of the delegates'''
+        self.assertEqual(len(response.data), len(delegates))
+
+        for i in range(len(response.data)):
+            self.assertEqual(dict(response.data[i]), {
+            'id': delegates[i].id,
+            'assignment': delegates[i].assignment.id,
+            'school': delegates[i].school.id,
+            'name': unicode(delegates[i].name),
+            'email': unicode(delegates[i].email),
+            'summary': unicode(delegates[i].summary),
+            'created_at': delegates[i].created_at.isoformat(),
+            'session_one': delegates[i].session_one,
+            'session_two': delegates[i].session_two,
+            'session_three': delegates[i].session_three,
+            'session_four': delegates[i].session_four
+        })
 
 
 class DelegateListPartialUpdateTestCase(tests.PartialUpdateAPITestCase):
@@ -285,15 +374,18 @@ class DelegateListPartialUpdateTestCase(tests.PartialUpdateAPITestCase):
     is_resource = False
 
     def setUp(self):
-        self.user = models.new_user(username='regular', password='user')
-        self.user2 = models.new_user(username='user2', password='user2')
-        self.school = models.new_school(user=self.user)
-        self.school2 = models.new_school(user=self.user2)
+        self.advisor = models.new_user(username='advisor', password='advisor')
+        self.advisor2 = models.new_user(username='advisor2', password='advisor')
+        self.chair = models.new_user(username='chair', password='chair', user_type=User.TYPE_CHAIR)
+        self.school = models.new_school(user=self.advisor)
+        self.school2 = models.new_school(user=self.advisor2)
+        self.committee = models.new_committee(user=self.chair)
 
-        self.assignment1 = models.new_assignment(school=self.school)
+        self.assignment1 = models.new_assignment(school=self.school, committee=self.committee)
         self.assignment2 = models.new_assignment(school=self.school)
-        self.assignment3 = models.new_assignment(school=self.school2)
+        self.assignment3 = models.new_assignment(school=self.school2, committee=self.committee)
         self.new_assignment = models.new_assignment(school=self.school)
+        self.new_assignment2 = models.new_assignment(school=self.school2)
         self.faulty_assignment = models.new_assignment()
 
         self.delegate1 = models.new_delegate(
@@ -326,7 +418,7 @@ class DelegateListPartialUpdateTestCase(tests.PartialUpdateAPITestCase):
 
     def test_advisor(self):
         '''It updates the delegates for the school's advisor.'''
-        self.client.login(username='regular', password='user')
+        self.client.login(username='advisor', password='advisor')
 
         response = self.get_response()
         self.assertEqual(dict(response.data[0]),
@@ -337,7 +429,11 @@ class DelegateListPartialUpdateTestCase(tests.PartialUpdateAPITestCase):
                 'name': unicode(self.delegate1.name),
                 'email': unicode(self.delegate1.email),
                 'summary': unicode(self.delegate1.summary),
-                'created_at': self.delegate1.created_at.isoformat()
+                'created_at': self.delegate1.created_at.isoformat(),
+                "session_one": self.delegate1.session_one,
+                "session_two": self.delegate1.session_two,
+                "session_three": self.delegate1.session_three,
+                "session_four": self.delegate1.session_four
             },
         )
         self.assertEqual(dict(response.data[1]),
@@ -348,7 +444,11 @@ class DelegateListPartialUpdateTestCase(tests.PartialUpdateAPITestCase):
                 'name': unicode(self.delegate2.name),
                 'email': unicode(self.delegate2.email),
                 'summary': unicode(self.delegate2.summary),
-                'created_at': self.delegate2.created_at.isoformat()
+                'created_at': self.delegate2.created_at.isoformat(),
+                "session_one": self.delegate2.session_one,
+                "session_two": self.delegate2.session_two,
+                "session_three": self.delegate2.session_three,
+                "session_four": self.delegate2.session_four
             },
         )
 
@@ -357,7 +457,7 @@ class DelegateListPartialUpdateTestCase(tests.PartialUpdateAPITestCase):
         It doesn't update the delegates for the school's advisor if fields
         are invalid.
         '''
-        self.client.login(username='regular', password='user')
+        self.client.login(username='advisor', password='advisor')
         self.params = [
             {'id': self.delegate1.id, 'assignment': self.faulty_assignment.id},
             {'id': self.delegate2.id, 'assignment': self.new_assignment.id}
@@ -365,9 +465,62 @@ class DelegateListPartialUpdateTestCase(tests.PartialUpdateAPITestCase):
 
         self.assertRaises(ValidationError, self.get_response, self.school.id)
 
+    def test_chair(self):
+        '''It updates the delegates for the chair's committee'''
+        self.client.login(username='chair', password='chair')
+        self.params = [
+            {'id': self.delegate1.id, 'assignment': self.new_assignment.id},
+            {'id': self.delegate3.id, 'assignment': self.new_assignment2.id}
+        ]
+        response = self.get_response()
+
+        self.assertEqual(dict(response.data[0]),
+            {
+                'id': self.delegate1.id,
+                'assignment': self.params[0]['assignment'],
+                'school': self.delegate1.school.id,
+                'name': unicode(self.delegate1.name),
+                'email': unicode(self.delegate1.email),
+                'summary': unicode(self.delegate1.summary),
+                'created_at': self.delegate1.created_at.isoformat(),
+                "session_one": self.delegate1.session_one,
+                "session_two": self.delegate1.session_two,
+                "session_three": self.delegate1.session_three,
+                "session_four": self.delegate1.session_four
+            },
+        )
+        self.assertEqual(dict(response.data[1]),
+            {
+                'id': self.delegate3.id,
+                'assignment': self.params[1]['assignment'],
+                'school': self.delegate3.school.id,
+                'name': unicode(self.delegate3.name),
+                'email': unicode(self.delegate3.email),
+                'summary': unicode(self.delegate3.summary),
+                'created_at': self.delegate3.created_at.isoformat(),
+                "session_one": self.delegate3.session_one,
+                "session_two": self.delegate3.session_two,
+                "session_three": self.delegate3.session_three,
+                "session_four": self.delegate3.session_four
+            },
+        )
+
+    def test_chair_fail(self):
+        '''
+        It doesn't update the delegates for the committee's chair if fields
+        are invalid.
+        '''
+        self.client.login(username='chair', password='chair')
+        self.params = [
+            {'id': self.delegate1.id, 'assignment': self.faulty_assignment.id},
+            {'id': self.delegate3.id, 'assignment': self.new_assignment2.id}
+        ]
+
+        self.assertRaises(ValidationError, self.get_response, self.committee.id)
+
     def test_other_user(self):
         '''Should reject a partial update from another user.'''
-        self.client.login(username='user2', password='user2')
+        self.client.login(username='advisor2', password='advisor')
 
         self.params = [
             {'id': self.delegate1.id, 'assignment': self.new_assignment.id},
@@ -392,7 +545,11 @@ class DelegateListPartialUpdateTestCase(tests.PartialUpdateAPITestCase):
                 'name': unicode(self.delegate1.name),
                 'email': unicode(self.delegate1.email),
                 'summary': unicode(self.delegate1.summary),
-                'created_at': self.delegate1.created_at.isoformat()
+                'created_at': self.delegate1.created_at.isoformat(),
+                "session_one": self.delegate1.session_one,
+                "session_two": self.delegate1.session_two,
+                "session_three": self.delegate1.session_three,
+                "session_four": self.delegate1.session_four
             },
         )
         self.assertEqual(dict(response.data[1]),
@@ -403,7 +560,11 @@ class DelegateListPartialUpdateTestCase(tests.PartialUpdateAPITestCase):
                 'name': unicode(self.delegate2.name),
                 'email': unicode(self.delegate2.email),
                 'summary': unicode(self.delegate2.summary),
-                'created_at': self.delegate2.created_at.isoformat()
+                'created_at': self.delegate2.created_at.isoformat(),
+                "session_one": self.delegate2.session_one,
+                "session_two": self.delegate2.session_two,
+                "session_three": self.delegate2.session_three,
+                "session_four": self.delegate2.session_four
             },
         )
 
@@ -411,7 +572,8 @@ class DelegateListPartialUpdateTestCase(tests.PartialUpdateAPITestCase):
         '''
         It doesn't update the delegates for the superuser if fields are invalid.
         '''
-        self.client.login(username='regular', password='user')
+        models.new_superuser(username='test', password='user')
+        self.client.login(username='test', password='user')
         self.params = [
             {'id': self.delegate1.id, 'assignment': self.faulty_assignment.id},
             {'id': self.delegate2.id, 'assignment': self.new_assignment.id}
