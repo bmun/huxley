@@ -79,11 +79,8 @@ class AssignmentStore extends Store {
           _previousUserID = userID;
         }
         break;
-      case ActionConstants.COMMITTEE_ASSIGNMENTS_FETCHED:
-        _committeeAssignments[action.committeeID] = action.assignments;
-        for (const assignment of action.assignments) {
-          _assignments[assignment.id] = assignment;
-        }
+      case ActionConstants.LOGOUT:
+        _assignments = {};
         break;
       default:
         return;

@@ -79,7 +79,6 @@ class DelegateStore extends Store {
     for (const delegate of delegates) {
       _delegates[delegate.id] = delegate;
     }
-    _committeeDelegates[committeeID] = delegates;
   }
 
   __onDispatch(action) {
@@ -114,11 +113,8 @@ class DelegateStore extends Store {
       case ActionConstants.UPDATE_COMMITTEE_DELEGATES:
         this.updateCommitteeDelegates(action.committeeID, action.delegates);
         break;
-      case ActionConstants.COMMITTEE_DELEGATES_FETCHED:
-        _committeeDelegates[action.committeeID] = action.delegates;
-        for (const delegate of action.delegates) {
-          _delegates[delegate.id] = delegate;
-        }
+      case ActionConstants.LOGOUT:
+        _delegates = {};
         break;
       default:
         return;
