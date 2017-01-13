@@ -50,16 +50,15 @@ class AssignmentStore extends Store {
     _assignments[assignmentID] = assignment;
   }
 
-  getCommitteeAssignments(committeeID, callback) {
-    if (!_committeeAssignments[committeeID]) {
-      _committeeAssignments[committeeID] = ServerAPI.getCommitteeAssignments(committeeID);
+  getCommitteeAssignments(committeeID) {
+    if (_committeeAssignments[committeeID]) {
+      return _committeeAssignments[committeeID]; 
     }
+    ServerAPI.getCommitteeAssignments(committeeID).then(value => {
+      AssignmentActions.committeeAssignmentsFetched(committeeID, value);
+    });
 
-    if (callback) {
-      _committeeAssignments[committeeID].then(callback);
-    }
-
-    return _committeeAssignments[committeeID];
+    return [];
 
   }
 
@@ -78,6 +77,12 @@ class AssignmentStore extends Store {
         if(userID != _previousUserID) {
           _assignments = {};
           _previousUserID = userID;
+        }
+        break;
+      case ActionConstants.COMMITTEE_ASSIGNMENTS_FETCHED:
+        _committeeAssignments[action.committeeID] = action.assignments;
+        for (const assignment of action.assignments) {
+          _assignments[assignment.id] = assignment;
         }
         break;
       default:
