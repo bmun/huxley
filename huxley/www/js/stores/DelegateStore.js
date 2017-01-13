@@ -113,8 +113,12 @@ class DelegateStore extends Store {
       case ActionConstants.UPDATE_COMMITTEE_DELEGATES:
         this.updateCommitteeDelegates(action.committeeID, action.delegates);
         break;
-      case ActionConstants.LOGOUT:
-        _delegates = {};
+      case ActionConstants.LOGIN:
+        var userID = CurrentUserStore.getCurrentUser().id;
+        if(userID != _previousUserID) {
+          _delegates = {};
+          _previousUserID = userID;
+        }
         break;
       default:
         return;

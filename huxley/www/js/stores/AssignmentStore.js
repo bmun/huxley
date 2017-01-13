@@ -79,9 +79,12 @@ class AssignmentStore extends Store {
           _previousUserID = userID;
         }
         break;
-      case ActionConstants.LOGOUT:
-        _assignments = {};
-        break;
+      case ActionConstants.LOGIN:
+        var userID = CurrentUserStore.getCurrentUser().id;
+        if(userID != _previousUserID) {
+          _assignments = {};
+          _previousUserID = userID;
+        }
       default:
         return;
     }
