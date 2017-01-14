@@ -201,6 +201,7 @@ class DelegateDetailPatchTestCase(tests.PartialUpdateAPITestCase):
             "name" : unicode(self.params['name']),
             "email" : unicode(self.params['email']),
             "summary" : unicode(self.params['summary']),
+            "published_summary": unicode(self.params['published_summary']),
             "session_one": self.delegate.session_one,
             "session_two": self.delegate.session_two,
             "session_three": self.delegate.session_three,
