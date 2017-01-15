@@ -27,7 +27,7 @@ var AdvisorRosterView = React.createClass({
   getInitialState: function() {
     var schoolID = CurrentUserStore.getCurrentUser().school.id;
     return {
-      delegates: DelegateStore.getDelegates(schoolID),
+      delegates: DelegateStore.getSchoolDelegates(schoolID),
       loading: false,
       modal_open: false,
       modal_name: '',
@@ -45,7 +45,7 @@ var AdvisorRosterView = React.createClass({
     this._delegatesToken = DelegateStore.addListener(() => {
       var schoolID = CurrentUserStore.getCurrentUser().school.id;
       this.setState({
-        delegates: DelegateStore.getDelegates(schoolID),
+        delegates: DelegateStore.getSchoolDelegates(schoolID),
         modal_open: false,
         loading: false
       });
@@ -138,7 +138,9 @@ var AdvisorRosterView = React.createClass({
         <tr>
           <td>{delegate.name}</td>
           <td>{delegate.email}</td>
-          <td>{delegate.summary}</td>
+          <td style={{"width": "35%"}}>
+              {delegate.summary}
+          </td>
           <td>
             <Button
               color="blue"

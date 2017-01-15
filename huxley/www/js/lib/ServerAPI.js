@@ -37,14 +37,14 @@ var ServerAPI = {
    * Get a list of all assignments for the given school ID.
    */
   getCommitteeAssignments(committeeID) {
-    return _get(`/api/assignments/committee/${committeeID}`);
+    return _get('/api/assignments/', {committee_id: committeeID});
   },
 
   /**
    * Get a list of all delegates for the given committee ID.
    */
   getCommitteeDelegates(committeeID) {
-    return _get(`/api/delegates/committee/${committeeID}`);
+    return _get('/api/delegates/', {committee_id: committeeID});
   },
 
   /**
@@ -86,7 +86,7 @@ var ServerAPI = {
   },
 
   updateCommitteeDelegates(committeeID, delegates) {
-    return _patch(`/api/delegates/committee/${committeeID}`, delegates);
+    return _patch('/api/delegates', delegates);
   },
 
 };
