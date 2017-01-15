@@ -41,7 +41,7 @@ describe('AssignmentStore', () => {
   });
 
   it('requests the assignments on first call and caches locally', () => {
-    var assignments = AssignmentStore.getAssignments(mockSchoolID);
+    var assignments = AssignmentStore.getSchoolAssignments(mockSchoolID);
     expect(assignments.length).toEqual(0);
     expect(ServerAPI.getAssignments).toBeCalledWith(mockSchoolID);
 
@@ -51,7 +51,7 @@ describe('AssignmentStore', () => {
       assignments: mockAssignments
     });
 
-    assignments = AssignmentStore.getAssignments(mockSchoolID);
+    assignments = AssignmentStore.getSchoolAssignments(mockSchoolID);
     expect(assignments).toEqual(mockAssignments);
     expect(ServerAPI.getAssignments.mock.calls.length).toEqual(1);
   });
@@ -87,7 +87,7 @@ describe('AssignmentStore', () => {
     expect(callback).toBeCalled();
 
     expect(ServerAPI.updateAssignment).toBeCalled();
-    var assignments = AssignmentStore.getAssignments(mockSchoolID);
+    var assignments = AssignmentStore.getSchoolAssignments(mockSchoolID);
     expect(assignments[0]['rejected']).toBe(true);
   });
 });
