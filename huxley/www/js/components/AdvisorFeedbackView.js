@@ -19,7 +19,7 @@ var ServerAPI = require('lib/ServerAPI');
 var TextInput = require('components/TextInput');
 var _handleChange = require('utils/_handleChange');
 
-var AdvisorRosterView = React.createClass({
+var AdvisorFeedbackView = React.createClass({
   mixins: [
     ReactRouter.History,
   ],
@@ -71,6 +71,7 @@ var AdvisorRosterView = React.createClass({
                 <tr>
                   <th>Delegate</th>
                   <th>Email</th>
+                  <th>Summary</th>
                   <th>Edit</th>
                   <th>Delete</th>
                 </tr>
@@ -137,6 +138,9 @@ var AdvisorRosterView = React.createClass({
         <tr>
           <td>{delegate.name}</td>
           <td>{delegate.email}</td>
+          <td style={{"width": "35%"}}>
+              {delegate.summary}
+          </td>
           <td>
             <Button
               color="blue"
@@ -198,57 +202,6 @@ var AdvisorRosterView = React.createClass({
 
     return null;
   },
-
-  _handleDeleteDelegate: function(delegate) {
-    const confirmed = window.confirm(
-      `Are you sure you want to delete this delegate (${delegate.name})?`
-    );
-    if (confirmed) {
-      DelegateActions.deleteDelegate(delegate.id, this._handleDeleteError);
-    }
-  },
-
-  _handleAddDelegate: function(data) {
-    this.setState({loading: true});
-    var user = CurrentUserStore.getCurrentUser();
-    ServerAPI.createDelegate(
-      this.state.modal_name,
-      this.state.modal_email,
-      user.school.id
-    ).then(this._handleAddDelegateSuccess, this._handleError);
-    event.preventDefault();
-  },
-
-  _handleEditDelegate: function(delegate) {
-    var user = CurrentUserStore.getCurrentUser();
-    this.setState({loading: true});
-    var delta = {name: this.state.modal_name, email: this.state.modal_email};
-    DelegateActions.updateDelegate(delegate.id, delta, this._handleError);
-    event.preventDefault();
-  },
-
-  _handleAddDelegateSuccess: function(response) {
-    DelegateActions.addDelegate(response);
-    this.setState({
-      loading: false,
-      modal_open: false,
-    });
-  },
-
-  _handleDeleteError: function(response) {
-    alert(
-      `There was an issue processing your request. Please refresh you page and try again.`
-    );
-  },
-
-  _handleError: function(response) {
-    this.setState({
-      errors: response,
-      loading: false,
-      modal_open: true
-    });
-  }
-
 });
 
-module.exports = AdvisorRosterView;
+module.exports = AdvisorFeedbackView;
