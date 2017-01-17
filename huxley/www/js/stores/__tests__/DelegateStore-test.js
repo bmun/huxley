@@ -50,7 +50,6 @@ describe('DelegateStore', () => {
 
     registerCallback({
       actionType: ActionConstants.DELEGATES_FETCHED,
-      schoolID: mockSchoolID,
       delegates: mockDelegates
     });
 
@@ -65,7 +64,6 @@ describe('DelegateStore', () => {
     expect(callback).not.toBeCalled();
     registerCallback({
       actionType: ActionConstants.DELEGATES_FETCHED,
-      schoolID: mockSchoolID,
       delegates: mockDelegates
     });
     expect(callback).toBeCalled();
@@ -74,7 +72,6 @@ describe('DelegateStore', () => {
   it('adds a delegate and emits a change', () => {
     registerCallback({
       actionType: ActionConstants.DELEGATES_FETCHED,
-      schoolID: mockSchoolID,
       delegates: mockDelegates
     });
 
@@ -97,7 +94,6 @@ describe('DelegateStore', () => {
   it('deletes a delegate and emits a change', () => {
     registerCallback({
       actionType: ActionConstants.DELEGATES_FETCHED,
-      schoolID: mockSchoolID,
       delegates: mockDelegates
     });
 
@@ -120,7 +116,6 @@ describe('DelegateStore', () => {
   it('updates a delegate and emits a change', () => {
     registerCallback({
       actionType: ActionConstants.DELEGATES_FETCHED,
-      schoolID: mockSchoolID,
       delegates: mockDelegates
     });
 
@@ -145,7 +140,6 @@ describe('DelegateStore', () => {
   it('updates delegates in bulk and emits a change', () => {
     registerCallback({
       actionType: ActionConstants.DELEGATES_FETCHED,
-      schoolID: mockSchoolID,
       delegates: mockDelegates
     });
 

@@ -47,7 +47,6 @@ describe('AssignmentStore', () => {
 
     registerCallback({
       actionType: ActionConstants.ASSIGNMENTS_FETCHED,
-      schoolID: mockSchoolID,
       assignments: mockAssignments
     });
 
@@ -62,7 +61,6 @@ describe('AssignmentStore', () => {
     expect(callback).not.toBeCalled();
     registerCallback({
       actionType: ActionConstants.ASSIGNMENTS_FETCHED,
-      schoolID: mockSchoolID,
       assignments: mockAssignments
     });
     expect(callback).toBeCalled();
@@ -71,7 +69,6 @@ describe('AssignmentStore', () => {
   it('updates an assignment and emits a change', function() {
     registerCallback({
       actionType: ActionConstants.ASSIGNMENTS_FETCHED,
-      schoolID: mockSchoolID,
       assignments: mockAssignments
     });
 

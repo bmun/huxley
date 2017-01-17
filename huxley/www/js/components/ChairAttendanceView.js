@@ -42,7 +42,6 @@ var ChairAttendanceView = React.createClass({
 
   componentDidMount() {
     var user = CurrentUserStore.getCurrentUser();
-    this._mapAssignments();
     this._delegatesToken = DelegateStore.addListener(() => {
       this.setState({delegates: DelegateStore.getCommitteeDelegates(user.committee)});
       this._mapAssignments();
@@ -119,9 +118,9 @@ var ChairAttendanceView = React.createClass({
     var country_assignments = {};
     var delegates = this.state.delegates;
     var assignments = this.state.assignments;
-    if (!assignments.length || !delegates.length) return;
     for (var delegate of delegates) {
       var assignment = assignments.find(assignment => assignment.id == delegate.assignment);
+      if (!assignment) continue;
       var countryID = assignment.country;
       if (countryID in country_assignments) {
         country_assignments[countryID].push(delegate);
