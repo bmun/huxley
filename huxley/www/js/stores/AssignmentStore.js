@@ -66,6 +66,7 @@ class AssignmentStore extends Store {
           _assignments = {};
           _previousUserID = userID;
         }
+        break;
       default:
         return;
     }
