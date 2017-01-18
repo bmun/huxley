@@ -17,11 +17,12 @@ var AssignmentActions = {
     });
   },
 
-  updateAssignment(assignmentID, delta) {
+  updateAssignment(assignmentID, delta, onError) {
     Dispatcher.dispatch({
       actionType: ActionConstants.UPDATE_ASSIGNMENT,
       assignmentID: assignmentID,
       delta: delta,
+      onError: onError,
     });
   }
 };

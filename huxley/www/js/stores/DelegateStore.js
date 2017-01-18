@@ -48,8 +48,8 @@ class DelegateStore extends Store {
       _schoolsDelegates[delegate.school].map(d => d.id == delegate.id ? delegate : d);
   }
 
-  updateDelegates(schoolID, delegates) {
-    ServerAPI.updateSchoolDelegates(schoolID, delegates);
+  updateDelegates(schoolID, delegates, onError) {
+    ServerAPI.updateSchoolDelegates(schoolID, delegates).catch(onError);
     for (const delegate of delegates) {
       _delegates[delegate.id] = delegate;
     }
@@ -74,7 +74,7 @@ class DelegateStore extends Store {
         }
         break;
       case ActionConstants.UPDATE_DELEGATES:
-        this.updateDelegates(action.schoolID, action.delegates);
+        this.updateDelegates(action.schoolID, action.delegates, action.onError);
         break;
       default:
         return;
