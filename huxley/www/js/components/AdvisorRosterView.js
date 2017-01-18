@@ -138,9 +138,7 @@ var AdvisorRosterView = React.createClass({
         <tr>
           <td>{delegate.name}</td>
           <td>{delegate.email}</td>
-          <td style={{"width": "35%"}}>
-              {delegate.summary}
-          </td>
+          <td>{delegate.summary}</td>
           <td>
             <Button
               color="blue"
