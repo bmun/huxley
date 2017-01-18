@@ -238,7 +238,7 @@ var AdvisorRosterView = React.createClass({
   },
 
   _handleDeleteError: function(response) {
-    window.confirm(
+    alert(
       `There was an issue processing your request. Please refresh you page and try again.`
     );
   },

@@ -9,11 +9,11 @@ var ActionConstants = require('constants/ActionConstants');
 var Dispatcher = require('dispatcher/Dispatcher');
 
 var DelegateActions = {
-  deleteDelegate(delegateID, error) {
+  deleteDelegate(delegateID, onError) {
     Dispatcher.dispatch({
       actionType: ActionConstants.DELETE_DELEGATE,
       delegateID: delegateID,
-      error: error,
+      onError: onError,
     });
   },
 
@@ -24,12 +24,12 @@ var DelegateActions = {
     });
   },
 
-  updateDelegate(delegateID, delta, error) {
+  updateDelegate(delegateID, delta, onError) {
     Dispatcher.dispatch({
       actionType: ActionConstants.UPDATE_DELEGATE,
       delegateID: delegateID,
       delta: delta,
-      error: error,
+      onError: onError,
     });
   },
 

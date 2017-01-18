@@ -28,8 +28,8 @@ class DelegateStore extends Store {
     return [];
   }
 
-  deleteDelegate(delegateID, error) {
-    ServerAPI.deleteDelegate(delegateID).then(null, error);
+  deleteDelegate(delegateID, onError) {
+    ServerAPI.deleteDelegate(delegateID).catch(onError);
     var schoolID = _delegates[delegateID].school;
     delete _delegates[delegateID];
     _schoolsDelegates[schoolID] = _schoolsDelegates[schoolID].filter(d => d.id !== delegateID);
@@ -40,9 +40,9 @@ class DelegateStore extends Store {
     _schoolsDelegates[delegate.school] = [..._schoolsDelegates[delegate.school], delegate];
   }
 
-  updateDelegate(delegateID, delta, error) {
+  updateDelegate(delegateID, delta, onError) {
     const delegate = {..._delegates[delegateID], ...delta};
-    ServerAPI.updateDelegate(delegateID, delegate).then(null, error);
+    ServerAPI.updateDelegate(delegateID, delegate).catch(onError);
     _delegates[delegateID] = delegate;
     _schoolsDelegates[delegate.school] =
       _schoolsDelegates[delegate.school].map(d => d.id == delegate.id ? delegate : d);
@@ -59,13 +59,13 @@ class DelegateStore extends Store {
   __onDispatch(action) {
     switch (action.actionType) {
       case ActionConstants.DELETE_DELEGATE:
-        this.deleteDelegate(action.delegateID, action.error);
+        this.deleteDelegate(action.delegateID, action.onError);
         break;
       case ActionConstants.ADD_DELEGATE:
         this.addDelegate(action.delegate);
         break;
       case ActionConstants.UPDATE_DELEGATE:
-        this.updateDelegate(action.delegateID, action.delta, action.error);
+        this.updateDelegate(action.delegateID, action.delta, action.onError);
         break;
       case ActionConstants.DELEGATES_FETCHED:
         _schoolsDelegates[action.schoolID] = action.delegates;
