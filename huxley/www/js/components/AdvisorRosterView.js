@@ -71,7 +71,7 @@ var AdvisorRosterView = React.createClass({
                 <tr>
                   <th>Delegate</th>
                   <th>Email</th>
-                  <th>summary</th>
+                  <th>Summary</th>
                   <th>Edit</th>
                   <th>Delete</th>
                 </tr>
