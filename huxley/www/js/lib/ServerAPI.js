@@ -34,7 +34,7 @@ var ServerAPI = {
   },
 
   /**
-   * Get a list of all assignments for the given school ID.
+   * Get a list of all assignments for the given committee ID.
    */
   getCommitteeAssignments(committeeID) {
     return _get('/api/assignments/', {committee_id: committeeID});
