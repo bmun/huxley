@@ -34,6 +34,7 @@ describe('AssignmentStore', () => {
       {id: 2, school: mockSchoolID, rejected: false}
     ];
     ServerAPI.getAssignments.mockReturnValue(Promise.resolve(mockAssignments));
+    ServerAPI.updateAssignment.mockReturnValue(Promise.resolve({}));
   });
 
   it('subscribes to the dispatcher', () => {

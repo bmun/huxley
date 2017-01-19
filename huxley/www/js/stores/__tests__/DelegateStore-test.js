@@ -37,6 +37,7 @@ describe('DelegateStore', () => {
     ServerAPI.getDelegates.mockReturnValue(Promise.resolve(mockDelegates));
     ServerAPI.updateDelegate.mockReturnValue(Promise.resolve({}));
     ServerAPI.deleteDelegate.mockReturnValue(Promise.resolve({}));
+    ServerAPI.updateSchoolDelegates.mockReturnValue(Promise.resolve({}));
   });
 
   it('subscribes to the dispatcher', () => {
