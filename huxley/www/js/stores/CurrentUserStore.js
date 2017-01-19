@@ -45,12 +45,14 @@ class CurrentUserStore extends Store {
     };
   }
 
-  updateUser(userID, delta) {
+  updateUser(userID, delta, onSuccess, onError) {
     $.ajax({
       type: 'PATCH',
       url: '/api/users/' + userID,
       data: JSON.stringify(delta),
       contentType: 'application/json',
+      success: onSuccess,
+      error: onError
     });
 
     const user = {
@@ -79,7 +81,7 @@ class CurrentUserStore extends Store {
         this.updateSchool(action.schoolID, action.delta, action.onError);
         break;
       case ActionConstants.UPDATE_USER:
-        this.updateUser(action.userID, action.delta);
+        this.updateUser(action.userID, action.delta, action.onSuccess, action.onError);
         break;
       default:
         return;

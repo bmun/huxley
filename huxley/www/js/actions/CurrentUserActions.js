@@ -38,12 +38,14 @@ var CurrentUserActions = {
     });
   },
 
-  updateUser(userID, delta) {
+  updateUser(userID, delta, onSuccess, onError) {
     Dispatcher.dispatch({
       actionType: ActionConstants.UPDATE_USER,
       userID: userID,
       delta: delta,
-    })
+      onSuccess: onSuccess,
+      onError: onError,
+    });
   }
 };
 
