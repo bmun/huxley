@@ -66,7 +66,7 @@ class DelegateStore extends Store {
   }
 
   updateCommitteeDelegates(committeeID, delegates) {
-    ServerAPI.updateCommitteeDelegates(committeeID, delegates)
+    ServerAPI.updateCommitteeDelegates(committeeID, delegates);
     for (const delegate of delegates) {
       _delegates[delegate.id] = delegate;
     }

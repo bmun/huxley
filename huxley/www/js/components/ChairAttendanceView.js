@@ -78,10 +78,10 @@ var ChairAttendanceView = React.createClass({
               <thead>
                 <tr>
                   <th>Assignment</th>
-                  <th>Friday</th>
-                  <th>Saturday Morning</th>
-                  <th>Saturday Afternoon</th>
-                  <th>Sunday</th>
+                  <th>Session One</th>
+                  <th>Session Two</th>
+                  <th>Session Three</th>
+                  <th>Session Four</th>
                 </tr>
               </thead>
               <tbody>
@@ -128,6 +128,7 @@ var ChairAttendanceView = React.createClass({
         country_assignments[countryID] = [delegate];
       }
     }
+    
     this.setState({country_assignments: country_assignments});
   }, 
 
@@ -149,7 +150,6 @@ var ChairAttendanceView = React.createClass({
       delegates = delegates.concat(country_assignments[country]);
     }
     DelegateActions.updateCommitteeDelegates(committee, delegates);
-    window.alert("Attendance Saved.");
     event.preventDefault();
   },
 
