@@ -124,25 +124,25 @@ var RegistrationView = React.createClass({
             <hr />
             <h3>Account Information</h3>
             <RegistrationTextInput
-              error={this.state.errors['first_name']}
+              errors={this.state.errors['first_name']}
               placeholder="First Name"
               onChange={_handleChange.bind(this, 'first_name')}
               value={this.state.first_name}
             />
             <RegistrationTextInput
-              error={this.state.errors['last_name']}
+              errors={this.state.errors['last_name']}
               placeholder="Last Name"
               onChange={_handleChange.bind(this, 'last_name')}
               value={this.state.last_name}
             />
             <RegistrationTextInput
-              error={this.state.errors['username']}
+              errors={this.state.errors['username']}
               placeholder="Username"
               onChange={_handleChange.bind(this, 'username')}
               value={this.state.username}
             />
             <RegistrationTextInput
-              error={this.state.errors['password']}
+              errors={this.state.errors['password']}
               type="password"
               placeholder="Password"
               value={this.state.password}
@@ -151,7 +151,7 @@ var RegistrationView = React.createClass({
               onFocus={this._handlePasswordFocus}
             />
             <RegistrationTextInput
-              error={this._getPasswordConfirmError()}
+              errors={this._getPasswordConfirmError()}
               type="password"
               placeholder="Password (confirm)"
               value={this.state.password2}
@@ -184,44 +184,44 @@ var RegistrationView = React.createClass({
                 </label>
               </li>
             </ul>
-            <TextInput
+            <RegistrationTextInput
+              errors={this._getSchoolErrors('name')}
               placeholder="Official School Name"
               onChange={_handleChange.bind(this, 'school_name')}
               value={this.state.school_name}
             />
-            {this.renderSchoolError('name')}
-            <TextInput
+            <RegistrationTextInput
+              errors={this._getSchoolErrors('address')}
               placeholder="Street Address"
               value={this.state.school_address}
               onChange={_handleChange.bind(this, 'school_address')}
             />
-            {this.renderSchoolError('address')}
-            <TextInput
+            <RegistrationTextInput
+              errors={this._getSchoolErrors('city')}
               placeholder="City"
               onChange={_handleChange.bind(this, 'school_city')}
               value={this.state.school_city}
             />
-            {this.renderSchoolError('city')}
-            <TextInput
+            <RegistrationTextInput
+              errors={this._getSchoolErrors('state')}
               placeholder="State"
               onChange={_handleChange.bind(this, 'school_state')}
               value={this.state.school_state}
             />
-            {this.renderSchoolError('state')}
-            <TextInput
+            <RegistrationTextInput
+              errors={this._getSchoolErrors('zip_code')}
               placeholder="Zip"
               onChange={_handleChange.bind(this, 'school_zip')}
               value={this.state.school_zip}
             />
-            {this.renderSchoolError('zip_code')}
-            <TextInput
+            <RegistrationTextInput
+              errors={this._getSchoolErrors('country')}
               placeholder="Country"
               value={this._getSchoolCountry()}
               onChange={_handleChange.bind(this, 'school_country')}
               disabled={!this.state.school_international}
               isControlled={true}
             />
-            {this.renderSchoolError('country')}
             <hr />
             <h3>Program Information</h3>
             <p className="instructions">What category best describes your program?</p>
@@ -293,46 +293,46 @@ var RegistrationView = React.createClass({
             <hr />
             <h3>Primary Contact</h3>
             {this.renderContactGenderField('primary_gender')}
-            <TextInput
+            <RegistrationTextInput
+              errors={this._getSchoolErrors('primary_name')}
               placeholder="Name"
               onChange={_handleChange.bind(this, 'primary_name')}
               value={this.state.primary_name}
             />
-            {this.renderSchoolError('primary_name')}
-            <TextInput
+            <RegistrationTextInput
+              errors={this._getSchoolErrors('primary_email')}
               placeholder="Email"
               onChange={_handleChange.bind(this, 'primary_email')}
               value={this.state.primary_email}
             />
-            {this.renderSchoolError('primary_email')}
-            <PhoneInput
+            <RegistrationPhoneInput
+              errors={this._getSchoolErrors('primary_phone')}
               onChange={this._handlePrimaryPhoneChange}
               value={this.state.primary_phone}
               isInternational={this.state.school_international}
             />
-            {this.renderSchoolError('primary_phone')}
             {this.renderContactTypeField('primary_type')}
             <hr />
             <h3>Secondary Contact</h3>
             {this.renderContactGenderField('secondary_gender')}
-            <TextInput
+            <RegistrationTextInput
+              errors={this._getSchoolErrors('secondary_name')}
               placeholder="Name"
               onChange={_handleChange.bind(this, 'secondary_name')}
               value={this.state.secondary_name}
             />
-            {this.renderSchoolError('secondary_name')}
-            <TextInput
+            <RegistrationTextInput
+              errors={this._getSchoolErrors('secondary_email')}
               placeholder="Email"
               onChange={_handleChange.bind(this, 'secondary_email')}
               value={this.state.secondary_email}
             />
-            {this.renderSchoolError('secondary_email')}
-            <PhoneInput
+            <RegistrationPhoneInput
+              errors={this._getSchoolErrors('secondary_phone')}
               onChange={this._handleSecondaryPhoneChange}
               value={this.state.secondary_phone}
               isInternational={this.state.school_international}
             />
-            {this.renderSchoolError('secondary_phone')}
             {this.renderContactTypeField('secondary_type')}
             <hr />
             <h3>Country Preferences</h3>
@@ -454,7 +454,7 @@ var RegistrationView = React.createClass({
   renderContactGenderField: function(name) {
     return (
       <select
-        className="contact-select"
+        className="contact-select reg-field"
         onChange={_handleChange.bind(this, name)}
         value={this.state[name]}>
         <option
@@ -484,7 +484,7 @@ var RegistrationView = React.createClass({
   renderContactTypeField: function(name) {
     return (
       <select
-        className="contact-select"
+        className="contact-select reg-field"
         onChange={_handleChange.bind(this, name)}
         value={this.state[name]}>
         <option
@@ -533,7 +533,7 @@ var RegistrationView = React.createClass({
     return null;
   },
 
-  _getSchoolError(field) {
+  _getSchoolErrors(field) {
     if (this.state.errors.school) {
       return this.state.errors.school[field];
     }
@@ -691,7 +691,7 @@ var RegistrationView = React.createClass({
 
 const RegistrationTextInput = React.createClass({
   propTypes: {
-    error: React.PropTypes.string,
+    errors: React.PropTypes.arrayOf(React.PropTypes.string),
     onChange: React.PropTypes.func,
     placeholder: React.PropTypes.string,
     value: React.PropTypes.string,
@@ -699,11 +699,34 @@ const RegistrationTextInput = React.createClass({
   },
 
   render() {
-    const {error, ...inputProps} = this.props;
+    const {errors, ...inputProps} = this.props;
     return (
       <div className="reg-field">
         <TextInput {...inputProps} />
-        {error && <label className="hint error">{error}</label>}
+        {errors && errors.map(error =>
+          <label className="hint error">{error}</label>
+        )}
+      </div>
+    );
+  },
+});
+
+const RegistrationPhoneInput = React.createClass({
+  propTypes: {
+    errors: React.PropTypes.arrayOf(React.PropTypes.string),
+    onChange: React.PropTypes.func,
+    placeholder: React.PropTypes.string,
+    value: React.PropTypes.string,
+  },
+
+  render() {
+    const {errors, ...inputProps} = this.props;
+    return (
+      <div className="reg-field">
+        <PhoneInput {...inputProps} />
+        {errors && errors.map(error =>
+          <label className="hint error">{error}</label>
+        )}
       </div>
     );
   },
