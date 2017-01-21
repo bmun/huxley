@@ -3,7 +3,7 @@
 
 import csv
 
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 from django.contrib import admin
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
@@ -26,12 +26,10 @@ class CommitteeAdmin(admin.ModelAdmin):
         return HttpResponseRedirect(reverse('admin:core_committee_changelist'))
 
     def get_urls(self):
-        urls = super(CommitteeAdmin, self).get_urls()
-        urls += patterns('',
+        return super(CommitteeAdmin, self).get_urls() + [
             url(
                 r'load',
                 self.admin_site.admin_view(self.load),
                 name='core_committee_load'
             ),
-        )
-        return urls
+        ]

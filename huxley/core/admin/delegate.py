@@ -3,7 +3,7 @@
 
 import csv
 
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 from django.contrib import admin
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect
@@ -55,8 +55,7 @@ class DelegateAdmin(admin.ModelAdmin):
         return HttpResponseRedirect(reverse('admin:core_delegate_changelist'))
 
     def get_urls(self):
-        urls = super(DelegateAdmin, self).get_urls()
-        urls += patterns('',
+        return super(DelegateAdmin, self).get_urls() + [
             url(
                 r'roster',
                 self.admin_site.admin_view(self.roster),
@@ -67,5 +66,4 @@ class DelegateAdmin(admin.ModelAdmin):
                 self.admin_site.admin_view(self.load),
                 name='core_delegate_load',
             ),
-        )
-        return urls
+        ]

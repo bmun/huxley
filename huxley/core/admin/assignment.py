@@ -3,7 +3,7 @@
 
 import csv
 
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 from django.contrib import admin, messages
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect
@@ -81,10 +81,8 @@ class AssignmentAdmin(admin.ModelAdmin):
 
         return HttpResponseRedirect(reverse('admin:core_assignment_changelist'))
 
-
     def get_urls(self):
-        urls = super(AssignmentAdmin, self).get_urls()
-        urls += patterns('',
+        return super(AssignmentAdmin, self).get_urls() + [
             url(
                 r'list',
                 self.admin_site.admin_view(self.list),
@@ -95,5 +93,4 @@ class AssignmentAdmin(admin.ModelAdmin):
                 self.admin_site.admin_view(self.load),
                 name='core_assignment_load',
             ),
-        )
-        return urls
+        ]

@@ -3,7 +3,7 @@
 
 import csv
 
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 from django.contrib import admin
 from django.http import HttpResponse
 
@@ -133,13 +133,10 @@ class SchoolAdmin(admin.ModelAdmin):
         return schools
 
     def get_urls(self):
-        urls = super(SchoolAdmin, self).get_urls()
-        urls += patterns(
-            '',
+        return super(SchoolAdmin, self).get_urls() + [
             url(r'info',
                 self.admin_site.admin_view(self.info),
                 name='core_school_info', ),
             url(r'preferences',
                 self.admin_site.admin_view(self.preferences),
-                name='core_school_preferences'))
-        return urls
+                name='core_school_preferences')]
