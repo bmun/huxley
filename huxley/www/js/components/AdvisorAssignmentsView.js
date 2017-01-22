@@ -245,8 +245,8 @@ var AdvisorAssignmentsView = React.createClass({
   },
 
   _handleError: function(response) {
-    window.alert("Something went wrong. Please refresh your page and try again.");
     this.setState({loading: false});
+    window.alert("Something went wrong. Please refresh your page and try again.");
   },
 });
 
