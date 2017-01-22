@@ -357,7 +357,7 @@ var AdvisorProfileView = React.createClass({
         secondary_email: this.state.secondary_email.trim(),
         secondary_phone: this.state.secondary_phone.trim(),
       }
-    });
+    }, this._handleSuccess, this._handleError);
     event.preventDefault();
   },
 

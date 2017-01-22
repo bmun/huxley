@@ -36,8 +36,8 @@ class CurrentUserStore extends Store {
     return super.addListener(callback);
   }
 
-  updateSchool(schoolID, delta) {
-    ServerAPI.updateSchool(schoolID, delta);
+  updateSchool(schoolID, delta, onError) {
+    ServerAPI.updateSchool(schoolID, delta).catch(onError);
     const user = this._currentUser;
     this._currentUser = {
       ...user,
@@ -45,12 +45,14 @@ class CurrentUserStore extends Store {
     };
   }
 
-  updateUser(userID, delta) {
+  updateUser(userID, delta, onSuccess, onError) {
     $.ajax({
       type: 'PATCH',
       url: '/api/users/' + userID,
       data: JSON.stringify(delta),
       contentType: 'application/json',
+      success: onSuccess,
+      error: onError
     });
 
     const user = {
@@ -76,10 +78,10 @@ class CurrentUserStore extends Store {
         this._currentUser = {};
         break;
       case ActionConstants.UPDATE_SCHOOL:
-        this.updateSchool(action.schoolID, action.delta);
+        this.updateSchool(action.schoolID, action.delta, action.onError);
         break;
       case ActionConstants.UPDATE_USER:
-        this.updateUser(action.userID, action.delta);
+        this.updateUser(action.userID, action.delta, action.onSuccess, action.onError);
         break;
       default:
         return;

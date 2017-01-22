@@ -41,11 +41,12 @@ var DelegateActions = {
     });
   },
 
-  updateDelegates(schoolID, delegates) {
+  updateDelegates(schoolID, delegates, onError) {
     Dispatcher.dispatch({
       actionType: ActionConstants.UPDATE_DELEGATES,
       schoolID: schoolID,
-      delegates: delegates
+      delegates: delegates,
+      onError: onError,
     });
   }
 };

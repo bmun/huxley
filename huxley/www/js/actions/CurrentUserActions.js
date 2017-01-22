@@ -29,20 +29,23 @@ var CurrentUserActions = {
   },
 
 
-  updateSchool(schoolID, delta) {
+  updateSchool(schoolID, delta, onError) {
     Dispatcher.dispatch({
       actionType: ActionConstants.UPDATE_SCHOOL,
       schoolID: schoolID,
       delta: delta,
+      onError: onError,
     });
   },
 
-  updateUser(userID, delta) {
+  updateUser(userID, delta, onSuccess, onError) {
     Dispatcher.dispatch({
       actionType: ActionConstants.UPDATE_USER,
       userID: userID,
       delta: delta,
-    })
+      onSuccess: onSuccess,
+      onError: onError,
+    });
   }
 };
 

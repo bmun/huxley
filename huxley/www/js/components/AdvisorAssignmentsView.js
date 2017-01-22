@@ -226,7 +226,7 @@ var AdvisorAssignmentsView = React.createClass({
     if (confirm) {
       CurrentUserActions.updateSchool(school.id, {
         assignments_finalized: true,
-      });
+      }, this._handleError);
     }
   },
 
@@ -235,14 +235,19 @@ var AdvisorAssignmentsView = React.createClass({
     if (confirm) {
       AssignmentActions.updateAssignment(assignment.id, {
         rejected: true,
-      });
+      }, this._handleError);
     }
   },
 
   _handleSave: function(event) {
     var school = CurrentUserStore.getCurrentUser().school;
-    DelegateActions.updateDelegates(school.id, this.state.delegates);
-  }
+    DelegateActions.updateDelegates(school.id, this.state.delegates, this._handleError);
+  },
+
+  _handleError: function(response) {
+    this.setState({loading: false});
+    window.alert("Something went wrong. Please refresh your page and try again.");
+  },
 });
 
 module.exports = AdvisorAssignmentsView;

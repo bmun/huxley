@@ -28,9 +28,9 @@ class AssignmentStore extends Store {
     return [];
   }
 
-  updateAssignment(assignmentID, delta) {
+  updateAssignment(assignmentID, delta, onError) {
     const assignment = {..._assignments[assignmentID], ...delta};
-    ServerAPI.updateAssignment(assignmentID, assignment);
+    ServerAPI.updateAssignment(assignmentID, assignment).catch(onError);
     _assignments[assignmentID] = assignment;
     _schoolsAssignments[assignment.school] =
       _schoolsAssignments[assignment.school].map(a => a.id == assignment.id ? assignment : a);
@@ -45,7 +45,7 @@ class AssignmentStore extends Store {
         }
         break;
       case ActionConstants.UPDATE_ASSIGNMENT:
-        this.updateAssignment(action.assignmentID, action.delta);
+        this.updateAssignment(action.assignmentID, action.delta, action.onError);
         break;
       default:
         return;

@@ -31,6 +31,8 @@ describe('CurrentUserStore', function() {
     registerCallback({
       actionType: ActionConstants.BOOTSTRAP,
     });
+
+    ServerAPI.updateSchool.mockReturnValue(Promise.resolve({}));
   });
 
   it('correctly bootstraps the current user object', function() {
