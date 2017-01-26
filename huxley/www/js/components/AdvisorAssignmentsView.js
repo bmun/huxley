@@ -139,11 +139,12 @@ var AdvisorAssignmentsView = React.createClass({
           <td>{committees[assignment.committee].delegation_size}</td>
           <td>{finalized ?
             this.renderDelegateDropdown(assignment, 0) :
-            <Button color="red"
+            "Not available as of Jan. 23"
+            /*<Button color="red"
                     size="small"
                     onClick={this._handleAssignmentDelete.bind(this, assignment)}>
                     Delete Assignment
-            </Button>}
+            </Button>*/}
           </td>
           <td>{finalized && committees[assignment.committee].delegation_size == 2 ?
             this.renderDelegateDropdown(assignment, 1) :
