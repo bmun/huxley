@@ -408,6 +408,7 @@ class Delegate(models.Model):
     email = models.EmailField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     summary = models.TextField(default='', blank=True, null=True)
+    published_summary = models.TextField(default='', blank=True, null=True)
 
     session_one = models.BooleanField(default=False)
     session_two = models.BooleanField(default=False)
