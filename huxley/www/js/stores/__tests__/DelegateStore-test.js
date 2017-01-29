@@ -45,17 +45,16 @@ describe('DelegateStore', () => {
   });
 
   it('requests the delegates on first call and caches locally', () => {
-    var delegates = DelegateStore.getDelegates(mockSchoolID);
+    var delegates = DelegateStore.getSchoolDelegates(mockSchoolID);
     expect(delegates.length).toEqual(0);
     expect(ServerAPI.getDelegates).toBeCalledWith(mockSchoolID);
 
     registerCallback({
       actionType: ActionConstants.DELEGATES_FETCHED,
-      schoolID: mockSchoolID,
       delegates: mockDelegates
     });
 
-    delegates = DelegateStore.getDelegates(mockSchoolID);
+    delegates = DelegateStore.getSchoolDelegates(mockSchoolID);
     expect(delegates).toEqual(mockDelegates);
     expect(ServerAPI.getDelegates.mock.calls.length).toEqual(1);
   });
@@ -66,7 +65,6 @@ describe('DelegateStore', () => {
     expect(callback).not.toBeCalled();
     registerCallback({
       actionType: ActionConstants.DELEGATES_FETCHED,
-      schoolID: mockSchoolID,
       delegates: mockDelegates
     });
     expect(callback).toBeCalled();
@@ -75,7 +73,6 @@ describe('DelegateStore', () => {
   it('adds a delegate and emits a change', () => {
     registerCallback({
       actionType: ActionConstants.DELEGATES_FETCHED,
-      schoolID: mockSchoolID,
       delegates: mockDelegates
     });
 
@@ -90,7 +87,7 @@ describe('DelegateStore', () => {
     });
     expect(callback).toBeCalled();
 
-    var delegates = DelegateStore.getDelegates(mockSchoolID);
+    var delegates = DelegateStore.getSchoolDelegates(mockSchoolID);
     expect(delegates.length).toEqual(3);
     expect(new_delegate).toEqual(delegates[2]);
   });
@@ -98,7 +95,6 @@ describe('DelegateStore', () => {
   it('deletes a delegate and emits a change', () => {
     registerCallback({
       actionType: ActionConstants.DELEGATES_FETCHED,
-      schoolID: mockSchoolID,
       delegates: mockDelegates
     });
 
@@ -113,7 +109,7 @@ describe('DelegateStore', () => {
     expect(callback).toBeCalled();
     expect(ServerAPI.deleteDelegate).toBeCalledWith(1);
 
-    var delegates = DelegateStore.getDelegates(mockSchoolID);
+    var delegates = DelegateStore.getSchoolDelegates(mockSchoolID);
     expect(delegates.length).toEqual(1);
     expect(delegates[0]).toEqual(nate);
   });
@@ -121,7 +117,6 @@ describe('DelegateStore', () => {
   it('updates a delegate and emits a change', () => {
     registerCallback({
       actionType: ActionConstants.DELEGATES_FETCHED,
-      schoolID: mockSchoolID,
       delegates: mockDelegates
     });
 
@@ -137,7 +132,7 @@ describe('DelegateStore', () => {
     });
     expect(callback).toBeCalled();
 
-    var updated_jake = DelegateStore.getDelegates(mockSchoolID)[0];
+    var updated_jake = DelegateStore.getSchoolDelegates(mockSchoolID)[0];
     expect(ServerAPI.updateDelegate).toBeCalledWith(1, updated_jake);
     expect(updated_jake.name).toEqual(delta.name);
     expect(updated_jake.email).toEqual(delta.email);
@@ -146,7 +141,6 @@ describe('DelegateStore', () => {
   it('updates delegates in bulk and emits a change', () => {
     registerCallback({
       actionType: ActionConstants.DELEGATES_FETCHED,
-      schoolID: mockSchoolID,
       delegates: mockDelegates
     });
 
@@ -167,7 +161,7 @@ describe('DelegateStore', () => {
       [updated_jake, udpated_nate]
     );
 
-    var updated_delegates = DelegateStore.getDelegates(mockSchoolID);
+    var updated_delegates = DelegateStore.getSchoolDelegates(mockSchoolID);
     expect(updated_delegates.length).toEqual(2);
     expect(updated_jake).toEqual(updated_delegates[0]);
     expect(udpated_nate).toEqual(updated_delegates[1]);

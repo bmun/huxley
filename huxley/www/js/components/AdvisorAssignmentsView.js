@@ -33,11 +33,11 @@ var AdvisorAssignmentsView = React.createClass({
 
   getInitialState: function() {
     var schoolID = CurrentUserStore.getCurrentUser().school.id;
-    var delegates = DelegateStore.getDelegates(schoolID);
+    var delegates = DelegateStore.getSchoolDelegates(schoolID);
     var assigned = this.prepareAssignedDelegates(delegates);
     return {
       assigned: assigned,
-      assignments: AssignmentStore.getAssignments(schoolID).filter(assignment => !assignment.rejected),
+      assignments: AssignmentStore.getSchoolAssignments(schoolID).filter(assignment => !assignment.rejected),
       committees: CommitteeStore.getCommittees(),
       countries: CountryStore.getCountries(),
       delegates: delegates,
@@ -56,7 +56,7 @@ var AdvisorAssignmentsView = React.createClass({
 
     this._delegatesToken = DelegateStore.addListener(() => {
       var schoolID = CurrentUserStore.getCurrentUser().school.id;
-      var delegates = DelegateStore.getDelegates(schoolID);
+      var delegates = DelegateStore.getSchoolDelegates(schoolID);
       var assigned = this.prepareAssignedDelegates(delegates);
       this.setState({
         delegates: delegates,
@@ -67,7 +67,7 @@ var AdvisorAssignmentsView = React.createClass({
     this._assignmentsToken = AssignmentStore.addListener(() => {
       var schoolID = CurrentUserStore.getCurrentUser().school.id;
       this.setState({
-        assignments: AssignmentStore.getAssignments(schoolID).filter(assignment => !assignment.rejected)
+        assignments: AssignmentStore.getSchoolAssignments(schoolID).filter(assignment => !assignment.rejected)
       });
     });
   },
