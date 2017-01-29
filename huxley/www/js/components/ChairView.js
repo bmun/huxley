@@ -19,6 +19,9 @@ var ChairView = React.createClass({
           <NavTab href="/chair/attendance">
             Attendance
           </NavTab>
+          <NavTab href="/chair/summary">
+            Summaries
+          </NavTab>
         </div>
         {this.props.children}
       </div>

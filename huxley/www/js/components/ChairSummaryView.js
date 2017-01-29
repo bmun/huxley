@@ -163,7 +163,6 @@ var ChairSummaryView = React.createClass({
       delegates = delegates.concat(country_assignments[country]);
     }
     DelegateActions.updateCommitteeDelegates(committee, delegates);
-    window.alert("Summaries Saved.");
   },
 
   _handlePublishSummaries(event) {
@@ -178,7 +177,6 @@ var ChairSummaryView = React.createClass({
 
       delegates.forEach(delegate => delegate.published_summary = delegate.summary);
       DelegateActions.updateCommitteeDelegates(committee, delegates);
-      window.alert("Summaries Published.");
     }
   },
 
