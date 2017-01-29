@@ -115,7 +115,7 @@ var AdvisorFeedbackView = React.createClass({
       return (
         <tr>
           <td>{committees[assignment.committee].name}</td>
-          <td>{countries[assignment.country].name}</td>
+          <td>{this.renderDelegateDropdown(assignment, 0)}</td>
           <td>{committees[assignment.committee].delegation_size}</td>
           <td>{finalized ?
             this.renderDelegateDropdown(assignment, 0) :
@@ -153,6 +153,23 @@ var AdvisorFeedbackView = React.createClass({
     );
   },
 
+  prepareAssignedDelegates: function(delegates) {
+    var assigned = {};
+    for (var i = 0; i < delegates.length; i++) {
+      if (delegates[i].assignment) {
+        if (delegates[i].assignment in assigned) {
+          assigned[delegates[i].assignment][1] = delegates[i].id;
+        } else {
+          var slots = [0, 0];
+          slots[0] = delegates[i].id;
+          assigned[delegates[i].assignment] = slots;
+        }
+      }
+    }
+
+    return assigned;
+  },
+
   _handleMapAssignments() {
     var user = CurrentUserStore.getCurrentUser();
     var committee_assignments = {};
@@ -168,6 +185,8 @@ var AdvisorFeedbackView = React.createClass({
         committee_assignments[committeeID] = [delegate];
       }
     }
+
+
     this.setState({committee_assignments: committee_assignments});
   }, 
 
@@ -223,6 +242,8 @@ var AdvisorFeedbackView = React.createClass({
     var school = CurrentUserStore.getCurrentUser().school;
     DelegateActions.updateDelegates(school.id, this.state.delegates);
   }
+
+  _
 });
 
 module.exports = AdvisorFeedbackView;
