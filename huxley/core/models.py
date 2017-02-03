@@ -419,11 +419,17 @@ class Delegate(models.Model):
 
     @property
     def country(self):
-        return self.assignment.country
+        if self.assignment:
+            return self.assignment.country
+
+        return None
 
     @property
     def committee(self):
-        return self.assignment.committee
+        if self.assignment:
+            return self.assignment.committee
+
+        return None
 
     def save(self, *args, **kwargs):
         if (self.assignment_id and self.school_id and
