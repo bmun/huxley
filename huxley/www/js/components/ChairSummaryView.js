@@ -41,15 +41,15 @@ var ChairSummaryView = React.createClass({
 
   componentDidMount() {
     var user = CurrentUserStore.getCurrentUser();
-    this._handleMapAssignments();
+    this._mapAssignments();
     this._delegatesToken = DelegateStore.addListener(() => {
       this.setState({delegates: DelegateStore.getCommitteeDelegates(user.committee)});
-      this._handleMapAssignments();
+      this._mapAssignments();
     });
 
     this._assignmentsToken = AssignmentStore.addListener(() => {
       this.setState({assignments: AssignmentStore.getCommitteeAssignments(user.committee)});
-      this._handleMapAssignments();
+      this._mapAssignments();
     });
 
     this._countriesToken = CountryStore.addListener(() => {
@@ -68,8 +68,17 @@ var ChairSummaryView = React.createClass({
       <InnerView>
         <h2>Summaries</h2>
         <p>
-          Here you can provide feedback for the delegates. Note that publishing
-          the summaries will allow advisors to view them.
+          Here you can provide feedback for the delegates. You can save any 
+          changes with the "Save" button and they will not become visible to 
+          advisors until you next publish. Please note that clicking the 
+          "Publish" button will allow advisors to read the summaries you have 
+          written for their delegates. 
+        </p>
+        <p>
+          <strong>
+            Only one chair at a time should be logged in. Changes may be lost 
+            otherwise.
+          </strong>
         </p>
         <form>
           <div className="table-container">
@@ -85,17 +94,21 @@ var ChairSummaryView = React.createClass({
               </tbody>
             </table>
           </div>
-          <Button
-            color="green"
-            onClick={this._handleSaveSummaries}>
-            Save
-          </Button>
-          <Button
-            color="blue"
-            onClick={this._handlePublishSummaries}>
-            Publish
-          </Button>
         </form>
+        <div className="foot-bar" >
+          <ul className="right">
+            <Button
+              color="green"
+              onClick={this._handleSaveSummaries}>
+              Save
+            </Button>
+            <Button
+              color="blue"
+              onClick={this._handlePublishSummaries}>
+              Publish
+            </Button>
+          </ul>
+        </div>
       </InnerView>
     );
   },
@@ -134,7 +147,7 @@ var ChairSummaryView = React.createClass({
     this.setState({country_assignments: country_assignments});
   },
 
-  _handleMapAssignments() {
+  _mapAssignments() {
     var user = CurrentUserStore.getCurrentUser();
     var country_assignments = {};
     var delegates = this.state.delegates;
@@ -153,7 +166,7 @@ var ChairSummaryView = React.createClass({
     }
 
     this.setState({country_assignments: country_assignments});
-  }, 
+  },
 
   _handleSaveSummaries(event) {
     var committee = CurrentUserStore.getCurrentUser().committee;
@@ -166,7 +179,14 @@ var ChairSummaryView = React.createClass({
   },
 
   _handlePublishSummaries(event) {
-    var confirm = window.confirm("Advisors will be able to see everything you have entered. Do you wish to continue?");
+    var confirm = window.confirm("By pressing ok, you are allowing advisors " +
+                                 "to read the summaries that you have written " +
+                                 "about their delegations. Please ensure " +
+                                 "there are no inappropriate comments or " +
+                                 "language in any of these summaries. If " +
+                                 "there is none and you are ready to publish " +
+                                 "your summaries to advisors, press 'ok' to " +
+                                 "continue.");
     if (confirm) {
       var committee = CurrentUserStore.getCurrentUser().committee;
       var country_assignments = this.state.country_assignments;

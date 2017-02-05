@@ -5,9 +5,6 @@
 
 'use strict';
 
-// Only necessary until ES2017 becomes standard
-require("babel-polyfill");
-
 var $ = require('jquery');
 var cx = require('classnames');
 var React = require('react');

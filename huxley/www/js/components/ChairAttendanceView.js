@@ -42,6 +42,7 @@ var ChairAttendanceView = React.createClass({
 
   componentDidMount() {
     var user = CurrentUserStore.getCurrentUser();
+    this._mapAssignments();
     this._delegatesToken = DelegateStore.addListener(() => {
       this.setState({delegates: DelegateStore.getCommitteeDelegates(user.committee)});
       this._mapAssignments();
@@ -72,6 +73,12 @@ var ChairAttendanceView = React.createClass({
           attendance will alert the advisor as to if their delegates have 
           shown up to committee.
         </p>
+        <p>
+          <strong>
+            Only one chair at a time should be logged in. Changes may be lost 
+            otherwise.
+          </strong>
+        </p>
         <form>
           <div className="table-container">
             <table className="table highlight-cells">
@@ -89,12 +96,16 @@ var ChairAttendanceView = React.createClass({
               </tbody>
             </table>
           </div>
-          <Button
-            color="green"
-            onClick={this._handleSaveAttendance}>
-            Confirm Attendance
-          </Button>
         </form>
+        <div className="foot-bar">
+          <ul className="right">
+            <Button
+              color="green"
+              onClick={this._handleSaveAttendance}>
+              Confirm Attendance
+            </Button>
+          </ul>
+        </div>
       </InnerView>
     );
   },

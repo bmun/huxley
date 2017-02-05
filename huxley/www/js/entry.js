@@ -6,6 +6,7 @@
 'use strict';
 
 require('core-js/es6');
+require('core-js/es7');
 
 var React = require('react');
 var ReactDOM = require('react-dom')
