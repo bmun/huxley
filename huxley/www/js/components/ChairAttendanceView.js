@@ -80,7 +80,7 @@ var ChairAttendanceView = React.createClass({
           </strong>
         </p>
         <form>
-          <div className="table-container">
+          <div className="table-container" style={{'overflowY': 'auto', 'maxHeight': '50vh'}}>
             <table className="table highlight-cells">
               <thead>
                 <tr>
@@ -96,16 +96,12 @@ var ChairAttendanceView = React.createClass({
               </tbody>
             </table>
           </div>
+          <Button
+            color="green"
+            onClick={this._handleSaveAttendance}>
+            Confirm Attendance
+          </Button>
         </form>
-        <div className="foot-bar">
-          <ul className="right">
-            <Button
-              color="green"
-              onClick={this._handleSaveAttendance}>
-              Confirm Attendance
-            </Button>
-          </ul>
-        </div>
       </InnerView>
     );
   },

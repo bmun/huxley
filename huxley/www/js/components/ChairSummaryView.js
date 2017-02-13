@@ -27,8 +27,8 @@ var ChairSummaryView = React.createClass({
     return {
       assignments: AssignmentStore.getCommitteeAssignments(user.committee),
       countries: CountryStore.getCountries(),
-      country_assignments: {},
       delegates: DelegateStore.getCommitteeDelegates(user.committee),
+      summaries: {},
     };
   },
 
@@ -41,20 +41,32 @@ var ChairSummaryView = React.createClass({
 
   componentDidMount() {
     var user = CurrentUserStore.getCurrentUser();
-    this._mapAssignments();
+    var delegates =  this.state.delegates;
+    var summaries = this.state.summaries;
+    for (var delegate of delegates) {
+      summaries[delegate.assignment] = delegate.summary;
+    }
+
     this._delegatesToken = DelegateStore.addListener(() => {
-      this.setState({delegates: DelegateStore.getCommitteeDelegates(user.committee)});
-      this._mapAssignments();
+      var delegates =  DelegateStore.getCommitteeDelegates(user.committee);
+      for (var delegate of delegates) {
+        summaries[delegate.assignment] = delegate.summary;
+      }
+      this.setState({
+        delegates: delegates,
+        summaries: summaries,
+      });
     });
 
     this._assignmentsToken = AssignmentStore.addListener(() => {
       this.setState({assignments: AssignmentStore.getCommitteeAssignments(user.committee)});
-      this._mapAssignments();
     });
 
     this._countriesToken = CountryStore.addListener(() => {
       this.setState({countries: CountryStore.getCountries()});
     });
+
+    this.setState({summaries: summaries});
   },
 
   componentWillUnmount() {
@@ -81,7 +93,8 @@ var ChairSummaryView = React.createClass({
           </strong>
         </p>
         <form>
-          <div className="table-container">
+          <div className="table-container"
+            style={{'overflowY': 'auto', 'maxHeight': '50vh'}}>
             <table className="table highlight-cells">
               <thead>
                 <tr>
@@ -90,46 +103,49 @@ var ChairSummaryView = React.createClass({
                 </tr>
               </thead>
               <tbody>
-                {this.renderSummaryRows()}
+                {
+                  Object.keys(this.state.countries).length > 0 ?
+                  this.renderSummaryRows() :
+                  <tr></tr>
+                }
               </tbody>
             </table>
           </div>
+          <Button
+            color="green"
+            onClick={this._handleSaveSummaries}>
+            Save
+          </Button>
+          <Button
+            color="blue"
+            onClick={this._handlePublishSummaries}>
+            Publish
+          </Button>
         </form>
-        <div className="foot-bar" >
-          <ul className="right">
-            <Button
-              color="green"
-              onClick={this._handleSaveSummaries}>
-              Save
-            </Button>
-            <Button
-              color="blue"
-              onClick={this._handlePublishSummaries}>
-              Publish
-            </Button>
-          </ul>
-        </div>
+
       </InnerView>
     );
   },
 
   renderSummaryRows() {
-    var committeeCountries = Object.keys(this.state.country_assignments);
+    var assignments = this.state.assignments;
+    var summaries = this.state.summaries;
+    var assignmentIDs = Object.keys(summaries);
     var countries = this.state.countries;
-    return committeeCountries.map(country => {
-      var country_delegates = this.state.country_assignments[country];
+    assignments = assignments.filter(a => assignmentIDs.indexOf(""+a.id) > -1);
+    return assignments.map(assignment => {
       return (
-        <tr key={country}>
+        <tr key={countries[assignment.country].id}>
           <td>
-            {Object.keys(countries).length ? countries[country].name : country}
+            {countries[assignment.country].name}
           </td>
           <td>
             <textarea
               className="text-input"
               style={{"width": "95%"}}
               rows="3"
-              onChange={this._handleSummaryChange.bind(this, country)}
-              defaultValue={country_delegates[0].summary}
+              onChange={this._handleSummaryChange.bind(this, assignment)}
+              defaultValue={summaries[assignment.id]}
             />
           </td>
         </tr>
@@ -137,43 +153,19 @@ var ChairSummaryView = React.createClass({
     });
   },
 
-  _handleSummaryChange(country, event) {
+  _handleSummaryChange(assignment, event) {
     var newSummary = event.target.value;
-    var country_assignments = this.state.country_assignments;
-    var country_delegates = country_assignments[country];
-    for (var delegate of country_delegates) {
-      delegate.summary = newSummary;
-    }
-    this.setState({country_assignments: country_assignments});
-  },
-
-  _mapAssignments() {
-    var user = CurrentUserStore.getCurrentUser();
-    var country_assignments = {};
-    var delegates = this.state.delegates;
-    var assignments = this.state.assignments;
-    for (var delegate of delegates) {
-      var assignment = assignments.find(assignment => assignment.id == delegate.assignment);
-      if (!assignment) continue;
-
-      var countryID = assignment.country;
-      if (countryID in country_assignments) {
-        country_assignments[countryID].push(delegate);
-        continue;
-      }
-      
-      country_assignments[countryID] = [delegate];
-    }
-
-    this.setState({country_assignments: country_assignments});
+    var summaries = this.state.summaries;
+    summaries[assignment.id] = newSummary;
+    this.setState({summaries: summaries});
   },
 
   _handleSaveSummaries(event) {
     var committee = CurrentUserStore.getCurrentUser().committee;
-    var country_assignments = this.state.country_assignments;
-    var delegates = [];
-    for (var country in country_assignments) {
-      delegates = delegates.concat(country_assignments[country]);
+    var delegates = this.state.delegates;
+    var summaries = this.state.summaries;
+    for (var delegate of delegates) {
+      delegate.summary = summaries[delegate.assignment];
     }
     DelegateActions.updateCommitteeDelegates(committee, delegates);
   },
@@ -189,12 +181,7 @@ var ChairSummaryView = React.createClass({
                                  "continue.");
     if (confirm) {
       var committee = CurrentUserStore.getCurrentUser().committee;
-      var country_assignments = this.state.country_assignments;
-      var delegates = [];
-      for (var country in country_assignments) {
-        delegates = delegates.concat(country_assignments[country]);
-      }
-
+      var delegates = this.state.delegates;
       delegates.forEach(delegate => delegate.published_summary = delegate.summary);
       DelegateActions.updateCommitteeDelegates(committee, delegates);
     }
