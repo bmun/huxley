@@ -41,7 +41,6 @@ var AdvisorFeedbackView = React.createClass({
       committees: CommitteeStore.getCommittees(),
       countries: CountryStore.getCountries(),
       delegates: delegates,
-      committee_assignments: {},
       loading: false
     };
   },
@@ -94,7 +93,10 @@ var AdvisorFeedbackView = React.createClass({
                 <tr>
                   <th>Committee</th>
                   <th>Delegates</th>
-                  <th>Attendance</th>
+                  <th>Session1</th>
+                  <th>Session2</th>
+                  <th>Session3</th>
+                  <th>Session4</th>
                   <th>Summary</th>
                 </tr>
               </thead>
@@ -111,27 +113,107 @@ var AdvisorFeedbackView = React.createClass({
   renderAssignmentRows: function() {
     var committees = this.state.committees;
     var countries = this.state.countries;
+    var assigned = this.state.assigned;
     return this.state.assignments.map(function(assignment) {
+      var delegates = assigned[assignment.id];
       return (
         <tr>
           <td>{committees[assignment.committee].name}</td>
-          <td>{this.renderDelegateDropdown(assignment, 0)}</td>
-          <td>{committees[assignment.committee].delegation_size}</td>
-          <td>{finalized ?
-            this.renderDelegateDropdown(assignment, 0) :
-            <Button color="red"
-                    size="small"
-                    onClick={this._handleAssignmentDelete.bind(this, assignment)}>
-                    Delete Assignment
-            </Button>}
-          </td>
-          <td>{committees[assignment.committee].delegation_size == 2 ?
-            this.renderDelegateDropdown(assignment, 1) :
-            <div/>}
-          </td>
+          <td>{delegates[1] == 0 ?
+            delegates[0] :
+            delegates[0] + ', ' + delegates[1]
+          }</td>
+          <td>
+          <label name="session">
+            <input
+              className="choice"
+              type="checkbox"
+              checked={delegates[0].session_one}
+              disabled
+            />
+          </label>
+        </td>
+        <td>
+          <label name="session">
+            <input
+              className="choice"
+              type="checkbox"
+              checked={delegates[0].session_two}
+              disabled
+            />
+          </label>
+        </td>
+        <td>
+          <label name="session">
+            <input
+              className="choice"
+              type="checkbox"
+              checked={delegates[0].session_three}
+              disabled
+            />
+          </label>
+        </td>
+        <td>
+          <label name="session">
+            <input
+              className="choice"
+              type="checkbox"
+              checked={delegates[0].session_four}
+              disabled
+            />
+          </label>
+        </td>
+        <td>{delegates[0].summary}</td>
         </tr>
       )
     }.bind(this));
+  },
+
+  renderAttendanceRows: function(delegate) {
+    return (
+      <tr>
+        <td>
+          <label name="session">
+            <input
+              className="choice"
+              type="checkbox"
+              checked={delegate.session_one}
+              disabled
+            />
+          </label>
+        </td>
+        <td>
+          <label name="session">
+            <input
+              className="choice"
+              type="checkbox"
+              checked={delegate.session_two}
+              disabled
+            />
+          </label>
+        </td>
+        <td>
+          <label name="session">
+            <input
+              className="choice"
+              type="checkbox"
+              checked={delegate.session_three}
+              disabled
+            />
+          </label>
+        </td>
+        <td>
+          <label name="session">
+            <input
+              className="choice"
+              type="checkbox"
+              checked={delegate.session_four}
+              disabled
+            />
+          </label>
+        </td>
+      </tr>
+    );
   },
 
   /*
@@ -141,6 +223,23 @@ var AdvisorFeedbackView = React.createClass({
     to be assigned to it. This way we can easily manage the relationship from
     assignment to delegates via this object.
   */
+
+  prepareAssignedDelegates: function(delegates) {
+    var assigned = {};
+    for (var i = 0; i < delegates.length; i++) {
+      if (delegates[i].assignment) {
+        if (delegates[i].assignment in assigned) {
+          assigned[delegates[i].assignment][1] = delegates[i].name;
+        } else {
+          var slots = [0, 0];
+          slots[0] = delegates[i].name;
+          assigned[delegates[i].assignment] = slots;
+        }
+      }
+    }
+
+    return assigned;
+  },
 
   renderDelegateDropdown: function(assignment, slot) {
     var selectedDelegateID = assignment.id in this.state.assigned ? this.state.assigned[assignment.id][slot] : 0;
@@ -153,45 +252,10 @@ var AdvisorFeedbackView = React.createClass({
     );
   },
 
-  prepareAssignedDelegates: function(delegates) {
-    var assigned = {};
-    for (var i = 0; i < delegates.length; i++) {
-      if (delegates[i].assignment) {
-        if (delegates[i].assignment in assigned) {
-          assigned[delegates[i].assignment][1] = delegates[i].id;
-        } else {
-          var slots = [0, 0];
-          slots[0] = delegates[i].id;
-          assigned[delegates[i].assignment] = slots;
-        }
-      }
-    }
-
-    return assigned;
-  },
-
-  _handleMapAssignments() {
-    var user = CurrentUserStore.getCurrentUser();
-    var committee_assignments = {};
-    var delegates = this.state.delegates;
-    var assignments = this.state.assignments;
-    for (var delegate of delegates) {
-      var assignment = assignments.find(assignment => assignment.id == delegate.assignment);
-      if (!assignment) continue;
-      var committeeID = assignment.committee;
-      if (committeeID in committee_assignments) {
-        committee_assignments[committeeID].push(delegate);
-      } else {
-        committee_assignments[committeeID] = [delegate];
-      }
-    }
-
-
-    this.setState({committee_assignments: committee_assignments});
-  }, 
-
   _handleDelegateAssignment: function(assignmentId, slot, event) {
     var delegates = this.state.delegates;
+    var assigned = this.state.assigned;
+    var newDelegateId = event.target.value, oldDelegateId = 0;
 
     if (assignmentId in assigned) {
       oldDelegateId = assigned[assignmentId][slot];
@@ -243,7 +307,7 @@ var AdvisorFeedbackView = React.createClass({
     DelegateActions.updateDelegates(school.id, this.state.delegates);
   }
 
-  _
+  
 });
 
 module.exports = AdvisorFeedbackView;
