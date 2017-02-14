@@ -41,7 +41,7 @@ var ChairSummaryView = React.createClass({
 
   componentDidMount() {
     var user = CurrentUserStore.getCurrentUser();
-    var delegates =  this.state.delegates;
+    var delegates = this.state.delegates;
     var summaries = this.state.summaries;
     for (var delegate of delegates) {
       summaries[delegate.assignment] = delegate.summary;
@@ -122,7 +122,6 @@ var ChairSummaryView = React.createClass({
             Publish
           </Button>
         </form>
-
       </InnerView>
     );
   },
@@ -135,7 +134,7 @@ var ChairSummaryView = React.createClass({
     assignments = assignments.filter(a => assignmentIDs.indexOf(""+a.id) > -1);
     return assignments.map(assignment => {
       return (
-        <tr key={countries[assignment.country].id}>
+        <tr key={assignment.id}>
           <td>
             {countries[assignment.country].name}
           </td>
@@ -182,6 +181,10 @@ var ChairSummaryView = React.createClass({
     if (confirm) {
       var committee = CurrentUserStore.getCurrentUser().committee;
       var delegates = this.state.delegates;
+      var summaries = this.state.summaries;
+      for (var delegate of delegates) {
+        delegate.summary = summaries[delegate.assignment];
+      }
       delegates.forEach(delegate => delegate.published_summary = delegate.summary);
       DelegateActions.updateCommitteeDelegates(committee, delegates);
     }
