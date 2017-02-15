@@ -21,7 +21,9 @@ class DelegateStore extends Store {
     var delegateIDs = Object.keys(_delegates);
     if (!delegateIDs.length) {
       ServerAPI.getDelegates(schoolID).then(value => {
-        DelegateActions.delegatesFetched(value);
+        if (value.length) {
+          DelegateActions.delegatesFetched(value);
+        }
       });
 
       return [];
