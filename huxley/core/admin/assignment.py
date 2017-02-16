@@ -13,6 +13,14 @@ from huxley.core.models import Assignment, Committee, Country, School
 
 
 class AssignmentAdmin(admin.ModelAdmin):
+
+    search_fields = (
+        'country__name',
+        'school__name',
+        'committee__name',
+        'committee__full_name'
+    )
+
     def list(self, request):
         '''Return a CSV file containing the current country assignments.'''
         assignments = HttpResponse(content_type='text/csv')
