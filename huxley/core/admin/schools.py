@@ -13,6 +13,7 @@ from huxley.core.models import School
 class SchoolAdmin(admin.ModelAdmin):
 
     readonly_fields = ('balance', )
+    search_fields = ('name',)
 
     def calc_balance(self, obj):
         return obj.balance()

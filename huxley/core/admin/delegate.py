@@ -12,6 +12,9 @@ from huxley.core.models import Assignment, Delegate
 
 
 class DelegateAdmin(admin.ModelAdmin):
+
+    search_fields = ('name',)
+
     def roster(self, request):
         '''Return a CSV file representing the entire roster of registered
         delegates, including their committee, country, and school.'''
