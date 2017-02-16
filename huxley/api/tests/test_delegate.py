@@ -36,7 +36,8 @@ class DelegateDetailPutTestCase(tests.UpdateAPITestCase):
     params = {
         'name':'Trevor Dowds',
         'email':'tdowds@hotmail.org',
-        'summary':'He did awful!'}
+        'summary':'He did awful!',
+        'published_summary': 'He moderately underperformed expectations.'}
 
     def setUp(self):
         self.advisor = models.new_user(username='advisor', password='advisor')
@@ -64,6 +65,7 @@ class DelegateDetailPutTestCase(tests.UpdateAPITestCase):
             "name" : unicode(self.params['name']),
             "email" : unicode(self.params['email']),
             "summary" : unicode(self.params['summary']),
+            "published_summary": unicode(self.params['published_summary']),
             "session_one": self.delegate.session_one,
             "session_two": self.delegate.session_two,
             "session_three": self.delegate.session_three,
@@ -82,6 +84,7 @@ class DelegateDetailPutTestCase(tests.UpdateAPITestCase):
             "name" : unicode(self.params['name']),
             "email" : unicode(self.params['email']),
             "summary" : unicode(self.params['summary']),
+            "published_summary": unicode(self.params['published_summary']),
             "session_one": self.delegate.session_one,
             "session_two": self.delegate.session_two,
             "session_three": self.delegate.session_three,
@@ -101,6 +104,7 @@ class DelegateDetailPutTestCase(tests.UpdateAPITestCase):
             "name" : unicode(self.params['name']),
             "email" : unicode(self.params['email']),
             "summary" : unicode(self.params['summary']),
+            "published_summary": unicode(self.params['published_summary']),
             "session_one": self.delegate.session_one,
             "session_two": self.delegate.session_two,
             "session_three": self.delegate.session_three,
@@ -113,7 +117,8 @@ class DelegateDetailPatchTestCase(tests.PartialUpdateAPITestCase):
     params = {
         'name':'Trevor Dowds',
         'email':'tdowds@hotmail.org',
-        'summary':'He did awful!'}
+        'summary':'He did awful!',
+        'published_summary': 'He moderately underperformed expectations.'}
 
     def setUp(self):
         self.advisor = models.new_user(username='advisor', password='advisor')
@@ -140,6 +145,7 @@ class DelegateDetailPatchTestCase(tests.PartialUpdateAPITestCase):
             "name" : unicode(self.params['name']),
             "email" : unicode(self.params['email']),
             "summary" : unicode(self.params['summary']),
+            "published_summary": unicode(self.params['published_summary']),
             "session_one": self.delegate.session_one,
             "session_two": self.delegate.session_two,
             "session_three": self.delegate.session_three,
@@ -158,6 +164,7 @@ class DelegateDetailPatchTestCase(tests.PartialUpdateAPITestCase):
             "name" : unicode(self.params['name']),
             "email" : unicode(self.params['email']),
             "summary" : unicode(self.params['summary']),
+            "published_summary": unicode(self.params['published_summary']),
             "session_one": self.delegate.session_one,
             "session_two": self.delegate.session_two,
             "session_three": self.delegate.session_three,
@@ -177,6 +184,7 @@ class DelegateDetailPatchTestCase(tests.PartialUpdateAPITestCase):
             "name" : unicode(self.params['name']),
             "email" : unicode(self.params['email']),
             "summary" : unicode(self.params['summary']),
+            "published_summary": unicode(self.params['published_summary']),
             "session_one": self.delegate.session_one,
             "session_two": self.delegate.session_two,
             "session_three": self.delegate.session_three,
@@ -219,7 +227,8 @@ class DelegateListCreateTestCase(tests.CreateAPITestCase):
     params = {
         'name':'Trevor Dowds',
         'email':'tdowds@hotmail.org',
-        'summary':'He did awful!'}
+        'summary':'He did awful!',
+        'published_summary': 'He moderately underperformed expectations.'}
 
     def setUp(self):
         self.advisor = models.new_user(username='advisor', password='advisor')
@@ -249,6 +258,7 @@ class DelegateListCreateTestCase(tests.CreateAPITestCase):
             "name" : unicode(self.params['name']),
             "email" : unicode(self.params['email']),
             "summary" : unicode(self.params['summary']),
+            "published_summary": unicode(self.params['published_summary']),
             "session_one": False,
             "session_two": False,
             "session_three": False,
@@ -280,6 +290,7 @@ class DelegateListCreateTestCase(tests.CreateAPITestCase):
             "name" : unicode(self.params['name']),
             "email" : unicode(self.params['email']),
             "summary" : unicode(self.params['summary']),
+            "published_summary": unicode(self.params['published_summary']),
             "session_one": False,
             "session_two": False,
             "session_three": False,
@@ -361,6 +372,7 @@ class DelegateListGetTestCase(tests.ListAPITestCase):
             'name': unicode(delegates[i].name),
             'email': unicode(delegates[i].email),
             'summary': unicode(delegates[i].summary),
+            'published_summary': unicode(delegates[i].published_summary),
             'created_at': delegates[i].created_at.isoformat(),
             'session_one': delegates[i].session_one,
             'session_two': delegates[i].session_two,
@@ -429,6 +441,7 @@ class DelegateListPartialUpdateTestCase(tests.PartialUpdateAPITestCase):
                 'name': unicode(self.delegate1.name),
                 'email': unicode(self.delegate1.email),
                 'summary': unicode(self.delegate1.summary),
+                'published_summary': unicode(self.delegate1.published_summary),
                 'created_at': self.delegate1.created_at.isoformat(),
                 "session_one": self.delegate1.session_one,
                 "session_two": self.delegate1.session_two,
@@ -444,6 +457,7 @@ class DelegateListPartialUpdateTestCase(tests.PartialUpdateAPITestCase):
                 'name': unicode(self.delegate2.name),
                 'email': unicode(self.delegate2.email),
                 'summary': unicode(self.delegate2.summary),
+                'published_summary': unicode(self.delegate2.published_summary),
                 'created_at': self.delegate2.created_at.isoformat(),
                 "session_one": self.delegate2.session_one,
                 "session_two": self.delegate2.session_two,
@@ -482,6 +496,7 @@ class DelegateListPartialUpdateTestCase(tests.PartialUpdateAPITestCase):
                 'name': unicode(self.delegate1.name),
                 'email': unicode(self.delegate1.email),
                 'summary': unicode(self.delegate1.summary),
+                'published_summary': unicode(self.delegate1.published_summary),
                 'created_at': self.delegate1.created_at.isoformat(),
                 "session_one": self.delegate1.session_one,
                 "session_two": self.delegate1.session_two,
@@ -497,6 +512,7 @@ class DelegateListPartialUpdateTestCase(tests.PartialUpdateAPITestCase):
                 'name': unicode(self.delegate3.name),
                 'email': unicode(self.delegate3.email),
                 'summary': unicode(self.delegate3.summary),
+                'published_summary': unicode(self.delegate3.published_summary),
                 'created_at': self.delegate3.created_at.isoformat(),
                 "session_one": self.delegate3.session_one,
                 "session_two": self.delegate3.session_two,
@@ -545,6 +561,7 @@ class DelegateListPartialUpdateTestCase(tests.PartialUpdateAPITestCase):
                 'name': unicode(self.delegate1.name),
                 'email': unicode(self.delegate1.email),
                 'summary': unicode(self.delegate1.summary),
+                'published_summary': unicode(self.delegate1.published_summary),
                 'created_at': self.delegate1.created_at.isoformat(),
                 "session_one": self.delegate1.session_one,
                 "session_two": self.delegate1.session_two,
@@ -560,6 +577,7 @@ class DelegateListPartialUpdateTestCase(tests.PartialUpdateAPITestCase):
                 'name': unicode(self.delegate2.name),
                 'email': unicode(self.delegate2.email),
                 'summary': unicode(self.delegate2.summary),
+                'published_summary': unicode(self.delegate2.published_summary),
                 'created_at': self.delegate2.created_at.isoformat(),
                 "session_one": self.delegate2.session_one,
                 "session_two": self.delegate2.session_two,

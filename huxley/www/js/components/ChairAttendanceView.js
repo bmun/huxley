@@ -42,6 +42,7 @@ var ChairAttendanceView = React.createClass({
 
   componentDidMount() {
     var user = CurrentUserStore.getCurrentUser();
+    this._mapAssignments();
     this._delegatesToken = DelegateStore.addListener(() => {
       this.setState({delegates: DelegateStore.getCommitteeDelegates(user.committee)});
       this._mapAssignments();
@@ -69,11 +70,17 @@ var ChairAttendanceView = React.createClass({
         <h2>Attendance</h2>
         <p>
           Here you can take attendance for delegates. Note that confirming 
-          attendance will alert the advisor as to if there delegates have 
+          attendance will alert the advisor as to if their delegates have 
           shown up to committee.
         </p>
+        <p>
+          <strong>
+            Only one chair at a time should be logged in. Changes may be lost 
+            otherwise.
+          </strong>
+        </p>
         <form>
-          <div className="table-container">
+          <div className="table-container" style={{'overflowY': 'auto', 'maxHeight': '50vh'}}>
             <table className="table highlight-cells">
               <thead>
                 <tr>
