@@ -81,7 +81,9 @@ var AdvisorAssignmentsView = React.createClass({
 
   render: function() {
     var finalized = CurrentUserStore.getFinalized();
+    var committees = this.state.committees;
     var conference = this.context.conference;
+    var countries = this.state.countries;
     return (
       <InnerView>
         <h2>Assignments</h2>
@@ -112,7 +114,11 @@ var AdvisorAssignmentsView = React.createClass({
                 </tr>
               </thead>
               <tbody>
-                {this.renderAssignmentRows()}
+                {
+                  Object.keys(committees).length > 0 && Object.keys(countries).length > 0 ?
+                  this.renderAssignmentRows() :
+                  <tr></tr>
+                }
               </tbody>
             </table>
           </div>
