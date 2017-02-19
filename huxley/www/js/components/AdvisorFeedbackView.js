@@ -86,17 +86,16 @@ var AdvisorFeedbackView = React.createClass({
         <p>
           Here you can view chairs feedback on your delegates, as well as their attendance.
         </p>
-        <form>
           <div className="table-container">
-            <table>
+            <table className="table highlight-cells">
               <thead>
                 <tr>
                   <th>Committee</th>
                   <th>Delegates</th>
-                  <th>Session1</th>
-                  <th>Session2</th>
-                  <th>Session3</th>
-                  <th>Session4</th>
+                  <th>1</th>
+                  <th>2</th>
+                  <th>3</th>
+                  <th>4</th>
                   <th>Summary</th>
                 </tr>
               </thead>
@@ -105,7 +104,6 @@ var AdvisorFeedbackView = React.createClass({
               </tbody>
             </table>
           </div>
-        </form>
       </InnerView>
     );
   },
@@ -132,46 +130,43 @@ var AdvisorFeedbackView = React.createClass({
             delegates[0].name + ', ' + delegates[1].name
           }</td>
           <td>
-          <label name="session">
             <input
               className="choice"
               type="checkbox"
               checked={delegates[0].session_one}
               disabled
             />
-          </label>
         </td>
         <td>
-          <label name="session">
             <input
               className="choice"
               type="checkbox"
               checked={delegates[0].session_two}
               disabled
             />
-          </label>
         </td>
         <td>
-          <label name="session">
             <input
               className="choice"
               type="checkbox"
               checked={delegates[0].session_three}
               disabled
             />
-          </label>
         </td>
         <td>
-          <label name="session">
             <input
               className="choice"
               type="checkbox"
               checked={delegates[0].session_four}
               disabled
             />
-          </label>
         </td>
-        <td>{delegates[0].published_summary}</td>
+        <textarea
+              className="text-input"
+              style={{"width": "95%"}}
+              defaultValue={delegates[0].published_summary}
+              disabled
+            />
         </tr>
       )
     }.bind(this));
