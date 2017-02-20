@@ -98,7 +98,7 @@ class DelegateStore extends Store {
         break;
       case ActionConstants.LOGIN:
         var userID = CurrentUserStore.getCurrentUser().id;
-        if(userID != _previousUserID) {
+        if (userID != _previousUserID) {
           _delegates = {};
           _delegatesFetched = false;
           _previousUserID = userID;
