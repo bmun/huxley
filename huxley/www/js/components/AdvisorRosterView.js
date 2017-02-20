@@ -183,8 +183,6 @@ var AdvisorRosterView = React.createClass({
       modal_onClick: fn,
       errors: {}
     });
-  
-    event.preventDefault();
   },
 
   closeModal: function() {
