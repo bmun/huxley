@@ -15,7 +15,7 @@ describe('DelegateStore', () => {
 
   var jake, nate
   var mockDelegates, mockSchoolID;
-  var notAnID;
+  var mockSchoolID2;
   var registerCallback;
 
   beforeEach(() => {
@@ -31,7 +31,7 @@ describe('DelegateStore', () => {
     };
 
     mockSchoolID = 1;
-    notAnID = 0;
+    mockSchoolID2 = 0;
     jake = {id: 1, name: 'Jake', email: '', school: mockSchoolID};
     nate = {id: 2, name: 'Nate', email: '', school: mockSchoolID};
     mockDelegates = [jake, nate];
@@ -62,16 +62,16 @@ describe('DelegateStore', () => {
   });
 
   it('differentiates no delegates from not having fetched delegates', () => {
-    var delegates = DelegateStore.getSchoolDelegates(notAnID);
+    var delegates = DelegateStore.getSchoolDelegates(mockSchoolID2);
     expect(delegates.length).toEqual(0);
-    expect(ServerAPI.getDelegates).toBeCalledWith(notAnID);
+    expect(ServerAPI.getDelegates).toBeCalledWith(mockSchoolID2);
 
     registerCallback({
       actionType: ActionConstants.DELEGATES_FETCHED,
       delegates: []
     });
 
-    delegates = DelegateStore.getSchoolDelegates(notAnID);
+    delegates = DelegateStore.getSchoolDelegates(mockSchoolID2);
     expect(delegates).toEqual([]);
     expect(ServerAPI.getDelegates.mock.calls.length).toEqual(1);
   });
