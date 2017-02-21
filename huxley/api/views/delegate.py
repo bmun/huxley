@@ -36,27 +36,3 @@ class DelegateDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Delegate.objects.all()
     permission_classes = (permissions.DelegateDetailPermission, )
     serializer_class = DelegateSerializer
-
-    def put(self, request, *args, **kwargs):
-        return self.list_update(request, *args, **kwargs)
-
-
-        school_id = query_params.get('school_id', None)
-        if school_id:
-            queryset = queryset.filter(school_id=school_id)
-
-        committee_id = query_params.get('committee_id', None)
-        if school_id:
-            queryset = queryset.filter(assignment__committee_id=committee_id)
-
-        return queryset
-
-    def patch(self, request, *args, **kwargs):
-        return self.list_update(request, partial=True, *args, **kwargs)
-
-
-class DelegateDetail(generics.RetrieveUpdateDestroyAPIView):
-    authentication_classes = (SessionAuthentication, )
-    queryset = Delegate.objects.all()
-    permission_classes = (permissions.DelegateDetailPermission, )
-    serializer_class = DelegateSerializer
