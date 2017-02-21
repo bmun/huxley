@@ -50,18 +50,6 @@ class AssignmentStore extends Store {
     _assignments[assignmentID] = assignment;
   }
 
-  getCommitteeAssignments(committeeID) {
-    if (_committeeAssignments[committeeID]) {
-      return _committeeAssignments[committeeID]; 
-    }
-    ServerAPI.getCommitteeAssignments(committeeID).then(value => {
-      AssignmentActions.committeeAssignmentsFetched(committeeID, value);
-    });
-
-    return [];
-
-  }
-
   __onDispatch(action) {
     switch (action.actionType) {
       case ActionConstants.ASSIGNMENTS_FETCHED:
@@ -79,12 +67,6 @@ class AssignmentStore extends Store {
           _previousUserID = userID;
         }
         break;
-      case ActionConstants.LOGIN:
-        var userID = CurrentUserStore.getCurrentUser().id;
-        if(userID != _previousUserID) {
-          _assignments = {};
-          _previousUserID = userID;
-        }
       default:
         return;
     }

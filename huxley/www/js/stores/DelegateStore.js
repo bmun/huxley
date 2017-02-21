@@ -74,13 +74,6 @@ class DelegateStore extends Store {
     }
   }
 
-  updateCommitteeDelegates(committeeID, delegates) {
-    ServerAPI.updateCommitteeDelegates(committeeID, delegates)
-    for (const delegate of delegates) {
-      _delegates[delegate.id] = delegate;
-    }
-  }
-
   __onDispatch(action) {
     switch (action.actionType) {
       case ActionConstants.DELETE_DELEGATE:
@@ -99,16 +92,6 @@ class DelegateStore extends Store {
         break;
       case ActionConstants.UPDATE_DELEGATES:
         this.updateDelegates(action.schoolID, action.delegates, action.onError);
-        break;
-      case ActionConstants.UPDATE_COMMITTEE_DELEGATES:
-        this.updateCommitteeDelegates(action.committeeID, action.delegates);
-        break;
-      case ActionConstants.LOGIN:
-        var userID = CurrentUserStore.getCurrentUser().id;
-        if(userID != _previousUserID) {
-          _delegates = {};
-          _previousUserID = userID;
-        }
         break;
       case ActionConstants.UPDATE_COMMITTEE_DELEGATES:
         this.updateCommitteeDelegates(action.committeeID, action.delegates);
