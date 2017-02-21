@@ -36,3 +36,4 @@ class DelegateDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Delegate.objects.all()
     permission_classes = (permissions.DelegateDetailPermission, )
     serializer_class = DelegateSerializer
+    

@@ -106,19 +106,6 @@ class DelegateDetailPermission(permissions.BasePermission):
 
 
 class DelegateListPermission(permissions.BasePermission):
-
-    def has_permission(self, request, view):
-        if request.user.is_superuser or request.method == 'POST':
-            return True
-
-        committee_id = view.request.GET.get('committee_id', None)
-        user = request.user
-
-        return (user.is_authenticated() and user.is_chair() and
-                user.assignment.committee.id == int(committee_id))
-
-
-class DelegateListPermission(permissions.BasePermission):
     '''Accept requests to create, retrieve, and update delegates in bulk from
        the superuser and from the advisor of the school of the delegates.
        Accept requests to retrieve and update delegates from the chair of the
@@ -141,12 +128,6 @@ class DelegateListPermission(permissions.BasePermission):
 
         if method == 'POST':
             return user_is_advisor(request, view, request.data['school'])
-
-        if method in ('PUT', 'PATCH'):
-            delegate_ids = [delegate['id'] for delegate in request.data]
-            delegates = Delegate.objects.filter(id__in=delegate_ids)
-            if user.is_chair():
-                return not delegates.exclude(assignment__committee_id=user.committee_id).exists()
 
         if method in ('PUT', 'PATCH'):
             delegate_ids = [delegate['id'] for delegate in request.data]

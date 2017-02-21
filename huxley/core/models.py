@@ -415,11 +415,6 @@ class Delegate(models.Model):
     session_three = models.BooleanField(default=False)
     session_four = models.BooleanField(default=False)
 
-    session_one = models.BooleanField(default=False)
-    session_two = models.BooleanField(default=False)
-    session_three = models.BooleanField(default=False)
-    session_four = models.BooleanField(default=False)
-
     def __unicode__(self):
         return self.name
 
