@@ -15,9 +15,6 @@ var CommitteeStore = require('stores/CommitteeStore');
 var ConferenceContext = require('components/ConferenceContext');
 var CountryStore = require('stores/CountryStore');
 var CurrentUserStore = require('stores/CurrentUserStore');
-var CurrentUserActions = require('actions/CurrentUserActions');
-var DelegateActions = require('actions/DelegateActions');
-var DelegateSelect = require('components/DelegateSelect');
 var DelegateStore = require('stores/DelegateStore');
 var InnerView = require('components/InnerView');
 var ServerAPI = require('lib/ServerAPI');
@@ -112,12 +109,7 @@ var AdvisorFeedbackView = React.createClass({
     var committees = this.state.committees;
     var countries = this.state.countries;
     var assigned = this.state.assigned;
-    for (var assignment = 0; assignment < this.state.assignments.length; assignment++) {
-      console.log(this.state.assignments[assignment]);
-    }
     return this.state.assignments.map(function(assignment) {
-      console.log(assignment);
-      console.log(delegates);
       var delegates = assigned[assignment.id];
       if (delegates == null) {
         return;
@@ -136,32 +128,32 @@ var AdvisorFeedbackView = React.createClass({
               checked={delegates[0].session_one}
               disabled
             />
-        </td>
-        <td>
+          </td>
+          <td>
             <input
               className="choice"
               type="checkbox"
               checked={delegates[0].session_two}
               disabled
             />
-        </td>
-        <td>
+          </td>
+          <td>
             <input
               className="choice"
               type="checkbox"
               checked={delegates[0].session_three}
               disabled
             />
-        </td>
-        <td>
+          </td>
+          <td>
             <input
               className="choice"
               type="checkbox"
               checked={delegates[0].session_four}
               disabled
             />
-        </td>
-        <textarea
+          </td>
+          <textarea
               className="text-input"
               style={{"width": "95%"}}
               defaultValue={delegates[0].published_summary}
@@ -184,7 +176,6 @@ var AdvisorFeedbackView = React.createClass({
   prepareAssignedDelegates: function(delegates) {
     var assigned = {};
     for (var i = 0; i < delegates.length; i++) {
-      console.log("hello")
       if (delegates[i].assignment) {
         if (assigned[delegates[i].assignment]) {
           assigned[delegates[i].assignment][1] = delegates[i]; 
