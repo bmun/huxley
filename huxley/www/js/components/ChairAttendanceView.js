@@ -109,7 +109,7 @@ var ChairAttendanceView = React.createClass({
   renderAttendanceRows() {
     var committeeCountryIDs = Object.keys(this.state.country_assignments);
     var countries = this.state.countries;
-    committeeCountryIDs.sort((c1, c2) => parseInt(c1) < parseInt(c2) ? -1 : 1);
+    committeeCountryIDs.sort((c1, c2) => countries[c1].name < countries[c2].name ? -1 : 1);
     return committeeCountryIDs.map(country => 
       <DelegationAttendanceRow
         key={country}

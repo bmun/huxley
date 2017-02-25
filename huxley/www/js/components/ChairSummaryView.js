@@ -25,10 +25,11 @@ var ChairSummaryView = React.createClass({
   getInitialState() {
     var user = CurrentUserStore.getCurrentUser();
     var assignments = AssignmentStore.getCommitteeAssignments(user.committee);
-    assignments.sort((a1, a2) => a1.country < a2.country ? -1 : 1);
+    var countries = CountryStore.getCountries();
+    assignments.sort((a1, a2) => countries[a1.country].name < countries[a2.country].name ? -1 : 1);
     return {
       assignments: assignments,
-      countries: CountryStore.getCountries(),
+      countries: countries,
       delegates: DelegateStore.getCommitteeDelegates(user.committee),
       summaries: {},
     };
@@ -62,12 +63,23 @@ var ChairSummaryView = React.createClass({
 
     this._assignmentsToken = AssignmentStore.addListener(() => {
       var assignments = AssignmentStore.getCommitteeAssignments(user.committee);
-      assignments.sort((a1, a2) => a1.country < a2.country ? -1 : 1);
+      var countries = this.state.countries;
+      if (Object.keys(countries).length > 0) {
+        assignments.sort((a1, a2) => countries[a1.country].name < countries[a2.country].name ? -1 : 1);
+      }
       this.setState({assignments: assignments});
     });
 
     this._countriesToken = CountryStore.addListener(() => {
-      this.setState({countries: CountryStore.getCountries()});
+      var assignments = this.state.assignments;
+      var countries = CountryStore.getCountries;
+      if (Object.keys(countries).length > 0) {
+        assignments.sort((a1, a2) => countries[a1.country].name < countries[a2.country].name ? -1 : 1);
+      }
+      this.setState({
+        assignments: assignments,
+        countries: countries
+      });
     });
 
     this.setState({summaries: summaries});
