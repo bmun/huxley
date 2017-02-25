@@ -24,8 +24,10 @@ var ChairSummaryView = React.createClass({
 
   getInitialState() {
     var user = CurrentUserStore.getCurrentUser();
+    var assignments = AssignmentStore.getCommitteeAssignments(user.committee);
+    assignments.sort((a1, a2) => a1.country < a2.country ? -1 : 1);
     return {
-      assignments: AssignmentStore.getCommitteeAssignments(user.committee),
+      assignments: assignments,
       countries: CountryStore.getCountries(),
       delegates: DelegateStore.getCommitteeDelegates(user.committee),
       summaries: {},
@@ -59,7 +61,9 @@ var ChairSummaryView = React.createClass({
     });
 
     this._assignmentsToken = AssignmentStore.addListener(() => {
-      this.setState({assignments: AssignmentStore.getCommitteeAssignments(user.committee)});
+      var assignments = AssignmentStore.getCommitteeAssignments(user.committee);
+      assignments.sort((a1, a2) => a1.country < a2.country ? -1 : 1);
+      this.setState({assignments: assignments});
     });
 
     this._countriesToken = CountryStore.addListener(() => {
