@@ -14,16 +14,15 @@ var {Store} = require('flux/utils');
 
 
 var _delegates = {};
+var _delegatesFetched = false;
 var _previousUserID = -1;
 
 class DelegateStore extends Store {
   getSchoolDelegates(schoolID) {
     var delegateIDs = Object.keys(_delegates);
-    if (!delegateIDs.length) {
+    if (!_delegatesFetched) {
       ServerAPI.getDelegates(schoolID).then(value => {
-        if (value.length) {
-          DelegateActions.delegatesFetched(value);
-        }
+        DelegateActions.delegatesFetched(value);
       });
 
       return [];
@@ -34,7 +33,7 @@ class DelegateStore extends Store {
 
   getCommitteeDelegates(committeeID) {
     var delegateIDs = Object.keys(_delegates);
-    if (!delegateIDs.length) {
+    if (!_delegatesFetched) {
       ServerAPI.getCommitteeDelegates(committeeID).then(value => {
         DelegateActions.delegatesFetched(value);
       });
@@ -89,6 +88,7 @@ class DelegateStore extends Store {
         for (const delegate of action.delegates) {
           _delegates[delegate.id] = delegate;
         }
+        _delegatesFetched = true;
         break;
       case ActionConstants.UPDATE_DELEGATES:
         this.updateDelegates(action.schoolID, action.delegates, action.onError);
@@ -98,8 +98,9 @@ class DelegateStore extends Store {
         break;
       case ActionConstants.LOGIN:
         var userID = CurrentUserStore.getCurrentUser().id;
-        if(userID != _previousUserID) {
+        if (userID != _previousUserID) {
           _delegates = {};
+          _delegatesFetched = false;
           _previousUserID = userID;
         }
         break;

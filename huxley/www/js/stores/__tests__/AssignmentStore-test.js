@@ -14,6 +14,7 @@ describe('AssignmentStore', () => {
   var ServerAPI;
 
   var mockAssignments, mockSchoolID;
+  var mockSchoolID2;
   var registerCallback;
 
   beforeEach(() => {
@@ -28,7 +29,8 @@ describe('AssignmentStore', () => {
       Dispatcher.isDispatching.mockReturnValue(false);
     };
 
-    mockSchoolID = 1
+    mockSchoolID = 1;
+    mockSchoolID2 = 0;
     mockAssignments = [
       {id: 1, school: mockSchoolID, rejected: false},
       {id: 2, school: mockSchoolID, rejected: false}
@@ -53,6 +55,21 @@ describe('AssignmentStore', () => {
 
     assignments = AssignmentStore.getSchoolAssignments(mockSchoolID);
     expect(assignments).toEqual(mockAssignments);
+    expect(ServerAPI.getAssignments.mock.calls.length).toEqual(1);
+  });
+
+  it('differentiates not having fetched assignments from having none', () => {
+    var assignments = AssignmentStore.getSchoolAssignments(mockSchoolID2);
+    expect(assignments.length).toEqual(0);
+    expect(ServerAPI.getAssignments).toBeCalledWith(mockSchoolID2);
+
+    registerCallback({
+      actionType: ActionConstants.ASSIGNMENTS_FETCHED,
+      assignments: []
+    });
+
+    assignments = AssignmentStore.getSchoolAssignments(mockSchoolID2);
+    expect(assignments).toEqual([]);
     expect(ServerAPI.getAssignments.mock.calls.length).toEqual(1);
   });
 
