@@ -71,7 +71,8 @@ var ChairAttendanceView = React.createClass({
         <p>
           Here you can take attendance for delegates. Note that confirming 
           attendance will alert the advisor as to if their delegates have 
-          shown up to committee.
+          shown up to committee. The "Voting" column is for the convenience of
+          the chair and is not visible to advisors.
         </p>
         <p>
           <strong>
@@ -85,6 +86,7 @@ var ChairAttendanceView = React.createClass({
               <thead>
                 <tr>
                   <th>Assignment</th>
+                  <th>Voting</th>
                   <th>Session One</th>
                   <th>Session Two</th>
                   <th>Session Three</th>
@@ -142,11 +144,11 @@ var ChairAttendanceView = React.createClass({
     this.setState({country_assignments: country_assignments});
   }, 
 
-  _handleAttendanceChange(session, country, event) {
+  _handleAttendanceChange(field, country, event) {
     var country_assignments = this.state.country_assignments;
     var country_delegates = country_assignments[country];
     for (var delegate of country_delegates) {
-      delegate[session] = !delegate[session];
+      delegate[field] = !delegate[field];
     }
 
     this.setState({country_assignments: country_assignments});
