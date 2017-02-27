@@ -410,6 +410,7 @@ class Delegate(models.Model):
     summary = models.TextField(default='', blank=True, null=True)
     published_summary = models.TextField(default='', blank=True, null=True)
 
+    voting = models.BooleanField(default=False)
     session_one = models.BooleanField(default=False)
     session_two = models.BooleanField(default=False)
     session_three = models.BooleanField(default=False)

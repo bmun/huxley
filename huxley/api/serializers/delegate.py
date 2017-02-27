@@ -18,6 +18,7 @@ class DelegateSerializer(serializers.ModelSerializer):
             'summary', 
             'published_summary',
             'school',
+            'voting',
             'session_one',
             'session_two',
             'session_three',
