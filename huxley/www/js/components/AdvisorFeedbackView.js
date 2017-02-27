@@ -17,7 +17,7 @@ var CountryStore = require('stores/CountryStore');
 var CurrentUserStore = require('stores/CurrentUserStore');
 var DelegateStore = require('stores/DelegateStore');
 var InnerView = require('components/InnerView');
-var ServerAPI = require('lib/ServerAPI');
+
 
 var AdvisorFeedbackView = React.createClass({
   mixins: [
@@ -31,17 +31,17 @@ var AdvisorFeedbackView = React.createClass({
   getInitialState: function() {
     var schoolID = CurrentUserStore.getCurrentUser().school.id;
     var delegates = DelegateStore.getSchoolDelegates(schoolID);
-    var assigned = this.prepareAssignedDelegates(delegates);
+    var assignments = AssignmentStore.getSchoolAssignments(schoolID).filter(assignment => !assignment.rejected);
+    var feedback = null;
     return {
-      assigned: assigned,
-      assignments: AssignmentStore.getSchoolAssignments(schoolID).filter(assignment => !assignment.rejected),
+      feedback: feedback,
+      assignments: assignments,
       committees: CommitteeStore.getCommittees(),
       countries: CountryStore.getCountries(),
       delegates: delegates,
       loading: false
     };
   },
-
   componentDidMount: function() {
     this._committeesToken = CommitteeStore.addListener(() => {
       this.setState({committees: CommitteeStore.getCommittees()});
@@ -51,20 +51,20 @@ var AdvisorFeedbackView = React.createClass({
       this.setState({countries: CountryStore.getCountries()});
     });
 
-    this._delegatesToken = DelegateStore.addListener(() => {
-      var schoolID = CurrentUserStore.getCurrentUser().school.id;
-      var delegates = DelegateStore.getSchoolDelegates(schoolID);
-      var assigned = this.prepareAssignedDelegates(delegates);
-      this.setState({
-        delegates: delegates,
-        assigned: assigned
-      });
-    });
-
     this._assignmentsToken = AssignmentStore.addListener(() => {
       var schoolID = CurrentUserStore.getCurrentUser().school.id;
       this.setState({
         assignments: AssignmentStore.getSchoolAssignments(schoolID).filter(assignment => !assignment.rejected)
+      });
+    });
+
+    this._delegatesToken = DelegateStore.addListener(() => {
+      var schoolID = CurrentUserStore.getCurrentUser().school.id;
+      var delegates = DelegateStore.getSchoolDelegates(schoolID);
+      var feedback = this.prepareFeedback(delegates, this.state.assignments);
+      this.setState({
+        delegates: delegates,
+        feedback: feedback
       });
     });
   },
@@ -106,26 +106,25 @@ var AdvisorFeedbackView = React.createClass({
   },
 
   renderAssignmentRows: function() {
+    var assignments = this.state.assignments
     var committees = this.state.committees;
     var countries = this.state.countries;
-    var assigned = this.state.assigned;
+    var feedback = this.state.feedback;
     return this.state.assignments.map(function(assignment) {
-      var delegates = assigned[assignment.id];
+      var delegates = feedback[assignment.id];
       if (delegates == null) {
         return;
       }
       return (
         <tr>
           <td>{committees[assignment.committee].name}</td>
-          <td>{delegates[1] == 0 ?
-            delegates[0].name :
-            delegates[0].name + ', ' + delegates[1].name
-          }</td>
+          <td>{countries[assignment.country].name}
+          </td>
           <td>
             <input
               className="choice"
               type="checkbox"
-              checked={delegates[0].session_one}
+              checked={delegates.session_one}
               disabled
             />
           </td>
@@ -133,7 +132,7 @@ var AdvisorFeedbackView = React.createClass({
             <input
               className="choice"
               type="checkbox"
-              checked={delegates[0].session_two}
+              checked={delegates.session_two}
               disabled
             />
           </td>
@@ -141,7 +140,7 @@ var AdvisorFeedbackView = React.createClass({
             <input
               className="choice"
               type="checkbox"
-              checked={delegates[0].session_three}
+              checked={delegates.session_three}
               disabled
             />
           </td>
@@ -149,14 +148,14 @@ var AdvisorFeedbackView = React.createClass({
             <input
               className="choice"
               type="checkbox"
-              checked={delegates[0].session_four}
+              checked={delegates.session_four}
               disabled
             />
           </td>
           <textarea
               className="text-input"
               style={{"width": "95%"}}
-              defaultValue={delegates[0].published_summary}
+              defaultValue={delegates.published_summary}
               disabled
             />
         </tr>
@@ -167,28 +166,30 @@ var AdvisorFeedbackView = React.createClass({
 
   /*
     To make it easier to assign and unassign delegates to assignments we maintain
-    a state variable called "assigned". "assigned" is a dictionary whose key is
+    a state variable called "feedback". "feedback" is a dictionary whose key is
     an assignment id, and value is an array representing slots for two delegates
-    to be assigned to it. This way we can easily manage the relationship from
+    to be feedback to it. This way we can easily manage the relationship from
     assignment to delegates via this object.
   */
 
-  prepareAssignedDelegates: function(delegates) {
-    var assigned = {};
-    for (var i = 0; i < delegates.length; i++) {
-      if (delegates[i].assignment) {
-        if (assigned[delegates[i].assignment]) {
-          assigned[delegates[i].assignment][1] = delegates[i]; 
-        } else {
-          var slots = [0, 0, 0];
-          slots[0] = delegates[i];
-          slots[2] = delegates[i].assignment;
-          assigned[delegates[i].assignment] = slots;
+  prepareFeedback: function(delegates, assignments) {
+    if (delegates && assignments) {
+      var feedback = {};
+      for (var i = 0; i < delegates.length; i++) {
+        if (delegates[i].assignment) {
+          if (!feedback[delegates[i].assignment]) {
+            feedback[delegates[i].assignment] = delegates[i];
+          } else {
+            //assignments.find(assignment => assignment.id == delegates[i].assignment);
+            //slots[2] = this.state.countries.find(country => country.id == slots[2].country);
+            
+          }
         }
       }
+
+      return feedback;
     }
 
-    return assigned;
   },
 });
 
