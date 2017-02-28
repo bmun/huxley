@@ -110,7 +110,7 @@ var AdvisorFeedbackView = React.createClass({
     var committees = this.state.committees;
     var countries = this.state.countries;
     var feedback = this.state.feedback;
-    return assignments.map(function(assignment) {
+    return assignments.map(assignment => {
       var delegates = feedback[assignment.id];
       if (delegates == null) {
         return;
@@ -151,12 +151,14 @@ var AdvisorFeedbackView = React.createClass({
               disabled
             />
           </td>
+          <td>
             <textarea
               className="text-input"
               style={{"width": "95%"}}
               defaultValue={delegates.published_summary}
               disabled
             />
+          </td>
         </tr>
       )
     });
@@ -173,18 +175,15 @@ var AdvisorFeedbackView = React.createClass({
 
   prepareFeedback: function(delegates) {
     var feedback = {};
-    if (delegates) {
-      for (var i = 0; i < delegates.length; i++) {
-        if (delegates[i].assignment) {
-          if (!feedback[delegates[i].assignment]) {
-            feedback[delegates[i].assignment] = delegates[i];
+      for (var delegate of delegates) {
+        if (delegate.assignment) {
+          if (!feedback[delegate.assignment]) {
+            feedback[delegate.assignment] = delegate;
           }
         }
       }
       return feedback;
-    }
-
-  },
+    },
 });
 
 module.exports = AdvisorFeedbackView;
