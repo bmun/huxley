@@ -32,7 +32,7 @@ var AdvisorFeedbackView = React.createClass({
     var schoolID = CurrentUserStore.getCurrentUser().school.id;
     var delegates = DelegateStore.getSchoolDelegates(schoolID);
     var assignments = AssignmentStore.getSchoolAssignments(schoolID).filter(assignment => !assignment.rejected);
-    var feedback = null;
+    var feedback = this.prepareFeedback(delegates);
     return {
       feedback: feedback,
       assignments: assignments,
@@ -61,7 +61,7 @@ var AdvisorFeedbackView = React.createClass({
     this._delegatesToken = DelegateStore.addListener(() => {
       var schoolID = CurrentUserStore.getCurrentUser().school.id;
       var delegates = DelegateStore.getSchoolDelegates(schoolID);
-      var feedback = this.prepareFeedback(delegates, this.state.assignments);
+      var feedback = this.prepareFeedback(delegates);
       this.setState({
         delegates: delegates,
         feedback: feedback
@@ -118,8 +118,7 @@ var AdvisorFeedbackView = React.createClass({
       return (
         <tr>
           <td>{committees[assignment.committee].name}</td>
-          <td>{countries[assignment.country].name}
-          </td>
+          <td>{countries[assignment.country].name}</td>
           <td>
             <input
               className="choice"
@@ -152,7 +151,7 @@ var AdvisorFeedbackView = React.createClass({
               disabled
             />
           </td>
-          <textarea
+            <textarea
               className="text-input"
               style={{"width": "95%"}}
               defaultValue={delegates.published_summary}
@@ -160,7 +159,7 @@ var AdvisorFeedbackView = React.createClass({
             />
         </tr>
       )
-    }.bind(this));
+    });
   },
 
 
@@ -173,8 +172,8 @@ var AdvisorFeedbackView = React.createClass({
   */
 
   prepareFeedback: function(delegates) {
+    var feedback = {};
     if (delegates) {
-      var feedback = {};
       for (var i = 0; i < delegates.length; i++) {
         if (delegates[i].assignment) {
           if (!feedback[delegates[i].assignment]) {
