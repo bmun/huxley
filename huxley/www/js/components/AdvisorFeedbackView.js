@@ -88,7 +88,7 @@ var AdvisorFeedbackView = React.createClass({
               <thead>
                 <tr>
                   <th>Committee</th>
-                  <th>Delegates</th>
+                  <th>Country</th>
                   <th>1</th>
                   <th>2</th>
                   <th>3</th>
@@ -110,7 +110,7 @@ var AdvisorFeedbackView = React.createClass({
     var committees = this.state.committees;
     var countries = this.state.countries;
     var feedback = this.state.feedback;
-    return this.state.assignments.map(function(assignment) {
+    return assignments.map(function(assignment) {
       var delegates = feedback[assignment.id];
       if (delegates == null) {
         return;
@@ -172,21 +172,16 @@ var AdvisorFeedbackView = React.createClass({
     assignment to delegates via this object.
   */
 
-  prepareFeedback: function(delegates, assignments) {
-    if (delegates && assignments) {
+  prepareFeedback: function(delegates) {
+    if (delegates) {
       var feedback = {};
       for (var i = 0; i < delegates.length; i++) {
         if (delegates[i].assignment) {
           if (!feedback[delegates[i].assignment]) {
             feedback[delegates[i].assignment] = delegates[i];
-          } else {
-            //assignments.find(assignment => assignment.id == delegates[i].assignment);
-            //slots[2] = this.state.countries.find(country => country.id == slots[2].country);
-            
           }
         }
       }
-
       return feedback;
     }
 
