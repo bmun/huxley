@@ -183,7 +183,7 @@ var AdvisorFeedbackView = React.createClass({
         }
       }
       return feedback;
-    },
+  },
 });
 
 module.exports = AdvisorFeedbackView;
