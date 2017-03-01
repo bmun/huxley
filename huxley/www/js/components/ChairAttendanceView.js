@@ -82,7 +82,7 @@ var ChairAttendanceView = React.createClass({
         </p>
         <form>
           <div className="table-container">
-            <table style={{'margin': '10px auto 0px auto', 'tableLayout':'fixed'}}>
+            <table style={{'margin':'10px auto 0px auto', 'tableLayout':'fixed'}}>
               <thead>
                 <tr>
                   <th>Assignment</th>
@@ -97,7 +97,7 @@ var ChairAttendanceView = React.createClass({
             <div style={{'overflowY': 'auto', 'maxHeight': '50vh'}}>
               <table 
                 className="table highlight-cells"
-                style={{'margin': '0px auto 20px auto', 'tableLayout':'fixed'}}
+                style={{'margin':'0px auto 20px auto', 'tableLayout':'fixed'}}
               >
                 <tbody>
                   {this.renderAttendanceRows()}
