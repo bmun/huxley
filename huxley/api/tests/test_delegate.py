@@ -599,3 +599,4 @@ class DelegateListPartialUpdateTestCase(tests.PartialUpdateAPITestCase):
 
         self.assertRaises(ValidationError, self.get_response, self.school.id)
         
+        

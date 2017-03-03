@@ -12,7 +12,6 @@ var AssignmentActions = require('actions/AssignmentActions');
 var AssignmentStore = require('stores/AssignmentStore');
 var Button = require('components/Button');
 var CommitteeStore = require('stores/CommitteeStore');
-var ConferenceContext = require('components/ConferenceContext');
 var CountryStore = require('stores/CountryStore');
 var CurrentUserStore = require('stores/CurrentUserStore');
 var DelegateStore = require('stores/DelegateStore');
@@ -23,10 +22,6 @@ var AdvisorFeedbackView = React.createClass({
   mixins: [
     ReactRouter.History,
   ],
-
-  contextTypes: {
-    conference: React.PropTypes.shape(ConferenceContext)
-  },
 
   getInitialState: function() {
     var schoolID = CurrentUserStore.getCurrentUser().school.id;
@@ -42,6 +37,7 @@ var AdvisorFeedbackView = React.createClass({
       loading: false
     };
   },
+
   componentDidMount: function() {
     this._committeesToken = CommitteeStore.addListener(() => {
       this.setState({committees: CommitteeStore.getCommittees()});
@@ -166,23 +162,22 @@ var AdvisorFeedbackView = React.createClass({
 
 
   /*
-    To make it easier to assign and unassign delegates to assignments we maintain
-    a state variable called "feedback". "feedback" is a dictionary whose key is
-    an assignment id, and value is an array representing slots for two delegates
-    to be feedback to it. This way we can easily manage the relationship from
-    assignment to delegates via this object.
+
+    The purpose of this is to allign the delegate objects with their respective 
+    assignment objects. We utilize an array called feedback, which has the delegate
+    object situated at the assignment id's index of feedback. Originally, this was an
+    array of dual arrays for dual delegations, but this has been deprecated since we use
+    country name instead of delegate name.
   */
 
   prepareFeedback: function(delegates) {
     var feedback = {};
-      for (var delegate of delegates) {
-        if (delegate.assignment) {
-          if (!feedback[delegate.assignment]) {
-            feedback[delegate.assignment] = delegate;
-          }
-        }
+    for (var delegate of delegates) {
+      if (delegate.assignment) {
+          feedback[delegate.assignment] = delegate;
       }
-      return feedback;
+    }
+    return feedback;
   },
 });
 
