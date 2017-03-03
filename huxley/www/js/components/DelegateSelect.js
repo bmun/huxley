@@ -18,7 +18,8 @@ var DelegateSelect = React.createClass({
     return (
       <select
         onChange={this.props.onChange}
-        value={this.props.selectedDelegateID}>
+        value={this.props.selectedDelegateID}
+        disabled>
         <option value="0">None</option>
         {this.renderDelegateOptions()}
       </select>
