@@ -81,8 +81,8 @@ var ChairAttendanceView = React.createClass({
           </strong>
         </p>
         <form>
-          <div className="table-container" style={{'overflowY': 'auto', 'maxHeight': '50vh'}}>
-            <table className="table highlight-cells">
+          <div className="table-container">
+            <table style={{'margin':'10px auto 0px auto', 'tableLayout':'fixed'}}>
               <thead>
                 <tr>
                   <th>Assignment</th>
@@ -93,15 +93,22 @@ var ChairAttendanceView = React.createClass({
                   <th>Session Four</th>
                 </tr>
               </thead>
-              <tbody>
-                {this.renderAttendanceRows()}
-              </tbody>
             </table>
+            <div style={{'overflowY': 'auto', 'maxHeight': '50vh'}}>
+              <table 
+                className="table highlight-cells"
+                style={{'margin':'0px auto 20px auto', 'tableLayout':'fixed'}}
+              >
+                <tbody>
+                  {this.renderAttendanceRows()}
+                </tbody>
+              </table>
+            </div>
           </div>
           <Button
             color="green"
             onClick={this._handleSaveAttendance}>
-            Confirm Attendance
+            Save Attendance
           </Button>
         </form>
       </InnerView>

@@ -111,23 +111,29 @@ var ChairSummaryView = React.createClass({
           </strong>
         </p>
         <form>
-          <div className="table-container"
-            style={{'overflowY': 'auto', 'maxHeight': '50vh'}}>
-            <table className="table highlight-cells">
+          <div className="table-container">
+            <table style={{'margin':'10px auto 0px auto'}}>
               <thead>
                 <tr>
                   <th>Assignment</th>
-                  <th>Summary</th>
+                  <th style={{'width':'65%'}}>Summary</th>
                 </tr>
               </thead>
-              <tbody>
-                {
-                  Object.keys(this.state.countries).length > 0 ?
-                  this.renderSummaryRows() :
-                  <tr></tr>
-                }
-              </tbody>
             </table>
+            <div style={{'overflowY': 'auto', 'maxHeight': '50vh'}}>
+              <table
+                className="table highlight-cells"
+                style={{'margin':'0px auto 20px auto'}}
+              >
+                <tbody>
+                  {
+                    Object.keys(this.state.countries).length > 0 ?
+                    this.renderSummaryRows() :
+                    <tr></tr>
+                  }
+                </tbody>
+              </table>
+            </div>
           </div>
           <Button
             color="green"
@@ -156,7 +162,7 @@ var ChairSummaryView = React.createClass({
           <td>
             {countries[assignment.country].name}
           </td>
-          <td>
+          <td style={{'width':'65%'}}>
             <textarea
               className="text-input"
               style={{"width": "95%"}}
