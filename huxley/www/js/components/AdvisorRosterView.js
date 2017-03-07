@@ -175,7 +175,7 @@ var AdvisorRosterView = React.createClass({
     );
   },
 
-  openModal: function(name, email, fn) {
+  openModal: function(name, email, fn, event) {
     this.setState({
       modal_open: true,
       modal_name: name,
@@ -183,10 +183,12 @@ var AdvisorRosterView = React.createClass({
       modal_onClick: fn,
       errors: {}
     });
+    event.preventDefault();
   },
 
-  closeModal: function() {
+  closeModal: function(event) {
     this.setState({modal_open: false});
+    event.preventDefault();
   },
 
   renderError: function(field) {

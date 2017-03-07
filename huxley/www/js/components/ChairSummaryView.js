@@ -191,6 +191,7 @@ var ChairSummaryView = React.createClass({
       delegate.summary = summaries[delegate.assignment];
     }
     DelegateActions.updateCommitteeDelegates(committee, delegates);
+    event.preventDefault();
   },
 
   _handlePublishSummaries(event) {
@@ -211,6 +212,7 @@ var ChairSummaryView = React.createClass({
       }
       delegates.forEach(delegate => delegate.published_summary = delegate.summary);
       DelegateActions.updateCommitteeDelegates(committee, delegates);
+      event.preventDefault();
     }
   },
 
