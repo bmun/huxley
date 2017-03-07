@@ -198,7 +198,6 @@ var ChairSummaryView = React.createClass({
     event.preventDefault();
   },
 
-
   _handlePublishSummaries(event) {
     var confirm = window.confirm("By pressing ok, you are allowing advisors " +
                                  "to read the summaries that you have written " +
