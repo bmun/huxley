@@ -198,6 +198,7 @@ var ChairSummaryView = React.createClass({
     event.preventDefault();
   },
 
+
   _handlePublishSummaries(event) {
     var confirm = window.confirm("By pressing ok, you are allowing advisors " +
                                  "to read the summaries that you have written " +
@@ -216,7 +217,7 @@ var ChairSummaryView = React.createClass({
         var summary = summaries[delegate.assignment];
         if (delegate.summary != summary || delegate.published_summary != summary) {
           delegate.summary = summaries[delegate.assignment];
-          delegate.published_summary = delegate.summary;
+          delegate.published_summary = summaries[delegate.assignment];
           toPublish.push(delegate);
         }
       }
