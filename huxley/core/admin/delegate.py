@@ -21,6 +21,16 @@ class DelegateAdmin(admin.ModelAdmin):
         roster = HttpResponse(content_type='text/csv')
         roster['Content-Disposition'] = 'attachment; filename="roster.csv"'
         writer = csv.writer(roster)
+        writer.writerow([
+                'Name',
+                'School',
+                'Committee',
+                'Country',
+                'Session One',
+                'Session Two',
+                'Session Three',
+                'Session Four'
+            ])
 
         ordering = 'assignment__school__name'
         for delegate in Delegate.objects.all().order_by(ordering):
@@ -28,7 +38,11 @@ class DelegateAdmin(admin.ModelAdmin):
                 delegate,
                 delegate.committee,
                 delegate.country,
-                delegate.school
+                delegate.school,
+                delegate.session_one,
+                delegate.session_two,
+                delegate.session_three,
+                delegate.session_four
             ])
 
         return roster
