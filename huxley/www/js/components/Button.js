@@ -15,6 +15,7 @@ var Button = React.createClass({
     href: React.PropTypes.string,
     loading: React.PropTypes.bool,
     size: React.PropTypes.oneOf(['small', 'medium', 'large']),
+    success: React.PropTypes.bool
   },
 
   getDefaultProps: function() {
@@ -22,6 +23,7 @@ var Button = React.createClass({
       color: 'blue',
       loading: false,
       size: 'medium',
+      success: false,
     };
   },
 
@@ -44,7 +46,13 @@ var Button = React.createClass({
         })}
         disabled={this.props.loading}
         to={this.props.href}>
-        <span>{this.props.children}</span>
+        {this.props.success ?
+          <div className="checkmark-circle">
+            <div className="background"></div>
+            <div className="checkmark draw"></div>
+          </div> :
+          <span>{this.props.children}</span>
+        }
       </ButtonComponent>
     );
   }

@@ -313,13 +313,9 @@ var AdvisorProfileView = React.createClass({
           <Button
             color="green"
             loading={this.state.loading}
+            success={this.state.success}
             type="submit">
-            {this.state.success ?
-              <div class="checkmark-circle">
-                <div class="background"></div>
-                <div class="checkmark draw"></div>
-              </div> :
-              "Save"}
+            Save
           </Button>
           <span className="help-text"><em> Remember to save any changes!</em></span>
         </form>
