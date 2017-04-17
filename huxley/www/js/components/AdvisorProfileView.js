@@ -51,7 +51,9 @@ var AdvisorProfileView = React.createClass({
       primary_phone: school.primary_phone,
       secondary_name: school.secondary_name,
       secondary_email: school.secondary_email,
-      secondary_phone: school.secondary_phone
+      secondary_phone: school.secondary_phone,
+      loading: false,
+      success: false
     }
   },
 
@@ -312,7 +314,12 @@ var AdvisorProfileView = React.createClass({
             color="green"
             loading={this.state.loading}
             type="submit">
-            Save
+            {this.state.success ?
+              <div class="checkmark-circle">
+                <div class="background"></div>
+                <div class="checkmark draw"></div>
+              </div> :
+              "Save"}
           </Button>
           <span className="help-text"><em> Remember to save any changes!</em></span>
         </form>
@@ -342,6 +349,7 @@ var AdvisorProfileView = React.createClass({
   },
 
   _handleSubmit: function(event) {
+    this.setState({loading: true});
     var user = this.props.user;
     CurrentUserActions.updateUser(user.id, {
       first_name: this.state.first_name.trim(),
@@ -364,7 +372,8 @@ var AdvisorProfileView = React.createClass({
   _handleSuccess: function(data, status, jqXHR) {
     this.setState({
       errors: {},
-      loading: false
+      loading: false,
+      success: true
     });
   },
 
