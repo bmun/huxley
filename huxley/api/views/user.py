@@ -17,6 +17,8 @@ from huxley.api.permissions import IsPostOrSuperuserOnly, IsUserOrSuperuser
 from huxley.api.serializers import CreateUserSerializer, UserSerializer
 from huxley.core.models import Conference, School
 
+import logging
+
 
 class UserList(generics.ListCreateAPIView):
     authentication_classes = (SessionAuthentication,)
@@ -52,16 +54,24 @@ class CurrentUser(generics.GenericAPIView):
 
     def post(self, request, *args, **kwargs):
         '''Log in a new user.'''
+        logger = logging.getLogger('huxley')
+
+        logger.info('Checking if another user is currently logged in.')
         if request.user.is_authenticated():
             raise PermissionDenied('Another user is currently logged in.')
 
+        logger.info('Authenticating user.')
         try:
             data = request.data
             user = User.authenticate(data['username'], data['password'])
         except AuthenticationError as e:
+            logger.info('User could not be authenticated.')
             raise AuthenticationFailed(str(e))
 
+        logger.info('Logging the user in.')
         login(request, user)
+
+        logger.info('Returning response.')
         return Response(UserSerializer(user).data,
                         status=status.HTTP_201_CREATED)
 
