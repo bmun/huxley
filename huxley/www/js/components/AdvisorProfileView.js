@@ -371,6 +371,10 @@ var AdvisorProfileView = React.createClass({
       loading: false,
       success: true
     });
+
+    setTimeout(() => {
+      this.setState({success: false});
+    }, 2000);
   },
 
   _handleError: function(jqXHR, status, error) {

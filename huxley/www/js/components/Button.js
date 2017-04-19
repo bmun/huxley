@@ -42,17 +42,12 @@ var Button = React.createClass({
           'button-yellow': this.props.color == 'yellow',
           'button-red': this.props.color == 'red',
           'rounded-small': true,
-          'loading': this.props.loading
+          'loading': this.props.loading,
+          'button-checkmark': this.props.success
         })}
         disabled={this.props.loading}
         to={this.props.href}>
-        {this.props.success ?
-          <div className="checkmark-circle">
-            <div className="background"></div>
-            <div className="checkmark draw"></div>
-          </div> :
           <span>{this.props.children}</span>
-        }
       </ButtonComponent>
     );
   }
