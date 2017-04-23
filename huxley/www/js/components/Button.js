@@ -15,7 +15,7 @@ var Button = React.createClass({
     href: React.PropTypes.string,
     loading: React.PropTypes.bool,
     size: React.PropTypes.oneOf(['small', 'medium', 'large']),
-    success: React.PropTypes.bool
+    success: React.PropTypes.bool,
   },
 
   getDefaultProps: function() {
@@ -43,11 +43,11 @@ var Button = React.createClass({
           'button-red': this.props.color == 'red',
           'rounded-small': true,
           'loading': this.props.loading,
-          'button-checkmark': this.props.success
+          'button-checkmark': this.props.success,
         })}
         disabled={this.props.loading}
         to={this.props.href}>
-          <span>{this.props.children}</span>
+        <span>{this.props.children}</span>
       </ButtonComponent>
     );
   }

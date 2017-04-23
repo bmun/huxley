@@ -53,7 +53,14 @@ var AdvisorProfileView = React.createClass({
       secondary_email: school.secondary_email,
       secondary_phone: school.secondary_phone,
       loading: false,
-      success: false
+      success: false,
+      successTimeoutId: null,
+    }
+  },
+
+  componentWillUnmount: function() {
+    if (this.state.successTimeoutId != null) {
+      clearTimeout(this.state.successTimeoutId);
     }
   },
 
@@ -345,6 +352,10 @@ var AdvisorProfileView = React.createClass({
   },
 
   _handleSubmit: function(event) {
+    if (this.state.successTimeoutId != null) {
+      clearTimeout(this.state.successTimeoutId);
+    }
+
     this.setState({loading: true});
     var user = this.props.user;
     CurrentUserActions.updateUser(user.id, {
@@ -372,9 +383,11 @@ var AdvisorProfileView = React.createClass({
       success: true
     });
 
-    setTimeout(() => {
+    var successTimeoutId = setTimeout(() => {
       this.setState({success: false});
     }, 2000);
+
+    this.setState({successTimeoutId: successTimeoutId});
   },
 
   _handleError: function(jqXHR, status, error) {
