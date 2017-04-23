@@ -25,7 +25,6 @@ var DelegationAttendanceRow = React.createClass({
   },
 
   render() {
-    console.log(this.props.assignmentID);
     return (
       <tr>
         <td>
