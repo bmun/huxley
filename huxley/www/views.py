@@ -12,6 +12,7 @@ from huxley.core.constants import ContactGender, ContactType, ProgramTypes
 from huxley.core.models import Conference
 from huxley.utils.shortcuts import render_template
 
+
 def index(request):
     if request.user.is_superuser:
         return redirect(reverse('admin:index'))
