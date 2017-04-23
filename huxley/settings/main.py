@@ -2,7 +2,7 @@
 # Use of this source code is governed by a BSD License (see LICENSE).
 
 from .roots import HUXLEY_ROOT
-
+import sys
 
 DEBUG = True
 
@@ -13,6 +13,9 @@ ADMINS = (('BMUN Tech Officer', 'tech@bmun.org'))
 ADMIN_SECRET = 'OVERRIDE THIS IN PRODUCTION'
 
 SITE_ID = 1
+
+TESTING = len(sys.argv) > 1 and sys.argv[1] == 'test'
+#True only when testing is run from command line
 
 DATABASES = {
     'default': {

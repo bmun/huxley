@@ -3,10 +3,15 @@
 
 import uuid
 
+from django.conf import settings
+from django.core.exceptions import PermissionDenied
+
 from huxley.accounts.models import User
 from huxley.core.constants import ContactGender, ContactType, ProgramTypes
 from huxley.core.models import School, Committee, Country, Delegate, Assignment
 
+if not settings.TESTING:
+    raise PermissionDenied
 
 def new_user(**kwargs):
     username = kwargs.pop('username', None) or str(uuid.uuid4())
