@@ -9,9 +9,8 @@ from django.core.exceptions import PermissionDenied
 from huxley.accounts.models import User
 from huxley.core.constants import ContactGender, ContactType, ProgramTypes
 from huxley.core.models import School, Committee, Country, Delegate, Assignment
-from django.core.exceptions import PermissionDenied
 
-if settings.TESTING == False:
+if not settings.TESTING:
     raise PermissionDenied
 
 def new_user(**kwargs):
