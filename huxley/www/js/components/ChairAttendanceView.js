@@ -79,7 +79,7 @@ var ChairAttendanceView = React.createClass({
       }
       this.setState({
         delegates: delegates,
-        attendance: {...attendance, ...update}),
+        attendance: {...attendance, ...update},
       });
     });
 
