@@ -191,8 +191,7 @@ var ChairSummaryView = React.createClass({
     for (var delegate of delegates) {
       var summary = summaries[delegate.assignment];
       if (delegate.summary != summary) {
-        var update = {summary:summary};
-        toSave.push({...delegate, ...update});
+        toSave.push({...delegate, summary});
       }
     }
     DelegateActions.updateCommitteeDelegates(committee, toSave);
@@ -216,8 +215,7 @@ var ChairSummaryView = React.createClass({
       for (var delegate of delegates) {
         var summary = summaries[delegate.assignment];
         if (delegate.summary != summary || delegate.published_summary != summary) {
-          var update = {summary:summary, published_summary:summary};
-          toPublish.push({...delegate, ...update});
+          toPublish.push({...delegate, summary, published_summary: summary});
         }
       }
       DelegateActions.updateCommitteeDelegates(committee, toPublish);
