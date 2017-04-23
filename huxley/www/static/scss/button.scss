@@ -120,11 +120,10 @@
     {
 
         position: relative;
-        width: 48px;
-        padding: 0;
-        text-indent: 101%;
-        overflow: hidden;
-        white-space: nowrap;
+        span
+        {
+            visibility: hidden;
+        }
 
         &:after {
             content: '';
@@ -132,8 +131,8 @@
             top: 50%;
             left: 50%;
             margin: -7px 0 0 -10px;
-            height: 5px;
-            width: 16px;
+            height: 7px;
+            width: 18px;
             border: solid #fff;
             border-width: 0 0 2.5px 2.5px;
             transform: rotate(-45deg);
