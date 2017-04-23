@@ -79,7 +79,7 @@ var ChairAttendanceView = React.createClass({
       }
       this.setState({
         delegates: delegates,
-        attendance: Object.assign({}, attendance, update),
+        attendance: {...attendance, ...update}),
       });
     });
 
@@ -176,11 +176,11 @@ var ChairAttendanceView = React.createClass({
   _handleAttendanceChange(field, assignmentID, event) {
     var attendanceMap = this.state.attendance;
     var oldAttendance = attendanceMap[assignmentID];
-    var newAttendance = Object.assign({}, oldAttendance);
+    var newAttendance = {...oldAttendance};
     newAttendance[field] = !newAttendance[field];
     var update = {};
     update[assignmentID] = newAttendance;
-    this.setState({attendance: Object.assign({}, attendanceMap, update)});
+    this.setState({attendance: {...attendanceMap, ...update}});
   },
 
   _handleSaveAttendance(event) {
@@ -198,7 +198,7 @@ var ChairAttendanceView = React.createClass({
                       session_two: attendance["session_two"],
                       session_three: attendance["session_three"],
                       session_four: attendance["session_four"]};
-        toSave.push(Object.assign({}, delegate, update))
+        toSave.push({...delegate, ...update})
       }
     }
     DelegateActions.updateCommitteeDelegates(committee, toSave, this._handleSuccess, this._handleError);
