@@ -27,14 +27,30 @@ var ChairAttendanceView = React.createClass({
 
   getInitialState() {
     var user = CurrentUserStore.getCurrentUser();
+    var assignments = AssignmentStore.getCommitteeAssignments(user.committee);
+    var countries = CountryStore.getCountries();
+    var delegates = DelegateStore.getCommitteeDelegates(user.committee);
+    var attendance = {};
+    for (var delegate of delegates) {
+      var delegateAttendance = {};
+      delegateAttendance["voting"] = delegate.voting;
+      delegateAttendance["session_one"] = delegate.session_one;
+      delegateAttendance["session_two"] = delegate.session_two;
+      delegateAttendance["session_three"] = delegate.session_three;
+      delegateAttendance["session_four"] = delegate.session_four;
+      attendance[delegate.assignment] = delegateAttendance;
+    }
+    if (assignments.length && Object.keys(countries).length){
+      assignments.sort((a1, a2) => countries[a1.country].name < countries[a2.country].name ? -1 : 1);
+    }
     return {
-      assignments: AssignmentStore.getCommitteeAssignments(user.committee),
-      countries: CountryStore.getCountries(),
       country_assignments: {},
-      delegates: DelegateStore.getCommitteeDelegates(user.committee),
       loading: false,
       success: false,
-      attendance: {},
+      assignments: assignments,
+      countries: countries,
+      delegates: delegates,
+      attendance: attendance,
     };
   },
 
@@ -47,30 +63,18 @@ var ChairAttendanceView = React.createClass({
 
   componentDidMount() {
     var user = CurrentUserStore.getCurrentUser();
-    var delegates = this.state.delegates;
     var attendance = this.state.attendance;
-    var update = {};
-    for (var delegate of delegates) {
-      var delegateAttendance = [];
-      delegateAttendance[0] = delegate.voting;
-      delegateAttendance[1] = delegate.session_one;
-      delegateAttendance[2] = delegate.session_two;
-      delegateAttendance[3] = delegate.session_three;
-      delegateAttendance[4] = delegate.session_four;
-      update[delegate.assignment] = delegateAttendance;
-    }
-    this.setState({attendance: Object.assign({}, attendance, update)});
 
     this._delegatesToken = DelegateStore.addListener(() => {
       var delegates =  DelegateStore.getCommitteeDelegates(user.committee);
       var update = {};
       for (var delegate of delegates) {
-        var delegateAttendance = [];
-        delegateAttendance[0] = delegate.voting;
-        delegateAttendance[1] = delegate.session_one;
-        delegateAttendance[2] = delegate.session_two;
-        delegateAttendance[3] = delegate.session_three;
-        delegateAttendance[4] = delegate.session_four;
+        var delegateAttendance = {};
+        delegateAttendance["voting"] = delegate.voting;
+        delegateAttendance["session_one"] = delegate.session_one;
+        delegateAttendance["session_two"] = delegate.session_two;
+        delegateAttendance["session_three"] = delegate.session_three;
+        delegateAttendance["session_four"] = delegate.session_four;
         update[delegate.assignment] = delegateAttendance;
       }
       this.setState({
@@ -172,7 +176,7 @@ var ChairAttendanceView = React.createClass({
   _handleAttendanceChange(field, assignmentID, event) {
     var attendanceMap = this.state.attendance;
     var oldAttendance = attendanceMap[assignmentID];
-    var newAttendance = [... oldAttendance];
+    var newAttendance = Object.assign({}, oldAttendance);
     newAttendance[field] = !newAttendance[field];
     var update = {};
     update[assignmentID] = newAttendance;
@@ -189,11 +193,11 @@ var ChairAttendanceView = React.createClass({
     for (var delegate of delegates) {
       var attendance = attendanceMap[delegate.assignment];
       if (delegate.attendance != attendance) {
-        var update = {voting: attendance[0],
-                      session_one: attendance[1],
-                      session_two: attendance[2],
-                      session_three: attendance[3],
-                      session_four: attendance[4]};
+        var update = {voting: attendance["voting"],
+                      session_one: attendance["session_one"],
+                      session_two: attendance["session_two"],
+                      session_three: attendance["session_three"],
+                      session_four: attendance["session_four"]};
         toSave.push(Object.assign({}, delegate, update))
       }
     }
