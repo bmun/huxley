@@ -59,15 +59,15 @@ class DelegateStore extends Store {
     _delegates[delegateID] = delegate;
   }
 
-  updateDelegates(schoolID, delegates, onError) {
-    ServerAPI.updateSchoolDelegates(schoolID, delegates).catch(onError);
+  updateDelegates(schoolID, delegates, onSuccess, onError) {
+    ServerAPI.updateSchoolDelegates(schoolID, delegates).then(onSuccess).catch(onError);
     for (const delegate of delegates) {
       _delegates[delegate.id] = delegate;
     }
   }
 
-  updateCommitteeDelegates(committeeID, delegates) {
-    ServerAPI.updateCommitteeDelegates(committeeID, delegates);
+  updateCommitteeDelegates(committeeID, delegates, onSuccess, onError) {
+    ServerAPI.updateCommitteeDelegates(committeeID, delegates).then(onSuccess).catch(onError);
     for (const delegate of delegates) {
       _delegates[delegate.id] = delegate;
     }
@@ -91,10 +91,10 @@ class DelegateStore extends Store {
         _delegatesFetched = true;
         break;
       case ActionConstants.UPDATE_DELEGATES:
-        this.updateDelegates(action.schoolID, action.delegates, action.onError);
+        this.updateDelegates(action.schoolID, action.delegates, action.onSuccess, action.onError);
         break;
       case ActionConstants.UPDATE_COMMITTEE_DELEGATES:
-        this.updateCommitteeDelegates(action.committeeID, action.delegates);
+        this.updateCommitteeDelegates(action.committeeID, action.delegates, action.onSuccess, action.onError);
         break;
       case ActionConstants.LOGIN:
         var userID = CurrentUserStore.getCurrentUser().id;

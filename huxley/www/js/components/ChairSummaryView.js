@@ -34,6 +34,10 @@ var ChairSummaryView = React.createClass({
       countries: countries,
       delegates: DelegateStore.getCommitteeDelegates(user.committee),
       summaries: {},
+      loadingSave: false,
+      successSave: false,
+      loadingPublish: false,
+      successPublish: false,
     };
   },
 
@@ -88,6 +92,8 @@ var ChairSummaryView = React.createClass({
   },
 
   componentWillUnmount() {
+    this._successTimoutSave && clearTimeout(this._successTimeoutSave);
+    this._successTimoutPublish && clearTimeout(this._successTimeoutPublish);
     this._countriesToken && this._countriesToken.remove();
     this._delegatesToken && this._delegatesToken.remove();
     this._assignmentsToken && this._assignmentsToken.remove();
@@ -98,15 +104,15 @@ var ChairSummaryView = React.createClass({
       <InnerView>
         <h2>Summaries</h2>
         <p>
-          Here you can provide feedback for the delegates. You can save any 
-          changes with the "Save" button and they will not become visible to 
-          advisors until you next publish. Please note that clicking the 
-          "Publish" button will allow advisors to read the summaries you have 
-          written for their delegates. 
+          Here you can provide feedback for the delegates. You can save any
+          changes with the "Save" button and they will not become visible to
+          advisors until you next publish. Please note that clicking the
+          "Publish" button will allow advisors to read the summaries you have
+          written for their delegates.
         </p>
         <p>
           <strong>
-            Only one chair at a time should be logged in. Changes may be lost 
+            Only one chair at a time should be logged in. Changes may be lost
             otherwise.
           </strong>
         </p>
@@ -137,12 +143,16 @@ var ChairSummaryView = React.createClass({
           </div>
           <Button
             color="green"
-            onClick={this._handleSaveSummaries}>
+            onClick={this._handleSaveSummaries}
+            loading={this.state.loadingSave}
+            success={this.state.successSave}>
             Save
           </Button>
           <Button
             color="blue"
-            onClick={this._handlePublishSummaries}>
+            onClick={this._handlePublishSummaries}
+            loading={this.state.loadingPublish}
+            success={this.state.successPublish}>
             Publish
           </Button>
         </form>
@@ -184,6 +194,8 @@ var ChairSummaryView = React.createClass({
   },
 
   _handleSaveSummaries(event) {
+    this._successTimoutSave && clearTimeout(this._successTimeoutSave);
+    this.setState({loadingSave: true});
     var committee = CurrentUserStore.getCurrentUser().committee;
     var delegates = this.state.delegates;
     var summaries = this.state.summaries;
@@ -194,7 +206,7 @@ var ChairSummaryView = React.createClass({
         toSave.push({...delegate, summary});
       }
     }
-    DelegateActions.updateCommitteeDelegates(committee, toSave);
+    DelegateActions.updateCommitteeDelegates(committee, toSave, this._handleSuccessSave, this._handleErrorSave);
     event.preventDefault();
   },
 
@@ -208,6 +220,8 @@ var ChairSummaryView = React.createClass({
                                  "your summaries to advisors, press 'ok' to " +
                                  "continue.");
     if (confirm) {
+      this._successTimoutPublish && clearTimeout(this._successTimeoutPublish);
+      this.setState({loadingPublish: true});
       var committee = CurrentUserStore.getCurrentUser().committee;
       var delegates = this.state.delegates;
       var summaries = this.state.summaries;
@@ -218,11 +232,38 @@ var ChairSummaryView = React.createClass({
           toPublish.push({...delegate, summary, published_summary: summary});
         }
       }
-      DelegateActions.updateCommitteeDelegates(committee, toPublish);
+      DelegateActions.updateCommitteeDelegates(committee, toPublish, this._handleSuccessPublish, this._handleErrorPublish);
       event.preventDefault();
     }
   },
 
+  _handleSuccessSave: function(response) {
+    this.setState({
+      loadingSave: false,
+      successSave: true,
+    });
+
+    this._successTimeoutSave = setTimeout(() => this.setState({successSave: false}), 2000);
+  },
+
+  _handleErrorSave: function(response) {
+    this.setState({loadingSave: false});
+    window.alert("Something went wrong. Please refresh your page and try again.");
+  },
+
+  _handleSuccessPublish: function(response) {
+    this.setState({
+      loadingPublish: false,
+      successPublish: true,
+    });
+
+    this._successTimeoutPublish = setTimeout(() => this.setState({successPublish: false}), 2000);
+  },
+
+  _handleErrorPublish: function(response) {
+    this.setState({loadingPublish: false});
+    window.alert("Something went wrong. Please refresh your page and try again.");
+  },
 });
-    
+
 module.exports = ChairSummaryView;

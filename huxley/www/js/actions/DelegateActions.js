@@ -40,20 +40,23 @@ var DelegateActions = {
     });
   },
 
-  updateDelegates(schoolID, delegates, onError) {
+  updateDelegates(schoolID, delegates, onSuccess, onError) {
     Dispatcher.dispatch({
       actionType: ActionConstants.UPDATE_DELEGATES,
       schoolID: schoolID,
       delegates: delegates,
+      onSuccess: onSuccess,
       onError: onError,
     });
   },
 
-  updateCommitteeDelegates(committeeID, delegates) {
+  updateCommitteeDelegates(committeeID, delegates, onSuccess, onError) {
     Dispatcher.dispatch({
       actionType: ActionConstants.UPDATE_COMMITTEE_DELEGATES,
       committeeID: committeeID,
-      delegates: delegates
+      delegates: delegates,
+      onSuccess: onSuccess,
+      onError: onError,
     });
   },
 

@@ -54,14 +54,11 @@ var AdvisorProfileView = React.createClass({
       secondary_phone: school.secondary_phone,
       loading: false,
       success: false,
-      successTimeoutId: null,
     }
   },
 
   componentWillUnmount: function() {
-    if (this.state.successTimeoutId != null) {
-      clearTimeout(this.state.successTimeoutId);
-    }
+    this._successTimout && clearTimeout(this._successTimeout);
   },
 
   render: function() {
@@ -352,10 +349,7 @@ var AdvisorProfileView = React.createClass({
   },
 
   _handleSubmit: function(event) {
-    if (this.state.successTimeoutId != null) {
-      clearTimeout(this.state.successTimeoutId);
-    }
-
+    this._successTimout && clearTimeout(this._successTimeout);
     this.setState({loading: true});
     var user = this.props.user;
     CurrentUserActions.updateUser(user.id, {
@@ -380,14 +374,10 @@ var AdvisorProfileView = React.createClass({
     this.setState({
       errors: {},
       loading: false,
-      success: true
+      success: true,
     });
 
-    var successTimeoutId = setTimeout(() => {
-      this.setState({success: false});
-    }, 2000);
-
-    this.setState({successTimeoutId: successTimeoutId});
+    this._successTimeout = setTimeout(() => this.setState({success: false}), 2000);
   },
 
   _handleError: function(jqXHR, status, error) {
