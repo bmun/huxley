@@ -41,7 +41,8 @@ var AdvisorAssignmentsView = React.createClass({
       committees: CommitteeStore.getCommittees(),
       countries: CountryStore.getCountries(),
       delegates: delegates,
-      loading: false
+      loading: false,
+      success: false,
     };
   },
 
@@ -73,6 +74,7 @@ var AdvisorAssignmentsView = React.createClass({
   },
 
   componentWillUnmount: function() {
+    this._successTimout && clearTimeout(this._successTimeout);
     this._committeesToken && this._committeesToken.remove();
     this._countriesToken && this._countriesToken.remove();
     this._delegatesToken && this._delegatesToken.remove();
@@ -125,8 +127,9 @@ var AdvisorAssignmentsView = React.createClass({
           <Button
             color="green"
             onClick={finalized ? this._handleSave: this._handleFinalize}
-            loading={this.state.loading}>
-            {finalized? 'Save' : 'Finalize Assignments'}
+            loading={this.state.loading}
+            success={this.state.success}>
+            {finalized ? 'Save' : 'Finalize Assignments'}
           </Button>
         </form>
       </InnerView>
@@ -247,8 +250,19 @@ var AdvisorAssignmentsView = React.createClass({
   },
 
   _handleSave: function(event) {
+    this._successTimout && clearTimeout(this._successTimeout);
+    this.setState({loading: true});
     var school = CurrentUserStore.getCurrentUser().school;
-    DelegateActions.updateDelegates(school.id, this.state.delegates, this._handleError);
+    DelegateActions.updateDelegates(school.id, this.state.delegates, this._handleSuccess, this._handleError);
+  },
+
+  _handleSuccess: function(response) {
+    this.setState({
+      loading: false,
+      success: true,
+    });
+
+    this._successTimeout = setTimeout(() => this.setState({success: false}), 2000);
   },
 
   _handleError: function(response) {

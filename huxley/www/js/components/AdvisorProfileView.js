@@ -51,8 +51,14 @@ var AdvisorProfileView = React.createClass({
       primary_phone: school.primary_phone,
       secondary_name: school.secondary_name,
       secondary_email: school.secondary_email,
-      secondary_phone: school.secondary_phone
+      secondary_phone: school.secondary_phone,
+      loading: false,
+      success: false,
     }
+  },
+
+  componentWillUnmount: function() {
+    this._successTimout && clearTimeout(this._successTimeout);
   },
 
   render: function() {
@@ -72,7 +78,7 @@ var AdvisorProfileView = React.createClass({
         </p>
         <p><strong>Remember to save!</strong></p>
         <p><strong>Important Note:</strong> Please mail all checks
-        to <strong>P.O. Box 4306 Berkeley, CA 94704-0306</strong>. If you'd like to pay online via
+        to <strong>P.O. Box 4306 Berkeley, CA 94704-0306</strong>. If you would like to pay online via
         credit card using our online booking service called Quickbooks,
         or if you have any further questions, please contact me
         at <a href="mailto:info@bmun.org">info@bmun.org</a> and I will respond promptly.
@@ -311,6 +317,7 @@ var AdvisorProfileView = React.createClass({
           <Button
             color="green"
             loading={this.state.loading}
+            success={this.state.success}
             type="submit">
             Save
           </Button>
@@ -342,6 +349,8 @@ var AdvisorProfileView = React.createClass({
   },
 
   _handleSubmit: function(event) {
+    this._successTimout && clearTimeout(this._successTimeout);
+    this.setState({loading: true});
     var user = this.props.user;
     CurrentUserActions.updateUser(user.id, {
       first_name: this.state.first_name.trim(),
@@ -364,8 +373,11 @@ var AdvisorProfileView = React.createClass({
   _handleSuccess: function(data, status, jqXHR) {
     this.setState({
       errors: {},
-      loading: false
+      loading: false,
+      success: true,
     });
+
+    this._successTimeout = setTimeout(() => this.setState({success: false}), 2000);
   },
 
   _handleError: function(jqXHR, status, error) {

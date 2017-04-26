@@ -30,6 +30,8 @@ var ChairAttendanceView = React.createClass({
       countries: CountryStore.getCountries(),
       country_assignments: {},
       delegates: DelegateStore.getCommitteeDelegates(user.committee),
+      loading: false,
+      success: false,
     };
   },
 
@@ -59,6 +61,7 @@ var ChairAttendanceView = React.createClass({
   },
 
   componentWillUnmount() {
+    this._successTimout && clearTimeout(this._successTimeout);
     this._countriesToken && this._countriesToken.remove();
     this._delegatesToken && this._delegatesToken.remove();
     this._assignmentsToken && this._assignmentsToken.remove();
@@ -69,14 +72,14 @@ var ChairAttendanceView = React.createClass({
       <InnerView>
         <h2>Attendance</h2>
         <p>
-          Here you can take attendance for delegates. Note that confirming 
-          attendance will alert the advisor as to if their delegates have 
+          Here you can take attendance for delegates. Note that confirming
+          attendance will alert the advisor as to if their delegates have
           shown up to committee. The "Voting" column is for the convenience of
           the chair and is not visible to advisors.
         </p>
         <p>
           <strong>
-            Only one chair at a time should be logged in. Changes may be lost 
+            Only one chair at a time should be logged in. Changes may be lost
             otherwise.
           </strong>
         </p>
@@ -95,7 +98,7 @@ var ChairAttendanceView = React.createClass({
               </thead>
             </table>
             <div style={{'overflowY': 'auto', 'maxHeight': '50vh'}}>
-              <table 
+              <table
                 className="table highlight-cells"
                 style={{'margin':'0px auto 20px auto', 'tableLayout':'fixed'}}
               >
@@ -107,7 +110,9 @@ var ChairAttendanceView = React.createClass({
           </div>
           <Button
             color="green"
-            onClick={this._handleSaveAttendance}>
+            onClick={this._handleSaveAttendance}
+            loading={this.state.loading}
+            success={this.state.success}>
             Save Attendance
           </Button>
         </form>
@@ -121,7 +126,7 @@ var ChairAttendanceView = React.createClass({
     if (Object.keys(countries).length){
       committeeCountryIDs.sort((c1, c2) => countries[c1].name < countries[c2].name ? -1 : 1);
     }
-    return committeeCountryIDs.map(country => 
+    return committeeCountryIDs.map(country =>
       <DelegationAttendanceRow
         key={country}
         onChange={this._handleAttendanceChange}
@@ -147,9 +152,9 @@ var ChairAttendanceView = React.createClass({
         country_assignments[countryID] = [delegate];
       }
     }
-    
+
     this.setState({country_assignments: country_assignments});
-  }, 
+  },
 
   _handleAttendanceChange(field, country, event) {
     var country_assignments = this.state.country_assignments;
@@ -162,16 +167,31 @@ var ChairAttendanceView = React.createClass({
   },
 
   _handleSaveAttendance(event) {
+    this._successTimout && clearTimeout(this._successTimeout);
+    this.setState({loading: true});
     var committee = CurrentUserStore.getCurrentUser().committee;
     var country_assignments = this.state.country_assignments;
     var delegates = [];
     for (var country in country_assignments) {
       delegates = delegates.concat(country_assignments[country]);
     }
-    DelegateActions.updateCommitteeDelegates(committee, delegates);
+    DelegateActions.updateCommitteeDelegates(committee, delegates, this._handleSuccess, this._handleError);
     event.preventDefault();
   },
 
+  _handleSuccess: function(response) {
+    this.setState({
+      loading: false,
+      success: true,
+    });
+
+    this._successTimeout = setTimeout(() => this.setState({success: false}), 2000);
+  },
+
+  _handleError: function(response) {
+    this.setState({loading: false});
+    window.alert("Something went wrong. Please refresh your page and try again.");
+  },
 });
-    
+
 module.exports = ChairAttendanceView;
