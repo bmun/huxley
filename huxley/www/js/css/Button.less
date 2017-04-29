@@ -1,9 +1,13 @@
+@import (reference) "~css/constants.less";
+
 .button {
-  /* Force image to be downloaded, but make it invisible. */
+  // Force image to be downloaded, but make it invisible.
   background-position: -9999px -9999px;
   background-repeat: no-repeat;
+  border: 1px solid;
   display: inline-block;
-  font: 14px "Segoe UI", "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: @font-family;
+  font-size: 14px;
   font-weight: 400 !important;
   padding: 5px 7px;
   text-align: center;
@@ -50,52 +54,60 @@
   }
 
   &.button-blue {
-    background-color: #39f;
+    @blue-shadow: darken(@blue, 5%);
+
+    background-color: @blue;
     background-image: url(/static/img/button-loading-blue.gif);
-    border: 1px solid #28e;
+    border-color: @blue-shadow;
     color: #fff;
-    text-shadow: #28e 0px 1px;
+    text-shadow: @blue-shadow 0px 1px;
 
     &:hover, &:focus {
-      background-color: #40a0ff;
+      background-color: lighten(@blue, 2.5%);
       border-color: #09c;
     }
   }
 
   &.button-green {
-    background-color: #0c0;
+    @green-shadow: darken(@green, 5%);
+
+    background-color: @green;
     background-image: url(/static/img/button-loading-green.gif);
-    border: 1px solid #0b0;
+    border-color: @green-shadow;
     color: #fff;
-    text-shadow: #0b0 0px 1px;
+    text-shadow: @green-shadow 0px 1px;
 
     &:hover, &:focus {
-      background-color: #00d000;
+      background-color: lighten(@green, 2%);
       border-color: #0b0;
     }
   }
 
   &.button-yellow {
-    background-color: #dd0;
-    border: 1px solid #cc0;
+    @yellow-shadow: darken(@yellow, 5%);
+
+    background-color: @yellow;
+    border-color: @yellow-shadow;
     color: #fff;
-    text-shadow: #cc0 0px 1px;
+    text-shadow: @yellow-shadow 0px 1px;
 
     &:hover, &:focus {
-      background-color: #e0e000;
+      background-color: lighten(@yellow, 2%);
       border-color: #cc0;
     }
   }
 
   &.button-red {
-    background-color: #c20;
+    @red-shadow: darken(@red, 5%);
+
+    background-color: @red;
     background-image: url(/static/img/loading.gif);
-    border: 1px solid #b10;
+    border-color: @red-shadow;
     color: #fff;
-    text-shadow: #b10 0px 1px;
+    text-shadow: @red-shadow 0px 1px;
 
     &:hover, &:focus {
-      background-color: #d03000;
+      background-color: @red-highlight;
       border-color: #c00;
     }
   }

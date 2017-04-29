@@ -1,4 +1,4 @@
-/* Content */
+@import (reference) "~css/constants.less";
 
 .content {
   width: 740px;
@@ -25,12 +25,12 @@
     color: #333;
 
     &[href^="mailto:"] {
-      color: #39f;
+      color: @blue;
     }
   }
 
   p {
-    font-smooth:always;
+    font-smooth: always;
     margin-bottom: 10px;
     text-rendering: optimizeLegibility;
   }
@@ -70,10 +70,8 @@
   width: 300px;
   margin-top: 80px;
 
-  p {
-    &.address {
-      margin-left: 50px;
-    }
+  p.address {
+    margin-left: 50px;
   }
 
   ul {

@@ -394,7 +394,7 @@ var RegistrationView = React.createClass({
               <NavLink direction="left" href="/login">
                 Back to Login
               </NavLink>
-              <div className="right">
+              <div style={{float: 'right'}}>
                 <span className="help-text"><em>All done?</em></span>
                 <Button
                   color="green"
