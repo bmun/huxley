@@ -19,6 +19,7 @@ var ServerAPI = require('lib/ServerAPI');
 var TextInput = require('components/TextInput');
 var User = require('utils/User');
 
+require('css/LoginForm.less');
 require('jquery-ui/effect-shake');
 
 var LoginView = React.createClass({

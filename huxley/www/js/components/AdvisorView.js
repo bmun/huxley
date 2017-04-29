@@ -13,6 +13,8 @@ var PermissionDeniedView = require('components/PermissionDeniedView');
 var TopBar = require('components/TopBar');
 var User = require('utils/User');
 
+require('css/NavBar.less');
+
 var AdvisorView = React.createClass ({
   mixins: [ReactRouter.History],
 

@@ -1,0 +1,49 @@
+a.nav-link {
+  display: inline-block;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 6px 0;
+
+  &:hover {
+    text-decoration: none;
+    color: #666;
+  }
+
+  &:active {
+    position: relative;
+    top: 1px;
+    text-shadow: none;
+  }
+
+  &:active, &:visited { outline: 0; }
+
+  &.arrow-left {
+    background: url(/static/img/arrow-left.png) left center no-repeat;
+    padding-left: 18px;
+  }
+
+  &.arrow-right {
+    background: url(/static/img/arrow-right.png) right center no-repeat;
+    padding-right: 18px;
+  }
+}
+
+@media
+only screen and (-webkit-min-device-pixel-ratio: 2),
+only screen and (   min--moz-device-pixel-ratio: 2),
+only screen and (   -o-min-device-pixel-ratio: 2/1),
+only screen and (    min-device-pixel-ratio: 2),
+only screen and (        min-resolution: 192dpi),
+only screen and (        min-resolution: 2dppx) {
+  a.nav-link {
+    &.arrow-left {
+      background-image: url(/static/img/arrow-left-2x.png);
+      background-size: 14px 14px;
+    }
+
+    &.arrow-right {
+      background-image: url(/static/img/arrow-right-2x.png);
+      background-size: 14px 14px;
+    }
+  }
+}

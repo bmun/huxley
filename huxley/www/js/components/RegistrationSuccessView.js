@@ -11,6 +11,8 @@ var ConferenceContext = require('components/ConferenceContext');
 var NavLink = require('components/NavLink');
 var OuterView = require('components/OuterView');
 
+require('css/Letter.less');
+
 var RegistrationSuccessView = React.createClass({
 
   contextTypes: {

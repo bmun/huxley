@@ -10,6 +10,8 @@ var React = require('react');
 var NavTab = require('components/NavTab');
 var TopBar = require('components/TopBar');
 
+require('css/NavBar.less');
+
 var ChairView = React.createClass({
   render() {
     return (

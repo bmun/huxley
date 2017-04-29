@@ -9,6 +9,8 @@ var cx = require('classnames');
 var Link = require('react-router').Link;
 var React = require('react');
 
+require('css/NavLink.less');
+
 var NavLink = React.createClass({
   propTypes: {
     direction: React.PropTypes.oneOf(['left', 'right']).isRequired,
@@ -19,7 +21,7 @@ var NavLink = React.createClass({
     return (
       <Link
         className={cx({
-          'outer-nav': true,
+          'nav-link': true,
           'arrow-left': this.props.direction == 'left',
           'arrow-right': this.props.direction == 'right'
         })}

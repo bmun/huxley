@@ -14,6 +14,7 @@ var NavLink = require('components/NavLink');
 var OuterView = require('components/OuterView');
 var TextInput = require('components/TextInput');
 
+require('css/LoginForm.less');
 require('jquery-ui/effect-shake');
 
 var ForgotPasswordView = React.createClass({
@@ -40,8 +41,7 @@ var ForgotPasswordView = React.createClass({
         </NavLink>
         <hr />
         <form
-          className="login-form"
-          id="password-reset"
+          className="login-form password-reset"
           onSubmit={this._handleSubmit}>
           <div className="login-fields">
             <TextInput
@@ -51,7 +51,6 @@ var ForgotPasswordView = React.createClass({
             />
           </div>
           <Button
-            className="reset-password-button"
             color="green"
             loading={this.state.loading}>
             Reset Password

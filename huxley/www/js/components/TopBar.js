@@ -11,6 +11,8 @@ var React = require('react');
 var ChangePasswordView = require('components/ChangePasswordView');
 var LogoutButton = require('components/LogoutButton');
 
+require('css/TopBar.less');
+
 var TopBar = React.createClass({
   getInitialState: function() {
     return {
