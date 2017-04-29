@@ -8,9 +8,11 @@
 var React = require('react');
 var cx = require('classnames');
 
+require('css/TextInput.less');
+
 /**
  * TextInput is uncontrolled by default to preserve cursor position.
- * Controlled inputs cannot preserve cursor position upon rendering. 
+ * Controlled inputs cannot preserve cursor position upon rendering.
  * See issue #519.
  */
 var TextInput = React.createClass({
