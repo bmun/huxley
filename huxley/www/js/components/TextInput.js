@@ -8,7 +8,7 @@
 var React = require('react');
 var cx = require('classnames');
 
-require('less/TextInput.less');
+require('css/TextInput.less');
 
 /**
  * TextInput is uncontrolled by default to preserve cursor position.
