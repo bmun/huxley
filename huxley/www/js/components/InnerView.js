@@ -7,6 +7,8 @@
 
 var React = require('react');
 
+require('css/content.less');
+
 var InnerView = React.createClass({
   render: function() {
     return (

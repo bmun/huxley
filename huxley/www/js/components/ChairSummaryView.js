@@ -17,6 +17,8 @@ var DelegateStore = require('stores/DelegateStore');
 var InnerView = require('components/InnerView');
 var User = require('utils/User');
 
+require('css/Table.less');
+
 var ChairSummaryView = React.createClass({
   mixins: [
     ReactRouter.History,

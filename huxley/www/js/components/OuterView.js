@@ -7,6 +7,8 @@
 
 var React = require('react');
 
+require('css/content.less');
+
 var OuterView = React.createClass({
   propTypes: {
     header: React.PropTypes.element,

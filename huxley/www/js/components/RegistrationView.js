@@ -25,6 +25,7 @@ var ProgramTypes = require('constants/ProgramTypes');
 var TextInput = require('components/TextInput');
 var _handleChange = require('utils/_handleChange');
 
+require('css/RegistrationView.less');
 require('jquery-ui/effect-shake');
 
 var USA = 'United States of America';

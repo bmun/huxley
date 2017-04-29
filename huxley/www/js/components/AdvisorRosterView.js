@@ -19,6 +19,9 @@ var ServerAPI = require('lib/ServerAPI');
 var TextInput = require('components/TextInput');
 var _handleChange = require('utils/_handleChange');
 
+require('css/Modal.less');
+require('css/Table.less');
+
 var AdvisorRosterView = React.createClass({
   mixins: [
     ReactRouter.History,

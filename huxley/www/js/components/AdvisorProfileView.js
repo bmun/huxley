@@ -19,6 +19,7 @@ var TextInput = require('components/TextInput');
 var User = require('utils/User');
 var _handleChange = require('utils/_handleChange');
 
+require('css/Table.less');
 require('jquery-ui/effect-shake');
 
 var AdvisorProfileView = React.createClass({

@@ -9,6 +9,8 @@ var cx = require('classnames');
 var React = require('react');
 var ReactRouter = require('react-router');
 
+require('css/Button.less');
+
 var Button = React.createClass({
   propTypes: {
     color: React.PropTypes.oneOf(['blue', 'green', 'yellow', 'red']),

@@ -22,6 +22,8 @@ var DelegateStore = require('stores/DelegateStore');
 var InnerView = require('components/InnerView');
 var ServerAPI = require('lib/ServerAPI');
 
+require('css/Table.less');
+
 var AdvisorAssignmentsView = React.createClass({
   mixins: [
     ReactRouter.History,

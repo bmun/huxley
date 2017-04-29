@@ -17,6 +17,7 @@ var CurrentUserStore = require('stores/CurrentUserStore');
 var DelegateStore = require('stores/DelegateStore');
 var InnerView = require('components/InnerView');
 
+require('css/Table.less');
 
 var AdvisorFeedbackView = React.createClass({
   mixins: [
@@ -163,7 +164,7 @@ var AdvisorFeedbackView = React.createClass({
 
   /*
 
-    The purpose of this is to allign the delegate objects with their respective 
+    The purpose of this is to allign the delegate objects with their respective
     assignment objects. We utilize an array called feedback, which has the delegate
     object situated at the assignment id's index of feedback. Originally, this was an
     array of dual arrays for dual delegations, but this has been deprecated since we use
@@ -182,4 +183,3 @@ var AdvisorFeedbackView = React.createClass({
 });
 
 module.exports = AdvisorFeedbackView;
-

@@ -1,0 +1,50 @@
+#registration {
+  .text-input + .text-input,
+  select + .text-input,
+  .text-input + select,
+  .reg-field + .reg-field {
+    margin-top: 15px;
+  }
+
+  .text-input {
+    font-size: 14px;
+  }
+
+  textarea {
+    font-size: 12px;
+  }
+
+  input[type=radio], input[type=checkbox] {
+    margin-right: 5px;
+  }
+
+  select {
+    font-size: 13px;
+    background-color: #fff;
+    color: #666;
+    border: 1px solid #ccc;
+    margin-left: 3px;
+  }
+
+  .contact-select {
+    width: 100%;
+    margin-left: 0px;
+  }
+
+  label.hint {
+    background: none;
+    display: block;
+    font-size: 11px;
+    line-height: 1.4;
+    padding: 3px 5px 0;
+
+    & + .text-input,
+    & + .instructions {
+      margin-top: 15px;
+    }
+  }
+
+  .instructions {
+    font-weight: 600;
+  }
+}

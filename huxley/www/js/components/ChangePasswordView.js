@@ -11,6 +11,8 @@ var React = require('react');
 
 var Button = require('components/Button');
 
+require('css/ChangePasswordView.less');
+
 var ChangePasswordView = React.createClass({
 
   propTypes: {
