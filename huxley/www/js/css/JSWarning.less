@@ -1,0 +1,29 @@
+.banner-wrapper.js-warning {
+  background: #faa;
+  border-bottom: 1px solid #c66;
+
+  .banner {
+    background: url(/static/img/js.png) left center no-repeat;
+    color: #400;
+    text-shadow: 0px 1px #ffc0c0;
+
+    h3 {
+      color: #600;
+    }
+  }
+}
+
+@media
+only screen and (-webkit-min-device-pixel-ratio: 2),
+only screen and (   min--moz-device-pixel-ratio: 2),
+only screen and (   -o-min-device-pixel-ratio: 2/1),
+only screen and (    min-device-pixel-ratio: 2),
+only screen and (        min-resolution: 192dpi),
+only screen and (        min-resolution: 2dppx) {
+  .banner-wrapper.js-warning {
+    .banner {
+      background-image: url(/static/img/js-2x.png);
+      background-size: 50px 50px;
+    }
+  }
+}
