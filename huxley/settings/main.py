@@ -14,8 +14,8 @@ ADMIN_SECRET = 'OVERRIDE THIS IN PRODUCTION'
 
 SITE_ID = 1
 
+# True only when testing is run from command line
 TESTING = len(sys.argv) > 1 and sys.argv[1] == 'test'
-#True only when testing is run from command line
 
 DATABASES = {
     'default': {
@@ -42,9 +42,8 @@ STATICFILES_DIRS = ()
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-    'pipeline.finders.PipelineFinder',
 )
-STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
+STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
 
 TEMPLATES = [{
     'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -92,5 +91,4 @@ INSTALLED_APPS = (
     'huxley.accounts',
     'huxley.www',
     'huxley.logging',
-    'pipeline',
 )

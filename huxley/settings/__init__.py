@@ -4,7 +4,6 @@
 from .conference import *
 from .main import *
 from .logging import *
-from .pipeline import *
 
 try:
     from .local import *
