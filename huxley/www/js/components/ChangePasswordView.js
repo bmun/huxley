@@ -10,6 +10,7 @@ var cx = require('classnames');
 var React = require('react');
 
 var Button = require('components/Button');
+var StatusLabel = require('components/StatusLabel');
 
 require('css/ChangePasswordView.less');
 
@@ -87,11 +88,9 @@ var ChangePasswordView = React.createClass({
     }
 
     return (
-      <div className="message">
-        <label className={this.state.success ? 'success' : 'error'}>
-          {this.state.message}
-        </label>
-      </div>
+      <StatusLabel status={this.state.success ? 'success' : 'error'}>
+        {this.state.message}
+      </StatusLabel>
     );
   },
 

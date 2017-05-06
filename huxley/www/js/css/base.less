@@ -23,29 +23,6 @@ a {
   }
 }
 
-/* This has to be here because it's used in the change password
- * dropdown. If that changes, move this to content.scss. */
-label.error {
-  color: @red-highlight;
-  font-size: 10px;
-  font-weight: 600;
-  padding-left: 20px;
-  background: url(/static/img/exclamation.png) left center no-repeat;
-}
-
-@media
-only screen and (-webkit-min-device-pixel-ratio: 2),
-only screen and (   min--moz-device-pixel-ratio: 2),
-only screen and (   -o-min-device-pixel-ratio: 2/1),
-only screen and (    min-device-pixel-ratio: 2),
-only screen and (        min-resolution: 192dpi),
-only screen and (        min-resolution: 2dppx) {
-  label.error {
-    background: url(/static/img/exclamation-2x.png) left center no-repeat;
-    background-size: 16px 16px;
-  }
-}
-
 .rounded {
   border-radius: 5px 5px 5px 5px;
   -moz-border-radius: 5px 5px 5px 5px;

@@ -16,6 +16,7 @@ var CurrentUserActions = require('actions/CurrentUserActions');
 var NavLink = require('components/NavLink');
 var OuterView = require('components/OuterView');
 var ServerAPI = require('lib/ServerAPI');
+var StatusLabel = require('components/StatusLabel');
 var TextInput = require('components/TextInput');
 var User = require('utils/User');
 
@@ -113,9 +114,7 @@ var LoginView = React.createClass({
   renderError: function() {
     if (this.state.error) {
       return (
-        <div id="errorcontainer">
-          <label className="error">{this.state.error}</label>
-        </div>
+        <StatusLabel status="error">{this.state.error}</StatusLabel>
       );
     }
 

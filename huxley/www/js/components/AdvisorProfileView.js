@@ -15,6 +15,7 @@ var ConferenceContext = require('components/ConferenceContext');
 var CurrentUserActions = require('actions/CurrentUserActions');
 var PhoneInput = require('components/PhoneInput');
 var ProgramTypes = require('constants/ProgramTypes');
+var StatusLabel = require('components/StatusLabel');
 var TextInput = require('components/TextInput');
 var User = require('utils/User');
 var _handleChange = require('utils/_handleChange');
@@ -331,18 +332,18 @@ var AdvisorProfileView = React.createClass({
   renderError: function(field) {
     if (this.state.errors[field]) {
       return (
-        <label className="hint error">
+        <StatusLabel status="error">
           {this.state.errors[field]}
-        </label>
+        </StatusLabel>
       );
     }
 
     if (this.state.errors.school &&
         this.state.errors.school[field]) {
       return (
-        <label className="hint error">
+        <StatusLabel status="error">
           {this.state.errors.school[field]}
-        </label>
+        </StatusLabel>
       );
     }
 

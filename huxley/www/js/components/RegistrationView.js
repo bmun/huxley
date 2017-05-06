@@ -22,6 +22,7 @@ var NumberInput = require('components/NumberInput');
 var OuterView = require('components/OuterView');
 var PhoneInput = require('components/PhoneInput');
 var ProgramTypes = require('constants/ProgramTypes');
+var StatusLabel = require('components/StatusLabel');
 var TextInput = require('components/TextInput');
 var _handleChange = require('utils/_handleChange');
 
@@ -505,9 +506,9 @@ var RegistrationView = React.createClass({
   renderError: function(field) {
     if (this.state.errors[field]) {
       return (
-        <label className="hint error">
+        <StatusLabel status="error">
           {this.state.errors[field]}
-        </label>
+        </StatusLabel>
       );
     }
 
@@ -525,9 +526,9 @@ var RegistrationView = React.createClass({
     if (this.state.errors.school &&
         this.state.errors.school[field]) {
       return (
-        <label className="hint error">
+        <StatusLabel status="error">
           {this.state.errors.school[field]}
-        </label>
+        </StatusLabel>
       );
     }
 
@@ -705,7 +706,7 @@ const RegistrationTextInput = React.createClass({
       <div className="reg-field">
         <TextInput {...inputProps} />
         {errors && errors.map(error =>
-          <label className="hint error">{error}</label>
+          <StatusLabel status="error">{error}</StatusLabel>
         )}
       </div>
     );
@@ -726,7 +727,7 @@ const RegistrationPhoneInput = React.createClass({
       <div className="reg-field">
         <PhoneInput {...inputProps} />
         {errors && errors.map(error =>
-          <label className="hint error">{error}</label>
+          <StatusLabel status="error">{error}</StatusLabel>
         )}
       </div>
     );

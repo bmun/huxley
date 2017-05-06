@@ -16,6 +16,7 @@ var DelegateStore = require('stores/DelegateStore');
 var CurrentUserActions = require('actions/CurrentUserActions');
 var InnerView = require('components/InnerView');
 var ServerAPI = require('lib/ServerAPI');
+var StatusLabel = require('components/StatusLabel');
 var TextInput = require('components/TextInput');
 var _handleChange = require('utils/_handleChange');
 
@@ -197,9 +198,9 @@ var AdvisorRosterView = React.createClass({
   renderError: function(field) {
     if (this.state.errors[field]) {
       return (
-        <label className="hint error">
+        <StatusLabel status="error">
           {this.state.errors[field]}
-        </label>
+        </StatusLabel>
       );
     }
 

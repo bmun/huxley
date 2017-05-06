@@ -12,6 +12,7 @@ var ReactRouter = require('react-router');
 var Button = require('components/Button');
 var NavLink = require('components/NavLink');
 var OuterView = require('components/OuterView');
+var StatusLabel = require('components/StatusLabel');
 var TextInput = require('components/TextInput');
 
 require('css/LoginForm.less');
@@ -56,9 +57,7 @@ var ForgotPasswordView = React.createClass({
             Reset Password
           </Button>
           <span className="help-text">We'll email you a new one.</span>
-          <div id="errorcontainer">
-            {this.renderError()}
-          </div>
+          {this.renderError()}
         </form>
       </OuterView>
     );
@@ -67,9 +66,9 @@ var ForgotPasswordView = React.createClass({
   renderError: function() {
     if (this.state.error) {
       return (
-        <label className="error">
+        <StatusLabel status="error">
           Sorry, we couldn't find a user for the username given.
-        </label>
+        </StatusLabel>
       );
     }
   },
