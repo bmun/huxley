@@ -8,7 +8,7 @@
     <link rel="icon" type="image/png" href="/static/img/favicon.png" />
     {% load static %}
     <link type="text/css" href="http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,700,600,400,300" rel="stylesheet">
-    <link type="text/css" href="{% static 'js/bundle.css' %}" rel="stylesheet">
+    <link type="text/css" href="{% static 'js/huxley.css' %}" rel="stylesheet">
     <script type="text/javascript">
         currentUser = {{ user_json|safe }};
         conference = {{ conference_json|safe }}
@@ -16,7 +16,8 @@
         ContactTypes = {{ contact_types|safe }};
         ProgramTypes = {{ program_types|safe }};
     </script>
-    <script type="text/javascript" src="{% static 'js/bundle.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/vendor.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/huxley.js' %}"></script>
 </head>
 <body>
     {% include "ie-warning.html" %}

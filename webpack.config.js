@@ -11,7 +11,11 @@ var plugins = [
   new webpack.EnvironmentPlugin([
     'NODE_ENV',
   ]),
-  new ExtractTextPlugin('bundle.css'),
+  new ExtractTextPlugin('huxley.css'),
+  new webpack.optimize.CommonsChunkPlugin({
+    name: 'vendor',
+    filename: 'vendor.js',
+  }),
 ];
 if (process.env.NODE_ENV === 'production') {
   plugins.push(
@@ -25,10 +29,23 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 module.exports = {
-  entry: path.join(JS_ROOT, 'entry.js'),
+  entry: {
+    huxley: path.join(JS_ROOT, 'entry.js'),
+    vendor: [
+      'classnames',
+      'flux',
+      'jquery',
+      'jquery-ui',
+      'js-cookie',
+      'react',
+      'react-dom',
+      'react-modal',
+      'react-router',
+    ],
+  },
   output: {
     path: STATIC_ROOT,
-    filename: 'bundle.js',
+    filename: '[name].js',
   },
   module: {
     rules: [
