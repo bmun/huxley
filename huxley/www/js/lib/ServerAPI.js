@@ -123,7 +123,6 @@ function _ajax(method, uri, data) {
         resolve(jqXHR.responseJSON);
       },
       error: (jqXHR, status, error) => {
-        debugger;
         reject(jqXHR.responseJSON);
       },
     });
