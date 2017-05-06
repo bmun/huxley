@@ -4,13 +4,12 @@
 import json
 
 from django.core.urlresolvers import reverse
-from django.db.models import Max
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render_to_response
+from django.template import RequestContext
 
 from huxley.api.serializers import UserSerializer
 from huxley.core.constants import ContactGender, ContactType, ProgramTypes
 from huxley.core.models import Conference
-from huxley.utils.shortcuts import render_template
 
 
 def index(request):
@@ -50,4 +49,5 @@ def index(request):
         'program_types': ProgramTypes.to_json(),
     }
 
-    return render_template(request, 'www.html', context)
+    return render_to_response('www.html', context,
+                              context_instance=RequestContext(request))
