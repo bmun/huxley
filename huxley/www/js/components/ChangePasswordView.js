@@ -5,11 +5,11 @@
 
 'use strict';
 
-var $ = require('jquery');
 var cx = require('classnames');
 var React = require('react');
 
 var Button = require('components/Button');
+var ServerAPI = require('lib/ServerAPI');
 var StatusLabel = require('components/StatusLabel');
 
 require('css/ChangePasswordView.less');
@@ -118,21 +118,16 @@ var ChangePasswordView = React.createClass({
       });
     } else {
       this.setState({loading: true});
-      $.ajax({
-        type: 'PUT',
-        url: '/api/users/me/password',
-        data: {
-          password: this.state.currentPassword,
-          new_password: this.state.newPassword,
-        },
-        success: this._handleSuccess,
-        error: this._handleError
-      }),
+      const {currentPassword, newPassword} = this.state;
+      ServerAPI.changePassword(currentPassword, newPassword).then(
+        this._handleSuccess,
+        this._handleError,
+      );
       event.preventDefault();
     }
   },
 
-  _handleSuccess: function(data, status, jqXHR) {
+  _handleSuccess: function(response) {
     this.setState({
       loading: false,
       success: true,
@@ -143,8 +138,7 @@ var ChangePasswordView = React.createClass({
     }, this.onSuccess);
   },
 
-  _handleError: function(jqXHR, status, error) {
-    var response = jqXHR.responseJSON;
+  _handleError: function(response) {
     this.setState({
       loading: false,
       message: response.detail,

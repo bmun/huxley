@@ -5,8 +5,6 @@
 
 'use strict';
 
-var $ = require('jquery');
-
 var ActionConstants = require('constants/ActionConstants');
 var Dispatcher = require('dispatcher/Dispatcher');
 var ServerAPI = require('lib/ServerAPI');
@@ -46,14 +44,7 @@ class CurrentUserStore extends Store {
   }
 
   updateUser(userID, delta, onSuccess, onError) {
-    $.ajax({
-      type: 'PATCH',
-      url: '/api/users/' + userID,
-      data: JSON.stringify(delta),
-      contentType: 'application/json',
-      success: onSuccess,
-      error: onError
-    });
+    ServerAPI.updateUser(userID, delta).then(onSuccess, onError);
 
     const user = {
       ...this._currentUser,

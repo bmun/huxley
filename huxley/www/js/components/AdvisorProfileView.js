@@ -372,7 +372,7 @@ var AdvisorProfileView = React.createClass({
     event.preventDefault();
   },
 
-  _handleSuccess: function(data, status, jqXHR) {
+  _handleSuccess: function(response) {
     this.setState({
       errors: {},
       loading: false,
@@ -382,8 +382,7 @@ var AdvisorProfileView = React.createClass({
     this._successTimeout = setTimeout(() => this.setState({success: false}), 2000);
   },
 
-  _handleError: function(jqXHR, status, error) {
-    var response = jqXHR.responseJSON;
+  _handleError: function(response) {
     if (!response) {
       return;
     }

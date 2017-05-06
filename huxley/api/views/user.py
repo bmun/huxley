@@ -78,7 +78,7 @@ class UserPassword(generics.GenericAPIView):
         '''Reset a user's password and email it to them.'''
         try:
             User.reset_password(request.data.get('username'))
-            return Response(status=status.HTTP_201_CREATED)
+            return Response({}, status=status.HTTP_201_CREATED)
         except User.DoesNotExist:
             raise Http404
 
@@ -92,6 +92,6 @@ class UserPassword(generics.GenericAPIView):
 
         try:
             request.user.change_password(password, new_password)
-            return Response(status=status.HTTP_200_OK)
+            return Response({}, status=status.HTTP_200_OK)
         except PasswordChangeFailed as e:
             raise APIException(str(e))

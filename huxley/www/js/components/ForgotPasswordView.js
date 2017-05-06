@@ -12,6 +12,7 @@ var ReactRouter = require('react-router');
 var Button = require('components/Button');
 var NavLink = require('components/NavLink');
 var OuterView = require('components/OuterView');
+var ServerAPI = require('lib/ServerAPI');
 var StatusLabel = require('components/StatusLabel');
 var TextInput = require('components/TextInput');
 
@@ -79,24 +80,18 @@ var ForgotPasswordView = React.createClass({
 
   _handleSubmit: function(event) {
     this.setState({loading: true});
-    $.ajax({
-      type: 'POST',
-      url: '/api/users/me/password',
-      data: {
-        username: this.state.username
-      },
-      success: this._handleSuccess,
-      error: this._handleError
-    });
+    ServerAPI.resetPassword(username).then(
+      this._handleSuccess,
+      this._handleError,
+    );
     event.preventDefault();
   },
 
-  _handleSuccess: function(data, status, jqXHR) {
+  _handleSuccess: function(response) {
     this.history.pushState(null, '/password/reset');
   },
 
-  _handleError: function(jqXHR, status, error) {
-    var response = jqXHR.responseJSON;
+  _handleError: function(response) {
     if (!response.detail) {
       return;
     }

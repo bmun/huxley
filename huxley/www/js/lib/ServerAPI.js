@@ -15,6 +15,13 @@ var ServerAPI = {
     return _post('/api/delegates', {name, email, school});
   },
 
+  changePassword(currentPassword, newPassword) {
+    return _put('/api/users/me/password', {
+      password: currentPassword,
+      new_password: newPassword,
+    });
+  },
+
   deleteDelegate(delegateID) {
     return _delete(`/api/delegates/${delegateID}`);
   },
@@ -69,6 +76,14 @@ var ServerAPI = {
     return _delete('/api/users/me');
   },
 
+  register(data) {
+    return _post('/api/users', data);
+  },
+
+  resetPassword(username) {
+    return _post('/api/users/me/password', {username});
+  },
+
   updateAssignment(assignmentID, data) {
     return _patch(`/api/assignments/${assignmentID}`, data);
   },
@@ -89,6 +104,9 @@ var ServerAPI = {
     return _patch('/api/delegates', delegates);
   },
 
+  updateUser(userID, data) {
+    return _patch(`/api/users/${userID}`, data);
+  },
 };
 
 function _ajax(method, uri, data) {
@@ -105,6 +123,7 @@ function _ajax(method, uri, data) {
         resolve(jqXHR.responseJSON);
       },
       error: (jqXHR, status, error) => {
+        debugger;
         reject(jqXHR.responseJSON);
       },
     });
@@ -114,6 +133,7 @@ function _ajax(method, uri, data) {
 const _delete = _ajax.bind(null, 'DELETE');
 const _get = _ajax.bind(null, 'GET');
 const _patch = _ajax.bind(null, 'PATCH');
+const _put = _ajax.bind(null, 'PUT');
 const _post = _ajax.bind(null, 'POST');
 
 $.ajaxSetup({
