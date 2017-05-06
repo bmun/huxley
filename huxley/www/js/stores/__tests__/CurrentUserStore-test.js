@@ -33,6 +33,7 @@ describe('CurrentUserStore', function() {
     });
 
     ServerAPI.updateSchool.mockReturnValue(Promise.resolve({}));
+    ServerAPI.updateUser.mockReturnValue(Promise.resolve({}));
   });
 
   it('correctly bootstraps the current user object', function() {
