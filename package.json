@@ -9,7 +9,6 @@
     "flux": "^2.1.1",
     "fbjs": "0.8.3",
     "jquery": "2.1.1",
-    "jquery-ui": "1.10.5",
     "js-cookie": "~2.0.3",
     "react": "15.0.0",
     "react-dom": "15.0.0",

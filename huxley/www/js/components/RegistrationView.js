@@ -5,7 +5,6 @@
 
 'use strict';
 
-var $ = require('jquery');
 var cx = require('classnames');
 var React = require('react');
 var ReactRouter = require('react-router');
@@ -28,7 +27,6 @@ var TextInput = require('components/TextInput');
 var _handleChange = require('utils/_handleChange');
 
 require('css/RegistrationView.less');
-require('jquery-ui/effect-shake');
 
 var USA = 'United States of America';
 
@@ -38,7 +36,8 @@ var RegistrationView = React.createClass({
   ],
 
   contextTypes: {
-    conference: React.PropTypes.shape(ConferenceContext)
+    conference: React.PropTypes.shape(ConferenceContext),
+    shake: React.PropTypes.func,
   },
 
   getInitialState: function() {
@@ -674,13 +673,9 @@ var RegistrationView = React.createClass({
     this.setState({
       errors: response,
       loading: false
-    }, function() {
-      $('#huxley-app').effect(
-        'shake',
-        {direction: 'up', times: 2, distance: 2},
-        250
-      );
-    }.bind(this));
+    }, () => {
+      this.context.shake && this.context.shake();
+    });
   }
 });
 

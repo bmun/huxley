@@ -10,6 +10,7 @@ var ReactRouter = require('react-router');
 
 var NavTab = require('components/NavTab');
 var PermissionDeniedView = require('components/PermissionDeniedView');
+var Shaker = require('components/Shaker');
 var TopBar = require('components/TopBar');
 var User = require('utils/User');
 
@@ -32,21 +33,23 @@ var AdvisorView = React.createClass ({
     return (
       <div>
         <TopBar user={this.props.user} />
-        <div className="navbar rounded-top">
-          <NavTab href="/advisor/profile">
-            Profile
-          </NavTab>
-          <NavTab href="/advisor/assignments">
-            Assignments
-          </NavTab>
-          <NavTab href="/advisor/roster">
-            Delegates
-          </NavTab>
-          <NavTab href="/advisor/feedback">
-            Feedback
-          </NavTab>
-        </div>
-        {this.props.children}
+        <Shaker>
+          <div className="navbar rounded-top">
+            <NavTab href="/advisor/profile">
+              Profile
+            </NavTab>
+            <NavTab href="/advisor/assignments">
+              Assignments
+            </NavTab>
+            <NavTab href="/advisor/roster">
+              Delegates
+            </NavTab>
+            <NavTab href="/advisor/feedback">
+              Feedback
+            </NavTab>
+          </div>
+          {this.props.children}
+        </Shaker>
       </div>
     );
   },

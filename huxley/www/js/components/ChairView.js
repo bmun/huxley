@@ -8,6 +8,7 @@
 var React = require('react');
 
 var NavTab = require('components/NavTab');
+var Shaker = require('components/Shaker');
 var TopBar = require('components/TopBar');
 
 require('css/NavBar.less');
@@ -17,15 +18,17 @@ var ChairView = React.createClass({
     return (
       <div>
         <TopBar user={this.props.user} />
-        <div className="navbar rounded-top">
-          <NavTab href="/chair/attendance">
-            Attendance
-          </NavTab>
-          <NavTab href="/chair/summary">
-            Summaries
-          </NavTab>
-        </div>
-        {this.props.children}
+        <Shaker>
+          <div className="navbar rounded-top">
+            <NavTab href="/chair/attendance">
+              Attendance
+            </NavTab>
+            <NavTab href="/chair/summary">
+              Summaries
+            </NavTab>
+          </div>
+          {this.props.children}
+        </Shaker>
       </div>
     );
   },

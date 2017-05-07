@@ -17,12 +17,15 @@ var StatusLabel = require('components/StatusLabel');
 var TextInput = require('components/TextInput');
 
 require('css/LoginForm.less');
-require('jquery-ui/effect-shake');
 
 var ForgotPasswordView = React.createClass({
   mixins: [
     ReactRouter.History,
   ],
+
+  contextTypes: {
+    shake: React.PropTypes.func,
+  },
 
   getInitialState: function() {
     return {
@@ -80,7 +83,7 @@ var ForgotPasswordView = React.createClass({
 
   _handleSubmit: function(event) {
     this.setState({loading: true});
-    ServerAPI.resetPassword(username).then(
+    ServerAPI.resetPassword(this.state.username).then(
       this._handleSuccess,
       this._handleError,
     );
@@ -100,11 +103,7 @@ var ForgotPasswordView = React.createClass({
       error: "Sorry, we couldn't find a user with that username.",
       loading: false
     }, () => {
-      $('#huxley-app').effect(
-        'shake',
-        {direction: 'up', times: 2, distance: 2},
-        250
-      );
+      this.context.shake && this.context.shake();
     });
   },
 });
