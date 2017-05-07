@@ -5,7 +5,6 @@
 
 'use strict';
 
-var $ = require('jquery');
 var React = require('react');
 
 var Button = require('components/Button');
