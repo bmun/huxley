@@ -6,8 +6,9 @@
   "license": "BSD",
   "dependencies": {
     "classnames": "2.2.5",
-    "flux": "^2.1.1",
     "fbjs": "0.8.3",
+    "flux": "^2.1.1",
+    "history": "^1.12.0",
     "jquery": "2.1.1",
     "jquery-ui": "1.10.5",
     "js-cookie": "~2.0.3",
