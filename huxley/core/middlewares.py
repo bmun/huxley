@@ -23,10 +23,12 @@ class LoggingMiddleware(object):
     def process_response(self, request, response):
         if 'api' in request.path:
             logger = logging.getLogger('huxley.api')
+            status_code = response.status_code
+            message = response.getvalue() if 500 > status_code >= 400 else ""
             log = json.dumps({
-                  'message': "",
+                  'message': message,
                   'uri': request.path,
-                  'status_code': response.status_code,
+                  'status_code': status_code,
                   'username': request.user.username})
             logger.info(log)
 
