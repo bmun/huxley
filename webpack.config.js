@@ -4,6 +4,8 @@ var webpack = require('webpack');
 
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
+var package = require('./package.json');
+
 var JS_ROOT = path.join(__dirname, 'huxley/www/js');
 var STATIC_ROOT = path.join(__dirname, 'huxley/www/static/js');
 
@@ -11,7 +13,11 @@ var plugins = [
   new webpack.EnvironmentPlugin([
     'NODE_ENV',
   ]),
-  new ExtractTextPlugin('bundle.css'),
+  new ExtractTextPlugin('huxley.css'),
+  new webpack.optimize.CommonsChunkPlugin({
+    name: 'vendor',
+    filename: 'vendor.js',
+  }),
 ];
 if (process.env.NODE_ENV === 'production') {
   plugins.push(
@@ -25,10 +31,13 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 module.exports = {
-  entry: path.join(JS_ROOT, 'entry.js'),
+  entry: {
+    huxley: path.join(JS_ROOT, 'entry.js'),
+    vendor: Object.keys(package.dependencies),
+  },
   output: {
     path: STATIC_ROOT,
-    filename: 'bundle.js',
+    filename: '[name].js',
   },
   module: {
     rules: [
