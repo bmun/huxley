@@ -4,6 +4,8 @@ var webpack = require('webpack');
 
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
+var package = require('./package.json');
+
 var JS_ROOT = path.join(__dirname, 'huxley/www/js');
 var STATIC_ROOT = path.join(__dirname, 'huxley/www/static/js');
 
@@ -31,17 +33,7 @@ if (process.env.NODE_ENV === 'production') {
 module.exports = {
   entry: {
     huxley: path.join(JS_ROOT, 'entry.js'),
-    vendor: [
-      'classnames',
-      'flux',
-      'jquery',
-      'jquery-ui',
-      'js-cookie',
-      'react',
-      'react-dom',
-      'react-modal',
-      'react-router',
-    ],
+    vendor: Object.keys(package.dependencies),
   },
   output: {
     path: STATIC_ROOT,
