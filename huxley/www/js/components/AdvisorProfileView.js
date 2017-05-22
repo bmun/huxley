@@ -5,7 +5,6 @@
 
 'use strict';
 
-var $ = require('jquery');
 var React = require('react');
 
 var Button = require('components/Button');
@@ -21,7 +20,6 @@ var User = require('utils/User');
 var _handleChange = require('utils/_handleChange');
 
 require('css/Table.less');
-require('jquery-ui/effect-shake');
 
 var AdvisorProfileView = React.createClass({
 
@@ -34,7 +32,8 @@ var AdvisorProfileView = React.createClass({
   // },
 
   contextTypes: {
-    conference: React.PropTypes.shape(ConferenceContext)
+    conference: React.PropTypes.shape(ConferenceContext),
+    shake: React.PropTypes.func,
   },
 
   getInitialState: function() {
@@ -390,12 +389,8 @@ var AdvisorProfileView = React.createClass({
     this.setState({
       errors: response,
       loading: false
-    }, function() {
-      $('#huxley-app').effect(
-        'shake',
-        {direction: 'up', times: 2},
-        250
-      );
+    }, () => {
+      this.context.shake && this.context.shake();
     });
   }
 });

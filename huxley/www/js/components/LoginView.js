@@ -5,7 +5,6 @@
 
 'use strict';
 
-var $ = require('jquery');
 var cx = require('classnames');
 var React = require('react');
 var ReactRouter = require('react-router');
@@ -21,7 +20,6 @@ var TextInput = require('components/TextInput');
 var User = require('utils/User');
 
 require('css/LoginForm.less');
-require('jquery-ui/effect-shake');
 
 var LoginView = React.createClass({
   mixins: [
@@ -29,7 +27,8 @@ var LoginView = React.createClass({
   ],
 
   contextTypes: {
-    conference: React.PropTypes.shape(ConferenceContext)
+    conference: React.PropTypes.shape(ConferenceContext),
+    shake: React.PropTypes.func,
   },
 
   getInitialState: function() {
@@ -149,11 +148,7 @@ var LoginView = React.createClass({
       error: responseJSON.detail,
       loading: false,
     }, () => {
-      $('#huxley-app').effect(
-        'shake',
-        {direction: 'up', times: 2, distance: 2},
-        250
-      );
+      this.context.shake && this.context.shake();
     });
   }
 });

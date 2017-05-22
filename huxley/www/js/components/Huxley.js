@@ -12,6 +12,7 @@ var AdvisorView = require('components/AdvisorView');
 var ChairView = require('components/ChairView');
 var ConferenceContext = require('components/ConferenceContext');
 var CurrentUserStore = require('stores/CurrentUserStore');
+var Shaker = require('components/Shaker');
 var User = require('utils/User');
 
 require('css/base.less');
@@ -49,7 +50,11 @@ var Huxley = React.createClass({
   render: function() {
     var user = CurrentUserStore.getCurrentUser();
     if (User.isAnonymous(user)) {
-      return React.cloneElement(this.props.children, { user: user });
+      return (
+        <Shaker>
+          {React.cloneElement(this.props.children, { user: user })}
+        </Shaker>
+      );
     } else if (User.isAdvisor(user)) {
       return (
         <AdvisorView user={user}>
