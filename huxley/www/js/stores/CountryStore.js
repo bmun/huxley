@@ -21,6 +21,7 @@ class CountryStore extends Store {
     }
 
     ServerAPI.getCountries().then(value => {
+      debugger;
       CountryActions.countriesFetched(value);
     });
 

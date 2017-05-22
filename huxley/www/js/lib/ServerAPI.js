@@ -3,7 +3,7 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-var $ = require('jquery');
+require('whatwg-fetch');
 var Cookie = require('js-cookie');
 
 /**
@@ -109,24 +109,35 @@ var ServerAPI = {
   },
 };
 
+function _encodeQueryString(params) {
+  return Object.entries(params)
+    .map(e => encodeURIComponent(e[0]) + '=' + encodeURIComponent(e[1]))
+    .join('&');
+}
+
 function _ajax(method, uri, data) {
-  return new Promise((resolve, reject) => {
-    $.ajax({
-      type: method,
-      url: uri,
-      contentType: 'application/json; charset=UTF-8',
-      data: typeof data === 'string' || method === 'GET'
-        ? data
-        : JSON.stringify(data),
-      dataType: 'json',
-      success: (data, textStatus, jqXHR) => {
-        resolve(jqXHR.responseJSON);
-      },
-      error: (jqXHR, status, error) => {
-        reject(jqXHR.responseJSON);
-      },
-    });
-  });
+  const isSafeMethod = /^(GET|HEAD|OPTIONS|TRACE)$/.test(method);
+  if (isSafeMethod && data) {
+    uri = uri + '?' + _encodeQueryString(data);
+  }
+  const params = {
+    credentials: 'same-origin',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    method: method,
+  };
+  if (!isSafeMethod) {
+    params.headers['X-CSRFToken'] = Cookie.get('csrftoken');
+    if (data) {
+      params.body = typeof data === 'string' ? data : JSON.stringify(data);
+    }
+  }
+  return fetch(uri, params).then(response =>
+    response.ok
+      ? response.json()
+      : response.json().then(json => Promise.reject(json))
+  );
 }
 
 const _delete = _ajax.bind(null, 'DELETE');
@@ -134,14 +145,5 @@ const _get = _ajax.bind(null, 'GET');
 const _patch = _ajax.bind(null, 'PATCH');
 const _put = _ajax.bind(null, 'PUT');
 const _post = _ajax.bind(null, 'POST');
-
-$.ajaxSetup({
-  beforeSend: (xhr, settings) => {
-    if (!/^(GET|HEAD|OPTIONS|TRACE)$/.test(settings.type)) {
-      // TODO: check that it's same origin.
-      xhr.setRequestHeader('X-CSRFToken', Cookie.get('csrftoken'));
-    }
-  },
-});
 
 module.exports = ServerAPI;
