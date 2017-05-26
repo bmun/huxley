@@ -9,6 +9,9 @@ var package = require('./package.json');
 var JS_ROOT = path.join(__dirname, 'huxley/www/js');
 var STATIC_ROOT = path.join(__dirname, 'huxley/www/static/js');
 
+const marked = require("marked");
+const renderer = new marked.Renderer();
+
 var plugins = [
   new webpack.EnvironmentPlugin([
     'NODE_ENV',
@@ -62,6 +65,19 @@ module.exports = {
           ],
           fallback: 'style-loader',
         }),
+      },
+      {
+        test: /\.md$/,
+        use: [
+          {loader: "html-loader"},
+          {
+            loader: "markdown-loader",
+            options: {
+              pedantic: true,
+              renderer
+            }
+          }
+        ]
       },
     ],
   },
