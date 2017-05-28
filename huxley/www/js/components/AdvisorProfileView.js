@@ -12,16 +12,16 @@ var InnerView = require('components/InnerView');
 var LogoutButton = require('components/LogoutButton');
 var ConferenceContext = require('components/ConferenceContext');
 var CurrentUserActions = require('actions/CurrentUserActions');
+var MarkdownTemplate = require('components/MarkdownTemplate');
 var PhoneInput = require('components/PhoneInput');
 var ProgramTypes = require('constants/ProgramTypes');
 var StatusLabel = require('components/StatusLabel');
 var TextInput = require('components/TextInput');
 var User = require('utils/User');
 var _handleChange = require('utils/_handleChange');
-var _transformMarkdownToReact = require('utils/_transformMarkdownToReact');
 
 require('css/Table.less');
-var AdvisorProfileViewMarkdown = require('markdown/AdvisorProfileView.md');
+const AdvisorProfileViewMarkdown = require('markdown/AdvisorProfileView.md');
 
 var AdvisorProfileView = React.createClass({
 
@@ -68,15 +68,15 @@ var AdvisorProfileView = React.createClass({
     var conference = this.context.conference;
     var user = this.props.user;
     var school = User.getSchool(user);
-    var markdownComponent = _transformMarkdownToReact(AdvisorProfileViewMarkdown, {
-      "first_name": user.first_name,
-      "school_name": school.name,
-      "conference_session": conference.session,
-      "conference_external": conference.external,
-    });
     return (
       <InnerView>
-        {markdownComponent}
+        <MarkdownTemplate
+          first_name={user.first_name}
+          school_name={school.name}
+          conference_session={conference.session}
+          conference_external={conference.external}>
+          {AdvisorProfileViewMarkdown}
+        </MarkdownTemplate>
         <form onSubmit={this._handleSubmit}>
           <div className="table-container">
             <table>
