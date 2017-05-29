@@ -18,10 +18,28 @@ var MarkdownTemplate = React.createClass({
     var markdown = this.props.children;
     for (const variable of Object.keys(this.props)) {
       var regex = new RegExp("{{ " + variable + " }}", "g");
-      markdown = markdown.replace(regex, this.props[variable]);
+      var value  = this.escapeHtml(this.props[variable]);
+      markdown = markdown.replace(regex, value);
     }
 
     return {__html: markdown};
+  },
+
+  escapeHtml: function(string) {
+    var entityMap = {
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#39;',
+      '/': '&#x2F;',
+      '`': '&#x60;',
+      '=': '&#x3D;'
+    };
+
+    return String(string).replace(/[&<>"'`=\/]/g, function (s) {
+      return entityMap[s];
+    });
   }
 });
 
