@@ -18,10 +18,12 @@ var InnerView = require('components/InnerView');
 var ServerAPI = require('lib/ServerAPI');
 var StatusLabel = require('components/StatusLabel');
 var TextInput = require('components/TextInput');
+var TextTemplate = require('components/TextTemplate');
 var _handleChange = require('utils/_handleChange');
 
 require('css/Modal.less');
 require('css/Table.less');
+var AdvisorRosterViewText = require('text/AdvisorRosterViewText.md');
 
 var AdvisorRosterView = React.createClass({
   mixins: [
@@ -63,11 +65,9 @@ var AdvisorRosterView = React.createClass({
   render: function() {
     return (
       <InnerView>
-        <h2>Roster</h2>
-        <p>
-          Here you can add your schools delegates to your roster.
-          Any comments that chairs have about your delegate will appear here.
-        </p>
+        <TextTemplate>
+          {AdvisorRosterViewText}
+        </TextTemplate>
         <form>
           <div className="table-container">
             <table className="table highlight-cells">

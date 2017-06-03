@@ -16,8 +16,10 @@ var CountryStore = require('stores/CountryStore');
 var CurrentUserStore = require('stores/CurrentUserStore');
 var DelegateStore = require('stores/DelegateStore');
 var InnerView = require('components/InnerView');
+var TextTemplate = require('components/TextTemplate');
 
 require('css/Table.less');
+var AdvisorFeedbackViewText = require('text/AdvisorFeedbackViewText.md');
 
 var AdvisorFeedbackView = React.createClass({
   mixins: [
@@ -76,28 +78,27 @@ var AdvisorFeedbackView = React.createClass({
   render: function() {
     return (
       <InnerView>
-        <h2>Feedback</h2>
-        <p>
-          Here you can view chairs feedback on your delegates, as well as their attendance.
-        </p>
-          <div className="table-container">
-            <table className="table highlight-cells">
-              <thead>
-                <tr>
-                  <th>Committee</th>
-                  <th>Country</th>
-                  <th>1</th>
-                  <th>2</th>
-                  <th>3</th>
-                  <th>4</th>
-                  <th>Summary</th>
-                </tr>
-              </thead>
-              <tbody>
-                {this.renderAssignmentRows()}
-              </tbody>
-            </table>
-          </div>
+        <TextTemplate>
+          {AdvisorFeedbackViewText}
+        </TextTemplate>
+        <div className="table-container">
+          <table className="table highlight-cells">
+            <thead>
+              <tr>
+                <th>Committee</th>
+                <th>Country</th>
+                <th>1</th>
+                <th>2</th>
+                <th>3</th>
+                <th>4</th>
+                <th>Summary</th>
+              </tr>
+            </thead>
+            <tbody>
+              {this.renderAssignmentRows()}
+            </tbody>
+          </table>
+        </div>
       </InnerView>
     );
   },
