@@ -17,9 +17,11 @@ var OuterView = require('components/OuterView');
 var ServerAPI = require('lib/ServerAPI');
 var StatusLabel = require('components/StatusLabel');
 var TextInput = require('components/TextInput');
+var TextTemplate = require('components/TextTemplate');
 var User = require('utils/User');
 
 require('css/LoginForm.less');
+var LoginViewText = require('text/LoginViewText.md');
 
 var LoginView = React.createClass({
   mixins: [
@@ -97,15 +99,13 @@ var LoginView = React.createClass({
     return (
       <div className="logo">
         <hr />
-        <h1>Welcome to Huxley</h1>
-        <span className="help-text">for Berkeley Model United Nations</span>
-        <br />
-        <span className="help-text">a High School Conference</span>
-        <br />
-        <span className="help-text">
-          {conference.start_date['month']} {conference.start_date['day']} -&nbsp;
-          {conference.end_date['day']}, {conference.start_date['year']}
-        </span>
+        <TextTemplate
+          conferenceStartMonth={conference.start_date['month']}
+          conferenceStartDay={conference.start_date['day']}
+          conferenceEndDay={conference.end_date['day']}
+          conferenceStartYear={conference.start_date['year']}>
+          {LoginViewText}
+        </TextTemplate>
       </div>
     );
   },

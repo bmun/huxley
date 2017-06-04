@@ -9,16 +9,17 @@ var React = require('react');
 
 var NavLink = require('components/NavLink');
 var OuterView = require('components/OuterView');
+var TextTemplate = require('components/TextTemplate');
+
+var PasswordResetSuccessViewText = require('text/PasswordResetSuccessViewText.md');
 
 var PasswordResetSuccessView = React.createClass({
   render: function() {
     return (
       <OuterView>
-        <h1>Your password was reset successfully</h1>
-        <p>
-          We've sent a temporary password to the email address in your account.
-          Please use it to log in and change your password.
-        </p>
+        <TextTemplate>
+          {PasswordResetSuccessViewText}
+        </TextTemplate>
         <NavLink direction="left" href="/login">
           Back to Login
         </NavLink>
