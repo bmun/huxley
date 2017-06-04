@@ -15,9 +15,11 @@ var CurrentUserStore = require('stores/CurrentUserStore');
 var DelegateActions = require('actions/DelegateActions');
 var DelegateStore = require('stores/DelegateStore');
 var InnerView = require('components/InnerView');
+var TextTemplate = require('components/TextTemplate');
 var User = require('utils/User');
 
 require('css/Table.less');
+var ChairSummaryViewText = require('text/ChairSummaryViewText.md');
 
 var ChairSummaryView = React.createClass({
   mixins: [
@@ -104,20 +106,9 @@ var ChairSummaryView = React.createClass({
   render() {
     return (
       <InnerView>
-        <h2>Summaries</h2>
-        <p>
-          Here you can provide feedback for the delegates. You can save any
-          changes with the "Save" button and they will not become visible to
-          advisors until you next publish. Please note that clicking the
-          "Publish" button will allow advisors to read the summaries you have
-          written for their delegates.
-        </p>
-        <p>
-          <strong>
-            Only one chair at a time should be logged in. Changes may be lost
-            otherwise.
-          </strong>
-        </p>
+        <TextTemplate>
+          {ChairSummaryViewText}
+        </TextTemplate>
         <form>
           <div className="table-container">
             <table style={{'margin':'10px auto 0px auto'}}>
