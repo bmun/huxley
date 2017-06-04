@@ -10,8 +10,10 @@ var React = require('react');
 var ConferenceContext = require('components/ConferenceContext');
 var NavLink = require('components/NavLink');
 var OuterView = require('components/OuterView');
+var TextTemplate = require('components/TextTemplate');
 
 require('css/Letter.less');
+var RegistrationWaitlistViewText = require('text/RegistrationWaitlistViewText.md');
 
 var RegistrationWaitlistView = React.createClass({
 
@@ -24,13 +26,10 @@ var RegistrationWaitlistView = React.createClass({
     return (
       <OuterView>
         <div class="letter">
-          <p>
-            Thank you for your interest in participating in
-            BMUN {conference.session}! You are currently on our
-            wait list and will be updated on your team's status as spots become
-            available again. We thank you for your patience in advance and hope
-            to see you at Berkeley next March!
-          </p>
+          <TextTemplate
+            conferenceSession={conference.session}>
+            {RegistrationWaitlistViewText}
+          </TextTemplate>
         </div>
         <hr />
         <NavLink direction="right" href="/login">

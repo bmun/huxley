@@ -24,9 +24,11 @@ var ProgramTypes = require('constants/ProgramTypes');
 var ServerAPI = require('lib/ServerAPI');
 var StatusLabel = require('components/StatusLabel');
 var TextInput = require('components/TextInput');
+var TextTemplate = require('components/TextTemplate');
 var _handleChange = require('utils/_handleChange');
 
 require('css/RegistrationView.less');
+var RegistrationViewText = require('text/RegistrationViewText.md');
 
 var USA = 'United States of America';
 
@@ -114,10 +116,10 @@ var RegistrationView = React.createClass({
       <OuterView>
         <form id="registration" onSubmit={this._handleSubmit}>
           <div>
-            <h1>Register for Berkeley Model United Nations</h1>
-            <p>Please fill out the following information to register your school
-            for BMUN {conference.session}. All fields are required except for Secondary Contact
-            information. Please note that BMUN is a high school level conference.</p>
+            <TextTemplate
+              conferenceSession={conference.session}>
+              {RegistrationViewText}
+            </TextTemplate>
             <NavLink direction="left" href="/login">
               Back to Login
             </NavLink>
