@@ -68,7 +68,7 @@ class CurrentUser(generics.GenericAPIView):
     def delete(self, request, *args, **kwargs):
         '''Log out the currently logged-in user.'''
         logout(request)
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response({}, status=status.HTTP_200_OK)
 
 
 class UserPassword(generics.GenericAPIView):
