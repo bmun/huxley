@@ -21,9 +21,9 @@ var DelegateSelect = require('components/DelegateSelect');
 var DelegateStore = require('stores/DelegateStore');
 var InnerView = require('components/InnerView');
 var ServerAPI = require('lib/ServerAPI');
+var Table = require('components/Table');
 var TextTemplate = require('components/TextTemplate');
 
-require('css/Table.less');
 var AdvisorAssignmentsViewText = require('text/AdvisorAssignmentsViewText.md');
 
 var AdvisorAssignmentsView = React.createClass({
@@ -90,47 +90,39 @@ var AdvisorAssignmentsView = React.createClass({
     var committees = this.state.committees;
     var conference = this.context.conference;
     var countries = this.state.countries;
+    var shouldRenderAssignments =
+      Object.keys(committees).length > 0 &&
+      Object.keys(countries).length > 0 &&
+      this.state.assignments.length > 0;
     return (
       <InnerView>
         <TextTemplate
           conferenceSession={conference.session}>
           {AdvisorAssignmentsViewText}
         </TextTemplate>
-        <form>
-          <div className="table-container">
-            <table>
-              <thead>
-                <tr>
-                  <th>Committee</th>
-                  <th>Country</th>
-                  <th>Delegation Size</th>
-                  <th>{finalized ?
-                    "Delegate" :
-                    "Delete Assignments"}
-                  </th>
-                  <th>{finalized ?
-                    "Delegate" :
-                    ""}
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {
-                  Object.keys(committees).length > 0 && Object.keys(countries).length > 0 ?
-                  this.renderAssignmentRows() :
-                  <tr></tr>
-                }
-              </tbody>
-            </table>
-          </div>
-          <Button
-            color="green"
-            onClick={finalized ? this._handleSave: this._handleFinalize}
-            loading={this.state.loading}
-            success={this.state.success}>
-            {finalized ? 'Save' : 'Finalize Assignments'}
-          </Button>
-        </form>
+        <Table
+          emptyMessage="You don't have any assignments."
+          isEmpty={!shouldRenderAssignments}>
+          <thead>
+            <tr>
+              <th>Committee</th>
+              <th>Country</th>
+              <th>Delegation Size</th>
+              <th>{finalized ? 'Delegate' : 'Delete Assignments'}</th>
+              <th>{finalized ? 'Delegate' : ''}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {shouldRenderAssignments ? this.renderAssignmentRows() : null}
+          </tbody>
+        </Table>
+        <Button
+          color="green"
+          onClick={finalized ? this._handleSave: this._handleFinalize}
+          loading={this.state.loading}
+          success={this.state.success}>
+          {finalized ? 'Save' : 'Finalize Assignments'}
+        </Button>
       </InnerView>
     );
   },
