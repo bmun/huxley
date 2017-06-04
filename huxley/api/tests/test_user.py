@@ -366,7 +366,7 @@ class CurrentUserTestCase(TestCase):
         self.assertEqual(int(self.client.session['_auth_user_id']), user.id)
 
         response = self.client.delete(self.url)
-        self.assertEqual(response.status_code, 204)
+        self.assertEqual(response.status_code, 200)
         self.assertTrue('_auth_user_id' not in self.client.session)
 
     def test_get(self):
