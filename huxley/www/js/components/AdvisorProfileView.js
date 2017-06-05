@@ -5,23 +5,25 @@
 
 'use strict';
 
-var React = require('react');
+const React = require('react');
 
-var Button = require('components/Button');
-var InnerView = require('components/InnerView');
-var LogoutButton = require('components/LogoutButton');
-var ConferenceContext = require('components/ConferenceContext');
-var CurrentUserActions = require('actions/CurrentUserActions');
-var PhoneInput = require('components/PhoneInput');
-var ProgramTypes = require('constants/ProgramTypes');
-var StatusLabel = require('components/StatusLabel');
-var TextInput = require('components/TextInput');
-var User = require('utils/User');
-var _handleChange = require('utils/_handleChange');
+const Button = require('components/Button');
+const InnerView = require('components/InnerView');
+const LogoutButton = require('components/LogoutButton');
+const ConferenceContext = require('components/ConferenceContext');
+const CurrentUserActions = require('actions/CurrentUserActions');
+const PhoneInput = require('components/PhoneInput');
+const ProgramTypes = require('constants/ProgramTypes');
+const StatusLabel = require('components/StatusLabel');
+const TextInput = require('components/TextInput');
+const TextTemplate = require('components/TextTemplate');
+const User = require('utils/User');
+const _handleChange = require('utils/_handleChange');
 
 require('css/Table.less');
+const AdvisorProfileViewText = require('text/AdvisorProfileViewText.md');
 
-var AdvisorProfileView = React.createClass({
+const AdvisorProfileView = React.createClass({
 
   // #489
   // The below code was commented out due to
@@ -68,25 +70,13 @@ var AdvisorProfileView = React.createClass({
     var school = User.getSchool(user);
     return (
       <InnerView>
-        <h2>Profile</h2>
-        <p>
-          Welcome, {user.first_name}! We are very excited to see {school.name} at BMUN {conference.session} this year! Here,
-          you can view and edit your registration information for the conference. Please
-          note that fees are currently <strong>estimates</strong> based on the
-          approximate delegation size given during registration. You can find
-          more information on our
-          fees <a href="http://www.bmun.org/conference-fees/" target="_blank">here</a>.
-        </p>
-        <p><strong>Remember to save!</strong></p>
-        <p><strong>Important Note:</strong> Please mail all checks
-        to <strong>P.O. Box 4306 Berkeley, CA 94704-0306</strong>. If you would like to pay online via
-        credit card using our online booking service called Quickbooks,
-        or if you have any further questions, please contact me
-        at <a href="mailto:info@bmun.org">info@bmun.org</a> and I will respond promptly.
-        See you soon!</p>
-        <p><strong>{conference.external}
-        <br />
-        <em>Under-Secretary General of External Relations, {conference.session}th Session</em></strong></p>
+        <TextTemplate
+          firstName={user.first_name}
+          schoolName={school.name}
+          conferenceSession={conference.session}
+          conferenceExternal={conference.external}>
+          {AdvisorProfileViewText}
+        </TextTemplate>
         <form onSubmit={this._handleSubmit}>
           <div className="table-container">
             <table>

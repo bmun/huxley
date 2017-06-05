@@ -1,0 +1,1 @@
+Thank you for your interest in participating in BMUN {{ conferenceSession }}! You are currently on our wait list and will be updated on your team's status as spots become available again. We thank you for your patience in advance and hope to see you at Berkeley next March!

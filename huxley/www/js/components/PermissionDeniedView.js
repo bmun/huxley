@@ -7,15 +7,17 @@
 
 var React = require('react');
 
+var TextTemplate = require('components/TextTemplate');
+
+var PermissionDeniedViewText = require('text/PermissionDeniedViewText.md');
+
 var PermissionDeniedView = React.createClass({
   render: function() {
     return (
       <div>
-        <h2>Permission Denied</h2>
-        <p>We are sorry but you do not have permission to view this page. Please
-        press the back button on your browser or email
-        <a href="mailto:tech@bmun.org"> tech@bmun.org</a>
-        if you feelthat you have encountered this message in error.</p>
+        <TextTemplate>
+          {PermissionDeniedViewText}
+        </TextTemplate>
       </div>
     );
   }

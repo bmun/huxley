@@ -16,9 +16,11 @@ var DelegateActions = require('actions/DelegateActions');
 var DelegationAttendanceRow = require('components/DelegationAttendanceRow');
 var DelegateStore = require('stores/DelegateStore');
 var InnerView = require('components/InnerView');
+var TextTemplate = require('components/TextTemplate');
 var User = require('utils/User');
 
 require('css/Table.less');
+var ChairAttendanceViewText = require('text/ChairAttendanceViewText.md');
 
 var ChairAttendanceView = React.createClass({
   mixins: [
@@ -72,19 +74,9 @@ var ChairAttendanceView = React.createClass({
   render() {
     return (
       <InnerView>
-        <h2>Attendance</h2>
-        <p>
-          Here you can take attendance for delegates. Note that confirming
-          attendance will alert the advisor as to if their delegates have
-          shown up to committee. The "Voting" column is for the convenience of
-          the chair and is not visible to advisors.
-        </p>
-        <p>
-          <strong>
-            Only one chair at a time should be logged in. Changes may be lost
-            otherwise.
-          </strong>
-        </p>
+        <TextTemplate>
+          {ChairAttendanceViewText}
+        </TextTemplate>
         <form>
           <div className="table-container">
             <table style={{'margin':'10px auto 0px auto', 'tableLayout':'fixed'}}>

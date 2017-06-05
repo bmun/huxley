@@ -14,8 +14,10 @@ var OuterView = require('components/OuterView');
 var ServerAPI = require('lib/ServerAPI');
 var StatusLabel = require('components/StatusLabel');
 var TextInput = require('components/TextInput');
+var TextTemplate = require('components/TextTemplate');
 
 require('css/LoginForm.less');
+var ForgotPasswordViewText = require('text/ForgotPasswordViewText.md');
 
 var ForgotPasswordView = React.createClass({
   mixins: [
@@ -37,9 +39,9 @@ var ForgotPasswordView = React.createClass({
   render: function() {
     return (
       <OuterView>
-        <h1>Forgot your Password?</h1>
-        <p>No problem. Just enter your username below, and we'll send a
-        temporary password to your email address.</p>
+        <TextTemplate>
+          {ForgotPasswordViewText}
+        </TextTemplate>
         <NavLink direction="left" href="/login">
           Back to Login
         </NavLink>

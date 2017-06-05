@@ -21,8 +21,10 @@ var DelegateSelect = require('components/DelegateSelect');
 var DelegateStore = require('stores/DelegateStore');
 var InnerView = require('components/InnerView');
 var ServerAPI = require('lib/ServerAPI');
+var TextTemplate = require('components/TextTemplate');
 
 require('css/Table.less');
+var AdvisorAssignmentsViewText = require('text/AdvisorAssignmentsViewText.md');
 
 var AdvisorAssignmentsView = React.createClass({
   mixins: [
@@ -90,15 +92,10 @@ var AdvisorAssignmentsView = React.createClass({
     var countries = this.state.countries;
     return (
       <InnerView>
-        <h2>Assignments</h2>
-        <p>
-          Here you can view your tentative assignments for BMUN {conference.session}. If you
-          would like to request more slots, please email <a href="mailto:info@bmun.org">
-          info@bmun.org</a>. The assignment finalization deadline is January 23rd.
-          After assignment finalization we will ask that you assign the
-          delegates you have added in the delegates tab to the assignments
-          given to you.
-        </p>
+        <TextTemplate
+          conferenceSession={conference.session}>
+          {AdvisorAssignmentsViewText}
+        </TextTemplate>
         <form>
           <div className="table-container">
             <table>
