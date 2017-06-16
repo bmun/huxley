@@ -32,6 +32,10 @@ var RegistrationViewText = require('text/RegistrationViewText.md');
 
 var USA = 'United States of America';
 
+var _accessSafe = function(obj, key) {
+  return obj && obj[key];
+};
+
 var RegistrationView = React.createClass({
   mixins: [
     ReactRouter.History,
@@ -112,301 +116,187 @@ var RegistrationView = React.createClass({
 
   render: function() {
     var conference = this.context.conference;
+
+    //I feel like this (And a lot of others in this section) could 
+    //Be reduced with some kind of mapping,
+    //But there's no obvious way to map over Objects in JS so :/
+    var accountInformationErrors = {
+      'first_name': this.state.errors['first_name'], 
+      'last_name': this.state.errors['last_name'], 
+      'username': this.state.errors['username'], 
+      'password': this.state.errors['password'],
+      'password_confirm': this._getPasswordConfirmError(),
+    };
+    var accountInformationHandlers = {
+      'first_name': _handleChange.bind(this,'first_name'),
+      'last_name': _handleChange.bind(this,'last_name'),
+      'username': _handleChange.bind(this,'username'),
+      'password': this._handlePasswordChange,
+      'password_confirm': this.handlePasswordConfirmChange,
+    };
+    var accountInformationValues = {
+      'first_name': this.state.first_name,
+      'last_name': this.state.last_name,
+      'username': this.state.username,
+      'password': this.state.password,
+      'password_confirm': this.state.password2,
+    };
+
+    var schoolInformationErrors = {
+      'school_name': this._getSchoolErrors('name'),
+      'school_address': this._getSchoolErrors('address'),
+      'school_city': this._getSchoolErrors('city'),
+      'school_state': this._getSchoolErrors('state'),
+      'school_zip': this._getSchoolErrors('zip_code'),
+      'school_country': this._getSchoolErrors('country'),
+    };
+    var schoolInformationHandlers = {
+      'school_name': _handleChange.bind(this,'school_name'),
+      'school_address': _handleChange.bind(this,'school_address'),
+      'school_city': _handleChange.bind(this,'school_city'),
+      'school_state': _handleChange.bind(this,'school_state'),
+      'school_zip': _handleChange.bind(this,'school_zip'),
+      'school_country': _handleChange.bind(this,'school_country'),
+    };
+    var schoolInformationValues = {
+      'school_name': this.state.school_name,
+      'school_address': this.state.school_address,
+      'school_city': this.state.school_city,
+      'school_state': this.state.school_state,
+      'school_zip': this.state.school_zip,
+      'school_country': this._getSchoolCountry(),
+    };
+    
+    var programInformationHandlers = {
+      'times_attended': _handleChange.bind(this, 'times_attended'),
+      'beginner_delegates': _handleChange.bind(this, 'beginner_delegates'),
+      'intermediate_delegates': _handleChange.bind(this, 'intermediate_delegates'),
+      'advanced_delegates': _handleChange.bind(this, 'advanced_delegates'),
+    };
+    var programInformationValues = {
+      'times_attended': this.state.times_attended,
+      'beginner_delegates': this.state.beginner_delegates,
+      'intermediate_delegates': this.state.intermediate_delegates,
+      'advanced_delegates': this.state.advanced_delegates,
+    };
+    var programInformationErrors = {
+      'times_attended': this.renderSchoolError('times_attended'),
+      'beginner_delegates': this.renderSchoolError('beginner_delegates'),
+      'intermediate_delegates': this.renderSchoolError('intermediate_delegates'),
+      'advanced_delegates': this.renderSchoolError('advanced_delegates'),
+    };
+
+    var primaryContactHandlers = {
+      'primary_name': _handleChange.bind(this, 'primary_name'),
+      'primary_email': _handleChange.bind(this, 'primary_email'),
+      'primary_phone': this._handlePrimaryPhoneChange,
+    };
+    var primaryContactValues = {
+      'primary_name': this.state.primary_name,
+      'primary_email': this.state.primary_email,
+      'primary_phone': this.state.primary_phone,
+    };
+    var primaryContactErrors = {
+      'primary_name': this._getSchoolErrors('primary_name'),
+      'primary_email': this._getSchoolErrors('primary_email'),
+      'primary_phone': this._getSchoolErrors('primary_phone'),
+    };
+
+    var secondaryContactHandlers = {
+      'secondary_name': _handleChange.bind(this, 'secondary_name'),
+      'secondary_email': _handleChange.bind(this, 'secondary_email'),
+      'secondary_phone': this._handleSecondaryPhoneChange,
+    };
+    var secondaryContactValues = {
+      'secondary_name': this.state.secondary_name,
+      'secondary_email': this.state.secondary_email,
+      'secondary_phone': this.state.secondary_phone,
+    };
+    var secondaryContactErrors = {
+      'secondary_name': this._getSchoolErrors('secondary_name'),
+      'secondary_email': this._getSchoolErrors('secondary_email'),
+      'secondary_phone': this._getSchoolErrors('secondary_phone'),
+    };
+
+    var specialCommitteeHandlers = {
+      'spanish_speaking_delegates': _handleChange.bind(this, 'spanish_speaking_delegates'),
+      'chinese_speaking_delegates': _handleChange.bind(this, 'chinese_speaking_delegates'),
+    };
+    var specialCommitteeValues = {
+      'spanish_speaking_delegates': this.state.spanish_speaking_delegates,
+      'chinese_speaking_delegates': this.state.chinese_speaking_delegates,
+    };
+    var specialCommitteeErrors = {
+      'spanish_speaking_delegates': this.renderSchoolError('spanish_speaking_delegates'),
+      'chinese_speaking_delegates': this.renderSchoolError('chinese_speaking_delegates'),
+    };
+
     return (
       <OuterView>
         <form id="registration" onSubmit={this._handleSubmit}>
-          <div>
-            <TextTemplate
-              conferenceSession={conference.session}>
-              {RegistrationViewText}
-            </TextTemplate>
-            <NavLink direction="left" href="/login">
-              Back to Login
-            </NavLink>
-          </div>
-          <div>
-            <hr />
-            <h3>Account Information</h3>
-            <RegistrationTextInput
-              errors={this.state.errors['first_name']}
-              placeholder="First Name"
-              onChange={_handleChange.bind(this, 'first_name')}
-              value={this.state.first_name}
+          <RegistrationHeader session={conference.session} />
+          <hr />
+          <AccountInformation 
+            handlers={accountInformationHandlers} 
+            errors={accountInformationErrors} 
+            accountInformation={accountInformationValues} 
+            blur={this._handlePasswordBlur} 
+            focus={this._handlePasswordFocus}
+          />
+          <hr />
+          <SchoolInformation  
+            handlers={schoolInformationHandlers} 
+            errors={schoolInformationErrors} 
+            schoolInformation={schoolInformationValues} 
+            handleInternationalChange={this._handleInternationalChange} 
+            schoolInternational={this.state.school_international} 
+          />
+          <hr />
+          <ProgramInformation 
+            handlers={programInformationHandlers} 
+            errors={programInformationErrors} 
+            programInformation={programInformationValues} 
+            handleProgramTypeChange={this._handleProgramTypeChange}
+            programType={this.state.program_type}
+          />
+          <hr />
+          <PrimaryContact 
+            handlers={primaryContactHandlers} 
+            primaryContactInformation={primaryContactValues} 
+            errors={primaryContactErrors} 
+            renderContactGenderField={this.renderContactGenderField} 
+            renderContactTypeField={this.renderContactTypeField} 
+            isInternational={this.state.school_international} 
+          />
+          <hr />
+          <SecondaryContact 
+            handlers={secondaryContactHandlers} 
+            secondaryContactInformation={secondaryContactValues} 
+            errors={secondaryContactErrors} 
+            renderContactGenderField={this.renderContactGenderField} 
+            renderContactTypeField={this.renderContactTypeField} 
+            isInternational={this.state.school_international}
+          />
+          <hr />
+            <CountryPreferences
+              renderCountryDropdown={this.renderCountryDropdown}
             />
-            <RegistrationTextInput
-              errors={this.state.errors['last_name']}
-              placeholder="Last Name"
-              onChange={_handleChange.bind(this, 'last_name')}
-              value={this.state.last_name}
+          <hr />
+            <SpecialCommitteePreferences 
+              handlers={specialCommitteeHandlers} 
+              errors={specialCommitteeErrors}
+              specialCommitteePrefValues={specialCommitteeValues} 
+              renderCommittees={this.renderCommittees}
             />
-            <RegistrationTextInput
-              errors={this.state.errors['username']}
-              placeholder="Username"
-              onChange={_handleChange.bind(this, 'username')}
-              value={this.state.username}
+          <hr />
+            <Comments
+              handler={_handleChange.bind(this, 'registration_comments')} 
+              value={this.state.registration_comments} 
             />
-            <RegistrationTextInput
-              errors={this.state.errors['password']}
-              type="password"
-              placeholder="Password"
-              value={this.state.password}
-              onChange={this._handlePasswordChange}
-              onBlur={this._handlePasswordBlur}
-              onFocus={this._handlePasswordFocus}
+          <hr />
+            <RegistrationFooter 
+              loading={this.state.loading} 
             />
-            <RegistrationTextInput
-              errors={this._getPasswordConfirmError()}
-              type="password"
-              placeholder="Password (confirm)"
-              value={this.state.password2}
-              onChange={this._handlePasswordConfirmChange}
-              onBlur={this._handlePasswordBlur}
-              onFocus={this._handlePasswordFocus}
-            />
-            <hr />
-            <h3>School Information</h3>
-            <p className="instructions">Where is your school located?</p>
-            <ul>
-              <li>
-                <label>
-                  <input
-                    type="radio"
-                    value=''
-                    onChange={this._handleInternationalChange}
-                    checked={!this.state.school_international}
-                  /> United States of America
-                  </label>
-              </li>
-              <li>
-                <label>
-                  <input
-                    type="radio"
-                    value="international"
-                    onChange={this._handleInternationalChange}
-                    checked={this.state.school_international}
-                  /> International
-                </label>
-              </li>
-            </ul>
-            <RegistrationTextInput
-              errors={this._getSchoolErrors('name')}
-              placeholder="Official School Name"
-              onChange={_handleChange.bind(this, 'school_name')}
-              value={this.state.school_name}
-            />
-            <RegistrationTextInput
-              errors={this._getSchoolErrors('address')}
-              placeholder="Street Address"
-              value={this.state.school_address}
-              onChange={_handleChange.bind(this, 'school_address')}
-            />
-            <RegistrationTextInput
-              errors={this._getSchoolErrors('city')}
-              placeholder="City"
-              onChange={_handleChange.bind(this, 'school_city')}
-              value={this.state.school_city}
-            />
-            <RegistrationTextInput
-              errors={this._getSchoolErrors('state')}
-              placeholder="State"
-              onChange={_handleChange.bind(this, 'school_state')}
-              value={this.state.school_state}
-            />
-            <RegistrationTextInput
-              errors={this._getSchoolErrors('zip_code')}
-              placeholder="Zip"
-              onChange={_handleChange.bind(this, 'school_zip')}
-              value={this.state.school_zip}
-            />
-            <RegistrationTextInput
-              errors={this._getSchoolErrors('country')}
-              placeholder="Country"
-              value={this._getSchoolCountry()}
-              onChange={_handleChange.bind(this, 'school_country')}
-              disabled={!this.state.school_international}
-              isControlled={true}
-            />
-            <hr />
-            <h3>Program Information</h3>
-            <p className="instructions">What category best describes your program?</p>
-            <ul>
-              <li>
-                <label>
-                  <input
-                    type="radio"
-                    checked={this.state.program_type == ProgramTypes.CLUB}
-                    value={ProgramTypes.CLUB}
-                    onChange={this._handleProgramTypeChange}
-                  /> Club
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input
-                    type="radio"
-                    value={ProgramTypes.CLASS}
-                    checked={this.state.program_type == ProgramTypes.CLASS}
-                    onChange={this._handleProgramTypeChange}
-                  /> Class
-                </label>
-              </li>
-            </ul>
-            <p className="instructions">Please tell us a bit more about your delegation this
-              year. Provide us with the tentative number of beginner,
-              intermediate, and advanced delegates you intend to bring to BMUN.
-              Try to provide us with realistic estimates for your delegate
-              numbers in each category so we can provide your delegation with
-              the appropriate number and type of assignments.</p>
-            <NumberInput
-              placeholder="Number of BMUN sessions attended"
-              onChange={_handleChange.bind(this, 'times_attended')}
-              value={this.state.times_attended}
-            />
-            {this.renderSchoolError('times_attended')}
-            <NumberInput
-              placeholder="Tentative Number of Beginner Delegates"
-              onChange={_handleChange.bind(this, 'beginner_delegates')}
-              value={this.state.beginner_delegates}
-            />
-            <label className="hint">
-              Beginner: Attended 0-3 conferences, not very familiar with Model
-              United Nations.
-            </label>
-            {this.renderSchoolError('beginner_delegates')}
-            <NumberInput
-              placeholder="Tentative Number of Intermediate Delegates"
-              onChange={_handleChange.bind(this, 'intermediate_delegates')}
-              value={this.state.intermediate_delegates}
-            />
-            <label className="hint">
-              Intermediate: Attended 4-7 conferences, little to no practice in
-              advanced committees.
-            </label>
-            {this.renderSchoolError('intermediate_delegates')}
-            <NumberInput
-              placeholder="Tentative Number of Advanced Delegates"
-              onChange={_handleChange.bind(this, 'advanced_delegates')}
-              value={this.state.advanced_delegates}
-            />
-            <label className="hint">
-              Advanced: Attended more than seven conferences, has participated
-              in many diverse committees.
-            </label>
-            {this.renderSchoolError('advanced_delegates')}
-            <p className="instructions">Tentative Total Number of Delegates: {this._handleDelegateSum()}</p>
-            <hr />
-            <h3>Primary Contact</h3>
-            {this.renderContactGenderField('primary_gender')}
-            <RegistrationTextInput
-              errors={this._getSchoolErrors('primary_name')}
-              placeholder="Name"
-              onChange={_handleChange.bind(this, 'primary_name')}
-              value={this.state.primary_name}
-            />
-            <RegistrationTextInput
-              errors={this._getSchoolErrors('primary_email')}
-              placeholder="Email"
-              onChange={_handleChange.bind(this, 'primary_email')}
-              value={this.state.primary_email}
-            />
-            <RegistrationPhoneInput
-              errors={this._getSchoolErrors('primary_phone')}
-              onChange={this._handlePrimaryPhoneChange}
-              value={this.state.primary_phone}
-              isInternational={this.state.school_international}
-            />
-            {this.renderContactTypeField('primary_type')}
-            <hr />
-            <h3>Secondary Contact</h3>
-            {this.renderContactGenderField('secondary_gender')}
-            <RegistrationTextInput
-              errors={this._getSchoolErrors('secondary_name')}
-              placeholder="Name"
-              onChange={_handleChange.bind(this, 'secondary_name')}
-              value={this.state.secondary_name}
-            />
-            <RegistrationTextInput
-              errors={this._getSchoolErrors('secondary_email')}
-              placeholder="Email"
-              onChange={_handleChange.bind(this, 'secondary_email')}
-              value={this.state.secondary_email}
-            />
-            <RegistrationPhoneInput
-              errors={this._getSchoolErrors('secondary_phone')}
-              onChange={this._handleSecondaryPhoneChange}
-              value={this.state.secondary_phone}
-              isInternational={this.state.school_international}
-            />
-            {this.renderContactTypeField('secondary_type')}
-            <hr />
-            <h3>Country Preferences</h3>
-            <p className="instructions">Please choose 10 United Nations Member States or
-            Observers your school would like to represent. A reference list of
-            countries and their relation to committees is
-            available <a href="http://www.un.org/en/member-states/" target="_blank">online</a>.
-            Please diversify your selection.</p>
-            <ul>
-              {this.renderCountryDropdown('01', 'country_pref1')}
-              {this.renderCountryDropdown('02', 'country_pref2')}
-              {this.renderCountryDropdown('03', 'country_pref3')}
-              {this.renderCountryDropdown('04', 'country_pref4')}
-              {this.renderCountryDropdown('05', 'country_pref5')}
-              {this.renderCountryDropdown('06', 'country_pref6')}
-              {this.renderCountryDropdown('07', 'country_pref7')}
-              {this.renderCountryDropdown('08', 'country_pref8')}
-              {this.renderCountryDropdown('09', 'country_pref9')}
-              {this.renderCountryDropdown('10', 'country_pref10')}
-            </ul>
-            <hr />
-            <h3>Special Committee Preferences</h3>
-            <p className="instructions">Would your delegation be interested in
-            being represented in the following small/specialized committees?
-            Positions are limited and we may not be able to accommodate all
-            preferences. You can find a reference to our
-            committees <a href="http://www.bmun.org/committees" target="_blank">
-            here</a>.</p>
-            <ul>
-              {this.renderCommittees()}
-            </ul>
-            <NumberInput
-              placeholder="Number of Spanish Speaking Delegates"
-              onChange={_handleChange.bind(this, 'spanish_speaking_delegates')}
-              value={this.state.spanish_speaking_delegates}
-            />
-            {this.renderSchoolError('spanish_speaking_delegates')}
-            <NumberInput
-              placeholder="Number of Chinese Speaking Delegates"
-              onChange={_handleChange.bind(this, 'chinese_speaking_delegates')}
-              value={this.state.chinese_speaking_delegates}
-            />
-            {this.renderSchoolError('chinese_speaking_delegates')}
-            <hr />
-            <h3>Comments</h3>
-            <p className="instructions">If there are any further details you
-            would like us to know about your participation in BMUN this year or
-            general feedback about the registration process, please comment
-            below.</p>
-            <textarea
-              className="text-input"
-              cols="40"
-              rows="7"
-              onChange={_handleChange.bind(this, 'registration_comments')}
-              value={this.state.registration_comments}
-            />
-            <hr />
-              <NavLink direction="left" href="/login">
-                Back to Login
-              </NavLink>
-              <div style={{float: 'right'}}>
-                <span className="help-text"><em>All done?</em></span>
-                <Button
-                  color="green"
-                  loading={this.state.loading}
-                  type="submit">
-                  Register
-                </Button>
-              </div>
-          </div>
         </form>
       </OuterView>
     );
@@ -724,4 +614,484 @@ const RegistrationPhoneInput = React.createClass({
   },
 });
 
-module.exports = RegistrationView;
+const RegistrationHeader = React.createClass({
+  propTypes: {
+    session: React.PropTypes.number,
+  },
+
+  render: function() {
+    return (
+      <div>
+        <TextTemplate conferenceSession={this.props.session}>
+          {RegistrationViewText}
+        </TextTemplate>
+        <NavLink direction="left" href="/login">
+          Back to Login
+        </NavLink>
+      </div>
+    );
+  },
+});
+
+const AccountInformation = React.createClass({
+  propTypes: {
+    handlers: React.PropTypes.object,
+    errors: React.PropTypes.object,
+    accountInformation: React.PropTypes.object,
+    blur: React.PropTypes.func,
+    focus: React.PropTypes.func,
+  },
+
+  render: function() {
+    var accessErrors = _accessSafe.bind(this, this.props.errors);
+    var accessHandlers = _accessSafe.bind(this, this.props.handlers);
+    var accessAccount = _accessSafe.bind(this, this.props.accountInformation);
+    return (
+      <div id="account_information">
+        <h3>Account Information</h3>
+        <RegistrationTextInput  
+          errors={accessErrors('first_name')} 
+          placeholder="First Name" 
+          onChange={accessHandlers('first_name')} 
+          value={accessAccount('first_name')} 
+        />
+        <RegistrationTextInput 
+          errors={accessErrors('last_name')} 
+          placeholder="Last Name" 
+          onChange={accessHandlers('last_name')} 
+          value={accessAccount('last_name')} 
+        />
+        <RegistrationTextInput
+          errors={accessErrors('username')} 
+          placeholder="Username" 
+          onChange={accessHandlers('username')} 
+          value={accessAccount('username')}
+        />
+        <RegistrationTextInput
+          errors={accessErrors('password')} 
+          type="password" 
+          placeholder="Password" 
+          value={accessAccount('password')} 
+          onChange={accessHandlers('password')}
+          onBlur={this.props.blur} 
+          onFocus={this.props.focus} 
+        />
+        <RegistrationTextInput
+          errors={accessErrors('password_confirm')} 
+          type="password" 
+          placeholder="Password (confirm)" 
+          value={accessAccount('password_confirm')} 
+          onChange={accessHandlers('password_confirm')} 
+          onBlur={this.props.blur}
+          onFocus={this.props.focus} 
+        />
+      </div>
+    );
+  },
+
+});
+
+const SchoolInformation = React.createClass({
+  propTypes: {
+    handlers: React.PropTypes.object,
+    errors: React.PropTypes.object,
+    schoolInformation: React.PropTypes.object,
+    handleInternationalChange: React.PropTypes.func,
+    schoolInternational: React.PropTypes.bool,
+  },
+
+  render: function() {
+    var accessErrors = _accessSafe.bind(this, this.props.errors);
+    var accessHandlers = _accessSafe.bind(this, this.props.handlers);
+    var accessSchool = _accessSafe.bind(this, this.props.schoolInformation);
+    return (
+      <div id="school_information">
+        <h3>School Information</h3>
+        <p className="instructions">Where is your school located?</p>
+        <ul>
+          <li>
+            <label>
+              <input 
+                type="radio" 
+                value=''
+                onChange={this.props.handleInternationalChange} 
+                checked={!this.props.schoolInternational}
+              /> United States of America
+            </label>
+          </li>
+          <li>
+            <label>
+              <input 
+                type="radio" 
+                value='international'
+                onChange={this.props.handleInternationalChange} 
+                checked={this.props.schoolInternational}
+              /> International
+            </label>
+          </li>
+        </ul>
+        <RegistrationTextInput 
+          errors={accessErrors('school_name')} 
+          placeholder="Official School Name" 
+          onChange={accessHandlers('school_name')} 
+          value={accessSchool('school_name')} 
+        />
+        <RegistrationTextInput  
+          errors={accessErrors('school_address')} 
+          placeholder="Street Address" 
+          onChange={accessHandlers('school_address')} 
+          value={accessSchool('school_address')} 
+        />
+        <RegistrationTextInput  
+          errors={accessErrors('school_city')} 
+          placeholder="City" 
+          onChange={accessHandlers('school_city')} 
+          value={accessSchool('school_city')} 
+        />
+        <RegistrationTextInput  
+          errors={accessErrors('school_state')} 
+          placeholder="State" 
+          onChange={accessHandlers('school_state')} 
+          value={accessSchool('school_state')} 
+        />
+        <RegistrationTextInput  
+          errors={accessErrors('school_zip')} 
+          placeholder="Zip" 
+          onChange={accessHandlers('school_zip')} 
+          value={accessSchool('school_zip')} 
+        />
+        <RegistrationTextInput  
+          errors={accessErrors('school_country')} 
+          placeholder="Country" 
+          onChange={accessHandlers('school_country')} 
+          value={accessSchool('school_country')} 
+          disabled={!this.props.schoolInternational} 
+          isControlled={true} 
+        />
+      </div>
+    );
+  },
+
+});
+
+const ProgramInformation = React.createClass({
+  propTypes: {
+    handlers: React.PropTypes.object,
+    errors: React.PropTypes.object,
+    programInformation: React.PropTypes.object,
+    handleProgramTypeChange: React.PropTypes.func,
+    programType: React.PropTypes.oneOf([ProgramTypes.CLUB,ProgramTypes.CLASS]),
+  },
+
+  render: function() {
+    var accessHandlers = _accessSafe.bind(this, this.props.handlers);
+    var accessErrors = _accessSafe.bind(this, this.props.errors);
+    var accessProgram = _accessSafe.bind(this, this.props.programInformation);
+    return (
+      <div id="program_information">
+        <h3>Program Information</h3>
+        <p className="instructions">What category best describes your program?</p>
+        <ul>
+          <li>
+            <label>
+              <input 
+                type="radio" 
+                checked={this.props.programType == ProgramTypes.CLUB} 
+                value={ProgramTypes.CLUB} 
+                onChange={this.props.handleProgramTypeChange}
+              /> Club
+            </label>
+          </li>
+          <li>
+            <label>
+              <input 
+                type="radio" 
+                value={ProgramTypes.CLASS} 
+                checked={this.props.propTypes == ProgramTypes.CLASS} 
+                onChange={this.props.handleProgramTypeChange} 
+              /> Class
+            </label>
+          </li>
+        </ul>
+        <p className="instructions">Please tell us a bit more about your delegation this
+           year. Provide us with the tentative number of beginner,
+           intermediate, and advanced delegates you intend to bring to BMUN.
+           Try to provide us with realistic estimates for your delegate
+           numbers in each category so we can provide your delegation with
+           the appropriate number and type of assignments.</p>
+        <NumberInput 
+          placeholder="Number of BMUN sessions attended" 
+          onChange={accessHandlers('times_attended')} 
+          value={accessProgram('times_attended')} 
+        />
+        {accessErrors('times_attended')}
+        <NumberInput 
+          placeholder="Tentative Number of Beginner Delegates" 
+          onChange={accessHandlers('beginner_delegates')} 
+          value={accessProgram('beginner_delegates')}
+        />
+        <label className="hint">
+          Beginner: Attended 0-3 conferences, not very familiar with Model
+          United Nations.
+        </label>
+        {accessErrors('beginner_delegates')}
+        <NumberInput 
+          placeholder="Tentative Number of Intermediate Delegates" 
+          onChange={accessHandlers('intermediate_delegates')} 
+          value={accessProgram('intermediate_delegates')} 
+        />
+        <label className="hint">
+          Intermediate: Attended 4-7 conferences, little to no practice in
+          advanced committees.
+        </label>
+        {accessErrors('intermediate_delegates')}
+        <NumberInput 
+          placeholder="Tentative Number of Advanced Delegates" 
+          onChange={accessHandlers('advanced_delegates')} 
+          value={accessProgram('advanced_delegates')} 
+        />
+        <label className="hint">
+          Advanced: Attended more than seven conferences, has participated
+          in many diverse committees.
+        </label>
+        {accessErrors('advanced_delegates')}
+        <p className="instructions">
+          Tentative Total Number of Delegates: {this._handleDelegateSum(
+            accessProgram('beginner_delegates'), accessProgram('intermediate_delegates'), 
+            accessProgram('advanced_delegates')
+          )}
+        </p>
+      </div>
+    );
+  },
+
+  _handleDelegateSum: function(beginner, intermediate, advanced) {
+    var sum = 0;
+    if (beginner) {
+      sum += parseInt(beginner, 10) || 0;
+    } if (intermediate) {
+      sum += parseInt(intermediate, 10) || 0; 
+    } if (advanced) {
+      sum += parseInt(advanced, 10) || 0;
+    }
+    return sum;
+  }
+
+});
+
+const PrimaryContact = React.createClass({
+  propTypes: {
+    handlers: React.PropTypes.object,
+    primaryContactInformation: React.PropTypes.object,
+    errors: React.PropTypes.object,
+    renderContactGenderField: React.PropTypes.func,
+    renderContactTypeField: React.PropTypes.func,
+    isInternational: React.PropTypes.bool,
+  },
+
+  render: function() {
+    var accessHandlers = _accessSafe.bind(this, this.props.handlers);
+    var accessPrimary = _accessSafe.bind(this, this.props.primaryContactInformation);
+    var accessErrors = _accessSafe.bind(this, this.props.errors);
+    return (
+      <div id='primary_contact'>
+        <h3>Primary Contact</h3>
+        {this.props.renderContactGenderField('primary_gender')}
+        <RegistrationTextInput
+          errors={accessErrors('primary_name')} 
+          placeholder="Name" 
+          onChange={accessHandlers('primary_name')} 
+          value={accessPrimary('primary_name')} 
+        />
+        <RegistrationTextInput 
+          errors={accessErrors('primary_email')} 
+          placeholder="Email" 
+          onChange={accessHandlers('primary_email')} 
+          value={accessPrimary('primary_email')} 
+        />
+        <RegistrationTextInput 
+          errors={accessErrors('primary_phone')} 
+          onChange={accessHandlers('primary_phone')} 
+          value={accessPrimary('primary_phone')} 
+          placeholder="Phone Number" 
+          isInternational={this.props.isInternational} 
+        />
+        {this.props.renderContactTypeField('primary_type')} 
+      </div>
+    );
+  },
+});
+
+const SecondaryContact = React.createClass({
+  propTypes: {
+    handlers: React.PropTypes.object,
+    secondaryContactInformation: React.PropTypes.object,
+    errors: React.PropTypes.object,
+    renderContactGenderField: React.PropTypes.func,
+    renderContactTypeField: React.PropTypes.func,
+    isInternational: React.PropTypes.bool,
+  },
+
+  render: function() {
+    var accessHandlers = _accessSafe.bind(this, this.props.handlers);
+    var accessSecondary = _accessSafe.bind(this, this.props.secondaryContactInformation);
+    var accessErrors = _accessSafe.bind(this, this.props.errors)
+    return (
+      <div id='secondary_contact'>
+        <h3>Secondary Contact</h3>
+        {this.props.renderContactGenderField('secondary_gender')}
+        <RegistrationTextInput
+          errors={accessErrors('secondary_name')}
+          placeholder="Name" 
+          onChange={accessHandlers('secondary_name')}
+          value={accessSecondary('secondary_name')}
+        />
+        <RegistrationTextInput 
+          errors={accessErrors('secondary_email')}
+          placeholder="Email" 
+          onChange={accessHandlers('secondary_email')}
+          value={accessSecondary('secondary_email')}
+        />
+        <RegistrationTextInput 
+          errors={accessErrors('secondary_phone')}
+          onChange={accessHandlers('secondary_phone')}
+          value={accessSecondary('secondary_phone')} 
+          placeholder="Phone Number" 
+          isInternational={this.props.isInternational}
+        />
+        {this.props.renderContactTypeField('secondary_type')}
+      </div>
+    );
+  },
+
+});
+
+const CountryPreferences = React.createClass({
+  propTypes: {
+    renderCountryDropdown: React.PropTypes.func,
+  },
+
+  render: function() {
+    return (
+      <div id='country_preferences'>
+        <h3>Country Preferences</h3>
+        <p className="instructions">Please choose 10 United Nations Member States or
+        Observers your school would like to represent. A reference list of
+        countries and their relation to committees is
+        available <a href="http://www.un.org/en/member-states/" target="_blank">online</a>.
+        Please diversify your selection.</p>
+        <ul>
+          {this.props.renderCountryDropdown('01', 'country_pref1')}
+          {this.props.renderCountryDropdown('02', 'country_pref2')}
+          {this.props.renderCountryDropdown('03', 'country_pref3')}
+          {this.props.renderCountryDropdown('04', 'country_pref4')}
+          {this.props.renderCountryDropdown('05', 'country_pref5')}
+          {this.props.renderCountryDropdown('06', 'country_pref6')}
+          {this.props.renderCountryDropdown('07', 'country_pref7')}
+          {this.props.renderCountryDropdown('08', 'country_pref8')}
+          {this.props.renderCountryDropdown('09', 'country_pref9')}
+          {this.props.renderCountryDropdown('10', 'country_pref10')}
+        </ul>
+      </div>
+    );
+  },
+
+});
+
+const SpecialCommitteePreferences = React.createClass({
+  propTypes: {
+    handlers: React.PropTypes.object, 
+    errors: React.PropTypes.object, 
+    specialCommitteePrefValues: React.PropTypes.object, 
+    renderCommittees: React.PropTypes.func, 
+  },
+
+  render: function() {
+    var accessHandlers = _accessSafe.bind(this, this.props.handlers);
+    var accessErrors = _accessSafe.bind(this, this.props.errors);
+    var accessValues = _accessSafe.bind(this, this.props.specialCommitteePrefValues);
+    return (
+      <div id='special_committee_preferences'>
+        <h3>Special Committee Preferences</h3>
+        <p className="instructions">Would your delegation be interested in
+        being represented in the following small/specialized committees?
+        Positions are limited and we may not be able to accommodate all
+        preferences. You can find a reference to our
+        committees <a href="http://www.bmun.org/committees" target="_blank">
+        here</a>.</p>
+        <ul>
+          {this.props.renderCommittees()}
+        </ul>
+        <NumberInput 
+          placeholder="Number of Spanish Speaking Delegates"  
+          onChange={accessHandlers('spanish_speaking_delegates')} 
+          value={accessValues('spanish_speaking_delegates')} 
+        />
+        {accessErrors('spanish_speaking_delegates')}
+        <NumberInput 
+          placeholder="Number of Chinese Speaking Delegates" 
+          onChange={accessHandlers('chinese_speaking_delegates')} 
+          value={accessValues('chinese_speaking_delegates')} 
+        />
+        {accessErrors('chinese_speaking_delegates')}
+      </div>
+    );
+  },
+
+});
+
+const Comments = React.createClass({
+  propTypes: {
+    handler: React.PropTypes.func,
+    value: React.PropTypes.string,
+  },
+
+  render: function() {
+    return (
+      <div id='comments'>
+        <h3>Comments</h3>
+        <p className="instructions">If there are any further details you
+        would like us to know about your participation in BMUN this year or
+        general feedback about the registration process, please comment
+        below.</p>
+        <textarea
+          className="text-input"
+          cols="40"
+          rows="7"
+          onChange={this.props.handler}
+          value={this.props.value}
+        />
+      </div>
+    );
+  },
+
+});
+
+const RegistrationFooter = React.createClass({
+  propTypes: {
+    loading: React.PropTypes.bool,
+  },
+
+  render: function() {
+    return (
+      <div id='registration_footer'>
+        <NavLink direction="left" href="/login">
+          Back to Login
+        </NavLink>
+        <div style={{float: 'right'}}>
+          <span className="help-text"><em>All done?</em></span>
+          <Button
+            color="green"
+            loading={this.props.loading}
+            type="submit">
+            Register
+          </Button>
+        </div>
+      </div>
+    );
+  },
+
+});
+
+module.exports = RegistrationView; 
+
