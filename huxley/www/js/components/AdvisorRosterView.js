@@ -17,12 +17,12 @@ var CurrentUserActions = require('actions/CurrentUserActions');
 var InnerView = require('components/InnerView');
 var ServerAPI = require('lib/ServerAPI');
 var StatusLabel = require('components/StatusLabel');
+var Table = require('components/Table');
 var TextInput = require('components/TextInput');
 var TextTemplate = require('components/TextTemplate');
 var _handleChange = require('utils/_handleChange');
 
 require('css/Modal.less');
-require('css/Table.less');
 var AdvisorRosterViewText = require('text/AdvisorRosterViewText.md');
 
 var AdvisorRosterView = React.createClass({
@@ -68,30 +68,27 @@ var AdvisorRosterView = React.createClass({
         <TextTemplate>
           {AdvisorRosterViewText}
         </TextTemplate>
-        <form>
-          <div className="table-container">
-            <table className="table highlight-cells">
-              <thead>
-                <tr>
-                  <th>Delegate</th>
-                  <th>Email</th>
-                  <th>Edit</th>
-                  <th>Delete</th>
-                </tr>
-              </thead>
-              <tbody>
-                {this.renderRosterRows()}
-              </tbody>
-            </table>
-            {this.renderEmptyMessage()}
-          </div>
-          <Button
-            color="green"
-            onClick={this.openModal.bind(this, '', '', this._handleAddDelegate)}
-            loading={this.state.loading}>
-            Add Delegate
-          </Button>
-        </form>
+        <Table
+          emptyMessage="You don't have any delegates in your roster."
+          isEmpty={!this.state.delegates.length}>
+          <thead>
+            <tr>
+              <th>Delegate</th>
+              <th>Email</th>
+              <th>Edit</th>
+              <th>Delete</th>
+            </tr>
+          </thead>
+          <tbody>
+            {this.renderRosterRows()}
+          </tbody>
+        </Table>
+        <Button
+          color="green"
+          onClick={this.openModal.bind(this, '', '', this._handleAddDelegate)}
+          loading={this.state.loading}>
+          Add Delegate
+        </Button>
         <Modal
           isOpen={this.state.modal_open}
           className="content content-outer transparent ie-layout rounded"
@@ -166,17 +163,6 @@ var AdvisorRosterView = React.createClass({
         </tr>
       )
     }.bind(this));
-  },
-
-  renderEmptyMessage: function() {
-    if (this.state.delegates.length) {
-      return null;
-    }
-    return (
-      <div className="empty">
-        {"You don't have any delegates in your roster."}
-      </div>
-    );
   },
 
   openModal: function(name, email, fn, event) {

@@ -15,16 +15,15 @@ const CurrentUserActions = require('actions/CurrentUserActions');
 const PhoneInput = require('components/PhoneInput');
 const ProgramTypes = require('constants/ProgramTypes');
 const StatusLabel = require('components/StatusLabel');
+const Table = require('components/Table');
 const TextInput = require('components/TextInput');
 const TextTemplate = require('components/TextTemplate');
 const User = require('utils/User');
 const _handleChange = require('utils/_handleChange');
 
-require('css/Table.less');
 const AdvisorProfileViewText = require('text/AdvisorProfileViewText.md');
 
 const AdvisorProfileView = React.createClass({
-
   // #489
   // The below code was commented out due to
   // https://github.com/reactjs/react-router/blob/master/upgrade-guides/v1.0.0.md#routehandler
@@ -78,233 +77,231 @@ const AdvisorProfileView = React.createClass({
           {AdvisorProfileViewText}
         </TextTemplate>
         <form onSubmit={this._handleSubmit}>
-          <div className="table-container">
-            <table>
-              <thead>
-                <tr>
-                  <th colSpan="2">Advisor Information</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>First Name</td>
-                  <td>
-                    <TextInput
-                      defaultValue={this.state.first_name}
-                      value={this.state.first_name}
-                      onChange={_handleChange.bind(this, 'first_name')}
-                    />
-                    {this.renderError('first_name')}
-                  </td>
-                </tr>
-                <tr>
-                  <td>Last Name</td>
-                  <td>
-                    <TextInput
-                      defaultValue={this.state.last_name}
-                      value={this.state.last_name}
-                      onChange={_handleChange.bind(this, 'last_name')}
-                    />
-                    {this.renderError('last_name')}
-                  </td>
-                </tr>
-                <tr>
-                  <th colSpan="2">School Information</th>
-                </tr>
-                <tr>
-                  <td>Name</td>
-                  <td>
-                    {school.name}
-                  </td>
-                </tr>
-                <tr>
-                  <td>Address</td>
-                  <td>
-                    <TextInput
-                      defaultValue={this.state.school_address}
-                      value={this.state.school_address}
-                      onChange={_handleChange.bind(this, 'school_address')}
-                    />
-                    {this.renderError('address')}
-                  </td>
-                </tr>
-                <tr>
-                  <td>City</td>
-                  <td>
-                    <TextInput
-                      defaultValue={this.state.school_city}
-                      value={this.state.school_city}
-                      onChange={_handleChange.bind(this, 'school_city')}
-                    />
-                    {this.renderError('city')}
-                  </td>
-                </tr>
-                <tr>
-                  <td>Zip</td>
-                  <td>
-                    <TextInput
-                      defaultValue={this.state.school_zip_code}
-                      value={this.state.school_zip_code}
-                      onChange={_handleChange.bind(this, 'school_zip_code')}
-                    />
-                    {this.renderError('zip_code')}
-                  </td>
-                </tr>
-                <tr>
-                  <td>Waitlisted</td>
-                  <td>
-                    {school.waitlist == true ? 'Yes' : 'No'}
-                  </td>
-                </tr>
-                <tr>
-                  <th colSpan="2">Program Information</th>
-                </tr>
-                <tr>
-                  <td>Program Type</td>
-                  <td>
-                    {school.program_type === 1 ? 'Club' : 'Class'}
-                  </td>
-                </tr>
-                <tr>
-                  <td>Times Attended</td>
-                  <td>
-                    {school.times_attended}
-                  </td>
-                </tr>
-                <tr>
-                  <td>Number of Beginner Delegates</td>
-                  <td>
-                    {school.beginner_delegates}
-                  </td>
-                </tr>
-                <tr>
-                  <td>Number of Intermediate Delegates</td>
-                  <td>
-                    {school.intermediate_delegates}
-                  </td>
-                </tr>
-                <tr>
-                  <td>Number of Advanced Delegates</td>
-                  <td>
-                    {school.advanced_delegates}
-                  </td>
-                </tr>
-                <tr>
-                  <td>Number of Spanish Speaking
-                  Delegates</td>
-                  <td>
-                    {school.spanish_speaking_delegates}
-                  </td>
-                </tr>
-                <tr>
-                  <td>Number of Chinese Speaking
-                  Delegates</td>
-                  <td>
-                    {school.chinese_speaking_delegates}
-                  </td>
-                </tr>
-                <tr>
-                  <td>All Waivers Completed?</td>
-                  <td>
-                    {school.waivers_completed ? "Yes" : "No"}
-                  </td>
-                </tr>
-                <tr>
-                  <th colSpan="2">Primary Contact Information</th>
-                </tr>
-                <tr>
-                  <td>Name</td>
-                  <td>
-                    <TextInput
-                      defaultValue={this.state.primary_name}
-                      value={this.state.primary_name}
-                      onChange={_handleChange.bind(this, 'primary_name')}
-                    />
-                    {this.renderError('primary_name')}
-                  </td>
-                </tr>
-                <tr>
-                  <td>Email</td>
-                  <td>
-                    <TextInput
-                      defaultValue={this.state.primary_email}
-                      value={this.state.primary_email}
-                      onChange={_handleChange.bind(this, 'primary_email')}
-                    />
-                    {this.renderError('primary_email')}
-                  </td>
-                </tr>
-                <tr>
-                  <td>Phone</td>
-                  <td>
-                    <PhoneInput
-                      value={this.state.primary_phone}
-                      isInternational={school.international}
-                      onChange={_handleChange.bind(this, 'primary_phone')}
-                    />
-                    {this.renderError('primary_phone')}
-                  </td>
-                </tr>
-                <tr>
-                  <th colSpan="2">Secondary Contact Information</th>
-                </tr>
-                <tr>
-                  <td>Name</td>
-                  <td>
-                    <TextInput
-                      defaultValue={this.state.secondary_name}
-                      value={this.state.secondary_name}
-                      onChange={_handleChange.bind(this, 'secondary_name')}
-                    />
-                    {this.renderError('secondary_name')}
-                  </td>
-                </tr>
-                <tr>
-                  <td>Email</td>
-                  <td>
-                    <TextInput
-                      defaultValue={this.state.secondary_email}
-                      value={this.state.secondary_email}
-                      onChange={_handleChange.bind(this, 'secondary_email')}
-                    />
-                    {this.renderError('secondary_email')}
-                  </td>
-                </tr>
-                <tr>
-                  <td>Phone</td>
-                  <td>
-                    <PhoneInput
-                      value={this.state.secondary_phone}
-                      isInternational={school.international}
-                      onChange={_handleChange.bind(this, 'secondary_phone')}
-                    />
-                    {this.renderError('secondary_phone')}
-                  </td>
-                </tr>
-                <tr>
-                  <th colSpan="2">Fees</th>
-                </tr>
-                <tr>
-                  <td>Fees Owed</td>
-                  <td>
-                    {'$' + school.fees_owed.toFixed(2)}
-                  </td>
-                </tr>
-                <tr>
-                  <td>Fees Paid</td>
-                  <td>
-                    {'$' + school.fees_paid.toFixed(2)}
-                  </td>
-                </tr>
-                <tr>
-                  <td>Balance</td>
-                  <td>
-                    {'$' + (school.fees_owed - school.fees_paid).toFixed(2)}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+          <Table emptyMessage="" isEmpty={false}>
+            <thead>
+              <tr>
+                <th colSpan="2">Advisor Information</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>First Name</td>
+                <td>
+                  <TextInput
+                    defaultValue={this.state.first_name}
+                    value={this.state.first_name}
+                    onChange={_handleChange.bind(this, 'first_name')}
+                  />
+                  {this.renderError('first_name')}
+                </td>
+              </tr>
+              <tr>
+                <td>Last Name</td>
+                <td>
+                  <TextInput
+                    defaultValue={this.state.last_name}
+                    value={this.state.last_name}
+                    onChange={_handleChange.bind(this, 'last_name')}
+                  />
+                  {this.renderError('last_name')}
+                </td>
+              </tr>
+              <tr>
+                <th colSpan="2">School Information</th>
+              </tr>
+              <tr>
+                <td>Name</td>
+                <td>
+                  {school.name}
+                </td>
+              </tr>
+              <tr>
+                <td>Address</td>
+                <td>
+                  <TextInput
+                    defaultValue={this.state.school_address}
+                    value={this.state.school_address}
+                    onChange={_handleChange.bind(this, 'school_address')}
+                  />
+                  {this.renderError('address')}
+                </td>
+              </tr>
+              <tr>
+                <td>City</td>
+                <td>
+                  <TextInput
+                    defaultValue={this.state.school_city}
+                    value={this.state.school_city}
+                    onChange={_handleChange.bind(this, 'school_city')}
+                  />
+                  {this.renderError('city')}
+                </td>
+              </tr>
+              <tr>
+                <td>Zip</td>
+                <td>
+                  <TextInput
+                    defaultValue={this.state.school_zip_code}
+                    value={this.state.school_zip_code}
+                    onChange={_handleChange.bind(this, 'school_zip_code')}
+                  />
+                  {this.renderError('zip_code')}
+                </td>
+              </tr>
+              <tr>
+                <td>Waitlisted</td>
+                <td>
+                  {school.waitlist == true ? 'Yes' : 'No'}
+                </td>
+              </tr>
+              <tr>
+                <th colSpan="2">Program Information</th>
+              </tr>
+              <tr>
+                <td>Program Type</td>
+                <td>
+                  {school.program_type === 1 ? 'Club' : 'Class'}
+                </td>
+              </tr>
+              <tr>
+                <td>Times Attended</td>
+                <td>
+                  {school.times_attended}
+                </td>
+              </tr>
+              <tr>
+                <td>Number of Beginner Delegates</td>
+                <td>
+                  {school.beginner_delegates}
+                </td>
+              </tr>
+              <tr>
+                <td>Number of Intermediate Delegates</td>
+                <td>
+                  {school.intermediate_delegates}
+                </td>
+              </tr>
+              <tr>
+                <td>Number of Advanced Delegates</td>
+                <td>
+                  {school.advanced_delegates}
+                </td>
+              </tr>
+              <tr>
+                <td>Number of Spanish Speaking
+                Delegates</td>
+                <td>
+                  {school.spanish_speaking_delegates}
+                </td>
+              </tr>
+              <tr>
+                <td>Number of Chinese Speaking
+                Delegates</td>
+                <td>
+                  {school.chinese_speaking_delegates}
+                </td>
+              </tr>
+              <tr>
+                <td>All Waivers Completed?</td>
+                <td>
+                  {school.waivers_completed ? "Yes" : "No"}
+                </td>
+              </tr>
+              <tr>
+                <th colSpan="2">Primary Contact Information</th>
+              </tr>
+              <tr>
+                <td>Name</td>
+                <td>
+                  <TextInput
+                    defaultValue={this.state.primary_name}
+                    value={this.state.primary_name}
+                    onChange={_handleChange.bind(this, 'primary_name')}
+                  />
+                  {this.renderError('primary_name')}
+                </td>
+              </tr>
+              <tr>
+                <td>Email</td>
+                <td>
+                  <TextInput
+                    defaultValue={this.state.primary_email}
+                    value={this.state.primary_email}
+                    onChange={_handleChange.bind(this, 'primary_email')}
+                  />
+                  {this.renderError('primary_email')}
+                </td>
+              </tr>
+              <tr>
+                <td>Phone</td>
+                <td>
+                  <PhoneInput
+                    value={this.state.primary_phone}
+                    isInternational={school.international}
+                    onChange={_handleChange.bind(this, 'primary_phone')}
+                  />
+                  {this.renderError('primary_phone')}
+                </td>
+              </tr>
+              <tr>
+                <th colSpan="2">Secondary Contact Information</th>
+              </tr>
+              <tr>
+                <td>Name</td>
+                <td>
+                  <TextInput
+                    defaultValue={this.state.secondary_name}
+                    value={this.state.secondary_name}
+                    onChange={_handleChange.bind(this, 'secondary_name')}
+                  />
+                  {this.renderError('secondary_name')}
+                </td>
+              </tr>
+              <tr>
+                <td>Email</td>
+                <td>
+                  <TextInput
+                    defaultValue={this.state.secondary_email}
+                    value={this.state.secondary_email}
+                    onChange={_handleChange.bind(this, 'secondary_email')}
+                  />
+                  {this.renderError('secondary_email')}
+                </td>
+              </tr>
+              <tr>
+                <td>Phone</td>
+                <td>
+                  <PhoneInput
+                    value={this.state.secondary_phone}
+                    isInternational={school.international}
+                    onChange={_handleChange.bind(this, 'secondary_phone')}
+                  />
+                  {this.renderError('secondary_phone')}
+                </td>
+              </tr>
+              <tr>
+                <th colSpan="2">Fees</th>
+              </tr>
+              <tr>
+                <td>Fees Owed</td>
+                <td>
+                  {'$' + school.fees_owed.toFixed(2)}
+                </td>
+              </tr>
+              <tr>
+                <td>Fees Paid</td>
+                <td>
+                  {'$' + school.fees_paid.toFixed(2)}
+                </td>
+              </tr>
+              <tr>
+                <td>Balance</td>
+                <td>
+                  {'$' + (school.fees_owed - school.fees_paid).toFixed(2)}
+                </td>
+              </tr>
+            </tbody>
+          </Table>
           <Button
             color="green"
             loading={this.state.loading}

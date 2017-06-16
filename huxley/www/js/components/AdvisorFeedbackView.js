@@ -16,9 +16,9 @@ var CountryStore = require('stores/CountryStore');
 var CurrentUserStore = require('stores/CurrentUserStore');
 var DelegateStore = require('stores/DelegateStore');
 var InnerView = require('components/InnerView');
+var Table = require('components/Table');
 var TextTemplate = require('components/TextTemplate');
 
-require('css/Table.less');
 var AdvisorFeedbackViewText = require('text/AdvisorFeedbackViewText.md');
 
 var AdvisorFeedbackView = React.createClass({
@@ -81,24 +81,24 @@ var AdvisorFeedbackView = React.createClass({
         <TextTemplate>
           {AdvisorFeedbackViewText}
         </TextTemplate>
-        <div className="table-container">
-          <table className="table highlight-cells">
-            <thead>
-              <tr>
-                <th>Committee</th>
-                <th>Country</th>
-                <th>1</th>
-                <th>2</th>
-                <th>3</th>
-                <th>4</th>
-                <th>Summary</th>
-              </tr>
-            </thead>
-            <tbody>
-              {this.renderAssignmentRows()}
-            </tbody>
-          </table>
-        </div>
+        <Table
+          emptyMessage="You don't have any delegate feedback."
+          isEmpty={!Object.keys(this.state.feedback).length}>
+          <thead>
+            <tr>
+              <th>Committee</th>
+              <th>Country</th>
+              <th>1</th>
+              <th>2</th>
+              <th>3</th>
+              <th>4</th>
+              <th>Summary</th>
+            </tr>
+          </thead>
+          <tbody>
+            {this.renderAssignmentRows()}
+          </tbody>
+        </Table>
       </InnerView>
     );
   },
