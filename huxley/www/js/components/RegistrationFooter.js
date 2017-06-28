@@ -15,6 +15,10 @@ const RegistrationFooter = React.createClass({
     loading: React.PropTypes.bool,
   },
 
+  shouldComponentUpdate: function(nextProps, nextState) {
+    return this.props.loading !== nextProps.loading;
+  },
+
   render: function() {
     return (
       <div id='registration_footer'>

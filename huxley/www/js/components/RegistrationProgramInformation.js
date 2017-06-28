@@ -20,6 +20,15 @@ const RegistrationProgramInformation = React.createClass({
     programType: React.PropTypes.oneOf([ProgramTypes.CLUB,ProgramTypes.CLASS]),
   },
 
+  shouldComponentUpdate: function(nextProps, nextState) {
+    for (var key in this.props.programInformation) {
+      if (this.props.programInformation[key] !== nextProps.programInformation[key]) {
+        return true;
+      }
+    }
+    return this.props.programType !== nextProps.programType;
+  },
+
   render: function() {
     var accessHandlers = _accessSafe.bind(this, this.props.handlers);
     var accessErrors = _accessSafe.bind(this, this.props.errors);

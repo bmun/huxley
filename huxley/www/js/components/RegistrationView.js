@@ -117,115 +117,6 @@ var RegistrationView = React.createClass({
   render: function() {
     var conference = this.context.conference;
 
-    //I feel like this (And a lot of others in this section) could 
-    //Be reduced with some kind of mapping,
-    //But there's no obvious way to map over Objects in JS so :/
-    var accountInformationErrors = {
-      'first_name': this.state.errors['first_name'], 
-      'last_name': this.state.errors['last_name'], 
-      'username': this.state.errors['username'], 
-      'password': this.state.errors['password'],
-      'password_confirm': this._getPasswordConfirmError(),
-    };
-    var accountInformationHandlers = {
-      'first_name': _handleChange.bind(this,'first_name'),
-      'last_name': _handleChange.bind(this,'last_name'),
-      'username': _handleChange.bind(this,'username'),
-      'password': this._handlePasswordChange,
-      'password_confirm': this.handlePasswordConfirmChange,
-    };
-    var accountInformationValues = {
-      'first_name': this.state.first_name,
-      'last_name': this.state.last_name,
-      'username': this.state.username,
-      'password': this.state.password,
-      'password_confirm': this.state.password2,
-    };
-
-    var schoolInformationErrors = {
-      'school_name': this._getSchoolErrors('name'),
-      'school_address': this._getSchoolErrors('address'),
-      'school_city': this._getSchoolErrors('city'),
-      'school_state': this._getSchoolErrors('state'),
-      'school_zip': this._getSchoolErrors('zip_code'),
-      'school_country': this._getSchoolErrors('country'),
-    };
-    var schoolInformationHandlers = {
-      'school_name': _handleChange.bind(this,'school_name'),
-      'school_address': _handleChange.bind(this,'school_address'),
-      'school_city': _handleChange.bind(this,'school_city'),
-      'school_state': _handleChange.bind(this,'school_state'),
-      'school_zip': _handleChange.bind(this,'school_zip'),
-      'school_country': _handleChange.bind(this,'school_country'),
-    };
-    var schoolInformationValues = {
-      'school_name': this.state.school_name,
-      'school_address': this.state.school_address,
-      'school_city': this.state.school_city,
-      'school_state': this.state.school_state,
-      'school_zip': this.state.school_zip,
-      'school_country': this._getSchoolCountry(),
-    };
-    
-    var programInformationHandlers = {
-      'times_attended': _handleChange.bind(this, 'times_attended'),
-      'beginner_delegates': _handleChange.bind(this, 'beginner_delegates'),
-      'intermediate_delegates': _handleChange.bind(this, 'intermediate_delegates'),
-      'advanced_delegates': _handleChange.bind(this, 'advanced_delegates'),
-    };
-    var programInformationValues = {
-      'times_attended': this.state.times_attended,
-      'beginner_delegates': this.state.beginner_delegates,
-      'intermediate_delegates': this.state.intermediate_delegates,
-      'advanced_delegates': this.state.advanced_delegates,
-    };
-    var programInformationErrors = {
-      'times_attended': this.renderSchoolError('times_attended'),
-      'beginner_delegates': this.renderSchoolError('beginner_delegates'),
-      'intermediate_delegates': this.renderSchoolError('intermediate_delegates'),
-      'advanced_delegates': this.renderSchoolError('advanced_delegates'),
-    };
-
-    var primaryContactHandlers = {
-      'primary_name': _handleChange.bind(this, 'primary_name'),
-      'primary_email': _handleChange.bind(this, 'primary_email'),
-      'primary_phone': this._handlePrimaryPhoneChange,
-    };
-    var primaryContactValues = {
-      'primary_name': this.state.primary_name,
-      'primary_email': this.state.primary_email,
-      'primary_phone': this.state.primary_phone,
-    };
-    var primaryContactErrors = {
-      'primary_name': this._getSchoolErrors('primary_name'),
-      'primary_email': this._getSchoolErrors('primary_email'),
-      'primary_phone': this._getSchoolErrors('primary_phone'),
-    };
-
-    var secondaryContactHandlers = {
-      'secondary_name': _handleChange.bind(this, 'secondary_name'),
-      'secondary_email': _handleChange.bind(this, 'secondary_email'),
-      'secondary_phone': this._handleSecondaryPhoneChange,
-    };
-    var secondaryContactValues = {
-      'secondary_name': this.state.secondary_name,
-      'secondary_email': this.state.secondary_email,
-      'secondary_phone': this.state.secondary_phone,
-    };
-    var secondaryContactErrors = {
-      'secondary_name': this._getSchoolErrors('secondary_name'),
-      'secondary_email': this._getSchoolErrors('secondary_email'),
-      'secondary_phone': this._getSchoolErrors('secondary_phone'),
-    };
-
-    var specialCommitteeHandlers = {
-      'spanish_speaking_delegates': _handleChange.bind(this, 'spanish_speaking_delegates'),
-      'chinese_speaking_delegates': _handleChange.bind(this, 'chinese_speaking_delegates'),
-    };
-    var specialCommitteeValues = {
-      'spanish_speaking_delegates': this.state.spanish_speaking_delegates,
-      'chinese_speaking_delegates': this.state.chinese_speaking_delegates,
-    };
     var specialCommitteeErrors = {
       'spanish_speaking_delegates': this.renderSchoolError('spanish_speaking_delegates'),
       'chinese_speaking_delegates': this.renderSchoolError('chinese_speaking_delegates'),
@@ -234,68 +125,155 @@ var RegistrationView = React.createClass({
     return (
       <OuterView>
         <form id="registration" onSubmit={this._handleSubmit}>
-          <RegistrationHeader session={conference.session} />
+          <RegistrationHeader session = {conference.session} />
           <hr />
           <RegistrationAccountInformation 
-            handlers={accountInformationHandlers} 
-            errors={accountInformationErrors} 
-            accountInformation={accountInformationValues} 
-            blur={this._handlePasswordBlur} 
-            focus={this._handlePasswordFocus}
+            handlers = {{
+              'first_name': _handleChange.bind(this,'first_name'),
+              'last_name': _handleChange.bind(this,'last_name'),
+              'username': _handleChange.bind(this,'username'),
+              'password': this._handlePasswordChange,
+              'password_confirm': this.handlePasswordConfirmChange,
+            }}
+            errors = {{
+              'first_name': this.state.errors['first_name'],
+              'last_name': this.state.errors['last_name'],
+              'username': this.state.errors['username'],
+              'password': this.state.errors['password'],
+              'password_confirm': this._getPasswordConfirmError(),
+            }}
+            accountInformation = {{
+              'first_name': this.state.first_name,
+              'last_name': this.state.last_name,
+              'username': this.state.username,
+              'password': this.state.password,
+              'password_confirm': this.state.password2,
+            }} 
+            blur = {this._handlePasswordBlur} 
+            focus = {this._handlePasswordFocus}
           />
           <hr />
           <RegistrationSchoolInformation  
-            handlers={schoolInformationHandlers} 
-            errors={schoolInformationErrors} 
-            schoolInformation={schoolInformationValues} 
-            handleInternationalChange={this._handleInternationalChange} 
-            schoolInternational={this.state.school_international} 
+            handlers = {{
+              'school_name': _handleChange.bind(this,'school_name'),
+              'school_address': _handleChange.bind(this,'school_address'),
+              'school_city': _handleChange.bind(this,'school_city'),
+              'school_state': _handleChange.bind(this,'school_state'),
+              'school_zip': _handleChange.bind(this,'school_zip'),
+              'school_country': _handleChange.bind(this,'school_country'),
+            }} 
+            errors = {{
+              'school_name': this._getSchoolErrors('name'),
+              'school_address': this._getSchoolErrors('address'),
+              'school_city': this._getSchoolErrors('city'),
+              'school_state': this._getSchoolErrors('state'),
+              'school_zip': this._getSchoolErrors('zip_code'),
+              'school_country': this._getSchoolErrors('country'),
+            }} 
+            schoolInformation = {{
+              'school_name': this.state.school_name,
+              'school_address': this.state.school_address,
+              'school_city': this.state.school_city,
+              'school_state': this.state.school_state,
+              'school_zip': this.state.school_zip,
+              'school_country': this._getSchoolCountry(),
+            }}
+            handleInternationalChange = {this._handleInternationalChange} 
+            schoolInternational = {this.state.school_international} 
           />
           <hr />
           <RegistrationProgramInformation 
-            handlers={programInformationHandlers} 
-            errors={programInformationErrors} 
-            programInformation={programInformationValues} 
-            handleProgramTypeChange={this._handleProgramTypeChange}
-            programType={this.state.program_type}
+            handlers = {{
+              'times_attended': _handleChange.bind(this, 'times_attended'),
+              'beginner_delegates': _handleChange.bind(this, 'beginner_delegates'),
+              'intermediate_delegates': _handleChange.bind(this, 'intermediate_delegates'),
+              'advanced_delegates': _handleChange.bind(this, 'advanced_delegates'),
+            }} 
+            errors = {{
+              'times_attended': this.renderSchoolError('times_attended'),
+              'beginner_delegates': this.renderSchoolError('beginner_delegates'),
+              'intermediate_delegates': this.renderSchoolError('intermediate_delegates'),
+              'advanced_delegates': this.renderSchoolError('advanced_delegates'),
+            }}
+            programInformation = {{
+              'times_attended': this.state.times_attended,
+              'beginner_delegates': this.state.beginner_delegates,
+              'intermediate_delegates': this.state.intermediate_delegates,
+              'advanced_delegates': this.state.advanced_delegates,
+            }} 
+            handleProgramTypeChange = {this._handleProgramTypeChange}
+            programType = {this.state.program_type}
           />
           <hr />
           <RegistrationPrimaryContact 
-            handlers={primaryContactHandlers} 
-            primaryContactInformation={primaryContactValues} 
-            errors={primaryContactErrors} 
-            renderContactGenderField={this.renderContactGenderField} 
-            renderContactTypeField={this.renderContactTypeField} 
-            isInternational={this.state.school_international} 
+            handlers = {{
+              'primary_name': _handleChange.bind(this, 'primary_name'),
+              'primary_email': _handleChange.bind(this, 'primary_email'),
+              'primary_phone': this._handlePrimaryPhoneChange,
+            }}
+            errors = {{
+              'primary_name': this._getSchoolErrors('primary_name'),
+              'primary_email': this._getSchoolErrors('primary_email'),
+              'primary_phone': this._getSchoolErrors('primary_phone'),
+            }} 
+            primaryContactInformation = {{
+              'primary_name': this.state.primary_name,
+              'primary_email': this.state.primary_email,
+              'primary_phone': this.state.primary_phone,
+            }}
+            renderContactGenderField = {this.renderContactGenderField} 
+            renderContactTypeField = {this.renderContactTypeField} 
+            isInternational = {this.state.school_international} 
           />
           <hr />
           <RegistrationSecondaryContact 
-            handlers={secondaryContactHandlers} 
-            secondaryContactInformation={secondaryContactValues} 
-            errors={secondaryContactErrors} 
-            renderContactGenderField={this.renderContactGenderField} 
-            renderContactTypeField={this.renderContactTypeField} 
-            isInternational={this.state.school_international}
+            handlers = {{
+              'secondary_name': _handleChange.bind(this, 'secondary_name'),
+              'secondary_email': _handleChange.bind(this, 'secondary_email'),
+              'secondary_phone': this._handleSecondaryPhoneChange,
+            }} 
+            errors = {{
+              'secondary_name': this._getSchoolErrors('secondary_name'),
+              'secondary_email': this._getSchoolErrors('secondary_email'),
+              'secondary_phone': this._getSchoolErrors('secondary_phone'),
+            }}
+            secondaryContactInformation = {{
+              'secondary_name': this.state.secondary_name,
+              'secondary_email': this.state.secondary_email,
+              'secondary_phone': this.state.secondary_phone,
+            }} 
+            renderContactGenderField = {this.renderContactGenderField} 
+            renderContactTypeField = {this.renderContactTypeField} 
+            isInternational = {this.state.school_international}
           />
           <hr />
           <RegistrationCountryPreferences
-            renderCountryDropdown={this.renderCountryDropdown}
+            renderCountryDropdown = {this.renderCountryDropdown}
           />
           <hr />
           <RegistrationSpecialCommitteePreferences 
-            handlers={specialCommitteeHandlers} 
-            errors={specialCommitteeErrors}
-            specialCommitteePrefValues={specialCommitteeValues} 
-            renderCommittees={this.renderCommittees}
+            handlers = {{
+              'spanish_speaking_delegates': _handleChange.bind(this, 'spanish_speaking_delegates'),
+              'chinese_speaking_delegates': _handleChange.bind(this, 'chinese_speaking_delegates'),
+            }}
+            errors = {{
+              'spanish_speaking_delegates': this.renderSchoolError('spanish_speaking_delegates'),
+              'chinese_speaking_delegates': this.renderSchoolError('chinese_speaking_delegates'),
+            }}
+            specialCommitteePrefValues = {{
+              'spanish_speaking_delegates': this.state.spanish_speaking_delegates,
+              'chinese_speaking_delegates': this.state.chinese_speaking_delegates,
+            }} 
+            renderCommittees = {this.renderCommittees}
           />
           <hr />
           <RegistrationComments
-            handler={_handleChange.bind(this, 'registration_comments')} 
-            value={this.state.registration_comments} 
+            handler = {_handleChange.bind(this, 'registration_comments')} 
+            value = {this.state.registration_comments} 
           />
           <hr />
           <RegistrationFooter 
-            loading={this.state.loading} 
+            loading = {this.state.loading} 
           />
         </form>
       </OuterView>

@@ -20,6 +20,15 @@ const RegistrationPrimaryContact = React.createClass({
     isInternational: React.PropTypes.bool,
   },
 
+  shouldComponentUpdate: function(nextProps, nextState) {
+    for (var key in primaryContactInformation) {
+      if(this.props.primaryContactInformation[key] !== nextProps.primaryContactInformation[key]) {
+        return true;
+      }
+    }
+    return this.props.isInternational !== nextProps.isInternational;
+  },
+
   render: function() { 
     var accessHandlers = _accessSafe.bind(this, this.props.handlers);
     var accessPrimary = _accessSafe.bind(this, this.props.primaryContactInformation);

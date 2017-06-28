@@ -13,6 +13,10 @@ const RegistrationComments = React.createClass({
     value: React.PropTypes.string,
   },
 
+  shouldComponentUpdate: function(nextProps, nextState) {
+    return this.props.value !== nextProps.value;
+  },
+
   render: function() {
     return (
       <div id='comments'>

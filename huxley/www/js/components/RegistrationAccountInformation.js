@@ -19,6 +19,15 @@ const RegistrationAccountInformation = React.createClass({
     focus: React.PropTypes.func,
   },
 
+  shouldComponentUpdate: function(nextProps, nextState) {
+    for (var key in this.props.accountInformation) {
+      if (this.props.accountInformation[key] !== nextProps.accountInformation[key]) {
+        return true;
+      }
+    }
+    return false;
+  },
+
   render: function() {
     var accessErrors = _accessSafe.bind(this, this.props.errors);
     var accessHandlers = _accessSafe.bind(this, this.props.handlers);

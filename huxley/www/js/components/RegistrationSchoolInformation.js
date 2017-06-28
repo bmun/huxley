@@ -19,6 +19,15 @@ const RegistrationSchoolInformation = React.createClass({
     schoolInternational: React.PropTypes.bool,
   },
 
+  shouldComponentUpdate: function(nextProps, nextState) {
+    for (var key in this.props.schoolInformation) {
+      if (this.props.schoolInformation[key] !== nextProps.schoolInformation[key]) {
+        return true;
+      }
+    }
+    return this.props.schoolInternational !== nextProps.schoolInternational;
+  },
+
   render: function() {
     var accessErrors = _accessSafe.bind(this, this.props.errors);
     var accessHandlers = _accessSafe.bind(this, this.props.handlers);
