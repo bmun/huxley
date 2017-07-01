@@ -9,27 +9,29 @@ var cx = require('classnames');
 var React = require('react');
 var ReactRouter = require('react-router');
 
+var Button = require('components/Button');
 var CommitteeStore = require('stores/CommitteeStore');
 var ContactTypes = require('constants/ContactTypes');
 var ConferenceContext = require('components/ConferenceContext');
 var CountrySelect = require('components/CountrySelect');
 var CountryStore = require('stores/CountryStore');
 var GenderConstants = require('constants/GenderConstants');
+var NavLink = require('components/NavLink');
 var OuterView = require('components/OuterView');
 var ProgramTypes = require('constants/ProgramTypes');
 var RegistrationAccountInformation = require('components/RegistrationAccountInformation');
 var RegistrationComments = require('components/RegistrationComments');
 var RegistrationCountryPreferences = require('components/RegistrationCountryPreferences');
-var RegistrationFooter = require('components/RegistrationFooter');
-var RegistrationHeader = require('components/RegistrationHeader');
 var RegistrationPhoneInput = require('components/RegistrationPhoneInput');
 var RegistrationPrimaryContact = require('components/RegistrationPrimaryContact');
 var RegistrationProgramInformation = require('components/RegistrationProgramInformation');
 var RegistrationSchoolInformation = require('components/RegistrationSchoolInformation');
 var RegistrationSecondaryContact = require('components/RegistrationSecondaryContact');
 var RegistrationSpecialCommitteePreferences = require('components/RegistrationSpecialCommitteePreferences');
+var RegistrationViewText = require('text/RegistrationViewText.md');
 var ServerAPI = require('lib/ServerAPI');
 var StatusLabel = require('components/StatusLabel');
+var TextTemplate = require('components/TextTemplate');
 var _handleChange = require('utils/_handleChange');
 
 require('css/RegistrationView.less');
@@ -116,16 +118,17 @@ var RegistrationView = React.createClass({
 
   render: function() {
     var conference = this.context.conference;
-
-    var specialCommitteeErrors = {
-      'spanish_speaking_delegates': this.renderSchoolError('spanish_speaking_delegates'),
-      'chinese_speaking_delegates': this.renderSchoolError('chinese_speaking_delegates'),
-    };
-
     return (
       <OuterView>
         <form id="registration" onSubmit={this._handleSubmit}>
-          <RegistrationHeader session = {conference.session} />
+          <div>
+            <TextTemplate conferenceSession={conference.session}>
+              {RegistrationViewText}
+            </TextTemplate>
+            <NavLink direction="left" href="/login">
+                  Back to Login
+            </NavLink>
+          </div>
           <hr />
           <RegistrationAccountInformation 
             handlers = {{
@@ -272,9 +275,20 @@ var RegistrationView = React.createClass({
             value = {this.state.registration_comments} 
           />
           <hr />
-          <RegistrationFooter 
-            loading = {this.state.loading} 
-          />
+          <div id='registration_footer'>
+            <NavLink direction="left" href="/login">
+              Back to Login
+            </NavLink>
+            <div style={{float: 'right'}}>
+              <span className="help-text"><em>All done?</em></span>
+              <Button
+                color="green"
+                loading={this.state.loading}
+                type="submit">
+                Register
+              </Button>
+            </div>
+          </div>
         </form>
       </OuterView>
     );

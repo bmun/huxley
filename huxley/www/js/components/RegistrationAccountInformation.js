@@ -20,7 +20,7 @@ const RegistrationAccountInformation = React.createClass({
   },
 
   shouldComponentUpdate: function(nextProps, nextState) {
-    for (var key in this.props.accountInformation) {
+    for (let key in this.props.accountInformation) {
       if (this.props.accountInformation[key] !== nextProps.accountInformation[key]) {
         return true;
       }

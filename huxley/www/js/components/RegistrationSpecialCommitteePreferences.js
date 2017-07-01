@@ -19,7 +19,7 @@ const RegistrationSpecialCommitteePreferences = React.createClass({
   },
 
   shouldComponentUpdate: function(nextProps, nextState) {
-    for (var key in this.props.specialCommitteePrefValues) {
+    for (let key in this.props.specialCommitteePrefValues) {
       if(this.props.specialCommitteePrefValues[key] !== nextProps.specialCommitteePrefValues[key]) {
         return true;
       }

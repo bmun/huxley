@@ -20,7 +20,7 @@ const RegistrationSchoolInformation = React.createClass({
   },
 
   shouldComponentUpdate: function(nextProps, nextState) {
-    for (var key in this.props.schoolInformation) {
+    for (let key in this.props.schoolInformation) {
       if (this.props.schoolInformation[key] !== nextProps.schoolInformation[key]) {
         return true;
       }

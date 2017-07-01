@@ -21,7 +21,7 @@ const RegistrationProgramInformation = React.createClass({
   },
 
   shouldComponentUpdate: function(nextProps, nextState) {
-    for (var key in this.props.programInformation) {
+    for (let key in this.props.programInformation) {
       if (this.props.programInformation[key] !== nextProps.programInformation[key]) {
         return true;
       }

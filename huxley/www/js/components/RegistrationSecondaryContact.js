@@ -21,7 +21,7 @@ const RegistrationSecondaryContact = React.createClass({
   },
 
   shouldComponentUpdate: function(nextProps, nextState) {
-    for (var key in this.props.secondaryContactInformation) {
+    for (let key in this.props.secondaryContactInformation) {
       if(this.props.secondaryContactInformation[key] !== nextProps.secondaryContactInformation[key]) {
         return true;
       }
