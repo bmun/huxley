@@ -7,7 +7,7 @@
 
 var React = require('react');
 
-var RegistrationTextInput = require('components/RegistrationTextInput');
+var RegistrationTextInput = require('components/registration/RegistrationTextInput');
 var _accessSafe = require('utils/_accessSafe');
 
 const RegistrationSecondaryContact = React.createClass({
