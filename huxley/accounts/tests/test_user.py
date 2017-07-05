@@ -30,7 +30,7 @@ class UserTestCase(TestCase):
         assert_raises('', 'mehta', AuthenticationError.MISSING_FIELDS)
         assert_raises('kunal', 'm', AuthenticationError.INVALID_CREDENTIALS)
         assert_raises('k', 'mehta', AuthenticationError.INVALID_CREDENTIALS)
-        assert_raises('kunal', 'mehta', AuthenticationError.INACTIVE_ACCOUNT)
+        assert_raises('kunal', 'mehta', AuthenticationError.INVALID_CREDENTIALS)
 
         kunal.is_active = True
         kunal.save()

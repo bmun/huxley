@@ -7,6 +7,7 @@ from django.test import TestCase
 
 from huxley.logging.models import LogEntry
 
+
 class EraseLogsTest(TestCase):
     def test_no_args(self):
         '''It erases all logs that exist prior to 30 days ago.'''
@@ -28,17 +29,17 @@ class EraseLogsTest(TestCase):
         self.assertEqual(logs[0].timestamp, recent_log.timestamp)
 
     def test_valid_arg(self):
-        '''It erase all logs that exist before the number of days specified.'''
-        old_log=LogEntry.objects.create(
+        '''It erases all logs that exist before the number of days specified.'''
+        old_log = LogEntry.objects.create(
             level='DEBUG',
             message='This should be deleted by the script.',
             timestamp=datetime.now()-timedelta(days=10))
-        recent_log=LogEntry.objects.create(
+        recent_log = LogEntry.objects.create(
             level='DEBUG',
             message='This should not be deleted by the script',
             timestamp=datetime.now()-timedelta(days=4))
 
-        call_command('erase_logs', '7')
+        call_command('erase_logs', '--days=7')
 
         logs = LogEntry.objects.all()
         self.assertEqual(logs.count(), 1)

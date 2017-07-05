@@ -279,8 +279,8 @@ class UserListPostTestCase(tests.CreateAPITestCase):
         response = self.get_response(params=self.get_params(username='>Kunal'))
         self.assertEqual(response.data, {
             'username': [
-                u'Enter a valid username. This value may contain only letters, '
-                u'numbers and @/./+/-/_ characters.']})
+                u'Enter a valid username. This value may contain only English '
+                u'letters, numbers, and @/./+/-/_ characters.']})
 
     def test_empty_password(self):
         response = self.get_response(params=self.get_params(password=''))
