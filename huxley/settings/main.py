@@ -69,8 +69,8 @@ MIDDLEWARE = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'huxley.core.middlewares.LoggingMiddleware',
-    'huxley.core.middlewares.ExceptionLoggerMiddleware',
+    'huxley.logging.middleware.LoggingMiddleware',
+    'huxley.logging.middleware.ExceptionLoggerMiddleware',
 )
 
 AUTHENTICATION_BACKENDS = (
