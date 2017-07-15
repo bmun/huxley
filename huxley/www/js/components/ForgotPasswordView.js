@@ -8,13 +8,13 @@
 var React = require('react');
 var ReactRouter = require('react-router');
 
-var Button = require('components/Button');
+var Button = require('components/core/Button');
 var NavLink = require('components/NavLink');
 var OuterView = require('components/OuterView');
 var ServerAPI = require('lib/ServerAPI');
-var StatusLabel = require('components/StatusLabel');
-var TextInput = require('components/TextInput');
-var TextTemplate = require('components/TextTemplate');
+var StatusLabel = require('components/core/StatusLabel');
+var TextInput = require('components/core/TextInput');
+var TextTemplate = require('components/core/TextTemplate');
 
 require('css/LoginForm.less');
 var ForgotPasswordViewText = require('text/ForgotPasswordViewText.md');

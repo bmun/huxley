@@ -10,14 +10,14 @@ var ReactRouter = require('react-router');
 
 var AssignmentActions = require('actions/AssignmentActions');
 var AssignmentStore = require('stores/AssignmentStore');
-var Button = require('components/Button');
+var Button = require('components/core/Button');
 var CommitteeStore = require('stores/CommitteeStore');
 var CountryStore = require('stores/CountryStore');
 var CurrentUserStore = require('stores/CurrentUserStore');
 var DelegateStore = require('stores/DelegateStore');
 var InnerView = require('components/InnerView');
-var Table = require('components/Table');
-var TextTemplate = require('components/TextTemplate');
+var Table = require('components/core/Table');
+var TextTemplate = require('components/core/TextTemplate');
 
 var AdvisorFeedbackViewText = require('text/AdvisorFeedbackViewText.md');
 

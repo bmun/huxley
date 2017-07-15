@@ -7,7 +7,7 @@
 
 var React = require('react');
 
-var TextTemplate = require('components/TextTemplate');
+var TextTemplate = require('components/core/TextTemplate');
 
 var PermissionDeniedViewText = require('text/PermissionDeniedViewText.md');
 

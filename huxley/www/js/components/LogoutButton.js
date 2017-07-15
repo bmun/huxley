@@ -7,7 +7,7 @@
 
 var React = require('react');
 
-var Button = require('components/Button');
+var Button = require('components/core/Button');
 var CurrentUserActions = require('actions/CurrentUserActions');
 var ServerAPI = require('lib/ServerAPI');
 

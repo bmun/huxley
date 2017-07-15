@@ -7,17 +7,17 @@
 
 const React = require('react');
 
-const Button = require('components/Button');
+const Button = require('components/core/Button');
 const InnerView = require('components/InnerView');
 const LogoutButton = require('components/LogoutButton');
 const ConferenceContext = require('components/ConferenceContext');
 const CurrentUserActions = require('actions/CurrentUserActions');
 const PhoneInput = require('components/PhoneInput');
 const ProgramTypes = require('constants/ProgramTypes');
-const StatusLabel = require('components/StatusLabel');
-const Table = require('components/Table');
-const TextInput = require('components/TextInput');
-const TextTemplate = require('components/TextTemplate');
+const StatusLabel = require('components/core/StatusLabel');
+const Table = require('components/core/Table');
+const TextInput = require('components/core/TextInput');
+const TextTemplate = require('components/core/TextTemplate');
 const User = require('utils/User');
 const _handleChange = require('utils/_handleChange');
 

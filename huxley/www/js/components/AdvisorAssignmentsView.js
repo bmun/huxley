@@ -10,7 +10,7 @@ var ReactRouter = require('react-router');
 
 var AssignmentActions = require('actions/AssignmentActions');
 var AssignmentStore = require('stores/AssignmentStore');
-var Button = require('components/Button');
+var Button = require('components/core/Button');
 var CommitteeStore = require('stores/CommitteeStore');
 var ConferenceContext = require('components/ConferenceContext');
 var CountryStore = require('stores/CountryStore');
@@ -21,8 +21,8 @@ var DelegateSelect = require('components/DelegateSelect');
 var DelegateStore = require('stores/DelegateStore');
 var InnerView = require('components/InnerView');
 var ServerAPI = require('lib/ServerAPI');
-var Table = require('components/Table');
-var TextTemplate = require('components/TextTemplate');
+var Table = require('components/core/Table');
+var TextTemplate = require('components/core/TextTemplate');
 
 var AdvisorAssignmentsViewText = require('text/AdvisorAssignmentsViewText.md');
 

@@ -7,8 +7,8 @@
 
 var React = require('react');
 
-var TextInput = require('components/TextInput');
-var StatusLabel = require('components/StatusLabel');
+var TextInput = require('components/core/TextInput');
+var StatusLabel = require('components/core/StatusLabel');
 
 const RegistrationTextInput = React.createClass({
   propTypes: {

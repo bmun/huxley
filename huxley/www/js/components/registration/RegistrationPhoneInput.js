@@ -8,7 +8,7 @@
 var React = require('react');
 
 var PhoneInput = require('components/PhoneInput');
-var StatusLabel = require('components/StatusLabel');
+var StatusLabel = require('components/core/StatusLabel');
 
 const RegistrationPhoneInput = React.createClass({
   propTypes: {

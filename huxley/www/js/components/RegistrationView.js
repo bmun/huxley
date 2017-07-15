@@ -9,7 +9,7 @@ var cx = require('classnames');
 var React = require('react');
 var ReactRouter = require('react-router');
 
-var Button = require('components/Button');
+var Button = require('components/core/Button');
 var CommitteeStore = require('stores/CommitteeStore');
 var ContactTypes = require('constants/ContactTypes');
 var ConferenceContext = require('components/ConferenceContext');
@@ -30,8 +30,8 @@ var RegistrationSecondaryContact = require('components/registration/Registration
 var RegistrationSpecialCommitteePreferences = require('components/registration/RegistrationSpecialCommitteePreferences');
 var RegistrationViewText = require('text/RegistrationViewText.md');
 var ServerAPI = require('lib/ServerAPI');
-var StatusLabel = require('components/StatusLabel');
-var TextTemplate = require('components/TextTemplate');
+var StatusLabel = require('components/core/StatusLabel');
+var TextTemplate = require('components/core/TextTemplate');
 var _handleChange = require('utils/_handleChange');
 
 require('css/RegistrationView.less');

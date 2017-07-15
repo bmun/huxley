@@ -8,9 +8,9 @@
 var cx = require('classnames');
 var React = require('react');
 
-var Button = require('components/Button');
+var Button = require('components/core/Button');
 var ServerAPI = require('lib/ServerAPI');
-var StatusLabel = require('components/StatusLabel');
+var StatusLabel = require('components/core/StatusLabel');
 
 require('css/ChangePasswordView.less');
 

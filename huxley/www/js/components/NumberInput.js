@@ -6,7 +6,7 @@
 'use strict';
 
 var React = require('react');
-var TextInput = require('components/TextInput');
+var TextInput = require('components/core/TextInput');
 
 var NumberInput = React.createClass({
 
