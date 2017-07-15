@@ -4,7 +4,7 @@
 import json
 
 from django.core.urlresolvers import reverse
-from django.shortcuts import redirect, render_to_response
+from django.shortcuts import redirect, render
 from django.template import RequestContext
 
 from huxley.api.serializers import UserSerializer
@@ -49,5 +49,4 @@ def index(request):
         'program_types': ProgramTypes.to_json(),
     }
 
-    return render_to_response('www.html', context,
-                              context_instance=RequestContext(request))
+    return render(request, 'www.html', context)
