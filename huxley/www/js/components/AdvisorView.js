@@ -13,7 +13,6 @@ var PermissionDeniedView = require('components/PermissionDeniedView');
 var Shaker = require('components/Shaker');
 var TopBar = require('components/TopBar');
 var User = require('utils/User');
-var BottomBar = require('components/BottomBar');
 
 require('css/NavBar.less');
 
@@ -51,7 +50,6 @@ var AdvisorView = React.createClass ({
           </div>
           {this.props.children}
         </Shaker>
-        <BottomBar />
       </div>
     );
   },
