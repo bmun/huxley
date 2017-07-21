@@ -13,6 +13,7 @@ var ChairView = require('components/ChairView');
 var ConferenceContext = require('components/ConferenceContext');
 var CurrentUserStore = require('stores/CurrentUserStore');
 var Shaker = require('components/Shaker');
+var SupportLink = require('components/SupportLink');
 var User = require('utils/User');
 
 require('css/base.less');
@@ -51,21 +52,30 @@ var Huxley = React.createClass({
     var user = CurrentUserStore.getCurrentUser();
     if (User.isAnonymous(user)) {
       return (
+        <div>
         <Shaker>
           {React.cloneElement(this.props.children, { user: user })}
         </Shaker>
+          <SupportLink />
+        </div>
       );
     } else if (User.isAdvisor(user)) {
       return (
+        <div>
         <AdvisorView user={user}>
           {React.cloneElement(this.props.children, { user: user })}
         </AdvisorView>
+          <SupportLink />
+        </div>
       );
     } else if (User.isChair(user)) {
       return (
+        <div>
         <ChairView user={user}>
           {React.cloneElement(this.props.children, { user: user })}
         </ChairView>
+          <SupportLink />
+        </div>
       );
     }
   },
