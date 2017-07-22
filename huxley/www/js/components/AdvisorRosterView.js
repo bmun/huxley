@@ -9,17 +9,17 @@ var Modal = require('react-modal');
 var React = require('react');
 var ReactRouter = require('react-router');
 
-var Button = require('components/Button');
+var Button = require('components/core/Button');
 var CurrentUserStore = require('stores/CurrentUserStore');
 var DelegateActions = require('actions/DelegateActions');
 var DelegateStore = require('stores/DelegateStore');
 var CurrentUserActions = require('actions/CurrentUserActions');
 var InnerView = require('components/InnerView');
 var ServerAPI = require('lib/ServerAPI');
-var StatusLabel = require('components/StatusLabel');
-var Table = require('components/Table');
-var TextInput = require('components/TextInput');
-var TextTemplate = require('components/TextTemplate');
+var StatusLabel = require('components/core/StatusLabel');
+var Table = require('components/core/Table');
+var TextInput = require('components/core/TextInput');
+var TextTemplate = require('components/core/TextTemplate');
 var _handleChange = require('utils/_handleChange');
 
 require('css/Modal.less');
