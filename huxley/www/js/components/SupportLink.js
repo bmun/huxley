@@ -14,15 +14,13 @@ require('css/SupportLink.less');
 var SupportLink = React.createClass({
   render: function() {
     return (
-      <div>
-        <div className="link-wrapper">
-          <span className="grey-text">Having Issues?</span>
-          &nbsp;
-          &nbsp;
-          <span>
+      <div className="link-wrapper">
+        <span className="grey-text">Having Issues?</span>
+        &nbsp;
+        &nbsp;
+        <span>
           <a className="mailto-link" href="mailto:tech@bmun.org?subject=Issues%20With%20Huxley">Email Us</a>
-          </span>
-        </div>
+        </span>
       </div>
     );
   },

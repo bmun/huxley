@@ -56,7 +56,7 @@ var Huxley = React.createClass({
         <Shaker>
           {React.cloneElement(this.props.children, { user: user })}
         </Shaker>
-          <SupportLink />
+        <SupportLink />
         </div>
       );
     } else if (User.isAdvisor(user)) {
@@ -65,7 +65,7 @@ var Huxley = React.createClass({
         <AdvisorView user={user}>
           {React.cloneElement(this.props.children, { user: user })}
         </AdvisorView>
-          <SupportLink />
+        <SupportLink />
         </div>
       );
     } else if (User.isChair(user)) {
@@ -74,7 +74,7 @@ var Huxley = React.createClass({
         <ChairView user={user}>
           {React.cloneElement(this.props.children, { user: user })}
         </ChairView>
-          <SupportLink />
+        <SupportLink />
         </div>
       );
     }
