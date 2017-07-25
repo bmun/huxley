@@ -8,7 +8,6 @@
 var cx = require('classnames');
 var React = require('react');
 
-
 require('css/SupportLink.less');
 
 var SupportLink = React.createClass({
@@ -19,7 +18,11 @@ var SupportLink = React.createClass({
         &nbsp;
         &nbsp;
         <span>
-          <a className="mailto-link" href="mailto:tech@bmun.org?subject=Issues%20With%20Huxley">Email Us</a>
+          <a
+            className="mailto-link"
+            href="mailto:tech@bmun.org?subject=Issues%20With%20Huxley">
+            Email Us
+          </a>
         </span>
       </div>
     );
