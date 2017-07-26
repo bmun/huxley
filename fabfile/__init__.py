@@ -60,7 +60,8 @@ def format():
     py_diff_list = [pyfile for pyfile in diff_list if pyfile.endswith('.py')]
     format_python(py_diff_list)
 
-    js_source = ' '.join([jsfile for jsfile in diff_list if jsfile.endswith('.js')])
+    js_source = ' '.join(
+        [jsfile for jsfile in diff_list if jsfile.endswith('.js')])
     format_js(js_source)
     print ui.info('Formatting complete')
 
