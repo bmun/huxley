@@ -61,10 +61,10 @@ def hub_installed():
         return local('hub').return_code != 127
 
 
-def diff_name_only(remote='upstream', branch='master'):
+def diff_name_only(remote='upstream', branch='master', options=''):
     with hide('running'):
         diff_list = local(
-            'git diff --name-only %s/%s...HEAD' % (remote, branch),
+            'git diff --name-only %s %s/%s...HEAD' % (options, remote, branch),
             capture=True)
     return diff_list.split('\n')
 
