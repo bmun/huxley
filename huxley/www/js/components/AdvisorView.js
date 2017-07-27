@@ -3,25 +3,25 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
-var React = require('react');
-var ReactRouter = require('react-router');
+var React = require("react");
+var ReactRouter = require("react-router");
 
-var NavTab = require('components/NavTab');
-var PermissionDeniedView = require('components/PermissionDeniedView');
-var Shaker = require('components/Shaker');
-var TopBar = require('components/TopBar');
-var User = require('utils/User');
+var NavTab = require("components/NavTab");
+var PermissionDeniedView = require("components/PermissionDeniedView");
+var Shaker = require("components/Shaker");
+var TopBar = require("components/TopBar");
+var User = require("utils/User");
 
-require('css/NavBar.less');
+require("css/NavBar.less");
 
-var AdvisorView = React.createClass ({
+var AdvisorView = React.createClass({
   mixins: [ReactRouter.History],
 
   componentDidMount: function() {
     if (User.isAnonymous(this.props.user)) {
-      this.history.pushState(null, '/login');
+      this.history.pushState(null, "/login");
     }
   },
 
@@ -35,18 +35,10 @@ var AdvisorView = React.createClass ({
         <TopBar user={this.props.user} />
         <Shaker>
           <div className="navbar rounded-top">
-            <NavTab href="/advisor/profile">
-              Profile
-            </NavTab>
-            <NavTab href="/advisor/assignments">
-              Assignments
-            </NavTab>
-            <NavTab href="/advisor/roster">
-              Delegates
-            </NavTab>
-            <NavTab href="/advisor/feedback">
-              Feedback
-            </NavTab>
+            <NavTab href="/advisor/profile">Profile</NavTab>
+            <NavTab href="/advisor/assignments">Assignments</NavTab>
+            <NavTab href="/advisor/roster">Delegates</NavTab>
+            <NavTab href="/advisor/feedback">Feedback</NavTab>
           </div>
           {this.props.children}
         </Shaker>

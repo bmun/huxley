@@ -3,12 +3,12 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
-var React = require('react');
+var React = require("react");
 
-var PhoneInput = require('components/PhoneInput');
-var StatusLabel = require('components/core/StatusLabel');
+var PhoneInput = require("components/PhoneInput");
+var StatusLabel = require("components/core/StatusLabel");
 
 const RegistrationPhoneInput = React.createClass({
   propTypes: {
@@ -27,9 +27,12 @@ const RegistrationPhoneInput = React.createClass({
     return (
       <div className="reg-field">
         <PhoneInput {...inputProps} />
-        {errors && errors.map(error =>
-          <StatusLabel status="error">{error}</StatusLabel>
-        )}
+        {errors &&
+          errors.map(error =>
+            <StatusLabel status="error">
+              {error}
+            </StatusLabel>,
+          )}
       </div>
     );
   },

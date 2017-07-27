@@ -3,45 +3,43 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
-var cx = require('classnames');
-var React = require('react');
-var ReactRouter = require('react-router');
+var cx = require("classnames");
+var React = require("react");
+var ReactRouter = require("react-router");
 
-var Button = require('components/core/Button');
-var CommitteeStore = require('stores/CommitteeStore');
-var ContactTypes = require('constants/ContactTypes');
-var ConferenceContext = require('components/ConferenceContext');
-var CountrySelect = require('components/CountrySelect');
-var CountryStore = require('stores/CountryStore');
-var GenderConstants = require('constants/GenderConstants');
-var NavLink = require('components/NavLink');
-var OuterView = require('components/OuterView');
-var ProgramTypes = require('constants/ProgramTypes');
-var RegistrationAccountInformation = require('components/registration/RegistrationAccountInformation');
-var RegistrationComments = require('components/registration/RegistrationComments');
-var RegistrationCountryPreferences = require('components/registration/RegistrationCountryPreferences');
-var RegistrationPhoneInput = require('components/registration/RegistrationPhoneInput');
-var RegistrationPrimaryContact = require('components/registration/RegistrationPrimaryContact');
-var RegistrationProgramInformation = require('components/registration/RegistrationProgramInformation');
-var RegistrationSchoolInformation = require('components/registration/RegistrationSchoolInformation');
-var RegistrationSecondaryContact = require('components/registration/RegistrationSecondaryContact');
-var RegistrationSpecialCommitteePreferences = require('components/registration/RegistrationSpecialCommitteePreferences');
-var RegistrationViewText = require('text/RegistrationViewText.md');
-var ServerAPI = require('lib/ServerAPI');
-var StatusLabel = require('components/core/StatusLabel');
-var TextTemplate = require('components/core/TextTemplate');
-var _handleChange = require('utils/_handleChange');
+var Button = require("components/core/Button");
+var CommitteeStore = require("stores/CommitteeStore");
+var ContactTypes = require("constants/ContactTypes");
+var ConferenceContext = require("components/ConferenceContext");
+var CountrySelect = require("components/CountrySelect");
+var CountryStore = require("stores/CountryStore");
+var GenderConstants = require("constants/GenderConstants");
+var NavLink = require("components/NavLink");
+var OuterView = require("components/OuterView");
+var ProgramTypes = require("constants/ProgramTypes");
+var RegistrationAccountInformation = require("components/registration/RegistrationAccountInformation");
+var RegistrationComments = require("components/registration/RegistrationComments");
+var RegistrationCountryPreferences = require("components/registration/RegistrationCountryPreferences");
+var RegistrationPhoneInput = require("components/registration/RegistrationPhoneInput");
+var RegistrationPrimaryContact = require("components/registration/RegistrationPrimaryContact");
+var RegistrationProgramInformation = require("components/registration/RegistrationProgramInformation");
+var RegistrationSchoolInformation = require("components/registration/RegistrationSchoolInformation");
+var RegistrationSecondaryContact = require("components/registration/RegistrationSecondaryContact");
+var RegistrationSpecialCommitteePreferences = require("components/registration/RegistrationSpecialCommitteePreferences");
+var RegistrationViewText = require("text/RegistrationViewText.md");
+var ServerAPI = require("lib/ServerAPI");
+var StatusLabel = require("components/core/StatusLabel");
+var TextTemplate = require("components/core/TextTemplate");
+var _handleChange = require("utils/_handleChange");
 
-require('css/RegistrationView.less');
+require("css/RegistrationView.less");
 
-var USA = 'United States of America';
+var USA = "United States of America";
 
 var RegistrationView = React.createClass({
-  mixins: [
-    ReactRouter.History,
-  ],
+  mixins: [ReactRouter.History],
 
   contextTypes: {
     conference: React.PropTypes.shape(ConferenceContext),
@@ -53,34 +51,34 @@ var RegistrationView = React.createClass({
       errors: {},
       countries: Object.values(CountryStore.getCountries()),
       committees: Object.values(CommitteeStore.getSpecialCommittees()),
-      first_name: '',
-      last_name: '',
-      username: '',
+      first_name: "",
+      last_name: "",
+      username: "",
       password: null,
       password2: null,
-      school_name: '',
-      school_address: '',
-      school_city: '',
-      school_state: '',
-      school_zip: '',
-      school_country: '',
+      school_name: "",
+      school_address: "",
+      school_city: "",
+      school_state: "",
+      school_zip: "",
+      school_country: "",
       school_international: false,
       program_type: ProgramTypes.CLUB,
-      times_attended: '',
-      beginner_delegates: '',
-      intermediate_delegates: '',
-      advanced_delegates: '',
-      spanish_speaking_delegates: '',
-      chinese_speaking_delegates: '',
-      primary_name: '',
+      times_attended: "",
+      beginner_delegates: "",
+      intermediate_delegates: "",
+      advanced_delegates: "",
+      spanish_speaking_delegates: "",
+      chinese_speaking_delegates: "",
+      primary_name: "",
       primary_gender: GenderConstants.UNSPECFIED,
-      primary_email: '',
-      primary_phone: '',
+      primary_email: "",
+      primary_phone: "",
       primary_type: ContactTypes.FACULTY,
-      secondary_name: '',
+      secondary_name: "",
       secondary_gender: GenderConstants.UNSPECFIED,
-      secondary_email: '',
-      secondary_phone: '',
+      secondary_email: "",
+      secondary_phone: "",
       secondary_type: ContactTypes.FACULTY,
       country_pref1: 0,
       country_pref2: 0,
@@ -93,16 +91,16 @@ var RegistrationView = React.createClass({
       country_pref9: 0,
       country_pref10: 0,
       committee_prefs: [],
-      registration_comments: '',
+      registration_comments: "",
       loading: false,
-      passwordValidating: false
+      passwordValidating: false,
     };
   },
 
   componentDidMount: function() {
     this._committeesToken = CommitteeStore.addListener(() => {
       this.setState({
-        committees: Object.values(CommitteeStore.getSpecialCommittees())
+        committees: Object.values(CommitteeStore.getSpecialCommittees()),
       });
     });
 
@@ -126,165 +124,185 @@ var RegistrationView = React.createClass({
               {RegistrationViewText}
             </TextTemplate>
             <NavLink direction="left" href="/login">
-                  Back to Login
+              Back to Login
             </NavLink>
           </div>
           <hr />
-          <RegistrationAccountInformation 
-            handlers = {{
-              'first_name': _handleChange.bind(this,'first_name'),
-              'last_name': _handleChange.bind(this,'last_name'),
-              'username': _handleChange.bind(this,'username'),
-              'password': this._handlePasswordChange,
-              'password_confirm': this.handlePasswordConfirmChange,
+          <RegistrationAccountInformation
+            handlers={{
+              first_name: _handleChange.bind(this, "first_name"),
+              last_name: _handleChange.bind(this, "last_name"),
+              username: _handleChange.bind(this, "username"),
+              password: this._handlePasswordChange,
+              password_confirm: this.handlePasswordConfirmChange,
             }}
-            errors = {{
-              'first_name': this.state.errors['first_name'],
-              'last_name': this.state.errors['last_name'],
-              'username': this.state.errors['username'],
-              'password': this.state.errors['password'],
-              'password_confirm': this._getPasswordConfirmError(),
+            errors={{
+              first_name: this.state.errors["first_name"],
+              last_name: this.state.errors["last_name"],
+              username: this.state.errors["username"],
+              password: this.state.errors["password"],
+              password_confirm: this._getPasswordConfirmError(),
             }}
-            accountInformation = {{
-              'first_name': this.state.first_name,
-              'last_name': this.state.last_name,
-              'username': this.state.username,
-              'password': this.state.password,
-              'password_confirm': this.state.password2,
-            }} 
-            blur = {this._handlePasswordBlur} 
-            focus = {this._handlePasswordFocus}
+            accountInformation={{
+              first_name: this.state.first_name,
+              last_name: this.state.last_name,
+              username: this.state.username,
+              password: this.state.password,
+              password_confirm: this.state.password2,
+            }}
+            blur={this._handlePasswordBlur}
+            focus={this._handlePasswordFocus}
           />
           <hr />
-          <RegistrationSchoolInformation  
-            handlers = {{
-              'school_name': _handleChange.bind(this,'school_name'),
-              'school_address': _handleChange.bind(this,'school_address'),
-              'school_city': _handleChange.bind(this,'school_city'),
-              'school_state': _handleChange.bind(this,'school_state'),
-              'school_zip': _handleChange.bind(this,'school_zip'),
-              'school_country': _handleChange.bind(this,'school_country'),
-            }} 
-            errors = {{
-              'school_name': this._getSchoolErrors('name'),
-              'school_address': this._getSchoolErrors('address'),
-              'school_city': this._getSchoolErrors('city'),
-              'school_state': this._getSchoolErrors('state'),
-              'school_zip': this._getSchoolErrors('zip_code'),
-              'school_country': this._getSchoolErrors('country'),
-            }} 
-            schoolInformation = {{
-              'school_name': this.state.school_name,
-              'school_address': this.state.school_address,
-              'school_city': this.state.school_city,
-              'school_state': this.state.school_state,
-              'school_zip': this.state.school_zip,
-              'school_country': this._getSchoolCountry(),
+          <RegistrationSchoolInformation
+            handlers={{
+              school_name: _handleChange.bind(this, "school_name"),
+              school_address: _handleChange.bind(this, "school_address"),
+              school_city: _handleChange.bind(this, "school_city"),
+              school_state: _handleChange.bind(this, "school_state"),
+              school_zip: _handleChange.bind(this, "school_zip"),
+              school_country: _handleChange.bind(this, "school_country"),
             }}
-            handleInternationalChange = {this._handleInternationalChange} 
-            schoolInternational = {this.state.school_international} 
+            errors={{
+              school_name: this._getSchoolErrors("name"),
+              school_address: this._getSchoolErrors("address"),
+              school_city: this._getSchoolErrors("city"),
+              school_state: this._getSchoolErrors("state"),
+              school_zip: this._getSchoolErrors("zip_code"),
+              school_country: this._getSchoolErrors("country"),
+            }}
+            schoolInformation={{
+              school_name: this.state.school_name,
+              school_address: this.state.school_address,
+              school_city: this.state.school_city,
+              school_state: this.state.school_state,
+              school_zip: this.state.school_zip,
+              school_country: this._getSchoolCountry(),
+            }}
+            handleInternationalChange={this._handleInternationalChange}
+            schoolInternational={this.state.school_international}
           />
           <hr />
-          <RegistrationProgramInformation 
-            handlers = {{
-              'times_attended': _handleChange.bind(this, 'times_attended'),
-              'beginner_delegates': _handleChange.bind(this, 'beginner_delegates'),
-              'intermediate_delegates': _handleChange.bind(this, 'intermediate_delegates'),
-              'advanced_delegates': _handleChange.bind(this, 'advanced_delegates'),
-            }} 
-            errors = {{
-              'times_attended': this.renderSchoolError('times_attended'),
-              'beginner_delegates': this.renderSchoolError('beginner_delegates'),
-              'intermediate_delegates': this.renderSchoolError('intermediate_delegates'),
-              'advanced_delegates': this.renderSchoolError('advanced_delegates'),
+          <RegistrationProgramInformation
+            handlers={{
+              times_attended: _handleChange.bind(this, "times_attended"),
+              beginner_delegates: _handleChange.bind(
+                this,
+                "beginner_delegates",
+              ),
+              intermediate_delegates: _handleChange.bind(
+                this,
+                "intermediate_delegates",
+              ),
+              advanced_delegates: _handleChange.bind(
+                this,
+                "advanced_delegates",
+              ),
             }}
-            programInformation = {{
-              'times_attended': this.state.times_attended,
-              'beginner_delegates': this.state.beginner_delegates,
-              'intermediate_delegates': this.state.intermediate_delegates,
-              'advanced_delegates': this.state.advanced_delegates,
-            }} 
-            handleProgramTypeChange = {this._handleProgramTypeChange}
-            programType = {this.state.program_type}
+            errors={{
+              times_attended: this.renderSchoolError("times_attended"),
+              beginner_delegates: this.renderSchoolError("beginner_delegates"),
+              intermediate_delegates: this.renderSchoolError(
+                "intermediate_delegates",
+              ),
+              advanced_delegates: this.renderSchoolError("advanced_delegates"),
+            }}
+            programInformation={{
+              times_attended: this.state.times_attended,
+              beginner_delegates: this.state.beginner_delegates,
+              intermediate_delegates: this.state.intermediate_delegates,
+              advanced_delegates: this.state.advanced_delegates,
+            }}
+            handleProgramTypeChange={this._handleProgramTypeChange}
+            programType={this.state.program_type}
           />
           <hr />
-          <RegistrationPrimaryContact 
-            handlers = {{
-              'primary_name': _handleChange.bind(this, 'primary_name'),
-              'primary_email': _handleChange.bind(this, 'primary_email'),
-              'primary_phone': this._handlePrimaryPhoneChange,
+          <RegistrationPrimaryContact
+            handlers={{
+              primary_name: _handleChange.bind(this, "primary_name"),
+              primary_email: _handleChange.bind(this, "primary_email"),
+              primary_phone: this._handlePrimaryPhoneChange,
             }}
-            errors = {{
-              'primary_name': this._getSchoolErrors('primary_name'),
-              'primary_email': this._getSchoolErrors('primary_email'),
-              'primary_phone': this._getSchoolErrors('primary_phone'),
-            }} 
-            primaryContactInformation = {{
-              'primary_name': this.state.primary_name,
-              'primary_email': this.state.primary_email,
-              'primary_phone': this.state.primary_phone,
+            errors={{
+              primary_name: this._getSchoolErrors("primary_name"),
+              primary_email: this._getSchoolErrors("primary_email"),
+              primary_phone: this._getSchoolErrors("primary_phone"),
             }}
-            renderContactGenderField = {this.renderContactGenderField} 
-            renderContactTypeField = {this.renderContactTypeField} 
-            isInternational = {this.state.school_international} 
+            primaryContactInformation={{
+              primary_name: this.state.primary_name,
+              primary_email: this.state.primary_email,
+              primary_phone: this.state.primary_phone,
+            }}
+            renderContactGenderField={this.renderContactGenderField}
+            renderContactTypeField={this.renderContactTypeField}
+            isInternational={this.state.school_international}
           />
           <hr />
-          <RegistrationSecondaryContact 
-            handlers = {{
-              'secondary_name': _handleChange.bind(this, 'secondary_name'),
-              'secondary_email': _handleChange.bind(this, 'secondary_email'),
-              'secondary_phone': this._handleSecondaryPhoneChange,
-            }} 
-            errors = {{
-              'secondary_name': this._getSchoolErrors('secondary_name'),
-              'secondary_email': this._getSchoolErrors('secondary_email'),
-              'secondary_phone': this._getSchoolErrors('secondary_phone'),
+          <RegistrationSecondaryContact
+            handlers={{
+              secondary_name: _handleChange.bind(this, "secondary_name"),
+              secondary_email: _handleChange.bind(this, "secondary_email"),
+              secondary_phone: this._handleSecondaryPhoneChange,
             }}
-            secondaryContactInformation = {{
-              'secondary_name': this.state.secondary_name,
-              'secondary_email': this.state.secondary_email,
-              'secondary_phone': this.state.secondary_phone,
-            }} 
-            renderContactGenderField = {this.renderContactGenderField} 
-            renderContactTypeField = {this.renderContactTypeField} 
-            isInternational = {this.state.school_international}
+            errors={{
+              secondary_name: this._getSchoolErrors("secondary_name"),
+              secondary_email: this._getSchoolErrors("secondary_email"),
+              secondary_phone: this._getSchoolErrors("secondary_phone"),
+            }}
+            secondaryContactInformation={{
+              secondary_name: this.state.secondary_name,
+              secondary_email: this.state.secondary_email,
+              secondary_phone: this.state.secondary_phone,
+            }}
+            renderContactGenderField={this.renderContactGenderField}
+            renderContactTypeField={this.renderContactTypeField}
+            isInternational={this.state.school_international}
           />
           <hr />
           <RegistrationCountryPreferences
-            renderCountryDropdown = {this.renderCountryDropdown}
+            renderCountryDropdown={this.renderCountryDropdown}
           />
           <hr />
-          <RegistrationSpecialCommitteePreferences 
-            handlers = {{
-              'spanish_speaking_delegates': _handleChange.bind(this, 'spanish_speaking_delegates'),
-              'chinese_speaking_delegates': _handleChange.bind(this, 'chinese_speaking_delegates'),
+          <RegistrationSpecialCommitteePreferences
+            handlers={{
+              spanish_speaking_delegates: _handleChange.bind(
+                this,
+                "spanish_speaking_delegates",
+              ),
+              chinese_speaking_delegates: _handleChange.bind(
+                this,
+                "chinese_speaking_delegates",
+              ),
             }}
-            errors = {{
-              'spanish_speaking_delegates': this.renderSchoolError('spanish_speaking_delegates'),
-              'chinese_speaking_delegates': this.renderSchoolError('chinese_speaking_delegates'),
+            errors={{
+              spanish_speaking_delegates: this.renderSchoolError(
+                "spanish_speaking_delegates",
+              ),
+              chinese_speaking_delegates: this.renderSchoolError(
+                "chinese_speaking_delegates",
+              ),
             }}
-            specialCommitteePrefValues = {{
-              'spanish_speaking_delegates': this.state.spanish_speaking_delegates,
-              'chinese_speaking_delegates': this.state.chinese_speaking_delegates,
-            }} 
-            renderCommittees = {this.renderCommittees}
+            specialCommitteePrefValues={{
+              spanish_speaking_delegates: this.state.spanish_speaking_delegates,
+              chinese_speaking_delegates: this.state.chinese_speaking_delegates,
+            }}
+            renderCommittees={this.renderCommittees}
           />
           <hr />
           <RegistrationComments
-            handler = {_handleChange.bind(this, 'registration_comments')} 
-            value = {this.state.registration_comments} 
+            handler={_handleChange.bind(this, "registration_comments")}
+            value={this.state.registration_comments}
           />
           <hr />
-          <div id='registration_footer'>
+          <div id="registration_footer">
             <NavLink direction="left" href="/login">
               Back to Login
             </NavLink>
-            <div style={{float: 'right'}}>
-              <span className="help-text"><em>All done?</em></span>
-              <Button
-                color="green"
-                loading={this.state.loading}
-                type="submit">
+            <div style={{float: "right"}}>
+              <span className="help-text">
+                <em>All done?</em>
+              </span>
+              <Button color="green" loading={this.state.loading} type="submit">
                 Register
               </Button>
             </div>
@@ -297,7 +315,9 @@ var RegistrationView = React.createClass({
   renderCountryDropdown: function(labelNum, fieldName) {
     return (
       <li>
-        <label>{labelNum}</label>
+        <label>
+          {labelNum}
+        </label>
         <CountrySelect
           onChange={_handleChange.bind(this, fieldName)}
           countries={this.state.countries}
@@ -312,7 +332,7 @@ var RegistrationView = React.createClass({
             this.state.country_pref7,
             this.state.country_pref8,
             this.state.country_pref9,
-            this.state.country_pref10
+            this.state.country_pref10,
           ]}
         />
       </li>
@@ -328,7 +348,10 @@ var RegistrationView = React.createClass({
               className="choice"
               type="checkbox"
               name="committee_prefs"
-              onChange={this._handleCommitteePreferenceChange.bind(this, committee)}
+              onChange={this._handleCommitteePreferenceChange.bind(
+                this,
+                committee,
+              )}
             />
             {committee.full_name}
           </label>
@@ -348,19 +371,13 @@ var RegistrationView = React.createClass({
           value={GenderConstants.UNSPECFIED}>
           Unspecified
         </option>
-        <option
-          key={GenderConstants.MALE}
-          value={GenderConstants.MALE}>
+        <option key={GenderConstants.MALE} value={GenderConstants.MALE}>
           Mr.
         </option>
-        <option
-          key={GenderConstants.FEMALE}
-          value={GenderConstants.FEMALE}>
+        <option key={GenderConstants.FEMALE} value={GenderConstants.FEMALE}>
           Mrs./Ms.
         </option>
-        <option
-          key={GenderConstants.OTHER}
-          value={GenderConstants.OTHER}>
+        <option key={GenderConstants.OTHER} value={GenderConstants.OTHER}>
           Other
         </option>
       </select>
@@ -373,14 +390,10 @@ var RegistrationView = React.createClass({
         className="contact-select reg-field"
         onChange={_handleChange.bind(this, name)}
         value={this.state[name]}>
-        <option
-          key={ContactTypes.STUDENT}
-          value={ContactTypes.STUDENT}>
+        <option key={ContactTypes.STUDENT} value={ContactTypes.STUDENT}>
           Student
         </option>
-        <option
-          key={ContactTypes.FACULTY}
-          value={ContactTypes.FACULTY}>
+        <option key={ContactTypes.FACULTY} value={ContactTypes.FACULTY}>
           Faculty
         </option>
       </select>
@@ -400,15 +413,16 @@ var RegistrationView = React.createClass({
   },
 
   _getPasswordConfirmError() {
-    if (this.state.passwordValidating &&
-        this.state.password !== this.state.password2) {
-      return 'Please enter the same password again.';
+    if (
+      this.state.passwordValidating &&
+      this.state.password !== this.state.password2
+    ) {
+      return "Please enter the same password again.";
     }
   },
 
   renderSchoolError: function(field) {
-    if (this.state.errors.school &&
-        this.state.errors.school[field]) {
+    if (this.state.errors.school && this.state.errors.school[field]) {
       return (
         <StatusLabel status="error">
           {this.state.errors.school[field]}
@@ -429,9 +443,11 @@ var RegistrationView = React.createClass({
     var sum = 0;
     if (this.state.beginner_delegates) {
       sum += parseInt(this.state.beginner_delegates, 10) || 0;
-    } if (this.state.intermediate_delegates) {
+    }
+    if (this.state.intermediate_delegates) {
       sum += parseInt(this.state.intermediate_delegates, 10) || 0;
-    } if (this.state.advanced_delegates) {
+    }
+    if (this.state.advanced_delegates) {
       sum += parseInt(this.state.advanced_delegates, 10) || 0;
     }
     return sum;
@@ -532,10 +548,10 @@ var RegistrationView = React.createClass({
           this.state.country_pref7,
           this.state.country_pref8,
           this.state.country_pref9,
-          this.state.country_pref10
+          this.state.country_pref10,
         ],
         committeepreferences: this.state.committee_prefs,
-        registration_comments: this.state.registration_comments.trim()
+        registration_comments: this.state.registration_comments.trim(),
       },
     }).then(this._handleSuccess, this._handleError);
     event.preventDefault();
@@ -543,9 +559,9 @@ var RegistrationView = React.createClass({
 
   _handleSuccess: function(response) {
     if (response.school.waitlist) {
-      this.history.pushState(null, '/register/waitlist');
+      this.history.pushState(null, "/register/waitlist");
     } else {
-      this.history.pushState(null, '/register/success');
+      this.history.pushState(null, "/register/success");
     }
   },
 
@@ -554,14 +570,16 @@ var RegistrationView = React.createClass({
       return;
     }
 
-    this.setState({
-      errors: response,
-      loading: false
-    }, () => {
-      this.context.shake && this.context.shake();
-    });
-  }
+    this.setState(
+      {
+        errors: response,
+        loading: false,
+      },
+      () => {
+        this.context.shake && this.context.shake();
+      },
+    );
+  },
 });
 
-module.exports = RegistrationView; 
-
+module.exports = RegistrationView;

@@ -3,14 +3,14 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
-var React = require('react');
-var ReactDOM = require('react-dom');
+var React = require("react");
+var ReactDOM = require("react-dom");
 
-var cx = require('classnames');
+var cx = require("classnames");
 
-require('css/Shaker.less');
+require("css/Shaker.less");
 
 var Shaker = React.createClass({
   childContextTypes: {
@@ -25,7 +25,7 @@ var Shaker = React.createClass({
 
   render() {
     return (
-      <div className={cx('shaker', this.props.className)}>
+      <div className={cx("shaker", this.props.className)}>
         {this.props.children}
       </div>
     );
@@ -35,10 +35,10 @@ var Shaker = React.createClass({
     const element = ReactDOM.findDOMNode(this);
     if (element) {
       this._timeout && clearTimeout(this._timeout);
-      element.classList.remove('shake');
-      element.classList.add('shake');
+      element.classList.remove("shake");
+      element.classList.add("shake");
       this._timeout = setTimeout(() => {
-        element.classList.remove('shake');
+        element.classList.remove("shake");
       }, 301);
     }
   },

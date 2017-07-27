@@ -3,13 +3,12 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
-var React = require('react');
-var TextInput = require('components/core/TextInput');
+var React = require("react");
+var TextInput = require("components/core/TextInput");
 
 var NumberInput = React.createClass({
-
   propTypes: {
     onChange: React.PropTypes.func,
     value: React.PropTypes.string,
@@ -27,7 +26,7 @@ var NumberInput = React.createClass({
   },
 
   _handleChange: function(value) {
-    this.props.onChange && this.props.onChange(value.replace(/[^\d]/, ''));
+    this.props.onChange && this.props.onChange(value.replace(/[^\d]/, ""));
   },
 });
 

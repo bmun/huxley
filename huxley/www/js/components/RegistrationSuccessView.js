@@ -3,22 +3,21 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
-var React = require('react');
+var React = require("react");
 
-var ConferenceContext = require('components/ConferenceContext');
-var NavLink = require('components/NavLink');
-var OuterView = require('components/OuterView');
-var TextTemplate = require('components/core/TextTemplate');
+var ConferenceContext = require("components/ConferenceContext");
+var NavLink = require("components/NavLink");
+var OuterView = require("components/OuterView");
+var TextTemplate = require("components/core/TextTemplate");
 
-require('css/Letter.less');
-var RegistrationSuccessViewText = require('text/RegistrationSuccessViewText.md');
+require("css/Letter.less");
+var RegistrationSuccessViewText = require("text/RegistrationSuccessViewText.md");
 
 var RegistrationSuccessView = React.createClass({
-
   contextTypes: {
-    conference: React.PropTypes.shape(ConferenceContext)
+    conference: React.PropTypes.shape(ConferenceContext),
   },
 
   render: function() {
@@ -40,7 +39,7 @@ var RegistrationSuccessView = React.createClass({
         </NavLink>
       </OuterView>
     );
-  }
+  },
 });
 
 module.exports = RegistrationSuccessView;

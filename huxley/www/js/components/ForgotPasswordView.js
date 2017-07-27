@@ -3,26 +3,24 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
-var React = require('react');
-var ReactRouter = require('react-router');
+var React = require("react");
+var ReactRouter = require("react-router");
 
-var Button = require('components/core/Button');
-var NavLink = require('components/NavLink');
-var OuterView = require('components/OuterView');
-var ServerAPI = require('lib/ServerAPI');
-var StatusLabel = require('components/core/StatusLabel');
-var TextInput = require('components/core/TextInput');
-var TextTemplate = require('components/core/TextTemplate');
+var Button = require("components/core/Button");
+var NavLink = require("components/NavLink");
+var OuterView = require("components/OuterView");
+var ServerAPI = require("lib/ServerAPI");
+var StatusLabel = require("components/core/StatusLabel");
+var TextInput = require("components/core/TextInput");
+var TextTemplate = require("components/core/TextTemplate");
 
-require('css/LoginForm.less');
-var ForgotPasswordViewText = require('text/ForgotPasswordViewText.md');
+require("css/LoginForm.less");
+var ForgotPasswordViewText = require("text/ForgotPasswordViewText.md");
 
 var ForgotPasswordView = React.createClass({
-  mixins: [
-    ReactRouter.History,
-  ],
+  mixins: [ReactRouter.History],
 
   contextTypes: {
     shake: React.PropTypes.func,
@@ -30,9 +28,9 @@ var ForgotPasswordView = React.createClass({
 
   getInitialState: function() {
     return {
-      username: '',
+      username: "",
       error: false,
-      loading: false
+      loading: false,
     };
   },
 
@@ -56,9 +54,7 @@ var ForgotPasswordView = React.createClass({
               onChange={this._handleUsernameChange}
             />
           </div>
-          <Button
-            color="green"
-            loading={this.state.loading}>
+          <Button color="green" loading={this.state.loading}>
             Reset Password
           </Button>
           <span className="help-text">We'll email you a new one.</span>
@@ -92,7 +88,7 @@ var ForgotPasswordView = React.createClass({
   },
 
   _handleSuccess: function(response) {
-    this.history.pushState(null, '/password/reset');
+    this.history.pushState(null, "/password/reset");
   },
 
   _handleError: function(response) {
@@ -100,12 +96,15 @@ var ForgotPasswordView = React.createClass({
       return;
     }
 
-    this.setState({
-      error: "Sorry, we couldn't find a user with that username.",
-      loading: false
-    }, () => {
-      this.context.shake && this.context.shake();
-    });
+    this.setState(
+      {
+        error: "Sorry, we couldn't find a user with that username.",
+        loading: false,
+      },
+      () => {
+        this.context.shake && this.context.shake();
+      },
+    );
   },
 });
 

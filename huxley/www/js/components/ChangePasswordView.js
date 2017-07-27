@@ -3,19 +3,18 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
-var cx = require('classnames');
-var React = require('react');
+var cx = require("classnames");
+var React = require("react");
 
-var Button = require('components/core/Button');
-var ServerAPI = require('lib/ServerAPI');
-var StatusLabel = require('components/core/StatusLabel');
+var Button = require("components/core/Button");
+var ServerAPI = require("lib/ServerAPI");
+var StatusLabel = require("components/core/StatusLabel");
 
-require('css/ChangePasswordView.less');
+require("css/ChangePasswordView.less");
 
 var ChangePasswordView = React.createClass({
-
   propTypes: {
     isVisible: React.PropTypes.bool.isRequired,
     onClick: React.PropTypes.func,
@@ -24,12 +23,12 @@ var ChangePasswordView = React.createClass({
 
   getInitialState: function() {
     return {
-      message: '',
+      message: "",
       success: false,
       loading: false,
-      currentPassword: '',
-      newPassword: '',
-      newPassword2: '',
+      currentPassword: "",
+      newPassword: "",
+      newPassword2: "",
     };
   },
 
@@ -41,10 +40,10 @@ var ChangePasswordView = React.createClass({
     return (
       <div
         className={cx({
-          'change-password': true,
-          'rounded-bottom': true,
-           'transparent': true,
-           'visible': this.props.isVisible,
+          "change-password": true,
+          "rounded-bottom": true,
+          transparent: true,
+          visible: this.props.isVisible,
         })}
         onClick={this._handleDropdownClick}>
         <form onSubmit={this._handleSubmit}>
@@ -88,7 +87,7 @@ var ChangePasswordView = React.createClass({
     }
 
     return (
-      <StatusLabel status={this.state.success ? 'success' : 'error'}>
+      <StatusLabel status={this.state.success ? "success" : "error"}>
         {this.state.message}
       </StatusLabel>
     );
@@ -113,7 +112,7 @@ var ChangePasswordView = React.createClass({
   _handleSubmit: function(event) {
     if (this.state.newPassword != this.state.newPassword2) {
       this.setState({
-        message: 'Please enter the same password again',
+        message: "Please enter the same password again",
         success: false,
       });
     } else {
@@ -128,14 +127,17 @@ var ChangePasswordView = React.createClass({
   },
 
   _handleSuccess: function(response) {
-    this.setState({
-      loading: false,
-      success: true,
-      message: 'Password changed!',
-      currentPassword: '',
-      newPassword: '',
-      newPassword2: '',
-    }, this.onSuccess);
+    this.setState(
+      {
+        loading: false,
+        success: true,
+        message: "Password changed!",
+        currentPassword: "",
+        newPassword: "",
+        newPassword2: "",
+      },
+      this.onSuccess,
+    );
   },
 
   _handleError: function(response) {

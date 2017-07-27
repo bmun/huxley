@@ -3,25 +3,25 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
-const React = require('react');
+const React = require("react");
 
-const Button = require('components/core/Button');
-const InnerView = require('components/InnerView');
-const LogoutButton = require('components/LogoutButton');
-const ConferenceContext = require('components/ConferenceContext');
-const CurrentUserActions = require('actions/CurrentUserActions');
-const PhoneInput = require('components/PhoneInput');
-const ProgramTypes = require('constants/ProgramTypes');
-const StatusLabel = require('components/core/StatusLabel');
-const Table = require('components/core/Table');
-const TextInput = require('components/core/TextInput');
-const TextTemplate = require('components/core/TextTemplate');
-const User = require('utils/User');
-const _handleChange = require('utils/_handleChange');
+const Button = require("components/core/Button");
+const InnerView = require("components/InnerView");
+const LogoutButton = require("components/LogoutButton");
+const ConferenceContext = require("components/ConferenceContext");
+const CurrentUserActions = require("actions/CurrentUserActions");
+const PhoneInput = require("components/PhoneInput");
+const ProgramTypes = require("constants/ProgramTypes");
+const StatusLabel = require("components/core/StatusLabel");
+const Table = require("components/core/Table");
+const TextInput = require("components/core/TextInput");
+const TextTemplate = require("components/core/TextTemplate");
+const User = require("utils/User");
+const _handleChange = require("utils/_handleChange");
 
-const AdvisorProfileViewText = require('text/AdvisorProfileViewText.md');
+const AdvisorProfileViewText = require("text/AdvisorProfileViewText.md");
 
 const AdvisorProfileView = React.createClass({
   // #489
@@ -56,7 +56,7 @@ const AdvisorProfileView = React.createClass({
       secondary_phone: school.secondary_phone,
       loading: false,
       success: false,
-    }
+    };
   },
 
   componentWillUnmount: function() {
@@ -90,9 +90,9 @@ const AdvisorProfileView = React.createClass({
                   <TextInput
                     defaultValue={this.state.first_name}
                     value={this.state.first_name}
-                    onChange={_handleChange.bind(this, 'first_name')}
+                    onChange={_handleChange.bind(this, "first_name")}
                   />
-                  {this.renderError('first_name')}
+                  {this.renderError("first_name")}
                 </td>
               </tr>
               <tr>
@@ -101,9 +101,9 @@ const AdvisorProfileView = React.createClass({
                   <TextInput
                     defaultValue={this.state.last_name}
                     value={this.state.last_name}
-                    onChange={_handleChange.bind(this, 'last_name')}
+                    onChange={_handleChange.bind(this, "last_name")}
                   />
-                  {this.renderError('last_name')}
+                  {this.renderError("last_name")}
                 </td>
               </tr>
               <tr>
@@ -121,9 +121,9 @@ const AdvisorProfileView = React.createClass({
                   <TextInput
                     defaultValue={this.state.school_address}
                     value={this.state.school_address}
-                    onChange={_handleChange.bind(this, 'school_address')}
+                    onChange={_handleChange.bind(this, "school_address")}
                   />
-                  {this.renderError('address')}
+                  {this.renderError("address")}
                 </td>
               </tr>
               <tr>
@@ -132,9 +132,9 @@ const AdvisorProfileView = React.createClass({
                   <TextInput
                     defaultValue={this.state.school_city}
                     value={this.state.school_city}
-                    onChange={_handleChange.bind(this, 'school_city')}
+                    onChange={_handleChange.bind(this, "school_city")}
                   />
-                  {this.renderError('city')}
+                  {this.renderError("city")}
                 </td>
               </tr>
               <tr>
@@ -143,15 +143,15 @@ const AdvisorProfileView = React.createClass({
                   <TextInput
                     defaultValue={this.state.school_zip_code}
                     value={this.state.school_zip_code}
-                    onChange={_handleChange.bind(this, 'school_zip_code')}
+                    onChange={_handleChange.bind(this, "school_zip_code")}
                   />
-                  {this.renderError('zip_code')}
+                  {this.renderError("zip_code")}
                 </td>
               </tr>
               <tr>
                 <td>Waitlisted</td>
                 <td>
-                  {school.waitlist == true ? 'Yes' : 'No'}
+                  {school.waitlist == true ? "Yes" : "No"}
                 </td>
               </tr>
               <tr>
@@ -160,7 +160,7 @@ const AdvisorProfileView = React.createClass({
               <tr>
                 <td>Program Type</td>
                 <td>
-                  {school.program_type === 1 ? 'Club' : 'Class'}
+                  {school.program_type === 1 ? "Club" : "Class"}
                 </td>
               </tr>
               <tr>
@@ -188,15 +188,13 @@ const AdvisorProfileView = React.createClass({
                 </td>
               </tr>
               <tr>
-                <td>Number of Spanish Speaking
-                Delegates</td>
+                <td>Number of Spanish Speaking Delegates</td>
                 <td>
                   {school.spanish_speaking_delegates}
                 </td>
               </tr>
               <tr>
-                <td>Number of Chinese Speaking
-                Delegates</td>
+                <td>Number of Chinese Speaking Delegates</td>
                 <td>
                   {school.chinese_speaking_delegates}
                 </td>
@@ -216,9 +214,9 @@ const AdvisorProfileView = React.createClass({
                   <TextInput
                     defaultValue={this.state.primary_name}
                     value={this.state.primary_name}
-                    onChange={_handleChange.bind(this, 'primary_name')}
+                    onChange={_handleChange.bind(this, "primary_name")}
                   />
-                  {this.renderError('primary_name')}
+                  {this.renderError("primary_name")}
                 </td>
               </tr>
               <tr>
@@ -227,9 +225,9 @@ const AdvisorProfileView = React.createClass({
                   <TextInput
                     defaultValue={this.state.primary_email}
                     value={this.state.primary_email}
-                    onChange={_handleChange.bind(this, 'primary_email')}
+                    onChange={_handleChange.bind(this, "primary_email")}
                   />
-                  {this.renderError('primary_email')}
+                  {this.renderError("primary_email")}
                 </td>
               </tr>
               <tr>
@@ -238,9 +236,9 @@ const AdvisorProfileView = React.createClass({
                   <PhoneInput
                     value={this.state.primary_phone}
                     isInternational={school.international}
-                    onChange={_handleChange.bind(this, 'primary_phone')}
+                    onChange={_handleChange.bind(this, "primary_phone")}
                   />
-                  {this.renderError('primary_phone')}
+                  {this.renderError("primary_phone")}
                 </td>
               </tr>
               <tr>
@@ -252,9 +250,9 @@ const AdvisorProfileView = React.createClass({
                   <TextInput
                     defaultValue={this.state.secondary_name}
                     value={this.state.secondary_name}
-                    onChange={_handleChange.bind(this, 'secondary_name')}
+                    onChange={_handleChange.bind(this, "secondary_name")}
                   />
-                  {this.renderError('secondary_name')}
+                  {this.renderError("secondary_name")}
                 </td>
               </tr>
               <tr>
@@ -263,9 +261,9 @@ const AdvisorProfileView = React.createClass({
                   <TextInput
                     defaultValue={this.state.secondary_email}
                     value={this.state.secondary_email}
-                    onChange={_handleChange.bind(this, 'secondary_email')}
+                    onChange={_handleChange.bind(this, "secondary_email")}
                   />
-                  {this.renderError('secondary_email')}
+                  {this.renderError("secondary_email")}
                 </td>
               </tr>
               <tr>
@@ -274,9 +272,9 @@ const AdvisorProfileView = React.createClass({
                   <PhoneInput
                     value={this.state.secondary_phone}
                     isInternational={school.international}
-                    onChange={_handleChange.bind(this, 'secondary_phone')}
+                    onChange={_handleChange.bind(this, "secondary_phone")}
                   />
-                  {this.renderError('secondary_phone')}
+                  {this.renderError("secondary_phone")}
                 </td>
               </tr>
               <tr>
@@ -285,19 +283,19 @@ const AdvisorProfileView = React.createClass({
               <tr>
                 <td>Fees Owed</td>
                 <td>
-                  {'$' + school.fees_owed.toFixed(2)}
+                  {"$" + school.fees_owed.toFixed(2)}
                 </td>
               </tr>
               <tr>
                 <td>Fees Paid</td>
                 <td>
-                  {'$' + school.fees_paid.toFixed(2)}
+                  {"$" + school.fees_paid.toFixed(2)}
                 </td>
               </tr>
               <tr>
                 <td>Balance</td>
                 <td>
-                  {'$' + (school.fees_owed - school.fees_paid).toFixed(2)}
+                  {"$" + (school.fees_owed - school.fees_paid).toFixed(2)}
                 </td>
               </tr>
             </tbody>
@@ -309,7 +307,9 @@ const AdvisorProfileView = React.createClass({
             type="submit">
             Save
           </Button>
-          <span className="help-text"><em> Remember to save any changes!</em></span>
+          <span className="help-text">
+            <em> Remember to save any changes!</em>
+          </span>
         </form>
       </InnerView>
     );
@@ -324,8 +324,7 @@ const AdvisorProfileView = React.createClass({
       );
     }
 
-    if (this.state.errors.school &&
-        this.state.errors.school[field]) {
+    if (this.state.errors.school && this.state.errors.school[field]) {
       return (
         <StatusLabel status="error">
           {this.state.errors.school[field]}
@@ -340,21 +339,26 @@ const AdvisorProfileView = React.createClass({
     this._successTimout && clearTimeout(this._successTimeout);
     this.setState({loading: true});
     var user = this.props.user;
-    CurrentUserActions.updateUser(user.id, {
-      first_name: this.state.first_name.trim(),
-      last_name: this.state.last_name.trim(),
-      school: {
-        address: this.state.school_address.trim(),
-        city: this.state.school_city.trim(),
-        zip_code: this.state.school_zip_code.trim(),
-        primary_name: this.state.primary_name.trim(),
-        primary_email: this.state.primary_email.trim(),
-        primary_phone: this.state.primary_phone.trim(),
-        secondary_name: this.state.secondary_name.trim(),
-        secondary_email: this.state.secondary_email.trim(),
-        secondary_phone: this.state.secondary_phone.trim(),
-      }
-    }, this._handleSuccess, this._handleError);
+    CurrentUserActions.updateUser(
+      user.id,
+      {
+        first_name: this.state.first_name.trim(),
+        last_name: this.state.last_name.trim(),
+        school: {
+          address: this.state.school_address.trim(),
+          city: this.state.school_city.trim(),
+          zip_code: this.state.school_zip_code.trim(),
+          primary_name: this.state.primary_name.trim(),
+          primary_email: this.state.primary_email.trim(),
+          primary_phone: this.state.primary_phone.trim(),
+          secondary_name: this.state.secondary_name.trim(),
+          secondary_email: this.state.secondary_email.trim(),
+          secondary_phone: this.state.secondary_phone.trim(),
+        },
+      },
+      this._handleSuccess,
+      this._handleError,
+    );
     event.preventDefault();
   },
 
@@ -365,7 +369,10 @@ const AdvisorProfileView = React.createClass({
       success: true,
     });
 
-    this._successTimeout = setTimeout(() => this.setState({success: false}), 2000);
+    this._successTimeout = setTimeout(
+      () => this.setState({success: false}),
+      2000,
+    );
   },
 
   _handleError: function(response) {
@@ -373,12 +380,15 @@ const AdvisorProfileView = React.createClass({
       return;
     }
 
-    this.setState({
-      errors: response,
-      loading: false
-    }, () => {
-      this.context.shake && this.context.shake();
-    });
-  }
+    this.setState(
+      {
+        errors: response,
+        loading: false,
+      },
+      () => {
+        this.context.shake && this.context.shake();
+      },
+    );
+  },
 });
 module.exports = AdvisorProfileView;

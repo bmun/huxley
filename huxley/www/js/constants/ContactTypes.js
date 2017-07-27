@@ -3,13 +3,13 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
-var invariant = require('fbjs/lib/invariant');
+var invariant = require("fbjs/lib/invariant");
 
 invariant(
   global.ContactTypes !== undefined,
-  'global.ContactTypes must be defined.'
+  "global.ContactTypes must be defined.",
 );
 
 var ContactTypes = global.ContactTypes;

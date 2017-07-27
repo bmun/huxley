@@ -3,9 +3,9 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
-var React = require('react');
+var React = require("react");
 
 const RegistrationComments = React.createClass({
   propTypes: {
@@ -19,12 +19,13 @@ const RegistrationComments = React.createClass({
 
   render: function() {
     return (
-      <div id='comments'>
+      <div id="comments">
         <h3>Comments</h3>
-        <p className="instructions">If there are any further details you 
-        would like us to know about your participation in BMUN this year or
-        general feedback about the registration process, please comment
-        below.</p>
+        <p className="instructions">
+          If there are any further details you would like us to know about your
+          participation in BMUN this year or general feedback about the
+          registration process, please comment below.
+        </p>
         <textarea
           className="text-input"
           cols="40"

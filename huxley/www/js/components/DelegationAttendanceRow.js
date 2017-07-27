@@ -3,16 +3,16 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
-var React = require('react');
+var React = require("react");
 
 var DelegationAttendanceRow = React.createClass({
   propTypes: {
     onChange: React.PropTypes.func,
     countryName: React.PropTypes.string,
     countryID: React.PropTypes.string,
-    delegates: React.PropTypes.array
+    delegates: React.PropTypes.array,
   },
 
   render() {
@@ -76,7 +76,8 @@ var DelegationAttendanceRow = React.createClass({
   },
 
   _handleChange: function(field, event) {
-    this.props.onChange && this.props.onChange(field, this.props.countryID, event);
+    this.props.onChange &&
+      this.props.onChange(field, this.props.countryID, event);
   },
 });
 

@@ -3,12 +3,12 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
-var React = require('react');
+var React = require("react");
 
-var RegistrationTextInput = require('components/registration/RegistrationTextInput');
-var _accessSafe = require('utils/_accessSafe');
+var RegistrationTextInput = require("components/registration/RegistrationTextInput");
+var _accessSafe = require("utils/_accessSafe");
 
 const RegistrationSchoolInformation = React.createClass({
   propTypes: {
@@ -21,7 +21,9 @@ const RegistrationSchoolInformation = React.createClass({
 
   shouldComponentUpdate: function(nextProps, nextState) {
     for (let key in this.props.schoolInformation) {
-      if (this.props.schoolInformation[key] !== nextProps.schoolInformation[key]) {
+      if (
+        this.props.schoolInformation[key] !== nextProps.schoolInformation[key]
+      ) {
         return true;
       }
     }
@@ -41,58 +43,60 @@ const RegistrationSchoolInformation = React.createClass({
             <label>
               <input
                 type="radio"
-                value=''
+                value=""
                 onChange={this.props.handleInternationalChange}
                 checked={!this.props.schoolInternational}
-              /> United States of America
+              />{" "}
+              United States of America
             </label>
           </li>
           <li>
             <label>
               <input
                 type="radio"
-                value='international'
+                value="international"
                 onChange={this.props.handleInternationalChange}
                 checked={this.props.schoolInternational}
-              /> International
+              />{" "}
+              International
             </label>
           </li>
         </ul>
         <RegistrationTextInput
-          errors={accessErrors('school_name')}
+          errors={accessErrors("school_name")}
           placeholder="Official School Name"
-          onChange={accessHandlers('school_name')}
-          value={accessSchool('school_name')}
+          onChange={accessHandlers("school_name")}
+          value={accessSchool("school_name")}
         />
         <RegistrationTextInput
-          errors={accessErrors('school_address')}
+          errors={accessErrors("school_address")}
           placeholder="Street Address"
-          onChange={accessHandlers('school_address')}
-          value={accessSchool('school_address')}
+          onChange={accessHandlers("school_address")}
+          value={accessSchool("school_address")}
         />
         <RegistrationTextInput
-          errors={accessErrors('school_city')}
+          errors={accessErrors("school_city")}
           placeholder="City"
-          onChange={accessHandlers('school_city')}
-          value={accessSchool('school_city')}
+          onChange={accessHandlers("school_city")}
+          value={accessSchool("school_city")}
         />
         <RegistrationTextInput
-          errors={accessErrors('school_state')}
+          errors={accessErrors("school_state")}
           placeholder="State"
-          onChange={accessHandlers('school_state')}
-          value={accessSchool('school_state')}
+          onChange={accessHandlers("school_state")}
+          value={accessSchool("school_state")}
         />
         <RegistrationTextInput
-          errors={accessErrors('school_zip')}
+          errors={accessErrors("school_zip")}
           placeholder="Zip"
-          onChange={accessHandlers('school_zip')}
-          value={accessSchool('school_zip')}
+          onChange={accessHandlers("school_zip")}
+          value={accessSchool("school_zip")}
         />
         <RegistrationTextInput
-          errors={accessErrors('school_country')}
+          errors={accessErrors("school_country")}
           placeholder="Country"
-          onChange={accessHandlers('school_country')}
-          value={accessSchool('school_country')}
+          onChange={accessHandlers("school_country")}
+          value={accessSchool("school_country")}
           disabled={!this.props.schoolInternational}
           isControlled={true}
         />

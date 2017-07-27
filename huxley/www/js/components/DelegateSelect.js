@@ -3,15 +3,15 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
-var React = require('react');
+var React = require("react");
 
 var DelegateSelect = React.createClass({
   propTypes: {
     onChange: React.PropTypes.func,
     delegates: React.PropTypes.array,
-    selectedDelegateID: React.PropTypes.number
+    selectedDelegateID: React.PropTypes.number,
   },
 
   render: function() {
@@ -27,12 +27,15 @@ var DelegateSelect = React.createClass({
   },
 
   renderDelegateOptions: function() {
-    return this.props.delegates.map((delegate) =>
-      <option key={delegate.id} value={delegate.id} disabled={delegate.assignment}>
+    return this.props.delegates.map(delegate =>
+      <option
+        key={delegate.id}
+        value={delegate.id}
+        disabled={delegate.assignment}>
         {delegate.name}
-      </option>
+      </option>,
     );
-  }
+  },
 });
 
 module.exports = DelegateSelect;

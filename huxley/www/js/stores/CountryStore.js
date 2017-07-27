@@ -3,14 +3,13 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
-var ActionConstants = require('constants/ActionConstants');
-var CountryActions = require('actions/CountryActions');
-var Dispatcher = require('dispatcher/Dispatcher');
-var ServerAPI = require('lib/ServerAPI');
-var {Store} = require('flux/utils');
-
+var ActionConstants = require("constants/ActionConstants");
+var CountryActions = require("actions/CountryActions");
+var Dispatcher = require("dispatcher/Dispatcher");
+var ServerAPI = require("lib/ServerAPI");
+var {Store} = require("flux/utils");
 
 var _countries = {};
 
@@ -40,6 +39,6 @@ class CountryStore extends Store {
 
     this.__emitChange();
   }
-};
+}
 
 module.exports = new CountryStore(Dispatcher);

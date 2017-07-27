@@ -3,10 +3,10 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
-var ActionConstants = require('constants/ActionConstants');
-var Dispatcher = require('dispatcher/Dispatcher');
+var ActionConstants = require("constants/ActionConstants");
+var Dispatcher = require("dispatcher/Dispatcher");
 
 var DelegateActions = {
   deleteDelegate(delegateID, onError) {
@@ -20,7 +20,7 @@ var DelegateActions = {
   addDelegate(delegate) {
     Dispatcher.dispatch({
       actionType: ActionConstants.ADD_DELEGATE,
-      delegate: delegate
+      delegate: delegate,
     });
   },
 
@@ -59,7 +59,6 @@ var DelegateActions = {
       onError: onError,
     });
   },
-
 };
 
 module.exports = DelegateActions;

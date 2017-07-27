@@ -3,15 +3,15 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
-var cx = require('classnames');
-var React = require('react');
+var cx = require("classnames");
+var React = require("react");
 
-var ChangePasswordView = require('components/ChangePasswordView');
-var LogoutButton = require('components/LogoutButton');
+var ChangePasswordView = require("components/ChangePasswordView");
+var LogoutButton = require("components/LogoutButton");
 
-require('css/TopBar.less');
+require("css/TopBar.less");
 
 var TopBar = React.createClass({
   getInitialState: function() {
@@ -21,11 +21,11 @@ var TopBar = React.createClass({
   },
 
   componentDidMount: function() {
-    document.addEventListener('click', this._hideDropdown);
+    document.addEventListener("click", this._hideDropdown);
   },
 
   componentWillUnmount: function() {
-    document.removeEventListener('click', this._hideDropdown);
+    document.removeEventListener("click", this._hideDropdown);
   },
 
   render: function() {
@@ -42,8 +42,8 @@ var TopBar = React.createClass({
               <li>
                 <a
                   className={cx({
-                    'change-password-link': true,
-                    'active': this.state.changePasswordVisible,
+                    "change-password-link": true,
+                    active: this.state.changePasswordVisible,
                   })}
                   href="#"
                   onClick={this._handleChangePasswordClick}>
@@ -56,9 +56,7 @@ var TopBar = React.createClass({
             </ul>
             <div className="left">
               <span className="title white">Huxley</span>
-              &nbsp;
-              &middot;
-              &nbsp;
+              &nbsp; &middot; &nbsp;
               <span>A Conference Management Tool by BMUN</span>
             </div>
           </div>
@@ -76,7 +74,7 @@ var TopBar = React.createClass({
     e.preventDefault();
     this._stopPropagation(e);
     this.setState({
-      changePasswordVisible: !this.state.changePasswordVisible
+      changePasswordVisible: !this.state.changePasswordVisible,
     });
   },
 

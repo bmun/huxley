@@ -3,20 +3,18 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
-var ActionConstants = require('constants/ActionConstants');
-var AssignmentActions = require('actions/AssignmentActions');
-var CurrentUserStore = require('stores/CurrentUserStore');
-var Dispatcher = require('dispatcher/Dispatcher');
-var ServerAPI = require('lib/ServerAPI');
-var {Store} = require('flux/utils');
-
+var ActionConstants = require("constants/ActionConstants");
+var AssignmentActions = require("actions/AssignmentActions");
+var CurrentUserStore = require("stores/CurrentUserStore");
+var Dispatcher = require("dispatcher/Dispatcher");
+var ServerAPI = require("lib/ServerAPI");
+var {Store} = require("flux/utils");
 
 var _assignments = {};
 var _assignmentsFetched = false;
 var _previousUserID = -1;
-
 
 class AssignmentStore extends Store {
   getSchoolAssignments(schoolID) {
@@ -60,11 +58,15 @@ class AssignmentStore extends Store {
         _assignmentsFetched = true;
         break;
       case ActionConstants.UPDATE_ASSIGNMENT:
-        this.updateAssignment(action.assignmentID, action.delta, action.onError);
+        this.updateAssignment(
+          action.assignmentID,
+          action.delta,
+          action.onError,
+        );
         break;
       case ActionConstants.LOGIN:
         var userID = CurrentUserStore.getCurrentUser().id;
-        if(userID != _previousUserID) {
+        if (userID != _previousUserID) {
           _assignments = {};
           _assignmentsFetched = false;
           _previousUserID = userID;
@@ -76,6 +78,6 @@ class AssignmentStore extends Store {
 
     this.__emitChange();
   }
-};
+}
 
 module.exports = new AssignmentStore(Dispatcher);

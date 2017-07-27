@@ -3,21 +3,23 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
-var React = require('react');
+var React = require("react");
 
 var CountrySelect = React.createClass({
   propTypes: {
     onChange: React.PropTypes.func,
     countries: React.PropTypes.array,
     selectedCountryID: React.PropTypes.number,
-    countryPreferences: React.PropTypes.array
+    countryPreferences: React.PropTypes.array,
   },
 
   shouldComponentUpdate: function(nextProps, nextState) {
     for (var i = 0; i < this.props.countryPreferences.length; i++) {
-      if (this.props.countryPreferences[i] !== nextProps.countryPreferences[i]) {
+      if (
+        this.props.countryPreferences[i] !== nextProps.countryPreferences[i]
+      ) {
         return true;
       }
     }
@@ -39,17 +41,19 @@ var CountrySelect = React.createClass({
   },
 
   renderCommitteeOptions: function() {
-    return this.props.countries.map(function(country) {
-      if (!country.special) {
-        var index = this.props.countryPreferences.indexOf("" + country.id)
-        return (
-          <option key={country.id} value={country.id} disabled={index >= 0}>
-            {country.name}
-          </option>
-        );
-      }
-    }.bind(this));
-  }
+    return this.props.countries.map(
+      function(country) {
+        if (!country.special) {
+          var index = this.props.countryPreferences.indexOf("" + country.id);
+          return (
+            <option key={country.id} value={country.id} disabled={index >= 0}>
+              {country.name}
+            </option>
+          );
+        }
+      }.bind(this),
+    );
+  },
 });
 
 module.exports = CountrySelect;

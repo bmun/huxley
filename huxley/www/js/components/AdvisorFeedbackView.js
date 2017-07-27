@@ -3,33 +3,33 @@
 * Use of this source code is governed by a BSD License (see LICENSE).
 +*/
 
-'use strict';
+"use strict";
 
-var React = require('react');
-var ReactRouter = require('react-router');
+var React = require("react");
+var ReactRouter = require("react-router");
 
-var AssignmentActions = require('actions/AssignmentActions');
-var AssignmentStore = require('stores/AssignmentStore');
-var Button = require('components/core/Button');
-var CommitteeStore = require('stores/CommitteeStore');
-var CountryStore = require('stores/CountryStore');
-var CurrentUserStore = require('stores/CurrentUserStore');
-var DelegateStore = require('stores/DelegateStore');
-var InnerView = require('components/InnerView');
-var Table = require('components/core/Table');
-var TextTemplate = require('components/core/TextTemplate');
+var AssignmentActions = require("actions/AssignmentActions");
+var AssignmentStore = require("stores/AssignmentStore");
+var Button = require("components/core/Button");
+var CommitteeStore = require("stores/CommitteeStore");
+var CountryStore = require("stores/CountryStore");
+var CurrentUserStore = require("stores/CurrentUserStore");
+var DelegateStore = require("stores/DelegateStore");
+var InnerView = require("components/InnerView");
+var Table = require("components/core/Table");
+var TextTemplate = require("components/core/TextTemplate");
 
-var AdvisorFeedbackViewText = require('text/AdvisorFeedbackViewText.md');
+var AdvisorFeedbackViewText = require("text/AdvisorFeedbackViewText.md");
 
 var AdvisorFeedbackView = React.createClass({
-  mixins: [
-    ReactRouter.History,
-  ],
+  mixins: [ReactRouter.History],
 
   getInitialState: function() {
     var schoolID = CurrentUserStore.getCurrentUser().school.id;
     var delegates = DelegateStore.getSchoolDelegates(schoolID);
-    var assignments = AssignmentStore.getSchoolAssignments(schoolID).filter(assignment => !assignment.rejected);
+    var assignments = AssignmentStore.getSchoolAssignments(schoolID).filter(
+      assignment => !assignment.rejected,
+    );
     var feedback = this.prepareFeedback(delegates);
     return {
       feedback: feedback,
@@ -37,7 +37,7 @@ var AdvisorFeedbackView = React.createClass({
       committees: CommitteeStore.getCommittees(),
       countries: CountryStore.getCountries(),
       delegates: delegates,
-      loading: false
+      loading: false,
     };
   },
 
@@ -53,7 +53,9 @@ var AdvisorFeedbackView = React.createClass({
     this._assignmentsToken = AssignmentStore.addListener(() => {
       var schoolID = CurrentUserStore.getCurrentUser().school.id;
       this.setState({
-        assignments: AssignmentStore.getSchoolAssignments(schoolID).filter(assignment => !assignment.rejected)
+        assignments: AssignmentStore.getSchoolAssignments(schoolID).filter(
+          assignment => !assignment.rejected,
+        ),
       });
     });
 
@@ -63,7 +65,7 @@ var AdvisorFeedbackView = React.createClass({
       var feedback = this.prepareFeedback(delegates);
       this.setState({
         delegates: delegates,
-        feedback: feedback
+        feedback: feedback,
       });
     });
   },
@@ -104,7 +106,7 @@ var AdvisorFeedbackView = React.createClass({
   },
 
   renderAssignmentRows: function() {
-    var assignments = this.state.assignments
+    var assignments = this.state.assignments;
     var committees = this.state.committees;
     var countries = this.state.countries;
     var feedback = this.state.feedback;
@@ -115,8 +117,12 @@ var AdvisorFeedbackView = React.createClass({
       }
       return (
         <tr>
-          <td>{committees[assignment.committee].name}</td>
-          <td>{countries[assignment.country].name}</td>
+          <td>
+            {committees[assignment.committee].name}
+          </td>
+          <td>
+            {countries[assignment.country].name}
+          </td>
           <td>
             <input
               className="choice"
@@ -152,16 +158,15 @@ var AdvisorFeedbackView = React.createClass({
           <td>
             <textarea
               className="text-input"
-              style={{"width": "95%"}}
+              style={{width: "95%"}}
               defaultValue={delegates.published_summary}
               disabled
             />
           </td>
         </tr>
-      )
+      );
     });
   },
-
 
   /*
 
@@ -176,7 +181,7 @@ var AdvisorFeedbackView = React.createClass({
     var feedback = {};
     for (var delegate of delegates) {
       if (delegate.assignment) {
-          feedback[delegate.assignment] = delegate;
+        feedback[delegate.assignment] = delegate;
       }
     }
     return feedback;

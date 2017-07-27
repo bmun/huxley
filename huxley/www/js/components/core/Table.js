@@ -3,12 +3,12 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
-const React = require('react');
-const cx = require('classnames');
+const React = require("react");
+const cx = require("classnames");
 
-require('css/Table.less');
+require("css/Table.less");
 
 const Table = React.createClass({
   propTypes: {
@@ -23,7 +23,11 @@ const Table = React.createClass({
         <table>
           {this.props.children}
         </table>
-        {isEmpty ? <div className="empty help-text">{emptyMessage}</div> : null}
+        {isEmpty
+          ? <div className="empty help-text">
+              {emptyMessage}
+            </div>
+          : null}
       </div>
     );
   },

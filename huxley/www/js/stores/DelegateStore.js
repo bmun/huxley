@@ -3,15 +3,14 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
-var ActionConstants = require('constants/ActionConstants');
-var CurrentUserStore = require('stores/CurrentUserStore');
-var DelegateActions = require('actions/DelegateActions');
-var Dispatcher = require('dispatcher/Dispatcher');
-var ServerAPI = require('lib/ServerAPI');
-var {Store} = require('flux/utils');
-
+var ActionConstants = require("constants/ActionConstants");
+var CurrentUserStore = require("stores/CurrentUserStore");
+var DelegateActions = require("actions/DelegateActions");
+var Dispatcher = require("dispatcher/Dispatcher");
+var ServerAPI = require("lib/ServerAPI");
+var {Store} = require("flux/utils");
 
 var _delegates = {};
 var _delegatesFetched = false;
@@ -60,14 +59,18 @@ class DelegateStore extends Store {
   }
 
   updateDelegates(schoolID, delegates, onSuccess, onError) {
-    ServerAPI.updateSchoolDelegates(schoolID, delegates).then(onSuccess).catch(onError);
+    ServerAPI.updateSchoolDelegates(schoolID, delegates)
+      .then(onSuccess)
+      .catch(onError);
     for (const delegate of delegates) {
       _delegates[delegate.id] = delegate;
     }
   }
 
   updateCommitteeDelegates(committeeID, delegates, onSuccess, onError) {
-    ServerAPI.updateCommitteeDelegates(committeeID, delegates).then(onSuccess).catch(onError);
+    ServerAPI.updateCommitteeDelegates(committeeID, delegates)
+      .then(onSuccess)
+      .catch(onError);
     for (const delegate of delegates) {
       _delegates[delegate.id] = delegate;
     }
@@ -91,10 +94,20 @@ class DelegateStore extends Store {
         _delegatesFetched = true;
         break;
       case ActionConstants.UPDATE_DELEGATES:
-        this.updateDelegates(action.schoolID, action.delegates, action.onSuccess, action.onError);
+        this.updateDelegates(
+          action.schoolID,
+          action.delegates,
+          action.onSuccess,
+          action.onError,
+        );
         break;
       case ActionConstants.UPDATE_COMMITTEE_DELEGATES:
-        this.updateCommitteeDelegates(action.committeeID, action.delegates, action.onSuccess, action.onError);
+        this.updateCommitteeDelegates(
+          action.committeeID,
+          action.delegates,
+          action.onSuccess,
+          action.onError,
+        );
         break;
       case ActionConstants.LOGIN:
         var userID = CurrentUserStore.getCurrentUser().id;
@@ -110,6 +123,6 @@ class DelegateStore extends Store {
 
     this.__emitChange();
   }
-};
+}
 
 module.exports = new DelegateStore(Dispatcher);

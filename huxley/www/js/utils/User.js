@@ -3,7 +3,7 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
 var TYPE_ADVISOR = 1;
 var TYPE_CHAIR = 2;
@@ -23,7 +23,7 @@ var User = {
 
   getSchool(user) {
     return user.school || {};
-  }
+  },
 };
 
 module.exports = User;

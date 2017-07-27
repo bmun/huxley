@@ -3,11 +3,11 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
-var React = require('react');
+var React = require("react");
 
-require('css/content.less');
+require("css/content.less");
 
 var OuterView = React.createClass({
   propTypes: {
@@ -25,8 +25,8 @@ var OuterView = React.createClass({
   },
 
   renderHeader: function() {
-    return this.props.header || <div className="logo-small"></div>;
-  }
+    return this.props.header || <div className="logo-small" />;
+  },
 });
 
 module.exports = OuterView;

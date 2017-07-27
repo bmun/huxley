@@ -3,7 +3,7 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
 module.exports = {
   BOOTSTRAP: "BOOTSTRAP",
