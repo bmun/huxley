@@ -86,9 +86,10 @@ def format_python(py_diff_list):
 def format_js(source):
     '''Formats the javascript files in source using prettier. The argument
        source is a string where each file path is separated by a space.'''
-    options = '--trailing-comma all --jsx-bracket-same-line --no-bracket-spacing'
-    local('./node_modules/.bin/prettier ' + options + ' --debug-check ' + source)
-    local('./node_modules/.bin/prettier ' + options + ' --write ' + source)
+    if len(source) > 0:
+        options = '--trailing-comma all --jsx-bracket-same-line --no-bracket-spacing'
+        local('./node_modules/.bin/prettier ' + options + ' --debug-check ' + source)
+        local('./node_modules/.bin/prettier ' + options + ' --write ' + source)
 
 
 @task
