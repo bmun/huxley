@@ -22,7 +22,6 @@ var ProgramTypes = require("constants/ProgramTypes");
 var RegistrationAccountInformation = require("components/registration/RegistrationAccountInformation");
 var RegistrationComments = require("components/registration/RegistrationComments");
 var RegistrationCountryPreferences = require("components/registration/RegistrationCountryPreferences");
-var RegistrationPhoneInput = require("components/registration/RegistrationPhoneInput");
 var RegistrationPrimaryContact = require("components/registration/RegistrationPrimaryContact");
 var RegistrationProgramInformation = require("components/registration/RegistrationProgramInformation");
 var RegistrationSchoolInformation = require("components/registration/RegistrationSchoolInformation");

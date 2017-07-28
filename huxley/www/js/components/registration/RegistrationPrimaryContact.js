@@ -7,6 +7,7 @@
 
 var React = require("react");
 
+var RegistrationPhoneInput = require("components/registration/RegistrationPhoneInput");
 var RegistrationTextInput = require("components/registration/RegistrationTextInput");
 var _accessSafe = require("utils/_accessSafe");
 
@@ -55,11 +56,10 @@ const RegistrationPrimaryContact = React.createClass({
           onChange={accessHandlers("primary_email")}
           value={accessPrimary("primary_email")}
         />
-        <RegistrationTextInput
+        <RegistrationPhoneInput
           errors={accessErrors("primary_phone")}
           onChange={accessHandlers("primary_phone")}
           value={accessPrimary("primary_phone")}
-          placeholder="Phone Number"
           isInternational={this.props.isInternational}
         />
         {this.props.renderContactTypeField("primary_type")}
