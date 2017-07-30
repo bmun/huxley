@@ -9,7 +9,6 @@ var React = require('react');
 var TextInput = require('components/core/TextInput');
 
 var NumberInput = React.createClass({
-
   propTypes: {
     onChange: React.PropTypes.func,
     value: React.PropTypes.string,

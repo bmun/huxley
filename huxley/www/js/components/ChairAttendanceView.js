@@ -23,9 +23,7 @@ require('css/Table.less');
 var ChairAttendanceViewText = require('text/ChairAttendanceViewText.md');
 
 var ChairAttendanceView = React.createClass({
-  mixins: [
-    ReactRouter.History,
-  ],
+  mixins: [ReactRouter.History],
 
   getInitialState() {
     var user = CurrentUserStore.getCurrentUser();
@@ -50,12 +48,16 @@ var ChairAttendanceView = React.createClass({
     var user = CurrentUserStore.getCurrentUser();
     this._mapAssignments();
     this._delegatesToken = DelegateStore.addListener(() => {
-      this.setState({delegates: DelegateStore.getCommitteeDelegates(user.committee)});
+      this.setState({
+        delegates: DelegateStore.getCommitteeDelegates(user.committee),
+      });
       this._mapAssignments();
     });
 
     this._assignmentsToken = AssignmentStore.addListener(() => {
-      this.setState({assignments: AssignmentStore.getCommitteeAssignments(user.committee)});
+      this.setState({
+        assignments: AssignmentStore.getCommitteeAssignments(user.committee),
+      });
       this._mapAssignments();
     });
 
@@ -79,7 +81,7 @@ var ChairAttendanceView = React.createClass({
         </TextTemplate>
         <form>
           <div className="table-container">
-            <table style={{'margin':'10px auto 0px auto', 'tableLayout':'fixed'}}>
+            <table style={{margin: '10px auto 0px auto', tableLayout: 'fixed'}}>
               <thead>
                 <tr>
                   <th>Assignment</th>
@@ -91,11 +93,10 @@ var ChairAttendanceView = React.createClass({
                 </tr>
               </thead>
             </table>
-            <div style={{'overflowY': 'auto', 'maxHeight': '50vh'}}>
+            <div style={{overflowY: 'auto', maxHeight: '50vh'}}>
               <table
                 className="table highlight-cells"
-                style={{'margin':'0px auto 20px auto', 'tableLayout':'fixed'}}
-              >
+                style={{margin: '0px auto 20px auto', tableLayout: 'fixed'}}>
                 <tbody>
                   {this.renderAttendanceRows()}
                 </tbody>
@@ -117,17 +118,21 @@ var ChairAttendanceView = React.createClass({
   renderAttendanceRows() {
     var committeeCountryIDs = Object.keys(this.state.country_assignments);
     var countries = this.state.countries;
-    if (Object.keys(countries).length){
-      committeeCountryIDs.sort((c1, c2) => countries[c1].name < countries[c2].name ? -1 : 1);
+    if (Object.keys(countries).length) {
+      committeeCountryIDs.sort(
+        (c1, c2) => (countries[c1].name < countries[c2].name ? -1 : 1),
+      );
     }
     return committeeCountryIDs.map(country =>
       <DelegationAttendanceRow
         key={country}
         onChange={this._handleAttendanceChange}
-        countryName={Object.keys(countries).length ? countries[country].name : country}
+        countryName={
+          Object.keys(countries).length ? countries[country].name : country
+        }
         countryID={country}
         delegates={this.state.country_assignments[country]}
-      />
+      />,
     );
   },
 
@@ -137,7 +142,9 @@ var ChairAttendanceView = React.createClass({
     var delegates = this.state.delegates;
     var assignments = this.state.assignments;
     for (var delegate of delegates) {
-      var assignment = assignments.find(assignment => assignment.id == delegate.assignment);
+      var assignment = assignments.find(
+        assignment => assignment.id == delegate.assignment,
+      );
       if (!assignment) continue;
       var countryID = assignment.country;
       if (countryID in country_assignments) {
@@ -169,7 +176,12 @@ var ChairAttendanceView = React.createClass({
     for (var country in country_assignments) {
       delegates = delegates.concat(country_assignments[country]);
     }
-    DelegateActions.updateCommitteeDelegates(committee, delegates, this._handleSuccess, this._handleError);
+    DelegateActions.updateCommitteeDelegates(
+      committee,
+      delegates,
+      this._handleSuccess,
+      this._handleError,
+    );
     event.preventDefault();
   },
 
@@ -179,12 +191,17 @@ var ChairAttendanceView = React.createClass({
       success: true,
     });
 
-    this._successTimeout = setTimeout(() => this.setState({success: false}), 2000);
+    this._successTimeout = setTimeout(
+      () => this.setState({success: false}),
+      2000,
+    );
   },
 
   _handleError: function(response) {
     this.setState({loading: false});
-    window.alert("Something went wrong. Please refresh your page and try again.");
+    window.alert(
+      'Something went wrong. Please refresh your page and try again.',
+    );
   },
 });
 

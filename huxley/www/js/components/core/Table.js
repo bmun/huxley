@@ -23,7 +23,11 @@ const Table = React.createClass({
         <table>
           {this.props.children}
         </table>
-        {isEmpty ? <div className="empty help-text">{emptyMessage}</div> : null}
+        {isEmpty
+          ? <div className="empty help-text">
+              {emptyMessage}
+            </div>
+          : null}
       </div>
     );
   },

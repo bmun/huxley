@@ -23,7 +23,7 @@ var User = {
 
   getSchool(user) {
     return user.school || {};
-  }
+  },
 };
 
 module.exports = User;

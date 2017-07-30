@@ -17,7 +17,7 @@ var RegistrationClosedViewText = require('text/RegistrationClosedViewText.md');
 
 var RegistrationClosedView = React.createClass({
   contextTypes: {
-    conference: React.PropTypes.shape(ConferenceContext)
+    conference: React.PropTypes.shape(ConferenceContext),
   },
 
   render: function() {
@@ -25,8 +25,7 @@ var RegistrationClosedView = React.createClass({
     return (
       <OuterView>
         <div className="letter">
-          <TextTemplate
-            conferenceSession={conference.session}>
+          <TextTemplate conferenceSession={conference.session}>
             {RegistrationClosedViewText}
           </TextTemplate>
         </div>
@@ -36,7 +35,7 @@ var RegistrationClosedView = React.createClass({
         </NavLink>
       </OuterView>
     );
-  }
+  },
 });
 
 module.exports = RegistrationClosedView;

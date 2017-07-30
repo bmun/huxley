@@ -20,7 +20,7 @@ var DelegateActions = {
   addDelegate(delegate) {
     Dispatcher.dispatch({
       actionType: ActionConstants.ADD_DELEGATE,
-      delegate: delegate
+      delegate: delegate,
     });
   },
 
@@ -59,7 +59,6 @@ var DelegateActions = {
       onError: onError,
     });
   },
-
 };
 
 module.exports = DelegateActions;

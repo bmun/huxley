@@ -21,7 +21,9 @@ const RegistrationSchoolInformation = React.createClass({
 
   shouldComponentUpdate: function(nextProps, nextState) {
     for (let key in this.props.schoolInformation) {
-      if (this.props.schoolInformation[key] !== nextProps.schoolInformation[key]) {
+      if (
+        this.props.schoolInformation[key] !== nextProps.schoolInformation[key]
+      ) {
         return true;
       }
     }
@@ -41,20 +43,22 @@ const RegistrationSchoolInformation = React.createClass({
             <label>
               <input
                 type="radio"
-                value=''
+                value=""
                 onChange={this.props.handleInternationalChange}
                 checked={!this.props.schoolInternational}
-              /> United States of America
+              />{' '}
+              United States of America
             </label>
           </li>
           <li>
             <label>
               <input
                 type="radio"
-                value='international'
+                value="international"
                 onChange={this.props.handleInternationalChange}
                 checked={this.props.schoolInternational}
-              /> International
+              />{' '}
+              International
             </label>
           </li>
         </ul>

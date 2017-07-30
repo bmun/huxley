@@ -10,16 +10,18 @@ var ReactRouter = require('react-router');
 
 var OuterView = require('components/OuterView');
 
-var NotFoundView = React.createClass ({
+var NotFoundView = React.createClass({
   render: function() {
     return (
       <OuterView>
         <h1>Page Not Found</h1>
-        <p>The page you are looking for does not exist. Please return to the
-        page you came from.</p>
+        <p>
+          The page you are looking for does not exist. Please return to the page
+          you came from.
+        </p>
       </OuterView>
     );
-  }
+  },
 });
 
 module.exports = NotFoundView;

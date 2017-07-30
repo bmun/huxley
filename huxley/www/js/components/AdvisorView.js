@@ -16,7 +16,7 @@ var User = require('utils/User');
 
 require('css/NavBar.less');
 
-var AdvisorView = React.createClass ({
+var AdvisorView = React.createClass({
   mixins: [ReactRouter.History],
 
   componentDidMount: function() {
@@ -35,18 +35,10 @@ var AdvisorView = React.createClass ({
         <TopBar user={this.props.user} />
         <Shaker>
           <div className="navbar rounded-top">
-            <NavTab href="/advisor/profile">
-              Profile
-            </NavTab>
-            <NavTab href="/advisor/assignments">
-              Assignments
-            </NavTab>
-            <NavTab href="/advisor/roster">
-              Delegates
-            </NavTab>
-            <NavTab href="/advisor/feedback">
-              Feedback
-            </NavTab>
+            <NavTab href="/advisor/profile">Profile</NavTab>
+            <NavTab href="/advisor/assignments">Assignments</NavTab>
+            <NavTab href="/advisor/roster">Delegates</NavTab>
+            <NavTab href="/advisor/feedback">Feedback</NavTab>
           </div>
           {this.props.children}
         </Shaker>

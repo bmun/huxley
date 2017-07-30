@@ -14,7 +14,7 @@ var CountryActions = {
       actionType: ActionConstants.COUNTRIES_FETCHED,
       countries: countries,
     });
-  }
+  },
 };
 
 module.exports = CountryActions;

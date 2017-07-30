@@ -133,10 +133,11 @@ function _ajax(method, uri, data) {
       params.body = typeof data === 'string' ? data : JSON.stringify(data);
     }
   }
-  return fetch(uri, params).then(response =>
-    response.ok
-      ? response.json()
-      : response.json().then(json => Promise.reject(json))
+  return fetch(uri, params).then(
+    response =>
+      response.ok
+        ? response.json()
+        : response.json().then(json => Promise.reject(json)),
   );
 }
 

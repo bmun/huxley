@@ -18,16 +18,15 @@ var CurrentUserActions = {
   login(user) {
     Dispatcher.dispatch({
       actionType: ActionConstants.LOGIN,
-      user: user
+      user: user,
     });
   },
 
   logout() {
     Dispatcher.dispatch({
-      actionType: ActionConstants.LOGOUT
+      actionType: ActionConstants.LOGOUT,
     });
   },
-
 
   updateSchool(schoolID, delta, onError) {
     Dispatcher.dispatch({
@@ -46,7 +45,7 @@ var CurrentUserActions = {
       onSuccess: onSuccess,
       onError: onError,
     });
-  }
+  },
 };
 
 module.exports = CurrentUserActions;

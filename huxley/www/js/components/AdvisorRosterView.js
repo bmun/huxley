@@ -26,9 +26,7 @@ require('css/Modal.less');
 var AdvisorRosterViewText = require('text/AdvisorRosterViewText.md');
 
 var AdvisorRosterView = React.createClass({
-  mixins: [
-    ReactRouter.History,
-  ],
+  mixins: [ReactRouter.History],
 
   getInitialState: function() {
     var schoolID = CurrentUserStore.getCurrentUser().school.id;
@@ -39,12 +37,12 @@ var AdvisorRosterView = React.createClass({
       modal_name: '',
       modal_email: '',
       modal_onClick: null,
-      errors: {}
+      errors: {},
     };
   },
 
   componentWillMount: function() {
-    Modal.setAppElement('body')
+    Modal.setAppElement('body');
   },
 
   componentDidMount: function() {
@@ -53,7 +51,7 @@ var AdvisorRosterView = React.createClass({
       this.setState({
         delegates: DelegateStore.getSchoolDelegates(schoolID),
         modal_open: false,
-        loading: false
+        loading: false,
       });
     });
   },
@@ -103,7 +101,7 @@ var AdvisorRosterView = React.createClass({
               value={this.state.modal_name}
               disabled
             />
-            {this.renderError("name")}
+            {this.renderError('name')}
             <TextInput
               placeholder="Email (Optional)"
               onChange={_handleChange.bind(this, 'modal_email')}
@@ -111,7 +109,7 @@ var AdvisorRosterView = React.createClass({
               value={this.state.modal_email}
               disabled
             />
-            {this.renderError("email")}
+            {this.renderError('email')}
             <hr />
             <div>
               <Button
@@ -120,9 +118,7 @@ var AdvisorRosterView = React.createClass({
                 loading={this.state.loading}>
                 Save
               </Button>
-              <Button
-                onClick={this.closeModal}
-                color="red">
+              <Button onClick={this.closeModal} color="red">
                 Cancel
               </Button>
             </div>
@@ -135,34 +131,41 @@ var AdvisorRosterView = React.createClass({
   renderRosterRows: function() {
     var committees = this.state.committees;
     var countries = this.state.countries;
-    return this.state.delegates.map(function(delegate) {
-      return (
-        <tr>
-          <td>{delegate.name}</td>
-          <td>{delegate.email}</td>
-          <td>
-            <Button
-              color="blue"
-              size="small"
-              onClick={this.openModal.bind(
-                this,
-                delegate.name,
-                delegate.email,
-                this._handleEditDelegate.bind(this, delegate))}>
-              Edit
-            </Button>
-          </td>
-          <td>
-            <Button
-              color="red"
-              size="small"
-              onClick={this._handleDeleteDelegate.bind(this, delegate)}>
-              Delete
-            </Button>
-          </td>
-        </tr>
-      )
-    }.bind(this));
+    return this.state.delegates.map(
+      function(delegate) {
+        return (
+          <tr>
+            <td>
+              {delegate.name}
+            </td>
+            <td>
+              {delegate.email}
+            </td>
+            <td>
+              <Button
+                color="blue"
+                size="small"
+                onClick={this.openModal.bind(
+                  this,
+                  delegate.name,
+                  delegate.email,
+                  this._handleEditDelegate.bind(this, delegate),
+                )}>
+                Edit
+              </Button>
+            </td>
+            <td>
+              <Button
+                color="red"
+                size="small"
+                onClick={this._handleDeleteDelegate.bind(this, delegate)}>
+                Delete
+              </Button>
+            </td>
+          </tr>
+        );
+      }.bind(this),
+    );
   },
 
   openModal: function(name, email, fn, event) {
@@ -171,7 +174,7 @@ var AdvisorRosterView = React.createClass({
       modal_name: name,
       modal_email: email,
       modal_onClick: fn,
-      errors: {}
+      errors: {},
     });
     event.preventDefault();
   },
@@ -208,7 +211,7 @@ var AdvisorRosterView = React.createClass({
     ServerAPI.createDelegate(
       this.state.modal_name,
       this.state.modal_email,
-      user.school.id
+      user.school.id,
     ).then(this._handleAddDelegateSuccess, this._handleError);
     event.preventDefault();
   },
@@ -231,7 +234,7 @@ var AdvisorRosterView = React.createClass({
 
   _handleDeleteError: function(response) {
     window.alert(
-      `There was an issue processing your request. Please refresh you page and try again.`
+      `There was an issue processing your request. Please refresh you page and try again.`,
     );
   },
 
@@ -239,10 +242,9 @@ var AdvisorRosterView = React.createClass({
     this.setState({
       errors: response,
       loading: false,
-      modal_open: true
+      modal_open: true,
     });
-  }
-
+  },
 });
 
 module.exports = AdvisorRosterView;

@@ -11,7 +11,6 @@ var Dispatcher = require('dispatcher/Dispatcher');
 var ServerAPI = require('lib/ServerAPI');
 var {Store} = require('flux/utils');
 
-
 var _countries = {};
 
 class CountryStore extends Store {
@@ -40,6 +39,6 @@ class CountryStore extends Store {
 
     this.__emitChange();
   }
-};
+}
 
 module.exports = new CountryStore(Dispatcher);

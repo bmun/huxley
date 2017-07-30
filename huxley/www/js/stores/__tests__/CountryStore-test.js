@@ -43,7 +43,7 @@ describe('CountryStore', () => {
 
     registerCallback({
       actionType: ActionConstants.COUNTRIES_FETCHED,
-      countries: mockCountries
+      countries: mockCountries,
     });
 
     countries = CountryStore.getCountries();
@@ -57,7 +57,7 @@ describe('CountryStore', () => {
     expect(callback).not.toBeCalled();
     registerCallback({
       actionType: ActionConstants.COUNTRIES_FETCHED,
-      countries: mockCountries
+      countries: mockCountries,
     });
     expect(callback).toBeCalled();
   });

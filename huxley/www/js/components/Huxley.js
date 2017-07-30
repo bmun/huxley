@@ -21,16 +21,16 @@ require('css/JSWarning.less');
 require('css/IEWarning.less');
 
 var Huxley = React.createClass({
-  mixins: [ReactRouter.History,],
+  mixins: [ReactRouter.History],
 
   childContextTypes: {
-    conference: React.PropTypes.shape(ConferenceContext)
+    conference: React.PropTypes.shape(ConferenceContext),
   },
 
   getChildContext: function() {
     var conference = global.conference;
     return {
-      conference: conference
+      conference: conference,
     };
   },
 
@@ -52,19 +52,19 @@ var Huxley = React.createClass({
     if (User.isAnonymous(user)) {
       return (
         <Shaker>
-          {React.cloneElement(this.props.children, { user: user })}
+          {React.cloneElement(this.props.children, {user: user})}
         </Shaker>
       );
     } else if (User.isAdvisor(user)) {
       return (
         <AdvisorView user={user}>
-          {React.cloneElement(this.props.children, { user: user })}
+          {React.cloneElement(this.props.children, {user: user})}
         </AdvisorView>
       );
     } else if (User.isChair(user)) {
       return (
         <ChairView user={user}>
-          {React.cloneElement(this.props.children, { user: user })}
+          {React.cloneElement(this.props.children, {user: user})}
         </ChairView>
       );
     }

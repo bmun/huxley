@@ -17,12 +17,14 @@ const RegistrationProgramInformation = React.createClass({
     errors: React.PropTypes.object,
     programInformation: React.PropTypes.object,
     handleProgramTypeChange: React.PropTypes.func,
-    programType: React.PropTypes.oneOf([ProgramTypes.CLUB,ProgramTypes.CLASS]),
+    programType: React.PropTypes.oneOf([ProgramTypes.CLUB, ProgramTypes.CLASS]),
   },
 
   shouldComponentUpdate: function(nextProps, nextState) {
     for (let key in this.props.programInformation) {
-      if (this.props.programInformation[key] !== nextProps.programInformation[key]) {
+      if (
+        this.props.programInformation[key] !== nextProps.programInformation[key]
+      ) {
         return true;
       }
     }
@@ -36,7 +38,9 @@ const RegistrationProgramInformation = React.createClass({
     return (
       <div id="program_information">
         <h3>Program Information</h3>
-        <p className="instructions">What category best describes your program?</p>
+        <p className="instructions">
+          What category best describes your program?
+        </p>
         <ul>
           <li>
             <label>
@@ -45,7 +49,8 @@ const RegistrationProgramInformation = React.createClass({
                 checked={this.props.programType == ProgramTypes.CLUB}
                 value={ProgramTypes.CLUB}
                 onChange={this.props.handleProgramTypeChange}
-              /> Club
+              />{' '}
+              Club
             </label>
           </li>
           <li>
@@ -54,17 +59,20 @@ const RegistrationProgramInformation = React.createClass({
                 type="radio"
                 value={ProgramTypes.CLASS}
                 checked={this.props.propTypes == ProgramTypes.CLASS}
-                onChange={this.props.handleProgramTypeChange} 
-              /> Class
+                onChange={this.props.handleProgramTypeChange}
+              />{' '}
+              Class
             </label>
           </li>
         </ul>
-        <p className="instructions">Please tell us a bit more about your delegation this
-           year. Provide us with the tentative number of beginner,
-           intermediate, and advanced delegates you intend to bring to BMUN.
-           Try to provide us with realistic estimates for your delegate
-           numbers in each category so we can provide your delegation with
-           the appropriate number and type of assignments.</p>
+        <p className="instructions">
+          Please tell us a bit more about your delegation this year. Provide us
+          with the tentative number of beginner, intermediate, and advanced
+          delegates you intend to bring to BMUN. Try to provide us with
+          realistic estimates for your delegate numbers in each category so we
+          can provide your delegation with the appropriate number and type of
+          assignments.
+        </p>
         <NumberInput
           placeholder="Number of BMUN sessions attended"
           onChange={accessHandlers('times_attended')}
@@ -83,7 +91,7 @@ const RegistrationProgramInformation = React.createClass({
         {accessErrors('beginner_delegates')}
         <NumberInput
           placeholder="Tentative Number of Intermediate Delegates"
-          onChange={accessHandlers('intermediate_delegates')} 
+          onChange={accessHandlers('intermediate_delegates')}
           value={accessProgram('intermediate_delegates')}
         />
         <label className="hint">
@@ -97,14 +105,16 @@ const RegistrationProgramInformation = React.createClass({
           value={accessProgram('advanced_delegates')}
         />
         <label className="hint">
-          Advanced: Attended more than seven conferences, has participated
-          in many diverse committees.
+          Advanced: Attended more than seven conferences, has participated in
+          many diverse committees.
         </label>
         {accessErrors('advanced_delegates')}
         <p className="instructions">
-          Tentative Total Number of Delegates: {this._handleDelegateSum(
-            accessProgram('beginner_delegates'), accessProgram('intermediate_delegates'),
-            accessProgram('advanced_delegates')
+          Tentative Total Number of Delegates:{' '}
+          {this._handleDelegateSum(
+            accessProgram('beginner_delegates'),
+            accessProgram('intermediate_delegates'),
+            accessProgram('advanced_delegates'),
           )}
         </p>
       </div>
@@ -115,13 +125,15 @@ const RegistrationProgramInformation = React.createClass({
     var sum = 0;
     if (beginner) {
       sum += parseInt(beginner, 10) || 0;
-    } if (intermediate) {
+    }
+    if (intermediate) {
       sum += parseInt(intermediate, 10) || 0;
-    } if (advanced) {
+    }
+    if (advanced) {
       sum += parseInt(advanced, 10) || 0;
     }
     return sum;
-  }
+  },
 });
 
 module.exports = RegistrationProgramInformation;

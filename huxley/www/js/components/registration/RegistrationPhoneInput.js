@@ -27,9 +27,12 @@ const RegistrationPhoneInput = React.createClass({
     return (
       <div className="reg-field">
         <PhoneInput {...inputProps} />
-        {errors && errors.map(error =>
-          <StatusLabel status="error">{error}</StatusLabel>
-        )}
+        {errors &&
+          errors.map(error =>
+            <StatusLabel status="error">
+              {error}
+            </StatusLabel>,
+          )}
       </div>
     );
   },

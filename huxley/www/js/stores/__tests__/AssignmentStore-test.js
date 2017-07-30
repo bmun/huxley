@@ -33,7 +33,7 @@ describe('AssignmentStore', () => {
     mockSchoolID2 = 0;
     mockAssignments = [
       {id: 1, school: mockSchoolID, rejected: false},
-      {id: 2, school: mockSchoolID, rejected: false}
+      {id: 2, school: mockSchoolID, rejected: false},
     ];
     ServerAPI.getAssignments.mockReturnValue(Promise.resolve(mockAssignments));
     ServerAPI.updateAssignment.mockReturnValue(Promise.resolve({}));
@@ -50,7 +50,7 @@ describe('AssignmentStore', () => {
 
     registerCallback({
       actionType: ActionConstants.ASSIGNMENTS_FETCHED,
-      assignments: mockAssignments
+      assignments: mockAssignments,
     });
 
     assignments = AssignmentStore.getSchoolAssignments(mockSchoolID);
@@ -65,7 +65,7 @@ describe('AssignmentStore', () => {
 
     registerCallback({
       actionType: ActionConstants.ASSIGNMENTS_FETCHED,
-      assignments: []
+      assignments: [],
     });
 
     assignments = AssignmentStore.getSchoolAssignments(mockSchoolID2);
@@ -79,7 +79,7 @@ describe('AssignmentStore', () => {
     expect(callback).not.toBeCalled();
     registerCallback({
       actionType: ActionConstants.ASSIGNMENTS_FETCHED,
-      assignments: mockAssignments
+      assignments: mockAssignments,
     });
     expect(callback).toBeCalled();
   });
@@ -87,7 +87,7 @@ describe('AssignmentStore', () => {
   it('updates an assignment and emits a change', function() {
     registerCallback({
       actionType: ActionConstants.ASSIGNMENTS_FETCHED,
-      assignments: mockAssignments
+      assignments: mockAssignments,
     });
 
     var callback = jest.genMockFunction();
@@ -97,7 +97,7 @@ describe('AssignmentStore', () => {
     registerCallback({
       actionType: ActionConstants.UPDATE_ASSIGNMENT,
       assignmentID: 1,
-      delta: {rejected: true}
+      delta: {rejected: true},
     });
     expect(callback).toBeCalled();
 

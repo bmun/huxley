@@ -25,7 +25,7 @@ var PasswordResetSuccessView = React.createClass({
         </NavLink>
       </OuterView>
     );
-  }
+  },
 });
 
 module.exports = PasswordResetSuccessView;

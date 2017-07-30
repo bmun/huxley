@@ -25,8 +25,8 @@ var OuterView = React.createClass({
   },
 
   renderHeader: function() {
-    return this.props.header || <div className="logo-small"></div>;
-  }
+    return this.props.header || <div className="logo-small" />;
+  },
 });
 
 module.exports = OuterView;

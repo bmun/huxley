@@ -9,7 +9,7 @@ var invariant = require('fbjs/lib/invariant');
 
 invariant(
   global.ProgramTypes !== undefined,
-  'global.ProgramTypes must be defined.'
+  'global.ProgramTypes must be defined.',
 );
 
 var ProgramTypes = global.ProgramTypes;

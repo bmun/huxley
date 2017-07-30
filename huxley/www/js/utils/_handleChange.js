@@ -8,9 +8,9 @@
  * Handles changes from both HTML and custom components
  */
 function _handleChange(fieldName, event) {
-    this.setState({
-      [fieldName]: event.target ? event.target.value : event,
-    });
+  this.setState({
+    [fieldName]: event.target ? event.target.value : event,
+  });
 }
 
 module.exports = _handleChange;

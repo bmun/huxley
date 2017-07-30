@@ -14,7 +14,7 @@ require('css/NavLink.less');
 var NavLink = React.createClass({
   propTypes: {
     direction: React.PropTypes.oneOf(['left', 'right']).isRequired,
-    href: React.PropTypes.string.isRequired
+    href: React.PropTypes.string.isRequired,
   },
 
   render: function() {
@@ -23,13 +23,13 @@ var NavLink = React.createClass({
         className={cx({
           'nav-link': true,
           'arrow-left': this.props.direction == 'left',
-          'arrow-right': this.props.direction == 'right'
+          'arrow-right': this.props.direction == 'right',
         })}
         to={this.props.href}>
         {this.props.children}
       </Link>
     );
-  }
+  },
 });
 
 module.exports = NavLink;

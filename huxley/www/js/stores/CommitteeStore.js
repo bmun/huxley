@@ -11,7 +11,6 @@ var Dispatcher = require('dispatcher/Dispatcher');
 var ServerAPI = require('lib/ServerAPI');
 var {Store} = require('flux/utils');
 
-
 var _committees = {};
 
 class CommitteeStore extends Store {
@@ -28,8 +27,9 @@ class CommitteeStore extends Store {
   }
 
   getSpecialCommittees() {
-    var specialCommitteesArray = Object.values(this.getCommittees())
-                                    .filter(committee => committee.special);
+    var specialCommitteesArray = Object.values(this.getCommittees()).filter(
+      committee => committee.special,
+    );
     var specialCommittees = {};
     for (const committee of specialCommitteesArray) {
       specialCommittees[committee.id] = committee;
@@ -50,6 +50,6 @@ class CommitteeStore extends Store {
 
     this.__emitChange();
   }
-};
+}
 
 module.exports = new CommitteeStore(Dispatcher);

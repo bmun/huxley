@@ -19,12 +19,13 @@ const RegistrationComments = React.createClass({
 
   render: function() {
     return (
-      <div id='comments'>
+      <div id="comments">
         <h3>Comments</h3>
-        <p className="instructions">If there are any further details you 
-        would like us to know about your participation in BMUN this year or
-        general feedback about the registration process, please comment
-        below.</p>
+        <p className="instructions">
+          If there are any further details you would like us to know about your
+          participation in BMUN this year or general feedback about the
+          registration process, please comment below.
+        </p>
         <textarea
           className="text-input"
           cols="40"

@@ -21,7 +21,9 @@ const RegistrationAccountInformation = React.createClass({
 
   shouldComponentUpdate: function(nextProps, nextState) {
     for (let key in this.props.accountInformation) {
-      if (this.props.accountInformation[key] !== nextProps.accountInformation[key]) {
+      if (
+        this.props.accountInformation[key] !== nextProps.accountInformation[key]
+      ) {
         return true;
       }
     }
@@ -35,46 +37,45 @@ const RegistrationAccountInformation = React.createClass({
     return (
       <div id="account_information">
         <h3>Account Information</h3>
-        <RegistrationTextInput  
-          errors={accessErrors('first_name')} 
-          placeholder="First Name" 
-          onChange={accessHandlers('first_name')} 
-          value={accessAccount('first_name')} 
-        />
-        <RegistrationTextInput 
-          errors={accessErrors('last_name')} 
-          placeholder="Last Name" 
-          onChange={accessHandlers('last_name')} 
-          value={accessAccount('last_name')} 
+        <RegistrationTextInput
+          errors={accessErrors('first_name')}
+          placeholder="First Name"
+          onChange={accessHandlers('first_name')}
+          value={accessAccount('first_name')}
         />
         <RegistrationTextInput
-          errors={accessErrors('username')} 
-          placeholder="Username" 
-          onChange={accessHandlers('username')} 
+          errors={accessErrors('last_name')}
+          placeholder="Last Name"
+          onChange={accessHandlers('last_name')}
+          value={accessAccount('last_name')}
+        />
+        <RegistrationTextInput
+          errors={accessErrors('username')}
+          placeholder="Username"
+          onChange={accessHandlers('username')}
           value={accessAccount('username')}
         />
         <RegistrationTextInput
-          errors={accessErrors('password')} 
-          type="password" 
-          placeholder="Password" 
-          value={accessAccount('password')} 
+          errors={accessErrors('password')}
+          type="password"
+          placeholder="Password"
+          value={accessAccount('password')}
           onChange={accessHandlers('password')}
-          onBlur={this.props.blur} 
-          onFocus={this.props.focus} 
+          onBlur={this.props.blur}
+          onFocus={this.props.focus}
         />
         <RegistrationTextInput
-          errors={accessErrors('password_confirm')} 
-          type="password" 
-          placeholder="Password (confirm)" 
-          value={accessAccount('password_confirm')} 
-          onChange={accessHandlers('password_confirm')} 
+          errors={accessErrors('password_confirm')}
+          type="password"
+          placeholder="Password (confirm)"
+          value={accessAccount('password_confirm')}
+          onChange={accessHandlers('password_confirm')}
           onBlur={this.props.blur}
-          onFocus={this.props.focus} 
+          onFocus={this.props.focus}
         />
       </div>
     );
   },
 });
-
 
 module.exports = RegistrationAccountInformation;

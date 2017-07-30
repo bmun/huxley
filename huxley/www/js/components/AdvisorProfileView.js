@@ -56,7 +56,7 @@ const AdvisorProfileView = React.createClass({
       secondary_phone: school.secondary_phone,
       loading: false,
       success: false,
-    }
+    };
   },
 
   componentWillUnmount: function() {
@@ -188,15 +188,13 @@ const AdvisorProfileView = React.createClass({
                 </td>
               </tr>
               <tr>
-                <td>Number of Spanish Speaking
-                Delegates</td>
+                <td>Number of Spanish Speaking Delegates</td>
                 <td>
                   {school.spanish_speaking_delegates}
                 </td>
               </tr>
               <tr>
-                <td>Number of Chinese Speaking
-                Delegates</td>
+                <td>Number of Chinese Speaking Delegates</td>
                 <td>
                   {school.chinese_speaking_delegates}
                 </td>
@@ -204,7 +202,7 @@ const AdvisorProfileView = React.createClass({
               <tr>
                 <td>All Waivers Completed?</td>
                 <td>
-                  {school.waivers_completed ? "Yes" : "No"}
+                  {school.waivers_completed ? 'Yes' : 'No'}
                 </td>
               </tr>
               <tr>
@@ -309,7 +307,9 @@ const AdvisorProfileView = React.createClass({
             type="submit">
             Save
           </Button>
-          <span className="help-text"><em> Remember to save any changes!</em></span>
+          <span className="help-text">
+            <em> Remember to save any changes!</em>
+          </span>
         </form>
       </InnerView>
     );
@@ -324,8 +324,7 @@ const AdvisorProfileView = React.createClass({
       );
     }
 
-    if (this.state.errors.school &&
-        this.state.errors.school[field]) {
+    if (this.state.errors.school && this.state.errors.school[field]) {
       return (
         <StatusLabel status="error">
           {this.state.errors.school[field]}
@@ -340,21 +339,26 @@ const AdvisorProfileView = React.createClass({
     this._successTimout && clearTimeout(this._successTimeout);
     this.setState({loading: true});
     var user = this.props.user;
-    CurrentUserActions.updateUser(user.id, {
-      first_name: this.state.first_name.trim(),
-      last_name: this.state.last_name.trim(),
-      school: {
-        address: this.state.school_address.trim(),
-        city: this.state.school_city.trim(),
-        zip_code: this.state.school_zip_code.trim(),
-        primary_name: this.state.primary_name.trim(),
-        primary_email: this.state.primary_email.trim(),
-        primary_phone: this.state.primary_phone.trim(),
-        secondary_name: this.state.secondary_name.trim(),
-        secondary_email: this.state.secondary_email.trim(),
-        secondary_phone: this.state.secondary_phone.trim(),
-      }
-    }, this._handleSuccess, this._handleError);
+    CurrentUserActions.updateUser(
+      user.id,
+      {
+        first_name: this.state.first_name.trim(),
+        last_name: this.state.last_name.trim(),
+        school: {
+          address: this.state.school_address.trim(),
+          city: this.state.school_city.trim(),
+          zip_code: this.state.school_zip_code.trim(),
+          primary_name: this.state.primary_name.trim(),
+          primary_email: this.state.primary_email.trim(),
+          primary_phone: this.state.primary_phone.trim(),
+          secondary_name: this.state.secondary_name.trim(),
+          secondary_email: this.state.secondary_email.trim(),
+          secondary_phone: this.state.secondary_phone.trim(),
+        },
+      },
+      this._handleSuccess,
+      this._handleError,
+    );
     event.preventDefault();
   },
 
@@ -365,7 +369,10 @@ const AdvisorProfileView = React.createClass({
       success: true,
     });
 
-    this._successTimeout = setTimeout(() => this.setState({success: false}), 2000);
+    this._successTimeout = setTimeout(
+      () => this.setState({success: false}),
+      2000,
+    );
   },
 
   _handleError: function(response) {
@@ -373,12 +380,15 @@ const AdvisorProfileView = React.createClass({
       return;
     }
 
-    this.setState({
-      errors: response,
-      loading: false
-    }, () => {
-      this.context.shake && this.context.shake();
-    });
-  }
+    this.setState(
+      {
+        errors: response,
+        loading: false,
+      },
+      () => {
+        this.context.shake && this.context.shake();
+      },
+    );
+  },
 });
 module.exports = AdvisorProfileView;

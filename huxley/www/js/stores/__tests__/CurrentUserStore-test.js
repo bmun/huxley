@@ -52,7 +52,7 @@ describe('CurrentUserStore', function() {
     var user = CurrentUserStore.getCurrentUser();
     registerCallback({
       actionType: ActionConstants.LOGIN,
-      user: {id: 2, user_type: 1}
+      user: {id: 2, user_type: 1},
     });
     var mockUser = CurrentUserStore.getCurrentUser();
     expect(user).not.toBe(mockUser);
@@ -74,7 +74,7 @@ describe('CurrentUserStore', function() {
     expect(callback).not.toBeCalled();
     registerCallback({
       actionType: ActionConstants.LOGIN,
-      user: {id: 1, user_type: 1}
+      user: {id: 1, user_type: 1},
     });
     expect(callback).toBeCalled();
   });
@@ -82,7 +82,7 @@ describe('CurrentUserStore', function() {
   it('updates the school of a user and emits a change', function() {
     registerCallback({
       actionType: ActionConstants.LOGIN,
-      user: {id: 2, user_type: 1, school: {id: 1}}
+      user: {id: 2, user_type: 1, school: {id: 1}},
     });
     var mockUser = CurrentUserStore.getCurrentUser();
 
@@ -94,7 +94,7 @@ describe('CurrentUserStore', function() {
     registerCallback({
       actionType: ActionConstants.UPDATE_SCHOOL,
       schoolID: 1,
-      delta: delta
+      delta: delta,
     });
     expect(callback).toBeCalled();
     expect(ServerAPI.updateSchool).toBeCalledWith(1, delta);
@@ -110,20 +110,20 @@ describe('CurrentUserStore', function() {
       user: {
         id: 2,
         user_type: 1,
-        first_name: "Trevor",
-        last_name: "Dowds",
+        first_name: 'Trevor',
+        last_name: 'Dowds',
         school: {
-          address: "1 School Way",
-          city: "School City",
-          zip_code: "123456",
-          primary_name: "Trevor",
-          primary_email: "t@d.com",
-          primary_phone: "123456789",
-          secondary_name: "",
-          secondary_email: "",
-          secondary_phone: "",
-        }
-      }
+          address: '1 School Way',
+          city: 'School City',
+          zip_code: '123456',
+          primary_name: 'Trevor',
+          primary_email: 't@d.com',
+          primary_phone: '123456789',
+          secondary_name: '',
+          secondary_email: '',
+          secondary_phone: '',
+        },
+      },
     });
     var mockUser = CurrentUserStore.getCurrentUser();
 
@@ -132,24 +132,24 @@ describe('CurrentUserStore', function() {
     expect(callback).not.toBeCalled();
 
     var delta = {
-      first_name: "Trev",
-      last_name: "Dowds",
+      first_name: 'Trev',
+      last_name: 'Dowds',
       school: {
-        address: "1 School Way",
-        city: "School City",
-        zip_code: "123456",
-        primary_name: "Trevor",
-        primary_email: "trev@d.com",
-        primary_phone: "123456789",
-        secondary_name: "",
-        secondary_email: "",
-        secondary_phone: "",
-      }
+        address: '1 School Way',
+        city: 'School City',
+        zip_code: '123456',
+        primary_name: 'Trevor',
+        primary_email: 'trev@d.com',
+        primary_phone: '123456789',
+        secondary_name: '',
+        secondary_email: '',
+        secondary_phone: '',
+      },
     };
     registerCallback({
       actionType: ActionConstants.UPDATE_USER,
       userID: 2,
-      delta: delta
+      delta: delta,
     });
     expect(callback).toBeCalled();
 
