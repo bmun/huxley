@@ -27,6 +27,13 @@ const RegistrationSpecialCommitteePreferences = React.createClass({
         return true;
       }
     }
+
+    for (let key in this.props.errors) {
+      if (this.props.errors[key] !== nextProps.errors[key]) {
+        return true;
+      }
+    }
+
     return false;
   },
 
