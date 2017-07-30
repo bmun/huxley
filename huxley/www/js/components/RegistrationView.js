@@ -133,7 +133,7 @@ var RegistrationView = React.createClass({
               last_name: _handleChange.bind(this, 'last_name'),
               username: _handleChange.bind(this, 'username'),
               password: this._handlePasswordChange,
-              password_confirm: this.handlePasswordConfirmChange,
+              password_confirm: this._handlePasswordConfirmChange,
             }}
             errors={{
               first_name: this.state.errors['first_name'],
@@ -416,7 +416,7 @@ var RegistrationView = React.createClass({
       this.state.passwordValidating &&
       this.state.password !== this.state.password2
     ) {
-      return 'Please enter the same password again.';
+      return ['Please enter the same password again.'];
     }
   },
 
