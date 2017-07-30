@@ -18,25 +18,6 @@ const RegistrationSpecialCommitteePreferences = React.createClass({
     renderCommittees: React.PropTypes.func,
   },
 
-  shouldComponentUpdate: function(nextProps, nextState) {
-    for (let key in this.props.specialCommitteePrefValues) {
-      if (
-        this.props.specialCommitteePrefValues[key] !==
-        nextProps.specialCommitteePrefValues[key]
-      ) {
-        return true;
-      }
-    }
-
-    for (let key in this.props.errors) {
-      if (this.props.errors[key] !== nextProps.errors[key]) {
-        return true;
-      }
-    }
-
-    return false;
-  },
-
   render: function() {
     var accessHandlers = _accessSafe.bind(this, this.props.handlers);
     var accessErrors = _accessSafe.bind(this, this.props.errors);
