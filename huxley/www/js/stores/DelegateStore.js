@@ -3,14 +3,14 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-"use strict";
+'use strict';
 
-var ActionConstants = require("constants/ActionConstants");
-var CurrentUserStore = require("stores/CurrentUserStore");
-var DelegateActions = require("actions/DelegateActions");
-var Dispatcher = require("dispatcher/Dispatcher");
-var ServerAPI = require("lib/ServerAPI");
-var {Store} = require("flux/utils");
+var ActionConstants = require('constants/ActionConstants');
+var CurrentUserStore = require('stores/CurrentUserStore');
+var DelegateActions = require('actions/DelegateActions');
+var Dispatcher = require('dispatcher/Dispatcher');
+var ServerAPI = require('lib/ServerAPI');
+var {Store} = require('flux/utils');
 
 var _delegates = {};
 var _delegatesFetched = false;

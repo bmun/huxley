@@ -3,12 +3,12 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-"use strict";
+'use strict';
 
-var React = require("react");
-var ReactRouter = require("react-router");
+var React = require('react');
+var ReactRouter = require('react-router');
 
-var OuterView = require("components/OuterView");
+var OuterView = require('components/OuterView');
 
 var NotFoundView = React.createClass({
   render: function() {

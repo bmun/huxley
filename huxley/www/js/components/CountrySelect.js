@@ -3,9 +3,9 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-"use strict";
+'use strict';
 
-var React = require("react");
+var React = require('react');
 
 var CountrySelect = React.createClass({
   propTypes: {
@@ -44,7 +44,7 @@ var CountrySelect = React.createClass({
     return this.props.countries.map(
       function(country) {
         if (!country.special) {
-          var index = this.props.countryPreferences.indexOf("" + country.id);
+          var index = this.props.countryPreferences.indexOf('' + country.id);
           return (
             <option key={country.id} value={country.id} disabled={index >= 0}>
               {country.name}

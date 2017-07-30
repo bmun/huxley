@@ -3,28 +3,28 @@
 * Use of this source code is governed by a BSD License (see LICENSE).
 +*/
 
-"use strict";
+'use strict';
 
-var React = require("react");
-var ReactRouter = require("react-router");
+var React = require('react');
+var ReactRouter = require('react-router');
 
-var AssignmentActions = require("actions/AssignmentActions");
-var AssignmentStore = require("stores/AssignmentStore");
-var Button = require("components/core/Button");
-var CommitteeStore = require("stores/CommitteeStore");
-var ConferenceContext = require("components/ConferenceContext");
-var CountryStore = require("stores/CountryStore");
-var CurrentUserStore = require("stores/CurrentUserStore");
-var CurrentUserActions = require("actions/CurrentUserActions");
-var DelegateActions = require("actions/DelegateActions");
-var DelegateSelect = require("components/DelegateSelect");
-var DelegateStore = require("stores/DelegateStore");
-var InnerView = require("components/InnerView");
-var ServerAPI = require("lib/ServerAPI");
-var Table = require("components/core/Table");
-var TextTemplate = require("components/core/TextTemplate");
+var AssignmentActions = require('actions/AssignmentActions');
+var AssignmentStore = require('stores/AssignmentStore');
+var Button = require('components/core/Button');
+var CommitteeStore = require('stores/CommitteeStore');
+var ConferenceContext = require('components/ConferenceContext');
+var CountryStore = require('stores/CountryStore');
+var CurrentUserStore = require('stores/CurrentUserStore');
+var CurrentUserActions = require('actions/CurrentUserActions');
+var DelegateActions = require('actions/DelegateActions');
+var DelegateSelect = require('components/DelegateSelect');
+var DelegateStore = require('stores/DelegateStore');
+var InnerView = require('components/InnerView');
+var ServerAPI = require('lib/ServerAPI');
+var Table = require('components/core/Table');
+var TextTemplate = require('components/core/TextTemplate');
 
-var AdvisorAssignmentsViewText = require("text/AdvisorAssignmentsViewText.md");
+var AdvisorAssignmentsViewText = require('text/AdvisorAssignmentsViewText.md');
 
 var AdvisorAssignmentsView = React.createClass({
   mixins: [ReactRouter.History],
@@ -110,10 +110,10 @@ var AdvisorAssignmentsView = React.createClass({
               <th>Country</th>
               <th>Delegation Size</th>
               <th>
-                {finalized ? "Delegate" : "Delete Assignments"}
+                {finalized ? 'Delegate' : 'Delete Assignments'}
               </th>
               <th>
-                {finalized ? "Delegate" : ""}
+                {finalized ? 'Delegate' : ''}
               </th>
             </tr>
           </thead>
@@ -126,7 +126,7 @@ var AdvisorAssignmentsView = React.createClass({
           onClick={finalized ? this._handleSave : this._handleFinalize}
           loading={this.state.loading}
           success={this.state.success}>
-          {finalized ? "Save" : "Finalize Assignments"}
+          {finalized ? 'Save' : 'Finalize Assignments'}
         </Button>
       </InnerView>
     );
@@ -152,7 +152,7 @@ var AdvisorAssignmentsView = React.createClass({
             <td>
               {finalized
                 ? this.renderDelegateDropdown(assignment, 0)
-                : "Not available as of Jan. 23"
+                : 'Not available as of Jan. 23'
               /*<Button color="red"
                     size="small"
                     onClick={this._handleAssignmentDelete.bind(this, assignment)}>
@@ -248,7 +248,7 @@ var AdvisorAssignmentsView = React.createClass({
 
   _handleFinalize: function(event) {
     var confirm = window.confirm(
-      "By pressing okay you are committing to the financial responsibility of each assignment. Are you sure you want to finalize assignments?",
+      'By pressing okay you are committing to the financial responsibility of each assignment. Are you sure you want to finalize assignments?',
     );
     var school = CurrentUserStore.getCurrentUser().school;
     if (confirm) {
@@ -264,7 +264,7 @@ var AdvisorAssignmentsView = React.createClass({
 
   _handleAssignmentDelete: function(assignment) {
     var confirm = window.confirm(
-      "Are you sure you want to delete this assignment?",
+      'Are you sure you want to delete this assignment?',
     );
     if (confirm) {
       AssignmentActions.updateAssignment(
@@ -304,7 +304,7 @@ var AdvisorAssignmentsView = React.createClass({
   _handleError: function(response) {
     this.setState({loading: false});
     window.alert(
-      "Something went wrong. Please refresh your page and try again.",
+      'Something went wrong. Please refresh your page and try again.',
     );
   },
 });

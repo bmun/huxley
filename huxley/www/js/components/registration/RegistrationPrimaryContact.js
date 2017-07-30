@@ -3,13 +3,13 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-"use strict";
+'use strict';
 
-var React = require("react");
+var React = require('react');
 
-var RegistrationPhoneInput = require("components/registration/RegistrationPhoneInput");
-var RegistrationTextInput = require("components/registration/RegistrationTextInput");
-var _accessSafe = require("utils/_accessSafe");
+var RegistrationPhoneInput = require('components/registration/RegistrationPhoneInput');
+var RegistrationTextInput = require('components/registration/RegistrationTextInput');
+var _accessSafe = require('utils/_accessSafe');
 
 const RegistrationPrimaryContact = React.createClass({
   propTypes: {
@@ -43,26 +43,26 @@ const RegistrationPrimaryContact = React.createClass({
     return (
       <div id="primary_contact">
         <h3>Primary Contact</h3>
-        {this.props.renderContactGenderField("primary_gender")}
+        {this.props.renderContactGenderField('primary_gender')}
         <RegistrationTextInput
-          errors={accessErrors("primary_name")}
+          errors={accessErrors('primary_name')}
           placeholder="Name"
-          onChange={accessHandlers("primary_name")}
-          value={accessPrimary("primary_name")}
+          onChange={accessHandlers('primary_name')}
+          value={accessPrimary('primary_name')}
         />
         <RegistrationTextInput
-          errors={accessErrors("primary_email")}
+          errors={accessErrors('primary_email')}
           placeholder="Email"
-          onChange={accessHandlers("primary_email")}
-          value={accessPrimary("primary_email")}
+          onChange={accessHandlers('primary_email')}
+          value={accessPrimary('primary_email')}
         />
         <RegistrationPhoneInput
-          errors={accessErrors("primary_phone")}
-          onChange={accessHandlers("primary_phone")}
-          value={accessPrimary("primary_phone")}
+          errors={accessErrors('primary_phone')}
+          onChange={accessHandlers('primary_phone')}
+          value={accessPrimary('primary_phone')}
           isInternational={this.props.isInternational}
         />
-        {this.props.renderContactTypeField("primary_type")}
+        {this.props.renderContactTypeField('primary_type')}
       </div>
     );
   },

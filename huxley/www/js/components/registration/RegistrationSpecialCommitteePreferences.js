@@ -3,12 +3,12 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-"use strict";
+'use strict';
 
-var React = require("react");
+var React = require('react');
 
-var NumberInput = require("components/NumberInput");
-var _accessSafe = require("utils/_accessSafe");
+var NumberInput = require('components/NumberInput');
+var _accessSafe = require('utils/_accessSafe');
 
 const RegistrationSpecialCommitteePreferences = React.createClass({
   propTypes: {
@@ -44,7 +44,7 @@ const RegistrationSpecialCommitteePreferences = React.createClass({
           Would your delegation be interested in being represented in the
           following small/specialized committees? Positions are limited and we
           may not be able to accommodate all preferences. You can find a
-          reference to our committees{" "}
+          reference to our committees{' '}
           <a href="http://www.bmun.org/committees" target="_blank">
             here
           </a>.
@@ -54,16 +54,16 @@ const RegistrationSpecialCommitteePreferences = React.createClass({
         </ul>
         <NumberInput
           placeholder="Number of Spanish Speaking Delegates"
-          onChange={accessHandlers("spanish_speaking_delegates")}
-          value={accessValues("spanish_speaking_delegates")}
+          onChange={accessHandlers('spanish_speaking_delegates')}
+          value={accessValues('spanish_speaking_delegates')}
         />
-        {accessErrors("spanish_speaking_delegates")}
+        {accessErrors('spanish_speaking_delegates')}
         <NumberInput
           placeholder="Number of Chinese Speaking Delegates"
-          onChange={accessHandlers("chinese_speaking_delegates")}
-          value={accessValues("chinese_speaking_delegates")}
+          onChange={accessHandlers('chinese_speaking_delegates')}
+          value={accessValues('chinese_speaking_delegates')}
         />
-        {accessErrors("chinese_speaking_delegates")}
+        {accessErrors('chinese_speaking_delegates')}
       </div>
     );
   },

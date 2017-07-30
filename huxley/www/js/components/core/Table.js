@@ -3,12 +3,12 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-"use strict";
+'use strict';
 
-const React = require("react");
-const cx = require("classnames");
+const React = require('react');
+const cx = require('classnames');
 
-require("css/Table.less");
+require('css/Table.less');
 
 const Table = React.createClass({
   propTypes: {

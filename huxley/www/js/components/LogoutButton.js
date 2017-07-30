@@ -3,13 +3,13 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-"use strict";
+'use strict';
 
-var React = require("react");
+var React = require('react');
 
-var Button = require("components/core/Button");
-var CurrentUserActions = require("actions/CurrentUserActions");
-var ServerAPI = require("lib/ServerAPI");
+var Button = require('components/core/Button');
+var CurrentUserActions = require('actions/CurrentUserActions');
+var ServerAPI = require('lib/ServerAPI');
 
 var LogoutButton = React.createClass({
   getInitialState: function() {

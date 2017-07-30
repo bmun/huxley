@@ -3,12 +3,12 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-"use strict";
+'use strict';
 
-var React = require("react");
+var React = require('react');
 
-var PhoneInput = require("components/PhoneInput");
-var StatusLabel = require("components/core/StatusLabel");
+var PhoneInput = require('components/PhoneInput');
+var StatusLabel = require('components/core/StatusLabel');
 
 const RegistrationPhoneInput = React.createClass({
   propTypes: {

@@ -3,12 +3,12 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-"use strict";
+'use strict';
 
-var React = require("react");
+var React = require('react');
 
-var TextInput = require("components/core/TextInput");
-var StatusLabel = require("components/core/StatusLabel");
+var TextInput = require('components/core/TextInput');
+var StatusLabel = require('components/core/StatusLabel');
 
 const RegistrationTextInput = React.createClass({
   propTypes: {
@@ -16,7 +16,7 @@ const RegistrationTextInput = React.createClass({
     onChange: React.PropTypes.func,
     placeholder: React.PropTypes.string,
     value: React.PropTypes.string,
-    type: React.PropTypes.oneOf(["text", "password"]),
+    type: React.PropTypes.oneOf(['text', 'password']),
   },
 
   render() {

@@ -3,15 +3,15 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-"use strict";
+'use strict';
 
-var React = require("react");
+var React = require('react');
 
-var NavTab = require("components/NavTab");
-var Shaker = require("components/Shaker");
-var TopBar = require("components/TopBar");
+var NavTab = require('components/NavTab');
+var Shaker = require('components/Shaker');
+var TopBar = require('components/TopBar');
 
-require("css/NavBar.less");
+require('css/NavBar.less');
 
 var ChairView = React.createClass({
   render() {

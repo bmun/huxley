@@ -3,22 +3,22 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-"use strict";
+'use strict';
 
-var React = require("react");
-var ReactRouter = require("react-router");
+var React = require('react');
+var ReactRouter = require('react-router');
 
-var AdvisorView = require("components/AdvisorView");
-var ChairView = require("components/ChairView");
-var ConferenceContext = require("components/ConferenceContext");
-var CurrentUserStore = require("stores/CurrentUserStore");
-var Shaker = require("components/Shaker");
-var User = require("utils/User");
+var AdvisorView = require('components/AdvisorView');
+var ChairView = require('components/ChairView');
+var ConferenceContext = require('components/ConferenceContext');
+var CurrentUserStore = require('stores/CurrentUserStore');
+var Shaker = require('components/Shaker');
+var User = require('utils/User');
 
-require("css/base.less");
-require("css/Banner.less");
-require("css/JSWarning.less");
-require("css/IEWarning.less");
+require('css/base.less');
+require('css/Banner.less');
+require('css/JSWarning.less');
+require('css/IEWarning.less');
 
 var Huxley = React.createClass({
   mixins: [ReactRouter.History],
@@ -38,11 +38,11 @@ var Huxley = React.createClass({
     CurrentUserStore.addListener(() => {
       var user = CurrentUserStore.getCurrentUser();
       if (User.isAnonymous(user)) {
-        this.history.pushState(null, "/login");
+        this.history.pushState(null, '/login');
       } else if (User.isAdvisor(user)) {
-        this.history.pushState(null, "/advisor/profile");
+        this.history.pushState(null, '/advisor/profile');
       } else if (User.isChair(user)) {
-        this.history.pushState(null, "/chair/attendance");
+        this.history.pushState(null, '/chair/attendance');
       }
     });
   },

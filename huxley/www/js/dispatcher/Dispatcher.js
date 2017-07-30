@@ -3,8 +3,8 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-"use strict";
+'use strict';
 
-var {Dispatcher} = require("flux");
+var {Dispatcher} = require('flux');
 
 module.exports = new Dispatcher();

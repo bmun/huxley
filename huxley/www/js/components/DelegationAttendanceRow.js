@@ -3,9 +3,9 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-"use strict";
+'use strict';
 
-var React = require("react");
+var React = require('react');
 
 var DelegationAttendanceRow = React.createClass({
   propTypes: {
@@ -27,7 +27,7 @@ var DelegationAttendanceRow = React.createClass({
               className="choice"
               type="checkbox"
               checked={this.props.delegates[0].voting}
-              onChange={this._handleChange.bind(this, "voting")}
+              onChange={this._handleChange.bind(this, 'voting')}
             />
           </label>
         </td>
@@ -37,7 +37,7 @@ var DelegationAttendanceRow = React.createClass({
               className="choice"
               type="checkbox"
               checked={this.props.delegates[0].session_one}
-              onChange={this._handleChange.bind(this, "session_one")}
+              onChange={this._handleChange.bind(this, 'session_one')}
             />
           </label>
         </td>
@@ -47,7 +47,7 @@ var DelegationAttendanceRow = React.createClass({
               className="choice"
               type="checkbox"
               checked={this.props.delegates[0].session_two}
-              onChange={this._handleChange.bind(this, "session_two")}
+              onChange={this._handleChange.bind(this, 'session_two')}
             />
           </label>
         </td>
@@ -57,7 +57,7 @@ var DelegationAttendanceRow = React.createClass({
               className="choice"
               type="checkbox"
               checked={this.props.delegates[0].session_three}
-              onChange={this._handleChange.bind(this, "session_three")}
+              onChange={this._handleChange.bind(this, 'session_three')}
             />
           </label>
         </td>
@@ -67,7 +67,7 @@ var DelegationAttendanceRow = React.createClass({
               className="choice"
               type="checkbox"
               checked={this.props.delegates[0].session_four}
-              onChange={this._handleChange.bind(this, "session_four")}
+              onChange={this._handleChange.bind(this, 'session_four')}
             />
           </label>
         </td>

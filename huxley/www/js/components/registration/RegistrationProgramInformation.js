@@ -3,13 +3,13 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-"use strict";
+'use strict';
 
-var React = require("react");
+var React = require('react');
 
-var ProgramTypes = require("constants/ProgramTypes");
-var NumberInput = require("components/NumberInput");
-var _accessSafe = require("utils/_accessSafe");
+var ProgramTypes = require('constants/ProgramTypes');
+var NumberInput = require('components/NumberInput');
+var _accessSafe = require('utils/_accessSafe');
 
 const RegistrationProgramInformation = React.createClass({
   propTypes: {
@@ -49,7 +49,7 @@ const RegistrationProgramInformation = React.createClass({
                 checked={this.props.programType == ProgramTypes.CLUB}
                 value={ProgramTypes.CLUB}
                 onChange={this.props.handleProgramTypeChange}
-              />{" "}
+              />{' '}
               Club
             </label>
           </li>
@@ -60,7 +60,7 @@ const RegistrationProgramInformation = React.createClass({
                 value={ProgramTypes.CLASS}
                 checked={this.props.propTypes == ProgramTypes.CLASS}
                 onChange={this.props.handleProgramTypeChange}
-              />{" "}
+              />{' '}
               Class
             </label>
           </li>
@@ -75,46 +75,46 @@ const RegistrationProgramInformation = React.createClass({
         </p>
         <NumberInput
           placeholder="Number of BMUN sessions attended"
-          onChange={accessHandlers("times_attended")}
-          value={accessProgram("times_attended")}
+          onChange={accessHandlers('times_attended')}
+          value={accessProgram('times_attended')}
         />
-        {accessErrors("times_attended")}
+        {accessErrors('times_attended')}
         <NumberInput
           placeholder="Tentative Number of Beginner Delegates"
-          onChange={accessHandlers("beginner_delegates")}
-          value={accessProgram("beginner_delegates")}
+          onChange={accessHandlers('beginner_delegates')}
+          value={accessProgram('beginner_delegates')}
         />
         <label className="hint">
           Beginner: Attended 0-3 conferences, not very familiar with Model
           United Nations.
         </label>
-        {accessErrors("beginner_delegates")}
+        {accessErrors('beginner_delegates')}
         <NumberInput
           placeholder="Tentative Number of Intermediate Delegates"
-          onChange={accessHandlers("intermediate_delegates")}
-          value={accessProgram("intermediate_delegates")}
+          onChange={accessHandlers('intermediate_delegates')}
+          value={accessProgram('intermediate_delegates')}
         />
         <label className="hint">
           Intermediate: Attended 4-7 conferences, little to no practice in
           advanced committees.
         </label>
-        {accessErrors("intermediate_delegates")}
+        {accessErrors('intermediate_delegates')}
         <NumberInput
           placeholder="Tentative Number of Advanced Delegates"
-          onChange={accessHandlers("advanced_delegates")}
-          value={accessProgram("advanced_delegates")}
+          onChange={accessHandlers('advanced_delegates')}
+          value={accessProgram('advanced_delegates')}
         />
         <label className="hint">
           Advanced: Attended more than seven conferences, has participated in
           many diverse committees.
         </label>
-        {accessErrors("advanced_delegates")}
+        {accessErrors('advanced_delegates')}
         <p className="instructions">
-          Tentative Total Number of Delegates:{" "}
+          Tentative Total Number of Delegates:{' '}
           {this._handleDelegateSum(
-            accessProgram("beginner_delegates"),
-            accessProgram("intermediate_delegates"),
-            accessProgram("advanced_delegates"),
+            accessProgram('beginner_delegates'),
+            accessProgram('intermediate_delegates'),
+            accessProgram('advanced_delegates'),
           )}
         </p>
       </div>

@@ -3,17 +3,17 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-"use strict";
+'use strict';
 
-var React = require("react");
+var React = require('react');
 
-var ConferenceContext = require("components/ConferenceContext");
-var NavLink = require("components/NavLink");
-var OuterView = require("components/OuterView");
-var TextTemplate = require("components/core/TextTemplate");
+var ConferenceContext = require('components/ConferenceContext');
+var NavLink = require('components/NavLink');
+var OuterView = require('components/OuterView');
+var TextTemplate = require('components/core/TextTemplate');
 
-require("css/Letter.less");
-var RegistrationWaitlistViewText = require("text/RegistrationWaitlistViewText.md");
+require('css/Letter.less');
+var RegistrationWaitlistViewText = require('text/RegistrationWaitlistViewText.md');
 
 var RegistrationWaitlistView = React.createClass({
   contextTypes: {

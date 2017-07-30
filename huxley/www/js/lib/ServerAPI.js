@@ -3,8 +3,8 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-require("whatwg-fetch");
-var Cookie = require("js-cookie");
+require('whatwg-fetch');
+var Cookie = require('js-cookie');
 
 /**
  * The ServerAPI exists to centralize and abstract calls to the server. Any
@@ -12,11 +12,11 @@ var Cookie = require("js-cookie");
  */
 var ServerAPI = {
   createDelegate(name, email, school) {
-    return _post("/api/delegates", {name, email, school});
+    return _post('/api/delegates', {name, email, school});
   },
 
   changePassword(currentPassword, newPassword) {
-    return _put("/api/users/me/password", {
+    return _put('/api/users/me/password', {
       password: currentPassword,
       new_password: newPassword,
     });
@@ -30,58 +30,58 @@ var ServerAPI = {
    * Get a list of all assignments for the given school ID.
    */
   getAssignments(schoolID) {
-    return _get("/api/assignments", {school_id: schoolID});
+    return _get('/api/assignments', {school_id: schoolID});
   },
 
   /**
    * Get a list of all committees.
    */
   getCommittees() {
-    return _get("/api/committees");
+    return _get('/api/committees');
   },
 
   /**
    * Get a list of all assignments for the given committee ID.
    */
   getCommitteeAssignments(committeeID) {
-    return _get("/api/assignments/", {committee_id: committeeID});
+    return _get('/api/assignments/', {committee_id: committeeID});
   },
 
   /**
    * Get a list of all delegates for the given committee ID.
    */
   getCommitteeDelegates(committeeID) {
-    return _get("/api/delegates/", {committee_id: committeeID});
+    return _get('/api/delegates/', {committee_id: committeeID});
   },
 
   /**
    * Get a list of all countries.
    */
   getCountries() {
-    return _get("/api/countries");
+    return _get('/api/countries');
   },
 
   /**
    * Get a list of all delegates for the given school ID.
    */
   getDelegates(schoolID) {
-    return _get("/api/delegates", {school_id: schoolID});
+    return _get('/api/delegates', {school_id: schoolID});
   },
 
   login(username, password) {
-    return _post("/api/users/me", {username, password});
+    return _post('/api/users/me', {username, password});
   },
 
   logout() {
-    return _delete("/api/users/me");
+    return _delete('/api/users/me');
   },
 
   register(data) {
-    return _post("/api/users", data);
+    return _post('/api/users', data);
   },
 
   resetPassword(username) {
-    return _post("/api/users/me/password", {username});
+    return _post('/api/users/me/password', {username});
   },
 
   updateAssignment(assignmentID, data) {
@@ -97,11 +97,11 @@ var ServerAPI = {
   },
 
   updateSchoolDelegates(schoolID, delegates) {
-    return _patch("/api/delegates", delegates);
+    return _patch('/api/delegates', delegates);
   },
 
   updateCommitteeDelegates(committeeID, delegates) {
-    return _patch("/api/delegates", delegates);
+    return _patch('/api/delegates', delegates);
   },
 
   updateUser(userID, data) {
@@ -111,26 +111,26 @@ var ServerAPI = {
 
 function _encodeQueryString(params) {
   return Object.entries(params)
-    .map(e => encodeURIComponent(e[0]) + "=" + encodeURIComponent(e[1]))
-    .join("&");
+    .map(e => encodeURIComponent(e[0]) + '=' + encodeURIComponent(e[1]))
+    .join('&');
 }
 
 function _ajax(method, uri, data) {
   const isSafeMethod = /^(GET|HEAD|OPTIONS|TRACE)$/.test(method);
   if (isSafeMethod && data) {
-    uri = uri + "?" + _encodeQueryString(data);
+    uri = uri + '?' + _encodeQueryString(data);
   }
   const params = {
-    credentials: "same-origin",
+    credentials: 'same-origin',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
     method: method,
   };
   if (!isSafeMethod) {
-    params.headers["X-CSRFToken"] = Cookie.get("csrftoken");
+    params.headers['X-CSRFToken'] = Cookie.get('csrftoken');
     if (data) {
-      params.body = typeof data === "string" ? data : JSON.stringify(data);
+      params.body = typeof data === 'string' ? data : JSON.stringify(data);
     }
   }
   return fetch(uri, params).then(
@@ -141,10 +141,10 @@ function _ajax(method, uri, data) {
   );
 }
 
-const _delete = _ajax.bind(null, "DELETE");
-const _get = _ajax.bind(null, "GET");
-const _patch = _ajax.bind(null, "PATCH");
-const _put = _ajax.bind(null, "PUT");
-const _post = _ajax.bind(null, "POST");
+const _delete = _ajax.bind(null, 'DELETE');
+const _get = _ajax.bind(null, 'GET');
+const _patch = _ajax.bind(null, 'PATCH');
+const _put = _ajax.bind(null, 'PUT');
+const _post = _ajax.bind(null, 'POST');
 
 module.exports = ServerAPI;

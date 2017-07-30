@@ -3,23 +3,23 @@
 * Use of this source code is governed by a BSD License (see LICENSE).
 +*/
 
-"use strict";
+'use strict';
 
-var React = require("react");
-var ReactRouter = require("react-router");
+var React = require('react');
+var ReactRouter = require('react-router');
 
-var Button = require("components/core/Button");
-var AssignmentStore = require("stores/AssignmentStore");
-var CountryStore = require("stores/CountryStore");
-var CurrentUserStore = require("stores/CurrentUserStore");
-var DelegateActions = require("actions/DelegateActions");
-var DelegateStore = require("stores/DelegateStore");
-var InnerView = require("components/InnerView");
-var TextTemplate = require("components/core/TextTemplate");
-var User = require("utils/User");
+var Button = require('components/core/Button');
+var AssignmentStore = require('stores/AssignmentStore');
+var CountryStore = require('stores/CountryStore');
+var CurrentUserStore = require('stores/CurrentUserStore');
+var DelegateActions = require('actions/DelegateActions');
+var DelegateStore = require('stores/DelegateStore');
+var InnerView = require('components/InnerView');
+var TextTemplate = require('components/core/TextTemplate');
+var User = require('utils/User');
 
-require("css/Table.less");
-var ChairSummaryViewText = require("text/ChairSummaryViewText.md");
+require('css/Table.less');
+var ChairSummaryViewText = require('text/ChairSummaryViewText.md');
 
 var ChairSummaryView = React.createClass({
   mixins: [ReactRouter.History],
@@ -49,7 +49,7 @@ var ChairSummaryView = React.createClass({
   componentWillMount() {
     var user = CurrentUserStore.getCurrentUser();
     if (!User.isChair(user)) {
-      this.history.pushState(null, "/");
+      this.history.pushState(null, '/');
     }
   },
 
@@ -118,18 +118,18 @@ var ChairSummaryView = React.createClass({
         </TextTemplate>
         <form>
           <div className="table-container">
-            <table style={{margin: "10px auto 0px auto"}}>
+            <table style={{margin: '10px auto 0px auto'}}>
               <thead>
                 <tr>
                   <th>Assignment</th>
-                  <th style={{width: "65%"}}>Summary</th>
+                  <th style={{width: '65%'}}>Summary</th>
                 </tr>
               </thead>
             </table>
-            <div style={{overflowY: "auto", maxHeight: "50vh"}}>
+            <div style={{overflowY: 'auto', maxHeight: '50vh'}}>
               <table
                 className="table highlight-cells"
-                style={{margin: "0px auto 20px auto"}}>
+                style={{margin: '0px auto 20px auto'}}>
                 <tbody>
                   {Object.keys(this.state.countries).length > 0
                     ? this.renderSummaryRows()
@@ -163,7 +163,7 @@ var ChairSummaryView = React.createClass({
     var assignmentIDs = Object.keys(summaries);
     var countries = this.state.countries;
     assignments = assignments.filter(
-      a => assignmentIDs.indexOf("" + a.id) > -1,
+      a => assignmentIDs.indexOf('' + a.id) > -1,
     );
     return assignments.map(assignment => {
       return (
@@ -171,10 +171,10 @@ var ChairSummaryView = React.createClass({
           <td>
             {countries[assignment.country].name}
           </td>
-          <td style={{width: "65%"}}>
+          <td style={{width: '65%'}}>
             <textarea
               className="text-input"
-              style={{width: "95%"}}
+              style={{width: '95%'}}
               rows="3"
               onChange={this._handleSummaryChange.bind(this, assignment)}
               defaultValue={summaries[assignment.id]}
@@ -216,14 +216,14 @@ var ChairSummaryView = React.createClass({
 
   _handlePublishSummaries(event) {
     var confirm = window.confirm(
-      "By pressing ok, you are allowing advisors " +
-        "to read the summaries that you have written " +
-        "about their delegations. Please ensure " +
-        "there are no inappropriate comments or " +
-        "language in any of these summaries. If " +
-        "there is none and you are ready to publish " +
+      'By pressing ok, you are allowing advisors ' +
+        'to read the summaries that you have written ' +
+        'about their delegations. Please ensure ' +
+        'there are no inappropriate comments or ' +
+        'language in any of these summaries. If ' +
+        'there is none and you are ready to publish ' +
         "your summaries to advisors, press 'ok' to " +
-        "continue.",
+        'continue.',
     );
     if (confirm) {
       this._successTimoutPublish && clearTimeout(this._successTimeoutPublish);
@@ -266,7 +266,7 @@ var ChairSummaryView = React.createClass({
   _handleErrorSave: function(response) {
     this.setState({loadingSave: false});
     window.alert(
-      "Something went wrong. Please refresh your page and try again.",
+      'Something went wrong. Please refresh your page and try again.',
     );
   },
 
@@ -285,7 +285,7 @@ var ChairSummaryView = React.createClass({
   _handleErrorPublish: function(response) {
     this.setState({loadingPublish: false});
     window.alert(
-      "Something went wrong. Please refresh your page and try again.",
+      'Something went wrong. Please refresh your page and try again.',
     );
   },
 });

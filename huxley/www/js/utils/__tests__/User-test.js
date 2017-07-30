@@ -3,18 +3,18 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-"use strict";
+'use strict';
 
-jest.dontMock("utils/User");
+jest.dontMock('utils/User');
 
-describe("User", function() {
+describe('User', function() {
   var User;
 
   beforeEach(function() {
-    User = require("utils/User");
+    User = require('utils/User');
   });
 
-  it("instantiates an anonymous user", function() {
+  it('instantiates an anonymous user', function() {
     var user = {};
 
     expect(User.isAnonymous(user)).toBe(true);
@@ -22,7 +22,7 @@ describe("User", function() {
     expect(User.isChair(user)).toBe(false);
   });
 
-  it("instantiates an advisor", function() {
+  it('instantiates an advisor', function() {
     var user = {id: 1, user_type: 1};
 
     expect(User.isAnonymous(user)).toBe(false);
@@ -30,7 +30,7 @@ describe("User", function() {
     expect(User.isChair(user)).toBe(false);
   });
 
-  it("instantiates a chair", function() {
+  it('instantiates a chair', function() {
     var user = {id: 1, user_type: 2};
 
     expect(User.isAnonymous(user)).toBe(false);

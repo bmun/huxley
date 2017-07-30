@@ -3,12 +3,12 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-"use strict";
+'use strict';
 
-var React = require("react");
-var cx = require("classnames");
+var React = require('react');
+var cx = require('classnames');
 
-require("css/TextInput.less");
+require('css/TextInput.less');
 
 /**
  * TextInput is uncontrolled by default to preserve cursor position.
@@ -22,16 +22,16 @@ var TextInput = React.createClass({
     onChange: React.PropTypes.func,
     placeholder: React.PropTypes.string,
     value: React.PropTypes.string,
-    type: React.PropTypes.oneOf(["text", "password"]),
+    type: React.PropTypes.oneOf(['text', 'password']),
   },
 
   render: function() {
     return (
       <input
         {...this.props}
-        className={cx("text-input", this.props.className)}
+        className={cx('text-input', this.props.className)}
         onChange={this._handleChange}
-        type={this.props.type || "text"}
+        type={this.props.type || 'text'}
         value={this.props.isControlled ? this.props.value : undefined}
       />
     );

@@ -3,11 +3,11 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-"use strict";
+'use strict';
 
-jest.dontMock("stores/AssignmentStore");
+jest.dontMock('stores/AssignmentStore');
 
-describe("AssignmentStore", () => {
+describe('AssignmentStore', () => {
   var ActionConstants;
   var AssignmentStore;
   var Dispatcher;
@@ -18,10 +18,10 @@ describe("AssignmentStore", () => {
   var registerCallback;
 
   beforeEach(() => {
-    ActionConstants = require("constants/ActionConstants");
-    AssignmentStore = require("stores/AssignmentStore");
-    Dispatcher = require("dispatcher/Dispatcher");
-    ServerAPI = require("lib/ServerAPI");
+    ActionConstants = require('constants/ActionConstants');
+    AssignmentStore = require('stores/AssignmentStore');
+    Dispatcher = require('dispatcher/Dispatcher');
+    ServerAPI = require('lib/ServerAPI');
 
     registerCallback = function(action) {
       Dispatcher.isDispatching.mockReturnValue(true);
@@ -39,11 +39,11 @@ describe("AssignmentStore", () => {
     ServerAPI.updateAssignment.mockReturnValue(Promise.resolve({}));
   });
 
-  it("subscribes to the dispatcher", () => {
+  it('subscribes to the dispatcher', () => {
     expect(Dispatcher.register).toBeCalled();
   });
 
-  it("requests the assignments on first call and caches locally", () => {
+  it('requests the assignments on first call and caches locally', () => {
     var assignments = AssignmentStore.getSchoolAssignments(mockSchoolID);
     expect(assignments.length).toEqual(0);
     expect(ServerAPI.getAssignments).toBeCalledWith(mockSchoolID);
@@ -58,7 +58,7 @@ describe("AssignmentStore", () => {
     expect(ServerAPI.getAssignments.mock.calls.length).toEqual(1);
   });
 
-  it("differentiates not having fetched assignments from having none", () => {
+  it('differentiates not having fetched assignments from having none', () => {
     var assignments = AssignmentStore.getSchoolAssignments(mockSchoolID2);
     expect(assignments.length).toEqual(0);
     expect(ServerAPI.getAssignments).toBeCalledWith(mockSchoolID2);
@@ -73,7 +73,7 @@ describe("AssignmentStore", () => {
     expect(ServerAPI.getAssignments.mock.calls.length).toEqual(1);
   });
 
-  it("emits a change when the assignments are loaded", function() {
+  it('emits a change when the assignments are loaded', function() {
     var callback = jest.genMockFunction();
     AssignmentStore.addListener(callback);
     expect(callback).not.toBeCalled();
@@ -84,7 +84,7 @@ describe("AssignmentStore", () => {
     expect(callback).toBeCalled();
   });
 
-  it("updates an assignment and emits a change", function() {
+  it('updates an assignment and emits a change', function() {
     registerCallback({
       actionType: ActionConstants.ASSIGNMENTS_FETCHED,
       assignments: mockAssignments,
@@ -103,6 +103,6 @@ describe("AssignmentStore", () => {
 
     expect(ServerAPI.updateAssignment).toBeCalled();
     var assignments = AssignmentStore.getSchoolAssignments(mockSchoolID);
-    expect(assignments[0]["rejected"]).toBe(true);
+    expect(assignments[0]['rejected']).toBe(true);
   });
 });

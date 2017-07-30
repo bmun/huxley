@@ -3,12 +3,12 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-"use strict";
+'use strict';
 
-var React = require("react");
-var TextInput = require("components/core/TextInput");
+var React = require('react');
+var TextInput = require('components/core/TextInput');
 
-var formatPhone = require("utils/formatPhone");
+var formatPhone = require('utils/formatPhone');
 
 var PhoneInput = React.createClass({
   propTypes: {
@@ -44,9 +44,9 @@ var PhoneInput = React.createClass({
   },
 
   _formatValue: function(value, isInternational) {
-    var value = value || "";
+    var value = value || '';
     return isInternational
-      ? value.replace(/[^0-9+\(\)\-\s]/, "")
+      ? value.replace(/[^0-9+\(\)\-\s]/, '')
       : formatPhone(value);
   },
 });

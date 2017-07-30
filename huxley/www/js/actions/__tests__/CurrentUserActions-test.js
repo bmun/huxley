@@ -3,23 +3,23 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-"use strict";
+'use strict';
 
-jest.dontMock("actions/CurrentUserActions");
+jest.dontMock('actions/CurrentUserActions');
 
-describe("CurrentUserActions", function() {
+describe('CurrentUserActions', function() {
   var ActionConstants;
   var CurrentUserActions;
   var Dispatcher;
 
   beforeEach(function() {
-    ActionConstants = require("constants/ActionConstants");
-    CurrentUserActions = require("actions/CurrentUserActions");
-    Dispatcher = require("dispatcher/Dispatcher");
+    ActionConstants = require('constants/ActionConstants');
+    CurrentUserActions = require('actions/CurrentUserActions');
+    Dispatcher = require('dispatcher/Dispatcher');
   });
 
-  it("dispatches the login action", function() {
-    var user = {id: 1, first_name: "Mike", last_name: "Jones"};
+  it('dispatches the login action', function() {
+    var user = {id: 1, first_name: 'Mike', last_name: 'Jones'};
     CurrentUserActions.login(user);
 
     expect(Dispatcher.dispatch.mock.calls.length).toBe(1);
@@ -29,7 +29,7 @@ describe("CurrentUserActions", function() {
     });
   });
 
-  it("dispatches the logout action", function() {
+  it('dispatches the logout action', function() {
     CurrentUserActions.logout();
 
     expect(Dispatcher.dispatch.mock.calls.length).toBe(1);

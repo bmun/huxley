@@ -3,24 +3,24 @@
 * Use of this source code is governed by a BSD License (see LICENSE).
 +*/
 
-"use strict";
+'use strict';
 
-var React = require("react");
-var ReactRouter = require("react-router");
+var React = require('react');
+var ReactRouter = require('react-router');
 
-var Button = require("components/core/Button");
-var AssignmentStore = require("stores/AssignmentStore");
-var CountryStore = require("stores/CountryStore");
-var CurrentUserStore = require("stores/CurrentUserStore");
-var DelegateActions = require("actions/DelegateActions");
-var DelegationAttendanceRow = require("components/DelegationAttendanceRow");
-var DelegateStore = require("stores/DelegateStore");
-var InnerView = require("components/InnerView");
-var TextTemplate = require("components/core/TextTemplate");
-var User = require("utils/User");
+var Button = require('components/core/Button');
+var AssignmentStore = require('stores/AssignmentStore');
+var CountryStore = require('stores/CountryStore');
+var CurrentUserStore = require('stores/CurrentUserStore');
+var DelegateActions = require('actions/DelegateActions');
+var DelegationAttendanceRow = require('components/DelegationAttendanceRow');
+var DelegateStore = require('stores/DelegateStore');
+var InnerView = require('components/InnerView');
+var TextTemplate = require('components/core/TextTemplate');
+var User = require('utils/User');
 
-require("css/Table.less");
-var ChairAttendanceViewText = require("text/ChairAttendanceViewText.md");
+require('css/Table.less');
+var ChairAttendanceViewText = require('text/ChairAttendanceViewText.md');
 
 var ChairAttendanceView = React.createClass({
   mixins: [ReactRouter.History],
@@ -40,7 +40,7 @@ var ChairAttendanceView = React.createClass({
   componentWillMount() {
     var user = CurrentUserStore.getCurrentUser();
     if (!User.isChair(user)) {
-      this.history.pushState(null, "/");
+      this.history.pushState(null, '/');
     }
   },
 
@@ -81,7 +81,7 @@ var ChairAttendanceView = React.createClass({
         </TextTemplate>
         <form>
           <div className="table-container">
-            <table style={{margin: "10px auto 0px auto", tableLayout: "fixed"}}>
+            <table style={{margin: '10px auto 0px auto', tableLayout: 'fixed'}}>
               <thead>
                 <tr>
                   <th>Assignment</th>
@@ -93,10 +93,10 @@ var ChairAttendanceView = React.createClass({
                 </tr>
               </thead>
             </table>
-            <div style={{overflowY: "auto", maxHeight: "50vh"}}>
+            <div style={{overflowY: 'auto', maxHeight: '50vh'}}>
               <table
                 className="table highlight-cells"
-                style={{margin: "0px auto 20px auto", tableLayout: "fixed"}}>
+                style={{margin: '0px auto 20px auto', tableLayout: 'fixed'}}>
                 <tbody>
                   {this.renderAttendanceRows()}
                 </tbody>
@@ -200,7 +200,7 @@ var ChairAttendanceView = React.createClass({
   _handleError: function(response) {
     this.setState({loading: false});
     window.alert(
-      "Something went wrong. Please refresh your page and try again.",
+      'Something went wrong. Please refresh your page and try again.',
     );
   },
 });

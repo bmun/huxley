@@ -3,25 +3,25 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-"use strict";
+'use strict';
 
-var React = require("react");
-var ReactRouter = require("react-router");
+var React = require('react');
+var ReactRouter = require('react-router');
 
-var NavTab = require("components/NavTab");
-var PermissionDeniedView = require("components/PermissionDeniedView");
-var Shaker = require("components/Shaker");
-var TopBar = require("components/TopBar");
-var User = require("utils/User");
+var NavTab = require('components/NavTab');
+var PermissionDeniedView = require('components/PermissionDeniedView');
+var Shaker = require('components/Shaker');
+var TopBar = require('components/TopBar');
+var User = require('utils/User');
 
-require("css/NavBar.less");
+require('css/NavBar.less');
 
 var AdvisorView = React.createClass({
   mixins: [ReactRouter.History],
 
   componentDidMount: function() {
     if (User.isAnonymous(this.props.user)) {
-      this.history.pushState(null, "/login");
+      this.history.pushState(null, '/login');
     }
   },
 

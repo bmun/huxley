@@ -3,23 +3,23 @@
 * Use of this source code is governed by a BSD License (see LICENSE).
 +*/
 
-"use strict";
+'use strict';
 
-var React = require("react");
-var ReactRouter = require("react-router");
+var React = require('react');
+var ReactRouter = require('react-router');
 
-var AssignmentActions = require("actions/AssignmentActions");
-var AssignmentStore = require("stores/AssignmentStore");
-var Button = require("components/core/Button");
-var CommitteeStore = require("stores/CommitteeStore");
-var CountryStore = require("stores/CountryStore");
-var CurrentUserStore = require("stores/CurrentUserStore");
-var DelegateStore = require("stores/DelegateStore");
-var InnerView = require("components/InnerView");
-var Table = require("components/core/Table");
-var TextTemplate = require("components/core/TextTemplate");
+var AssignmentActions = require('actions/AssignmentActions');
+var AssignmentStore = require('stores/AssignmentStore');
+var Button = require('components/core/Button');
+var CommitteeStore = require('stores/CommitteeStore');
+var CountryStore = require('stores/CountryStore');
+var CurrentUserStore = require('stores/CurrentUserStore');
+var DelegateStore = require('stores/DelegateStore');
+var InnerView = require('components/InnerView');
+var Table = require('components/core/Table');
+var TextTemplate = require('components/core/TextTemplate');
 
-var AdvisorFeedbackViewText = require("text/AdvisorFeedbackViewText.md");
+var AdvisorFeedbackViewText = require('text/AdvisorFeedbackViewText.md');
 
 var AdvisorFeedbackView = React.createClass({
   mixins: [ReactRouter.History],
@@ -158,7 +158,7 @@ var AdvisorFeedbackView = React.createClass({
           <td>
             <textarea
               className="text-input"
-              style={{width: "95%"}}
+              style={{width: '95%'}}
               defaultValue={delegates.published_summary}
               disabled
             />

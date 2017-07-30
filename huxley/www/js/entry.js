@@ -3,32 +3,32 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-"use strict";
+'use strict';
 
-require("core-js/es6");
-require("core-js/es7");
+require('core-js/es6');
+require('core-js/es7');
 
-var React = require("react");
-var ReactDOM = require("react-dom");
-var ReactRouter = require("react-router");
+var React = require('react');
+var ReactDOM = require('react-dom');
+var ReactRouter = require('react-router');
 
-var CurrentUserActions = require("actions/CurrentUserActions");
-var Huxley = require("components/Huxley");
-var AdvisorAssignmentsView = require("components/AdvisorAssignmentsView");
-var AdvisorFeedbackView = require("components/AdvisorFeedbackView");
-var AdvisorProfileView = require("components/AdvisorProfileView");
-var AdvisorRosterView = require("components/AdvisorRosterView");
-var ChairAttendanceView = require("components/ChairAttendanceView");
-var ChairSummaryView = require("components/ChairSummaryView");
-var ForgotPasswordView = require("components/ForgotPasswordView");
-var LoginView = require("components/LoginView");
-var NotFoundView = require("components/NotFoundView");
-var PasswordResetSuccessView = require("components/PasswordResetSuccessView");
-var RedirectView = require("components/RedirectView");
-var RegistrationView = require("components/RegistrationView");
-var RegistrationClosedView = require("components/RegistrationClosedView");
-var RegistrationSuccessView = require("components/RegistrationSuccessView");
-var RegistrationWaitlistView = require("components/RegistrationWaitlistView");
+var CurrentUserActions = require('actions/CurrentUserActions');
+var Huxley = require('components/Huxley');
+var AdvisorAssignmentsView = require('components/AdvisorAssignmentsView');
+var AdvisorFeedbackView = require('components/AdvisorFeedbackView');
+var AdvisorProfileView = require('components/AdvisorProfileView');
+var AdvisorRosterView = require('components/AdvisorRosterView');
+var ChairAttendanceView = require('components/ChairAttendanceView');
+var ChairSummaryView = require('components/ChairSummaryView');
+var ForgotPasswordView = require('components/ForgotPasswordView');
+var LoginView = require('components/LoginView');
+var NotFoundView = require('components/NotFoundView');
+var PasswordResetSuccessView = require('components/PasswordResetSuccessView');
+var RedirectView = require('components/RedirectView');
+var RegistrationView = require('components/RegistrationView');
+var RegistrationClosedView = require('components/RegistrationClosedView');
+var RegistrationSuccessView = require('components/RegistrationSuccessView');
+var RegistrationWaitlistView = require('components/RegistrationWaitlistView');
 
 var IndexRoute = ReactRouter.IndexRoute;
 var Router = ReactRouter.Router;
@@ -60,12 +60,12 @@ var routes = (
   </Route>
 );
 
-window.addEventListener("DOMContentLoaded", () => {
+window.addEventListener('DOMContentLoaded', () => {
   ReactDOM.render(
     <Router>
       {routes}
     </Router>,
-    document.getElementById("huxley-app"),
+    document.getElementById('huxley-app'),
   );
 });
 

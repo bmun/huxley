@@ -3,25 +3,25 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-"use strict";
+'use strict';
 
-var cx = require("classnames");
-var React = require("react");
-var ReactRouter = require("react-router");
+var cx = require('classnames');
+var React = require('react');
+var ReactRouter = require('react-router');
 
-var Button = require("components/core/Button");
-var ConferenceContext = require("components/ConferenceContext");
-var CurrentUserActions = require("actions/CurrentUserActions");
-var NavLink = require("components/NavLink");
-var OuterView = require("components/OuterView");
-var ServerAPI = require("lib/ServerAPI");
-var StatusLabel = require("components/core/StatusLabel");
-var TextInput = require("components/core/TextInput");
-var TextTemplate = require("components/core/TextTemplate");
-var User = require("utils/User");
+var Button = require('components/core/Button');
+var ConferenceContext = require('components/ConferenceContext');
+var CurrentUserActions = require('actions/CurrentUserActions');
+var NavLink = require('components/NavLink');
+var OuterView = require('components/OuterView');
+var ServerAPI = require('lib/ServerAPI');
+var StatusLabel = require('components/core/StatusLabel');
+var TextInput = require('components/core/TextInput');
+var TextTemplate = require('components/core/TextTemplate');
+var User = require('utils/User');
 
-require("css/LoginForm.less");
-var LoginViewText = require("text/LoginViewText.md");
+require('css/LoginForm.less');
+var LoginViewText = require('text/LoginViewText.md');
 
 var LoginView = React.createClass({
   mixins: [ReactRouter.History],
@@ -34,8 +34,8 @@ var LoginView = React.createClass({
   getInitialState: function() {
     return {
       error: null,
-      username: "",
-      password: "",
+      username: '',
+      password: '',
       loading: false,
     };
   },
@@ -46,7 +46,7 @@ var LoginView = React.createClass({
       return;
     }
     if (User.isAdvisor(user)) {
-      this.history.pushState(null, "/advisor/profile");
+      this.history.pushState(null, '/advisor/profile');
     }
   },
 
@@ -92,10 +92,10 @@ var LoginView = React.createClass({
       <div className="logo">
         <hr />
         <TextTemplate
-          conferenceStartMonth={conference.start_date["month"]}
-          conferenceStartDay={conference.start_date["day"]}
-          conferenceEndDay={conference.end_date["day"]}
-          conferenceStartYear={conference.start_date["year"]}>
+          conferenceStartMonth={conference.start_date['month']}
+          conferenceStartDay={conference.start_date['day']}
+          conferenceEndDay={conference.end_date['day']}
+          conferenceStartYear={conference.start_date['year']}>
           {LoginViewText}
         </TextTemplate>
       </div>

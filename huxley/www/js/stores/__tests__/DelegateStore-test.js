@@ -3,11 +3,11 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-"use strict";
+'use strict';
 
-jest.dontMock("stores/DelegateStore");
+jest.dontMock('stores/DelegateStore');
 
-describe("DelegateStore", () => {
+describe('DelegateStore', () => {
   var ActionConstants;
   var DelegateStore;
   var Dispatcher;
@@ -19,10 +19,10 @@ describe("DelegateStore", () => {
   var registerCallback;
 
   beforeEach(() => {
-    ActionConstants = require("constants/ActionConstants");
-    DelegateStore = require("stores/DelegateStore");
-    Dispatcher = require("dispatcher/Dispatcher");
-    ServerAPI = require("lib/ServerAPI");
+    ActionConstants = require('constants/ActionConstants');
+    DelegateStore = require('stores/DelegateStore');
+    Dispatcher = require('dispatcher/Dispatcher');
+    ServerAPI = require('lib/ServerAPI');
 
     registerCallback = function(action) {
       Dispatcher.isDispatching.mockReturnValue(true);
@@ -32,8 +32,8 @@ describe("DelegateStore", () => {
 
     mockSchoolID = 1;
     mockSchoolID2 = 0;
-    jake = {id: 1, name: "Jake", email: "", school: mockSchoolID};
-    nate = {id: 2, name: "Nate", email: "", school: mockSchoolID};
+    jake = {id: 1, name: 'Jake', email: '', school: mockSchoolID};
+    nate = {id: 2, name: 'Nate', email: '', school: mockSchoolID};
     mockDelegates = [jake, nate];
 
     ServerAPI.getDelegates.mockReturnValue(Promise.resolve(mockDelegates));
@@ -42,11 +42,11 @@ describe("DelegateStore", () => {
     ServerAPI.updateSchoolDelegates.mockReturnValue(Promise.resolve({}));
   });
 
-  it("subscribes to the dispatcher", () => {
+  it('subscribes to the dispatcher', () => {
     expect(Dispatcher.register).toBeCalled();
   });
 
-  it("requests the delegates on first call and caches locally", () => {
+  it('requests the delegates on first call and caches locally', () => {
     var delegates = DelegateStore.getSchoolDelegates(mockSchoolID);
     expect(delegates.length).toEqual(0);
     expect(ServerAPI.getDelegates).toBeCalledWith(mockSchoolID);
@@ -61,7 +61,7 @@ describe("DelegateStore", () => {
     expect(ServerAPI.getDelegates.mock.calls.length).toEqual(1);
   });
 
-  it("differentiates no delegates from not having fetched delegates", () => {
+  it('differentiates no delegates from not having fetched delegates', () => {
     var delegates = DelegateStore.getSchoolDelegates(mockSchoolID2);
     expect(delegates.length).toEqual(0);
     expect(ServerAPI.getDelegates).toBeCalledWith(mockSchoolID2);
@@ -76,7 +76,7 @@ describe("DelegateStore", () => {
     expect(ServerAPI.getDelegates.mock.calls.length).toEqual(1);
   });
 
-  it("emits a change when the delegates are loaded", function() {
+  it('emits a change when the delegates are loaded', function() {
     var callback = jest.genMockFunction();
     DelegateStore.addListener(callback);
     expect(callback).not.toBeCalled();
@@ -87,7 +87,7 @@ describe("DelegateStore", () => {
     expect(callback).toBeCalled();
   });
 
-  it("adds a delegate and emits a change", () => {
+  it('adds a delegate and emits a change', () => {
     registerCallback({
       actionType: ActionConstants.DELEGATES_FETCHED,
       delegates: mockDelegates,
@@ -97,7 +97,7 @@ describe("DelegateStore", () => {
     DelegateStore.addListener(callback);
     expect(callback).not.toBeCalled();
 
-    var new_delegate = {id: 3, name: "Trevor", email: "", school: mockSchoolID};
+    var new_delegate = {id: 3, name: 'Trevor', email: '', school: mockSchoolID};
     registerCallback({
       actionType: ActionConstants.ADD_DELEGATE,
       delegate: new_delegate,
@@ -109,7 +109,7 @@ describe("DelegateStore", () => {
     expect(new_delegate).toEqual(delegates[2]);
   });
 
-  it("deletes a delegate and emits a change", () => {
+  it('deletes a delegate and emits a change', () => {
     registerCallback({
       actionType: ActionConstants.DELEGATES_FETCHED,
       delegates: mockDelegates,
@@ -131,7 +131,7 @@ describe("DelegateStore", () => {
     expect(delegates[0]).toEqual(nate);
   });
 
-  it("updates a delegate and emits a change", () => {
+  it('updates a delegate and emits a change', () => {
     registerCallback({
       actionType: ActionConstants.DELEGATES_FETCHED,
       delegates: mockDelegates,
@@ -141,7 +141,7 @@ describe("DelegateStore", () => {
     DelegateStore.addListener(callback);
     expect(callback).not.toBeCalled();
 
-    var delta = {name: "Jake Moskowitz", email: "j@m.com"};
+    var delta = {name: 'Jake Moskowitz', email: 'j@m.com'};
     registerCallback({
       actionType: ActionConstants.UPDATE_DELEGATE,
       delegateID: 1,
@@ -155,7 +155,7 @@ describe("DelegateStore", () => {
     expect(updated_jake.email).toEqual(delta.email);
   });
 
-  it("updates delegates in bulk and emits a change", () => {
+  it('updates delegates in bulk and emits a change', () => {
     registerCallback({
       actionType: ActionConstants.DELEGATES_FETCHED,
       delegates: mockDelegates,
@@ -167,14 +167,14 @@ describe("DelegateStore", () => {
 
     var updated_jake = {
       id: 1,
-      name: "Jake Moskowitz",
-      email: "",
+      name: 'Jake Moskowitz',
+      email: '',
       school: mockSchoolID,
     };
     var udpated_nate = {
       id: 2,
-      name: "Nathaniel Parke",
-      email: "",
+      name: 'Nathaniel Parke',
+      email: '',
       school: mockSchoolID,
     };
     registerCallback({

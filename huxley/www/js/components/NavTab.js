@@ -3,10 +3,10 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-"use strict";
+'use strict';
 
-var Link = require("react-router").Link;
-var React = require("react");
+var Link = require('react-router').Link;
+var React = require('react');
 
 var NavTab = React.createClass({
   propTypes: {
