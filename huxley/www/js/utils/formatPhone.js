@@ -21,7 +21,7 @@ function formatPhone(rawInput) {
   var input = _tokenize(rawInput);
   var accumulator = [];
 
-  for (var slot = 0; slot <= 20 && input.length > 0;) {
+  for (var slot = 0; slot <= 20 && input.length > 0; ) {
     var f = _getTransitionFunction(slot);
     var shouldTransition = f(accumulator, input);
     shouldTransition && ++slot;

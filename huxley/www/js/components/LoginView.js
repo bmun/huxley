@@ -24,9 +24,7 @@ require('css/LoginForm.less');
 var LoginViewText = require('text/LoginViewText.md');
 
 var LoginView = React.createClass({
-  mixins: [
-    ReactRouter.History,
-  ],
+  mixins: [ReactRouter.History],
 
   contextTypes: {
     conference: React.PropTypes.shape(ConferenceContext),
@@ -38,7 +36,7 @@ var LoginView = React.createClass({
       error: null,
       username: '',
       password: '',
-      loading: false
+      loading: false,
     };
   },
 
@@ -55,10 +53,7 @@ var LoginView = React.createClass({
   render: function() {
     return (
       <OuterView header={this.renderHeader()}>
-        <form
-          id="login"
-          className="login-form"
-          onSubmit={this._handleSubmit}>
+        <form id="login" className="login-form" onSubmit={this._handleSubmit}>
           <div className="login-fields">
             <TextInput
               name="username"
@@ -75,10 +70,7 @@ var LoginView = React.createClass({
             />
           </div>
           <div className="login-register">
-            <Button
-              color="blue"
-              loading={this.state.loading}
-              type="submit">
+            <Button color="blue" loading={this.state.loading} type="submit">
               Log In
             </Button>
             <Button color="green" href="/register">
@@ -113,7 +105,9 @@ var LoginView = React.createClass({
   renderError: function() {
     if (this.state.error) {
       return (
-        <StatusLabel status="error">{this.state.error}</StatusLabel>
+        <StatusLabel status="error">
+          {this.state.error}
+        </StatusLabel>
       );
     }
 
@@ -130,8 +124,10 @@ var LoginView = React.createClass({
 
   _handleSubmit: function(event) {
     this.setState({loading: true});
-    ServerAPI.login(this.state.username, this.state.password)
-      .then(this._handleSuccess, this._handleError);
+    ServerAPI.login(this.state.username, this.state.password).then(
+      this._handleSuccess,
+      this._handleError,
+    );
     event.preventDefault();
   },
 
@@ -144,13 +140,16 @@ var LoginView = React.createClass({
       return;
     }
 
-    this.setState({
-      error: responseJSON.detail,
-      loading: false,
-    }, () => {
-      this.context.shake && this.context.shake();
-    });
-  }
+    this.setState(
+      {
+        error: responseJSON.detail,
+        loading: false,
+      },
+      () => {
+        this.context.shake && this.context.shake();
+      },
+    );
+  },
 });
 
 module.exports = LoginView;

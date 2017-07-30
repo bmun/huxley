@@ -14,13 +14,16 @@ const RegistrationCountryPreferences = React.createClass({
 
   render: function() {
     return (
-      <div id='country_preferences'>
+      <div id="country_preferences">
         <h3>Country Preferences</h3>
-        <p className="instructions">Please choose 10 United Nations Member States or
-        Observers your school would like to represent. A reference list of
-        countries and their relation to committees is
-        available <a href="http://www.un.org/en/member-states/" target="_blank">online</a>.
-        Please diversify your selection.</p>
+        <p className="instructions">
+          Please choose 10 United Nations Member States or Observers your school
+          would like to represent. A reference list of countries and their
+          relation to committees is available{' '}
+          <a href="http://www.un.org/en/member-states/" target="_blank">
+            online
+          </a>. Please diversify your selection.
+        </p>
         <ul>
           {this.props.renderCountryDropdown('01', 'country_pref1')}
           {this.props.renderCountryDropdown('02', 'country_pref2')}
@@ -36,7 +39,6 @@ const RegistrationCountryPreferences = React.createClass({
       </div>
     );
   },
-
 });
 
 module.exports = RegistrationCountryPreferences;

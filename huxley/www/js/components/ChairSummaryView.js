@@ -22,16 +22,17 @@ require('css/Table.less');
 var ChairSummaryViewText = require('text/ChairSummaryViewText.md');
 
 var ChairSummaryView = React.createClass({
-  mixins: [
-    ReactRouter.History,
-  ],
+  mixins: [ReactRouter.History],
 
   getInitialState() {
     var user = CurrentUserStore.getCurrentUser();
     var assignments = AssignmentStore.getCommitteeAssignments(user.committee);
     var countries = CountryStore.getCountries();
-    if (assignments.length && Object.keys(countries).length){
-      assignments.sort((a1, a2) => countries[a1.country].name < countries[a2.country].name ? -1 : 1);
+    if (assignments.length && Object.keys(countries).length) {
+      assignments.sort(
+        (a1, a2) =>
+          countries[a1.country].name < countries[a2.country].name ? -1 : 1,
+      );
     }
     return {
       assignments: assignments,
@@ -61,7 +62,7 @@ var ChairSummaryView = React.createClass({
     }
 
     this._delegatesToken = DelegateStore.addListener(() => {
-      var delegates =  DelegateStore.getCommitteeDelegates(user.committee);
+      var delegates = DelegateStore.getCommitteeDelegates(user.committee);
       for (var delegate of delegates) {
         summaries[delegate.assignment] = delegate.summary;
       }
@@ -75,7 +76,10 @@ var ChairSummaryView = React.createClass({
       var assignments = AssignmentStore.getCommitteeAssignments(user.committee);
       var countries = this.state.countries;
       if (Object.keys(countries).length) {
-        assignments.sort((a1, a2) => countries[a1.country].name < countries[a2.country].name ? -1 : 1);
+        assignments.sort(
+          (a1, a2) =>
+            countries[a1.country].name < countries[a2.country].name ? -1 : 1,
+        );
       }
       this.setState({assignments: assignments});
     });
@@ -84,11 +88,14 @@ var ChairSummaryView = React.createClass({
       var assignments = this.state.assignments;
       var countries = CountryStore.getCountries();
       if (assignments.length) {
-        assignments.sort((a1, a2) => countries[a1.country].name < countries[a2.country].name ? -1 : 1);
+        assignments.sort(
+          (a1, a2) =>
+            countries[a1.country].name < countries[a2.country].name ? -1 : 1,
+        );
       }
       this.setState({
         assignments: assignments,
-        countries: countries
+        countries: countries,
       });
     });
 
@@ -111,25 +118,22 @@ var ChairSummaryView = React.createClass({
         </TextTemplate>
         <form>
           <div className="table-container">
-            <table style={{'margin':'10px auto 0px auto'}}>
+            <table style={{margin: '10px auto 0px auto'}}>
               <thead>
                 <tr>
                   <th>Assignment</th>
-                  <th style={{'width':'65%'}}>Summary</th>
+                  <th style={{width: '65%'}}>Summary</th>
                 </tr>
               </thead>
             </table>
-            <div style={{'overflowY': 'auto', 'maxHeight': '50vh'}}>
+            <div style={{overflowY: 'auto', maxHeight: '50vh'}}>
               <table
                 className="table highlight-cells"
-                style={{'margin':'0px auto 20px auto'}}
-              >
+                style={{margin: '0px auto 20px auto'}}>
                 <tbody>
-                  {
-                    Object.keys(this.state.countries).length > 0 ?
-                    this.renderSummaryRows() :
-                    <tr></tr>
-                  }
+                  {Object.keys(this.state.countries).length > 0
+                    ? this.renderSummaryRows()
+                    : <tr />}
                 </tbody>
               </table>
             </div>
@@ -158,17 +162,19 @@ var ChairSummaryView = React.createClass({
     var summaries = this.state.summaries;
     var assignmentIDs = Object.keys(summaries);
     var countries = this.state.countries;
-    assignments = assignments.filter(a => assignmentIDs.indexOf(""+a.id) > -1);
+    assignments = assignments.filter(
+      a => assignmentIDs.indexOf('' + a.id) > -1,
+    );
     return assignments.map(assignment => {
       return (
         <tr key={assignment.id}>
           <td>
             {countries[assignment.country].name}
           </td>
-          <td style={{'width':'65%'}}>
+          <td style={{width: '65%'}}>
             <textarea
               className="text-input"
-              style={{"width": "95%"}}
+              style={{width: '95%'}}
               rows="3"
               onChange={this._handleSummaryChange.bind(this, assignment)}
               defaultValue={summaries[assignment.id]}
@@ -199,19 +205,26 @@ var ChairSummaryView = React.createClass({
         toSave.push({...delegate, summary});
       }
     }
-    DelegateActions.updateCommitteeDelegates(committee, toSave, this._handleSuccessSave, this._handleErrorSave);
+    DelegateActions.updateCommitteeDelegates(
+      committee,
+      toSave,
+      this._handleSuccessSave,
+      this._handleErrorSave,
+    );
     event.preventDefault();
   },
 
   _handlePublishSummaries(event) {
-    var confirm = window.confirm("By pressing ok, you are allowing advisors " +
-                                 "to read the summaries that you have written " +
-                                 "about their delegations. Please ensure " +
-                                 "there are no inappropriate comments or " +
-                                 "language in any of these summaries. If " +
-                                 "there is none and you are ready to publish " +
-                                 "your summaries to advisors, press 'ok' to " +
-                                 "continue.");
+    var confirm = window.confirm(
+      'By pressing ok, you are allowing advisors ' +
+        'to read the summaries that you have written ' +
+        'about their delegations. Please ensure ' +
+        'there are no inappropriate comments or ' +
+        'language in any of these summaries. If ' +
+        'there is none and you are ready to publish ' +
+        "your summaries to advisors, press 'ok' to " +
+        'continue.',
+    );
     if (confirm) {
       this._successTimoutPublish && clearTimeout(this._successTimeoutPublish);
       this.setState({loadingPublish: true});
@@ -221,11 +234,19 @@ var ChairSummaryView = React.createClass({
       var toPublish = [];
       for (var delegate of delegates) {
         var summary = summaries[delegate.assignment];
-        if (delegate.summary != summary || delegate.published_summary != summary) {
+        if (
+          delegate.summary != summary ||
+          delegate.published_summary != summary
+        ) {
           toPublish.push({...delegate, summary, published_summary: summary});
         }
       }
-      DelegateActions.updateCommitteeDelegates(committee, toPublish, this._handleSuccessPublish, this._handleErrorPublish);
+      DelegateActions.updateCommitteeDelegates(
+        committee,
+        toPublish,
+        this._handleSuccessPublish,
+        this._handleErrorPublish,
+      );
       event.preventDefault();
     }
   },
@@ -236,12 +257,17 @@ var ChairSummaryView = React.createClass({
       successSave: true,
     });
 
-    this._successTimeoutSave = setTimeout(() => this.setState({successSave: false}), 2000);
+    this._successTimeoutSave = setTimeout(
+      () => this.setState({successSave: false}),
+      2000,
+    );
   },
 
   _handleErrorSave: function(response) {
     this.setState({loadingSave: false});
-    window.alert("Something went wrong. Please refresh your page and try again.");
+    window.alert(
+      'Something went wrong. Please refresh your page and try again.',
+    );
   },
 
   _handleSuccessPublish: function(response) {
@@ -250,12 +276,17 @@ var ChairSummaryView = React.createClass({
       successPublish: true,
     });
 
-    this._successTimeoutPublish = setTimeout(() => this.setState({successPublish: false}), 2000);
+    this._successTimeoutPublish = setTimeout(
+      () => this.setState({successPublish: false}),
+      2000,
+    );
   },
 
   _handleErrorPublish: function(response) {
     this.setState({loadingPublish: false});
-    window.alert("Something went wrong. Please refresh your page and try again.");
+    window.alert(
+      'Something went wrong. Please refresh your page and try again.',
+    );
   },
 });
 

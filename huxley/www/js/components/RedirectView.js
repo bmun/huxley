@@ -29,7 +29,7 @@ var RedirectView = React.createClass({
     // TODO: make this the same component as the loading indicator... when the
     // loading indicator is actually built.
     return <OuterView />;
-  }
+  },
 });
 
 module.exports = RedirectView;

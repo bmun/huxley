@@ -16,9 +16,8 @@ require('css/Letter.less');
 var RegistrationWaitlistViewText = require('text/RegistrationWaitlistViewText.md');
 
 var RegistrationWaitlistView = React.createClass({
-
   contextTypes: {
-    conference: React.PropTypes.shape(ConferenceContext)
+    conference: React.PropTypes.shape(ConferenceContext),
   },
 
   render: function() {
@@ -26,8 +25,7 @@ var RegistrationWaitlistView = React.createClass({
     return (
       <OuterView>
         <div class="letter">
-          <TextTemplate
-            conferenceSession={conference.session}>
+          <TextTemplate conferenceSession={conference.session}>
             {RegistrationWaitlistViewText}
           </TextTemplate>
         </div>
@@ -37,7 +35,7 @@ var RegistrationWaitlistView = React.createClass({
         </NavLink>
       </OuterView>
     );
-  }
+  },
 });
 
 module.exports = RegistrationWaitlistView;

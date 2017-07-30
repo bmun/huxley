@@ -7,6 +7,7 @@
 
 var React = require('react');
 
+var RegistrationPhoneInput = require('components/registration/RegistrationPhoneInput');
 var RegistrationTextInput = require('components/registration/RegistrationTextInput');
 var _accessSafe = require('utils/_accessSafe');
 
@@ -21,39 +22,44 @@ const RegistrationPrimaryContact = React.createClass({
   },
 
   shouldComponentUpdate: function(nextProps, nextState) {
-    for (let key in primaryContactInformation) {
-      if(this.props.primaryContactInformation[key] !== nextProps.primaryContactInformation[key]) {
+    for (let key in this.props.primaryContactInformation) {
+      if (
+        this.props.primaryContactInformation[key] !==
+        nextProps.primaryContactInformation[key]
+      ) {
         return true;
       }
     }
     return this.props.isInternational !== nextProps.isInternational;
   },
 
-  render: function() { 
+  render: function() {
     var accessHandlers = _accessSafe.bind(this, this.props.handlers);
-    var accessPrimary = _accessSafe.bind(this, this.props.primaryContactInformation);
+    var accessPrimary = _accessSafe.bind(
+      this,
+      this.props.primaryContactInformation,
+    );
     var accessErrors = _accessSafe.bind(this, this.props.errors);
     return (
-      <div id='primary_contact'>
+      <div id="primary_contact">
         <h3>Primary Contact</h3>
         {this.props.renderContactGenderField('primary_gender')}
         <RegistrationTextInput
           errors={accessErrors('primary_name')}
-          placeholder="Name" 
+          placeholder="Name"
           onChange={accessHandlers('primary_name')}
           value={accessPrimary('primary_name')}
         />
-        <RegistrationTextInput 
+        <RegistrationTextInput
           errors={accessErrors('primary_email')}
-          placeholder="Email" 
+          placeholder="Email"
           onChange={accessHandlers('primary_email')}
           value={accessPrimary('primary_email')}
         />
-        <RegistrationTextInput 
-          errors={accessErrors('primary_phone')} 
+        <RegistrationPhoneInput
+          errors={accessErrors('primary_phone')}
           onChange={accessHandlers('primary_phone')}
           value={accessPrimary('primary_phone')}
-          placeholder="Phone Number" 
           isInternational={this.props.isInternational}
         />
         {this.props.renderContactTypeField('primary_type')}
@@ -61,6 +67,5 @@ const RegistrationPrimaryContact = React.createClass({
     );
   },
 });
-
 
 module.exports = RegistrationPrimaryContact;

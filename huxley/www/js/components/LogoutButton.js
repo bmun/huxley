@@ -14,7 +14,7 @@ var ServerAPI = require('lib/ServerAPI');
 var LogoutButton = React.createClass({
   getInitialState: function() {
     return {
-      loggingOut: false
+      loggingOut: false,
     };
   },
 

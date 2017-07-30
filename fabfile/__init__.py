@@ -55,10 +55,22 @@ def lint():
 
 @task
 def format():
-    '''Format and commit python files committed on the current feature branch'''
-    diff_list = git.diff_name_only()
+    '''Format files committed on the current feature branch'''
+    diff_list = git.diff_name_only(options='--diff-filter=d')
     py_diff_list = [pyfile for pyfile in diff_list if pyfile.endswith('.py')]
+    format_python(py_diff_list)
 
+    js_source = ' '.join(
+        [jsfile for jsfile in diff_list if jsfile.endswith('.js')])
+    format_js(js_source)
+    print ui.info('Formatting complete')
+
+    if len(local('git status --porcelain', capture=True)) > 0:
+        local('git commit -am "Ran autoformatter"')
+
+
+@task
+def format_python(py_diff_list):
     if confirm('Review formatting changes? (Select no to approve all)'):
 
         for pyfile in py_diff_list:
@@ -68,10 +80,15 @@ def format():
     else:
         for pyfile in py_diff_list:
             FormatFile(pyfile, in_place=True)
-    print ui.info('Formatting complete')
 
-    if len(local('git status --porcelain', capture=True)) > 0:
-        local('git commit -am "Ran autoformatter"')
+
+@task
+def format_js(source):
+    '''Formats the javascript files in source using prettier. The argument
+       source is a string where each file path is separated by a space.'''
+    if len(source) > 0:
+        options = '--jsx-bracket-same-line --no-bracket-spacing --single-quote --trailing-comma all '
+        local('./node_modules/.bin/prettier ' + options + ' --write ' + source)
 
 
 @task
@@ -82,7 +99,7 @@ def submit(remote='origin', skip_tests=False):
         if not confirm('Continue submit?'):
             return
 
-    # format()
+    format()
     if not skip_tests:
         with settings(warn_only=True):
             if not test.run():

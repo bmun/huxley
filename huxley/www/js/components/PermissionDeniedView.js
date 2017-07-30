@@ -20,7 +20,7 @@ var PermissionDeniedView = React.createClass({
         </TextTemplate>
       </div>
     );
-  }
+  },
 });
 
 module.exports = PermissionDeniedView;

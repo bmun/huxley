@@ -9,7 +9,7 @@ var invariant = require('fbjs/lib/invariant');
 
 invariant(
   global.GenderConstants !== undefined,
-  'global.GenderConstants must be defined.'
+  'global.GenderConstants must be defined.',
 );
 
 var GenderConstants = global.GenderConstants;

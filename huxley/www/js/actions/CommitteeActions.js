@@ -14,7 +14,7 @@ var CommitteeActions = {
       actionType: ActionConstants.COMMITTEES_FETCHED,
       committees: committees,
     });
-  }
+  },
 };
 
 module.exports = CommitteeActions;

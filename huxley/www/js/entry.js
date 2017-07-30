@@ -9,7 +9,7 @@ require('core-js/es6');
 require('core-js/es7');
 
 var React = require('react');
-var ReactDOM = require('react-dom')
+var ReactDOM = require('react-dom');
 var ReactRouter = require('react-router');
 
 var CurrentUserActions = require('actions/CurrentUserActions');
@@ -41,9 +41,10 @@ var routes = (
     <Route path="/password/reset" component={PasswordResetSuccessView} />
     <Route
       path="/register"
-      component={global.conference.registration_open
-        ? RegistrationView
-        : RegistrationClosedView
+      component={
+        global.conference.registration_open
+          ? RegistrationView
+          : RegistrationClosedView
       }
     />
     <Route path="/register/success" component={RegistrationSuccessView} />
@@ -61,8 +62,10 @@ var routes = (
 
 window.addEventListener('DOMContentLoaded', () => {
   ReactDOM.render(
-    <Router>{routes}</Router>,
-    document.getElementById('huxley-app')
+    <Router>
+      {routes}
+    </Router>,
+    document.getElementById('huxley-app'),
   );
 });
 

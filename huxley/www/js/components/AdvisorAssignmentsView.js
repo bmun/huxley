@@ -27,12 +27,10 @@ var TextTemplate = require('components/core/TextTemplate');
 var AdvisorAssignmentsViewText = require('text/AdvisorAssignmentsViewText.md');
 
 var AdvisorAssignmentsView = React.createClass({
-  mixins: [
-    ReactRouter.History,
-  ],
+  mixins: [ReactRouter.History],
 
   contextTypes: {
-    conference: React.PropTypes.shape(ConferenceContext)
+    conference: React.PropTypes.shape(ConferenceContext),
   },
 
   getInitialState: function() {
@@ -41,7 +39,9 @@ var AdvisorAssignmentsView = React.createClass({
     var assigned = this.prepareAssignedDelegates(delegates);
     return {
       assigned: assigned,
-      assignments: AssignmentStore.getSchoolAssignments(schoolID).filter(assignment => !assignment.rejected),
+      assignments: AssignmentStore.getSchoolAssignments(schoolID).filter(
+        assignment => !assignment.rejected,
+      ),
       committees: CommitteeStore.getCommittees(),
       countries: CountryStore.getCountries(),
       delegates: delegates,
@@ -65,14 +65,16 @@ var AdvisorAssignmentsView = React.createClass({
       var assigned = this.prepareAssignedDelegates(delegates);
       this.setState({
         delegates: delegates,
-        assigned: assigned
+        assigned: assigned,
       });
     });
 
     this._assignmentsToken = AssignmentStore.addListener(() => {
       var schoolID = CurrentUserStore.getCurrentUser().school.id;
       this.setState({
-        assignments: AssignmentStore.getSchoolAssignments(schoolID).filter(assignment => !assignment.rejected)
+        assignments: AssignmentStore.getSchoolAssignments(schoolID).filter(
+          assignment => !assignment.rejected,
+        ),
       });
     });
   },
@@ -96,8 +98,7 @@ var AdvisorAssignmentsView = React.createClass({
       this.state.assignments.length > 0;
     return (
       <InnerView>
-        <TextTemplate
-          conferenceSession={conference.session}>
+        <TextTemplate conferenceSession={conference.session}>
           {AdvisorAssignmentsViewText}
         </TextTemplate>
         <Table
@@ -108,8 +109,12 @@ var AdvisorAssignmentsView = React.createClass({
               <th>Committee</th>
               <th>Country</th>
               <th>Delegation Size</th>
-              <th>{finalized ? 'Delegate' : 'Delete Assignments'}</th>
-              <th>{finalized ? 'Delegate' : ''}</th>
+              <th>
+                {finalized ? 'Delegate' : 'Delete Assignments'}
+              </th>
+              <th>
+                {finalized ? 'Delegate' : ''}
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -118,7 +123,7 @@ var AdvisorAssignmentsView = React.createClass({
         </Table>
         <Button
           color="green"
-          onClick={finalized ? this._handleSave: this._handleFinalize}
+          onClick={finalized ? this._handleSave : this._handleFinalize}
           loading={this.state.loading}
           success={this.state.success}>
           {finalized ? 'Save' : 'Finalize Assignments'}
@@ -131,28 +136,40 @@ var AdvisorAssignmentsView = React.createClass({
     var committees = this.state.committees;
     var countries = this.state.countries;
     var finalized = CurrentUserStore.getFinalized();
-    return this.state.assignments.map(function(assignment) {
-      return (
-        <tr>
-          <td>{committees[assignment.committee].name}</td>
-          <td>{countries[assignment.country].name}</td>
-          <td>{committees[assignment.committee].delegation_size}</td>
-          <td>{finalized ?
-            this.renderDelegateDropdown(assignment, 0) :
-            "Not available as of Jan. 23"
-            /*<Button color="red"
+    return this.state.assignments.map(
+      function(assignment) {
+        return (
+          <tr>
+            <td>
+              {committees[assignment.committee].name}
+            </td>
+            <td>
+              {countries[assignment.country].name}
+            </td>
+            <td>
+              {committees[assignment.committee].delegation_size}
+            </td>
+            <td>
+              {finalized
+                ? this.renderDelegateDropdown(assignment, 0)
+                : 'Not available as of Jan. 23'
+              /*<Button color="red"
                     size="small"
                     onClick={this._handleAssignmentDelete.bind(this, assignment)}>
                     Delete Assignment
-            </Button>*/}
-          </td>
-          <td>{finalized && committees[assignment.committee].delegation_size == 2 ?
-            this.renderDelegateDropdown(assignment, 1) :
-            <div/>}
-          </td>
-        </tr>
-      )
-    }.bind(this));
+            </Button>*/
+              }
+            </td>
+            <td>
+              {finalized &&
+              committees[assignment.committee].delegation_size == 2
+                ? this.renderDelegateDropdown(assignment, 1)
+                : <div />}
+            </td>
+          </tr>
+        );
+      }.bind(this),
+    );
   },
 
   /*
@@ -180,10 +197,17 @@ var AdvisorAssignmentsView = React.createClass({
   },
 
   renderDelegateDropdown: function(assignment, slot) {
-    var selectedDelegateID = assignment.id in this.state.assigned ? this.state.assigned[assignment.id][slot] : 0;
+    var selectedDelegateID =
+      assignment.id in this.state.assigned
+        ? this.state.assigned[assignment.id][slot]
+        : 0;
     return (
       <DelegateSelect
-        onChange={this._handleDelegateAssignment.bind(this, assignment.id, slot)}
+        onChange={this._handleDelegateAssignment.bind(
+          this,
+          assignment.id,
+          slot,
+        )}
         delegates={this.state.delegates}
         selectedDelegateID={selectedDelegateID}
       />
@@ -193,7 +217,8 @@ var AdvisorAssignmentsView = React.createClass({
   _handleDelegateAssignment: function(assignmentId, slot, event) {
     var delegates = this.state.delegates;
     var assigned = this.state.assigned;
-    var newDelegateId = event.target.value, oldDelegateId = 0;
+    var newDelegateId = event.target.value,
+      oldDelegateId = 0;
 
     if (assignmentId in assigned) {
       oldDelegateId = assigned[assignmentId][slot];
@@ -217,26 +242,38 @@ var AdvisorAssignmentsView = React.createClass({
 
     this.setState({
       delegates: delegates,
-      assigned: assigned
+      assigned: assigned,
     });
   },
 
   _handleFinalize: function(event) {
-    var confirm = window.confirm("By pressing okay you are committing to the financial responsibility of each assignment. Are you sure you want to finalize assignments?");
+    var confirm = window.confirm(
+      'By pressing okay you are committing to the financial responsibility of each assignment. Are you sure you want to finalize assignments?',
+    );
     var school = CurrentUserStore.getCurrentUser().school;
     if (confirm) {
-      CurrentUserActions.updateSchool(school.id, {
-        assignments_finalized: true,
-      }, this._handleError);
+      CurrentUserActions.updateSchool(
+        school.id,
+        {
+          assignments_finalized: true,
+        },
+        this._handleError,
+      );
     }
   },
 
   _handleAssignmentDelete: function(assignment) {
-    var confirm = window.confirm("Are you sure you want to delete this assignment?");
+    var confirm = window.confirm(
+      'Are you sure you want to delete this assignment?',
+    );
     if (confirm) {
-      AssignmentActions.updateAssignment(assignment.id, {
-        rejected: true,
-      }, this._handleError);
+      AssignmentActions.updateAssignment(
+        assignment.id,
+        {
+          rejected: true,
+        },
+        this._handleError,
+      );
     }
   },
 
@@ -244,7 +281,12 @@ var AdvisorAssignmentsView = React.createClass({
     this._successTimout && clearTimeout(this._successTimeout);
     this.setState({loading: true});
     var school = CurrentUserStore.getCurrentUser().school;
-    DelegateActions.updateDelegates(school.id, this.state.delegates, this._handleSuccess, this._handleError);
+    DelegateActions.updateDelegates(
+      school.id,
+      this.state.delegates,
+      this._handleSuccess,
+      this._handleError,
+    );
   },
 
   _handleSuccess: function(response) {
@@ -253,12 +295,17 @@ var AdvisorAssignmentsView = React.createClass({
       success: true,
     });
 
-    this._successTimeout = setTimeout(() => this.setState({success: false}), 2000);
+    this._successTimeout = setTimeout(
+      () => this.setState({success: false}),
+      2000,
+    );
   },
 
   _handleError: function(response) {
     this.setState({loading: false});
-    window.alert("Something went wrong. Please refresh your page and try again.");
+    window.alert(
+      'Something went wrong. Please refresh your page and try again.',
+    );
   },
 });
 

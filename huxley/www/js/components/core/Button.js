@@ -36,7 +36,7 @@ var Button = React.createClass({
       <ButtonComponent
         {...this.props}
         className={cx({
-          'button': true,
+          button: true,
           'button-small': this.props.size == 'small',
           'button-large': this.props.size == 'large',
           'button-blue': this.props.color == 'blue',
@@ -44,15 +44,17 @@ var Button = React.createClass({
           'button-yellow': this.props.color == 'yellow',
           'button-red': this.props.color == 'red',
           'rounded-small': true,
-          'loading': this.props.loading,
+          loading: this.props.loading,
           'button-checkmark': this.props.success,
         })}
         disabled={this.props.loading}
         to={this.props.href}>
-        <span>{this.props.children}</span>
+        <span>
+          {this.props.children}
+        </span>
       </ButtonComponent>
     );
-  }
+  },
 });
 
 module.exports = Button;

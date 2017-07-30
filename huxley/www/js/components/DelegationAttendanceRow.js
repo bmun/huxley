@@ -12,7 +12,7 @@ var DelegationAttendanceRow = React.createClass({
     onChange: React.PropTypes.func,
     countryName: React.PropTypes.string,
     countryID: React.PropTypes.string,
-    delegates: React.PropTypes.array
+    delegates: React.PropTypes.array,
   },
 
   render() {
@@ -27,7 +27,7 @@ var DelegationAttendanceRow = React.createClass({
               className="choice"
               type="checkbox"
               checked={this.props.delegates[0].voting}
-              onChange={this._handleChange.bind(this, "voting")}
+              onChange={this._handleChange.bind(this, 'voting')}
             />
           </label>
         </td>
@@ -37,7 +37,7 @@ var DelegationAttendanceRow = React.createClass({
               className="choice"
               type="checkbox"
               checked={this.props.delegates[0].session_one}
-              onChange={this._handleChange.bind(this, "session_one")}
+              onChange={this._handleChange.bind(this, 'session_one')}
             />
           </label>
         </td>
@@ -47,7 +47,7 @@ var DelegationAttendanceRow = React.createClass({
               className="choice"
               type="checkbox"
               checked={this.props.delegates[0].session_two}
-              onChange={this._handleChange.bind(this, "session_two")}
+              onChange={this._handleChange.bind(this, 'session_two')}
             />
           </label>
         </td>
@@ -57,7 +57,7 @@ var DelegationAttendanceRow = React.createClass({
               className="choice"
               type="checkbox"
               checked={this.props.delegates[0].session_three}
-              onChange={this._handleChange.bind(this, "session_three")}
+              onChange={this._handleChange.bind(this, 'session_three')}
             />
           </label>
         </td>
@@ -67,7 +67,7 @@ var DelegationAttendanceRow = React.createClass({
               className="choice"
               type="checkbox"
               checked={this.props.delegates[0].session_four}
-              onChange={this._handleChange.bind(this, "session_four")}
+              onChange={this._handleChange.bind(this, 'session_four')}
             />
           </label>
         </td>
@@ -76,7 +76,8 @@ var DelegationAttendanceRow = React.createClass({
   },
 
   _handleChange: function(field, event) {
-    this.props.onChange && this.props.onChange(field, this.props.countryID, event);
+    this.props.onChange &&
+      this.props.onChange(field, this.props.countryID, event);
   },
 });
 

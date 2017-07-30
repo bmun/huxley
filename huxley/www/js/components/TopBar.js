@@ -43,7 +43,7 @@ var TopBar = React.createClass({
                 <a
                   className={cx({
                     'change-password-link': true,
-                    'active': this.state.changePasswordVisible,
+                    active: this.state.changePasswordVisible,
                   })}
                   href="#"
                   onClick={this._handleChangePasswordClick}>
@@ -56,9 +56,7 @@ var TopBar = React.createClass({
             </ul>
             <div className="left">
               <span className="title white">Huxley</span>
-              &nbsp;
-              &middot;
-              &nbsp;
+              &nbsp; &middot; &nbsp;
               <span>A Conference Management Tool by BMUN</span>
             </div>
           </div>
@@ -76,7 +74,7 @@ var TopBar = React.createClass({
     e.preventDefault();
     this._stopPropagation(e);
     this.setState({
-      changePasswordVisible: !this.state.changePasswordVisible
+      changePasswordVisible: !this.state.changePasswordVisible,
     });
   },
 

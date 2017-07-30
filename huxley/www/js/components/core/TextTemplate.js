@@ -15,21 +15,19 @@ const entityMap = {
   "'": '&#39;',
   '/': '&#x2F;',
   '`': '&#x60;',
-  '=': '&#x3D;'
+  '=': '&#x3D;',
 };
 
 const TextTemplate = React.createClass({
   render() {
-    return (
-      <div dangerouslySetInnerHTML={this.createMarkup()} />
-    );
+    return <div dangerouslySetInnerHTML={this.createMarkup()} />;
   },
 
   createMarkup() {
     var text = this.props.children;
     for (const variable of Object.keys(this.props)) {
-      const regex = new RegExp("{{ " + variable + " }}", "g");
-      const value  = this.escapeHtml(this.props[variable]);
+      const regex = new RegExp('{{ ' + variable + ' }}', 'g');
+      const value = this.escapeHtml(this.props[variable]);
       text = text.replace(regex, value);
     }
 
@@ -37,10 +35,10 @@ const TextTemplate = React.createClass({
   },
 
   escapeHtml(string) {
-    return String(string).replace(/[&<>"'`=\/]/g, function (s) {
+    return String(string).replace(/[&<>"'`=\/]/g, function(s) {
       return entityMap[s];
     });
-  }
+  },
 });
 
 module.exports = TextTemplate;

@@ -11,7 +11,7 @@ var DelegateSelect = React.createClass({
   propTypes: {
     onChange: React.PropTypes.func,
     delegates: React.PropTypes.array,
-    selectedDelegateID: React.PropTypes.number
+    selectedDelegateID: React.PropTypes.number,
   },
 
   render: function() {
@@ -27,12 +27,15 @@ var DelegateSelect = React.createClass({
   },
 
   renderDelegateOptions: function() {
-    return this.props.delegates.map((delegate) =>
-      <option key={delegate.id} value={delegate.id} disabled={delegate.assignment}>
+    return this.props.delegates.map(delegate =>
+      <option
+        key={delegate.id}
+        value={delegate.id}
+        disabled={delegate.assignment}>
         {delegate.name}
-      </option>
+      </option>,
     );
-  }
+  },
 });
 
 module.exports = DelegateSelect;

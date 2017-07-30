@@ -20,9 +20,7 @@ require('css/LoginForm.less');
 var ForgotPasswordViewText = require('text/ForgotPasswordViewText.md');
 
 var ForgotPasswordView = React.createClass({
-  mixins: [
-    ReactRouter.History,
-  ],
+  mixins: [ReactRouter.History],
 
   contextTypes: {
     shake: React.PropTypes.func,
@@ -32,7 +30,7 @@ var ForgotPasswordView = React.createClass({
     return {
       username: '',
       error: false,
-      loading: false
+      loading: false,
     };
   },
 
@@ -56,9 +54,7 @@ var ForgotPasswordView = React.createClass({
               onChange={this._handleUsernameChange}
             />
           </div>
-          <Button
-            color="green"
-            loading={this.state.loading}>
+          <Button color="green" loading={this.state.loading}>
             Reset Password
           </Button>
           <span className="help-text">We'll email you a new one.</span>
@@ -100,12 +96,15 @@ var ForgotPasswordView = React.createClass({
       return;
     }
 
-    this.setState({
-      error: "Sorry, we couldn't find a user with that username.",
-      loading: false
-    }, () => {
-      this.context.shake && this.context.shake();
-    });
+    this.setState(
+      {
+        error: "Sorry, we couldn't find a user with that username.",
+        loading: false,
+      },
+      () => {
+        this.context.shake && this.context.shake();
+      },
+    );
   },
 });
 

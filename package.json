@@ -58,6 +58,7 @@
     "less": "^2.7.2",
     "less-loader": "^4.0.3",
     "markdown-loader": "^2.0.0",
+    "prettier": "^1.5.3",
     "style-loader": "^0.16.1",
     "uglify-js": "~2.4.15",
     "webpack": "^2.4.1"

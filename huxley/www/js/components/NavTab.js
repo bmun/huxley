@@ -10,19 +10,16 @@ var React = require('react');
 
 var NavTab = React.createClass({
   propTypes: {
-    href: React.PropTypes.string.isRequired
+    href: React.PropTypes.string.isRequired,
   },
 
   render: function() {
     return (
-      <Link
-        activeClassName="current"
-        className='tab'
-        to={this.props.href}>
+      <Link activeClassName="current" className="tab" to={this.props.href}>
         {this.props.children}
       </Link>
     );
-  }
+  },
 });
 
 module.exports = NavTab;

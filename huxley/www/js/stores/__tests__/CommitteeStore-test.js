@@ -48,7 +48,7 @@ describe('CommitteeStore', () => {
 
     registerCallback({
       actionType: ActionConstants.COMMITTEES_FETCHED,
-      committees: mockCommittees
+      committees: mockCommittees,
     });
 
     committees = CommitteeStore.getCommittees();
@@ -59,7 +59,7 @@ describe('CommitteeStore', () => {
   it('filters special committees', () => {
     registerCallback({
       actionType: ActionConstants.COMMITTEES_FETCHED,
-      committees: mockCommittees
+      committees: mockCommittees,
     });
 
     var committees = CommitteeStore.getSpecialCommittees();
@@ -72,7 +72,7 @@ describe('CommitteeStore', () => {
     expect(callback).not.toBeCalled();
     registerCallback({
       actionType: ActionConstants.COMMITTEES_FETCHED,
-      committees: mockCommittees
+      committees: mockCommittees,
     });
     expect(callback).toBeCalled();
   });

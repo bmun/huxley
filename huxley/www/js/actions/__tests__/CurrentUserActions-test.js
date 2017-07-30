@@ -25,7 +25,7 @@ describe('CurrentUserActions', function() {
     expect(Dispatcher.dispatch.mock.calls.length).toBe(1);
     expect(Dispatcher.dispatch).toBeCalledWith({
       actionType: ActionConstants.LOGIN,
-      user: user
+      user: user,
     });
   });
 
@@ -34,7 +34,7 @@ describe('CurrentUserActions', function() {
 
     expect(Dispatcher.dispatch.mock.calls.length).toBe(1);
     expect(Dispatcher.dispatch).toBeCalledWith({
-      actionType: ActionConstants.LOGOUT
+      actionType: ActionConstants.LOGOUT,
     });
   });
 });

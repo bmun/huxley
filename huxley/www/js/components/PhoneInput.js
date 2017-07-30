@@ -21,7 +21,7 @@ var PhoneInput = React.createClass({
     if (prevProps.isInternational !== this.props.isInternational) {
       var number = this._formatValue(
         this.props.value,
-        this.props.isInternational
+        this.props.isInternational,
       );
       this.props.onChange && this.props.onChange(number);
     }

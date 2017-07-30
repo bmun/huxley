@@ -13,7 +13,7 @@ describe('DelegateStore', () => {
   var Dispatcher;
   var ServerAPI;
 
-  var jake, nate
+  var jake, nate;
   var mockDelegates, mockSchoolID;
   var mockSchoolID2;
   var registerCallback;
@@ -53,7 +53,7 @@ describe('DelegateStore', () => {
 
     registerCallback({
       actionType: ActionConstants.DELEGATES_FETCHED,
-      delegates: mockDelegates
+      delegates: mockDelegates,
     });
 
     delegates = DelegateStore.getSchoolDelegates(mockSchoolID);
@@ -68,7 +68,7 @@ describe('DelegateStore', () => {
 
     registerCallback({
       actionType: ActionConstants.DELEGATES_FETCHED,
-      delegates: []
+      delegates: [],
     });
 
     delegates = DelegateStore.getSchoolDelegates(mockSchoolID2);
@@ -82,7 +82,7 @@ describe('DelegateStore', () => {
     expect(callback).not.toBeCalled();
     registerCallback({
       actionType: ActionConstants.DELEGATES_FETCHED,
-      delegates: mockDelegates
+      delegates: mockDelegates,
     });
     expect(callback).toBeCalled();
   });
@@ -90,17 +90,17 @@ describe('DelegateStore', () => {
   it('adds a delegate and emits a change', () => {
     registerCallback({
       actionType: ActionConstants.DELEGATES_FETCHED,
-      delegates: mockDelegates
+      delegates: mockDelegates,
     });
 
     var callback = jest.genMockFunction();
     DelegateStore.addListener(callback);
     expect(callback).not.toBeCalled();
 
-    var new_delegate = {id: 3, name: 'Trevor', email: "", school: mockSchoolID};
+    var new_delegate = {id: 3, name: 'Trevor', email: '', school: mockSchoolID};
     registerCallback({
       actionType: ActionConstants.ADD_DELEGATE,
-      delegate: new_delegate
+      delegate: new_delegate,
     });
     expect(callback).toBeCalled();
 
@@ -112,7 +112,7 @@ describe('DelegateStore', () => {
   it('deletes a delegate and emits a change', () => {
     registerCallback({
       actionType: ActionConstants.DELEGATES_FETCHED,
-      delegates: mockDelegates
+      delegates: mockDelegates,
     });
 
     var callback = jest.genMockFunction();
@@ -121,7 +121,7 @@ describe('DelegateStore', () => {
 
     registerCallback({
       actionType: ActionConstants.DELETE_DELEGATE,
-      delegateID: 1
+      delegateID: 1,
     });
     expect(callback).toBeCalled();
     expect(ServerAPI.deleteDelegate).toBeCalledWith(1);
@@ -134,7 +134,7 @@ describe('DelegateStore', () => {
   it('updates a delegate and emits a change', () => {
     registerCallback({
       actionType: ActionConstants.DELEGATES_FETCHED,
-      delegates: mockDelegates
+      delegates: mockDelegates,
     });
 
     var callback = jest.genMockFunction();
@@ -145,7 +145,7 @@ describe('DelegateStore', () => {
     registerCallback({
       actionType: ActionConstants.UPDATE_DELEGATE,
       delegateID: 1,
-      delta: delta
+      delta: delta,
     });
     expect(callback).toBeCalled();
 
@@ -158,25 +158,35 @@ describe('DelegateStore', () => {
   it('updates delegates in bulk and emits a change', () => {
     registerCallback({
       actionType: ActionConstants.DELEGATES_FETCHED,
-      delegates: mockDelegates
+      delegates: mockDelegates,
     });
 
     var callback = jest.genMockFunction();
     DelegateStore.addListener(callback);
     expect(callback).not.toBeCalled();
 
-    var updated_jake = {id: 1, name: 'Jake Moskowitz', email: '', school: mockSchoolID};
-    var udpated_nate = {id: 2, name: 'Nathaniel Parke', email: '', school: mockSchoolID};
+    var updated_jake = {
+      id: 1,
+      name: 'Jake Moskowitz',
+      email: '',
+      school: mockSchoolID,
+    };
+    var udpated_nate = {
+      id: 2,
+      name: 'Nathaniel Parke',
+      email: '',
+      school: mockSchoolID,
+    };
     registerCallback({
       actionType: ActionConstants.UPDATE_DELEGATES,
       schoolID: mockSchoolID,
-      delegates: [updated_jake, udpated_nate]
+      delegates: [updated_jake, udpated_nate],
     });
     expect(callback).toBeCalled();
-    expect(ServerAPI.updateSchoolDelegates).toBeCalledWith(
-      mockSchoolID,
-      [updated_jake, udpated_nate]
-    );
+    expect(ServerAPI.updateSchoolDelegates).toBeCalledWith(mockSchoolID, [
+      updated_jake,
+      udpated_nate,
+    ]);
 
     var updated_delegates = DelegateStore.getSchoolDelegates(mockSchoolID);
     expect(updated_delegates.length).toEqual(2);

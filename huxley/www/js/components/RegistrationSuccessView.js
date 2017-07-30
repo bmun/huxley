@@ -16,9 +16,8 @@ require('css/Letter.less');
 var RegistrationSuccessViewText = require('text/RegistrationSuccessViewText.md');
 
 var RegistrationSuccessView = React.createClass({
-
   contextTypes: {
-    conference: React.PropTypes.shape(ConferenceContext)
+    conference: React.PropTypes.shape(ConferenceContext),
   },
 
   render: function() {
@@ -40,7 +39,7 @@ var RegistrationSuccessView = React.createClass({
         </NavLink>
       </OuterView>
     );
-  }
+  },
 });
 
 module.exports = RegistrationSuccessView;

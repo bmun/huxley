@@ -16,7 +16,6 @@ require('css/TextInput.less');
  * See issue #519.
  */
 var TextInput = React.createClass({
-
   propTypes: {
     defaultValue: React.PropTypes.string,
     isControlled: React.PropTypes.bool,

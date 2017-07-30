@@ -15,7 +15,6 @@ var StatusLabel = require('components/core/StatusLabel');
 require('css/ChangePasswordView.less');
 
 var ChangePasswordView = React.createClass({
-
   propTypes: {
     isVisible: React.PropTypes.bool.isRequired,
     onClick: React.PropTypes.func,
@@ -43,8 +42,8 @@ var ChangePasswordView = React.createClass({
         className={cx({
           'change-password': true,
           'rounded-bottom': true,
-           'transparent': true,
-           'visible': this.props.isVisible,
+          transparent: true,
+          visible: this.props.isVisible,
         })}
         onClick={this._handleDropdownClick}>
         <form onSubmit={this._handleSubmit}>
@@ -128,14 +127,17 @@ var ChangePasswordView = React.createClass({
   },
 
   _handleSuccess: function(response) {
-    this.setState({
-      loading: false,
-      success: true,
-      message: 'Password changed!',
-      currentPassword: '',
-      newPassword: '',
-      newPassword2: '',
-    }, this.onSuccess);
+    this.setState(
+      {
+        loading: false,
+        success: true,
+        message: 'Password changed!',
+        currentPassword: '',
+        newPassword: '',
+        newPassword2: '',
+      },
+      this.onSuccess,
+    );
   },
 
   _handleError: function(response) {
