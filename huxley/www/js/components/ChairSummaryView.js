@@ -28,6 +28,11 @@ var ChairSummaryView = React.createClass({
     var user = CurrentUserStore.getCurrentUser();
     var assignments = AssignmentStore.getCommitteeAssignments(user.committee);
     var countries = CountryStore.getCountries();
+    var delegates = DelegateStore.getCommitteeDelegates(user.committee);
+    var summaries = {};
+    for (var delegate of delegates) {
+      summaries[delegate.assignment] = delegate.summary;
+    }
     if (assignments.length && Object.keys(countries).length) {
       assignments.sort(
         (a1, a2) =>
@@ -37,12 +42,12 @@ var ChairSummaryView = React.createClass({
     return {
       assignments: assignments,
       countries: countries,
-      delegates: DelegateStore.getCommitteeDelegates(user.committee),
-      summaries: {},
       loadingSave: false,
       successSave: false,
       loadingPublish: false,
       successPublish: false,
+      delegates: delegates,
+      summaries: summaries,
     };
   },
 
@@ -55,20 +60,17 @@ var ChairSummaryView = React.createClass({
 
   componentDidMount() {
     var user = CurrentUserStore.getCurrentUser();
-    var delegates = this.state.delegates;
-    var summaries = this.state.summaries;
-    for (var delegate of delegates) {
-      summaries[delegate.assignment] = delegate.summary;
-    }
 
     this._delegatesToken = DelegateStore.addListener(() => {
       var delegates = DelegateStore.getCommitteeDelegates(user.committee);
+      var summaries = this.state.summaries;
+      var update = {};
       for (var delegate of delegates) {
-        summaries[delegate.assignment] = delegate.summary;
+        update[delegate.assignment] = delegate.summary;
       }
       this.setState({
         delegates: delegates,
-        summaries: summaries,
+        summaries: {...summaries, ...update},
       });
     });
 
@@ -98,8 +100,6 @@ var ChairSummaryView = React.createClass({
         countries: countries,
       });
     });
-
-    this.setState({summaries: summaries});
   },
 
   componentWillUnmount() {
@@ -188,8 +188,9 @@ var ChairSummaryView = React.createClass({
   _handleSummaryChange(assignment, event) {
     var newSummary = event.target.value;
     var summaries = this.state.summaries;
-    summaries[assignment.id] = newSummary;
-    this.setState({summaries: summaries});
+    var update = {};
+    update[assignment.id] = newSummary;
+    this.setState({summaries: {...summaries, ...update}});
   },
 
   _handleSaveSummaries(event) {

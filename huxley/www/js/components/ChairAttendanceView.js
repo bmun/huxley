@@ -34,6 +34,7 @@ var ChairAttendanceView = React.createClass({
       delegates: DelegateStore.getCommitteeDelegates(user.committee),
       loading: false,
       success: false,
+      attendance: {},
     };
   },
 
@@ -46,23 +47,57 @@ var ChairAttendanceView = React.createClass({
 
   componentDidMount() {
     var user = CurrentUserStore.getCurrentUser();
-    this._mapAssignments();
+    var delegates = this.state.delegates;
+    var attendance = this.state.attendance;
+    var update = {};
+    for (var delegate of delegates) {
+      var delegateAttendance = [];
+      delegateAttendance[0] = delegate.voting;
+      delegateAttendance[1] = delegate.session_one;
+      delegateAttendance[2] = delegate.session_two;
+      delegateAttendance[3] = delegate.session_three;
+      delegateAttendance[4] = delegate.session_four;
+      update[delegate.assignment] = delegateAttendance;
+    }
+    this.setState({attendance: Object.assign({}, attendance, update)});
+
     this._delegatesToken = DelegateStore.addListener(() => {
+      var delegates =  DelegateStore.getCommitteeDelegates(user.committee);
+      var update = {};
+      for (var delegate of delegates) {
+        var delegateAttendance = [];
+        delegateAttendance[0] = delegate.voting;
+        delegateAttendance[1] = delegate.session_one;
+        delegateAttendance[2] = delegate.session_two;
+        delegateAttendance[3] = delegate.session_three;
+        delegateAttendance[4] = delegate.session_four;
+        update[delegate.assignment] = delegateAttendance;
+      }
       this.setState({
-        delegates: DelegateStore.getCommitteeDelegates(user.committee),
+        delegates: delegates,
+        attendance: Object.assign({}, attendance, update),
       });
-      this._mapAssignments();
     });
 
     this._assignmentsToken = AssignmentStore.addListener(() => {
-      this.setState({
-        assignments: AssignmentStore.getCommitteeAssignments(user.committee),
-      });
-      this._mapAssignments();
+      var assignments = AssignmentStore.getCommitteeAssignments(user.committee);
+      var countries = this.state.countries;
+      if (Object.keys(countries).length) {
+        assignments.sort((a1, a2) => countries[a1.country].name < countries[a2.country].name ? -1 : 1);
+      }
+      this.setState({assignments: assignments});
     });
 
     this._countriesToken = CountryStore.addListener(() => {
-      this.setState({countries: CountryStore.getCountries()});
+      var assignments = this.state.assignments;
+      var countries = CountryStore.getCountries();
+      if (assignments.length) {
+        assignments.sort((a1, a2) => countries[a1.country].name < countries[a2.country].name ? -1 : 1);
+      }
+      this.setState({
+        assignments: assignments,
+        countries: countries
+      });
     });
   },
 
@@ -116,72 +151,53 @@ var ChairAttendanceView = React.createClass({
   },
 
   renderAttendanceRows() {
-    var committeeCountryIDs = Object.keys(this.state.country_assignments);
+    var assignments = this.state.assignments;
+    var attendance = this.state.attendance;
+    var assignmentIDs = Object.keys(attendance);
     var countries = this.state.countries;
-    if (Object.keys(countries).length) {
-      committeeCountryIDs.sort(
-        (c1, c2) => (countries[c1].name < countries[c2].name ? -1 : 1),
-      );
-    }
-    return committeeCountryIDs.map(country =>
+    assignments = assignments.filter(a => assignmentIDs.indexOf(""+a.id) > -1);
+    return assignments.map(assignment => 
       <DelegationAttendanceRow
-        key={country}
+        key={assignment.id}
         onChange={this._handleAttendanceChange}
         countryName={
-          Object.keys(countries).length ? countries[country].name : country
+          Object.keys(countries).length ? countries[assignment.country].name : ""+assignment.country
         }
-        countryID={country}
-        delegates={this.state.country_assignments[country]}
-      />,
+        assignmentID={assignment.id}
+        attendance={attendance[assignment.id]}
+      />
     );
   },
 
-  _mapAssignments() {
-    var user = CurrentUserStore.getCurrentUser();
-    var country_assignments = {};
-    var delegates = this.state.delegates;
-    var assignments = this.state.assignments;
-    for (var delegate of delegates) {
-      var assignment = assignments.find(
-        assignment => assignment.id == delegate.assignment,
-      );
-      if (!assignment) continue;
-      var countryID = assignment.country;
-      if (countryID in country_assignments) {
-        country_assignments[countryID].push(delegate);
-      } else {
-        country_assignments[countryID] = [delegate];
-      }
-    }
-
-    this.setState({country_assignments: country_assignments});
-  },
-
-  _handleAttendanceChange(field, country, event) {
-    var country_assignments = this.state.country_assignments;
-    var country_delegates = country_assignments[country];
-    for (var delegate of country_delegates) {
-      delegate[field] = !delegate[field];
-    }
-
-    this.setState({country_assignments: country_assignments});
+  _handleAttendanceChange(field, assignmentID, event) {
+    var attendanceMap = this.state.attendance;
+    var oldAttendance = attendanceMap[assignmentID];
+    var newAttendance = [... oldAttendance];
+    newAttendance[field] = !newAttendance[field];
+    var update = {};
+    update[assignmentID] = newAttendance;
+    this.setState({attendance: Object.assign({}, attendanceMap, update)});
   },
 
   _handleSaveAttendance(event) {
     this._successTimout && clearTimeout(this._successTimeout);
     this.setState({loading: true});
     var committee = CurrentUserStore.getCurrentUser().committee;
-    var country_assignments = this.state.country_assignments;
-    var delegates = [];
-    for (var country in country_assignments) {
-      delegates = delegates.concat(country_assignments[country]);
+    var attendanceMap = this.state.attendance;
+    var delegates = this.state.delegates;
+    var toSave = [];
+    for (var delegate of delegates) {
+      var attendance = attendanceMap[delegate.assignment];
+      if (delegate.attendance != attendance) {
+        var update = {voting: attendance[0],
+                      session_one: attendance[1],
+                      session_two: attendance[2],
+                      session_three: attendance[3],
+                      session_four: attendance[4]};
+        toSave.push(Object.assign({}, delegate, update))
+      }
     }
-    DelegateActions.updateCommitteeDelegates(
-      committee,
-      delegates,
-      this._handleSuccess,
-      this._handleError,
-    );
+    DelegateActions.updateCommitteeDelegates(committee, toSave, this._handleSuccess, this._handleError);
     event.preventDefault();
   },
 
