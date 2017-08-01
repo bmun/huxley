@@ -13,6 +13,7 @@ from huxley.core.models import School, Committee, Country, Delegate, Assignment,
 if not settings.TESTING:
     raise PermissionDenied
 
+
 def new_user(**kwargs):
     username = kwargs.pop('username', None) or str(uuid.uuid4())
     u = User(username=username, email=kwargs.pop('email', 'test@user.in'))
@@ -38,31 +39,32 @@ def new_superuser(*args, **kwargs):
 
 
 def new_school(**kwargs):
-    s = School(name=kwargs.pop('name', 'Test School'),
-               address=kwargs.pop('address', '1 Schoolhouse Road'),
-               city=kwargs.pop('city', 'Berkeley'),
-               state=kwargs.pop('state', 'CA'),
-               zip_code=kwargs.pop('zip_code', '94024'),
-               country=kwargs.pop('country', 'United States of America'),
-               primary_name=kwargs.pop('primary_name', 'first'),
-               primary_gender=kwargs.pop('primary_gender', ContactGender.MALE),
-               primary_email=kwargs.pop('primary_email', 'e@mail.com'),
-               primary_phone=kwargs.pop('primary_phone', '1234567890'),
-               primary_type=kwargs.pop('primary_type', ContactType.FACULTY),
-               secondary_name=kwargs.pop('secondary_name', ''),
-               secondary_gender=kwargs.pop('secondary_gender', ContactGender.MALE),
-               secondary_email=kwargs.pop('secondary_email', ''),
-               secondary_phone=kwargs.pop('secondary_phone', ''),
-               secondary_type=kwargs.pop('secondary_type', ContactType.FACULTY),
-               program_type=kwargs.pop('program_type', ProgramTypes.CLUB),
-               times_attended=kwargs.pop('times_attended', 0),
-               beginner_delegates=kwargs.pop('beginner_delegates', 0),
-               intermediate_delegates=kwargs.pop('intermediate_delegates', 0),
-               advanced_delegates=kwargs.pop('advanced_delegates', 0),
-               spanish_speaking_delegates=kwargs.pop('spanish_speaking_delegates', 0),
-               chinese_speaking_delegates=kwargs.pop('chinese_speaking_delegates', 0),
-               registration_comments=kwargs.pop('registration_comments', ''),
-               assignments_finalized=kwargs.pop('assignments_finalized', False))
+    s = School(
+        name=kwargs.pop('name', 'Test School'),
+        address=kwargs.pop('address', '1 Schoolhouse Road'),
+        city=kwargs.pop('city', 'Berkeley'),
+        state=kwargs.pop('state', 'CA'),
+        zip_code=kwargs.pop('zip_code', '94024'),
+        country=kwargs.pop('country', 'United States of America'),
+        primary_name=kwargs.pop('primary_name', 'first'),
+        primary_gender=kwargs.pop('primary_gender', ContactGender.MALE),
+        primary_email=kwargs.pop('primary_email', 'e@mail.com'),
+        primary_phone=kwargs.pop('primary_phone', '1234567890'),
+        primary_type=kwargs.pop('primary_type', ContactType.FACULTY),
+        secondary_name=kwargs.pop('secondary_name', ''),
+        secondary_gender=kwargs.pop('secondary_gender', ContactGender.MALE),
+        secondary_email=kwargs.pop('secondary_email', ''),
+        secondary_phone=kwargs.pop('secondary_phone', ''),
+        secondary_type=kwargs.pop('secondary_type', ContactType.FACULTY),
+        program_type=kwargs.pop('program_type', ProgramTypes.CLUB),
+        times_attended=kwargs.pop('times_attended', 0),
+        beginner_delegates=kwargs.pop('beginner_delegates', 0),
+        intermediate_delegates=kwargs.pop('intermediate_delegates', 0),
+        advanced_delegates=kwargs.pop('advanced_delegates', 0),
+        spanish_speaking_delegates=kwargs.pop('spanish_speaking_delegates', 0),
+        chinese_speaking_delegates=kwargs.pop('chinese_speaking_delegates', 0),
+        registration_comments=kwargs.pop('registration_comments', ''),
+        assignments_finalized=kwargs.pop('assignments_finalized', False))
 
     user = kwargs.pop('user', None)
     for attr, value in kwargs.items():
@@ -95,7 +97,8 @@ def new_committee(**kwargs):
     c.save()
 
     if user is None:
-        new_user(username=str(uuid.uuid4()), committee=c, user_type=User.TYPE_CHAIR)
+        new_user(
+            username=str(uuid.uuid4()), committee=c, user_type=User.TYPE_CHAIR)
     else:
         user.committee = c
         user.save()
@@ -119,7 +122,7 @@ def new_delegate(**kwargs):
         school=s,
         name=kwargs.pop('name', 'Nate Parke'),
         email=kwargs.pop('email', 'nate@earthlink.gov'),
-        summary=kwargs.pop('summary', 'He did well!'),)
+        summary=kwargs.pop('summary', 'He did well!'), )
     d.save()
     return d
 
@@ -133,20 +136,23 @@ def new_assignment(**kwargs):
         committee=test_committee,
         school=test_school,
         country=test_country,
-        rejected=kwargs.pop('rejected', False),)
+        rejected=kwargs.pop('rejected', False), )
     a.save()
     return a
 
 
 def new_registration(**kwargs):
-  r = Registration(school=kwargs.pop('school', new_school()),
-                   conference=kwargs.pop('conference', Conference.get_current()),
-                   num_beginner_delegates=kwargs.pop('num_beginner_delegates', 0),
-                   num_intermediate_delegates=kwargs.pop('num_intermediate_delegates', 0),
-                   num_advanced_delegates=kwargs.pop('num_advanced_delegates', 0),
-                   num_spanish_speaking_delegates=kwargs.pop('num_spanish_speaking_delegates', 0),
-                   num_chinese_speaking_delegates=kwargs.pop('num_chinese_speaking_delegates', 0))
+    r = Registration(
+        school=kwargs.pop('school', new_school()),
+        conference=kwargs.pop('conference', Conference.get_current()),
+        num_beginner_delegates=kwargs.pop('num_beginner_delegates', 0),
+        num_intermediate_delegates=kwargs.pop('num_intermediate_delegates', 0),
+        num_advanced_delegates=kwargs.pop('num_advanced_delegates', 0),
+        num_spanish_speaking_delegates=kwargs.pop(
+            'num_spanish_speaking_delegates', 0),
+        num_chinese_speaking_delegates=kwargs.pop(
+            'num_chinese_speaking_delegates', 0))
 
-  r.save()
+    r.save()
 
-  return r
+    return r
