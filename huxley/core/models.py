@@ -74,202 +74,21 @@ class School(models.Model):
     PROGRAM_TYPE_OPTIONS = ((ProgramTypes.CLUB, 'Club'),
                             (ProgramTypes.CLASS, 'Class'), )
 
-    CONTACT_TYPE_OPTIONS = ((ContactType.FACULTY, 'Faculty'),
-                            (ContactType.STUDENT, 'Student'), )
-
-    GENDER_OPTIONS = ((ContactGender.MALE, 'Male'),
-                      (ContactGender.FEMALE, 'Female'),
-                      (ContactGender.OTHER, 'Other'),
-                      (ContactGender.UNSPECIFIED, 'Unspecified'), )
-
-    registered = models.DateTimeField(auto_now_add=True)
     name = models.CharField(max_length=128)
     address = models.CharField(max_length=128)
     city = models.CharField(max_length=128)
     state = models.CharField(max_length=16)
     zip_code = models.CharField(max_length=16)
     country = models.CharField(max_length=64)
-    primary_name = models.CharField(max_length=128)
-    primary_gender = models.PositiveSmallIntegerField(
-        choices=GENDER_OPTIONS, default=ContactGender.UNSPECIFIED)
-    primary_email = models.EmailField()
-    primary_phone = models.CharField(max_length=32)
-    primary_type = models.PositiveSmallIntegerField(
-        choices=CONTACT_TYPE_OPTIONS, default=ContactType.FACULTY)
-    secondary_name = models.CharField(max_length=128, blank=True)
-    secondary_gender = models.PositiveSmallIntegerField(
-        choices=GENDER_OPTIONS, blank=True, default=ContactGender.UNSPECIFIED)
-    secondary_email = models.EmailField(blank=True)
-    secondary_phone = models.CharField(max_length=32, blank=True)
-    secondary_type = models.PositiveSmallIntegerField(
-        choices=CONTACT_TYPE_OPTIONS, blank=True, default=ContactType.FACULTY)
     program_type = models.PositiveSmallIntegerField(
         choices=PROGRAM_TYPE_OPTIONS, default=ProgramTypes.CLUB)
-    times_attended = models.PositiveSmallIntegerField(default=0)
     international = models.BooleanField(default=False)
-    waitlist = models.BooleanField(default=False)
-    waivers_completed = models.BooleanField(default=False)
-
-    beginner_delegates = models.PositiveSmallIntegerField()
-    intermediate_delegates = models.PositiveSmallIntegerField()
-    advanced_delegates = models.PositiveSmallIntegerField()
-    spanish_speaking_delegates = models.PositiveSmallIntegerField()
-    chinese_speaking_delegates = models.PositiveSmallIntegerField()
-
-    countrypreferences = models.ManyToManyField(
-        Country, through='CountryPreference')
-    committeepreferences = models.ManyToManyField(
-        Committee, limit_choices_to={'special': True})
-
-    registration_comments = models.TextField(default='', blank=True)
-
-    assignments_finalized = models.BooleanField(default=False)
-
-    fees_owed = models.DecimalField(
-        max_digits=6, decimal_places=2, default=Decimal('0.00'))
-    fees_paid = models.DecimalField(
-        max_digits=6, decimal_places=2, default=Decimal('0.00'))
-
-    modified_at = models.DateTimeField(default=timezone.now)
-
-    def balance(self):
-        return self.fees_owed - self.fees_paid
-
-    def update_country_preferences(self, country_ids):
-        '''Given a list of country IDs, first dedupe and filter out 0s, then
-        clear the existing country preferences and construct new ones.'''
-        seen = set()
-        processed_country_ids = []
-        country_preferences = []
-
-        for rank, country_id in enumerate(country_ids):
-            if not country_id or country_id in seen:
-                continue
-            seen.add(country_id)
-            processed_country_ids.append(country_id)
-            country_preferences.append(
-                CountryPreference(
-                    school=self,
-                    country_id=country_id,
-                    rank=rank, ))
-
-        if country_preferences:
-            with transaction.atomic():
-                self.countrypreferences.clear()
-                CountryPreference.objects.bulk_create(country_preferences)
-
-        return processed_country_ids
-
-    @classmethod
-    def update_fees(cls, **kwargs):
-        school = kwargs['instance']
-        delegate_fee = Conference.get_current().delegate_fee
-        delegate_fees = delegate_fee * sum((school.beginner_delegates,
-                                            school.intermediate_delegates,
-                                            school.advanced_delegates, ))
-        registration_fee = Conference.get_current().registration_fee
-        total_fees = registration_fee + delegate_fees
-        school.fees_owed = Decimal(total_fees) + Decimal('0.00')
-
-    @classmethod
-    def update_waitlist(cls, **kwargs):
-        '''If the school is about to be created (i.e. has no ID) and
-        registration is closed, add it to the waitlist.'''
-        school = kwargs['instance']
-        conference = Conference.get_current()
-        if not school.id and conference.waitlist_reg:
-            school.waitlist = True
-
-    @property
-    def country_preference_ids(self):
-        '''Return an ordered list of the school's preferred countries.'''
-        return [country.id
-                for country in self.countrypreferences.all().order_by(
-                    'countrypreference')]
-
-    @country_preference_ids.setter
-    def country_preference_ids(self, country_ids):
-        '''Queue a pending update to replace the school's preferred countries
-        on the next save.'''
-        self._pending_country_preference_ids = country_ids
-
-    def save(self, *args, **kwargs):
-        '''Save the school normally, then update its country preferences.'''
-        super(School, self).save(*args, **kwargs)
-        if getattr(self, '_pending_country_preference_ids', []):
-            self.update_country_preferences(
-                self._pending_country_preference_ids)
-            self._pending_country_preference_ids = []
-
-    @classmethod
-    def email_comments(cls, **kwargs):
-        school = kwargs['instance']
-        if kwargs['created'] and school.registration_comments:
-            send_mail(
-                'Registration Comments from ' + school.name,
-                school.name + ' made comments about registration: ' +
-                school.registration_comments,
-                'tech@bmun.org', ['info@bmun.org'],
-                fail_silently=False)
-
-    @classmethod
-    def email_confirmation(cls, **kwargs):
-        conference = Conference.get_current()
-        if kwargs['created']:
-            school = kwargs['instance']
-            if school.waitlist:
-                send_mail(
-                    'BMUN %d Waitlist Confirmation' % conference.session,
-                    'You have officially been put on the waitlist for BMUN %d. '
-                    'We will inform you if and when you are taken off the waitlist.\n\n'
-                    'If you have any tech related questions, please email tech@bmun.org. '
-                    'For all other questions, please email info@bmun.org.\n\n'
-                    'Thank you for using Huxley!' % conference.session,
-                    'no-reply@bmun.org', [school.primary_email],
-                    fail_silently=False)
-            else:
-                registration_fee = conference.registration_fee
-                delegate_fee = conference.delegate_fee
-                send_mail(
-                    'BMUN %d Registration Confirmation' % conference.session,
-                    'Congratulations, you have officially been registered for BMUN %d. '
-                    'To access your account, please log in at huxley.bmun.org.\n\n'
-                    'In order to confirm your spot on our registration list, '
-                    'you must pay the non-refundable school fee of $%d. '
-                    'In 24-48 hours, you will receive an invoice from QuickBooks, '
-                    'our accounting system, for your school fee. '
-                    'You can either pay online through the QuickBooks payment portal '
-                    'or mail a check to the address listed on the invoice. '
-                    'More information on payment methods and deadlines can be found '
-                    'in the invoice or at http://www.bmun.org/conference-fees/. '
-                    'If you do not pay by the deadline, then you will be dropped to our waitlist.\n\n'
-                    'In addition to the school fee, there is also a delegate fee of $%d per student. '
-                    'The invoice for this will be sent out with country assignments '
-                    'in November and is due shortly after that.\n\n'
-                    'If you have any students that need financial assistance, '
-                    'we encourage them to apply for our Alumni Scholarship '
-                    'at http://bmun.org/alumni-scholarship/. This year we will be '
-                    'awarding up to $13,000 to those that apply.\n\n'
-                    'If you have any questions, please contact info@bmun.org.\n\n'
-                    'Thank you for registering for BMUN, and we look forward to '
-                    'seeing you at the oldest high school conference in the world '
-                    'on March 3-5, 2017.' %
-                    (conference.session, int(registration_fee),
-                     int(delegate_fee)),
-                    'no-reply@bmun.org', [school.primary_email],
-                    fail_silently=False)
 
     def __unicode__(self):
         return self.name
 
     class Meta:
         db_table = u'school'
-
-
-pre_save.connect(School.update_fees, sender=School)
-pre_save.connect(School.update_waitlist, sender=School)
-post_save.connect(School.email_comments, sender=School)
-post_save.connect(School.email_confirmation, sender=School)
 
 
 class Assignment(models.Model):
@@ -444,3 +263,195 @@ class Delegate(models.Model):
     class Meta:
         db_table = u'delegate'
         ordering = ['school']
+
+
+class Registration(models.Model):
+    CONTACT_TYPE_OPTIONS = ((ContactType.FACULTY, 'Faculty'),
+                            (ContactType.STUDENT, 'Student'), )
+
+    GENDER_OPTIONS = ((ContactGender.MALE, 'Male'),
+                      (ContactGender.FEMALE, 'Female'),
+                      (ContactGender.OTHER, 'Other'),
+                      (ContactGender.UNSPECIFIED, 'Unspecified'), )
+
+    registered = models.DateTimeField(auto_now_add=True)
+
+    primary_name = models.CharField(max_length=128)
+    primary_gender = models.PositiveSmallIntegerField(
+        choices=GENDER_OPTIONS, default=ContactGender.UNSPECIFIED)
+    primary_email = models.EmailField()
+    primary_phone = models.CharField(max_length=32)
+    primary_type = models.PositiveSmallIntegerField(
+        choices=CONTACT_TYPE_OPTIONS, default=ContactType.FACULTY)
+    secondary_name = models.CharField(max_length=128, blank=True)
+    secondary_gender = models.PositiveSmallIntegerField(
+        choices=GENDER_OPTIONS, blank=True, default=ContactGender.UNSPECIFIED)
+    secondary_email = models.EmailField(blank=True)
+    secondary_phone = models.CharField(max_length=32, blank=True)
+    secondary_type = models.PositiveSmallIntegerField(
+        choices=CONTACT_TYPE_OPTIONS, blank=True, default=ContactType.FACULTY)
+
+    times_attended = models.PositiveSmallIntegerField(default=0)
+    beginner_delegates = models.PositiveSmallIntegerField()
+    intermediate_delegates = models.PositiveSmallIntegerField()
+    advanced_delegates = models.PositiveSmallIntegerField()
+    spanish_speaking_delegates = models.PositiveSmallIntegerField()
+    chinese_speaking_delegates = models.PositiveSmallIntegerField()
+
+    countrypreferences = models.ManyToManyField(
+        Country, through='CountryPreference')
+    committeepreferences = models.ManyToManyField(
+        Committee, limit_choices_to={'special': True})
+
+    registration_comments = models.TextField(default='', blank=True)
+
+    waitlist = models.BooleanField(default=False)
+    waivers_completed = models.BooleanField(default=False)
+
+    assignments_finalized = models.BooleanField(default=False)
+
+    fees_owed = models.DecimalField(
+        max_digits=6, decimal_places=2, default=Decimal('0.00'))
+    fees_paid = models.DecimalField(
+        max_digits=6, decimal_places=2, default=Decimal('0.00'))
+
+    modified_at = models.DateTimeField(default=timezone.now)
+
+    def balance(self):
+        return self.fees_owed - self.fees_paid
+
+    def update_country_preferences(self, country_ids):
+        '''Given a list of country IDs, first dedupe and filter out 0s, then
+        clear the existing country preferences and construct new ones.'''
+        seen = set()
+        processed_country_ids = []
+        country_preferences = []
+
+        for rank, country_id in enumerate(country_ids):
+            if not country_id or country_id in seen:
+                continue
+            seen.add(country_id)
+            processed_country_ids.append(country_id)
+            country_preferences.append(
+                CountryPreference(
+                    school=self,
+                    country_id=country_id,
+                    rank=rank, ))
+
+        if country_preferences:
+            with transaction.atomic():
+                self.countrypreferences.clear()
+                CountryPreference.objects.bulk_create(country_preferences)
+
+        return processed_country_ids
+
+    @classmethod
+    def update_fees(cls, **kwargs):
+        school = kwargs['instance']
+        delegate_fee = Conference.get_current().delegate_fee
+        delegate_fees = delegate_fee * sum((school.beginner_delegates,
+                                            school.intermediate_delegates,
+                                            school.advanced_delegates, ))
+        registration_fee = Conference.get_current().registration_fee
+        total_fees = registration_fee + delegate_fees
+        school.fees_owed = Decimal(total_fees) + Decimal('0.00')
+
+    @classmethod
+    def update_waitlist(cls, **kwargs):
+        '''If the school is about to be created (i.e. has no ID) and
+        registration is closed, add it to the waitlist.'''
+        school = kwargs['instance']
+        conference = Conference.get_current()
+        if not school.id and conference.waitlist_reg:
+            school.waitlist = True
+
+    @property
+    def country_preference_ids(self):
+        '''Return an ordered list of the school's preferred countries.'''
+        return [country.id
+                for country in self.countrypreferences.all().order_by(
+                    'countrypreference')]
+
+    @country_preference_ids.setter
+    def country_preference_ids(self, country_ids):
+        '''Queue a pending update to replace the school's preferred countries
+        on the next save.'''
+        self._pending_country_preference_ids = country_ids
+
+    def save(self, *args, **kwargs):
+        '''Save the school normally, then update its country preferences.'''
+        super(School, self).save(*args, **kwargs)
+        if getattr(self, '_pending_country_preference_ids', []):
+            self.update_country_preferences(
+                self._pending_country_preference_ids)
+            self._pending_country_preference_ids = []
+
+    @classmethod
+    def email_comments(cls, **kwargs):
+        school = kwargs['instance']
+        if kwargs['created'] and school.registration_comments:
+            send_mail(
+                'Registration Comments from ' + school.name,
+                school.name + ' made comments about registration: ' +
+                school.registration_comments,
+                'tech@bmun.org', ['info@bmun.org'],
+                fail_silently=False)
+
+    @classmethod
+    def email_confirmation(cls, **kwargs):
+        conference = Conference.get_current()
+        if kwargs['created']:
+            school = kwargs['instance']
+            if school.waitlist:
+                send_mail(
+                    'BMUN %d Waitlist Confirmation' % conference.session,
+                    'You have officially been put on the waitlist for BMUN %d. '
+                    'We will inform you if and when you are taken off the waitlist.\n\n'
+                    'If you have any tech related questions, please email tech@bmun.org. '
+                    'For all other questions, please email info@bmun.org.\n\n'
+                    'Thank you for using Huxley!' % conference.session,
+                    'no-reply@bmun.org', [school.primary_email],
+                    fail_silently=False)
+            else:
+                registration_fee = conference.registration_fee
+                delegate_fee = conference.delegate_fee
+                send_mail(
+                    'BMUN %d Registration Confirmation' % conference.session,
+                    'Congratulations, you have officially been registered for BMUN %d. '
+                    'To access your account, please log in at huxley.bmun.org.\n\n'
+                    'In order to confirm your spot on our registration list, '
+                    'you must pay the non-refundable school fee of $%d. '
+                    'In 24-48 hours, you will receive an invoice from QuickBooks, '
+                    'our accounting system, for your school fee. '
+                    'You can either pay online through the QuickBooks payment portal '
+                    'or mail a check to the address listed on the invoice. '
+                    'More information on payment methods and deadlines can be found '
+                    'in the invoice or at http://www.bmun.org/conference-fees/. '
+                    'If you do not pay by the deadline, then you will be dropped to our waitlist.\n\n'
+                    'In addition to the school fee, there is also a delegate fee of $%d per student. '
+                    'The invoice for this will be sent out with country assignments '
+                    'in November and is due shortly after that.\n\n'
+                    'If you have any students that need financial assistance, '
+                    'we encourage them to apply for our Alumni Scholarship '
+                    'at http://bmun.org/alumni-scholarship/. This year we will be '
+                    'awarding up to $13,000 to those that apply.\n\n'
+                    'If you have any questions, please contact info@bmun.org.\n\n'
+                    'Thank you for registering for BMUN, and we look forward to '
+                    'seeing you at the oldest high school conference in the world '
+                    'on March 3-5, 2017.' %
+                    (conference.session, int(registration_fee),
+                     int(delegate_fee)),
+                    'no-reply@bmun.org', [school.primary_email],
+                    fail_silently=False)
+
+    def __unicode__(self):
+        return self.name
+
+    class Meta:
+        db_table = u'school'
+
+
+pre_save.connect(School.update_fees, sender=School)
+pre_save.connect(School.update_waitlist, sender=School)
+post_save.connect(School.email_comments, sender=School)
+post_save.connect(School.email_confirmation, sender=School)
