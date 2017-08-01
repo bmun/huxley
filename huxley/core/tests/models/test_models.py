@@ -224,3 +224,15 @@ class DelegateTest(TestCase):
             school=school,
             assignment=assignment
         )
+
+class RegistrationTest(TestCase):
+
+    fixtures = ['conference']
+
+    def test_uniqueness(self):
+        '''Is defined uniquely by its school and conference.'''
+        s = models.new_school()
+        c = Conference.get_current()
+        r1 = models.new_registration(school=s, conference=c)
+        with self.assertRaises(IntegrityError):
+            r2 = models.new_registration(school=s, conference=c)

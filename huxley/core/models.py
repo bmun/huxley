@@ -74,205 +74,6 @@ class School(models.Model):
     PROGRAM_TYPE_OPTIONS = ((ProgramTypes.CLUB, 'Club'),
                             (ProgramTypes.CLASS, 'Class'), )
 
-    name = models.CharField(max_length=128)
-    address = models.CharField(max_length=128)
-    city = models.CharField(max_length=128)
-    state = models.CharField(max_length=16)
-    zip_code = models.CharField(max_length=16)
-    country = models.CharField(max_length=64)
-    program_type = models.PositiveSmallIntegerField(
-        choices=PROGRAM_TYPE_OPTIONS, default=ProgramTypes.CLUB)
-    international = models.BooleanField(default=False)
-
-    def __unicode__(self):
-        return self.name
-
-    class Meta:
-        db_table = u'school'
-
-
-class Assignment(models.Model):
-    committee = models.ForeignKey(Committee)
-    country = models.ForeignKey(Country)
-    school = models.ForeignKey(School, null=True, blank=True, default=None)
-    rejected = models.BooleanField(default=False)
-
-    @classmethod
-    def update_assignments(cls, new_assignments):
-        '''
-        Atomically update the set of country assignments in a transaction.
-
-        For each assignment in the updated list, either update the existing
-        one (and delete its delegates), or create a new one if it doesn't
-        exist.
-        '''
-        assignments = cls.objects.all().values()
-        assignment_dict = {(a['committee_id'], a['country_id']): a
-                           for a in assignments}
-        additions = []
-        deletions = []
-        assigned = set()
-        failed_assignments = []
-
-        def add(committee, country, school, rejected):
-            additions.append(
-                cls(committee_id=committee.id,
-                    country_id=country.id,
-                    school_id=school.id,
-                    rejected=rejected, ))
-
-        def remove(assignment_data):
-            deletions.append(assignment_data['id'])
-
-        for committee, country, school, rejected in new_assignments:
-            key = (committee.id, country.id)
-            if key in assigned:
-                # Make sure that the same committee/country pair is not being
-                # given to more than one school in the upload
-                committee = str(committee.name)
-                country = str(country.name)
-                failed_assignments.append(
-                    str((committee, country)) +
-                    ' - ASSIGNED TO MORE THAN ONE SCHOOL')
-                continue
-
-            # If the assignemnt contains no bad cells, then each value should
-            # have the type of its corresponding model.
-            is_invalid = False
-            if type(committee) is not Committee:
-                committee = Committee(name=committee + ' - DOES NOT EXIST')
-                is_invalid = True
-            if type(country) is not Country:
-                country = Country(name=country + ' - DOES NOT EXIST')
-                is_invalid = True
-            if type(school) is not School:
-                school = School(name=school + ' - DOES NOT EXIST')
-                is_invalid = True
-            if is_invalid:
-                failed_assignments.append(
-                    str((str(school.name), str(committee.name), str(
-                        country.name))))
-                continue
-
-            assigned.add(key)
-            old_assignment = assignment_dict.get(key)
-
-            if not old_assignment:
-                add(committee, country, school, rejected)
-                continue
-
-            if old_assignment['school_id'] != school:
-                # Remove the old assignment instead of just updating it
-                # so that its delegates are deleted by cascade.
-                remove(old_assignment)
-                add(committee, country, school, rejected)
-
-            del assignment_dict[key]
-
-        if not failed_assignments:
-            # Only update assignments if there were no issues
-            for old_assignment in assignment_dict.values():
-                remove(old_assignment)
-
-            with transaction.atomic():
-                Assignment.objects.filter(id__in=deletions).delete()
-                Assignment.objects.bulk_create(additions)
-
-        return failed_assignments
-
-    @classmethod
-    def update_assignment(cls, **kwargs):
-        '''Ensures that when an assignment's school field changes,
-           any delegates assigned to that assignment are no longer
-           assigned to it and that its rejected field is false.'''
-        assignment = kwargs['instance']
-        if not assignment.id:
-            return
-
-        old_assignment = cls.objects.get(id=assignment.id)
-        if assignment.school_id != old_assignment.school_id:
-            assignment.rejected = False
-            Delegate.objects.filter(assignment_id=old_assignment.id).update(
-                assignment=None)
-
-    def __unicode__(self):
-        return self.committee.name + " : " + self.country.name + " : " + (
-            self.school.name if self.school else "Unassigned")
-
-    class Meta:
-        db_table = u'assignment'
-        unique_together = ('committee', 'country')
-
-
-pre_save.connect(Assignment.update_assignment, sender=Assignment)
-
-
-class CountryPreference(models.Model):
-    school = models.ForeignKey(School)
-    country = models.ForeignKey(Country, limit_choices_to={'special': False})
-    rank = models.PositiveSmallIntegerField()
-
-    def __unicode__(self):
-        return '%s : %s (%d)' % (self.school.name, self.country.name,
-                                 self.rank)
-
-    class Meta:
-        db_table = u'country_preference'
-        ordering = ['-school', 'rank']
-        unique_together = ('country', 'school')
-
-
-class Delegate(models.Model):
-    school = models.ForeignKey(School, related_name='delegates', null=True)
-    assignment = models.ForeignKey(
-        Assignment,
-        related_name='delegates',
-        blank=True,
-        null=True,
-        on_delete=models.SET_NULL)
-    name = models.CharField(max_length=64)
-    email = models.EmailField(blank=True, null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    summary = models.TextField(default='', blank=True, null=True)
-    published_summary = models.TextField(default='', blank=True, null=True)
-
-    voting = models.BooleanField(default=False)
-    session_one = models.BooleanField(default=False)
-    session_two = models.BooleanField(default=False)
-    session_three = models.BooleanField(default=False)
-    session_four = models.BooleanField(default=False)
-
-    def __unicode__(self):
-        return self.name
-
-    @property
-    def country(self):
-        if self.assignment:
-            return self.assignment.country
-
-        return None
-
-    @property
-    def committee(self):
-        if self.assignment:
-            return self.assignment.committee
-
-        return None
-
-    def save(self, *args, **kwargs):
-        if (self.assignment_id and self.school_id and
-                self.school_id != self.assignment.school_id):
-            raise ValidationError(
-                'Delegate school and delegate assignment school do not match.')
-
-        super(Delegate, self).save(*args, **kwargs)
-
-    class Meta:
-        db_table = u'delegate'
-        ordering = ['school']
-
-
-class Registration(models.Model):
     CONTACT_TYPE_OPTIONS = ((ContactType.FACULTY, 'Faculty'),
                             (ContactType.STUDENT, 'Student'), )
 
@@ -282,7 +83,12 @@ class Registration(models.Model):
                       (ContactGender.UNSPECIFIED, 'Unspecified'), )
 
     registered = models.DateTimeField(auto_now_add=True)
-
+    name = models.CharField(max_length=128)
+    address = models.CharField(max_length=128)
+    city = models.CharField(max_length=128)
+    state = models.CharField(max_length=16)
+    zip_code = models.CharField(max_length=16)
+    country = models.CharField(max_length=64)
     primary_name = models.CharField(max_length=128)
     primary_gender = models.PositiveSmallIntegerField(
         choices=GENDER_OPTIONS, default=ContactGender.UNSPECIFIED)
@@ -297,8 +103,13 @@ class Registration(models.Model):
     secondary_phone = models.CharField(max_length=32, blank=True)
     secondary_type = models.PositiveSmallIntegerField(
         choices=CONTACT_TYPE_OPTIONS, blank=True, default=ContactType.FACULTY)
-
+    program_type = models.PositiveSmallIntegerField(
+        choices=PROGRAM_TYPE_OPTIONS, default=ProgramTypes.CLUB)
     times_attended = models.PositiveSmallIntegerField(default=0)
+    international = models.BooleanField(default=False)
+    waitlist = models.BooleanField(default=False)
+    waivers_completed = models.BooleanField(default=False)
+
     beginner_delegates = models.PositiveSmallIntegerField()
     intermediate_delegates = models.PositiveSmallIntegerField()
     advanced_delegates = models.PositiveSmallIntegerField()
@@ -311,9 +122,6 @@ class Registration(models.Model):
         Committee, limit_choices_to={'special': True})
 
     registration_comments = models.TextField(default='', blank=True)
-
-    waitlist = models.BooleanField(default=False)
-    waivers_completed = models.BooleanField(default=False)
 
     assignments_finalized = models.BooleanField(default=False)
 
@@ -462,3 +270,224 @@ pre_save.connect(School.update_fees, sender=School)
 pre_save.connect(School.update_waitlist, sender=School)
 post_save.connect(School.email_comments, sender=School)
 post_save.connect(School.email_confirmation, sender=School)
+
+
+class Registration(models.Model):
+    school = models.ForeignKey(School, related_name='registrations')
+    conference = models.ForeignKey(Conference, related_name='conferences')
+
+    registered_at = models.DateTimeField(auto_now_add=True)
+
+    num_beginner_delegates = models.PositiveSmallIntegerField()
+    num_intermediate_delegates = models.PositiveSmallIntegerField()
+    num_advanced_delegates = models.PositiveSmallIntegerField()
+    num_spanish_speaking_delegates = models.PositiveSmallIntegerField()
+    num_chinese_speaking_delegates = models.PositiveSmallIntegerField()
+
+    country_preferences = models.ManyToManyField(
+        Country, through='CountryPreference')
+    committee_preferences = models.ManyToManyField(
+        Committee, limit_choices_to={'special': True})
+
+    registration_comments = models.TextField(default='', blank=True)
+
+    waitlist = models.BooleanField(default=False)
+    waivers_completed = models.BooleanField(default=False)
+
+    assignments_finalized = models.BooleanField(default=False)
+
+    fees_owed = models.DecimalField(
+        max_digits=6, decimal_places=2, default=Decimal('0.00'))
+    fees_paid = models.DecimalField(
+        max_digits=6, decimal_places=2, default=Decimal('0.00'))
+
+    modified_at = models.DateTimeField(default=timezone.now)
+
+    def __unicode__(self):
+        return self.name
+
+    class Meta:
+        db_table = u'registration'
+        unique_together = ('conference', 'school')
+
+
+class Assignment(models.Model):
+    committee = models.ForeignKey(Committee)
+    country = models.ForeignKey(Country)
+    school = models.ForeignKey(School, null=True, blank=True, default=None)
+    rejected = models.BooleanField(default=False)
+
+    @classmethod
+    def update_assignments(cls, new_assignments):
+        '''
+        Atomically update the set of country assignments in a transaction.
+
+        For each assignment in the updated list, either update the existing
+        one (and delete its delegates), or create a new one if it doesn't
+        exist.
+        '''
+        assignments = cls.objects.all().values()
+        assignment_dict = {(a['committee_id'], a['country_id']): a
+                           for a in assignments}
+        additions = []
+        deletions = []
+        assigned = set()
+        failed_assignments = []
+
+        def add(committee, country, school, rejected):
+            additions.append(
+                cls(committee_id=committee.id,
+                    country_id=country.id,
+                    school_id=school.id,
+                    rejected=rejected, ))
+
+        def remove(assignment_data):
+            deletions.append(assignment_data['id'])
+
+        for committee, country, school, rejected in new_assignments:
+            key = (committee.id, country.id)
+            if key in assigned:
+                # Make sure that the same committee/country pair is not being
+                # given to more than one school in the upload
+                committee = str(committee.name)
+                country = str(country.name)
+                failed_assignments.append(
+                    str((committee, country)) +
+                    ' - ASSIGNED TO MORE THAN ONE SCHOOL')
+                continue
+
+            # If the assignemnt contains no bad cells, then each value should
+            # have the type of its corresponding model.
+            is_invalid = False
+            if type(committee) is not Committee:
+                committee = Committee(name=committee + ' - DOES NOT EXIST')
+                is_invalid = True
+            if type(country) is not Country:
+                country = Country(name=country + ' - DOES NOT EXIST')
+                is_invalid = True
+            if type(school) is not School:
+                school = School(name=school + ' - DOES NOT EXIST')
+                is_invalid = True
+            if is_invalid:
+                failed_assignments.append(
+                    str((str(school.name), str(committee.name), str(
+                        country.name))))
+                continue
+
+            assigned.add(key)
+            old_assignment = assignment_dict.get(key)
+
+            if not old_assignment:
+                add(committee, country, school, rejected)
+                continue
+
+            if old_assignment['school_id'] != school:
+                # Remove the old assignment instead of just updating it
+                # so that its delegates are deleted by cascade.
+                remove(old_assignment)
+                add(committee, country, school, rejected)
+
+            del assignment_dict[key]
+
+        if not failed_assignments:
+            # Only update assignments if there were no issues
+            for old_assignment in assignment_dict.values():
+                remove(old_assignment)
+
+            with transaction.atomic():
+                Assignment.objects.filter(id__in=deletions).delete()
+                Assignment.objects.bulk_create(additions)
+
+        return failed_assignments
+
+    @classmethod
+    def update_assignment(cls, **kwargs):
+        '''Ensures that when an assignment's school field changes,
+           any delegates assigned to that assignment are no longer
+           assigned to it and that its rejected field is false.'''
+        assignment = kwargs['instance']
+        if not assignment.id:
+            return
+
+        old_assignment = cls.objects.get(id=assignment.id)
+        if assignment.school_id != old_assignment.school_id:
+            assignment.rejected = False
+            Delegate.objects.filter(assignment_id=old_assignment.id).update(
+                assignment=None)
+
+    def __unicode__(self):
+        return self.committee.name + " : " + self.country.name + " : " + (
+            self.school.name if self.school else "Unassigned")
+
+    class Meta:
+        db_table = u'assignment'
+        unique_together = ('committee', 'country')
+
+
+pre_save.connect(Assignment.update_assignment, sender=Assignment)
+
+
+class CountryPreference(models.Model):
+    school = models.ForeignKey(School)
+    registration = models.ForeignKey(Registration, null=True)
+    country = models.ForeignKey(Country, limit_choices_to={'special': False})
+    rank = models.PositiveSmallIntegerField()
+
+    def __unicode__(self):
+        return '%s : %s (%d)' % (self.school.name, self.country.name,
+                                 self.rank)
+
+    class Meta:
+        db_table = u'country_preference'
+        ordering = ['-school', 'rank']
+        unique_together = ('country', 'school')
+
+
+class Delegate(models.Model):
+    school = models.ForeignKey(School, related_name='delegates', null=True)
+    assignment = models.ForeignKey(
+        Assignment,
+        related_name='delegates',
+        blank=True,
+        null=True,
+        on_delete=models.SET_NULL)
+    name = models.CharField(max_length=64)
+    email = models.EmailField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    summary = models.TextField(default='', blank=True, null=True)
+    published_summary = models.TextField(default='', blank=True, null=True)
+
+    voting = models.BooleanField(default=False)
+    session_one = models.BooleanField(default=False)
+    session_two = models.BooleanField(default=False)
+    session_three = models.BooleanField(default=False)
+    session_four = models.BooleanField(default=False)
+
+    def __unicode__(self):
+        return self.name
+
+    @property
+    def country(self):
+        if self.assignment:
+            return self.assignment.country
+
+        return None
+
+    @property
+    def committee(self):
+        if self.assignment:
+            return self.assignment.committee
+
+        return None
+
+    def save(self, *args, **kwargs):
+        if (self.assignment_id and self.school_id and
+                self.school_id != self.assignment.school_id):
+            raise ValidationError(
+                'Delegate school and delegate assignment school do not match.')
+
+        super(Delegate, self).save(*args, **kwargs)
+
+    class Meta:
+        db_table = u'delegate'
+        ordering = ['school']
