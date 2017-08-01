@@ -192,7 +192,8 @@ class Assignment(models.Model):
         old_assignment = cls.objects.get(id=assignment.id)
         if assignment.school_id != old_assignment.school_id:
             assignment.rejected = False
-            Delegate.objects.filter(assignment_id=old_assignment.id).update(assignment=None)
+            Delegate.objects.filter(assignment_id=old_assignment.id).update(
+                assignment=None)
 
     def __unicode__(self):
         return self.committee.name + " : " + self.country.name + " : " + (
@@ -202,7 +203,9 @@ class Assignment(models.Model):
         db_table = u'assignment'
         unique_together = ('committee', 'country')
 
+
 pre_save.connect(Assignment.update_assignment, sender=Assignment)
+
 
 class CountryPreference(models.Model):
     school = models.ForeignKey(School)
@@ -222,7 +225,11 @@ class CountryPreference(models.Model):
 class Delegate(models.Model):
     school = models.ForeignKey(School, related_name='delegates', null=True)
     assignment = models.ForeignKey(
-        Assignment, related_name='delegates', blank=True, null=True, on_delete=models.SET_NULL)
+        Assignment,
+        related_name='delegates',
+        blank=True,
+        null=True,
+        on_delete=models.SET_NULL)
     name = models.CharField(max_length=64)
     email = models.EmailField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
