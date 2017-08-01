@@ -47,7 +47,7 @@ var ChairSummaryView = React.createClass({
       loadingPublish: false,
       successPublish: false,
       delegates: delegates,
-      summaries: summaries,
+      summaries: summaries
     };
   },
 

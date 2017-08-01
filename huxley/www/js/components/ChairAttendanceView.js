@@ -50,7 +50,7 @@ var ChairAttendanceView = React.createClass({
       assignments: assignments,
       countries: countries,
       delegates: delegates,
-      attendance: attendance,
+      attendance: attendance
     };
   },
 
