@@ -33,12 +33,14 @@ var ChairSummaryView = React.createClass({
     for (var delegate of delegates) {
       summaries[delegate.assignment] = delegate.summary;
     }
+
     if (assignments.length && Object.keys(countries).length) {
       assignments.sort(
         (a1, a2) =>
           countries[a1.country].name < countries[a2.country].name ? -1 : 1,
       );
     }
+
     return {
       assignments: assignments,
       countries: countries,
@@ -47,7 +49,7 @@ var ChairSummaryView = React.createClass({
       loadingPublish: false,
       successPublish: false,
       delegates: delegates,
-      summaries: summaries
+      summaries: summaries,
     };
   },
 
@@ -108,6 +110,8 @@ var ChairSummaryView = React.createClass({
     this._countriesToken && this._countriesToken.remove();
     this._delegatesToken && this._delegatesToken.remove();
     this._assignmentsToken && this._assignmentsToken.remove();
+    this._successTimeoutSave && clearTimeout(this._successTimeoutSave);
+    this._successTimeoutPublish && clearTimeout(this._successTimeoutPublish);
   },
 
   render() {
