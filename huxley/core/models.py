@@ -272,10 +272,136 @@ post_save.connect(School.email_comments, sender=School)
 post_save.connect(School.email_confirmation, sender=School)
 
 
+class Registration(models.Model):
+    school = models.ForeignKey(School, related_name='registrations')
+    conference = models.ForeignKey(Conference, related_name='registrations')
+
+    registered_at = models.DateTimeField(auto_now_add=True)
+
+    num_beginner_delegates = models.PositiveSmallIntegerField()
+    num_intermediate_delegates = models.PositiveSmallIntegerField()
+    num_advanced_delegates = models.PositiveSmallIntegerField()
+    num_spanish_speaking_delegates = models.PositiveSmallIntegerField()
+    num_chinese_speaking_delegates = models.PositiveSmallIntegerField()
+
+    country_preferences = models.ManyToManyField(
+        Country, through='CountryPreference')
+    committee_preferences = models.ManyToManyField(
+        Committee, limit_choices_to={'special': True})
+
+    registration_comments = models.TextField(default='', blank=True)
+
+    is_waitlisted = models.BooleanField(default=False)
+    waivers_completed = models.BooleanField(default=False)
+
+    assignments_finalized = models.BooleanField(default=False)
+
+    fees_owed = models.DecimalField(
+        max_digits=6, decimal_places=2, default=Decimal('0.00'))
+    fees_paid = models.DecimalField(
+        max_digits=6, decimal_places=2, default=Decimal('0.00'))
+
+    modified_at = models.DateTimeField(default=timezone.now)
+
+    @classmethod
+    def update_fees(cls, **kwargs):
+        registration = kwargs['instance']
+        delegate_fee = Conference.get_current().delegate_fee
+        delegate_fees = delegate_fee * sum(
+            (registration.num_beginner_delegates,
+             registration.num_intermediate_delegates,
+             registration.num_advanced_delegates, ))
+        registration_fee = Conference.get_current().registration_fee
+        total_fees = registration_fee + delegate_fees
+        registration.fees_owed = Decimal(total_fees) + Decimal('0.00')
+
+    @classmethod
+    def update_waitlist(cls, **kwargs):
+        '''If the registration is about to be created (i.e. has no ID) and
+        registration is closed, add it to the waitlist.'''
+        registration = kwargs['instance']
+        conference = Conference.get_current()
+        if not registration.id and conference.waitlist_reg:
+            registration.is_waitlisted = True
+
+    @classmethod
+    def email_comments(cls, **kwargs):
+        registration = kwargs['instance']
+        if kwargs['created'] and registration.registration_comments:
+            send_mail(
+                'Registration Comments from ' + registration.school.name,
+                registration.school.name +
+                ' made comments about registration: ' +
+                registration.registration_comments,
+                'tech@bmun.org', ['info@bmun.org'],
+                fail_silently=False)
+
+    @classmethod
+    def email_confirmation(cls, **kwargs):
+        conference = Conference.get_current()
+        if kwargs['created']:
+            registration = kwargs['instance']
+            if registration.is_waitlisted:
+                send_mail(
+                    'BMUN %d Waitlist Confirmation' % conference.session,
+                    'You have officially been put on the waitlist for BMUN %d. '
+                    'We will inform you if and when you are taken off the waitlist.\n\n'
+                    'If you have any tech related questions, please email tech@bmun.org. '
+                    'For all other questions, please email info@bmun.org.\n\n'
+                    'Thank you for using Huxley!' % conference.session,
+                    'no-reply@bmun.org', [registration.school.primary_email],
+                    fail_silently=False)
+            else:
+                registration_fee = conference.registration_fee
+                delegate_fee = conference.delegate_fee
+                send_mail(
+                    'BMUN %d Registration Confirmation' % conference.session,
+                    'Congratulations, you have officially been registered for BMUN %d. '
+                    'To access your account, please log in at huxley.bmun.org.\n\n'
+                    'In order to confirm your spot on our registration list, '
+                    'you must pay the non-refundable school fee of $%d. '
+                    'In 24-48 hours, you will receive an invoice from QuickBooks, '
+                    'our accounting system, for your school fee. '
+                    'You can either pay online through the QuickBooks payment portal '
+                    'or mail a check to the address listed on the invoice. '
+                    'More information on payment methods and deadlines can be found '
+                    'in the invoice or at http://www.bmun.org/conference-fees/. '
+                    'If you do not pay by the deadline, then you will be dropped to our waitlist.\n\n'
+                    'In addition to the school fee, there is also a delegate fee of $%d per student. '
+                    'The invoice for this will be sent out with country assignments '
+                    'in November and is due shortly after that.\n\n'
+                    'If you have any students that need financial assistance, '
+                    'we encourage them to apply for our Alumni Scholarship '
+                    'at http://bmun.org/alumni-scholarship/. This year we will be '
+                    'awarding up to $13,000 to those that apply.\n\n'
+                    'If you have any questions, please contact info@bmun.org.\n\n'
+                    'Thank you for registering for BMUN, and we look forward to '
+                    'seeing you at the oldest high school conference in the world '
+                    'on March 3-5, 2017.' %
+                    (conference.session, int(registration_fee),
+                     int(delegate_fee)),
+                    'no-reply@bmun.org', [registration.school.primary_email],
+                    fail_silently=False)
+
+    def __unicode__(self):
+        return self.school.name + ' - ' + self.conference.session
+
+    class Meta:
+        db_table = u'registration'
+        unique_together = ('conference', 'school')
+
+
+pre_save.connect(Registration.update_fees, sender=Registration)
+pre_save.connect(Registration.update_waitlist, sender=Registration)
+post_save.connect(Registration.email_comments, sender=Registration)
+post_save.connect(Registration.email_confirmation, sender=Registration)
+
+
 class Assignment(models.Model):
     committee = models.ForeignKey(Committee)
     country = models.ForeignKey(Country)
     school = models.ForeignKey(School, null=True, blank=True, default=None)
+    registration = models.ForeignKey(Registration, null=True)
     rejected = models.BooleanField(default=False)
 
     @classmethod
@@ -373,7 +499,8 @@ class Assignment(models.Model):
         old_assignment = cls.objects.get(id=assignment.id)
         if assignment.school_id != old_assignment.school_id:
             assignment.rejected = False
-            Delegate.objects.filter(assignment_id=old_assignment.id).update(assignment=None)
+            Delegate.objects.filter(assignment_id=old_assignment.id).update(
+                assignment=None)
 
     def __unicode__(self):
         return self.committee.name + " : " + self.country.name + " : " + (
@@ -383,10 +510,14 @@ class Assignment(models.Model):
         db_table = u'assignment'
         unique_together = ('committee', 'country')
 
+
 pre_save.connect(Assignment.update_assignment, sender=Assignment)
 
+
 class CountryPreference(models.Model):
+    # TODO: Access school through Registration model
     school = models.ForeignKey(School)
+    registration = models.ForeignKey(Registration, null=True)
     country = models.ForeignKey(Country, limit_choices_to={'special': False})
     rank = models.PositiveSmallIntegerField()
 
@@ -403,7 +534,11 @@ class CountryPreference(models.Model):
 class Delegate(models.Model):
     school = models.ForeignKey(School, related_name='delegates', null=True)
     assignment = models.ForeignKey(
-        Assignment, related_name='delegates', blank=True, null=True, on_delete=models.SET_NULL)
+        Assignment,
+        related_name='delegates',
+        blank=True,
+        null=True,
+        on_delete=models.SET_NULL)
     name = models.CharField(max_length=64)
     email = models.EmailField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
