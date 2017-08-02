@@ -14,7 +14,6 @@ from huxley.utils.test import models
 
 
 class ConferenceTest(TestCase):
-
     def setUp(self):
         self.conference = Conference.objects.create(
             session=61,
@@ -22,8 +21,7 @@ class ConferenceTest(TestCase):
             end_date=date(2013, 3, 3),
             reg_open=date(2012, 9, 1),
             early_reg_close=date(2013, 1, 10),
-            reg_close=date(2013, 2, 28)
-        )
+            reg_close=date(2013, 2, 28))
 
     def test_default_fields(self):
         """ Tests that fields with default values are correctly set. """
@@ -36,7 +34,6 @@ class ConferenceTest(TestCase):
 
 
 class CountryTest(TestCase):
-
     def setUp(self):
         self.country = Country.objects.create(name='Lolville')
 
@@ -50,12 +47,9 @@ class CountryTest(TestCase):
 
 
 class CommitteeTest(TestCase):
-
     def setUp(self):
         self.committee = Committee.objects.create(
-            name='DISC',
-            full_name='Disarmament and International Security'
-        )
+            name='DISC', full_name='Disarmament and International Security')
 
     def test_default_fields(self):
         """ Tests that fields with default values are correctly set. """
@@ -98,16 +92,14 @@ class SchoolTest(TestCase):
         school = models.new_school(
             beginner_delegates=b,
             intermediate_delegates=i,
-            advanced_delegates=a,
-        )
+            advanced_delegates=a, )
 
         conference = Conference.get_current()
         registration_fee = conference.registration_fee
         delegate_fee = conference.delegate_fee
 
-        self.assertEquals(
-            school.fees_owed, registration_fee + delegate_fee * (b + i + a),
-        )
+        self.assertEquals(school.fees_owed,
+                          registration_fee + delegate_fee * (b + i + a), )
 
         b2, i2, a2 = 5, 10, 15
         school.beginner_delegates = b2
@@ -115,9 +107,8 @@ class SchoolTest(TestCase):
         school.advanced_delegates = a2
         school.save()
 
-        self.assertEquals(
-            school.fees_owed, registration_fee + delegate_fee * (b2 + i2 + a2),
-        )
+        self.assertEquals(school.fees_owed,
+                          registration_fee + delegate_fee * (b2 + i2 + a2), )
 
     def test_update_waitlist(self):
         '''New schools should be waitlisted based on the conference waitlist field.'''
@@ -155,9 +146,9 @@ class AssignmentTest(TestCase):
         s2 = models.new_school(name='S2')
 
         Assignment.objects.bulk_create([
-            Assignment(committee_id=cm.id, country_id=ct.id, school_id=s1.id)
-            for ct in [ct1, ct2]
-            for cm in [cm1, cm2]
+            Assignment(
+                committee_id=cm.id, country_id=ct.id, school_id=s1.id)
+            for ct in [ct1, ct2] for cm in [cm1, cm2]
         ])
 
         a = Assignment.objects.get(committee_id=cm2.id, country_id=ct2.id)
@@ -168,16 +159,18 @@ class AssignmentTest(TestCase):
         updates = [
             (cm1, ct1, s1, False),
             (cm1, ct2, s1, False),
-            (cm1, ct3, s1, False),   # ADDED
+            (cm1, ct3, s1, False),  # ADDED
             # (cm2, ct1, s1), # DELETED
-            (cm2, ct2, s2, False),   # UPDATED
-            (cm2, ct3, s2, False),   # ADDED
+            (cm2, ct2, s2, False),  # UPDATED
+            (cm2, ct3, s2, False),  # ADDED
         ]
 
         Assignment.update_assignments(updates)
-        new_assignments = [a[1:] for a in Assignment.objects.all().values_list()]
+        new_assignments = [a[1:]
+                           for a in Assignment.objects.all().values_list()]
         delegates = Delegate.objects.all()
-        updates = [(cm.id, ct.id, s.id, None, rej) for cm, ct, s, rej in updates]
+        updates = [(cm.id, ct.id, s.id, None, rej)
+                   for cm, ct, s, rej in updates]
         self.assertEquals(set(updates), set(new_assignments))
         self.assertEquals(len(delegates), 2)
 
@@ -199,13 +192,14 @@ class AssignmentTest(TestCase):
         self.assertEquals(a.delegates.count(), 0)
         self.assertEquals(a.rejected, False)
 
-class CountryPreferenceTest(TestCase):
 
+class CountryPreferenceTest(TestCase):
     def test_uniqueness(self):
         '''Country and school fields should be unique.'''
         CountryPreference.objects.create(school_id=1, country_id=1, rank=1)
         with self.assertRaises(IntegrityError):
             CountryPreference.objects.create(school_id=1, country_id=1, rank=1)
+
 
 class DelegateTest(TestCase):
 
@@ -219,11 +213,13 @@ class DelegateTest(TestCase):
         school = models.new_school(name='S1')
         assignment = models.new_assignment()
 
-        self.assertRaises(ValidationError, Delegate.objects.create,
+        self.assertRaises(
+            ValidationError,
+            Delegate.objects.create,
             name="Test Delegate",
             school=school,
-            assignment=assignment
-        )
+            assignment=assignment)
+
 
 class RegistrationTest(TestCase):
 
@@ -243,16 +239,14 @@ class RegistrationTest(TestCase):
         registration = models.new_registration(
             num_beginner_delegates=b,
             num_intermediate_delegates=i,
-            num_advanced_delegates=a,
-        )
+            num_advanced_delegates=a, )
 
         conference = Conference.get_current()
         registration_fee = conference.registration_fee
         delegate_fee = conference.delegate_fee
 
-        self.assertEquals(
-            registration.fees_owed, registration_fee + delegate_fee * (b + i + a),
-        )
+        self.assertEquals(registration.fees_owed,
+                          registration_fee + delegate_fee * (b + i + a), )
 
         b2, i2, a2 = 5, 10, 15
         registration.num_beginner_delegates = b2
@@ -260,9 +254,8 @@ class RegistrationTest(TestCase):
         registration.num_advanced_delegates = a2
         registration.save()
 
-        self.assertEquals(
-            registration.fees_owed, registration_fee + delegate_fee * (b2 + i2 + a2),
-        )
+        self.assertEquals(registration.fees_owed,
+                          registration_fee + delegate_fee * (b2 + i2 + a2), )
 
     def test_update_waitlist(self):
         '''New registrations should be waitlisted based on the conference waitlist field.'''
