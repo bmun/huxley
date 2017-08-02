@@ -307,9 +307,10 @@ class Registration(models.Model):
     def update_fees(cls, **kwargs):
         registration = kwargs['instance']
         delegate_fee = Conference.get_current().delegate_fee
-        delegate_fees = delegate_fee * sum((registration.num_beginner_delegates,
-                                            registration.num_intermediate_delegates,
-                                            registration.num_advanced_delegates, ))
+        delegate_fees = delegate_fee * sum(
+            (registration.num_beginner_delegates,
+             registration.num_intermediate_delegates,
+             registration.num_advanced_delegates, ))
         registration_fee = Conference.get_current().registration_fee
         total_fees = registration_fee + delegate_fees
         registration.fees_owed = Decimal(total_fees) + Decimal('0.00')
@@ -329,7 +330,8 @@ class Registration(models.Model):
         if kwargs['created'] and registration.registration_comments:
             send_mail(
                 'Registration Comments from ' + registration.school.name,
-                registration.school.name + ' made comments about registration: ' +
+                registration.school.name +
+                ' made comments about registration: ' +
                 registration.registration_comments,
                 'tech@bmun.org', ['info@bmun.org'],
                 fail_silently=False)
