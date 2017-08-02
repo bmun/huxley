@@ -177,7 +177,7 @@ var ChairAttendanceView = React.createClass({
         session_one: delegate.session_one,
         session_two: delegate.session_two,
         session_three: delegate.session_three,
-        session_four: delegate.session_four
+        session_four: delegate.session_four,
       };
     }
     return attendance;
@@ -188,9 +188,9 @@ var ChairAttendanceView = React.createClass({
     var oldAttendance = attendanceMap[assignmentID];
     this.setState({
       attendance: {
-        ...attendanceMap, 
-        [assignmentID]: {...oldAttendance, [field]:!oldAttendance[field]}
-      }
+        ...attendanceMap,
+        [assignmentID]: {...oldAttendance, [field]: !oldAttendance[field]},
+      },
     });
   },
 
@@ -203,11 +203,12 @@ var ChairAttendanceView = React.createClass({
     var toSave = [];
     for (var delegate of delegates) {
       var attendance = attendanceMap[delegate.assignment];
-      var shouldSave = delegate.voting !== attendance.voting ||
-                       delegate.session_one !== attendance.session_one ||
-                       delegate.session_two !== attendance.session_two ||
-                       delegate.session_three !== attendance.session_three ||
-                       delegate.session_four !== attendance.session_four;
+      var shouldSave =
+        delegate.voting !== attendance.voting ||
+        delegate.session_one !== attendance.session_one ||
+        delegate.session_two !== attendance.session_two ||
+        delegate.session_three !== attendance.session_three ||
+        delegate.session_four !== attendance.session_four;
       if (shouldSave) {
         toSave.push({
           ...delegate,
@@ -215,7 +216,7 @@ var ChairAttendanceView = React.createClass({
           session_one: attendance.session_one,
           session_two: attendance.session_two,
           session_three: attendance.session_three,
-          session_four: attendance.session_four
+          session_four: attendance.session_four,
         });
       }
     }

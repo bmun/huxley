@@ -193,9 +193,9 @@ var ChairSummaryView = React.createClass({
     var summaries = this.state.summaries;
     this.setState({
       summaries: {
-        ...summaries, 
-        [assignment.id]: event.target.value
-      }
+        ...summaries,
+        [assignment.id]: event.target.value,
+      },
     });
   },
 

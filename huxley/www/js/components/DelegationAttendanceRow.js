@@ -21,8 +21,10 @@ var DelegationAttendanceRow = React.createClass({
         return true;
       }
     }
-    return this.props.countryName !== nextProps.countryName ||
-           this.props.assignmentID !== nextProps.assignmentID;
+    return (
+      this.props.countryName !== nextProps.countryName ||
+      this.props.assignmentID !== nextProps.assignmentID
+    );
   },
 
   render() {
