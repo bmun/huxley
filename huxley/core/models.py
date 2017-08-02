@@ -274,7 +274,7 @@ post_save.connect(School.email_confirmation, sender=School)
 
 class Registration(models.Model):
     school = models.ForeignKey(School, related_name='registrations')
-    conference = models.ForeignKey(Conference, related_name='conferences')
+    conference = models.ForeignKey(Conference, related_name='registrations')
 
     registered_at = models.DateTimeField(auto_now_add=True)
 
@@ -291,7 +291,7 @@ class Registration(models.Model):
 
     registration_comments = models.TextField(default='', blank=True)
 
-    waitlist = models.BooleanField(default=False)
+    is_waitlisted = models.BooleanField(default=False)
     waivers_completed = models.BooleanField(default=False)
 
     assignments_finalized = models.BooleanField(default=False)
@@ -322,7 +322,7 @@ class Registration(models.Model):
         registration = kwargs['instance']
         conference = Conference.get_current()
         if not registration.id and conference.waitlist_reg:
-            registration.waitlist = True
+            registration.is_waitlisted = True
 
     @classmethod
     def email_comments(cls, **kwargs):
@@ -341,7 +341,7 @@ class Registration(models.Model):
         conference = Conference.get_current()
         if kwargs['created']:
             registration = kwargs['instance']
-            if registration.waitlist:
+            if registration.is_waitlisted:
                 send_mail(
                     'BMUN %d Waitlist Confirmation' % conference.session,
                     'You have officially been put on the waitlist for BMUN %d. '
@@ -401,6 +401,7 @@ class Assignment(models.Model):
     committee = models.ForeignKey(Committee)
     country = models.ForeignKey(Country)
     school = models.ForeignKey(School, null=True, blank=True, default=None)
+    registration = models.ForeignKey(Registration, null=True)
     rejected = models.BooleanField(default=False)
 
     @classmethod
@@ -514,6 +515,7 @@ pre_save.connect(Assignment.update_assignment, sender=Assignment)
 
 
 class CountryPreference(models.Model):
+    # TODO: Access school through Registration model
     school = models.ForeignKey(School)
     registration = models.ForeignKey(Registration, null=True)
     country = models.ForeignKey(Country, limit_choices_to={'special': False})

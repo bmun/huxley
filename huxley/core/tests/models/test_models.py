@@ -177,7 +177,7 @@ class AssignmentTest(TestCase):
         Assignment.update_assignments(updates)
         new_assignments = [a[1:] for a in Assignment.objects.all().values_list()]
         delegates = Delegate.objects.all()
-        updates = [(cm.id, ct.id, s.id, rej) for cm, ct, s, rej in updates]
+        updates = [(cm.id, ct.id, s.id, None, rej) for cm, ct, s, rej in updates]
         self.assertEquals(set(updates), set(new_assignments))
         self.assertEquals(len(delegates), 2)
 
@@ -267,13 +267,13 @@ class RegistrationTest(TestCase):
     def test_update_waitlist(self):
         '''New registrations should be waitlisted based on the conference waitlist field.'''
         r1 = models.new_registration()
-        self.assertFalse(r1.waitlist)
+        self.assertFalse(r1.is_waitlisted)
 
         conference = Conference.get_current()
         conference.waitlist_reg = True
         conference.save()
 
         r1.save()
-        self.assertFalse(r1.waitlist)
+        self.assertFalse(r1.is_waitlisted)
         r2 = models.new_registration()
-        self.assertTrue(r2.waitlist)
+        self.assertTrue(r2.is_waitlisted)
