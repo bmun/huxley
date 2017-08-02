@@ -190,11 +190,13 @@ var ChairSummaryView = React.createClass({
   },
 
   _handleSummaryChange(assignment, event) {
-    var newSummary = event.target.value;
     var summaries = this.state.summaries;
-    var update = {};
-    update[assignment.id] = newSummary;
-    this.setState({summaries: {...summaries, ...update}});
+    this.setState({
+      summaries: {
+        ...summaries, 
+        [assignment.id]: event.target.value
+      }
+    });
   },
 
   _handleSaveSummaries(event) {

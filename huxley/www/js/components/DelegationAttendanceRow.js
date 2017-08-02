@@ -21,7 +21,8 @@ var DelegationAttendanceRow = React.createClass({
         return true;
       }
     }
-    return this.props.countryName !== nextProps.countryName;
+    return this.props.countryName !== nextProps.countryName ||
+           this.props.assignmentID !== nextProps.assignmentID;
   },
 
   render() {
@@ -35,7 +36,7 @@ var DelegationAttendanceRow = React.createClass({
             <input
               className="choice"
               type="checkbox"
-              checked={this.props.attendance['voting']}
+              checked={this.props.attendance.voting}
               onChange={this._handleChange.bind(this, 'voting')}
             />
           </label>
@@ -45,7 +46,7 @@ var DelegationAttendanceRow = React.createClass({
             <input
               className="choice"
               type="checkbox"
-              checked={this.props.attendance['session_one']}
+              checked={this.props.attendance.session_one}
               onChange={this._handleChange.bind(this, 'session_one')}
             />
           </label>
@@ -55,7 +56,7 @@ var DelegationAttendanceRow = React.createClass({
             <input
               className="choice"
               type="checkbox"
-              checked={this.props.attendance['session_two']}
+              checked={this.props.attendance.session_two}
               onChange={this._handleChange.bind(this, 'session_two')}
             />
           </label>
@@ -65,7 +66,7 @@ var DelegationAttendanceRow = React.createClass({
             <input
               className="choice"
               type="checkbox"
-              checked={this.props.attendance['session_three']}
+              checked={this.props.attendance.session_three}
               onChange={this._handleChange.bind(this, 'session_three')}
             />
           </label>
@@ -75,7 +76,7 @@ var DelegationAttendanceRow = React.createClass({
             <input
               className="choice"
               type="checkbox"
-              checked={this.props.attendance['session_four']}
+              checked={this.props.attendance.session_four}
               onChange={this._handleChange.bind(this, 'session_four')}
             />
           </label>
