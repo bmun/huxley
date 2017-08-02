@@ -303,12 +303,96 @@ class Registration(models.Model):
 
     modified_at = models.DateTimeField(default=timezone.now)
 
+    @classmethod
+    def update_fees(cls, **kwargs):
+        registration = kwargs['instance']
+        delegate_fee = Conference.get_current().delegate_fee
+        delegate_fees = delegate_fee * sum((registration.num_beginner_delegates,
+                                            registration.num_intermediate_delegates,
+                                            registration.num_advanced_delegates, ))
+        registration_fee = Conference.get_current().registration_fee
+        total_fees = registration_fee + delegate_fees
+        registration.fees_owed = Decimal(total_fees) + Decimal('0.00')
+
+    @classmethod
+    def update_waitlist(cls, **kwargs):
+        '''If the registration is about to be created (i.e. has no ID) and
+        registration is closed, add it to the waitlist.'''
+        registration = kwargs['instance']
+        conference = Conference.get_current()
+        if not registration.id and conference.waitlist_reg:
+            registration.waitlist = True
+
+    @classmethod
+    def email_comments(cls, **kwargs):
+        registration = kwargs['instance']
+        if kwargs['created'] and registration.registration_comments:
+            send_mail(
+                'Registration Comments from ' + registration.school.name,
+                registration.school.name + ' made comments about registration: ' +
+                registration.registration_comments,
+                'tech@bmun.org', ['info@bmun.org'],
+                fail_silently=False)
+
+    @classmethod
+    def email_confirmation(cls, **kwargs):
+        conference = Conference.get_current()
+        if kwargs['created']:
+            registration = kwargs['instance']
+            if registration.waitlist:
+                send_mail(
+                    'BMUN %d Waitlist Confirmation' % conference.session,
+                    'You have officially been put on the waitlist for BMUN %d. '
+                    'We will inform you if and when you are taken off the waitlist.\n\n'
+                    'If you have any tech related questions, please email tech@bmun.org. '
+                    'For all other questions, please email info@bmun.org.\n\n'
+                    'Thank you for using Huxley!' % conference.session,
+                    'no-reply@bmun.org', [registration.school.primary_email],
+                    fail_silently=False)
+            else:
+                registration_fee = conference.registration_fee
+                delegate_fee = conference.delegate_fee
+                send_mail(
+                    'BMUN %d Registration Confirmation' % conference.session,
+                    'Congratulations, you have officially been registered for BMUN %d. '
+                    'To access your account, please log in at huxley.bmun.org.\n\n'
+                    'In order to confirm your spot on our registration list, '
+                    'you must pay the non-refundable school fee of $%d. '
+                    'In 24-48 hours, you will receive an invoice from QuickBooks, '
+                    'our accounting system, for your school fee. '
+                    'You can either pay online through the QuickBooks payment portal '
+                    'or mail a check to the address listed on the invoice. '
+                    'More information on payment methods and deadlines can be found '
+                    'in the invoice or at http://www.bmun.org/conference-fees/. '
+                    'If you do not pay by the deadline, then you will be dropped to our waitlist.\n\n'
+                    'In addition to the school fee, there is also a delegate fee of $%d per student. '
+                    'The invoice for this will be sent out with country assignments '
+                    'in November and is due shortly after that.\n\n'
+                    'If you have any students that need financial assistance, '
+                    'we encourage them to apply for our Alumni Scholarship '
+                    'at http://bmun.org/alumni-scholarship/. This year we will be '
+                    'awarding up to $13,000 to those that apply.\n\n'
+                    'If you have any questions, please contact info@bmun.org.\n\n'
+                    'Thank you for registering for BMUN, and we look forward to '
+                    'seeing you at the oldest high school conference in the world '
+                    'on March 3-5, 2017.' %
+                    (conference.session, int(registration_fee),
+                     int(delegate_fee)),
+                    'no-reply@bmun.org', [registration.school.primary_email],
+                    fail_silently=False)
+
     def __unicode__(self):
-        return self.name
+        return self.school.name + ' - ' + self.conference.session
 
     class Meta:
         db_table = u'registration'
         unique_together = ('conference', 'school')
+
+
+pre_save.connect(Registration.update_fees, sender=Registration)
+pre_save.connect(Registration.update_waitlist, sender=Registration)
+post_save.connect(Registration.email_comments, sender=Registration)
+post_save.connect(Registration.email_confirmation, sender=Registration)
 
 
 class Assignment(models.Model):

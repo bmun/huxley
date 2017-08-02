@@ -236,3 +236,44 @@ class RegistrationTest(TestCase):
         r1 = models.new_registration(school=s, conference=c)
         with self.assertRaises(IntegrityError):
             r2 = models.new_registration(school=s, conference=c)
+
+    def test_update_fees(self):
+        '''Fees should be calculated when a Registration is created/updated.'''
+        b, i, a = 3, 5, 7
+        registration = models.new_registration(
+            num_beginner_delegates=b,
+            num_intermediate_delegates=i,
+            num_advanced_delegates=a,
+        )
+
+        conference = Conference.get_current()
+        registration_fee = conference.registration_fee
+        delegate_fee = conference.delegate_fee
+
+        self.assertEquals(
+            registration.fees_owed, registration_fee + delegate_fee * (b + i + a),
+        )
+
+        b2, i2, a2 = 5, 10, 15
+        registration.num_beginner_delegates = b2
+        registration.num_intermediate_delegates = i2
+        registration.num_advanced_delegates = a2
+        registration.save()
+
+        self.assertEquals(
+            registration.fees_owed, registration_fee + delegate_fee * (b2 + i2 + a2),
+        )
+
+    def test_update_waitlist(self):
+        '''New registrations should be waitlisted based on the conference waitlist field.'''
+        r1 = models.new_registration()
+        self.assertFalse(r1.waitlist)
+
+        conference = Conference.get_current()
+        conference.waitlist_reg = True
+        conference.save()
+
+        r1.save()
+        self.assertFalse(r1.waitlist)
+        r2 = models.new_registration()
+        self.assertTrue(r2.waitlist)
