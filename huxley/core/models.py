@@ -383,6 +383,53 @@ class Registration(models.Model):
                     'no-reply@bmun.org', [registration.school.primary_email],
                     fail_silently=False)
 
+    @property
+    def country_preference_ids(self):
+        '''Return an ordered list of the registration's preferred countries.'''
+        return [country.id
+                for country in self.country_preferences.all().order_by(
+                    'countrypreference')]
+
+    @country_preference_ids.setter
+    def country_preference_ids(self, country_ids):
+        '''Queue a pending update to replace the registration's preferred countries
+        on the next save.'''
+        self._pending_country_preference_ids = country_ids
+
+    def update_country_preferences(self, country_ids):
+        '''Given a list of country IDs, first dedupe and filter out 0s, then
+        clear the existing country preferences and construct new ones.'''
+        seen = set()
+        processed_country_ids = []
+        country_preferences = []
+
+        for rank, country_id in enumerate(country_ids):
+            if not country_id or country_id in seen:
+                continue
+            seen.add(country_id)
+            processed_country_ids.append(country_id)
+            country_preferences.append(
+                CountryPreference(
+                    registration=self,
+                    school=self.school,
+                    country_id=country_id,
+                    rank=rank, ))
+
+        if country_preferences:
+            with transaction.atomic():
+                self.country_preferences.clear()
+                CountryPreference.objects.bulk_create(country_preferences)
+
+        return processed_country_ids
+
+    def save(self, *args, **kwargs):
+        '''Save the registration normally, then update its country preferences.'''
+        super(Registration, self).save(*args, **kwargs)
+        if getattr(self, '_pending_country_preference_ids', []):
+            self.update_country_preferences(
+                self._pending_country_preference_ids)
+            self._pending_country_preference_ids = []
+
     def __unicode__(self):
         return self.school.name + ' - ' + self.conference.session
 

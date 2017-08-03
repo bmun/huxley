@@ -270,3 +270,24 @@ class RegistrationTest(TestCase):
         self.assertFalse(r1.is_waitlisted)
         r2 = models.new_registration()
         self.assertTrue(r2.is_waitlisted)
+
+    def test_update_country_preferences(self):
+        '''It should filter and replace the country preferences.'''
+        r1 = models.new_registration()
+        r2 = models.new_registration()
+        c1 = models.new_country().id
+        c2 = models.new_country().id
+        c3 = models.new_country().id
+
+        country_ids = [0, c1, c2, c2, 0, c3]
+        self.assertEquals(0, CountryPreference.objects.all().count())
+
+        r1.update_country_preferences(country_ids)
+        self.assertEquals([c1, c2, c3], r1.country_preference_ids)
+
+        r2.update_country_preferences(country_ids)
+        self.assertEquals([c1, c2, c3], r2.country_preference_ids)
+
+        r1.update_country_preferences([c3, c1])
+        self.assertEquals([c3, c1], r1.country_preference_ids)
+        self.assertEquals([c1, c2, c3], r2.country_preference_ids)
