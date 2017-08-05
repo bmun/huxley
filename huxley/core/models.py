@@ -431,7 +431,7 @@ class Registration(models.Model):
             self._pending_country_preference_ids = []
 
     def __unicode__(self):
-        return self.school.name + ' - ' + self.conference.session
+        return self.school.name + ' - ' + str(self.conference.session)
 
     class Meta:
         db_table = u'registration'
