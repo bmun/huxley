@@ -10,18 +10,18 @@ from huxley.core.models import Registration
 
 
 class RegistrationList(generics.ListCreateAPIView):
-    authentication_classes = (SessionAuthentication,)
+    authentication_classes = (SessionAuthentication, )
     serializer_class = RegistrationSerializer
     permission_classes = (RegistrationListPermission, )
 
     def get_queryset(self):
-    	queryset = Registration.objects.all()
-    	query_params = self.request.GET
+        queryset = Registration.objects.all()
+        query_params = self.request.GET
 
-    	school_id = query_params.get('school_id', None)
-    	conference_session = query_params.get('conference_id', None)
-    	if school_id and conference_session:
-    		queryset = queryset.filter(school_id=school_id, conference_session=conference_session)
+        school_id = query_params.get('school_id', None)
+        conference_session = query_params.get('conference_id', None)
+        if school_id and conference_session:
+            queryset = queryset.filter(
+                school_id=school_id, conference_session=conference_session)
 
-    	return queryset
-
+        return queryset
