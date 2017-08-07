@@ -6,7 +6,7 @@ import json
 from django.http import QueryDict
 from rest_framework import permissions
 
-from huxley.core.models import Assignment, Delegate
+from huxley.core.models import Assignment, Delegate, Registration
 
 
 class IsSuperuserOrReadOnly(permissions.BasePermission):
@@ -51,6 +51,24 @@ class IsPostOrSuperuserOnly(permissions.BasePermission):
         return request.method == 'POST' or request.user.is_superuser
 
 
+class RegistrationListPermission(permissions.BasePermission):
+    '''Accept only when the school of the registration object is the same
+       as the school of the user, or is a post, or is the superuser.'''
+
+    def has_permission(self, request, view):
+        if request.user.is_superuser:
+            return True
+
+        if request.method == 'POST':
+            return True
+
+        if request.method in permissions.SAFE_METHODS:
+            school_id = request.query_params.get('school_id', -1)
+            return user_is_advisor(request, view, school_id)
+
+        return False
+
+
 class IsSchoolAssignmentAdvisorOrSuperuser(permissions.BasePermission):
     '''Accept only the advisor of the given school with a given assignment.'''
 
@@ -74,16 +92,16 @@ class AssignmentListPermission(permissions.BasePermission):
         if request.method in permissions.SAFE_METHODS:
             school_id = request.query_params.get('school_id', -1)
             committee_id = request.query_params.get('committee_id', -1)
-            return (user_is_chair(request, view, committee_id) or 
+            return (user_is_chair(request, view, committee_id) or
                     user_is_advisor(request, view, school_id))
 
         return False
-        
+
 
 class DelegateDetailPermission(permissions.BasePermission):
     '''Accept requests to retrieve, update, and destroy a delegate from the
        superuser and the advisor of the school of the delegate. Accept requests
-       to retrieve and update a delegate from the chair of the committee of 
+       to retrieve and update a delegate from the chair of the committee of
        the delegate.'''
 
     def has_permission(self, request, view):
@@ -123,7 +141,7 @@ class DelegateListPermission(permissions.BasePermission):
         if method in permissions.SAFE_METHODS:
             school_id = request.query_params.get('school_id', -1)
             committee_id = request.query_params.get('committee_id', -1)
-            return (user_is_chair(request, view, committee_id) or 
+            return (user_is_chair(request, view, committee_id) or
                     user_is_advisor(request, view, school_id))
 
         if method == 'POST':
@@ -143,10 +161,10 @@ class DelegateListPermission(permissions.BasePermission):
 
 def user_is_advisor(request, view, school_id):
     user = request.user
-    return (user.is_authenticated() and user.is_advisor() and 
+    return (user.is_authenticated() and user.is_advisor() and
             user.school_id == int(school_id))
 
 def user_is_chair(request, view, committee_id):
     user = request.user
-    return (user.is_authenticated() and user.is_chair() and 
+    return (user.is_authenticated() and user.is_chair() and
             user.committee_id == int(committee_id))

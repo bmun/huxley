@@ -7,3 +7,4 @@ from .country import CountrySerializer
 from .delegate import DelegateSerializer
 from .school import SchoolSerializer
 from .user import CreateUserSerializer, UserSerializer
+from .registration import RegistrationSerializer
