@@ -11,14 +11,14 @@ def migrate_school_data(apps, schema_editor):
     Registration = apps.get_model('core', 'Registration')
     Conference = apps.get_model('core', 'Conference')
     conference, created = Conference.objects.get_or_create(
-    	session=65,
-    	defaults={
-    		'start_date': datetime(2017,3,5),
-    		'end_date': datetime(2017,3,7),
-    		'reg_open': datetime(2017,1,1),
-    		'early_reg_close': datetime(2017,2,2),
-    		'reg_close': datetime(2017,3,3)
-    	})
+        session=65,
+        defaults={
+            'start_date': datetime(2017, 3, 5),
+            'end_date': datetime(2017, 3, 7),
+            'reg_open': datetime(2017, 1, 1),
+            'early_reg_close': datetime(2017, 2, 2),
+            'reg_close': datetime(2017, 3, 3)
+        })
     for school in School.objects.all():
         registration = Registration.objects.create(
             school=school,
