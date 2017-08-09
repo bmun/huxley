@@ -8,7 +8,7 @@ from django.http import Http404
 from rest_framework import generics
 from rest_framework.authentication import SessionAuthentication
 
-from huxley.api.permissions import IsAdvisorOrSuperuser, IsSchoolAdvisorOrSuperuser
+from huxley.api import permissions
 from huxley.api.serializers import DelegateSerializer, SchoolSerializer
 from huxley.core.models import Conference, Delegate, School
 
@@ -19,11 +19,11 @@ class SchoolList(generics.CreateAPIView):
     serializer_class = SchoolSerializer
 
 
-class SchoolDetail(generics.RetrieveUpdateDestroyAPIView):
+class SchoolDetail(generics.RetrieveUpdateAPIView):
     authentication_classes = (SessionAuthentication,)
     queryset = School.objects.all()
     serializer_class = SchoolSerializer
-    permission_classes = (IsAdvisorOrSuperuser,)
+    permission_classes = (permissions.SchoolDetailPermission,)
 
     def put(self, request, *args, **kwargs):
         return self.partial_update(request, *args, **kwargs)

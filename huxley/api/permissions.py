@@ -84,6 +84,27 @@ class IsSchoolAssignmentAdvisorOrSuperuser(permissions.BasePermission):
                                assignment.registration.school_id)
 
 
+class AssignmentDetailPermission(permissions.BasePermission):
+    '''Accept requests to retrieve an assignment from superusers, the advisor of 
+       the assignment's school, and delegates with the requested assignment.
+       Onyl allow superusers to update assignments.'''
+
+    def has_permission(self, request, view):
+        if request.user.is_superuser:
+            return True
+
+        assignment_id = view.kwargs.get('pk', None)
+        assignment = Assignment.objects.get(id=assignment_id)
+        user = request.user
+        method = request.method
+
+        if method == 'GET':
+            return (user_is_advisor(request, view, assignment.school_id) or
+                    user_is_delegate(request, view, assignment_id))
+
+        return False
+
+
 class AssignmentListPermission(permissions.BasePermission):
     def has_permission(self, request, view):
         if request.user.is_superuser:
@@ -158,6 +179,23 @@ class DelegateListPermission(permissions.BasePermission):
                 return not delegates.exclude(school_id=user.school_id).exists()
 
         return False
+        
+
+class SchoolDetailPermission(permissions.BasePermission):
+    '''Accept only the school's advisor, the school's delegates, or 
+       superusers to retrieve the school. Accept only superusers and the advisor
+       to update the school.'''
+
+    def has_permission(self, request, view):
+        user = request.user
+        method = request.method
+        school_id = view.kwargs.get('pk', None)
+
+        if method == 'GET':
+            return (user_is_advisor(view, request, school_id),
+                    user_is_school_delegate(view, request, school_id))
+
+        return user.is_superuser or user_is_advisor(view, request, school_id)
 
 
 def user_is_advisor(request, view, school_id):
@@ -170,3 +208,15 @@ def user_is_chair(request, view, committee_id):
     user = request.user
     return (user.is_authenticated() and user.is_chair() and
             user.committee_id == int(committee_id))
+
+def user_is_delegate(request, view, assignment_id):
+    user = request.user
+    return (user.is_authenticated() and user.is_delegate() and
+            user.assignment_id == int(assignment_id))
+
+def user_is_school_delegate(request, view, school_id):
+    user = request.user
+    assignment_id = user.assignment_id
+    assignment = Assignment.objects.get(id=assignment_id)
+    return (user.is_authenticated() and user.is_delegte() and
+            assignment.school_id = int(school_id))
