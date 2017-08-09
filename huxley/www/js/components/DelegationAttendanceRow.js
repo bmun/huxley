@@ -11,8 +11,20 @@ var DelegationAttendanceRow = React.createClass({
   propTypes: {
     onChange: React.PropTypes.func,
     countryName: React.PropTypes.string,
-    countryID: React.PropTypes.string,
-    delegates: React.PropTypes.array,
+    assignmentID: React.PropTypes.number,
+    attendance: React.PropTypes.object,
+  },
+
+  shouldComponentUpdate(nextProps, nextState) {
+    for (var field in this.props.attendance) {
+      if (this.props.attendance[field] !== nextProps.attendance[field]) {
+        return true;
+      }
+    }
+    return (
+      this.props.countryName !== nextProps.countryName ||
+      this.props.assignmentID !== nextProps.assignmentID
+    );
   },
 
   render() {
@@ -26,7 +38,7 @@ var DelegationAttendanceRow = React.createClass({
             <input
               className="choice"
               type="checkbox"
-              checked={this.props.delegates[0].voting}
+              checked={this.props.attendance.voting}
               onChange={this._handleChange.bind(this, 'voting')}
             />
           </label>
@@ -36,7 +48,7 @@ var DelegationAttendanceRow = React.createClass({
             <input
               className="choice"
               type="checkbox"
-              checked={this.props.delegates[0].session_one}
+              checked={this.props.attendance.session_one}
               onChange={this._handleChange.bind(this, 'session_one')}
             />
           </label>
@@ -46,7 +58,7 @@ var DelegationAttendanceRow = React.createClass({
             <input
               className="choice"
               type="checkbox"
-              checked={this.props.delegates[0].session_two}
+              checked={this.props.attendance.session_two}
               onChange={this._handleChange.bind(this, 'session_two')}
             />
           </label>
@@ -56,7 +68,7 @@ var DelegationAttendanceRow = React.createClass({
             <input
               className="choice"
               type="checkbox"
-              checked={this.props.delegates[0].session_three}
+              checked={this.props.attendance.session_three}
               onChange={this._handleChange.bind(this, 'session_three')}
             />
           </label>
@@ -66,7 +78,7 @@ var DelegationAttendanceRow = React.createClass({
             <input
               className="choice"
               type="checkbox"
-              checked={this.props.delegates[0].session_four}
+              checked={this.props.attendance.session_four}
               onChange={this._handleChange.bind(this, 'session_four')}
             />
           </label>
@@ -77,7 +89,7 @@ var DelegationAttendanceRow = React.createClass({
 
   _handleChange: function(field, event) {
     this.props.onChange &&
-      this.props.onChange(field, this.props.countryID, event);
+      this.props.onChange(field, this.props.assignmentID, event);
   },
 });
 
