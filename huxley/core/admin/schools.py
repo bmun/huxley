@@ -12,7 +12,7 @@ from huxley.core.models import School
 
 class SchoolAdmin(admin.ModelAdmin):
 
-    search_fields = ('name',)
+    search_fields = ('name', )
 
     def info(self, request):
         ''' Returns a CSV file containing the current set of
@@ -75,4 +75,5 @@ class SchoolAdmin(admin.ModelAdmin):
         return super(SchoolAdmin, self).get_urls() + [
             url(r'info',
                 self.admin_site.admin_view(self.info),
-                name='core_school_info', )]
+                name='core_school_info', )
+        ]
