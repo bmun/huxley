@@ -45,16 +45,6 @@ class SchoolAdminTest(TestCase):
             "Program Type",
             "Times Attended",
             "International",
-            "Waitlist",
-            "Beginners",
-            "Intermediates",
-            "Advanced",
-            "Spanish Speakers",
-            "Chinese Speakers",
-            "Registration Comments",
-            "Fees Owed",
-            "Fees Paid",
-            "Modified At",
         ]
 
         fields_csv = ",".join(map(str, header)) + "\r\n"
@@ -80,64 +70,7 @@ class SchoolAdminTest(TestCase):
             school.program_type,
             school.times_attended,
             school.international,
-            school.waitlist,
-            school.beginner_delegates,
-            school.intermediate_delegates,
-            school.advanced_delegates,
-            school.spanish_speaking_delegates,
-            school.chinese_speaking_delegates,
-            school.registration_comments,
-            school.fees_owed,
-            school.fees_paid,
-            school.modified_at.isoformat(),
         ]
-
-        fields_csv += ",".join(map(str, fields))
-        self.assertEquals(fields_csv, response.content[:-2])
-
-    def test_preference_export(self):
-        '''Test that the admin panel can properly export school preferences.'''
-        models.new_user(username='testuser1', password='test1')
-        models.new_superuser(username='testuser2', password='test2')
-        self.client.login(username='testuser1', password='test1')
-        school = models.new_school()
-        self.client.logout()
-        self.client.login(username='testuser2', password='test2')
-
-        response = self.client.get(reverse('admin:core_school_preferences'))
-
-        self.assertTrue(response)
-
-        header = [
-            "Name", "Assignments Requested", "Beginners", "Intermediates",
-            "Advanced", "Spanish Speakers", "Chinese Speakers", "Country 1",
-            "Country 2", "Country 3", "Country 4", "Country 5", "Country 6",
-            "Country 7", "Country 8", "Country 9", "Country 10",
-            "Committee Preferences", "Registration Comments"
-        ]
-
-        fields_csv = ",".join(map(str, header)) + "\r\n"
-
-        countryprefs = [c
-                        for c in school.countrypreferences.all().order_by(
-                            'countrypreference')]
-        countryprefs += [''] * (10 - len(countryprefs))
-        committeeprefs = [', '.join(
-            [c.name for c in school.committeepreferences.all()])]
-
-        fields = [
-            school.name,
-            school.beginner_delegates + school.intermediate_delegates +
-            school.advanced_delegates,
-            school.beginner_delegates,
-            school.intermediate_delegates,
-            school.advanced_delegates,
-            school.spanish_speaking_delegates,
-            school.chinese_speaking_delegates,
-        ]
-        fields.extend(countryprefs)
-        fields.extend(committeeprefs)
-        fields.append(school.registration_comments)
 
         fields_csv += ",".join(map(str, fields))
         self.assertEquals(fields_csv, response.content[:-2])
