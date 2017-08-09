@@ -407,8 +407,8 @@ class CountryPreference(models.Model):
     rank = models.PositiveSmallIntegerField()
 
     def __unicode__(self):
-        return '%s : %s (%d)' % (self.registration.school.name, self.country.name,
-                                 self.rank)
+        return '%s : %s (%d)' % (self.registration.school.name,
+                                 self.country.name, self.rank)
 
     class Meta:
         db_table = u'country_preference'
