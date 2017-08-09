@@ -308,11 +308,11 @@ class Assignment(models.Model):
         assigned = set()
         failed_assignments = []
 
-        def add(committee, country, school, rejected):
+        def add(committee, country, registration, rejected):
             additions.append(
                 cls(committee_id=committee.id,
                     country_id=country.id,
-                    school_id=school.id,
+                    registration_id=registration.id,
                     rejected=rejected, ))
 
         def remove(assignment_data):
@@ -348,18 +348,19 @@ class Assignment(models.Model):
                         country.name))))
                 continue
 
+            registration = School.objects.get(id=school.id)
             assigned.add(key)
             old_assignment = assignment_dict.get(key)
 
             if not old_assignment:
-                add(committee, country, school, rejected)
+                add(committee, country, registration, rejected)
                 continue
 
-            if old_assignment['school_id'] != school:
+            if old_assignment['registration_id'] != registration:
                 # Remove the old assignment instead of just updating it
                 # so that its delegates are deleted by cascade.
                 remove(old_assignment)
-                add(committee, country, school, rejected)
+                add(committee, country, registration, rejected)
 
             del assignment_dict[key]
 
@@ -384,14 +385,14 @@ class Assignment(models.Model):
             return
 
         old_assignment = cls.objects.get(id=assignment.id)
-        if assignment.school_id != old_assignment.school_id:
+        if assignment.registration_id != old_assignment.registration_id:
             assignment.rejected = False
             Delegate.objects.filter(assignment_id=old_assignment.id).update(
                 assignment=None)
 
     def __unicode__(self):
         return self.committee.name + " : " + self.country.name + " : " + (
-            self.school.name if self.school else "Unassigned")
+            self.registration.school.name if self.registration else "Unassigned")
 
     class Meta:
         db_table = u'assignment'
@@ -455,7 +456,7 @@ class Delegate(models.Model):
 
     def save(self, *args, **kwargs):
         if (self.assignment_id and self.school_id and
-                self.school_id != self.assignment.school_id):
+                self.school_id != self.assignment.registration.school_id):
             raise ValidationError(
                 'Delegate school and delegate assignment school do not match.')
 

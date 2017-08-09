@@ -20,13 +20,13 @@ class DelegateAdminTest(TestCase):
         models.new_superuser(username='testuser', password='test')
         self.client.login(username='testuser', password='test')
 
-        school = models.new_school()
+        registration = models.new_registration()
         cm1 = models.new_committee(name='SPD')
         cm2 = models.new_committee(name='USS')
         co1 = models.new_country(name="Côte d'Ivoire")
         co2 = models.new_country(name='Barbara Boxer')
-        Assignment.objects.create(committee=cm1, country=co1, school=school)
-        Assignment.objects.create(committee=cm2, country=co2, school=school)
+        Assignment.objects.create(committee=cm1, country=co1, registration=registration)
+        Assignment.objects.create(committee=cm2, country=co2, registration=registration)
 
         f = TestFiles.new_csv([
             ['Name', 'Committee', 'Country', 'School'],
@@ -39,7 +39,7 @@ class DelegateAdminTest(TestCase):
 
         self.assertTrue(Delegate.objects.filter(
             assignment=Assignment.objects.get(
-                school=School.objects.get(name='Test School'),
+                registration=registration,
                 committee=Committee.objects.get(name='SPD'),
                 country=Country.objects.get(name="Côte d'Ivoire")
             ),
@@ -47,7 +47,7 @@ class DelegateAdminTest(TestCase):
         ).exists())
         self.assertTrue(Delegate.objects.filter(
             assignment=Assignment.objects.get(
-                school=School.objects.get(name='Test School'),
+                registration=registration,
                 committee=Committee.objects.get(name='USS'),
                 country=Country.objects.get(name='Barbara Boxer')
             ),

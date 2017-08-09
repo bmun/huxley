@@ -79,11 +79,13 @@ class AssignmentTest(TestCase):
         ct2 = models.new_country(name='CT2')
         ct3 = models.new_country(name='CT3')
         s1 = models.new_school(name='S1')
+        r1 = models.new_registration(school=s1)
         s2 = models.new_school(name='S2')
+        r2 = models.new_registration(school=s2)
 
         Assignment.objects.bulk_create([
             Assignment(
-                committee_id=cm.id, country_id=ct.id, school_id=s1.id)
+                committee_id=cm.id, country_id=ct.id, registration_id=r1.id)
             for ct in [ct1, ct2] for cm in [cm1, cm2]
         ])
 
@@ -105,7 +107,7 @@ class AssignmentTest(TestCase):
         new_assignments = [a[1:]
                            for a in Assignment.objects.all().values_list()]
         delegates = Delegate.objects.all()
-        updates = [(cm.id, ct.id, s.id, None, rej)
+        updates = [(cm.id, ct.id, s.id, rej)
                    for cm, ct, s, rej in updates]
         self.assertEquals(set(updates), set(new_assignments))
         self.assertEquals(len(delegates), 2)
@@ -115,14 +117,16 @@ class AssignmentTest(TestCase):
            field is set to False and any delegates assigned to it are
            no longer assigned to it.'''
         s1 = models.new_school(name='S1')
+        r1 = models.new_registration(school=s1)
         s2 = models.new_school(name='S2')
-        a = models.new_assignment(school=s1, rejected=True)
+        r2 = models.new_registration(school=s2)
+        a = models.new_assignment(registration=r1, rejected=True)
         d1 = models.new_delegate(school=s1, assignment=a)
         d2 = models.new_delegate(school=s1, assignment=a)
         self.assertEquals(a.delegates.count(), 2)
         self.assertTrue(a.rejected)
 
-        a.school = s2
+        a.registration = r2
         a.save()
 
         self.assertEquals(a.delegates.count(), 0)
@@ -149,7 +153,8 @@ class DelegateTest(TestCase):
         should be the same if they both exist on the delegate.
         """
         school = models.new_school(name='S1')
-        assignment = models.new_assignment()
+        registration = models.new_registration()
+        assignment = models.new_assignment(registration=registration)
 
         self.assertRaises(
             ValidationError,

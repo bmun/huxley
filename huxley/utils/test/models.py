@@ -122,12 +122,12 @@ def new_delegate(**kwargs):
 
 def new_assignment(**kwargs):
     test_committee = kwargs.pop('committee', None) or new_committee()
-    test_school = kwargs.pop('school', None) or new_school()
+    test_registration = kwargs.pop('registration', None) or new_registration()
     test_country = kwargs.pop('country', None) or new_country()
 
     a = Assignment(
         committee=test_committee,
-        school=test_school,
+        registration=test_registration,
         country=test_country,
         rejected=kwargs.pop('rejected', False), )
     a.save()
@@ -135,9 +135,11 @@ def new_assignment(**kwargs):
 
 
 def new_registration(**kwargs):
+    test_school = kwargs.pop('school', None) or new_school()
+    test_conference = kwargs.pop('conference', None) or Conference.get_current()
     r = Registration(
-        school=kwargs.pop('school', new_school()),
-        conference=kwargs.pop('conference', Conference.get_current()),
+        school=test_school,
+        conference=test_conference,
         num_beginner_delegates=kwargs.pop('num_beginner_delegates', 0),
         num_intermediate_delegates=kwargs.pop('num_intermediate_delegates', 0),
         num_advanced_delegates=kwargs.pop('num_advanced_delegates', 0),

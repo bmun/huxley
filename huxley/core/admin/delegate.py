@@ -32,13 +32,13 @@ class DelegateAdmin(admin.ModelAdmin):
                 'Session Four'
             ])
 
-        ordering = 'assignment__school__name'
+        ordering = 'assignment__registration__school__name'
         for delegate in Delegate.objects.all().order_by(ordering):
             writer.writerow([
                 delegate,
+                delegate.school,
                 delegate.committee,
                 delegate.country,
-                delegate.school,
                 delegate.session_one,
                 delegate.session_two,
                 delegate.session_three,
@@ -57,7 +57,7 @@ class DelegateAdmin(admin.ModelAdmin):
             assignments[
                 assignment.committee.name.encode('ascii', 'ignore'),
                 assignment.country.name.encode('ascii', 'ignore'),
-                assignment.school.name,
+                assignment.registration.school.name,
             ] = assignment
         for row in reader:
             if row[1] == 'Committee':
