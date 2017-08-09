@@ -136,7 +136,8 @@ def new_assignment(**kwargs):
 
 def new_registration(**kwargs):
     test_school = kwargs.pop('school', None) or new_school()
-    test_conference = kwargs.pop('conference', None) or Conference.get_current()
+    test_conference = kwargs.pop('conference',
+                                 None) or Conference.get_current()
     r = Registration(
         school=test_school,
         conference=test_conference,

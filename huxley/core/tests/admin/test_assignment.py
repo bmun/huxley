@@ -34,13 +34,13 @@ class AssignmentAdminTest(TestCase):
         with closing(f) as f:
             self.client.post(reverse('admin:core_assignment_load'), {'csv': f})
 
-        self.assertTrue(Assignment.objects.filter(
-            registration=registration,
-            committee=Committee.objects.get(name='SPD'),
-            country=Country.objects.get(name="Côte d'Ivoire")
-        ).exists())
-        self.assertTrue(Assignment.objects.filter(
-            registration=registration,
-            committee=Committee.objects.get(name='USS'),
-            country=Country.objects.get(name='Barbara Boxer')
-        ).exists())
+        self.assertTrue(
+            Assignment.objects.filter(
+                registration=registration,
+                committee=Committee.objects.get(name='SPD'),
+                country=Country.objects.get(name="Côte d'Ivoire")).exists())
+        self.assertTrue(
+            Assignment.objects.filter(
+                registration=registration,
+                committee=Committee.objects.get(name='USS'),
+                country=Country.objects.get(name='Barbara Boxer')).exists())

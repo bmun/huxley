@@ -25,8 +25,10 @@ class DelegateAdminTest(TestCase):
         cm2 = models.new_committee(name='USS')
         co1 = models.new_country(name="Côte d'Ivoire")
         co2 = models.new_country(name='Barbara Boxer')
-        Assignment.objects.create(committee=cm1, country=co1, registration=registration)
-        Assignment.objects.create(committee=cm2, country=co2, registration=registration)
+        Assignment.objects.create(
+            committee=cm1, country=co1, registration=registration)
+        Assignment.objects.create(
+            committee=cm2, country=co2, registration=registration)
 
         f = TestFiles.new_csv([
             ['Name', 'Committee', 'Country', 'School'],
@@ -37,19 +39,17 @@ class DelegateAdminTest(TestCase):
         with closing(f) as f:
             self.client.post(reverse('admin:core_delegate_load'), {'csv': f})
 
-        self.assertTrue(Delegate.objects.filter(
-            assignment=Assignment.objects.get(
-                registration=registration,
-                committee=Committee.objects.get(name='SPD'),
-                country=Country.objects.get(name="Côte d'Ivoire")
-            ),
-            name='John Doe'
-        ).exists())
-        self.assertTrue(Delegate.objects.filter(
-            assignment=Assignment.objects.get(
-                registration=registration,
-                committee=Committee.objects.get(name='USS'),
-                country=Country.objects.get(name='Barbara Boxer')
-            ),
-            name='Jane Doe'
-        ).exists())
+        self.assertTrue(
+            Delegate.objects.filter(
+                assignment=Assignment.objects.get(
+                    registration=registration,
+                    committee=Committee.objects.get(name='SPD'),
+                    country=Country.objects.get(name="Côte d'Ivoire")),
+                name='John Doe').exists())
+        self.assertTrue(
+            Delegate.objects.filter(
+                assignment=Assignment.objects.get(
+                    registration=registration,
+                    committee=Committee.objects.get(name='USS'),
+                    country=Country.objects.get(name='Barbara Boxer')),
+                name='Jane Doe').exists())

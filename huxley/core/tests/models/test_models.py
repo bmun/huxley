@@ -107,8 +107,7 @@ class AssignmentTest(TestCase):
         new_assignments = [a[1:]
                            for a in Assignment.objects.all().values_list()]
         delegates = Delegate.objects.all()
-        updates = [(cm.id, ct.id, s.id, rej)
-                   for cm, ct, s, rej in updates]
+        updates = [(cm.id, ct.id, s.id, rej) for cm, ct, s, rej in updates]
         self.assertEquals(set(updates), set(new_assignments))
         self.assertEquals(len(delegates), 2)
 

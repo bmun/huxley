@@ -392,7 +392,8 @@ class Assignment(models.Model):
 
     def __unicode__(self):
         return self.committee.name + " : " + self.country.name + " : " + (
-            self.registration.school.name if self.registration else "Unassigned")
+            self.registration.school.name
+            if self.registration else "Unassigned")
 
     class Meta:
         db_table = u'assignment'
