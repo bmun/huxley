@@ -6,7 +6,7 @@ from rest_framework.authentication import SessionAuthentication
 
 from huxley.api import permissions
 from huxley.api.serializers import AssignmentSerializer
-from huxley.core.models import Assignment
+from huxley.core.models import Assignment, Registration
 
 
 class AssignmentList(generics.ListCreateAPIView):
@@ -20,7 +20,8 @@ class AssignmentList(generics.ListCreateAPIView):
 
         school_id = query_params.get('school_id', None)
         if school_id:
-            queryset = queryset.filter(school_id=school_id)
+            registration_id = Registration.objects.get(school_id=school_id).id
+            queryset = queryset.filter(registration_id=registration_id)
 
         committee_id = query_params.get('committee_id', None)
         if committee_id:

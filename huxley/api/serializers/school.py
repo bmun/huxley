@@ -7,17 +7,11 @@ from huxley.core.models import School, Committee
 
 
 class SchoolSerializer(serializers.ModelSerializer):
-    fees_owed = serializers.FloatField(read_only=True)
-    fees_paid = serializers.FloatField(read_only=True)
-    assignments_finalized = serializers.BooleanField(required=False)
-    countrypreferences = serializers.ListField(child=serializers.IntegerField(required=False), source='country_preference_ids')
-    committeepreferences = serializers.PrimaryKeyRelatedField(allow_empty=True, many=True, queryset=Committee.objects.all(), required=False)
 
     class Meta:
         model = School
         fields = (
             'id',
-            'registered',
             'name',
             'address',
             'city',
@@ -37,39 +31,15 @@ class SchoolSerializer(serializers.ModelSerializer):
             'program_type',
             'times_attended',
             'international',
-            'waitlist',
-            'beginner_delegates',
-            'intermediate_delegates',
-            'advanced_delegates',
-            'spanish_speaking_delegates',
-            'chinese_speaking_delegates',
-            'waivers_completed',
-            'countrypreferences',
-            'committeepreferences',
-            'registration_comments',
-            'fees_owed',
-            'fees_paid',
-            'assignments_finalized',
-            'modified_at',
         )
         extra_kwargs = {
-        'committeepreferences': {'required': False},
-        'countrypreferences': {'required': False},
         'secondary_name': {'required': False},
         'secondary_gender': {'required': False},
         'secondary_email': {'required': False},
         'secondary_phone': {'required': False},
         'secondary_type': {'required': False},
         'program_type': {'required': False},
-        'times_attended': {'required': False},
-        'beginner_delegates': {'required': False},
-        'intermediate_delegates': {'required': False},
-        'advanced_delegates': {'required': False},
-        'spanish_speaking_delegates': {'required': False},
-        'chinese_speaking_delegates': {'required': False},
-        'countrypreferences': {'required': False},
-        'committeepreferences': {'required': False},
-        'registration_comments': {'required': False}
+        'times_attended': {'required': False}
         }
 
 
@@ -79,16 +49,6 @@ class SchoolSerializer(serializers.ModelSerializer):
         primary_phone = data.get('primary_phone')
         secondary_phone = data.get('secondary_phone')
         school_zip = data.get('zip_code')
-        beginner_delegates = data.get('beginner_delegates')
-        intermediate_delegates = data.get('intermediate_delegates')
-        advanced_delegates = data.get('advanced_delegates')
-        spanish_speaking_delegates = data.get('spanish_speaking_delegates')
-        chinese_speaking_delegates = data.get('chinese_speaking_delegates')
-
-        total_delegates = sum((
-            beginner_delegates or 0,
-            intermediate_delegates or 0,
-            advanced_delegates or 0))
 
         def validate_phone(phone, international):
             if international:
@@ -116,11 +76,6 @@ class SchoolSerializer(serializers.ModelSerializer):
                 validate_zip_code(school_zip, international)
             except serializers.ValidationError:
                 invalid_fields['zip_code'] = 'This field can only contain numbers and spaces.'
-
-        if spanish_speaking_delegates > total_delegates:
-            invalid_fields['spanish_speaking_delegates'] = 'Cannot exceed total number of delegates.'
-        if chinese_speaking_delegates > total_delegates:
-            invalid_fields['chinese_speaking_delegates'] = 'Cannot exceed total number of delegates.'
 
         if invalid_fields:
             raise serializers.ValidationError(invalid_fields)

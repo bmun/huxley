@@ -80,7 +80,7 @@ class IsSchoolAssignmentAdvisorOrSuperuser(permissions.BasePermission):
         assignment = Assignment.objects.get(id=assignment_id)
         user = request.user
 
-        return user_is_advisor(request, view, assignment.school_id)
+        return user_is_advisor(request, view, assignment.registration.school_id)
 
 
 class AssignmentListPermission(permissions.BasePermission):
