@@ -144,7 +144,7 @@ class DelegateDetailPermission(permissions.BasePermission):
             return True
 
         if (user_is_delegate(request, view, delegate_id) and
-            request.method != 'DELETE'):
+                request.method != 'DELETE'):
             return True
 
         return False
@@ -185,7 +185,7 @@ class DelegateListPermission(permissions.BasePermission):
                 return not delegates.exclude(school_id=user.school_id).exists()
 
         return False
-        
+
 
 class SchoolDetailPermission(permissions.BasePermission):
     '''Accept only the school's advisor, the school's delegates, or 
@@ -196,7 +196,7 @@ class SchoolDetailPermission(permissions.BasePermission):
         user = request.user
         if user.is_superuser:
             return True
-            
+
         method = request.method
         school_id = view.kwargs.get('pk', None)
 
@@ -218,13 +218,14 @@ def user_is_chair(request, view, committee_id):
     return (user.is_authenticated() and user.is_chair() and
             user.committee_id == int(committee_id))
 
+
 def user_is_delegate(request, view, target_id, field=None):
     user = request.user
     if not user.is_authenticated() or not user.is_delegate():
         return False
 
     if field:
-        return (user.delegate and 
-                getattr(user.delegate, field+'_id') == int(target_id))
+        return (user.delegate and
+                getattr(user.delegate, field + '_id') == int(target_id))
 
     return user.delegate_id == int(target_id)

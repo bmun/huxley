@@ -50,7 +50,8 @@ class UserDetailGetTestCase(tests.RetrieveAPITestCase):
             'user_type': user1.user_type,
             'school': user1.school_id,
             'committee': user1.committee_id,
-            'delegate': user1.delegate_id})
+            'delegate': user1.delegate_id
+        })
 
     def test_self(self):
         '''It should return the correct fields for a single user.'''
@@ -88,7 +89,8 @@ class UserDetailGetTestCase(tests.RetrieveAPITestCase):
                 'international': school.international,
             },
             'committee': user.committee_id,
-            'delegate': user.delegate_id})
+            'delegate': user.delegate_id
+        })
 
     def test_chair(self):
         '''It should have the correct fields for chairs.'''
@@ -108,7 +110,8 @@ class UserDetailGetTestCase(tests.RetrieveAPITestCase):
             'user_type': user.user_type,
             'school': user.school_id,
             'committee': user.committee_id,
-            'delegate': user.delegate_id})
+            'delegate': user.delegate_id
+        })
 
 
 class UserDetailDeleteTestCase(auto.DestroyAPIAutoTestCase):
@@ -220,15 +223,15 @@ class UserListGetTestCase(tests.ListAPITestCase):
              'user_type': user1.user_type,
              'school': user1.school_id,
              'committee': user1.committee_id,
-             'delegate': user1.delegate_id},
-            {'id': user2.id,
-             'username': user2.username,
-             'first_name': user2.first_name,
-             'last_name': user2.last_name,
-             'user_type': user2.user_type,
-             'school': user2.school_id,
-             'committee': user2.committee_id,
-             'delegate': user2.delegate_id}])
+             'delegate': user1.delegate_id}, {'id': user2.id,
+                                              'username': user2.username,
+                                              'first_name': user2.first_name,
+                                              'last_name': user2.last_name,
+                                              'user_type': user2.user_type,
+                                              'school': user2.school_id,
+                                              'committee': user2.committee_id,
+                                              'delegate': user2.delegate_id}
+        ])
 
 
 class UserListPostTestCase(tests.CreateAPITestCase):

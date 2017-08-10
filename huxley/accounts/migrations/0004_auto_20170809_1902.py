@@ -16,11 +16,14 @@ class Migration(migrations.Migration):
     operations = [
         migrations.RemoveField(
             model_name='user',
-            name='assignment',
-        ),
+            name='assignment', ),
         migrations.AddField(
             model_name='user',
             name='delegate',
-            field=models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='delegate', to='core.Delegate'),
-        ),
+            field=models.OneToOneField(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name='delegate',
+                to='core.Delegate'), ),
     ]

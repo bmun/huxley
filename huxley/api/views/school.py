@@ -14,16 +14,16 @@ from huxley.core.models import Conference, Delegate, School
 
 
 class SchoolList(generics.CreateAPIView):
-    authentication_classes = (SessionAuthentication,)
+    authentication_classes = (SessionAuthentication, )
     queryset = School.objects.all()
     serializer_class = SchoolSerializer
 
 
 class SchoolDetail(generics.RetrieveUpdateDestroyAPIView):
-    authentication_classes = (SessionAuthentication,)
+    authentication_classes = (SessionAuthentication, )
     queryset = School.objects.all()
     serializer_class = SchoolSerializer
-    permission_classes = (permissions.SchoolDetailPermission,)
+    permission_classes = (permissions.SchoolDetailPermission, )
 
     def put(self, request, *args, **kwargs):
         return self.partial_update(request, *args, **kwargs)
@@ -36,11 +36,9 @@ class SchoolInvoice(PDFTemplateView):
         conference = Conference.get_current()
         school = School.objects.get(pk=kwargs['pk'])
         due_date = school.registered + datetime.timedelta(days=21)
-        delegate_total = sum((
-            school.beginner_delegates,
-            school.intermediate_delegates,
-            school.advanced_delegates,
-        ))
+        delegate_total = sum((school.beginner_delegates,
+                              school.intermediate_delegates,
+                              school.advanced_delegates, ))
         delegate_fee = conference.delegate_fee
         delegate_fees = delegate_total * delegate_fee
         fees_owed = school.fees_owed
@@ -58,5 +56,4 @@ class SchoolInvoice(PDFTemplateView):
             fees_owed=fees_owed,
             fees_paid=fees_paid,
             amount_due=amount_due,
-            **kwargs
-        )
+            **kwargs)
