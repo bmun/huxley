@@ -49,7 +49,8 @@ class UserDetailGetTestCase(tests.RetrieveAPITestCase):
             'last_name': user1.last_name,
             'user_type': user1.user_type,
             'school': user1.school_id,
-            'committee': user1.committee_id})
+            'committee': user1.committee_id
+        })
 
     def test_self(self):
         '''It should return the correct fields for a single user.'''
@@ -86,14 +87,16 @@ class UserDetailGetTestCase(tests.RetrieveAPITestCase):
                 'times_attended': school.times_attended,
                 'international': school.international,
             },
-            'committee': user.committee_id})
+            'committee': user.committee_id
+        })
 
     def test_chair(self):
         '''It should have the correct fields for chairs.'''
-        user = models.new_user(username='testuser',
-                                  password='test',
-                                  user_type=User.TYPE_CHAIR,
-                                  committee_id=4)
+        user = models.new_user(
+            username='testuser',
+            password='test',
+            user_type=User.TYPE_CHAIR,
+            committee_id=4)
         self.client.login(username='testuser', password='test')
         response = self.get_response(user.id)
 
@@ -104,7 +107,8 @@ class UserDetailGetTestCase(tests.RetrieveAPITestCase):
             'last_name': user.last_name,
             'user_type': user.user_type,
             'school': user.school_id,
-            'committee': user.committee_id})
+            'committee': user.committee_id
+        })
 
 
 class UserDetailDeleteTestCase(auto.DestroyAPIAutoTestCase):
@@ -121,7 +125,8 @@ class UserDetailDeleteTestCase(auto.DestroyAPIAutoTestCase):
     def test_other_user(self):
         '''It should reject the request from another user.'''
         models.new_school(user=self.default_user)
-        self.as_default_user().do_test(expected_error=auto.EXP_PERMISSION_DENIED)
+        self.as_default_user().do_test(
+            expected_error=auto.EXP_PERMISSION_DENIED)
 
     def test_self(self):
         '''It should allow a user to delete themself.'''
@@ -134,8 +139,7 @@ class UserDetailDeleteTestCase(auto.DestroyAPIAutoTestCase):
 
 class UserDetailPatchTestCase(tests.PartialUpdateAPITestCase):
     url_name = 'api:user_detail'
-    params = {'first_name': 'first',
-              'last_name': 'last'}
+    params = {'first_name': 'first', 'last_name': 'last'}
 
     def setUp(self):
         self.user = models.new_user(username='user1', password='user1')
@@ -215,14 +219,15 @@ class UserListGetTestCase(tests.ListAPITestCase):
              'last_name': user1.last_name,
              'user_type': user1.user_type,
              'school': user1.school_id,
-             'committee': user1.committee_id},
-            {'id': user2.id,
-             'username': user2.username,
-             'first_name': user2.first_name,
-             'last_name': user2.last_name,
-             'user_type': user2.user_type,
-             'school': user2.school_id,
-             'committee': user2.committee_id}])
+             'committee': user1.committee_id}, {'id': user2.id,
+                                                'username': user2.username,
+                                                'first_name': user2.first_name,
+                                                'last_name': user2.last_name,
+                                                'user_type': user2.user_type,
+                                                'school': user2.school_id,
+                                                'committee':
+                                                user2.committee_id}
+        ])
 
 
 class UserListPostTestCase(tests.CreateAPITestCase):
@@ -247,55 +252,66 @@ class UserListPostTestCase(tests.CreateAPITestCase):
             'last_name': user.last_name,
             'user_type': User.TYPE_ADVISOR,
             'school': user.school_id,
-            'email': user.email})
+            'email': user.email
+        })
 
     def test_empty_username(self):
         response = self.get_response(params=self.get_params(username=''))
         self.assertEqual(response.data, {
-            'username': [u'This field may not be blank.']})
+            'username': [u'This field may not be blank.']
+        })
 
     def test_taken_username(self):
         models.new_user(username='_Kunal', password='pass')
         response = self.get_response(params=self.get_params(username='_Kunal'))
         self.assertEqual(response.data, {
-            'username': [u'A user with that username already exists.']})
+            'username': [u'A user with that username already exists.']
+        })
 
     def test_invalid_username(self):
         response = self.get_response(params=self.get_params(username='>Kunal'))
         self.assertEqual(response.data, {
             'username': [
                 u'Enter a valid username. This value may contain only English '
-                u'letters, numbers, and @/./+/-/_ characters.']})
+                u'letters, numbers, and @/./+/-/_ characters.'
+            ]
+        })
 
     def test_empty_password(self):
         response = self.get_response(params=self.get_params(password=''))
         self.assertEqual(response.data, {
-            'password': [u'This field may not be blank.']})
+            'password': [u'This field may not be blank.']
+        })
 
     def test_invalid_password(self):
         response = self.get_response(params=self.get_params(password='>pass'))
         self.assertEqual(response.data, {
-            'password': ['Password contains invalid characters.']})
+            'password': ['Password contains invalid characters.']
+        })
 
     def test_empty_first_name(self):
         response = self.get_response(params=self.get_params(first_name=''))
         self.assertEqual(response.data, {
-            'first_name': ['This field is required.']})
+            'first_name': ['This field is required.']
+        })
 
     def test_empty_last_name(self):
         response = self.get_response(params=self.get_params(last_name=''))
         self.assertEqual(response.data, {
-            'last_name': ['This field is required.']})
+            'last_name': ['This field is required.']
+        })
 
     def test_username_length(self):
         response = self.get_response(params=self.get_params(username='user'))
         self.assertEqual(response.data, {
-            'username': ['Username must be at least 5 characters.']})
+            'username': ['Username must be at least 5 characters.']
+        })
 
     def test_password_length(self):
         response = self.get_response(params=self.get_params(password='pass'))
         self.assertEqual(response.data, {
-            'password': ['Password must be at least 6 characters.']})
+            'password': ['Password must be at least 6 characters.']
+        })
 
     def test_invalid(self):
         conf = Conference.get_current()
@@ -305,7 +321,8 @@ class UserListPostTestCase(tests.CreateAPITestCase):
         params = self.get_params()
         response = self.get_response(params)
         self.assertEqual(response.data, {
-            'detail': 'Conference registration is closed.'})
+            'detail': 'Conference registration is closed.'
+        })
 
         conf.open_reg = True
         conf.save()
@@ -327,17 +344,18 @@ class CurrentUserTestCase(TestCase):
         user2 = models.new_user(username='bunny', password='bunny')
 
         credentials = {'username': 'lol', 'password': 'lol'}
-        response = self.client.post(self.url,
-                                    data=json.dumps(credentials),
-                                    content_type='application/json')
+        response = self.client.post(
+            self.url,
+            data=json.dumps(credentials),
+            content_type='application/json')
         self.assertEqual(response.status_code, 201)
         self.assertEqual(int(self.client.session['_auth_user_id']), user.id)
 
-
         credentials = {'username': 'bunny', 'password': 'bunny'}
-        response = self.client.post(self.url,
-                                    data=json.dumps(credentials),
-                                    content_type='application/json')
+        response = self.client.post(
+            self.url,
+            data=json.dumps(credentials),
+            content_type='application/json')
         self.assertEqual(int(self.client.session['_auth_user_id']), user.id)
 
         data = json.loads(response.content)
