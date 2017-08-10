@@ -17,7 +17,7 @@ class UserAdmin(UserAdminBase):
                 'user_type',
                 'school',
                 'committee',
-                'assignment',
+                'delegate',
             )
         }),
     )

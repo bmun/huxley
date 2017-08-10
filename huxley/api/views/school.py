@@ -19,7 +19,7 @@ class SchoolList(generics.CreateAPIView):
     serializer_class = SchoolSerializer
 
 
-class SchoolDetail(generics.RetrieveUpdateAPIView):
+class SchoolDetail(generics.RetrieveUpdateDestroyAPIView):
     authentication_classes = (SessionAuthentication,)
     queryset = School.objects.all()
     serializer_class = SchoolSerializer

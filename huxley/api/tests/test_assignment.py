@@ -24,6 +24,15 @@ class AssignmentDetailGetTestCase(auto.RetrieveAPIAutoTestCase):
         chair = models.new_user(user_type=User.TYPE_CHAIR)
         self.as_user(chair).do_test(expected_error=auto.EXP_PERMISSION_DENIED)
 
+    def test_delegate(self):
+        delegate_1 = models.new_user(user_type=User.TYPE_DELEGATE)
+        self.as_user(delegate_1).do_test(expected_error=auto.EXP_PERMISSION_DENIED)
+
+        assigned_delegate = models.new_delegate(assignment=self.object)
+        delegate_2 = models.new_user(user_type=User.TYPE_DELEGATE, 
+                                     delegate=assigned_delegate)
+        self.as_user(delegate_2).do_test()
+
     def test_superuser(self):
         self.as_superuser().do_test()
 
@@ -41,6 +50,10 @@ class AssignmentDetailPutTestCase(tests.UpdateAPITestCase):
         self.committee = models.new_committee(user=self.chair)
         self.assignment = models.new_assignment(
             committee=self.committee, registration=self.registration)
+        self.delegate_user = models.new_user(
+            username='delegate', password='delegate', user_type=User.TYPE_DELEGATE)
+        self.delegate = models.new_delegate(
+            user=self.delegate_user, school=self.school, assignment=self.assignment)
 
     def test_anonymous_user(self):
         '''Unauthenticated users shouldn't be able to update assignments.'''
@@ -62,6 +75,12 @@ class AssignmentDetailPutTestCase(tests.UpdateAPITestCase):
     def test_chair(self):
         '''Chairs should not be able to update assignments'''
         self.client.login(username='chair', password='chair')
+        response = self.get_response(self.assignment.id, params=self.params)
+        self.assertPermissionDenied(response)
+
+    def test_delegate(self):
+        '''Delegates should not be able to update assignments'''
+        self.client.login(username='delegate', password='delegate')
         response = self.get_response(self.assignment.id, params=self.params)
         self.assertPermissionDenied(response)
 
@@ -92,6 +111,8 @@ class AssignmentDetailPatchTestCase(tests.PartialUpdateAPITestCase):
         self.committee = models.new_committee(user=self.chair)
         self.assignment = models.new_assignment(
             committee=self.committee, registration=self.registration)
+        self.delegate_user = models.new_user(username='delegate', password='delegate', user_type=User.TYPE_DELEGATE)
+        self.delegate = models.new_delegate(user=self.delegate_user, school=self.school, assignment=self.assignment)
 
     def test_anonymous_user(self):
         '''Unauthenticated users shouldn't be able to update assignments.'''
@@ -113,6 +134,12 @@ class AssignmentDetailPatchTestCase(tests.PartialUpdateAPITestCase):
     def test_chair(self):
         '''Chairs should not be able to update assignments'''
         self.client.login(username='chair', password='chair')
+        response = self.get_response(self.assignment.id, params=self.params)
+        self.assertPermissionDenied(response)
+
+    def test_delegate(self):
+        '''Delegates should not be able to update assignments'''
+        self.client.login(username='delegate', password='delegate')
         response = self.get_response(self.assignment.id, params=self.params)
         self.assertPermissionDenied(response)
 
@@ -151,6 +178,11 @@ class AssignmentDetailDeleteTestCase(auto.DestroyAPIAutoTestCase):
         chair = models.new_user(user_type=User.TYPE_CHAIR)
         self.as_user(chair).do_test(expected_error=auto.EXP_PERMISSION_DENIED)
 
+    def test_delegate(self):
+        '''Delegates cannot delete their assignment.'''
+        delegate_user = models.new_user(user_type=User.TYPE_DELEGATE)
+        self.as_user(delegate_user).do_test(expected_error=auto.EXP_PERMISSION_DENIED)
+
     def test_other_user(self):
         '''A user cannot delete another user's assignments.'''
         models.new_school(user=self.default_user)
@@ -174,6 +206,7 @@ class AssignmentListCreateTestCase(tests.CreateAPITestCase):
         self.registration = models.new_registration(school=self.school)
         self.committee = models.new_committee(user=self.chair)
         self.country = models.new_country()
+        self.delegate_user = models.new_user(username='delegate', password='delegate', user_type=User.TYPE_DELEGATE)
         self.params['committee'] = self.committee.id
         self.params['registration'] = self.registration.id
         self.params['country'] = self.country.id
@@ -192,6 +225,12 @@ class AssignmentListCreateTestCase(tests.CreateAPITestCase):
     def test_chair(self):
         '''Chairs should not be able to create Assignments'''
         self.client.login(username='chair', password='chair')
+        response = self.get_response(params=self.params)
+        self.assertPermissionDenied(response)
+
+    def test_delegate(self):
+        '''Delegates should not be able to create Assignments'''
+        self.client.login(username='delegate', password='delegate')
         response = self.get_response(params=self.params)
         self.assertPermissionDenied(response)
 
@@ -217,6 +256,8 @@ class AssignmentListGetTestCase(tests.ListAPITestCase):
         self.advisor = models.new_user(username='advisor', password='advisor')
         self.chair = models.new_user(
             username='chair', password='chair', user_type=User.TYPE_CHAIR)
+        self.delegate_user = models.new_user(
+            username='delegate', password='delegate', user_type=User.TYPE_DELEGATE)
         self.school = models.new_school(user=self.advisor)
         self.registration = models.new_registration(school=self.school)
         self.committee = models.new_committee(user=self.chair)
@@ -254,6 +295,13 @@ class AssignmentListGetTestCase(tests.ListAPITestCase):
         response = self.get_response(
             params={'committee_id': self.committee.id})
         self.assert_assignments_equal(response, [self.a1, self.a2])
+
+    def test_delegate(self):
+        '''Delegates cannot access assignments in bulk.'''
+        self.client.login(username='delegate', password='delegate')
+
+        response = self.get_response()
+        self.assertPermissionDenied(response)
 
     def test_other_user(self):
         '''It rejects a request from another user.'''

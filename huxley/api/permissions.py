@@ -86,8 +86,9 @@ class IsSchoolAssignmentAdvisorOrSuperuser(permissions.BasePermission):
 
 class AssignmentDetailPermission(permissions.BasePermission):
     '''Accept requests to retrieve an assignment from superusers, the advisor of 
-       the assignment's school, and delegates with the requested assignment.
-       Onyl allow superusers to update assignments.'''
+       the assignment's school, the chair of the assignment's committee, and 
+       delegates with the assignment. Only allow superusers and advisors to
+       update assignments.'''
 
     def has_permission(self, request, view):
         if request.user.is_superuser:
@@ -98,11 +99,12 @@ class AssignmentDetailPermission(permissions.BasePermission):
         user = request.user
         method = request.method
 
-        if method == 'GET':
-            return (user_is_advisor(request, view, assignment.school_id) or
-                    user_is_delegate(request, view, assignment_id))
+        if method != 'GET':
+            return user_is_advisor(request, view, assignment.school_id)
 
-        return False
+        return (user_is_advisor(request, view, assignment.school_id) or
+                user_is_chair(request, view, assignment.committee_id) or
+                user_is_delegate(request, view, assignment_id, 'assignment'))
 
 
 class AssignmentListPermission(permissions.BasePermission):
@@ -122,8 +124,8 @@ class AssignmentListPermission(permissions.BasePermission):
 class DelegateDetailPermission(permissions.BasePermission):
     '''Accept requests to retrieve, update, and destroy a delegate from the
        superuser and the advisor of the school of the delegate. Accept requests
-       to retrieve and update a delegate from the chair of the committee of
-       the delegate.'''
+       to retrieve and update a delegate from the delegate or the chair of the
+       committee of the delegate.'''
 
     def has_permission(self, request, view):
         user = request.user
@@ -139,6 +141,10 @@ class DelegateDetailPermission(permissions.BasePermission):
         if (delegate.assignment and
                 user_is_chair(request, view, delegate.assignment.committee_id)
                 and request.method != 'DELETE'):
+            return True
+
+        if (user_is_delegate(request, view, delegate_id) and
+            request.method != 'DELETE'):
             return True
 
         return False
@@ -188,14 +194,17 @@ class SchoolDetailPermission(permissions.BasePermission):
 
     def has_permission(self, request, view):
         user = request.user
+        if user.is_superuser:
+            return True
+            
         method = request.method
         school_id = view.kwargs.get('pk', None)
 
         if method == 'GET':
-            return (user_is_advisor(view, request, school_id),
-                    user_is_school_delegate(view, request, school_id))
+            return (user_is_advisor(request, view, school_id) or
+                    user_is_delegate(request, view, school_id, 'school'))
 
-        return user.is_superuser or user_is_advisor(view, request, school_id)
+        return user_is_advisor(request, view, school_id)
 
 
 def user_is_advisor(request, view, school_id):
@@ -209,14 +218,13 @@ def user_is_chair(request, view, committee_id):
     return (user.is_authenticated() and user.is_chair() and
             user.committee_id == int(committee_id))
 
-def user_is_delegate(request, view, assignment_id):
+def user_is_delegate(request, view, target_id, field=None):
     user = request.user
-    return (user.is_authenticated() and user.is_delegate() and
-            user.assignment_id == int(assignment_id))
+    if not user.is_authenticated() or not user.is_delegate():
+        return False
 
-def user_is_school_delegate(request, view, school_id):
-    user = request.user
-    assignment_id = user.assignment_id
-    assignment = Assignment.objects.get(id=assignment_id)
-    return (user.is_authenticated() and user.is_delegte() and
-            assignment.school_id = int(school_id))
+    if field:
+        return (user.delegate and 
+                getattr(user.delegate, field+'_id') == int(target_id))
+
+    return user.delegate_id == int(target_id)
