@@ -7,41 +7,37 @@ from huxley.core.models import School, Committee
 
 
 class SchoolSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = School
-        fields = (
-            'id',
-            'name',
-            'address',
-            'city',
-            'state',
-            'zip_code',
-            'country',
-            'primary_name',
-            'primary_gender',
-            'primary_email',
-            'primary_phone',
-            'primary_type',
-            'secondary_name',
-            'secondary_gender',
-            'secondary_email',
-            'secondary_phone',
-            'secondary_type',
-            'program_type',
-            'times_attended',
-            'international',
-        )
+        fields = ('id',
+                  'name',
+                  'address',
+                  'city',
+                  'state',
+                  'zip_code',
+                  'country',
+                  'primary_name',
+                  'primary_gender',
+                  'primary_email',
+                  'primary_phone',
+                  'primary_type',
+                  'secondary_name',
+                  'secondary_gender',
+                  'secondary_email',
+                  'secondary_phone',
+                  'secondary_type',
+                  'program_type',
+                  'times_attended',
+                  'international', )
         extra_kwargs = {
-        'secondary_name': {'required': False},
-        'secondary_gender': {'required': False},
-        'secondary_email': {'required': False},
-        'secondary_phone': {'required': False},
-        'secondary_type': {'required': False},
-        'program_type': {'required': False},
-        'times_attended': {'required': False}
+            'secondary_name': {'required': False},
+            'secondary_gender': {'required': False},
+            'secondary_email': {'required': False},
+            'secondary_phone': {'required': False},
+            'secondary_type': {'required': False},
+            'program_type': {'required': False},
+            'times_attended': {'required': False}
         }
-
 
     def validate(self, data):
         invalid_fields = {}
@@ -64,18 +60,21 @@ class SchoolSerializer(serializers.ModelSerializer):
             try:
                 validate_phone(primary_phone, international)
             except serializers.ValidationError:
-                invalid_fields['primary_phone'] = 'This is an invalid phone number.'
+                invalid_fields[
+                    'primary_phone'] = 'This is an invalid phone number.'
         if secondary_phone:
             try:
                 validate_phone(secondary_phone, international)
             except serializers.ValidationError:
-                invalid_fields['secondary_phone'] = 'This is an invalid phone number.'
+                invalid_fields[
+                    'secondary_phone'] = 'This is an invalid phone number.'
 
         if school_zip:
             try:
                 validate_zip_code(school_zip, international)
             except serializers.ValidationError:
-                invalid_fields['zip_code'] = 'This field can only contain numbers and spaces.'
+                invalid_fields[
+                    'zip_code'] = 'This field can only contain numbers and spaces.'
 
         if invalid_fields:
             raise serializers.ValidationError(invalid_fields)
@@ -87,8 +86,8 @@ class SchoolSerializer(serializers.ModelSerializer):
 
         if School.objects.filter(name=school_name).exists():
             raise serializers.ValidationError(
-                'A school with the name "%s" has already been registered.'
-                % school_name)
+                'A school with the name "%s" has already been registered.' %
+                school_name)
 
         validators.name(school_name)
 

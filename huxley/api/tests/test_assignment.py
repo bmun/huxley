@@ -30,15 +30,17 @@ class AssignmentDetailGetTestCase(auto.RetrieveAPIAutoTestCase):
 
 class AssignmentDetailPutTestCase(tests.UpdateAPITestCase):
     url_name = 'api:assignment_detail'
-    params = {'rejected':True}
+    params = {'rejected': True}
 
     def setUp(self):
         self.advisor = models.new_user(username='advisor', password='advisor')
         self.school = models.new_school(user=self.advisor)
         self.registration = models.new_registration(school=self.school)
-        self.chair = models.new_user(username='chair', password='chair', user_type=User.TYPE_CHAIR)
+        self.chair = models.new_user(
+            username='chair', password='chair', user_type=User.TYPE_CHAIR)
         self.committee = models.new_committee(user=self.chair)
-        self.assignment = models.new_assignment(committee=self.committee, registration=self.registration)
+        self.assignment = models.new_assignment(
+            committee=self.committee, registration=self.registration)
 
     def test_anonymous_user(self):
         '''Unauthenticated users shouldn't be able to update assignments.'''
@@ -50,11 +52,11 @@ class AssignmentDetailPutTestCase(tests.UpdateAPITestCase):
         self.client.login(username='advisor', password='advisor')
         response = self.get_response(self.assignment.id, params=self.params)
         self.assertEqual(response.data, {
-            "id" : self.assignment.id,
-            "committee" : self.assignment.committee.id,
-            "country" : self.assignment.country.id,
-            "registration" : self.registration.id,
-            "rejected" : True,
+            "id": self.assignment.id,
+            "committee": self.assignment.committee.id,
+            "country": self.assignment.country.id,
+            "registration": self.registration.id,
+            "rejected": True,
         })
 
     def test_chair(self):
@@ -69,25 +71,27 @@ class AssignmentDetailPutTestCase(tests.UpdateAPITestCase):
         self.client.login(username='s_user', password='s_user')
         response = self.get_response(self.assignment.id)
         self.assertEqual(response.data, {
-            "id" : self.assignment.id,
-            "committee" : self.assignment.committee.id,
-            "country" : self.assignment.country.id,
-            "registration" : self.registration.id,
-            "rejected" : True,
+            "id": self.assignment.id,
+            "committee": self.assignment.committee.id,
+            "country": self.assignment.country.id,
+            "registration": self.registration.id,
+            "rejected": True,
         })
 
 
 class AssignmentDetailPatchTestCase(tests.PartialUpdateAPITestCase):
     url_name = 'api:assignment_detail'
-    params = {'rejected':True}
+    params = {'rejected': True}
 
     def setUp(self):
         self.advisor = models.new_user(username='advisor', password='advisor')
         self.school = models.new_school(user=self.advisor)
         self.registration = models.new_registration(school=self.school)
-        self.chair = models.new_user(username='chair', password='chair', user_type=User.TYPE_CHAIR)
+        self.chair = models.new_user(
+            username='chair', password='chair', user_type=User.TYPE_CHAIR)
         self.committee = models.new_committee(user=self.chair)
-        self.assignment = models.new_assignment(committee=self.committee, registration=self.registration)
+        self.assignment = models.new_assignment(
+            committee=self.committee, registration=self.registration)
 
     def test_anonymous_user(self):
         '''Unauthenticated users shouldn't be able to update assignments.'''
@@ -99,11 +103,11 @@ class AssignmentDetailPatchTestCase(tests.PartialUpdateAPITestCase):
         self.client.login(username='advisor', password='advisor')
         response = self.get_response(self.assignment.id, params=self.params)
         self.assertEqual(response.data, {
-            "id" : self.assignment.id,
-            "committee" : self.assignment.committee.id,
-            "country" : self.assignment.country.id,
-            "registration" : self.registration.id,
-            "rejected" : True,
+            "id": self.assignment.id,
+            "committee": self.assignment.committee.id,
+            "country": self.assignment.country.id,
+            "registration": self.registration.id,
+            "rejected": True,
         })
 
     def test_chair(self):
@@ -118,11 +122,11 @@ class AssignmentDetailPatchTestCase(tests.PartialUpdateAPITestCase):
         self.client.login(username='s_user', password='s_user')
         response = self.get_response(self.assignment.id)
         self.assertEqual(response.data, {
-            "id" : self.assignment.id,
-            "committee" : self.assignment.committee.id,
-            "country" : self.assignment.country.id,
-            "registration" : self.registration.id,
-            "rejected" : True,
+            "id": self.assignment.id,
+            "committee": self.assignment.committee.id,
+            "country": self.assignment.country.id,
+            "registration": self.registration.id,
+            "rejected": True,
         })
 
 
@@ -139,7 +143,8 @@ class AssignmentDetailDeleteTestCase(auto.DestroyAPIAutoTestCase):
 
     def test_advisor(self):
         '''Advisors cannot delete their assignments.'''
-        self.as_user(self.object.registration.school.advisor).do_test(expected_error=auto.EXP_DELETE_NOT_ALLOWED)
+        self.as_user(self.object.registration.school.advisor).do_test(
+            expected_error=auto.EXP_DELETE_NOT_ALLOWED)
 
     def test_chair(self):
         '''Chairs cannot delete their assignments.'''
@@ -149,7 +154,8 @@ class AssignmentDetailDeleteTestCase(auto.DestroyAPIAutoTestCase):
     def test_other_user(self):
         '''A user cannot delete another user's assignments.'''
         models.new_school(user=self.default_user)
-        self.as_default_user().do_test(expected_error=auto.EXP_PERMISSION_DENIED)
+        self.as_default_user().do_test(
+            expected_error=auto.EXP_PERMISSION_DENIED)
 
     def test_superuser(self):
         '''A superuser cannot delete assignments.'''
@@ -158,11 +164,12 @@ class AssignmentDetailDeleteTestCase(auto.DestroyAPIAutoTestCase):
 
 class AssignmentListCreateTestCase(tests.CreateAPITestCase):
     url_name = 'api:assignment_list'
-    params = {'rejected':True}
+    params = {'rejected': True}
 
     def setUp(self):
         self.advisor = models.new_user(username='advisor', password='advisor')
-        self.chair = models.new_user(username='chair', password='chair', user_type=User.TYPE_CHAIR)
+        self.chair = models.new_user(
+            username='chair', password='chair', user_type=User.TYPE_CHAIR)
         self.school = models.new_school(user=self.advisor)
         self.registration = models.new_registration(school=self.school)
         self.committee = models.new_committee(user=self.chair)
@@ -196,10 +203,10 @@ class AssignmentListCreateTestCase(tests.CreateAPITestCase):
         response = self.get_response(params=self.params)
         response.data.pop('id')
         self.assertEqual(response.data, {
-            "committee" : self.committee.id,
-            "country" : self.country.id,
-            "registration" : self.registration.id,
-            "rejected" : True,
+            "committee": self.committee.id,
+            "country": self.country.id,
+            "registration": self.registration.id,
+            "rejected": True,
         })
 
 
@@ -208,12 +215,15 @@ class AssignmentListGetTestCase(tests.ListAPITestCase):
 
     def setUp(self):
         self.advisor = models.new_user(username='advisor', password='advisor')
-        self.chair = models.new_user(username='chair', password='chair', user_type=User.TYPE_CHAIR)
+        self.chair = models.new_user(
+            username='chair', password='chair', user_type=User.TYPE_CHAIR)
         self.school = models.new_school(user=self.advisor)
         self.registration = models.new_registration(school=self.school)
         self.committee = models.new_committee(user=self.chair)
-        self.a1 = models.new_assignment(registration=self.registration, committee=self.committee)
-        self.a2 = models.new_assignment(registration=self.registration, committee=self.committee)
+        self.a1 = models.new_assignment(
+            registration=self.registration, committee=self.committee)
+        self.a2 = models.new_assignment(
+            registration=self.registration, committee=self.committee)
         self.a3 = models.new_assignment()
 
     def test_anonymous_user(self):
@@ -241,7 +251,8 @@ class AssignmentListGetTestCase(tests.ListAPITestCase):
         response = self.get_response()
         self.assertPermissionDenied(response)
 
-        response = self.get_response(params={'committee_id': self.committee.id})
+        response = self.get_response(
+            params={'committee_id': self.committee.id})
         self.assert_assignments_equal(response, [self.a1, self.a2])
 
     def test_other_user(self):

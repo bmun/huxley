@@ -80,11 +80,11 @@ class IsSchoolAssignmentAdvisorOrSuperuser(permissions.BasePermission):
         assignment = Assignment.objects.get(id=assignment_id)
         user = request.user
 
-        return user_is_advisor(request, view, assignment.registration.school_id)
+        return user_is_advisor(request, view,
+                               assignment.registration.school_id)
 
 
 class AssignmentListPermission(permissions.BasePermission):
-
     def has_permission(self, request, view):
         if request.user.is_superuser:
             return True
@@ -116,8 +116,8 @@ class DelegateDetailPermission(permissions.BasePermission):
             return True
 
         if (delegate.assignment and
-            user_is_chair(request, view, delegate.assignment.committee_id) and
-            request.method != 'DELETE'):
+                user_is_chair(request, view, delegate.assignment.committee_id)
+                and request.method != 'DELETE'):
             return True
 
         return False
@@ -151,7 +151,8 @@ class DelegateListPermission(permissions.BasePermission):
             delegate_ids = [delegate['id'] for delegate in request.data]
             delegates = Delegate.objects.filter(id__in=delegate_ids)
             if user.is_chair():
-                return not delegates.exclude(assignment__committee_id=user.committee_id).exists()
+                return not delegates.exclude(
+                    assignment__committee_id=user.committee_id).exists()
 
             if user.is_advisor():
                 return not delegates.exclude(school_id=user.school_id).exists()
@@ -163,6 +164,7 @@ def user_is_advisor(request, view, school_id):
     user = request.user
     return (user.is_authenticated() and user.is_advisor() and
             user.school_id == int(school_id))
+
 
 def user_is_chair(request, view, committee_id):
     user = request.user

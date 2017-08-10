@@ -28,28 +28,29 @@ class CreateSchoolTestCase(CreateAPITestCase):
 
     def test_empty_fields(self):
         '''This should not allow for required fields to be empty.'''
-        response = self.get_response(params=self.get_params(name='',
-                                                            address='',
-                                                            city='',
-                                                            state='',
-                                                            zip_code='',
-                                                            country='',
-                                                            primary_name='',
-                                                            primary_email='',
-                                                            primary_phone='',
-                                                            program_type=''))
+        response = self.get_response(params=self.get_params(
+            name='',
+            address='',
+            city='',
+            state='',
+            zip_code='',
+            country='',
+            primary_name='',
+            primary_email='',
+            primary_phone='',
+            program_type=''))
 
         self.assertEqual(response.data,
-            {'city': [u'This field may not be blank.'],
-            'name': [u'This field may not be blank.'],
-            'primary_phone': [u'This field may not be blank.'],
-            'program_type': [u'"" is not a valid choice.'],
-            'country': [u'This field may not be blank.'],
-            'state': [u'This field may not be blank.'],
-            'primary_email': [u'This field may not be blank.'],
-            'address': [u'This field may not be blank.'],
-            'primary_name': [u'This field may not be blank.'],
-            'zip_code': [u'This field may not be blank.']})
+                         {'city': [u'This field may not be blank.'],
+                          'name': [u'This field may not be blank.'],
+                          'primary_phone': [u'This field may not be blank.'],
+                          'program_type': [u'"" is not a valid choice.'],
+                          'country': [u'This field may not be blank.'],
+                          'state': [u'This field may not be blank.'],
+                          'primary_email': [u'This field may not be blank.'],
+                          'address': [u'This field may not be blank.'],
+                          'primary_name': [u'This field may not be blank.'],
+                          'zip_code': [u'This field may not be blank.']})
 
     def test_valid(self):
         params = self.get_params()
@@ -188,8 +189,7 @@ class CreateSchoolTestCase(CreateAPITestCase):
 
     def test_invalid_international_secondary_phone(self):
         '''Secondary_phone phone should be numerical.'''
-        params = self.get_params(international=True,
-            secondary_phone='ABC')
+        params = self.get_params(international=True, secondary_phone='ABC')
 
         response = self.get_response(params=params)
 
@@ -202,6 +202,9 @@ class CreateSchoolTestCase(CreateAPITestCase):
 
         response = self.get_response(params=params)
 
-        self.assertEqual(response.data,
-            {"name": ["A school with the name \"%s\" has already been registered." %params['name']]})
+        self.assertEqual(
+            response.data,
+            {"name":
+             ["A school with the name \"%s\" has already been registered." %
+              params['name']]})
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
