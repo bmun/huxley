@@ -625,9 +625,9 @@ class DelegateListPartialUpdateTestCase(tests.PartialUpdateAPITestCase):
         self.client.login(username='chair', password='chair')
         self.params = [
             {'id': self.delegate1.id,
-             'assignment': self.new_assignment.id},
-            {'id': self.delegate3.id,
-             'assignment': self.new_assignment2.id}
+             'assignment': self.new_assignment.id}, {'id': self.delegate3.id,
+                                                     'assignment':
+                                                     self.new_assignment2.id}
         ]
         response = self.get_response()
 

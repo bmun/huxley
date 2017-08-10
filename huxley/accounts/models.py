@@ -19,23 +19,18 @@ class User(AbstractUser):
     USER_TYPE_CHOICES = ((TYPE_ADVISOR, 'Advisor'), (TYPE_CHAIR, 'Chair'),
                          (TYPE_DELEGATE, 'Delegate'))
 
-    user_type = models.PositiveSmallIntegerField(choices=USER_TYPE_CHOICES,
-                                                 default=TYPE_ADVISOR)
-    
-    school = models.OneToOneField(School,
-                                  related_name='advisor',
-                                  null=True,
-                                  blank=True)  # Advisors only
-    
-    committee = models.ForeignKey(Committee,
-                                  related_name='chair',
-                                  null=True,
-                                  blank=True)  # Chairs only
-    
-    delegate = models.OneToOneField(Delegate,
-                                    related_name='delegate',
-                                    null=True,
-                                    blank=True)  # Delegate only
+    user_type = models.PositiveSmallIntegerField(
+        choices=USER_TYPE_CHOICES, default=TYPE_ADVISOR)
+
+    school = models.OneToOneField(
+        School, related_name='advisor', null=True, blank=True)  # Advisors only
+
+    committee = models.ForeignKey(
+        Committee, related_name='chair', null=True, blank=True)  # Chairs only
+
+    delegate = models.OneToOneField(
+        Delegate, related_name='delegate', null=True,
+        blank=True)  # Delegate only
 
     def is_advisor(self):
         return self.user_type == self.TYPE_ADVISOR
