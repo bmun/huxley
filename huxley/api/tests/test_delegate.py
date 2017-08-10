@@ -23,7 +23,7 @@ class DelegateDetailGetTestCase(auto.RetrieveAPIAutoTestCase):
         self.as_user(self.object.school.advisor).do_test()
 
     def test_chair(self):
-        chair = models.new_user(user_type=User.TYPE_CHAIR, 
+        chair = models.new_user(user_type=User.TYPE_CHAIR,
                                 committee=self.object.assignment.committee)
         self.as_user(chair).do_test()
 
@@ -43,8 +43,9 @@ class DelegateDetailPutTestCase(tests.UpdateAPITestCase):
         self.advisor = models.new_user(username='advisor', password='advisor')
         self.chair = models.new_user(username='chair', password='chair', user_type=User.TYPE_CHAIR)
         self.school = models.new_school(user=self.advisor)
+        self.registration = models.new_registration(school=self.school)
         self.committee = models.new_committee(user=self.chair)
-        self.assignment = models.new_assignment(school=self.school, committee=self.committee)
+        self.assignment = models.new_assignment(registration=self.registration, committee=self.committee)
         self.delegate = models.new_delegate(assignment=self.assignment, school=self.school)
         self.params['assignment'] = self.assignment.id
 
@@ -127,8 +128,9 @@ class DelegateDetailPatchTestCase(tests.PartialUpdateAPITestCase):
         self.advisor = models.new_user(username='advisor', password='advisor')
         self.chair = models.new_user(username='chair', password='chair', user_type=User.TYPE_CHAIR)
         self.school = models.new_school(user=self.advisor)
+        self.registration = models.new_registration(school=self.school)
         self.committee = models.new_committee(user=self.chair)
-        self.assignment = models.new_assignment(school=self.school, committee=self.committee)
+        self.assignment = models.new_assignment(registration=self.registration, committee=self.committee)
         self.delegate = models.new_delegate(assignment=self.assignment, school=self.school)
 
     def test_anonymous_user(self):
@@ -242,8 +244,10 @@ class DelegateListCreateTestCase(tests.CreateAPITestCase):
         self.chair = models.new_user(username='chair', password='chair', user_type=User.TYPE_CHAIR)
         self.school = models.new_school(user=self.advisor)
         self.school2 = models.new_school(user=self.advisor2)
+        self.registration = models.new_registration(school=self.school)
+        self.registration2 = models.new_registration(school=self.school2)
         self.committee = models.new_committee(user=self.chair)
-        self.assignment = models.new_assignment(school=self.school, committee=self.committee)
+        self.assignment = models.new_assignment(registration=self.registration, committee=self.committee)
         self.params['assignment'] = self.assignment.id
         self.params['school'] = self.school.id
 
@@ -313,9 +317,10 @@ class DelegateListGetTestCase(tests.ListAPITestCase):
         self.advisor = models.new_user(username='advisor', password='advisor')
         self.chair = models.new_user(username='chair', password='chair', user_type=User.TYPE_CHAIR)
         self.school = models.new_school(user=self.advisor)
+        self.registration = models.new_registration(school=self.school)
         self.committee = models.new_committee(user=self.chair)
-        self.assignment1 = models.new_assignment(school=self.school, committee=self.committee)
-        self.assignment2 = models.new_assignment(school=self.school)
+        self.assignment1 = models.new_assignment(registration=self.registration, committee=self.committee)
+        self.assignment2 = models.new_assignment(registration=self.registration)
         self.delegate1 = models.new_delegate(
             assignment=self.assignment1,
         )
@@ -400,13 +405,15 @@ class DelegateListPartialUpdateTestCase(tests.PartialUpdateAPITestCase):
         self.chair = models.new_user(username='chair', password='chair', user_type=User.TYPE_CHAIR)
         self.school = models.new_school(user=self.advisor)
         self.school2 = models.new_school(user=self.advisor2)
+        self.registration = models.new_registration(school=self.school)
+        self.registration2 = models.new_registration(school=self.school2)
         self.committee = models.new_committee(user=self.chair)
 
-        self.assignment1 = models.new_assignment(school=self.school, committee=self.committee)
-        self.assignment2 = models.new_assignment(school=self.school)
-        self.assignment3 = models.new_assignment(school=self.school2, committee=self.committee)
-        self.new_assignment = models.new_assignment(school=self.school)
-        self.new_assignment2 = models.new_assignment(school=self.school2)
+        self.assignment1 = models.new_assignment(registration=self.registration, committee=self.committee)
+        self.assignment2 = models.new_assignment(registration=self.registration)
+        self.assignment3 = models.new_assignment(registration=self.registration2, committee=self.committee)
+        self.new_assignment = models.new_assignment(registration=self.registration)
+        self.new_assignment2 = models.new_assignment(registration=self.registration2)
         self.faulty_assignment = models.new_assignment()
 
         self.delegate1 = models.new_delegate(
@@ -613,5 +620,5 @@ class DelegateListPartialUpdateTestCase(tests.PartialUpdateAPITestCase):
         ]
 
         self.assertRaises(ValidationError, self.get_response, self.school.id)
-        
-        
+
+

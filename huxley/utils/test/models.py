@@ -108,7 +108,7 @@ def new_country(**kwargs):
 
 def new_delegate(**kwargs):
     a = kwargs.pop('assignment', None) or new_assignment()
-    s = kwargs.pop('school', None) or a.school
+    s = kwargs.pop('school', None) or a.registration.school
 
     d = Delegate(
         assignment=a,
