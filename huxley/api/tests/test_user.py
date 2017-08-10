@@ -224,7 +224,7 @@ class UserListGetTestCase(tests.ListAPITestCase):
              'school': user1.school_id,
              'committee': user1.committee_id,
              'delegate': user1.delegate_id},
-            {'id': user2.id,
+        {'id': user2.id,
              'username': user2.username,
              'first_name': user2.first_name,
              'last_name': user2.last_name,
