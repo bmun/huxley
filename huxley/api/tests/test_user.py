@@ -223,14 +223,15 @@ class UserListGetTestCase(tests.ListAPITestCase):
              'user_type': user1.user_type,
              'school': user1.school_id,
              'committee': user1.committee_id,
-             'delegate': user1.delegate_id}, {'id': user2.id,
-                                              'username': user2.username,
-                                              'first_name': user2.first_name,
-                                              'last_name': user2.last_name,
-                                              'user_type': user2.user_type,
-                                              'school': user2.school_id,
-                                              'committee': user2.committee_id,
-                                              'delegate': user2.delegate_id}
+             'delegate': user1.delegate_id},
+            {'id': user2.id,
+             'username': user2.username,
+             'first_name': user2.first_name,
+             'last_name': user2.last_name,
+             'user_type': user2.user_type,
+             'school': user2.school_id,
+             'committee': user2.committee_id,
+             'delegate': user2.delegate_id},
         ])
 
 
