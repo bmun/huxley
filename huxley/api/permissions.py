@@ -225,6 +225,6 @@ def user_is_delegate(request, view, target_id, field=None):
         return False
 
     if field:
-        return getattr(user.delegate, field + '_id', -1) == int(target_id)
+        return getattr(user.delegate, field + '_id', -1) ==  int(target_id)
 
     return user.delegate_id == int(target_id)
