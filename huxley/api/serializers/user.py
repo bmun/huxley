@@ -35,10 +35,9 @@ class UserSerializer(ModelSerializer):
     def update(self, instance, validated_data):
         if 'school' in validated_data:
             school_data = validated_data.pop('school')
-            school_data['modified_at'] = timezone.now()
             School.objects.filter(id=instance.school.id).update(**school_data)
-            send_mail('{0} has updated its registration information'.format(instance.school),
-                      'New registration information for {0}: \n\n'.format(instance.school) \
+            send_mail('{0} has updated its information'.format(instance.school),
+                      'New information for {0}: \n\n'.format(instance.school) \
                       + 'Advisor: \n' \
                       + '\n'.join(['{0}: {1}'.format(field, validated_data[field]) for field in validated_data]) \
                       + '\n\nSchool: \n' \
@@ -69,13 +68,8 @@ class CreateUserSerializer(ModelSerializer):
 
         if validated_data.get('school'):
             school_data = validated_data.pop('school')
-            committeepreferences = school_data.pop('committeepreferences')
 
             school = School.objects.create(**school_data)
-            school.save()
-
-            for pref in committeepreferences:
-                school.committeepreferences.add(pref)
             school.save()
 
             user = User.objects.create(

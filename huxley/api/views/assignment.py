@@ -6,12 +6,12 @@ from rest_framework.authentication import SessionAuthentication
 
 from huxley.api import permissions
 from huxley.api.serializers import AssignmentSerializer
-from huxley.core.models import Assignment
+from huxley.core.models import Assignment, Registration
 
 
 class AssignmentList(generics.ListCreateAPIView):
-    authentication_classes = (SessionAuthentication,)
-    permission_classes = (permissions.AssignmentListPermission,)
+    authentication_classes = (SessionAuthentication, )
+    permission_classes = (permissions.AssignmentListPermission, )
     serializer_class = AssignmentSerializer
 
     def get_queryset(self):
@@ -20,7 +20,8 @@ class AssignmentList(generics.ListCreateAPIView):
 
         school_id = query_params.get('school_id', None)
         if school_id:
-            queryset = queryset.filter(school_id=school_id)
+            registration_id = Registration.objects.get(school_id=school_id).id
+            queryset = queryset.filter(registration_id=registration_id)
 
         committee_id = query_params.get('committee_id', None)
         if committee_id:
@@ -30,9 +31,9 @@ class AssignmentList(generics.ListCreateAPIView):
 
 
 class AssignmentDetail(generics.RetrieveUpdateAPIView):
-    authentication_classes = (SessionAuthentication,)
+    authentication_classes = (SessionAuthentication, )
     queryset = Assignment.objects.all()
-    permission_classes = (permissions.IsSchoolAssignmentAdvisorOrSuperuser,)
+    permission_classes = (permissions.IsSchoolAssignmentAdvisorOrSuperuser, )
     serializer_class = AssignmentSerializer
 
     def put(self, request, *args, **kwargs):

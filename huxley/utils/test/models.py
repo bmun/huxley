@@ -57,14 +57,7 @@ def new_school(**kwargs):
         secondary_phone=kwargs.pop('secondary_phone', ''),
         secondary_type=kwargs.pop('secondary_type', ContactType.FACULTY),
         program_type=kwargs.pop('program_type', ProgramTypes.CLUB),
-        times_attended=kwargs.pop('times_attended', 0),
-        beginner_delegates=kwargs.pop('beginner_delegates', 0),
-        intermediate_delegates=kwargs.pop('intermediate_delegates', 0),
-        advanced_delegates=kwargs.pop('advanced_delegates', 0),
-        spanish_speaking_delegates=kwargs.pop('spanish_speaking_delegates', 0),
-        chinese_speaking_delegates=kwargs.pop('chinese_speaking_delegates', 0),
-        registration_comments=kwargs.pop('registration_comments', ''),
-        assignments_finalized=kwargs.pop('assignments_finalized', False))
+        times_attended=kwargs.pop('times_attended', 0))
 
     user = kwargs.pop('user', None)
     for attr, value in kwargs.items():
@@ -115,7 +108,7 @@ def new_country(**kwargs):
 
 def new_delegate(**kwargs):
     a = kwargs.pop('assignment', None) or new_assignment()
-    s = kwargs.pop('school', None) or a.school
+    s = kwargs.pop('school', None) or a.registration.school
 
     d = Delegate(
         assignment=a,
@@ -129,12 +122,12 @@ def new_delegate(**kwargs):
 
 def new_assignment(**kwargs):
     test_committee = kwargs.pop('committee', None) or new_committee()
-    test_school = kwargs.pop('school', None) or new_school()
+    test_registration = kwargs.pop('registration', None) or new_registration()
     test_country = kwargs.pop('country', None) or new_country()
 
     a = Assignment(
         committee=test_committee,
-        school=test_school,
+        registration=test_registration,
         country=test_country,
         rejected=kwargs.pop('rejected', False), )
     a.save()
@@ -142,9 +135,12 @@ def new_assignment(**kwargs):
 
 
 def new_registration(**kwargs):
+    test_school = kwargs.pop('school', None) or new_school()
+    test_conference = kwargs.pop('conference',
+                                 None) or Conference.get_current()
     r = Registration(
-        school=kwargs.pop('school', new_school()),
-        conference=kwargs.pop('conference', Conference.get_current()),
+        school=test_school,
+        conference=test_conference,
         num_beginner_delegates=kwargs.pop('num_beginner_delegates', 0),
         num_intermediate_delegates=kwargs.pop('num_intermediate_delegates', 0),
         num_advanced_delegates=kwargs.pop('num_advanced_delegates', 0),

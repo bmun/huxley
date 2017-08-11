@@ -24,63 +24,33 @@ class CreateSchoolTestCase(CreateAPITestCase):
         'primary_phone': '(999) 999-9999',
         'primary_type': 2,
         'program_type': User.TYPE_ADVISOR,
-        'beginner_delegates': 0,
-        'intermediate_delegates': 0,
-        'advanced_delegates': 0,
-        'spanish_speaking_delegates': 0,
-        'chinese_speaking_delegates': 0,
-        'countrypreferences': [1, 2],
-        'assignments_finalized': False,
     }
 
     def test_empty_fields(self):
         '''This should not allow for required fields to be empty.'''
-        response = self.get_response(params=self.get_params(name='',
-                                                            address='',
-                                                            city='',
-                                                            state='',
-                                                            zip_code='',
-                                                            country='',
-                                                            primary_name='',
-                                                            primary_email='',
-                                                            primary_phone='',
-                                                            program_type='',
-                                                            beginner_delegates='',
-                                                            intermediate_delegates='',
-                                                            advanced_delegates='',
-                                                            spanish_speaking_delegates='',
-                                                            chinese_speaking_delegates=''))
+        response = self.get_response(params=self.get_params(
+            name='',
+            address='',
+            city='',
+            state='',
+            zip_code='',
+            country='',
+            primary_name='',
+            primary_email='',
+            primary_phone='',
+            program_type=''))
 
         self.assertEqual(response.data,
-            {'city': [u'This field may not be blank.'],
-            'beginner_delegates': [u'A valid integer is required.'],
-            'name': [u'This field may not be blank.'],
-            'primary_phone': [u'This field may not be blank.'],
-            'program_type': [u'"" is not a valid choice.'],
-            'country': [u'This field may not be blank.'],
-            'advanced_delegates': [u'A valid integer is required.'],
-            'chinese_speaking_delegates': [u'A valid integer is required.'],
-            'state': [u'This field may not be blank.'],
-            'intermediate_delegates': [u'A valid integer is required.'],
-            'primary_email': [u'This field may not be blank.'],
-            'address': [u'This field may not be blank.'],
-            'primary_name': [u'This field may not be blank.'],
-            'spanish_speaking_delegates': [u'A valid integer is required.'],
-            'zip_code': [u'This field may not be blank.']})
-
-    def test_fees(self):
-        '''Fees should be read-only fields.'''
-        params = self.get_params(fees_owed=2000.0, fees_paid=2000.0)
-        response = self.get_response(params=params)
-
-        school = School.objects.get(id=response.data['id'])
-        fees_owed = response.data['fees_owed']
-        fees_paid = response.data['fees_paid']
-
-        self.assertEqual(fees_owed, float(school.fees_owed))
-        self.assertEqual(fees_paid, float(school.fees_paid))
-        self.assertNotEqual(fees_owed, 2000.0)
-        self.assertNotEqual(fees_paid, 2000.0)
+                         {'city': [u'This field may not be blank.'],
+                          'name': [u'This field may not be blank.'],
+                          'primary_phone': [u'This field may not be blank.'],
+                          'program_type': [u'"" is not a valid choice.'],
+                          'country': [u'This field may not be blank.'],
+                          'state': [u'This field may not be blank.'],
+                          'primary_email': [u'This field may not be blank.'],
+                          'address': [u'This field may not be blank.'],
+                          'primary_name': [u'This field may not be blank.'],
+                          'zip_code': [u'This field may not be blank.']})
 
     def test_valid(self):
         params = self.get_params()
@@ -92,7 +62,6 @@ class CreateSchoolTestCase(CreateAPITestCase):
         school = School.objects.get(id=response.data['id'])
         self.assertEqual(response.data, {
             'id': school.id,
-            'registered': school.registered.isoformat(),
             'name': school.name,
             'address': school.address,
             'city': school.city,
@@ -112,34 +81,7 @@ class CreateSchoolTestCase(CreateAPITestCase):
             'program_type': school.program_type,
             'times_attended': school.times_attended,
             'international': school.international,
-            'waitlist': school.waitlist,
-            'beginner_delegates': school.beginner_delegates,
-            'intermediate_delegates': school.intermediate_delegates,
-            'advanced_delegates': school.advanced_delegates,
-            'spanish_speaking_delegates': school.spanish_speaking_delegates,
-            'chinese_speaking_delegates': school.chinese_speaking_delegates,
-            'waivers_completed': school.waivers_completed,
-            'countrypreferences': school.country_preference_ids,
-            'registration_comments': school.registration_comments,
-            'committeepreferences': list(school.committeepreferences.all()),
-            'fees_owed': float(school.fees_owed),
-            'fees_paid': float(school.fees_paid),
-            'assignments_finalized': school.assignments_finalized,
-            'modified_at': school.modified_at.isoformat(),
         })
-
-    def test_country_preferences(self):
-        '''It should save a school's country preferences.'''
-        c1 = models.new_country().id
-        c2 = models.new_country().id
-        params = self.get_params(countrypreferences=[0, c1, c2, 0, c1])
-        response = self.get_response(params=params)
-
-        self.assertEqual(response.data['countrypreferences'], [c1, c2])
-
-        school_id = response.data['id']
-        school = School.objects.get(id=school_id)
-        self.assertEqual([c1, c2], school.country_preference_ids)
 
     def test_invalid_state(self):
         '''States should be alphabetical.'''
@@ -247,8 +189,7 @@ class CreateSchoolTestCase(CreateAPITestCase):
 
     def test_invalid_international_secondary_phone(self):
         '''Secondary_phone phone should be numerical.'''
-        params = self.get_params(international=True,
-            secondary_phone='ABC')
+        params = self.get_params(international=True, secondary_phone='ABC')
 
         response = self.get_response(params=params)
 
@@ -261,6 +202,9 @@ class CreateSchoolTestCase(CreateAPITestCase):
 
         response = self.get_response(params=params)
 
-        self.assertEqual(response.data,
-            {"name": ["A school with the name \"%s\" has already been registered." %params['name']]})
+        self.assertEqual(
+            response.data,
+            {"name":
+             ["A school with the name \"%s\" has already been registered." %
+              params['name']]})
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)

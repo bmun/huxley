@@ -16,7 +16,7 @@ class AssignmentAdmin(admin.ModelAdmin):
 
     search_fields = (
         'country__name',
-        'school__name',
+        'registration__school__name',
         'committee__name',
         'committee__full_name'
     )
@@ -33,10 +33,10 @@ class AssignmentAdmin(admin.ModelAdmin):
                 'Rejected'
             ])
 
-        for assignment in Assignment.objects.all().order_by('school__name',
+        for assignment in Assignment.objects.all().order_by('registration__school__name',
                                                             'committee__name'):
             writer.writerow([
-                assignment.school,
+                assignment.registration.school,
                 assignment.committee,
                 assignment.country,
                 assignment.rejected

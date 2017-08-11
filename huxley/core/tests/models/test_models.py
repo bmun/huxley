@@ -61,70 +61,6 @@ class CommitteeTest(TestCase):
         self.assertEquals('DISC', self.committee.__unicode__())
 
 
-class SchoolTest(TestCase):
-
-    fixtures = ['conference']
-
-    def test_update_country_preferences(self):
-        '''It should filter and replace the school's country preferences.'''
-        s1 = models.new_school()
-        s2 = models.new_school()
-        c1 = models.new_country().id
-        c2 = models.new_country().id
-        c3 = models.new_country().id
-
-        country_ids = [0, c1, c2, c2, 0, c3]
-        self.assertEquals(0, CountryPreference.objects.all().count())
-
-        s1.update_country_preferences(country_ids)
-        self.assertEquals([c1, c2, c3], s1.country_preference_ids)
-
-        s2.update_country_preferences(country_ids)
-        self.assertEquals([c1, c2, c3], s2.country_preference_ids)
-
-        s1.update_country_preferences([c3, c1])
-        self.assertEquals([c3, c1], s1.country_preference_ids)
-        self.assertEquals([c1, c2, c3], s2.country_preference_ids)
-
-    def test_update_fees(self):
-        '''Fees should be calculated when a School is created/updated.'''
-        b, i, a = 3, 5, 7
-        school = models.new_school(
-            beginner_delegates=b,
-            intermediate_delegates=i,
-            advanced_delegates=a, )
-
-        conference = Conference.get_current()
-        registration_fee = conference.registration_fee
-        delegate_fee = conference.delegate_fee
-
-        self.assertEquals(school.fees_owed,
-                          registration_fee + delegate_fee * (b + i + a), )
-
-        b2, i2, a2 = 5, 10, 15
-        school.beginner_delegates = b2
-        school.intermediate_delegates = i2
-        school.advanced_delegates = a2
-        school.save()
-
-        self.assertEquals(school.fees_owed,
-                          registration_fee + delegate_fee * (b2 + i2 + a2), )
-
-    def test_update_waitlist(self):
-        '''New schools should be waitlisted based on the conference waitlist field.'''
-        s1 = models.new_school()
-        self.assertFalse(s1.waitlist)
-
-        conference = Conference.get_current()
-        conference.waitlist_reg = True
-        conference.save()
-
-        s1.save()
-        self.assertFalse(s1.waitlist)
-        s2 = models.new_school()
-        self.assertTrue(s2.waitlist)
-
-
 class AssignmentTest(TestCase):
 
     fixtures = ['conference']
@@ -143,11 +79,13 @@ class AssignmentTest(TestCase):
         ct2 = models.new_country(name='CT2')
         ct3 = models.new_country(name='CT3')
         s1 = models.new_school(name='S1')
+        r1 = models.new_registration(school=s1)
         s2 = models.new_school(name='S2')
+        r2 = models.new_registration(school=s2)
 
         Assignment.objects.bulk_create([
             Assignment(
-                committee_id=cm.id, country_id=ct.id, school_id=s1.id)
+                committee_id=cm.id, country_id=ct.id, registration_id=r1.id)
             for ct in [ct1, ct2] for cm in [cm1, cm2]
         ])
 
@@ -169,8 +107,7 @@ class AssignmentTest(TestCase):
         new_assignments = [a[1:]
                            for a in Assignment.objects.all().values_list()]
         delegates = Delegate.objects.all()
-        updates = [(cm.id, ct.id, s.id, None, rej)
-                   for cm, ct, s, rej in updates]
+        updates = [(cm.id, ct.id, s.id, rej) for cm, ct, s, rej in updates]
         self.assertEquals(set(updates), set(new_assignments))
         self.assertEquals(len(delegates), 2)
 
@@ -179,14 +116,16 @@ class AssignmentTest(TestCase):
            field is set to False and any delegates assigned to it are
            no longer assigned to it.'''
         s1 = models.new_school(name='S1')
+        r1 = models.new_registration(school=s1)
         s2 = models.new_school(name='S2')
-        a = models.new_assignment(school=s1, rejected=True)
+        r2 = models.new_registration(school=s2)
+        a = models.new_assignment(registration=r1, rejected=True)
         d1 = models.new_delegate(school=s1, assignment=a)
         d2 = models.new_delegate(school=s1, assignment=a)
         self.assertEquals(a.delegates.count(), 2)
         self.assertTrue(a.rejected)
 
-        a.school = s2
+        a.registration = r2
         a.save()
 
         self.assertEquals(a.delegates.count(), 0)
@@ -196,9 +135,11 @@ class AssignmentTest(TestCase):
 class CountryPreferenceTest(TestCase):
     def test_uniqueness(self):
         '''Country and school fields should be unique.'''
-        CountryPreference.objects.create(school_id=1, country_id=1, rank=1)
+        CountryPreference.objects.create(
+            registration_id=1, country_id=1, rank=1)
         with self.assertRaises(IntegrityError):
-            CountryPreference.objects.create(school_id=1, country_id=1, rank=1)
+            CountryPreference.objects.create(
+                registration_id=1, country_id=1, rank=1)
 
 
 class DelegateTest(TestCase):
@@ -211,7 +152,8 @@ class DelegateTest(TestCase):
         should be the same if they both exist on the delegate.
         """
         school = models.new_school(name='S1')
-        assignment = models.new_assignment()
+        registration = models.new_registration()
+        assignment = models.new_assignment(registration=registration)
 
         self.assertRaises(
             ValidationError,
