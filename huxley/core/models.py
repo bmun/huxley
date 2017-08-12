@@ -145,6 +145,9 @@ class Registration(models.Model):
 
     modified_at = models.DateTimeField(default=timezone.now)
 
+    def balance(self):
+        return self.fees_owed - self.fees_paid
+
     @classmethod
     def update_fees(cls, **kwargs):
         registration = kwargs['instance']
