@@ -14,7 +14,6 @@ from .delegate import DelegateAdmin
 from .schools import SchoolAdmin
 from .registration import RegistrationAdmin
 
-
 admin.site.register(Conference)
 admin.site.register(Country, CountryAdmin)
 admin.site.register(School, SchoolAdmin)
