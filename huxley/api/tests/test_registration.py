@@ -149,9 +149,9 @@ class RegistrationListGetTest(tests.ListAPITestCase):
         self.registration = models.new_registration(school=self.school)
 
     def test_anonymous_user(self):
-        response = self.get_response(
-            {'school_id': self.school.id,
-             'conference_session': Conference.get_current()})
+        response = self.get_response({'school_id': self.school.id,
+                                      'conference_session':
+                                      Conference.get_current()})
         self.assertNotAuthenticated(response)
 
         response = self.get_response()
@@ -161,9 +161,9 @@ class RegistrationListGetTest(tests.ListAPITestCase):
         other_user = models.new_user(username='other', password='other')
         other_school = models.new_school(user=other_user)
         self.client.login(username='other', password='other')
-        response = self.get_response(
-            params={'school_id': self.school.id,
-                    'conference_session': Conference.get_current()})
+        response = self.get_response(params={'school_id': self.school.id,
+                                             'conference_session':
+                                             Conference.get_current()})
         self.assertPermissionDenied(response)
 
         response = self.get_response()
@@ -171,9 +171,9 @@ class RegistrationListGetTest(tests.ListAPITestCase):
 
     def test_advisor(self):
         self.client.login(username='username', password='pass')
-        response = self.get_response(
-            params={'school_id': self.school.id,
-                    'conference_session': Conference.get_current()})
+        response = self.get_response(params={'school_id': self.school.id,
+                                             'conference_session':
+                                             Conference.get_current()})
         self.assertEqual(len(response.data), 1)
         self.assertEqual(
             dict(response.data[0]), {
@@ -209,9 +209,9 @@ class RegistrationListGetTest(tests.ListAPITestCase):
     def test_superuser(self):
         models.new_superuser(username='test', password='user')
         self.client.login(username='test', password='user')
-        response = self.get_response(
-            params={'school_id': self.school.id,
-                    'conference_session': Conference.get_current()})
+        response = self.get_response(params={'school_id': self.school.id,
+                                             'conference_session':
+                                             Conference.get_current()})
         self.assertEqual(len(response.data), 1)
         self.assertEqual(
             dict(response.data[0]), {
@@ -258,7 +258,8 @@ class RegistrationDetailGetTest(auto.RetrieveAPIAutoTestCase):
     def test_other_user(self):
         other_user = models.new_user()
         school = models.new_school(user=other_user)
-        self.as_user(other_user).do_test(expected_error=auto.EXP_PERMISSION_DENIED)
+        self.as_user(other_user).do_test(
+            expected_error=auto.EXP_PERMISSION_DENIED)
 
     def test_advisor(self):
         advisor = User.objects.get(school_id=self.object.school_id)
@@ -307,13 +308,17 @@ class RegistrationDetailPutTest(tests.UpdateAPITestCase):
             'registered_at': self.registration.registered_at.isoformat(),
             'is_waitlisted': self.registration.is_waitlisted,
             'num_beginner_delegates': self.registration.num_beginner_delegates,
-            'num_intermediate_delegates': self.registration.num_intermediate_delegates,
+            'num_intermediate_delegates':
+            self.registration.num_intermediate_delegates,
             'num_advanced_delegates': self.registration.num_advanced_delegates,
-            'num_spanish_speaking_delegates': self.registration.num_spanish_speaking_delegates,
-            'num_chinese_speaking_delegates': self.registration.num_chinese_speaking_delegates,
+            'num_spanish_speaking_delegates':
+            self.registration.num_spanish_speaking_delegates,
+            'num_chinese_speaking_delegates':
+            self.registration.num_chinese_speaking_delegates,
             'waivers_completed': self.registration.waivers_completed,
             'country_preferences': self.registration.country_preference_ids,
-            'committee_preferences': list(self.registration.committee_preferences.all()),
+            'committee_preferences':
+            list(self.registration.committee_preferences.all()),
             'registration_comments': self.registration.registration_comments,
             'fees_owed': float(self.registration.fees_owed),
             'fees_paid': float(self.registration.fees_paid),
@@ -333,13 +338,17 @@ class RegistrationDetailPutTest(tests.UpdateAPITestCase):
             'registered_at': self.registration.registered_at.isoformat(),
             'is_waitlisted': self.registration.is_waitlisted,
             'num_beginner_delegates': self.registration.num_beginner_delegates,
-            'num_intermediate_delegates': self.registration.num_intermediate_delegates,
+            'num_intermediate_delegates':
+            self.registration.num_intermediate_delegates,
             'num_advanced_delegates': self.registration.num_advanced_delegates,
-            'num_spanish_speaking_delegates': self.registration.num_spanish_speaking_delegates,
-            'num_chinese_speaking_delegates': self.registration.num_chinese_speaking_delegates,
+            'num_spanish_speaking_delegates':
+            self.registration.num_spanish_speaking_delegates,
+            'num_chinese_speaking_delegates':
+            self.registration.num_chinese_speaking_delegates,
             'waivers_completed': self.registration.waivers_completed,
             'country_preferences': self.registration.country_preference_ids,
-            'committee_preferences': list(self.registration.committee_preferences.all()),
+            'committee_preferences':
+            list(self.registration.committee_preferences.all()),
             'registration_comments': self.registration.registration_comments,
             'fees_owed': float(self.registration.fees_owed),
             'fees_paid': float(self.registration.fees_paid),
@@ -386,13 +395,17 @@ class RegistrationDetailPatchTest(tests.PartialUpdateAPITestCase):
             'registered_at': self.registration.registered_at.isoformat(),
             'is_waitlisted': self.registration.is_waitlisted,
             'num_beginner_delegates': self.registration.num_beginner_delegates,
-            'num_intermediate_delegates': self.registration.num_intermediate_delegates,
+            'num_intermediate_delegates':
+            self.registration.num_intermediate_delegates,
             'num_advanced_delegates': self.registration.num_advanced_delegates,
-            'num_spanish_speaking_delegates': self.registration.num_spanish_speaking_delegates,
-            'num_chinese_speaking_delegates': self.registration.num_chinese_speaking_delegates,
+            'num_spanish_speaking_delegates':
+            self.registration.num_spanish_speaking_delegates,
+            'num_chinese_speaking_delegates':
+            self.registration.num_chinese_speaking_delegates,
             'waivers_completed': self.registration.waivers_completed,
             'country_preferences': self.registration.country_preference_ids,
-            'committee_preferences': list(self.registration.committee_preferences.all()),
+            'committee_preferences':
+            list(self.registration.committee_preferences.all()),
             'registration_comments': self.registration.registration_comments,
             'fees_owed': float(self.registration.fees_owed),
             'fees_paid': float(self.registration.fees_paid),
@@ -412,13 +425,17 @@ class RegistrationDetailPatchTest(tests.PartialUpdateAPITestCase):
             'registered_at': self.registration.registered_at.isoformat(),
             'is_waitlisted': self.registration.is_waitlisted,
             'num_beginner_delegates': self.registration.num_beginner_delegates,
-            'num_intermediate_delegates': self.registration.num_intermediate_delegates,
+            'num_intermediate_delegates':
+            self.registration.num_intermediate_delegates,
             'num_advanced_delegates': self.registration.num_advanced_delegates,
-            'num_spanish_speaking_delegates': self.registration.num_spanish_speaking_delegates,
-            'num_chinese_speaking_delegates': self.registration.num_chinese_speaking_delegates,
+            'num_spanish_speaking_delegates':
+            self.registration.num_spanish_speaking_delegates,
+            'num_chinese_speaking_delegates':
+            self.registration.num_chinese_speaking_delegates,
             'waivers_completed': self.registration.waivers_completed,
             'country_preferences': self.registration.country_preference_ids,
-            'committee_preferences': list(self.registration.committee_preferences.all()),
+            'committee_preferences':
+            list(self.registration.committee_preferences.all()),
             'registration_comments': self.registration.registration_comments,
             'fees_owed': float(self.registration.fees_owed),
             'fees_paid': float(self.registration.fees_paid),
@@ -440,7 +457,8 @@ class RegistrationDetailDeleteTest(auto.DestroyAPIAutoTestCase):
     def test_other_user(self):
         other_user = models.new_user()
         school = models.new_school(user=other_user)
-        self.as_user(other_user).do_test(expected_error=auto.EXP_PERMISSION_DENIED)
+        self.as_user(other_user).do_test(
+            expected_error=auto.EXP_PERMISSION_DENIED)
 
     def test_advisor(self):
         advisor = User.objects.get(school_id=self.object.school_id)
@@ -449,4 +467,3 @@ class RegistrationDetailDeleteTest(auto.DestroyAPIAutoTestCase):
 
     def test_superuser(self):
         self.as_superuser().do_test()
-
