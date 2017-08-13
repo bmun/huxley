@@ -17,6 +17,18 @@ var _assignmentsFetched = false;
 var _previousUserID = -1;
 
 class AssignmentStore extends Store {
+  getAssignment(assignmentID) {
+    if (!_assignmentsFetched) {
+      ServerAPI.getAssignment(assignmentID).then(value => {
+        AssignmentActions.assignmentsFetched(value);
+      });
+
+      return [];
+    }
+
+    return _assignments[assignmentID];
+  }
+
   getSchoolAssignments(schoolID) {
     var assignmentIDs = Object.keys(_assignments);
     if (!_assignmentsFetched) {

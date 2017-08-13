@@ -7,6 +7,7 @@
 
 var TYPE_ADVISOR = 1;
 var TYPE_CHAIR = 2;
+var TYPE_DELEGATE = 3;
 
 var User = {
   isAnonymous(user) {
@@ -19,6 +20,10 @@ var User = {
 
   isChair(user) {
     return user.user_type == TYPE_CHAIR;
+  },
+
+  isDelegate(user) {
+    return user.user_type == TYPE_DELEGATE
   },
 
   getSchool(user) {

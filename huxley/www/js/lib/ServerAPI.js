@@ -27,6 +27,13 @@ var ServerAPI = {
   },
 
   /**
+   * Get the assignment with the given ID.
+   */
+   getAssignment(assignmentID) {
+    return _get(`/api/assignments/${assignmentID}`);
+   },
+
+  /**
    * Get a list of all assignments for the given school ID.
    */
   getAssignments(schoolID) {
@@ -66,6 +73,13 @@ var ServerAPI = {
    */
   getDelegates(schoolID) {
     return _get('/api/delegates', {school_id: schoolID});
+  },
+
+  /**
+   * Get the school with the givne ID.
+   */
+  getSchool(schoolID) {
+    return _get(`/api/school/${schoolID}`);
   },
 
   login(username, password) {

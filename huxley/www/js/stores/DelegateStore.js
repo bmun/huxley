@@ -17,6 +17,18 @@ var _delegatesFetched = false;
 var _previousUserID = -1;
 
 class DelegateStore extends Store {
+  getDelegate(delegateID) {
+    if (!_delegatesFetched) {
+      ServerAPI.getDelegate(delegateID).then(value => {
+        DelegateActions.delegatesFetched(value);
+      });
+
+      return [];
+    }
+
+    return _delegates[delegateID];
+  }
+
   getSchoolDelegates(schoolID) {
     var delegateIDs = Object.keys(_delegates);
     if (!_delegatesFetched) {
