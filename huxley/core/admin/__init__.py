@@ -12,7 +12,7 @@ from .committee import CommitteeAdmin
 from .country import CountryAdmin
 from .delegate import DelegateAdmin
 from .schools import SchoolAdmin
-
+from .registration import RegistrationAdmin
 
 admin.site.register(Conference)
 admin.site.register(Country, CountryAdmin)
@@ -21,4 +21,4 @@ admin.site.register(Committee, CommitteeAdmin)
 admin.site.register(Assignment, AssignmentAdmin)
 admin.site.register(CountryPreference)
 admin.site.register(Delegate, DelegateAdmin)
-admin.site.register(Registration)
+admin.site.register(Registration, RegistrationAdmin)
