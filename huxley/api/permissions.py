@@ -100,9 +100,10 @@ class AssignmentDetailPermission(permissions.BasePermission):
         method = request.method
 
         if method != 'GET':
-            return user_is_advisor(request, view, assignment.school_id)
+            return user_is_advisor(
+                request, view, assignment.registration.school_id)
 
-        return (user_is_advisor(request, view, assignment.school_id) or
+        return (user_is_advisor(request, view, assignment.registration.school_id) or
                 user_is_chair(request, view, assignment.committee_id) or
                 user_is_delegate(request, view, assignment_id, 'assignment'))
 
