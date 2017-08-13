@@ -4,7 +4,7 @@
 from rest_framework import generics
 from rest_framework.authentication import SessionAuthentication
 
-from huxley.api.permissions import RegistrationListPermission
+from huxley.api.permissions import RegistrationDetailPermission, RegistrationListPermission
 from huxley.api.serializers import RegistrationSerializer
 from huxley.core.models import Registration
 
@@ -25,3 +25,10 @@ class RegistrationList(generics.ListCreateAPIView):
                 school_id=school_id, conference_session=conference_session)
 
         return queryset
+
+
+class RegistrationDetail(generics.RetrieveUpdateDestroyAPIView):
+    authentication_classes = (SessionAuthentication, )
+    queryset = Registration.objects.all()
+    serializer_class = RegistrationSerializer
+    permission_classes = (RegistrationDetailPermission, )

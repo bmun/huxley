@@ -69,6 +69,19 @@ class RegistrationListPermission(permissions.BasePermission):
         return False
 
 
+class RegistrationDetailPermission(permissions.BasePermission):
+    '''Accept only when the school of the registration object is the same as the
+       school of the user or is a superuser.'''
+
+    def has_permission(self, request, view):
+        if request.user.is_superuser:
+            return True
+
+        registration_id = view.kwargs.get('pk', None)
+        registration = Registration.objects.get(id=registration_id)
+        return user_is_advisor(request, view, registration.school_id)
+
+
 class IsSchoolAssignmentAdvisorOrSuperuser(permissions.BasePermission):
     '''Accept only the advisor of the given school with a given assignment.'''
 

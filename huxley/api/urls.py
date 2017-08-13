@@ -29,6 +29,7 @@ urlpatterns = [
     url(r'^delegates/(?P<pk>[0-9]+)/?$', views.delegate.DelegateDetail.as_view(), name='delegate_detail'),
 
     url(r'^registrations/?$', views.registration.RegistrationList.as_view(), name='registration_list'),
+    url(r'^registrations(?P<pk>[0-9]+)/?$', views.registration.RegistrationDetail.as_view(), name='registration_detail'),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
