@@ -1,12 +1,14 @@
 # Copyright (c) 2011-2017 Berkeley Model United Nations. All rights reserved.
 # Use of this source code is governed by a BSD License (see LICENSE).
 
-from huxley.api.tests import CreateAPITestCase, ListAPITestCase
+from huxley.accounts.models import User
+from huxley.api import tests
+from huxley.api.tests import auto
 from huxley.core.models import Conference, Registration
 from huxley.utils.test import models
 
 
-class RegistrationListPostTest(CreateAPITestCase):
+class RegistrationListPostTest(tests.CreateAPITestCase):
     url_name = 'api:registration_list'
     params = {
         'num_beginner_delegates': 0,
@@ -138,7 +140,7 @@ class RegistrationListPostTest(CreateAPITestCase):
                           [u'Cannot exceed total number of delegates.']})
 
 
-class RegistrationListTest(ListAPITestCase):
+class RegistrationListGetTest(tests.ListAPITestCase):
     url_name = 'api:registration_list'
 
     def setUp(self):
@@ -147,9 +149,9 @@ class RegistrationListTest(ListAPITestCase):
         self.registration = models.new_registration(school=self.school)
 
     def test_anonymous_user(self):
-        response = self.get_response(
-            {'school_id': self.school.id,
-             'conference_session': Conference.get_current()})
+        response = self.get_response({'school_id': self.school.id,
+                                      'conference_session':
+                                      Conference.get_current()})
         self.assertNotAuthenticated(response)
 
         response = self.get_response()
@@ -159,9 +161,9 @@ class RegistrationListTest(ListAPITestCase):
         other_user = models.new_user(username='other', password='other')
         other_school = models.new_school(user=other_user)
         self.client.login(username='other', password='other')
-        response = self.get_response(
-            params={'school_id': self.school.id,
-                    'conference_session': Conference.get_current()})
+        response = self.get_response(params={'school_id': self.school.id,
+                                             'conference_session':
+                                             Conference.get_current()})
         self.assertPermissionDenied(response)
 
         response = self.get_response()
@@ -169,9 +171,9 @@ class RegistrationListTest(ListAPITestCase):
 
     def test_advisor(self):
         self.client.login(username='username', password='pass')
-        response = self.get_response(
-            params={'school_id': self.school.id,
-                    'conference_session': Conference.get_current()})
+        response = self.get_response(params={'school_id': self.school.id,
+                                             'conference_session':
+                                             Conference.get_current()})
         self.assertEqual(len(response.data), 1)
         self.assertEqual(
             dict(response.data[0]), {
@@ -207,9 +209,9 @@ class RegistrationListTest(ListAPITestCase):
     def test_superuser(self):
         models.new_superuser(username='test', password='user')
         self.client.login(username='test', password='user')
-        response = self.get_response(
-            params={'school_id': self.school.id,
-                    'conference_session': Conference.get_current()})
+        response = self.get_response(params={'school_id': self.school.id,
+                                             'conference_session':
+                                             Conference.get_current()})
         self.assertEqual(len(response.data), 1)
         self.assertEqual(
             dict(response.data[0]), {
@@ -241,3 +243,227 @@ class RegistrationListTest(ListAPITestCase):
                 self.registration.assignments_finalized,
                 'modified_at': self.registration.modified_at.isoformat()
             })
+
+
+class RegistrationDetailGetTest(auto.RetrieveAPIAutoTestCase):
+    url_name = 'api:registration_detail'
+
+    @classmethod
+    def get_test_object(cls):
+        return models.new_registration()
+
+    def test_anonymous_user(self):
+        self.do_test(expected_error=auto.EXP_NOT_AUTHENTICATED)
+
+    def test_other_user(self):
+        other_user = models.new_user()
+        school = models.new_school(user=other_user)
+        self.as_user(other_user).do_test(
+            expected_error=auto.EXP_PERMISSION_DENIED)
+
+    def test_advisor(self):
+        advisor = User.objects.get(school_id=self.object.school_id)
+        advisor.PASSWORD_FOR_TESTS_ONLY = 'test'
+        self.as_user(advisor).do_test()
+
+    def test_superuser(self):
+        self.as_superuser().do_test()
+
+
+class RegistrationDetailPutTest(tests.UpdateAPITestCase):
+    url_name = 'api:registration_detail'
+
+    def setUp(self):
+        self.advisor = models.new_user(username='advisor', password='advisor')
+        self.school = models.new_school(user=self.advisor)
+        self.registration = models.new_registration(school=self.school)
+        self.params = {
+            'conference': self.registration.conference.session,
+            'school': self.registration.school.id,
+            'country_preferences': self.registration.country_preference_ids,
+            'assignments_finalized': True
+        }
+
+    def test_anonymous_user(self):
+        '''Anonymous user should not be able to submit a full update.'''
+        response = self.get_response(self.registration.id, self.params)
+        self.assertNotAuthenticated(response)
+
+    def test_other_user(self):
+        '''A user should not be able to fully update another user's info.'''
+        other_user = models.new_user(username='username', password='password')
+        school = models.new_school(user=other_user)
+        self.client.login(username='username', password='password')
+        response = self.get_response(self.registration.id, self.params)
+        self.assertPermissionDenied(response)
+
+    def test_advisor(self):
+        '''An advisor should be able to fully update his/her info.'''
+        self.client.login(username='advisor', password='advisor')
+        response = self.get_response(self.registration.id, self.params)
+        self.assertEqual(response.data, {
+            'id': self.registration.id,
+            'school': self.registration.school.id,
+            'conference': self.registration.conference.session,
+            'registered_at': self.registration.registered_at.isoformat(),
+            'is_waitlisted': self.registration.is_waitlisted,
+            'num_beginner_delegates': self.registration.num_beginner_delegates,
+            'num_intermediate_delegates':
+            self.registration.num_intermediate_delegates,
+            'num_advanced_delegates': self.registration.num_advanced_delegates,
+            'num_spanish_speaking_delegates':
+            self.registration.num_spanish_speaking_delegates,
+            'num_chinese_speaking_delegates':
+            self.registration.num_chinese_speaking_delegates,
+            'waivers_completed': self.registration.waivers_completed,
+            'country_preferences': self.registration.country_preference_ids,
+            'committee_preferences':
+            list(self.registration.committee_preferences.all()),
+            'registration_comments': self.registration.registration_comments,
+            'fees_owed': float(self.registration.fees_owed),
+            'fees_paid': float(self.registration.fees_paid),
+            'assignments_finalized': True,
+            'modified_at': self.registration.modified_at.isoformat()
+        })
+
+    def test_superuser(self):
+        '''A superuser should be able to fully update anyone's info.'''
+        models.new_superuser(username='super', password='user')
+        self.client.login(username='super', password='user')
+        response = self.get_response(self.registration.id, self.params)
+        self.assertEqual(response.data, {
+            'id': self.registration.id,
+            'school': self.registration.school.id,
+            'conference': self.registration.conference.session,
+            'registered_at': self.registration.registered_at.isoformat(),
+            'is_waitlisted': self.registration.is_waitlisted,
+            'num_beginner_delegates': self.registration.num_beginner_delegates,
+            'num_intermediate_delegates':
+            self.registration.num_intermediate_delegates,
+            'num_advanced_delegates': self.registration.num_advanced_delegates,
+            'num_spanish_speaking_delegates':
+            self.registration.num_spanish_speaking_delegates,
+            'num_chinese_speaking_delegates':
+            self.registration.num_chinese_speaking_delegates,
+            'waivers_completed': self.registration.waivers_completed,
+            'country_preferences': self.registration.country_preference_ids,
+            'committee_preferences':
+            list(self.registration.committee_preferences.all()),
+            'registration_comments': self.registration.registration_comments,
+            'fees_owed': float(self.registration.fees_owed),
+            'fees_paid': float(self.registration.fees_paid),
+            'assignments_finalized': True,
+            'modified_at': self.registration.modified_at.isoformat()
+        })
+
+
+class RegistrationDetailPatchTest(tests.PartialUpdateAPITestCase):
+    url_name = 'api:registration_detail'
+
+    def setUp(self):
+        self.advisor = models.new_user(username='advisor', password='advisor')
+        self.school = models.new_school(user=self.advisor)
+        self.registration = models.new_registration(school=self.school)
+        self.params = {
+            'conference': self.registration.conference.session,
+            'school': self.registration.school.id,
+            'country_preferences': self.registration.country_preference_ids,
+            'assignments_finalized': True
+        }
+
+    def test_anonymous_user(self):
+        '''Anonymous user should not be able to submit a partial update.'''
+        response = self.get_response(self.registration.id, self.params)
+        self.assertNotAuthenticated(response)
+
+    def test_other_user(self):
+        '''A user should not be able to partially update another user's info.'''
+        other_user = models.new_user(username='username', password='password')
+        school = models.new_school(user=other_user)
+        self.client.login(username='username', password='password')
+        response = self.get_response(self.registration.id, self.params)
+        self.assertPermissionDenied(response)
+
+    def test_advisor(self):
+        '''An advisor should be able to partially update his/her info.'''
+        self.client.login(username='advisor', password='advisor')
+        response = self.get_response(self.registration.id, self.params)
+        self.assertEqual(response.data, {
+            'id': self.registration.id,
+            'school': self.registration.school.id,
+            'conference': self.registration.conference.session,
+            'registered_at': self.registration.registered_at.isoformat(),
+            'is_waitlisted': self.registration.is_waitlisted,
+            'num_beginner_delegates': self.registration.num_beginner_delegates,
+            'num_intermediate_delegates':
+            self.registration.num_intermediate_delegates,
+            'num_advanced_delegates': self.registration.num_advanced_delegates,
+            'num_spanish_speaking_delegates':
+            self.registration.num_spanish_speaking_delegates,
+            'num_chinese_speaking_delegates':
+            self.registration.num_chinese_speaking_delegates,
+            'waivers_completed': self.registration.waivers_completed,
+            'country_preferences': self.registration.country_preference_ids,
+            'committee_preferences':
+            list(self.registration.committee_preferences.all()),
+            'registration_comments': self.registration.registration_comments,
+            'fees_owed': float(self.registration.fees_owed),
+            'fees_paid': float(self.registration.fees_paid),
+            'assignments_finalized': True,
+            'modified_at': self.registration.modified_at.isoformat()
+        })
+
+    def test_superuser(self):
+        '''A superuser should be able to partially update anyone's info.'''
+        models.new_superuser(username='super', password='user')
+        self.client.login(username='super', password='user')
+        response = self.get_response(self.registration.id, self.params)
+        self.assertEqual(response.data, {
+            'id': self.registration.id,
+            'school': self.registration.school.id,
+            'conference': self.registration.conference.session,
+            'registered_at': self.registration.registered_at.isoformat(),
+            'is_waitlisted': self.registration.is_waitlisted,
+            'num_beginner_delegates': self.registration.num_beginner_delegates,
+            'num_intermediate_delegates':
+            self.registration.num_intermediate_delegates,
+            'num_advanced_delegates': self.registration.num_advanced_delegates,
+            'num_spanish_speaking_delegates':
+            self.registration.num_spanish_speaking_delegates,
+            'num_chinese_speaking_delegates':
+            self.registration.num_chinese_speaking_delegates,
+            'waivers_completed': self.registration.waivers_completed,
+            'country_preferences': self.registration.country_preference_ids,
+            'committee_preferences':
+            list(self.registration.committee_preferences.all()),
+            'registration_comments': self.registration.registration_comments,
+            'fees_owed': float(self.registration.fees_owed),
+            'fees_paid': float(self.registration.fees_paid),
+            'assignments_finalized': True,
+            'modified_at': self.registration.modified_at.isoformat()
+        })
+
+
+class RegistrationDetailDeleteTest(auto.DestroyAPIAutoTestCase):
+    url_name = 'api:registration_detail'
+
+    @classmethod
+    def get_test_object(cls):
+        return models.new_registration()
+
+    def test_anonymous_user(self):
+        self.do_test(expected_error=auto.EXP_NOT_AUTHENTICATED)
+
+    def test_other_user(self):
+        other_user = models.new_user()
+        school = models.new_school(user=other_user)
+        self.as_user(other_user).do_test(
+            expected_error=auto.EXP_PERMISSION_DENIED)
+
+    def test_advisor(self):
+        advisor = User.objects.get(school_id=self.object.school_id)
+        advisor.PASSWORD_FOR_TESTS_ONLY = 'test'
+        self.as_user(advisor).do_test()
+
+    def test_superuser(self):
+        self.as_superuser().do_test()
