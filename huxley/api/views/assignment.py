@@ -33,7 +33,7 @@ class AssignmentList(generics.ListCreateAPIView):
 class AssignmentDetail(generics.RetrieveUpdateAPIView):
     authentication_classes = (SessionAuthentication, )
     queryset = Assignment.objects.all()
-    permission_classes = (permissions.IsSchoolAssignmentAdvisorOrSuperuser, )
+    permission_classes = (permissions.AssignmentDetailPermission, )
     serializer_class = AssignmentSerializer
 
     def put(self, request, *args, **kwargs):

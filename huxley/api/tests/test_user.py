@@ -49,7 +49,8 @@ class UserDetailGetTestCase(tests.RetrieveAPITestCase):
             'last_name': user1.last_name,
             'user_type': user1.user_type,
             'school': user1.school_id,
-            'committee': user1.committee_id
+            'committee': user1.committee_id,
+            'delegate': user1.delegate_id
         })
 
     def test_self(self):
@@ -87,7 +88,8 @@ class UserDetailGetTestCase(tests.RetrieveAPITestCase):
                 'times_attended': school.times_attended,
                 'international': school.international,
             },
-            'committee': user.committee_id
+            'committee': user.committee_id,
+            'delegate': user.delegate_id
         })
 
     def test_chair(self):
@@ -107,7 +109,8 @@ class UserDetailGetTestCase(tests.RetrieveAPITestCase):
             'last_name': user.last_name,
             'user_type': user.user_type,
             'school': user.school_id,
-            'committee': user.committee_id
+            'committee': user.committee_id,
+            'delegate': user.delegate_id
         })
 
 
@@ -219,14 +222,16 @@ class UserListGetTestCase(tests.ListAPITestCase):
              'last_name': user1.last_name,
              'user_type': user1.user_type,
              'school': user1.school_id,
-             'committee': user1.committee_id}, {'id': user2.id,
-                                                'username': user2.username,
-                                                'first_name': user2.first_name,
-                                                'last_name': user2.last_name,
-                                                'user_type': user2.user_type,
-                                                'school': user2.school_id,
-                                                'committee':
-                                                user2.committee_id}
+             'committee': user1.committee_id,
+             'delegate': user1.delegate_id},
+            {'id': user2.id,
+             'username': user2.username,
+             'first_name': user2.first_name,
+             'last_name': user2.last_name,
+             'user_type': user2.user_type,
+             'school': user2.school_id,
+             'committee': user2.committee_id,
+             'delegate': user2.delegate_id},
         ])
 
 
@@ -383,7 +388,7 @@ class CurrentUserTestCase(TestCase):
         self.client.login(username=user.username, password='test')
 
         data = self.get_data(self.url)
-        self.assertEqual(len(data.keys()), 7)
+        self.assertEqual(len(data.keys()), 8)
         self.assertEqual(data['id'], user.id)
         self.assertEqual(data['username'], user.username)
         self.assertEqual(data['first_name'], user.first_name)

@@ -109,6 +109,7 @@ def new_country(**kwargs):
 def new_delegate(**kwargs):
     a = kwargs.pop('assignment', None) or new_assignment()
     s = kwargs.pop('school', None) or a.registration.school
+    user = kwargs.pop('user', None)
 
     d = Delegate(
         assignment=a,
@@ -117,6 +118,10 @@ def new_delegate(**kwargs):
         email=kwargs.pop('email', 'nate@earthlink.gov'),
         summary=kwargs.pop('summary', 'He did well!'), )
     d.save()
+
+    if user:
+        user.delegate = d
+        user.save()
     return d
 
 

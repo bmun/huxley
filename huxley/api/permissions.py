@@ -97,6 +97,31 @@ class IsSchoolAssignmentAdvisorOrSuperuser(permissions.BasePermission):
                                assignment.registration.school_id)
 
 
+class AssignmentDetailPermission(permissions.BasePermission):
+    '''Accept requests to retrieve an assignment from superusers, the advisor of 
+       the assignment's school, the chair of the assignment's committee, and 
+       delegates with the assignment. Only allow superusers and advisors to
+       update assignments.'''
+
+    def has_permission(self, request, view):
+        if request.user.is_superuser:
+            return True
+
+        assignment_id = view.kwargs.get('pk', None)
+        assignment = Assignment.objects.get(id=assignment_id)
+        user = request.user
+        method = request.method
+
+        if method != 'GET':
+            return user_is_advisor(request, view,
+                                   assignment.registration.school_id)
+
+        return (
+            user_is_advisor(request, view, assignment.registration.school_id)
+            or user_is_chair(request, view, assignment.committee_id) or
+            user_is_delegate(request, view, assignment_id, 'assignment'))
+
+
 class AssignmentListPermission(permissions.BasePermission):
     def has_permission(self, request, view):
         if request.user.is_superuser:
@@ -114,8 +139,8 @@ class AssignmentListPermission(permissions.BasePermission):
 class DelegateDetailPermission(permissions.BasePermission):
     '''Accept requests to retrieve, update, and destroy a delegate from the
        superuser and the advisor of the school of the delegate. Accept requests
-       to retrieve and update a delegate from the chair of the committee of
-       the delegate.'''
+       to retrieve and update a delegate from the delegate or the chair of the
+       committee of the delegate.'''
 
     def has_permission(self, request, view):
         user = request.user
@@ -131,6 +156,10 @@ class DelegateDetailPermission(permissions.BasePermission):
         if (delegate.assignment and
                 user_is_chair(request, view, delegate.assignment.committee_id)
                 and request.method != 'DELETE'):
+            return True
+
+        if (user_is_delegate(request, view, delegate_id) and
+                request.method != 'DELETE'):
             return True
 
         return False
@@ -173,6 +202,26 @@ class DelegateListPermission(permissions.BasePermission):
         return False
 
 
+class SchoolDetailPermission(permissions.BasePermission):
+    '''Accept only the school's advisor, the school's delegates, or 
+       superusers to retrieve the school. Accept only superusers and the advisor
+       to update the school.'''
+
+    def has_permission(self, request, view):
+        user = request.user
+        if user.is_superuser:
+            return True
+
+        method = request.method
+        school_id = view.kwargs.get('pk', None)
+
+        if method == 'GET':
+            return (user_is_advisor(request, view, school_id) or
+                    user_is_delegate(request, view, school_id, 'school'))
+
+        return user_is_advisor(request, view, school_id)
+
+
 def user_is_advisor(request, view, school_id):
     user = request.user
     return (user.is_authenticated() and user.is_advisor() and
@@ -183,3 +232,14 @@ def user_is_chair(request, view, committee_id):
     user = request.user
     return (user.is_authenticated() and user.is_chair() and
             user.committee_id == int(committee_id))
+
+
+def user_is_delegate(request, view, target_id, field=None):
+    user = request.user
+    if not user.is_authenticated() or not user.is_delegate():
+        return False
+
+    if field:
+        return getattr(user.delegate, field + '_id', -1) == int(target_id)
+
+    return user.delegate_id == int(target_id)

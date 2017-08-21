@@ -8,7 +8,7 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 from huxley.accounts.exceptions import AuthenticationError, PasswordChangeFailed
-from huxley.core.models import Assignment, Committee, School
+from huxley.core.models import Committee, Delegate, School
 
 
 class User(AbstractUser):
@@ -16,14 +16,21 @@ class User(AbstractUser):
     TYPE_ADVISOR = 1
     TYPE_CHAIR = 2
     TYPE_DELEGATE = 3
-    USER_TYPE_CHOICES = ((TYPE_ADVISOR, 'Advisor'),
-                         (TYPE_CHAIR, 'Chair'),
+    USER_TYPE_CHOICES = ((TYPE_ADVISOR, 'Advisor'), (TYPE_CHAIR, 'Chair'),
                          (TYPE_DELEGATE, 'Delegate'))
 
-    user_type = models.PositiveSmallIntegerField(choices=USER_TYPE_CHOICES, default=TYPE_ADVISOR)
-    school = models.OneToOneField(School, related_name='advisor', null=True, blank=True)  # Advisors only
-    committee = models.ForeignKey(Committee, related_name='chair', null=True, blank=True) # Chairs only
-    assignment = models.ForeignKey(Assignment, related_name='delegate', null=True, blank=True) # Delegate only (Note you can access school and committee through assignment)
+    user_type = models.PositiveSmallIntegerField(
+        choices=USER_TYPE_CHOICES, default=TYPE_ADVISOR)
+
+    school = models.OneToOneField(
+        School, related_name='advisor', null=True, blank=True)  # Advisors only
+
+    committee = models.ForeignKey(
+        Committee, related_name='chair', null=True, blank=True)  # Chairs only
+
+    delegate = models.OneToOneField(
+        Delegate, related_name='delegate', null=True,
+        blank=True)  # Delegate only
 
     def is_advisor(self):
         return self.user_type == self.TYPE_ADVISOR
@@ -70,10 +77,11 @@ class User(AbstractUser):
         user.set_password(new_password)
         user.save()
 
-        user.email_user('Huxley Password Reset',
-                        'Your password has been reset to %s.\n'
-                        'Thank you for using Huxley!' % (new_password),
-                        from_email='no-reply@bmun.org')
+        user.email_user(
+            'Huxley Password Reset',
+            'Your password has been reset to %s.\n'
+            'Thank you for using Huxley!' % (new_password),
+            from_email='no-reply@bmun.org')
 
     def change_password(self, old_password, new_password):
         '''Change the user's password, or raise PasswordChangeFailed.'''

@@ -26,7 +26,8 @@ class UserSerializer(ModelSerializer):
                   'last_name',
                   'user_type',
                   'school',
-                  'committee', )
+                  'committee',
+                  'delegate', )
         read_only_fields = ('id',
                             'username',
                             'user_type',

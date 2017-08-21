@@ -11,15 +11,12 @@ from huxley.accounts.models import User
 
 class UserAdmin(UserAdminBase):
     model = User
-    fieldsets = UserAdminBase.fieldsets + (
-        ('BMUN-Specific Information', {
-            'fields': (
-                'user_type',
-                'school',
-                'committee',
-            )
-        }),
-    )
+    fieldsets = UserAdminBase.fieldsets + (('BMUN-Specific Information', {
+        'fields': ('user_type',
+                   'school',
+                   'committee',
+                   'delegate', )
+    }), )
 
 
 admin.site.register(User, UserAdmin)
