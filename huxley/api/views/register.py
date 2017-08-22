@@ -11,16 +11,16 @@ from huxley.core.models import Conference
 
 
 class Register(generics.GenericAPIView, mixins.RegisterMixin):
-	authentication_classes = (SessionAuthentication, )
-	serializer_classes = {
-		'user': CreateUserSerializer,
-		'registration': RegistrationSerializer
-	}
+    authentication_classes = (SessionAuthentication, )
+    serializer_classes = {
+        'user': CreateUserSerializer,
+        'registration': RegistrationSerializer
+    }
 
-	def post(self, request, *args, **kwargs):
-		return self.create(request, *args, **kwargs)
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
 
-	def create(self, request, *args, **kwargs):
-		if Conference.get_current().open_reg:
-			return super(Register, self).create(request, *args, **kwargs)
-		raise PermissionDenied('Conference registration is closed.')
+    def create(self, request, *args, **kwargs):
+        if Conference.get_current().open_reg:
+            return super(Register, self).create(request, *args, **kwargs)
+        raise PermissionDenied('Conference registration is closed.')
