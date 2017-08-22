@@ -19,18 +19,22 @@ class RegisterMixin(object):
         user_data = request.data['user']
         registration_data = request.data['registration']
         user_serializer = self.serializer_classes['user'](data=user_data)
-        registration_serializer = self.serializer_classes['registration'](data=registration_data)
+        registration_serializer = self.serializer_classes['registration'](
+            data=registration_data)
         is_user_valid = user_serializer.is_valid()
-        is_registration_valid = self.is_registration_valid(registration_serializer)
+        is_registration_valid = self.is_registration_valid(
+            registration_serializer)
 
         if is_user_valid and is_registration_valid:
             user_serializer.save()
             school_id = School.objects.get(name=user_data['school']['name']).id
             registration_data['school'] = school_id
-            registration_serializer = self.serializer_classes['registration'](data=registration_data)
+            registration_serializer = self.serializer_classes['registration'](
+                data=registration_data)
             registration_serializer.is_valid()
             registration_serializer.save()
-            data = {'user': user_serializer.data, 'registration': registration_serializer.data}
+            data = {'user': user_serializer.data,
+                    'registration': registration_serializer.data}
             response_status = status.HTTP_200_OK
         else:
             data = registration_serializer.errors.copy()
@@ -38,7 +42,6 @@ class RegisterMixin(object):
             response_status = status.HTTP_400_BAD_REQUEST
 
         return Response(data, status=response_status)
-
 
     def is_registration_valid(self, registration_serializer):
         registration_serializer.is_valid()
@@ -61,8 +64,7 @@ class ListUpdateModelMixin(object):
                 serializer = self.get_serializer(
                     instance=delegate,
                     data=updates[delegate.id],
-                    partial=partial
-                )
+                    partial=partial)
                 serializer.is_valid(raise_exception=True)
                 serializer.save()
                 response_data.append(serializer.data)
