@@ -77,7 +77,7 @@ var ServerAPI = {
   },
 
   register(data) {
-    return _post('/api/users', data);
+    return _post('/api/register', data);
   },
 
   resetPassword(username) {
