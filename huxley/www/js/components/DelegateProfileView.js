@@ -8,7 +8,6 @@
 const React = require('react');
 const ReactRouter = require('react-router');
 
-const Button = require('components/core/Button');
 const AssignmentStore = require('stores/AssignmentStore');
 const ConferenceContext = require('components/ConferenceContext');
 const CommitteeStore = require('stores/CommitteeStore');
