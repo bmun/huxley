@@ -200,11 +200,15 @@ var RegistrationView = React.createClass({
             }}
             errors={{
               times_attended: this.renderSchoolError('times_attended'),
-              num_beginner_delegates: this.renderError('num_beginner_delegates'),
+              num_beginner_delegates: this.renderError(
+                'num_beginner_delegates',
+              ),
               num_intermediate_delegates: this.renderError(
                 'num_intermediate_delegates',
               ),
-              num_advanced_delegates: this.renderError('num_advanced_delegates'),
+              num_advanced_delegates: this.renderError(
+                'num_advanced_delegates',
+              ),
             }}
             programInformation={{
               times_attended: this.state.times_attended,
@@ -282,8 +286,10 @@ var RegistrationView = React.createClass({
               ),
             }}
             specialCommitteePrefValues={{
-              num_spanish_speaking_delegates: this.state.num_spanish_speaking_delegates,
-              num_chinese_speaking_delegates: this.state.num_chinese_speaking_delegates,
+              num_spanish_speaking_delegates: this.state
+                .num_spanish_speaking_delegates,
+              num_chinese_speaking_delegates: this.state
+                .num_chinese_speaking_delegates,
             }}
             renderCommittees={this.renderCommittees}
           />
@@ -540,8 +546,10 @@ var RegistrationView = React.createClass({
         num_beginner_delegates: this.state.num_beginner_delegates,
         num_intermediate_delegates: this.state.num_intermediate_delegates,
         num_advanced_delegates: this.state.num_advanced_delegates,
-        num_spanish_speaking_delegates: this.state.num_spanish_speaking_delegates,
-        num_chinese_speaking_delegates: this.state.num_chinese_speaking_delegates,
+        num_spanish_speaking_delegates: this.state
+          .num_spanish_speaking_delegates,
+        num_chinese_speaking_delegates: this.state
+          .num_chinese_speaking_delegates,
         country_preferences: [
           this.state.country_pref1,
           this.state.country_pref2,
