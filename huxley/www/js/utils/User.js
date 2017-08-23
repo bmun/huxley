@@ -23,7 +23,7 @@ var User = {
   },
 
   isDelegate(user) {
-    return user.user_type == TYPE_DELEGATE
+    return user.user_type == TYPE_DELEGATE;
   },
 
   getSchool(user) {

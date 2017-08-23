@@ -22,7 +22,7 @@ const TextTemplate = require('components/core/TextTemplate');
 const User = require('utils/User');
 
 require('css/Table.less');
-const DelegateProfileViewText = require('text/DelegateProfileViewText.md')
+const DelegateProfileViewText = require('text/DelegateProfileViewText.md');
 
 const DelegateProfileView = React.createClass({
   contextTypes: {
@@ -34,14 +34,15 @@ const DelegateProfileView = React.createClass({
     var committees = CommitteeStore.getCommittees();
     var countries = CountryStore.getCountries();
     var delegate = DelegateStore.getDelegate(user.delegate);
-    var assignment = delegate && AssignmentStore.getAssignment(delegate.assignment);
+    var assignment =
+      delegate && AssignmentStore.getAssignment(delegate.assignment);
     var school = delegate && SchoolStore.getSchool(delegate.school);
     return {
       assignment: assignment,
       committees: committees,
       countries: countries,
       delegate: delegate,
-      school: school
+      school: school,
     };
   },
 
@@ -57,7 +58,8 @@ const DelegateProfileView = React.createClass({
     this._assignmentToken = AssignmentStore.addListener(() => {
       var delegate = this.state.delegate;
       this.setState({
-        assignment: delegate && AssignmentStore.getAssignment(delegate.assignment)
+        assignment:
+          delegate && AssignmentStore.getAssignment(delegate.assignment),
       });
     });
 
@@ -74,14 +76,14 @@ const DelegateProfileView = React.createClass({
       this.setState({
         delegate: delegate,
         assignment: AssignmentStore.getAssignment(delegate.assignment),
-        school: SchoolStore.getSchool(delegate.school)
+        school: SchoolStore.getSchool(delegate.school),
       });
     });
 
     this._schoolToken = SchoolStore.addListener(() => {
       var delegate = this.state.delegate;
       this.setState({
-        school: delegate && SchoolStore.getSchool(delegate.school)
+        school: delegate && SchoolStore.getSchool(delegate.school),
       });
     });
   },
@@ -101,30 +103,36 @@ const DelegateProfileView = React.createClass({
     var countries = this.state.countries;
     var delegate = this.state.delegate;
     var school = this.state.school;
-    var text = <div/>;
-    
-    if (assignment && school && Object.keys(committees).length 
-        && Object.keys(countries).length) {
-      text = <TextTemplate
-               firstName={delegate && delegate.name}
-               schoolName={school && school.name}
-               conferenceSession={conference.session}
-               committee={assignment && committees[assignment.committee].name}
-               country={assignment && countries[assignment.country].name}>
-               {DelegateProfileViewText}
-             </TextTemplate>;
+    var text = <div />;
+
+    if (
+      assignment &&
+      school &&
+      Object.keys(committees).length &&
+      Object.keys(countries).length
+    ) {
+      text = (
+        <TextTemplate
+          firstName={delegate && delegate.name}
+          schoolName={school && school.name}
+          conferenceSession={conference.session}
+          committee={assignment && committees[assignment.committee].name}
+          country={assignment && countries[assignment.country].name}>
+          {DelegateProfileViewText}
+        </TextTemplate>
+      );
     }
 
     return (
       <InnerView>
-        <div style={{'textAlign':'center'}}>
-          <br/>
+        <div style={{textAlign: 'center'}}>
+          <br />
           <h2>We are excited to have you at BMUN this year!</h2>
-          <br/>
+          <br />
         </div>
         {text}
         <h4>Below is your attendance from conference.</h4>
-        <div className="table-container" style={{margin:'10px auto auto 0px'}}>
+        <div className="table-container" style={{margin: '10px auto auto 0px'}}>
           <table>
             <thead>
               <tr>
@@ -135,7 +143,7 @@ const DelegateProfileView = React.createClass({
                 <th>Sunday Morning</th>
               </tr>
             </thead>
-              {this.state.delegate ? this.renderAttendanceRows() : <tbody />}
+            {this.state.delegate ? this.renderAttendanceRows() : <tbody />}
           </table>
         </div>
       </InnerView>
@@ -147,26 +155,23 @@ const DelegateProfileView = React.createClass({
     return (
       <tbody>
         <tr>
+          <td>Attendance</td>
           <td>
-            Attendance
+            {delegate.session_one ? 'Attended' : ''}
           </td>
           <td>
-            {delegate.session_one ? "Attended" : ""}
+            {delegate.session_two ? 'Attended' : ''}
           </td>
           <td>
-            {delegate.session_two ? "Attended" : ""}
+            {delegate.session_three ? 'Attended' : ''}
           </td>
           <td>
-            {delegate.session_three ? "Attended" : ""}
-          </td>
-          <td>
-            {delegate.session_four ? "Attended" : ""}
+            {delegate.session_four ? 'Attended' : ''}
           </td>
         </tr>
       </tbody>
     );
   },
-
 });
 
 module.exports = DelegateProfileView;

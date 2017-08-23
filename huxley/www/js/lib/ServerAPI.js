@@ -29,9 +29,9 @@ var ServerAPI = {
   /**
    * Get the assignment with the given ID.
    */
-   getAssignment(assignmentID) {
+  getAssignment(assignmentID) {
     return _get(`/api/assignments/${assignmentID}`);
-   },
+  },
 
   /**
    * Get a list of all assignments for the given school ID.
@@ -71,9 +71,9 @@ var ServerAPI = {
   /**
    * Get the delegate with the given ID
    */
-   getDelegate(delegateID) {
+  getDelegate(delegateID) {
     return _get(`/api/delegates/${delegateID}`);
-   },
+  },
 
   /**
    * Get a list of all delegates for the given school ID.
