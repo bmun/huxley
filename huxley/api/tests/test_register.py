@@ -55,14 +55,17 @@ class RegisterTestCase(tests.CreateAPITestCase):
         response = self.get_response(params=params)
         user_query = User.objects.filter(id=response.data['user']['id'])
         self.assertTrue(user_query.exists())
-        school_query = School.objects.filter(id=response.data['user']['school']['id'])
+        school_query = School.objects.filter(
+            id=response.data['user']['school']['id'])
         self.assertTrue(school_query.exists())
-        registration_query = Registration.objects.filter(id=response.data['registration']['id'])
+        registration_query = Registration.objects.filter(
+            id=response.data['registration']['id'])
         self.assertTrue(registration_query.exists())
 
         user = User.objects.get(id=response.data['user']['id'])
         school = School.objects.get(id=user.school_id)
-        registration = Registration.objects.get(id=response.data['registration']['id'])
+        registration = Registration.objects.get(
+            id=response.data['registration']['id'])
         response.data['user']['school'] = dict(response.data['user']['school'])
         self.assertEqual(response.data, {
             'user': {
@@ -101,12 +104,16 @@ class RegisterTestCase(tests.CreateAPITestCase):
                 'school': registration.school_id,
                 'registered_at': registration.registered_at.isoformat(),
                 'num_beginner_delegates': registration.num_beginner_delegates,
-                'num_intermediate_delegates': registration.num_intermediate_delegates,
+                'num_intermediate_delegates':
+                registration.num_intermediate_delegates,
                 'num_advanced_delegates': registration.num_advanced_delegates,
-                'num_spanish_speaking_delegates': registration.num_spanish_speaking_delegates,
-                'num_chinese_speaking_delegates': registration.num_chinese_speaking_delegates,
+                'num_spanish_speaking_delegates':
+                registration.num_spanish_speaking_delegates,
+                'num_chinese_speaking_delegates':
+                registration.num_chinese_speaking_delegates,
                 'country_preferences': registration.country_preference_ids,
-                'committee_preferences': list(registration.committee_preferences.all()),
+                'committee_preferences':
+                list(registration.committee_preferences.all()),
                 'registration_comments': registration.registration_comments,
                 'is_waitlisted': registration.is_waitlisted,
                 'waivers_completed': registration.waivers_completed,
