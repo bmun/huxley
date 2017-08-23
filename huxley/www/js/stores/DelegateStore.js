@@ -20,10 +20,10 @@ class DelegateStore extends Store {
   getDelegate(delegateID) {
     if (!_delegatesFetched) {
       ServerAPI.getDelegate(delegateID).then(value => {
-        DelegateActions.delegatesFetched(value);
+        DelegateActions.delegatesFetched([value]);
       });
 
-      return [];
+      return null;
     }
 
     return _delegates[delegateID];

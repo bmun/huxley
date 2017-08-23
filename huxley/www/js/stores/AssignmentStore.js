@@ -20,10 +20,10 @@ class AssignmentStore extends Store {
   getAssignment(assignmentID) {
     if (!_assignmentsFetched) {
       ServerAPI.getAssignment(assignmentID).then(value => {
-        AssignmentActions.assignmentsFetched(value);
+        AssignmentActions.assignmentsFetched([value]);
       });
 
-      return [];
+      return null;
     }
 
     return _assignments[assignmentID];

@@ -69,6 +69,13 @@ var ServerAPI = {
   },
 
   /**
+   * Get the delegate with the given ID
+   */
+   getDelegate(delegateID) {
+    return _get(`/api/delegates/${delegateID}`);
+   },
+
+  /**
    * Get a list of all delegates for the given school ID.
    */
   getDelegates(schoolID) {
@@ -76,10 +83,10 @@ var ServerAPI = {
   },
 
   /**
-   * Get the school with the givne ID.
+   * Get the school with the given ID.
    */
   getSchool(schoolID) {
-    return _get(`/api/school/${schoolID}`);
+    return _get(`/api/schools/${schoolID}`);
   },
 
   login(username, password) {
