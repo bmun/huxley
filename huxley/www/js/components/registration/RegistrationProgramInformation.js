@@ -88,40 +88,40 @@ const RegistrationProgramInformation = React.createClass({
         {accessErrors('times_attended')}
         <NumberInput
           placeholder="Tentative Number of Beginner Delegates"
-          onChange={accessHandlers('beginner_delegates')}
-          value={accessProgram('beginner_delegates')}
+          onChange={accessHandlers('num_beginner_delegates')}
+          value={accessProgram('num_beginner_delegates')}
         />
         <label className="hint">
           Beginner: Attended 0-3 conferences, not very familiar with Model
           United Nations.
         </label>
-        {accessErrors('beginner_delegates')}
+        {accessErrors('num_beginner_delegates')}
         <NumberInput
           placeholder="Tentative Number of Intermediate Delegates"
-          onChange={accessHandlers('intermediate_delegates')}
-          value={accessProgram('intermediate_delegates')}
+          onChange={accessHandlers('num_intermediate_delegates')}
+          value={accessProgram('num_intermediate_delegates')}
         />
         <label className="hint">
           Intermediate: Attended 4-7 conferences, little to no practice in
           advanced committees.
         </label>
-        {accessErrors('intermediate_delegates')}
+        {accessErrors('num_intermediate_delegates')}
         <NumberInput
           placeholder="Tentative Number of Advanced Delegates"
-          onChange={accessHandlers('advanced_delegates')}
-          value={accessProgram('advanced_delegates')}
+          onChange={accessHandlers('num_advanced_delegates')}
+          value={accessProgram('num_advanced_delegates')}
         />
         <label className="hint">
           Advanced: Attended more than seven conferences, has participated in
           many diverse committees.
         </label>
-        {accessErrors('advanced_delegates')}
+        {accessErrors('num_advanced_delegates')}
         <p className="instructions">
           Tentative Total Number of Delegates:{' '}
           {this._handleDelegateSum(
-            accessProgram('beginner_delegates'),
-            accessProgram('intermediate_delegates'),
-            accessProgram('advanced_delegates'),
+            accessProgram('num_beginner_delegates'),
+            accessProgram('num_intermediate_delegates'),
+            accessProgram('num_advanced_delegates'),
           )}
         </p>
       </div>
