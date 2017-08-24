@@ -142,14 +142,14 @@ const DelegateProfileView = React.createClass({
                 <th>Sunday Morning</th>
               </tr>
             </thead>
-            {this.state.delegate ? this.renderAttendanceRows() : <tbody />}
+            {this.state.delegate ? this.renderAttendanceRow() : <tbody />}
           </table>
         </div>
       </InnerView>
     );
   },
 
-  renderAttendanceRows: function() {
+  renderAttendanceRow: function() {
     var delegate = this.state.delegate;
     return (
       <tbody>
