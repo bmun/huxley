@@ -157,19 +157,19 @@ class RegisterTestCase(tests.CreateAPITestCase):
             'registration': {
                 'conference': '',
                 'num_beginner_delegates': '',
-                'num_intermediate_delegates':'',
+                'num_intermediate_delegates': '',
                 'num_advanced_delegates': '',
-                'num_spanish_speaking_delegates':'',
+                'num_spanish_speaking_delegates': '',
                 'num_chinese_speaking_delegates': '',
             }
         }
 
         response = self.get_response(params=params)
         self.assertEqual(response.data, {
-            "first_name":["This field is required."],
-            "last_name":["This field is required."],
-            "username":["This field may not be blank."],
-            "password":["This field may not be blank."],
+            "first_name": ["This field is required."],
+            "last_name": ["This field is required."],
+            "username": ["This field may not be blank."],
+            "password": ["This field may not be blank."],
             "conference": ["This field may not be null."],
             "school": {
                 "city": ["This field may not be blank."],
@@ -177,16 +177,16 @@ class RegisterTestCase(tests.CreateAPITestCase):
                 "primary_phone": ["This field may not be blank."],
                 "secondary_email": ["Enter a valid email address."],
                 "country": ["This field may not be blank."],
-                "times_attended":["A valid integer is required."],
-                "state":["This field may not be blank."],
-                "primary_name":["This field may not be blank."],
-                "primary_email":["This field may not be blank."],
-                "address":["This field may not be blank."],
-                "zip_code":["This field may not be blank."]
+                "times_attended": ["A valid integer is required."],
+                "state": ["This field may not be blank."],
+                "primary_name": ["This field may not be blank."],
+                "primary_email": ["This field may not be blank."],
+                "address": ["This field may not be blank."],
+                "zip_code": ["This field may not be blank."]
             },
-            "num_advanced_delegates":["A valid integer is required."],
-            "num_spanish_speaking_delegates":["A valid integer is required."],
-            "num_chinese_speaking_delegates":["A valid integer is required."],
-            "num_intermediate_delegates":["A valid integer is required."],
-            "num_beginner_delegates":["A valid integer is required."],
+            "num_advanced_delegates": ["A valid integer is required."],
+            "num_spanish_speaking_delegates": ["A valid integer is required."],
+            "num_chinese_speaking_delegates": ["A valid integer is required."],
+            "num_intermediate_delegates": ["A valid integer is required."],
+            "num_beginner_delegates": ["A valid integer is required."],
         })
