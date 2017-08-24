@@ -123,3 +123,70 @@ class RegisterTestCase(tests.CreateAPITestCase):
                 'modified_at': registration.modified_at.isoformat()
             }
         })
+
+    def test_invalid(self):
+        params = {
+            'user': {
+                'first_name': '',
+                'last_name': '',
+                'username': '',
+                'email': '',
+                'password': '',
+                'school': {
+                    'name': '',
+                    'address': '',
+                    'city': '',
+                    'state': '',
+                    'zip_code': '',
+                    'country': '',
+                    'international': False,
+                    'program_type': ProgramTypes.CLUB,
+                    'times_attended': '',
+                    'primary_name': '',
+                    'primary_gender': ContactGender.UNSPECIFIED,
+                    'primary_email': '',
+                    'primary_phone': '',
+                    'primary_type': ContactType.FACULTY,
+                    'secondary_name': '',
+                    'secondary_gender': ContactGender.UNSPECIFIED,
+                    'secondary_email': '',
+                    'secondary_phone': '',
+                    'secondary_type': ContactType.FACULTY,
+                },
+            },
+            'registration': {
+                'conference': '',
+                'num_beginner_delegates': '',
+                'num_intermediate_delegates':'',
+                'num_advanced_delegates': '',
+                'num_spanish_speaking_delegates':'',
+                'num_chinese_speaking_delegates': '',
+            }
+        }
+
+        response = self.get_response(params=params)
+        self.assertEqual(response.data, {
+            "first_name":["This field is required."],
+            "last_name":["This field is required."],
+            "username":["This field may not be blank."],
+            "password":["This field may not be blank."],
+            "conference": ["This field may not be null."],
+            "school": {
+                "city": ["This field may not be blank."],
+                "name": ["This field may not be blank."],
+                "primary_phone": ["This field may not be blank."],
+                "secondary_email": ["Enter a valid email address."],
+                "country": ["This field may not be blank."],
+                "times_attended":["A valid integer is required."],
+                "state":["This field may not be blank."],
+                "primary_name":["This field may not be blank."],
+                "primary_email":["This field may not be blank."],
+                "address":["This field may not be blank."],
+                "zip_code":["This field may not be blank."]
+            },
+            "num_advanced_delegates":["A valid integer is required."],
+            "num_spanish_speaking_delegates":["A valid integer is required."],
+            "num_chinese_speaking_delegates":["A valid integer is required."],
+            "num_intermediate_delegates":["A valid integer is required."],
+            "num_beginner_delegates":["A valid integer is required."],
+        })
