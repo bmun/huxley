@@ -1,3 +1,3 @@
 ## Delegate Account
 
-Welcome {{ firstName }}! We are very excited to see you as part of {{ schoolName }}'s delegation at BMUN {{ conferenceSession }} this year. This year, you will represent **{{ country }}** in **{{ committee }}**.
+Welcome {{ firstName }}! We are looking forward to seeing you as part of {{ schoolName }}'s delegation at BMUN {{ conferenceSession }}. This year, you will represent **{{ country }}** in **{{ committee }}**.
