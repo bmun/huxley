@@ -42,16 +42,16 @@ const RegistrationSpecialCommitteePreferences = React.createClass({
         </ul>
         <NumberInput
           placeholder="Number of Spanish Speaking Delegates"
-          onChange={accessHandlers('spanish_speaking_delegates')}
-          value={accessValues('spanish_speaking_delegates')}
+          onChange={accessHandlers('num_spanish_speaking_delegates')}
+          value={accessValues('num_spanish_speaking_delegates')}
         />
-        {accessErrors('spanish_speaking_delegates')}
+        {accessErrors('num_spanish_speaking_delegates')}
         <NumberInput
           placeholder="Number of Chinese Speaking Delegates"
-          onChange={accessHandlers('chinese_speaking_delegates')}
-          value={accessValues('chinese_speaking_delegates')}
+          onChange={accessHandlers('num_chinese_speaking_delegates')}
+          value={accessValues('num_chinese_speaking_delegates')}
         />
-        {accessErrors('chinese_speaking_delegates')}
+        {accessErrors('num_chinese_speaking_delegates')}
       </div>
     );
   },

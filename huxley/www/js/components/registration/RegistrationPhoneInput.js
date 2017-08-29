@@ -18,10 +18,6 @@ const RegistrationPhoneInput = React.createClass({
     value: React.PropTypes.string,
   },
 
-  shouldComponentUpdate: function(nextProps, nextState) {
-    return this.props.value !== nextProps.value;
-  },
-
   render() {
     const {errors, ...inputProps} = this.props;
     return (

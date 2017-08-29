@@ -25,8 +25,7 @@ class ListUpdateModelMixin(object):
                 serializer = self.get_serializer(
                     instance=delegate,
                     data=updates[delegate.id],
-                    partial=partial
-                )
+                    partial=partial)
                 serializer.is_valid(raise_exception=True)
                 serializer.save()
                 response_data.append(serializer.data)

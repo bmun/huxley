@@ -11,7 +11,8 @@ class RegistrationSerializer(serializers.ModelSerializer):
     assignments_finalized = serializers.BooleanField(required=False)
     country_preferences = serializers.ListField(
         child=serializers.IntegerField(required=False),
-        source='country_preference_ids')
+        source='country_preference_ids',
+        required=False)
     committee_preferences = serializers.PrimaryKeyRelatedField(
         allow_empty=True,
         many=True,

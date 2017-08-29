@@ -30,6 +30,8 @@ urlpatterns = [
 
     url(r'^registrations/?$', views.registration.RegistrationList.as_view(), name='registration_list'),
     url(r'^registrations(?P<pk>[0-9]+)/?$', views.registration.RegistrationDetail.as_view(), name='registration_detail'),
+
+    url(r'^register/?$', views.register.Register.as_view(), name='register'),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

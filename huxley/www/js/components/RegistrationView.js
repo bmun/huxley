@@ -64,11 +64,11 @@ var RegistrationView = React.createClass({
       school_international: false,
       program_type: ProgramTypes.CLUB,
       times_attended: '',
-      beginner_delegates: '',
-      intermediate_delegates: '',
-      advanced_delegates: '',
-      spanish_speaking_delegates: '',
-      chinese_speaking_delegates: '',
+      num_beginner_delegates: '',
+      num_intermediate_delegates: '',
+      num_advanced_delegates: '',
+      num_spanish_speaking_delegates: '',
+      num_chinese_speaking_delegates: '',
       primary_name: '',
       primary_gender: GenderConstants.UNSPECFIED,
       primary_email: '',
@@ -185,32 +185,36 @@ var RegistrationView = React.createClass({
           <RegistrationProgramInformation
             handlers={{
               times_attended: _handleChange.bind(this, 'times_attended'),
-              beginner_delegates: _handleChange.bind(
+              num_beginner_delegates: _handleChange.bind(
                 this,
-                'beginner_delegates',
+                'num_beginner_delegates',
               ),
-              intermediate_delegates: _handleChange.bind(
+              num_intermediate_delegates: _handleChange.bind(
                 this,
-                'intermediate_delegates',
+                'num_intermediate_delegates',
               ),
-              advanced_delegates: _handleChange.bind(
+              num_advanced_delegates: _handleChange.bind(
                 this,
-                'advanced_delegates',
+                'num_advanced_delegates',
               ),
             }}
             errors={{
               times_attended: this.renderSchoolError('times_attended'),
-              beginner_delegates: this.renderSchoolError('beginner_delegates'),
-              intermediate_delegates: this.renderSchoolError(
-                'intermediate_delegates',
+              num_beginner_delegates: this.renderError(
+                'num_beginner_delegates',
               ),
-              advanced_delegates: this.renderSchoolError('advanced_delegates'),
+              num_intermediate_delegates: this.renderError(
+                'num_intermediate_delegates',
+              ),
+              num_advanced_delegates: this.renderError(
+                'num_advanced_delegates',
+              ),
             }}
             programInformation={{
               times_attended: this.state.times_attended,
-              beginner_delegates: this.state.beginner_delegates,
-              intermediate_delegates: this.state.intermediate_delegates,
-              advanced_delegates: this.state.advanced_delegates,
+              num_beginner_delegates: this.state.num_beginner_delegates,
+              num_intermediate_delegates: this.state.num_intermediate_delegates,
+              num_advanced_delegates: this.state.num_advanced_delegates,
             }}
             handleProgramTypeChange={this._handleProgramTypeChange}
             programType={this.state.program_type}
@@ -264,26 +268,28 @@ var RegistrationView = React.createClass({
           <hr />
           <RegistrationSpecialCommitteePreferences
             handlers={{
-              spanish_speaking_delegates: _handleChange.bind(
+              num_spanish_speaking_delegates: _handleChange.bind(
                 this,
-                'spanish_speaking_delegates',
+                'num_spanish_speaking_delegates',
               ),
-              chinese_speaking_delegates: _handleChange.bind(
+              num_chinese_speaking_delegates: _handleChange.bind(
                 this,
-                'chinese_speaking_delegates',
+                'num_chinese_speaking_delegates',
               ),
             }}
             errors={{
-              spanish_speaking_delegates: this.renderSchoolError(
-                'spanish_speaking_delegates',
+              num_spanish_speaking_delegates: this.renderError(
+                'num_spanish_speaking_delegates',
               ),
-              chinese_speaking_delegates: this.renderSchoolError(
-                'chinese_speaking_delegates',
+              num_chinese_speaking_delegates: this.renderError(
+                'num_chinese_speaking_delegates',
               ),
             }}
             specialCommitteePrefValues={{
-              spanish_speaking_delegates: this.state.spanish_speaking_delegates,
-              chinese_speaking_delegates: this.state.chinese_speaking_delegates,
+              num_spanish_speaking_delegates: this.state
+                .num_spanish_speaking_delegates,
+              num_chinese_speaking_delegates: this.state
+                .num_chinese_speaking_delegates,
             }}
             renderCommittees={this.renderCommittees}
           />
@@ -440,14 +446,14 @@ var RegistrationView = React.createClass({
 
   _handleDelegateSum: function() {
     var sum = 0;
-    if (this.state.beginner_delegates) {
-      sum += parseInt(this.state.beginner_delegates, 10) || 0;
+    if (this.state.num_beginner_delegates) {
+      sum += parseInt(this.state.num_beginner_delegates, 10) || 0;
     }
-    if (this.state.intermediate_delegates) {
-      sum += parseInt(this.state.intermediate_delegates, 10) || 0;
+    if (this.state.num_intermediate_delegates) {
+      sum += parseInt(this.state.num_intermediate_delegates, 10) || 0;
     }
-    if (this.state.advanced_delegates) {
-      sum += parseInt(this.state.advanced_delegates, 10) || 0;
+    if (this.state.num_advanced_delegates) {
+      sum += parseInt(this.state.num_advanced_delegates, 10) || 0;
     }
     return sum;
   },
@@ -506,38 +512,45 @@ var RegistrationView = React.createClass({
   _handleSubmit: function(event) {
     this.setState({loading: true});
     ServerAPI.register({
-      first_name: this.state.first_name.trim(),
-      last_name: this.state.last_name.trim(),
-      username: this.state.username.trim(),
-      email: this.state.primary_email.trim(),
-      password: this.state.password,
-      password2: this.state.password2,
-      school: {
-        name: this.state.school_name.trim(),
-        address: this.state.school_address.trim(),
-        city: this.state.school_city.trim(),
-        state: this.state.school_state.trim(),
-        zip_code: this.state.school_zip.trim(),
-        country: this._getSchoolCountry().trim(),
-        international: this.state.school_international,
-        program_type: this.state.program_type,
-        times_attended: this.state.times_attended.trim(),
-        beginner_delegates: this.state.beginner_delegates,
-        intermediate_delegates: this.state.intermediate_delegates,
-        advanced_delegates: this.state.advanced_delegates,
-        spanish_speaking_delegates: this.state.spanish_speaking_delegates,
-        chinese_speaking_delegates: this.state.chinese_speaking_delegates,
-        primary_name: this.state.primary_name.trim(),
-        primary_gender: this.state.primary_gender,
-        primary_email: this.state.primary_email.trim(),
-        primary_phone: this.state.primary_phone.trim(),
-        primary_type: this.state.primary_type,
-        secondary_name: this.state.secondary_name.trim(),
-        secondary_gender: this.state.secondary_gender,
-        secondary_email: this.state.secondary_email.trim(),
-        secondary_phone: this.state.secondary_phone.trim(),
-        secondary_type: this.state.secondary_type,
-        countrypreferences: [
+      user: {
+        first_name: this.state.first_name.trim(),
+        last_name: this.state.last_name.trim(),
+        username: this.state.username.trim(),
+        email: this.state.primary_email.trim(),
+        password: this.state.password,
+        password2: this.state.password2,
+        school: {
+          name: this.state.school_name.trim(),
+          address: this.state.school_address.trim(),
+          city: this.state.school_city.trim(),
+          state: this.state.school_state.trim(),
+          zip_code: this.state.school_zip.trim(),
+          country: this._getSchoolCountry().trim(),
+          international: this.state.school_international,
+          program_type: this.state.program_type,
+          times_attended: this.state.times_attended.trim(),
+          primary_name: this.state.primary_name.trim(),
+          primary_gender: this.state.primary_gender,
+          primary_email: this.state.primary_email.trim(),
+          primary_phone: this.state.primary_phone.trim(),
+          primary_type: this.state.primary_type,
+          secondary_name: this.state.secondary_name.trim(),
+          secondary_gender: this.state.secondary_gender,
+          secondary_email: this.state.secondary_email.trim(),
+          secondary_phone: this.state.secondary_phone.trim(),
+          secondary_type: this.state.secondary_type,
+        },
+      },
+      registration: {
+        conference: this.context.conference.session,
+        num_beginner_delegates: this.state.num_beginner_delegates,
+        num_intermediate_delegates: this.state.num_intermediate_delegates,
+        num_advanced_delegates: this.state.num_advanced_delegates,
+        num_spanish_speaking_delegates: this.state
+          .num_spanish_speaking_delegates,
+        num_chinese_speaking_delegates: this.state
+          .num_chinese_speaking_delegates,
+        country_preferences: [
           this.state.country_pref1,
           this.state.country_pref2,
           this.state.country_pref3,
@@ -549,7 +562,7 @@ var RegistrationView = React.createClass({
           this.state.country_pref9,
           this.state.country_pref10,
         ],
-        committeepreferences: this.state.committee_prefs,
+        committee_preferences: this.state.committee_prefs,
         registration_comments: this.state.registration_comments.trim(),
       },
     }).then(this._handleSuccess, this._handleError);
@@ -557,7 +570,7 @@ var RegistrationView = React.createClass({
   },
 
   _handleSuccess: function(response) {
-    if (response.school.waitlist) {
+    if (response.registration.is_waitlisted) {
       this.history.pushState(null, '/register/waitlist');
     } else {
       this.history.pushState(null, '/register/success');
