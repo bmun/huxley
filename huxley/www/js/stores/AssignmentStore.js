@@ -19,10 +19,6 @@ var _previousUserID = -1;
 class AssignmentStore extends Store {
   getAssignment(assignmentID) {
     if (!_assignmentsFetched) {
-      ServerAPI.getAssignment(assignmentID).then(value => {
-        AssignmentActions.assignmentsFetched([value]);
-      });
-
       return null;
     }
 
@@ -83,6 +79,11 @@ class AssignmentStore extends Store {
           _assignmentsFetched = false;
           _previousUserID = userID;
         }
+        break;
+      case ActionConstants.DELEGATE_FETCHED:
+        const assignment = action.values.assignment;
+        _assignments[assignment.id] = assignment;
+        _assignmentsFetched = true;
         break;
       default:
         return;

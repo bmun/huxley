@@ -33,6 +33,10 @@ class CountryStore extends Store {
           _countries[country.id] = country;
         }
         break;
+      case ActionConstants.DELEGATE_FETCHED:
+        const country = action.values.country;
+        _countries[country.id] = country;
+        break;
       default:
         return;
     }

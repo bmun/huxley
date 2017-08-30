@@ -20,7 +20,7 @@ class DelegateStore extends Store {
   getDelegate(delegateID) {
     if (!_delegatesFetched) {
       ServerAPI.getDelegate(delegateID).then(value => {
-        DelegateActions.delegatesFetched([value]);
+        DelegateActions.delegateFetched(value);
       });
 
       return null;
@@ -103,6 +103,11 @@ class DelegateStore extends Store {
         for (const delegate of action.delegates) {
           _delegates[delegate.id] = delegate;
         }
+        _delegatesFetched = true;
+        break;
+      case ActionConstants.DELEGATE_FETCHED:
+        const delegate = action.values.delegate;
+        _delegates[delegate.id] = delegate;
         _delegatesFetched = true;
         break;
       case ActionConstants.UPDATE_DELEGATES:

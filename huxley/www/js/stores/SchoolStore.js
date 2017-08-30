@@ -19,10 +19,6 @@ var _previousUserID = -1;
 class SchoolStore extends Store {
   getSchool(schoolID) {
     if (!_schoolsFetched) {
-      ServerAPI.getSchool(schoolID).then(value => {
-        SchoolActions.schoolsFetched([value]);
-      });
-
       return null;
     }
 
@@ -44,6 +40,11 @@ class SchoolStore extends Store {
           _schoolsFetched = false;
           _previousUserID = userID;
         }
+        break;
+      case ActionConstants.DELEGATE_FETCHED:
+        const school = action.values.school;
+        _schools[school.id] = school;
+        _schoolsFetched = true;
         break;
       default:
         return;

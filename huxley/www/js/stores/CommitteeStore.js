@@ -44,6 +44,10 @@ class CommitteeStore extends Store {
           _committees[committee.id] = committee;
         }
         break;
+      case ActionConstants.DELEGATE_FETCHED:
+        const committee = action.values.committee;
+        _committees[committee.id] = committee;
+        break;
       default:
         return;
     }
