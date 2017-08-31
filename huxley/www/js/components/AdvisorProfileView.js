@@ -67,7 +67,9 @@ const AdvisorProfileView = React.createClass({
     var schoolID = User.getSchool(this.props.user).id;
     var conferenceID = this.context.conference.session;
     this._registrationToken = RegistrationStore.addListener(() => {
-      this.setState({registration: RegistrationStore.getRegistration(schoolID, conferenceID)});
+      this.setState({
+        registration: RegistrationStore.getRegistration(schoolID, conferenceID),
+      });
     });
   },
 
@@ -81,8 +83,14 @@ const AdvisorProfileView = React.createClass({
     var user = this.props.user;
     var school = User.getSchool(user);
     var registration = this.state.registration;
-    var fees_owed = _accessSafe(registration, 'fees_owed') == null ? null : registration.fees_owed.toFixed(2);
-    var fees_paid = _accessSafe(registration, 'fees_paid') == null ? null : registration.fees_paid.toFixed(2);
+    var fees_owed =
+      _accessSafe(registration, 'fees_owed') == null
+        ? null
+        : registration.fees_owed.toFixed(2);
+    var fees_paid =
+      _accessSafe(registration, 'fees_paid') == null
+        ? null
+        : registration.fees_paid.toFixed(2);
     return (
       <InnerView>
         <TextTemplate
@@ -167,7 +175,9 @@ const AdvisorProfileView = React.createClass({
               <tr>
                 <td>Waitlisted</td>
                 <td>
-                  {_accessSafe(registration, 'is_waitlisted') == true ? 'Yes' : 'No'}
+                  {_accessSafe(registration, 'is_waitlisted') == true
+                    ? 'Yes'
+                    : 'No'}
                 </td>
               </tr>
               <tr>
@@ -218,7 +228,9 @@ const AdvisorProfileView = React.createClass({
               <tr>
                 <td>All Waivers Completed?</td>
                 <td>
-                  {_accessSafe(registration, 'waivers_completed') ? 'Yes' : 'No'}
+                  {_accessSafe(registration, 'waivers_completed')
+                    ? 'Yes'
+                    : 'No'}
                 </td>
               </tr>
               <tr>

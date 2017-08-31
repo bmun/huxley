@@ -86,7 +86,9 @@ var AdvisorAssignmentsView = React.createClass({
     var schoolID = CurrentUserStore.getCurrentUser().school.id;
     var conferenceID = this.context.conference.session;
     this._registrationToken = RegistrationStore.addListener(() => {
-      this.setState({registration: RegistrationStore.getRegistration(schoolID, conferenceID)});
+      this.setState({
+        registration: RegistrationStore.getRegistration(schoolID, conferenceID),
+      });
     });
   },
 
@@ -100,7 +102,10 @@ var AdvisorAssignmentsView = React.createClass({
   },
 
   render: function() {
-    var finalized = _accessSafe(this.state.registration, 'assignments_finalized') == null ? false : this.state.registration.assignments_finalized;
+    var finalized =
+      _accessSafe(this.state.registration, 'assignments_finalized') == null
+        ? false
+        : this.state.registration.assignments_finalized;
     var committees = this.state.committees;
     var conference = this.context.conference;
     var countries = this.state.countries;
@@ -148,7 +153,10 @@ var AdvisorAssignmentsView = React.createClass({
   renderAssignmentRows: function() {
     var committees = this.state.committees;
     var countries = this.state.countries;
-    var finalized = _accessSafe(this.state.registration, 'assignments_finalized') == null ? false : this.state.registration.assignments_finalized;
+    var finalized =
+      _accessSafe(this.state.registration, 'assignments_finalized') == null
+        ? false
+        : this.state.registration.assignments_finalized;
     return this.state.assignments.map(
       function(assignment) {
         return (

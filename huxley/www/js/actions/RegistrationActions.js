@@ -16,9 +16,9 @@ var RegistrationActions = {
     });
   },
 
-	updateRegistration() {
-		Dispatcher.dispatch({});
-	},
-}
+  updateRegistration() {
+    Dispatcher.dispatch({});
+  },
+};
 
 module.exports = RegistrationActions;

@@ -14,9 +14,13 @@ var {Store} = require('flux/utils');
 var _registration = null;
 
 class RegistrationStore extends Store {
-	getRegistration(schoolID, conferenceID) {
-    if (_registration && _registration.school == schoolID && _registration.conference == conferenceID) {
-		  return _registration;
+  getRegistration(schoolID, conferenceID) {
+    if (
+      _registration &&
+      _registration.school == schoolID &&
+      _registration.conference == conferenceID
+    ) {
+      return _registration;
     }
 
     ServerAPI.getRegistration(schoolID, conferenceID).then(value => {
@@ -24,14 +28,12 @@ class RegistrationStore extends Store {
     });
 
     return null;
-	}
+  }
 
-	updateRegistration(registrationID, delta, onError) {
+  updateRegistration(registrationID, delta, onError) {}
 
-	}
-
-	__onDispatch(action) {
-		switch (action.actionType) {
+  __onDispatch(action) {
+    switch (action.actionType) {
       case ActionConstants.REGISTRATION_FETCHED:
         _registration = action.registration;
         break;
