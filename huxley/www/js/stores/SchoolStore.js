@@ -19,10 +19,14 @@ var _previousUserID = -1;
 class SchoolStore extends Store {
   getSchool(schoolID) {
     if (!_schoolsFetched) {
+      ServerAPI.getSchool(schoolID).then(value => {
+        SchoolActions.schoolsFetched([value]);
+      });
+
       return null;
     }
 
-    return _schools[schoolID];
+    return schoolID in _schools ? _schools[schoolID] : null;
   }
 
   __onDispatch(action) {

@@ -26,7 +26,7 @@ class DelegateStore extends Store {
       return null;
     }
 
-    return _delegates[delegateID];
+    return delegateId in _delegates ? _delegates[delegateID] : null;
   }
 
   getSchoolDelegates(schoolID) {

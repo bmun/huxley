@@ -112,11 +112,11 @@ const DelegateProfileView = React.createClass({
     ) {
       text = (
         <TextTemplate
-          firstName={delegate && delegate.name}
-          schoolName={school && school.name}
+          firstName={delegate.name}
+          schoolName={school.name}
           conferenceSession={conference.session}
-          committee={assignment && committees[assignment.committee].full_name}
-          country={assignment && countries[assignment.country].name}>
+          committee={committees[assignment.committee].full_name}
+          country={countries[assignment.country].name}>
           {DelegateProfileViewText}
         </TextTemplate>
       );
