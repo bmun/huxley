@@ -107,6 +107,10 @@ var ServerAPI = {
   updateUser(userID, data) {
     return _patch(`/api/users/${userID}`, data);
   },
+
+  getRegistration(schoolID, conferenceID) {
+    return _get('/api/registrations', {school_id: schoolID, conference_id: conferenceID});
+  }
 };
 
 function _encodeQueryString(params) {
