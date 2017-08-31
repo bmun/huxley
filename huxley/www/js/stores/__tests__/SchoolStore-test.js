@@ -42,7 +42,7 @@ describe('SchoolStore', () => {
       primary_phone: '(000) 000-0000',
       primary_type: 0,
       times_attended: 2,
-      international: false
+      international: false,
     };
 
     mockSchoolID2 = 3;
