@@ -16,8 +16,13 @@ var RegistrationActions = {
     });
   },
 
-  updateRegistration() {
-    Dispatcher.dispatch({});
+  updateRegistration(registrationID, delta, onError) {
+    Dispatcher.dispatch({
+      actionType: ActionConstants.UPDATE_REGISTRATION,
+      registrationID: registrationID,
+      delta: delta,
+      onError: onError,
+    });
   },
 };
 

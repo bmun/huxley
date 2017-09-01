@@ -30,12 +30,19 @@ class RegistrationStore extends Store {
     return null;
   }
 
-  updateRegistration(registrationID, delta, onError) {}
+  updateRegistration(registrationID, delta, onError) {
+    const registration = {..._registration, ...delta};
+    ServerAPI.updateRegistration(registrationID, registration).catch(onError);
+    _registration = registration;
+  }
 
   __onDispatch(action) {
     switch (action.actionType) {
       case ActionConstants.REGISTRATION_FETCHED:
         _registration = action.registration;
+        break;
+      case ActionConstants.UPDATE_REGISTRATION:
+        this.updateRegistration(action.registrationID, action.delta, action.onError);
         break;
       default:
         return;

@@ -56,6 +56,9 @@ var AdvisorAssignmentsView = React.createClass({
   },
 
   componentDidMount: function() {
+    var schoolID = CurrentUserStore.getCurrentUser().school.id;
+    var conferenceID = this.context.conference.session;
+
     this._committeesToken = CommitteeStore.addListener(() => {
       this.setState({committees: CommitteeStore.getCommittees()});
     });
@@ -75,7 +78,6 @@ var AdvisorAssignmentsView = React.createClass({
     });
 
     this._assignmentsToken = AssignmentStore.addListener(() => {
-      var schoolID = CurrentUserStore.getCurrentUser().school.id;
       this.setState({
         assignments: AssignmentStore.getSchoolAssignments(schoolID).filter(
           assignment => !assignment.rejected,
@@ -83,8 +85,6 @@ var AdvisorAssignmentsView = React.createClass({
       });
     });
 
-    var schoolID = CurrentUserStore.getCurrentUser().school.id;
-    var conferenceID = this.context.conference.session;
     this._registrationToken = RegistrationStore.addListener(() => {
       this.setState({
         registration: RegistrationStore.getRegistration(schoolID, conferenceID),
@@ -273,7 +273,7 @@ var AdvisorAssignmentsView = React.createClass({
     );
     if (confirm) {
       RegistrationActions.updateRegistration(
-        registration.id,
+        this.state.registration.id,
         {
           assignments_finalized: true,
         },

@@ -114,6 +114,10 @@ var ServerAPI = {
       conference_id: conferenceID,
     });
   },
+
+  updateRegistration(registrationID, data) {
+    return _patch(`/api/registrations/${registrationID}`, data);
+  },
 };
 
 function _encodeQueryString(params) {
