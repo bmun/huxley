@@ -42,7 +42,11 @@ class RegistrationStore extends Store {
         _registration = action.registration;
         break;
       case ActionConstants.UPDATE_REGISTRATION:
-        this.updateRegistration(action.registrationID, action.delta, action.onError);
+        this.updateRegistration(
+          action.registrationID,
+          action.delta,
+          action.onError,
+        );
         break;
       default:
         return;
