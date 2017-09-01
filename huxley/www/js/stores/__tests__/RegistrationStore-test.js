@@ -31,18 +31,28 @@ describe('RegistrationStore', () => {
     };
     mockSchoolID = 1;
     mockConferenceID = 65;
-    mockRegistration = {id: 1, school: mockSchoolID, conference: mockConferenceID, assignments_finalized: false};
+    mockRegistration = {
+      id: 1,
+      school: mockSchoolID,
+      conference: mockConferenceID,
+      assignments_finalized: false,
+    };
 
-    ServerAPI.getRegistration.mockReturnValue(Promise.resolve(mockRegistration));
+    ServerAPI.getRegistration.mockReturnValue(
+      Promise.resolve(mockRegistration),
+    );
     ServerAPI.updateRegistration.mockReturnValue(Promise.resolve({}));
   });
 
-	it('subscribes to the dispatcher', () => {
+  it('subscribes to the dispatcher', () => {
     expect(Dispatcher.register).toBeCalled();
   });
 
   it('requests the registration on first call and caches locally', () => {
-    var registration = RegistrationStore.getRegistration(mockSchoolID, mockConferenceID);
+    var registration = RegistrationStore.getRegistration(
+      mockSchoolID,
+      mockConferenceID,
+    );
     expect(ServerAPI.getRegistration).toBeCalled();
 
     registerCallback({
@@ -50,7 +60,10 @@ describe('RegistrationStore', () => {
       registration: mockRegistration,
     });
 
-    registration = RegistrationStore.getRegistration(mockSchoolID, mockConferenceID);
+    registration = RegistrationStore.getRegistration(
+      mockSchoolID,
+      mockConferenceID,
+    );
     expect(registration).toEqual(mockRegistration);
     expect(ServerAPI.getRegistration.mock.calls.length).toEqual(1);
   });
@@ -85,8 +98,13 @@ describe('RegistrationStore', () => {
     });
     expect(callback).toBeCalled();
 
-    var registration = RegistrationStore.getRegistration(mockSchoolID, mockConferenceID);
+    var registration = RegistrationStore.getRegistration(
+      mockSchoolID,
+      mockConferenceID,
+    );
     expect(ServerAPI.updateRegistration).toBeCalledWith(1, registration);
-    expect(registration.assignments_finalized).toEqual(delta.assignments_finalized);
+    expect(registration.assignments_finalized).toEqual(
+      delta.assignments_finalized,
+    );
   });
 });
