@@ -24,7 +24,7 @@ const DelegateProfileView = React.createClass({
 
   getInitialState() {
     var user = CurrentUserStore.getCurrentUser();
-    var delegate = user.delegate
+    var delegate = user.delegate;
     return {
       delegate: delegate,
     };
@@ -46,12 +46,7 @@ const DelegateProfileView = React.createClass({
     var school = delegate && delegate.school;
     var text = <div />;
 
-    if (
-      assignment &&
-      school &&
-      committee &&
-      country
-    ) {
+    if (assignment && school && committee && country) {
       text = (
         <TextTemplate
           firstName={delegate.name}

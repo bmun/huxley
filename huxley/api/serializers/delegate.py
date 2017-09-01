@@ -11,21 +11,20 @@ from huxley.core.models import Delegate
 class DelegateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Delegate
-        fields = (
-            'id', 
-            'assignment', 
-            'name', 
-            'email', 
-            'created_at', 
-            'summary', 
-            'published_summary',
-            'school',
-            'voting',
-            'session_one',
-            'session_two',
-            'session_three',
-            'session_four',
-        )
+        fields = ('id',
+                  'assignment',
+                  'name',
+                  'email',
+                  'created_at',
+                  'summary',
+                  'published_summary',
+                  'school',
+                  'voting',
+                  'session_one',
+                  'session_two',
+                  'session_three',
+                  'session_four', )
+
 
 class DelegateNestedSerializer(serializers.ModelSerializer):
     assignment = AssignmentNestedSerializer(read_only=True)
@@ -33,18 +32,16 @@ class DelegateNestedSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Delegate
-        fields = (
-            'id', 
-            'assignment', 
-            'name', 
-            'email', 
-            'created_at', 
-            'summary', 
-            'published_summary',
-            'school',
-            'voting',
-            'session_one',
-            'session_two',
-            'session_three',
-            'session_four',
-        )
+        fields = ('id',
+                  'assignment',
+                  'name',
+                  'email',
+                  'created_at',
+                  'summary',
+                  'published_summary',
+                  'school',
+                  'voting',
+                  'session_one',
+                  'session_two',
+                  'session_three',
+                  'session_four', )

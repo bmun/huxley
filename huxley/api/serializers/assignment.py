@@ -13,10 +13,11 @@ class AssignmentSerializer(serializers.ModelSerializer):
         model = Assignment
         fields = ('id', 'committee', 'country', 'registration', 'rejected')
 
+
 class AssignmentNestedSerializer(serializers.ModelSerializer):
     committee = CommitteeSerializer(read_only=True)
     country = CountrySerializer(read_only=True)
-    
+
     class Meta:
         model = Assignment
         fields = ('id', 'committee', 'country', 'registration', 'rejected')
