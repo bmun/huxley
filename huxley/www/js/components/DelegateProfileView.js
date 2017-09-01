@@ -8,14 +8,8 @@
 const React = require('react');
 const ReactRouter = require('react-router');
 
-const AssignmentStore = require('stores/AssignmentStore');
 const ConferenceContext = require('components/ConferenceContext');
-const CommitteeStore = require('stores/CommitteeStore');
-const CountryStore = require('stores/CountryStore');
 const CurrentUserStore = require('stores/CurrentUserStore');
-const DelegateActions = require('actions/DelegateActions');
-const DelegateStore = require('stores/DelegateStore');
-const SchoolStore = require('stores/SchoolStore');
 const InnerView = require('components/InnerView');
 const TextTemplate = require('components/core/TextTemplate');
 const User = require('utils/User');
@@ -30,7 +24,7 @@ const DelegateProfileView = React.createClass({
 
   getInitialState() {
     var user = CurrentUserStore.getCurrentUser();
-    var delegate = user.delegate //DelegateStore.getDelegate(user.delegate);
+    var delegate = user.delegate
     return {
       delegate: delegate,
     };
@@ -42,21 +36,6 @@ const DelegateProfileView = React.createClass({
       this.history.pushState(null, '/');
     }
   },
-
-  // componentDidMount() {
-  //   var user = CurrentUserStore.getCurrentUser();
-
-  //   this._delegateToken = DelegateStore.addListener(() => {
-  //     var delegate = DelegateStore.getDelegate(user.delegate);
-  //     this.setState({
-  //       delegate: delegate,
-  //     });
-  //   });
-  // },
-
-  // componentWillUnmount() {
-  //   this._delegateToken && this._delegateToken.remove();
-  // },
 
   render() {
     var user = CurrentUserStore.getCurrentUser();

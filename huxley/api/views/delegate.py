@@ -7,10 +7,8 @@ from rest_framework.response import Response
 
 from huxley.api.mixins import ListUpdateModelMixin
 from huxley.api import permissions
-from huxley.api.serializers import AssignmentSerializer, CommitteeSerializer, \
-                                   CountrySerializer, DelegateSerializer, \
-                                   DelegateNestedSerializer, SchoolSerializer
-from huxley.core.models import Assignment, Committee, Country, Delegate, School
+from huxley.api.serializers import DelegateSerializer
+from huxley.core.models import Delegate
 
 
 class DelegateList(generics.ListCreateAPIView, ListUpdateModelMixin):
@@ -37,4 +35,5 @@ class DelegateDetail(generics.RetrieveUpdateDestroyAPIView):
     authentication_classes = (SessionAuthentication, )
     queryset = Delegate.objects.all()
     permission_classes = (permissions.DelegateDetailPermission, )
-    serializer_class = DelegateNestedSerializer
+    serializer_class = DelegateSerializer
+
