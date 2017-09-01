@@ -12,10 +12,12 @@ from django.utils import timezone
 
 from huxley.accounts.models import User, School
 from huxley.api import validators
+from huxley.api.serializers.delegate import DelegateNestedSerializer
 from huxley.api.serializers.school import SchoolSerializer
 
 
 class UserSerializer(ModelSerializer):
+    delegate = DelegateNestedSerializer(required=False)
     school = SchoolSerializer(required=False)
 
     class Meta:

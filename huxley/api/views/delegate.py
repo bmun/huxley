@@ -9,7 +9,7 @@ from huxley.api.mixins import ListUpdateModelMixin
 from huxley.api import permissions
 from huxley.api.serializers import AssignmentSerializer, CommitteeSerializer, \
                                    CountrySerializer, DelegateSerializer, \
-                                   SchoolSerializer
+                                   DelegateNestedSerializer, SchoolSerializer
 from huxley.core.models import Assignment, Committee, Country, Delegate, School
 
 
@@ -37,22 +37,4 @@ class DelegateDetail(generics.RetrieveUpdateDestroyAPIView):
     authentication_classes = (SessionAuthentication, )
     queryset = Delegate.objects.all()
     permission_classes = (permissions.DelegateDetailPermission, )
-    serializer_class = DelegateSerializer
-
-    def get(self, request, format=None, **kwargs):
-        delegate_id = kwargs['pk']
-        delegate = Delegate.objects.get(id=delegate_id)
-        school = delegate.school
-        assignment = delegate.assignment
-        committee = assignment.committee
-        country = assignment.country
-
-        print delegate
-
-        return Response({
-            'delegate': DelegateSerializer(delegate).data,
-            'school': SchoolSerializer(school).data,
-            'assignment': AssignmentSerializer(assignment).data,
-            'committee': CommitteeSerializer(committee).data,
-            'country': CountrySerializer(country).data
-        })
+    serializer_class = DelegateNestedSerializer

@@ -30,18 +30,9 @@ const DelegateProfileView = React.createClass({
 
   getInitialState() {
     var user = CurrentUserStore.getCurrentUser();
-    var committees = CommitteeStore.getCommittees();
-    var countries = CountryStore.getCountries();
-    var delegate = DelegateStore.getDelegate(user.delegate);
-    var assignment =
-      delegate && AssignmentStore.getAssignment(delegate.assignment);
-    var school = delegate && SchoolStore.getSchool(delegate.school);
+    var delegate = user.delegate //DelegateStore.getDelegate(user.delegate);
     return {
-      assignment: assignment,
-      committees: committees,
-      countries: countries,
       delegate: delegate,
-      school: school,
     };
   },
 
@@ -52,71 +43,43 @@ const DelegateProfileView = React.createClass({
     }
   },
 
-  componentDidMount() {
-    var user = CurrentUserStore.getCurrentUser();
-    this._assignmentToken = AssignmentStore.addListener(() => {
-      var delegate = this.state.delegate;
-      this.setState({
-        assignment:
-          delegate && AssignmentStore.getAssignment(delegate.assignment),
-      });
-    });
+  // componentDidMount() {
+  //   var user = CurrentUserStore.getCurrentUser();
 
-    this._committeesToken = CommitteeStore.addListener(() => {
-      this.setState({committees: CommitteeStore.getCommittees()});
-    });
+  //   this._delegateToken = DelegateStore.addListener(() => {
+  //     var delegate = DelegateStore.getDelegate(user.delegate);
+  //     this.setState({
+  //       delegate: delegate,
+  //     });
+  //   });
+  // },
 
-    this._countriesToken = CountryStore.addListener(() => {
-      this.setState({countries: CountryStore.getCountries()});
-    });
-
-    this._delegateToken = DelegateStore.addListener(() => {
-      var delegate = DelegateStore.getDelegate(user.delegate);
-      this.setState({
-        delegate: delegate,
-        assignment: AssignmentStore.getAssignment(delegate.assignment),
-        school: SchoolStore.getSchool(delegate.school),
-      });
-    });
-
-    this._schoolToken = SchoolStore.addListener(() => {
-      var delegate = this.state.delegate;
-      this.setState({
-        school: delegate && SchoolStore.getSchool(delegate.school),
-      });
-    });
-  },
-
-  componentWillUnmount() {
-    this._assignmentToken && this._assignmentToken.remove();
-    this._committeesToken && this._committeesToken.remove();
-    this._countriesToken && this._countriesToken.remove();
-    this._delegateToken && this._delegateToken.remove();
-    this._schoolToken && this._schoolToken.remove();
-  },
+  // componentWillUnmount() {
+  //   this._delegateToken && this._delegateToken.remove();
+  // },
 
   render() {
     var user = CurrentUserStore.getCurrentUser();
-    var assignment = this.state.assignment;
-    var committees = this.state.committees;
-    var countries = this.state.countries;
     var delegate = this.state.delegate;
-    var school = this.state.school;
+    var assignment = delegate && delegate.assignment;
+    var committee = delegate && delegate.assignment.committee;
+    var country = delegate && delegate.assignment.country;
+    var school = delegate && delegate.school;
     var text = <div />;
 
     if (
       assignment &&
       school &&
-      Object.keys(committees).length &&
-      Object.keys(countries).length
+      committee &&
+      country
     ) {
       text = (
         <TextTemplate
           firstName={delegate.name}
           schoolName={school.name}
           conferenceSession={conference.session}
-          committee={committees[assignment.committee].full_name}
-          country={countries[assignment.country].name}>
+          committee={committee.full_name}
+          country={country.name}>
           {DelegateProfileViewText}
         </TextTemplate>
       );

@@ -80,11 +80,6 @@ class AssignmentStore extends Store {
           _previousUserID = userID;
         }
         break;
-      case ActionConstants.DELEGATE_FETCHED:
-        const assignment = action.values.assignment;
-        _assignments[assignment.id] = assignment;
-        _assignmentsFetched = true;
-        break;
       default:
         return;
     }

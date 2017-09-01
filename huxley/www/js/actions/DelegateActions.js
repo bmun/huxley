@@ -33,12 +33,12 @@ var DelegateActions = {
     });
   },
 
-  delegateFetched(values) {
-    Dispatcher.dispatch({
-      actionType: ActionConstants.DELEGATE_FETCHED,
-      values: values,
-    });
-  },
+  // delegateFetched(values) {
+  //   Dispatcher.dispatch({
+  //     actionType: ActionConstants.DELEGATE_FETCHED,
+  //     values: values,
+  //   });
+  // },
 
   delegatesFetched(delegates) {
     Dispatcher.dispatch({

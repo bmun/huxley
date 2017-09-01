@@ -20,13 +20,13 @@ class DelegateStore extends Store {
   getDelegate(delegateID) {
     if (!_delegatesFetched) {
       ServerAPI.getDelegate(delegateID).then(value => {
-        DelegateActions.delegateFetched(value);
+        DelegateActions.delegatesFetched([value]);
       });
 
       return null;
     }
 
-    return delegateId in _delegates ? _delegates[delegateID] : null;
+    return delegateID in _delegates ? _delegates[delegateID] : null;
   }
 
   getSchoolDelegates(schoolID) {
@@ -105,11 +105,11 @@ class DelegateStore extends Store {
         }
         _delegatesFetched = true;
         break;
-      case ActionConstants.DELEGATE_FETCHED:
-        const delegate = action.values.delegate;
-        _delegates[delegate.id] = delegate;
-        _delegatesFetched = true;
-        break;
+      // case ActionConstants.DELEGATE_FETCHED:
+      //   const delegate = action.values.delegate;
+      //   _delegates[delegate.id] = delegate;
+      //   _delegatesFetched = true;
+      //   break;
       case ActionConstants.UPDATE_DELEGATES:
         this.updateDelegates(
           action.schoolID,

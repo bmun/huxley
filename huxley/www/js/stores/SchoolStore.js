@@ -45,11 +45,6 @@ class SchoolStore extends Store {
           _previousUserID = userID;
         }
         break;
-      case ActionConstants.DELEGATE_FETCHED:
-        const school = action.values.school;
-        _schools[school.id] = school;
-        _schoolsFetched = true;
-        break;
       default:
         return;
     }
