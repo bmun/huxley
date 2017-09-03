@@ -6,12 +6,14 @@
 'use strict';
 
 var ActionConstants = require('constants/ActionConstants');
+var CurrentUserStore = require('stores/CurrentUserStore');
 var Dispatcher = require('dispatcher/Dispatcher');
 var RegistrationActions = require('actions/RegistrationActions');
 var ServerAPI = require('lib/ServerAPI');
 var {Store} = require('flux/utils');
 
 var _registration = null;
+var _previousUserID = -1;
 
 class RegistrationStore extends Store {
   getRegistration(schoolID, conferenceID) {
@@ -47,6 +49,13 @@ class RegistrationStore extends Store {
           action.delta,
           action.onError,
         );
+        break;
+      case ActionConstants.LOGIN:
+        var userID = CurrentUserStore.getCurrentUser().id;
+        if (userID != _previousUserID) {
+          _registration = null;
+          _previousUserID = userID;
+        }
         break;
       default:
         return;
