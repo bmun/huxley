@@ -24,11 +24,6 @@ class CurrentUserStore extends Store {
     return this._currentUser;
   }
 
-  getFinalized() {
-    this._assertBootstrapped();
-    return this._currentUser.school.assignments_finalized;
-  }
-
   addListener(callback) {
     this._assertBootstrapped();
     return super.addListener(callback);

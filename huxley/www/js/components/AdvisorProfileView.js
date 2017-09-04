@@ -7,6 +7,7 @@
 
 const React = require('react');
 
+var _accessSafe = require('utils/_accessSafe');
 const Button = require('components/core/Button');
 const InnerView = require('components/InnerView');
 const LogoutButton = require('components/LogoutButton');
@@ -14,6 +15,7 @@ const ConferenceContext = require('components/ConferenceContext');
 const CurrentUserActions = require('actions/CurrentUserActions');
 const PhoneInput = require('components/PhoneInput');
 const ProgramTypes = require('constants/ProgramTypes');
+const RegistrationStore = require('stores/RegistrationStore');
 const StatusLabel = require('components/core/StatusLabel');
 const Table = require('components/core/Table');
 const TextInput = require('components/core/TextInput');
@@ -40,6 +42,7 @@ const AdvisorProfileView = React.createClass({
   getInitialState: function() {
     var user = this.props.user;
     var school = User.getSchool(user);
+    var conferenceID = this.context.conference.session;
     return {
       errors: {},
       first_name: user.first_name,
@@ -56,17 +59,38 @@ const AdvisorProfileView = React.createClass({
       secondary_phone: school.secondary_phone,
       loading: false,
       success: false,
+      registration: RegistrationStore.getRegistration(school.id, conferenceID),
     };
+  },
+
+  componentDidMount: function() {
+    var schoolID = User.getSchool(this.props.user).id;
+    var conferenceID = this.context.conference.session;
+    this._registrationToken = RegistrationStore.addListener(() => {
+      this.setState({
+        registration: RegistrationStore.getRegistration(schoolID, conferenceID),
+      });
+    });
   },
 
   componentWillUnmount: function() {
     this._successTimout && clearTimeout(this._successTimeout);
+    this._registrationToken && this._registrationToken.remove();
   },
 
   render: function() {
     var conference = this.context.conference;
     var user = this.props.user;
     var school = User.getSchool(user);
+    var registration = this.state.registration;
+    var fees_owed =
+      _accessSafe(registration, 'fees_owed') == null
+        ? null
+        : registration.fees_owed.toFixed(2);
+    var fees_paid =
+      _accessSafe(registration, 'fees_paid') == null
+        ? null
+        : registration.fees_paid.toFixed(2);
     return (
       <InnerView>
         <TextTemplate
@@ -77,7 +101,7 @@ const AdvisorProfileView = React.createClass({
           {AdvisorProfileViewText}
         </TextTemplate>
         <form onSubmit={this._handleSubmit}>
-          <Table emptyMessage="" isEmpty={false}>
+          <Table emptyMessage="" isEmpty={registration == null}>
             <thead>
               <tr>
                 <th colSpan="2">Advisor Information</th>
@@ -151,7 +175,9 @@ const AdvisorProfileView = React.createClass({
               <tr>
                 <td>Waitlisted</td>
                 <td>
-                  {school.waitlist == true ? 'Yes' : 'No'}
+                  {_accessSafe(registration, 'is_waitlisted') == true
+                    ? 'Yes'
+                    : 'No'}
                 </td>
               </tr>
               <tr>
@@ -172,37 +198,39 @@ const AdvisorProfileView = React.createClass({
               <tr>
                 <td>Number of Beginner Delegates</td>
                 <td>
-                  {school.beginner_delegates}
+                  {_accessSafe(registration, 'num_beginner_delegates')}
                 </td>
               </tr>
               <tr>
                 <td>Number of Intermediate Delegates</td>
                 <td>
-                  {school.intermediate_delegates}
+                  {_accessSafe(registration, 'num_intermediate_delegates')}
                 </td>
               </tr>
               <tr>
                 <td>Number of Advanced Delegates</td>
                 <td>
-                  {school.advanced_delegates}
+                  {_accessSafe(registration, 'num_advanced_delegates')}
                 </td>
               </tr>
               <tr>
                 <td>Number of Spanish Speaking Delegates</td>
                 <td>
-                  {school.spanish_speaking_delegates}
+                  {_accessSafe(registration, 'num_spanish_speaking_delegates')}
                 </td>
               </tr>
               <tr>
                 <td>Number of Chinese Speaking Delegates</td>
                 <td>
-                  {school.chinese_speaking_delegates}
+                  {_accessSafe(registration, 'num_chinese_speaking_delegates')}
                 </td>
               </tr>
               <tr>
                 <td>All Waivers Completed?</td>
                 <td>
-                  {school.waivers_completed ? 'Yes' : 'No'}
+                  {_accessSafe(registration, 'waivers_completed')
+                    ? 'Yes'
+                    : 'No'}
                 </td>
               </tr>
               <tr>
@@ -283,19 +311,19 @@ const AdvisorProfileView = React.createClass({
               <tr>
                 <td>Fees Owed</td>
                 <td>
-                  {'$' + school.fees_owed.toFixed(2)}
+                  {'$' + fees_owed}
                 </td>
               </tr>
               <tr>
                 <td>Fees Paid</td>
                 <td>
-                  {'$' + school.fees_paid.toFixed(2)}
+                  {'$' + fees_paid}
                 </td>
               </tr>
               <tr>
                 <td>Balance</td>
                 <td>
-                  {'$' + (school.fees_owed - school.fees_paid).toFixed(2)}
+                  {'$' + (fees_owed - fees_paid)}
                 </td>
               </tr>
             </tbody>

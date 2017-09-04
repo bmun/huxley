@@ -8,6 +8,7 @@
 var React = require('react');
 var ReactRouter = require('react-router');
 
+var _accessSafe = require('utils/_accessSafe');
 var AssignmentActions = require('actions/AssignmentActions');
 var AssignmentStore = require('stores/AssignmentStore');
 var Button = require('components/core/Button');
@@ -20,6 +21,8 @@ var DelegateActions = require('actions/DelegateActions');
 var DelegateSelect = require('components/DelegateSelect');
 var DelegateStore = require('stores/DelegateStore');
 var InnerView = require('components/InnerView');
+var RegistrationActions = require('actions/RegistrationActions');
+var RegistrationStore = require('stores/RegistrationStore');
 var ServerAPI = require('lib/ServerAPI');
 var Table = require('components/core/Table');
 var TextTemplate = require('components/core/TextTemplate');
@@ -37,6 +40,7 @@ var AdvisorAssignmentsView = React.createClass({
     var schoolID = CurrentUserStore.getCurrentUser().school.id;
     var delegates = DelegateStore.getSchoolDelegates(schoolID);
     var assigned = this.prepareAssignedDelegates(delegates);
+    var conferenceID = this.context.conference.session;
     return {
       assigned: assigned,
       assignments: AssignmentStore.getSchoolAssignments(schoolID).filter(
@@ -47,10 +51,14 @@ var AdvisorAssignmentsView = React.createClass({
       delegates: delegates,
       loading: false,
       success: false,
+      registration: RegistrationStore.getRegistration(schoolID, conferenceID),
     };
   },
 
   componentDidMount: function() {
+    var schoolID = CurrentUserStore.getCurrentUser().school.id;
+    var conferenceID = this.context.conference.session;
+
     this._committeesToken = CommitteeStore.addListener(() => {
       this.setState({committees: CommitteeStore.getCommittees()});
     });
@@ -70,11 +78,16 @@ var AdvisorAssignmentsView = React.createClass({
     });
 
     this._assignmentsToken = AssignmentStore.addListener(() => {
-      var schoolID = CurrentUserStore.getCurrentUser().school.id;
       this.setState({
         assignments: AssignmentStore.getSchoolAssignments(schoolID).filter(
           assignment => !assignment.rejected,
         ),
+      });
+    });
+
+    this._registrationToken = RegistrationStore.addListener(() => {
+      this.setState({
+        registration: RegistrationStore.getRegistration(schoolID, conferenceID),
       });
     });
   },
@@ -85,17 +98,22 @@ var AdvisorAssignmentsView = React.createClass({
     this._countriesToken && this._countriesToken.remove();
     this._delegatesToken && this._delegatesToken.remove();
     this._assignmentsToken && this._assignmentsToken.remove();
+    this._registrationToken && this._registrationToken.remove();
   },
 
   render: function() {
-    var finalized = CurrentUserStore.getFinalized();
+    var finalized =
+      _accessSafe(this.state.registration, 'assignments_finalized') == null
+        ? false
+        : this.state.registration.assignments_finalized;
     var committees = this.state.committees;
     var conference = this.context.conference;
     var countries = this.state.countries;
     var shouldRenderAssignments =
       Object.keys(committees).length > 0 &&
       Object.keys(countries).length > 0 &&
-      this.state.assignments.length > 0;
+      this.state.assignments.length > 0 &&
+      this.state.registration;
     return (
       <InnerView>
         <TextTemplate conferenceSession={conference.session}>
@@ -135,7 +153,10 @@ var AdvisorAssignmentsView = React.createClass({
   renderAssignmentRows: function() {
     var committees = this.state.committees;
     var countries = this.state.countries;
-    var finalized = CurrentUserStore.getFinalized();
+    var finalized =
+      _accessSafe(this.state.registration, 'assignments_finalized') == null
+        ? false
+        : this.state.registration.assignments_finalized;
     return this.state.assignments.map(
       function(assignment) {
         return (
@@ -250,10 +271,9 @@ var AdvisorAssignmentsView = React.createClass({
     var confirm = window.confirm(
       'By pressing okay you are committing to the financial responsibility of each assignment. Are you sure you want to finalize assignments?',
     );
-    var school = CurrentUserStore.getCurrentUser().school;
     if (confirm) {
-      CurrentUserActions.updateSchool(
-        school.id,
+      RegistrationActions.updateRegistration(
+        this.state.registration.id,
         {
           assignments_finalized: true,
         },

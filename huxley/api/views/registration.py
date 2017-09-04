@@ -22,7 +22,7 @@ class RegistrationList(generics.ListCreateAPIView):
         conference_session = query_params.get('conference_id', None)
         if school_id and conference_session:
             queryset = queryset.filter(
-                school_id=school_id, conference_session=conference_session)
+                school_id=school_id, conference_id=conference_session)
 
         return queryset
 
