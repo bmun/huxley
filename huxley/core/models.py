@@ -217,12 +217,11 @@ class Registration(models.Model):
                     'in November and is due shortly after that.\n\n'
                     'If you have any students that need financial assistance, '
                     'we encourage them to apply for our Alumni Scholarship '
-                    'at http://bmun.org/alumni-scholarship/. This year we will be '
-                    'awarding up to $13,000 to those that apply.\n\n'
+                    'at http://bmun.org/alumni-scholarship/.\n\n'
                     'If you have any questions, please contact info@bmun.org.\n\n'
                     'Thank you for registering for BMUN, and we look forward to '
                     'seeing you at the oldest high school conference in the world '
-                    'on March 3-5, 2017.' %
+                    'on March 2-4, 2018.' %
                     (conference.session, int(registration_fee),
                      int(delegate_fee)),
                     'no-reply@bmun.org', [registration.school.primary_email],
