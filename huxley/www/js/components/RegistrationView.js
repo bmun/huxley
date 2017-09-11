@@ -467,7 +467,7 @@ var RegistrationView = React.createClass({
   },
 
   _handleProgramTypeChange: function(event) {
-    this.setState({program_type: event.target.value});
+    this.setState({program_type: parseInt(event.target.value)});
   },
 
   _handleCommitteePreferenceChange: function(committee) {

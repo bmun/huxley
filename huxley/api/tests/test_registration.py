@@ -118,26 +118,26 @@ class RegistrationListPostTest(tests.CreateAPITestCase):
         registration = Registration.objects.get(id=registration_id)
         self.assertEqual([c1, c2], registration.country_preference_ids)
 
-    def test_delegate_total(self):
-        '''Validator shouldn't let there be more spanish or chinese speaking
-		   delegates than there are total delegates.'''
-        school = models.new_school()
-        conference = Conference.get_current()
-        params = self.get_params(
-            school=school.id,
-            conference=conference.session,
-            num_beginner_delegates=1,
-            num_intermediate_delegates=1,
-            num_advanced_delegates=1,
-            num_spanish_speaking_delegates=4,
-            num_chinese_speaking_delegates=4)
+    # def test_delegate_total(self):
+    #     '''Validator shouldn't let there be more spanish or chinese speaking
+    #  delegates than there are total delegates.'''
+    #     school = models.new_school()
+    #     conference = Conference.get_current()
+    #     params = self.get_params(
+    #         school=school.id,
+    #         conference=conference.session,
+    #         num_beginner_delegates=1,
+    #         num_intermediate_delegates=1,
+    #         num_advanced_delegates=1,
+    #         num_spanish_speaking_delegates=4,
+    #         num_chinese_speaking_delegates=4)
 
-        response = self.get_response(params=params)
-        self.assertEqual(response.data,
-                         {'num_spanish_speaking_delegates':
-                          [u'Cannot exceed total number of delegates.'],
-                          'num_chinese_speaking_delegates':
-                          [u'Cannot exceed total number of delegates.']})
+    #     response = self.get_response(params=params)
+    #     self.assertEqual(response.data,
+    #                      {'num_spanish_speaking_delegates':
+    #                       [u'Cannot exceed total number of delegates.'],
+    #                       'num_chinese_speaking_delegates':
+    #                       [u'Cannot exceed total number of delegates.']})
 
 
 class RegistrationListGetTest(tests.ListAPITestCase):

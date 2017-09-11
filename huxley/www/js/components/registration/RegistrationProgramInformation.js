@@ -65,7 +65,7 @@ const RegistrationProgramInformation = React.createClass({
               <input
                 type="radio"
                 value={ProgramTypes.CLASS}
-                checked={this.props.propTypes == ProgramTypes.CLASS}
+                checked={this.props.programType == ProgramTypes.CLASS}
                 onChange={this.props.handleProgramTypeChange}
               />{' '}
               Class
