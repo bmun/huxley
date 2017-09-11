@@ -21,25 +21,6 @@ const RegistrationSecondaryContact = React.createClass({
     isInternational: React.PropTypes.bool,
   },
 
-  shouldComponentUpdate: function(nextProps, nextState) {
-    for (let key in this.props.secondaryContactInformation) {
-      if (
-        this.props.secondaryContactInformation[key] !==
-        nextProps.secondaryContactInformation[key]
-      ) {
-        return true;
-      }
-    }
-
-    for (let key in this.props.errors) {
-      if (this.props.errors[key] !== nextProps.errors[key]) {
-        return true;
-      }
-    }
-
-    return this.props.isInternational !== nextProps.isInternational;
-  },
-
   render: function() {
     var accessHandlers = _accessSafe.bind(this, this.props.handlers);
     var accessSecondary = _accessSafe.bind(
