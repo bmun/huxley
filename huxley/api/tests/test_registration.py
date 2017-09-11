@@ -120,7 +120,7 @@ class RegistrationListPostTest(tests.CreateAPITestCase):
 
     # def test_delegate_total(self):
     #     '''Validator shouldn't let there be more spanish or chinese speaking
-		  #  delegates than there are total delegates.'''
+    #  delegates than there are total delegates.'''
     #     school = models.new_school()
     #     conference = Conference.get_current()
     #     params = self.get_params(

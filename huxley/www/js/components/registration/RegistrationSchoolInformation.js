@@ -89,13 +89,13 @@ const RegistrationSchoolInformation = React.createClass({
         />
         <RegistrationTextInput
           errors={accessErrors('school_state')}
-          placeholder= {this.props.schoolInternational ? "Province" : "State"}
+          placeholder={this.props.schoolInternational ? 'Province' : 'State'}
           onChange={accessHandlers('school_state')}
           value={accessSchool('school_state')}
         />
         <RegistrationTextInput
           errors={accessErrors('school_zip')}
-          placeholder={this.props.schoolInternational ? "Postal Code" : "Zip"}
+          placeholder={this.props.schoolInternational ? 'Postal Code' : 'Zip'}
           onChange={accessHandlers('school_zip')}
           value={accessSchool('school_zip')}
         />
