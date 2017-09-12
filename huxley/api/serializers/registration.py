@@ -50,7 +50,6 @@ class RegistrationSerializer(serializers.ModelSerializer):
             'registration_comments': {'required': False}
         }
 
-
     def is_registration_valid(self, raise_exception=False):
         setattr(self.fields['school'], 'read_only', True)
         is_valid = super(RegistrationSerializer, self).is_valid()
