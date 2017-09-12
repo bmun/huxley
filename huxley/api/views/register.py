@@ -26,13 +26,13 @@ class Register(generics.GenericAPIView):
 
     def register(self, request, *args, **kwargs):
         user_data = request.data['user']
-        registration_data = request.data['registration']
         user_serializer = self.serializer_classes['user'](data=user_data)
+        is_user_valid = user_serializer.is_valid()
+
+        registration_data = request.data['registration']
         registration_serializer = self.serializer_classes['registration'](
             data=registration_data)
-        is_user_valid = user_serializer.is_valid()
-        is_registration_valid = self.is_registration_valid(
-            registration_serializer)
+        is_registration_valid = registration_serializer.is_registration_valid()
 
         if is_user_valid and is_registration_valid:
             user_serializer.save()
@@ -51,8 +51,3 @@ class Register(generics.GenericAPIView):
             response_status = status.HTTP_400_BAD_REQUEST
 
         return response.Response(data, status=response_status)
-
-    def is_registration_valid(self, registration_serializer):
-        registration_serializer.is_valid()
-        errors = registration_serializer.errors
-        return len(errors) == 1 and 'school' in errors

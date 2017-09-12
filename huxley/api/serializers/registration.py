@@ -50,30 +50,36 @@ class RegistrationSerializer(serializers.ModelSerializer):
             'registration_comments': {'required': False}
         }
 
-    ## This causes an issue during registration; see issue #622
-    # def validate(self, data):
-    #     invalid_fields = {}
 
-    #     num_beginner_delegates = data.get('num_beginner_delegates')
-    #     num_intermediate_delegates = data.get('num_intermediate_delegates')
-    #     num_advanced_delegates = data.get('num_advanced_delegates')
-    #     num_spanish_speaking_delegates = data.get(
-    #         'num_spanish_speaking_delegates')
-    #     num_chinese_speaking_delegates = data.get(
-    #         'num_chinese_speaking_delegates')
+    def is_registration_valid(self, raise_exception=False):
+        setattr(self.fields['school'], 'read_only', True)
+        is_valid = super(RegistrationSerializer, self).is_valid()
+        setattr(self.fields['school'], 'read_only', False)
+        return is_valid
 
-    #     total_delegates = sum(
-    #         (num_beginner_delegates or 0, num_intermediate_delegates or 0,
-    #          num_advanced_delegates or 0))
+    def validate(self, data):
+        invalid_fields = {}
 
-    #     if num_spanish_speaking_delegates > total_delegates:
-    #         invalid_fields[
-    #             'num_spanish_speaking_delegates'] = 'Cannot exceed total number of delegates.'
-    #     if num_chinese_speaking_delegates > total_delegates:
-    #         invalid_fields[
-    #             'num_chinese_speaking_delegates'] = 'Cannot exceed total number of delegates.'
+        num_beginner_delegates = data.get('num_beginner_delegates')
+        num_intermediate_delegates = data.get('num_intermediate_delegates')
+        num_advanced_delegates = data.get('num_advanced_delegates')
+        num_spanish_speaking_delegates = data.get(
+            'num_spanish_speaking_delegates')
+        num_chinese_speaking_delegates = data.get(
+            'num_chinese_speaking_delegates')
 
-    #     if invalid_fields:
-    #         raise serializers.ValidationError(invalid_fields)
+        total_delegates = sum(
+            (num_beginner_delegates or 0, num_intermediate_delegates or 0,
+             num_advanced_delegates or 0))
 
-    #     return data
+        if num_spanish_speaking_delegates > total_delegates:
+            invalid_fields[
+                'num_spanish_speaking_delegates'] = 'Cannot exceed total number of delegates.'
+        if num_chinese_speaking_delegates > total_delegates:
+            invalid_fields[
+                'num_chinese_speaking_delegates'] = 'Cannot exceed total number of delegates.'
+
+        if invalid_fields:
+            raise serializers.ValidationError(invalid_fields)
+
+        return data
