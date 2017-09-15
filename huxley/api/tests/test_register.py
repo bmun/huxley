@@ -11,48 +11,49 @@ from huxley.core.models import Registration, School
 
 class RegisterTestCase(tests.CreateAPITestCase):
     url_name = 'api:register'
+    params = {
+        'user': {
+            'first_name': 'Trevor',
+            'last_name': 'Dowds',
+            'username': 'tdowds',
+            'email': 'tdowds@huxley.org',
+            'password': 'password',
+            'school': {
+                'name': 'The Trevor School',
+                'address': '123 School Way',
+                'city': 'School City',
+                'state': 'CA',
+                'zip_code': '12345',
+                'country': 'USA',
+                'international': False,
+                'program_type': ProgramTypes.CLUB,
+                'times_attended': 0,
+                'primary_name': 'Trevor Dowds',
+                'primary_gender': ContactGender.MALE,
+                'primary_email': 'tdowds@huxley.org',
+                'primary_phone': '(999) 999-9999',
+                'primary_type': ContactType.FACULTY,
+                'secondary_name': '',
+                'secondary_gender': ContactGender.MALE,
+                'secondary_email': '',
+                'secondary_phone': '',
+                'secondary_type': ContactType.FACULTY,
+            },
+        },
+        'registration': {
+            'conference': 65,
+            'num_beginner_delegates': 1,
+            'num_intermediate_delegates': 0,
+            'num_advanced_delegates': 0,
+            'num_spanish_speaking_delegates': 0,
+            'num_chinese_speaking_delegates': 0,
+        }
+    }
 
     def test_valid(self):
-        params = {
-            'user': {
-                'first_name': 'Trevor',
-                'last_name': 'Dowds',
-                'username': 'tdowds',
-                'email': 'tdowds@huxley.org',
-                'password': 'password',
-                'school': {
-                    'name': 'The Trevor School',
-                    'address': '123 School Way',
-                    'city': 'School City',
-                    'state': 'CA',
-                    'zip_code': '12345',
-                    'country': 'USA',
-                    'international': False,
-                    'program_type': ProgramTypes.CLUB,
-                    'times_attended': 0,
-                    'primary_name': 'Trevor Dowds',
-                    'primary_gender': ContactGender.MALE,
-                    'primary_email': 'tdowds@huxley.org',
-                    'primary_phone': '(999) 999-9999',
-                    'primary_type': ContactType.FACULTY,
-                    'secondary_name': '',
-                    'secondary_gender': ContactGender.MALE,
-                    'secondary_email': '',
-                    'secondary_phone': '',
-                    'secondary_type': ContactType.FACULTY,
-                },
-            },
-            'registration': {
-                'conference': 65,
-                'num_beginner_delegates': 1,
-                'num_intermediate_delegates': 0,
-                'num_advanced_delegates': 0,
-                'num_spanish_speaking_delegates': 0,
-                'num_chinese_speaking_delegates': 0,
-            }
-        }
-
-        response = self.get_response(params=params)
+        '''It creates User, School, and Registration model instances for a
+           successful request and returns them in the response.'''
+        response = self.get_response(params=self.params)
         user_query = User.objects.filter(id=response.data['user']['id'])
         self.assertTrue(user_query.exists())
         school_query = School.objects.filter(
@@ -124,9 +125,10 @@ class RegisterTestCase(tests.CreateAPITestCase):
             }
         })
 
-    def test_invalid(self):
-        params = {
-            'user': {
+    def test_empty(self):
+        '''It returns errors for all required fields.'''
+        params = self.get_params(
+            user={
                 'first_name': '',
                 'last_name': '',
                 'username': '',
@@ -154,15 +156,14 @@ class RegisterTestCase(tests.CreateAPITestCase):
                     'secondary_type': ContactType.FACULTY,
                 },
             },
-            'registration': {
+            registration={
                 'conference': '',
                 'num_beginner_delegates': '',
                 'num_intermediate_delegates': '',
                 'num_advanced_delegates': '',
                 'num_spanish_speaking_delegates': '',
                 'num_chinese_speaking_delegates': '',
-            }
-        }
+            })
 
         response = self.get_response(params=params)
         self.assertEqual(response.data, {
@@ -190,3 +191,29 @@ class RegisterTestCase(tests.CreateAPITestCase):
             'num_intermediate_delegates': ['A valid integer is required.'],
             'num_beginner_delegates': ['A valid integer is required.'],
         })
+        self.assertFalse(User.objects.all().exists())
+        self.assertFalse(School.objects.all().exists())
+        self.assertFalse(Registration.objects.all().exists())
+
+    def test_reg_invalid(self):
+        '''It does not create User and School model instances on an invalid
+           input for Registration and valid inputs for User and School.'''
+        params = self.get_params(registration={
+            'conference': '65',
+            'num_beginner_delegates': 1,
+            'num_intermediate_delegates': 0,
+            'num_advanced_delegates': 0,
+            'num_spanish_speaking_delegates': 2,
+            'num_chinese_speaking_delegates': 2,
+        })
+
+        response = self.get_response(params=params)
+        self.assertEqual(response.data, {
+            'num_spanish_speaking_delegates':
+            ['Cannot exceed total number of delegates.'],
+            'num_chinese_speaking_delegates':
+            ['Cannot exceed total number of delegates.']
+        })
+        self.assertFalse(User.objects.all().exists())
+        self.assertFalse(School.objects.all().exists())
+        self.assertFalse(Registration.objects.all().exists())
