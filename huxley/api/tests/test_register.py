@@ -163,8 +163,7 @@ class RegisterTestCase(tests.CreateAPITestCase):
                 'num_advanced_delegates': '',
                 'num_spanish_speaking_delegates': '',
                 'num_chinese_speaking_delegates': '',
-            }
-        )
+            })
 
         response = self.get_response(params=params)
         self.assertEqual(response.data, {
@@ -196,7 +195,6 @@ class RegisterTestCase(tests.CreateAPITestCase):
         self.assertFalse(School.objects.all().exists())
         self.assertFalse(Registration.objects.all().exists())
 
-
     def test_reg_invalid(self):
         '''It does not create User and School model instances on an invalid
            input for Registration and valid inputs for User and School.'''
@@ -211,8 +209,10 @@ class RegisterTestCase(tests.CreateAPITestCase):
 
         response = self.get_response(params=params)
         self.assertEqual(response.data, {
-            'num_spanish_speaking_delegates': ['Cannot exceed total number of delegates.'],
-            'num_chinese_speaking_delegates': ['Cannot exceed total number of delegates.']
+            'num_spanish_speaking_delegates':
+            ['Cannot exceed total number of delegates.'],
+            'num_chinese_speaking_delegates':
+            ['Cannot exceed total number of delegates.']
         })
         self.assertFalse(User.objects.all().exists())
         self.assertFalse(School.objects.all().exists())
