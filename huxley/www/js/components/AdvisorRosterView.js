@@ -196,7 +196,7 @@ var AdvisorRosterView = React.createClass({
 
   _handleDeleteDelegate: function(delegate) {
     const confirmed = window.confirm(
-      `Are you sure you want to delete this delegate (${delegate.name})?`
+      `Are you sure you want to delete this delegate (${delegate.name})?`,
     );
     if (confirmed) {
       DelegateActions.deleteDelegate(delegate.id, this._handleDeleteError);

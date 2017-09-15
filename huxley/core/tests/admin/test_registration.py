@@ -21,7 +21,7 @@ class RegistrationAdminTest(TestCase):
         response = self.client.get(reverse('admin:core_registration_info'))
 
         header = [
-            "Registration Time", "School Name", "Total Number of Delegates", 
+            "Registration Time", "School Name", "Total Number of Delegates",
             "Beginners", "Intermediates", "Advanced", "Spanish Speakers",
             "Chinese Speakers", "Country 1", "Country 2", "Country 3",
             "Country 4", "Country 5", "Country 6", "Country 7", "Country 8",
