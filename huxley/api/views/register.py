@@ -37,10 +37,11 @@ class Register(generics.GenericAPIView):
 
             school_id = user_serializer.data['school']['id']
             registration_data['school'] = school_id
-            registration_serializer = self.serializer_classes['registration'](data=registration_data)
+            registration_serializer = self.serializer_classes['registration'](
+                data=registration_data)
             registration_serializer.is_valid(raise_exception=True)
             registration_serializer.save()
 
         data = {'user': user_serializer.data,
-                    'registration': registration_serializer.data}
+                'registration': registration_serializer.data}
         return response.Response(data, status=status.HTTP_200_OK)
