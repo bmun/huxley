@@ -1,6 +1,8 @@
 # Copyright (c) 2011-2017 Berkeley Model United Nations. All rights reserved.
 # Use of this source code is governed by a BSD License (see LICENSE).
 
+from django.db import transaction
+
 from rest_framework import generics, response, status
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.exceptions import PermissionDenied
@@ -26,28 +28,19 @@ class Register(generics.GenericAPIView):
 
     def register(self, request, *args, **kwargs):
         user_data = request.data['user']
-        user_serializer = self.serializer_classes['user'](data=user_data)
-        is_user_valid = user_serializer.is_valid()
-
         registration_data = request.data['registration']
-        registration_serializer = self.serializer_classes['registration'](
-            data=registration_data)
-        is_registration_valid = registration_serializer.is_registration_valid()
 
-        if is_user_valid and is_registration_valid:
+        with transaction.atomic():
+            user_serializer = self.serializer_classes['user'](data=user_data)
+            user_serializer.is_valid(raise_exception=True)
             user_serializer.save()
-            school_id = School.objects.get(name=user_data['school']['name']).id
-            registration_data['school'] = school_id
-            registration_serializer = self.serializer_classes['registration'](
-                data=registration_data)
-            registration_serializer.is_valid()
-            registration_serializer.save()
-            data = {'user': user_serializer.data,
-                    'registration': registration_serializer.data}
-            response_status = status.HTTP_200_OK
-        else:
-            data = registration_serializer.errors.copy()
-            data.update(user_serializer.errors)
-            response_status = status.HTTP_400_BAD_REQUEST
 
-        return response.Response(data, status=response_status)
+            school_id = user_serializer.data['school']['id']
+            registration_data['school'] = school_id
+            registration_serializer = self.serializer_classes['registration'](data=registration_data)
+            registration_serializer.is_valid(raise_exception=True)
+            registration_serializer.save()
+
+        data = {'user': user_serializer.data,
+                    'registration': registration_serializer.data}
+        return response.Response(data, status=status.HTTP_200_OK)

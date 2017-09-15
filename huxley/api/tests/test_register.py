@@ -11,48 +11,47 @@ from huxley.core.models import Registration, School
 
 class RegisterTestCase(tests.CreateAPITestCase):
     url_name = 'api:register'
+    params = {
+        'user': {
+            'first_name': 'Trevor',
+            'last_name': 'Dowds',
+            'username': 'tdowds',
+            'email': 'tdowds@huxley.org',
+            'password': 'password',
+            'school': {
+                'name': 'The Trevor School',
+                'address': '123 School Way',
+                'city': 'School City',
+                'state': 'CA',
+                'zip_code': '12345',
+                'country': 'USA',
+                'international': False,
+                'program_type': ProgramTypes.CLUB,
+                'times_attended': 0,
+                'primary_name': 'Trevor Dowds',
+                'primary_gender': ContactGender.MALE,
+                'primary_email': 'tdowds@huxley.org',
+                'primary_phone': '(999) 999-9999',
+                'primary_type': ContactType.FACULTY,
+                'secondary_name': '',
+                'secondary_gender': ContactGender.MALE,
+                'secondary_email': '',
+                'secondary_phone': '',
+                'secondary_type': ContactType.FACULTY,
+            },
+        },
+        'registration': {
+            'conference': 65,
+            'num_beginner_delegates': 1,
+            'num_intermediate_delegates': 0,
+            'num_advanced_delegates': 0,
+            'num_spanish_speaking_delegates': 0,
+            'num_chinese_speaking_delegates': 0,
+        }
+    }
 
     def test_valid(self):
-        params = {
-            'user': {
-                'first_name': 'Trevor',
-                'last_name': 'Dowds',
-                'username': 'tdowds',
-                'email': 'tdowds@huxley.org',
-                'password': 'password',
-                'school': {
-                    'name': 'The Trevor School',
-                    'address': '123 School Way',
-                    'city': 'School City',
-                    'state': 'CA',
-                    'zip_code': '12345',
-                    'country': 'USA',
-                    'international': False,
-                    'program_type': ProgramTypes.CLUB,
-                    'times_attended': 0,
-                    'primary_name': 'Trevor Dowds',
-                    'primary_gender': ContactGender.MALE,
-                    'primary_email': 'tdowds@huxley.org',
-                    'primary_phone': '(999) 999-9999',
-                    'primary_type': ContactType.FACULTY,
-                    'secondary_name': '',
-                    'secondary_gender': ContactGender.MALE,
-                    'secondary_email': '',
-                    'secondary_phone': '',
-                    'secondary_type': ContactType.FACULTY,
-                },
-            },
-            'registration': {
-                'conference': 65,
-                'num_beginner_delegates': 1,
-                'num_intermediate_delegates': 0,
-                'num_advanced_delegates': 0,
-                'num_spanish_speaking_delegates': 0,
-                'num_chinese_speaking_delegates': 0,
-            }
-        }
-
-        response = self.get_response(params=params)
+        response = self.get_response(params=self.params)
         user_query = User.objects.filter(id=response.data['user']['id'])
         self.assertTrue(user_query.exists())
         school_query = School.objects.filter(
@@ -125,68 +124,17 @@ class RegisterTestCase(tests.CreateAPITestCase):
         })
 
     def test_invalid(self):
-        params = {
-            'user': {
-                'first_name': '',
-                'last_name': '',
-                'username': '',
-                'email': '',
-                'password': '',
-                'school': {
-                    'name': '',
-                    'address': '',
-                    'city': '',
-                    'state': '',
-                    'zip_code': '',
-                    'country': '',
-                    'international': False,
-                    'program_type': ProgramTypes.CLUB,
-                    'times_attended': '',
-                    'primary_name': '',
-                    'primary_gender': ContactGender.UNSPECIFIED,
-                    'primary_email': '',
-                    'primary_phone': '',
-                    'primary_type': ContactType.FACULTY,
-                    'secondary_name': '',
-                    'secondary_gender': ContactGender.UNSPECIFIED,
-                    'secondary_email': 'badformat',
-                    'secondary_phone': '',
-                    'secondary_type': ContactType.FACULTY,
-                },
-            },
-            'registration': {
-                'conference': '',
-                'num_beginner_delegates': '',
-                'num_intermediate_delegates': '',
-                'num_advanced_delegates': '',
-                'num_spanish_speaking_delegates': '',
-                'num_chinese_speaking_delegates': '',
-            }
+        '''It does not create a model instance on an invalid input.'''
+        params = self.get_params()
+        params['registration'] = {
+            'conference': '65',
+            'num_beginner_delegates': 1,
+            'num_intermediate_delegates': 0,
+            'num_advanced_delegates': 0,
+            'num_spanish_speaking_delegates': 2,
+            'num_chinese_speaking_delegates': 2,
         }
 
-        response = self.get_response(params=params)
-        self.assertEqual(response.data, {
-            'first_name': ['This field is required.'],
-            'last_name': ['This field is required.'],
-            'username': ['This field may not be blank.'],
-            'password': ['This field may not be blank.'],
-            'conference': ['This field may not be null.'],
-            'school': {
-                'city': ['This field may not be blank.'],
-                'name': ['This field may not be blank.'],
-                'primary_phone': ['This field may not be blank.'],
-                'secondary_email': ['Enter a valid email address.'],
-                'country': ['This field may not be blank.'],
-                'times_attended': ['A valid integer is required.'],
-                'state': ['This field may not be blank.'],
-                'primary_name': ['This field may not be blank.'],
-                'primary_email': ['This field may not be blank.'],
-                'address': ['This field may not be blank.'],
-                'zip_code': ['This field may not be blank.']
-            },
-            'num_advanced_delegates': ['A valid integer is required.'],
-            'num_spanish_speaking_delegates': ['A valid integer is required.'],
-            'num_chinese_speaking_delegates': ['A valid integer is required.'],
-            'num_intermediate_delegates': ['A valid integer is required.'],
-            'num_beginner_delegates': ['A valid integer is required.'],
-        })
+        self.assertFalse(User.objects.all().exists())
+        self.assertFalse(School.objects.all().exists())
+        self.assertFalse(Registration.objects.all().exists())
