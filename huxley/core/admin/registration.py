@@ -25,8 +25,8 @@ class RegistrationAdmin(admin.ModelAdmin):
 
         writer = csv.writer(registrations)
         writer.writerow([
-            "School Name", "Total Number of Delegates", "Beginners",
-            "Intermediates", "Advanced", "Spanish Speakers",
+            "Registration Time", "School Name", "Total Number of Delegates",
+            "Beginners", "Intermediates", "Advanced", "Spanish Speakers",
             "Chinese Speakers", "Country 1", "Country 2", "Country 3",
             "Country 4", "Country 5", "Country 6", "Country 7", "Country 8",
             "Country 9", "Country 10", "Committee Preferences",
@@ -47,6 +47,7 @@ class RegistrationAdmin(admin.ModelAdmin):
             writer.writerow(
                 [unicode(field).encode('utf8')
                  for field in [
+                     registration.registered_at,
                      registration.school.name,
                      registration.num_beginner_delegates +
                      registration.num_intermediate_delegates +

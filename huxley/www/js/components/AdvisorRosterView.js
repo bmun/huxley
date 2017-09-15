@@ -99,7 +99,6 @@ var AdvisorRosterView = React.createClass({
               onChange={_handleChange.bind(this, 'modal_name')}
               defaultValue={this.state.modal_name}
               value={this.state.modal_name}
-              disabled
             />
             {this.renderError('name')}
             <TextInput
@@ -107,7 +106,6 @@ var AdvisorRosterView = React.createClass({
               onChange={_handleChange.bind(this, 'modal_email')}
               defaultValue={this.state.modal_email}
               value={this.state.modal_email}
-              disabled
             />
             {this.renderError('email')}
             <hr />
@@ -197,12 +195,12 @@ var AdvisorRosterView = React.createClass({
   },
 
   _handleDeleteDelegate: function(delegate) {
-    // const confirmed = window.confirm(
-    //   `Are you sure you want to delete this delegate (${delegate.name})?`
-    // );
-    // if (confirmed) {
-    //   DelegateActions.deleteDelegate(delegate.id, this._handleDeleteError);
-    // }
+    const confirmed = window.confirm(
+      `Are you sure you want to delete this delegate (${delegate.name})?`,
+    );
+    if (confirmed) {
+      DelegateActions.deleteDelegate(delegate.id, this._handleDeleteError);
+    }
   },
 
   _handleAddDelegate: function(data) {
