@@ -51,6 +51,8 @@ class RegisterTestCase(tests.CreateAPITestCase):
     }
 
     def test_valid(self):
+        '''It creates User, School, and Registration model instances for a
+           successful request and returns them in the response.'''
         response = self.get_response(params=self.params)
         user_query = User.objects.filter(id=response.data['user']['id'])
         self.assertTrue(user_query.exists())
@@ -123,8 +125,81 @@ class RegisterTestCase(tests.CreateAPITestCase):
             }
         })
 
-    def test_invalid(self):
-        '''It does not create a model instance on an invalid input.'''
+    def test_empty(self):
+        '''It returns errors for all required fields.'''
+        params = self.get_params(
+            user={
+                'first_name': '',
+                'last_name': '',
+                'username': '',
+                'email': '',
+                'password': '',
+                'school': {
+                    'name': '',
+                    'address': '',
+                    'city': '',
+                    'state': '',
+                    'zip_code': '',
+                    'country': '',
+                    'international': False,
+                    'program_type': ProgramTypes.CLUB,
+                    'times_attended': '',
+                    'primary_name': '',
+                    'primary_gender': ContactGender.UNSPECIFIED,
+                    'primary_email': '',
+                    'primary_phone': '',
+                    'primary_type': ContactType.FACULTY,
+                    'secondary_name': '',
+                    'secondary_gender': ContactGender.UNSPECIFIED,
+                    'secondary_email': 'badformat',
+                    'secondary_phone': '',
+                    'secondary_type': ContactType.FACULTY,
+                },
+            },
+            registration={
+                'conference': '',
+                'num_beginner_delegates': '',
+                'num_intermediate_delegates': '',
+                'num_advanced_delegates': '',
+                'num_spanish_speaking_delegates': '',
+                'num_chinese_speaking_delegates': '',
+            }
+        )
+
+        response = self.get_response(params=params)
+        self.assertEqual(response.data, {
+            'first_name': ['This field is required.'],
+            'last_name': ['This field is required.'],
+            'username': ['This field may not be blank.'],
+            'password': ['This field may not be blank.'],
+            'conference': ['This field may not be null.'],
+            'school': {
+                'city': ['This field may not be blank.'],
+                'name': ['This field may not be blank.'],
+                'primary_phone': ['This field may not be blank.'],
+                'secondary_email': ['Enter a valid email address.'],
+                'country': ['This field may not be blank.'],
+                'times_attended': ['A valid integer is required.'],
+                'state': ['This field may not be blank.'],
+                'primary_name': ['This field may not be blank.'],
+                'primary_email': ['This field may not be blank.'],
+                'address': ['This field may not be blank.'],
+                'zip_code': ['This field may not be blank.']
+            },
+            'num_advanced_delegates': ['A valid integer is required.'],
+            'num_spanish_speaking_delegates': ['A valid integer is required.'],
+            'num_chinese_speaking_delegates': ['A valid integer is required.'],
+            'num_intermediate_delegates': ['A valid integer is required.'],
+            'num_beginner_delegates': ['A valid integer is required.'],
+        })
+        self.assertFalse(User.objects.all().exists())
+        self.assertFalse(School.objects.all().exists())
+        self.assertFalse(Registration.objects.all().exists())
+
+
+    def test_reg_invalid(self):
+        '''It does not create User and School model instances on an invalid
+           input for Registration and valid inputs for User and School.'''
         params = self.get_params(registration={
             'conference': '65',
             'num_beginner_delegates': 1,
@@ -135,6 +210,10 @@ class RegisterTestCase(tests.CreateAPITestCase):
         })
 
         response = self.get_response(params=params)
+        self.assertEqual(response.data, {
+            'num_spanish_speaking_delegates': ['Cannot exceed total number of delegates.'],
+            'num_chinese_speaking_delegates': ['Cannot exceed total number of delegates.']
+        })
         self.assertFalse(User.objects.all().exists())
         self.assertFalse(School.objects.all().exists())
         self.assertFalse(Registration.objects.all().exists())
