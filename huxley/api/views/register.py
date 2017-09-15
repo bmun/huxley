@@ -32,9 +32,15 @@ class Register(generics.GenericAPIView):
 
         with transaction.atomic():
             user_serializer = self.serializer_classes['user'](data=user_data)
-            user_serializer.is_valid(raise_exception=True)
-            user_serializer.save()
+            user_is_valid = user_serializer.is_valid()
+            if not user_is_valid:
+                registration_serializer = self.serializer_classes['registration'](data=registration_data)
+                registration_serializer.is_valid()
+                errors = registration_serializer.errors
+                errors.update(user_serializer.errors)
+                return response.Response(errors, status=status.HTTP_400_BAD_REQUEST)
 
+            user_serializer.save()
             school_id = user_serializer.data['school']['id']
             registration_data['school'] = school_id
             registration_serializer = self.serializer_classes['registration'](

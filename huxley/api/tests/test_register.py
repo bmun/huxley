@@ -125,16 +125,16 @@ class RegisterTestCase(tests.CreateAPITestCase):
 
     def test_invalid(self):
         '''It does not create a model instance on an invalid input.'''
-        params = self.get_params()
-        params['registration'] = {
+        params = self.get_params(registration={
             'conference': '65',
             'num_beginner_delegates': 1,
             'num_intermediate_delegates': 0,
             'num_advanced_delegates': 0,
             'num_spanish_speaking_delegates': 2,
             'num_chinese_speaking_delegates': 2,
-        }
+        })
 
+        response = self.get_response(params=params)
         self.assertFalse(User.objects.all().exists())
         self.assertFalse(School.objects.all().exists())
         self.assertFalse(Registration.objects.all().exists())
