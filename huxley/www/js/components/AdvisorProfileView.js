@@ -219,12 +219,14 @@ const AdvisorProfileView = React.createClass({
                   {_accessSafe(registration, 'num_spanish_speaking_delegates')}
                 </td>
               </tr>
+              {/*
               <tr>
                 <td>Number of Chinese Speaking Delegates</td>
                 <td>
                   {_accessSafe(registration, 'num_chinese_speaking_delegates')}
                 </td>
               </tr>
+              */}
               <tr>
                 <td>All Waivers Completed?</td>
                 <td>
