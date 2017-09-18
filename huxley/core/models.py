@@ -214,7 +214,7 @@ class Registration(models.Model):
                     'If you do not pay by the deadline, then you will be dropped to our waitlist.\n\n'
                     'In addition to the school fee, there is also a delegate fee of $%d per student. '
                     'The invoice for this will be sent out with country assignments '
-                    'in November and is due shortly after that.\n\n'
+                    'shortly after that.\n\n'
                     'If you have any students that need financial assistance, '
                     'we encourage them to apply for our Alumni Scholarship '
                     'at http://bmun.org/alumni-scholarship/.\n\n'
