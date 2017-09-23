@@ -10,6 +10,7 @@ var ReactRouter = require('react-router');
 
 var AdvisorView = require('components/AdvisorView');
 var ChairView = require('components/ChairView');
+var DelegateView = require('components/DelegateView');
 var ConferenceContext = require('components/ConferenceContext');
 var CurrentUserStore = require('stores/CurrentUserStore');
 var Shaker = require('components/Shaker');
@@ -44,6 +45,8 @@ var Huxley = React.createClass({
         this.history.pushState(null, '/advisor/profile');
       } else if (User.isChair(user)) {
         this.history.pushState(null, '/chair/attendance');
+      } else if (User.isDelegate(user)) {
+        this.history.pushState(null, '/delegate/profile');
       }
     });
   },
@@ -74,6 +77,15 @@ var Huxley = React.createClass({
           <ChairView user={user}>
             {React.cloneElement(this.props.children, {user: user})}
           </ChairView>
+          <SupportLink />
+        </div>
+      );
+    } else if (User.isDelegate(user)) {
+      return (
+        <div>
+          <DelegateView user={user}>
+            {React.cloneElement(this.props.children, {user: user})}
+          </DelegateView>
           <SupportLink />
         </div>
       );
