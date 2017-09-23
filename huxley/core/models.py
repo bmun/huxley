@@ -335,7 +335,8 @@ class Assignment(models.Model):
                 is_invalid = True
             else:
                 try:
-                    registration = Registration.objects.get(school_id=school.id)
+                    registration = Registration.objects.get(
+                        school_id=school.id)
                 except Registration.DoesNotExist:
                     is_invalid = True
 
