@@ -103,12 +103,20 @@ class AssignmentTest(TestCase):
             (cm2, ct3, s2, False),  # ADDED
         ]
 
+        all_assignments = [
+            (cm1.id, ct1.id, r1.id, False),
+            (cm1.id, ct2.id, r1.id, False),
+            (cm1.id, ct3.id, r1.id, False),
+            (cm2.id, ct2.id, r2.id, False),
+            (cm2.id, ct3.id, r2.id, False),
+            (cm2.id, ct1.id, r1.id, False),
+        ]
+
         Assignment.update_assignments(updates)
-        new_assignments = [a[1:]
-                           for a in Assignment.objects.all().values_list()]
+        assignments = [a[1:] for a in Assignment.objects.all().values_list()]
         delegates = Delegate.objects.all()
         updates = [(cm.id, ct.id, s.id, rej) for cm, ct, s, rej in updates]
-        self.assertEquals(set(updates), set(new_assignments))
+        self.assertEquals(set(all_assignments), set(assignments))
         self.assertEquals(len(delegates), 2)
 
     def test_update_assignment(self):
