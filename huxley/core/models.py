@@ -321,17 +321,6 @@ class Assignment(models.Model):
             deletions.append(assignment_data['id'])
 
         for committee, country, school, rejected in new_assignments:
-            key = (committee.id, country.id)
-            if key in assigned:
-                # Make sure that the same committee/country pair is not being
-                # given to more than one school in the upload
-                committee = str(committee.name)
-                country = str(country.name)
-                failed_assignments.append(
-                    str((committee, country)) +
-                    ' - ASSIGNED TO MORE THAN ONE SCHOOL')
-                continue
-
             # If the assignemnt contains no bad cells, then each value should
             # have the type of its corresponding model.
             is_invalid = False
@@ -344,13 +333,29 @@ class Assignment(models.Model):
             if type(school) is not School:
                 school = School(name=school + ' - DOES NOT EXIST')
                 is_invalid = True
+            else:
+                try:
+                    registration = Registration.objects.get(school_id=school.id)
+                except Registration.DoesNotExist:
+                    is_invalid = True
+
             if is_invalid:
                 failed_assignments.append(
                     str((str(school.name), str(committee.name), str(
                         country.name))))
                 continue
 
-            registration = School.objects.get(id=school.id)
+            key = (committee.id, country.id)
+            if key in assigned:
+                # Make sure that the same committee/country pair is not being
+                # given to more than one school in the upload
+                committee = str(committee.name)
+                country = str(country.name)
+                failed_assignments.append(
+                    str((committee, country)) +
+                    ' - ASSIGNED TO MORE THAN ONE SCHOOL')
+                continue
+
             assigned.add(key)
             old_assignment = assignment_dict.get(key)
 
@@ -364,13 +369,7 @@ class Assignment(models.Model):
                 remove(old_assignment)
                 add(committee, country, registration, rejected)
 
-            del assignment_dict[key]
-
         if not failed_assignments:
-            # Only update assignments if there were no issues
-            for old_assignment in assignment_dict.values():
-                remove(old_assignment)
-
             with transaction.atomic():
                 Assignment.objects.filter(id__in=deletions).delete()
                 Assignment.objects.bulk_create(additions)
