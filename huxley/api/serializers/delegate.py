@@ -33,16 +33,16 @@ class DelegateSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         if ('assignment' in validated_data and
-            validated_data['assignment'] != None
-            and not instance.assignment):
+                validated_data['assignment'] != None and
+                not instance.assignment):
 
             names = instance.name.split(' ')
             username = names[0] + '_' + str(instance.id)
             password = BaseUserManager().make_random_password(10)
             user = User.objects.create(delegate=instance, username=username,\
                                        user_type=User.TYPE_DELEGATE,\
-                                       last_login=datetime.now(), 
-                                       first_name=names[0], last_name=names[-1], 
+                                       last_login=datetime.now(),
+                                       first_name=names[0], last_name=names[-1],
                                        email=instance.email)
             user.set_password(password)
             user.save()

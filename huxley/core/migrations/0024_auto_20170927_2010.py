@@ -7,15 +7,13 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('core', '0023_auto_20170809_1436'),
-    ]
+    dependencies = [('core', '0023_auto_20170809_1436'), ]
 
     operations = [
         migrations.AlterField(
             model_name='delegate',
             name='email',
-            field=models.EmailField(default='', max_length=254),
-            preserve_default=False,
-        ),
+            field=models.EmailField(
+                default='', max_length=254),
+            preserve_default=False, ),
     ]
