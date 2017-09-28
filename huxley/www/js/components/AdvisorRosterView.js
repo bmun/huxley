@@ -102,7 +102,7 @@ var AdvisorRosterView = React.createClass({
             />
             {this.renderError('name')}
             <TextInput
-              placeholder="Email (Optional)"
+              placeholder="Email"
               onChange={_handleChange.bind(this, 'modal_email')}
               defaultValue={this.state.modal_email}
               value={this.state.modal_email}
