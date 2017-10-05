@@ -39,13 +39,14 @@ class DelegateSerializer(serializers.ModelSerializer):
             names = instance.name.split(' ')
             username = names[0] + '_' + str(instance.id)
             password = BaseUserManager().make_random_password(10)
-            user = User.objects.create(delegate=instance, username=username,\
-                                       user_type=User.TYPE_DELEGATE,\
-                                       last_login=datetime.now(),
-                                       first_name=names[0], last_name=names[-1],
-                                       email=instance.email)
-            user.set_password(password)
-            user.save()
+            user = User.objects.create_user(username=username,
+                                            password=password,
+                                            delegate=instance, 
+                                            user_type=User.TYPE_DELEGATE,
+                                            first_name=names[0],
+                                            last_name=names[-1],
+                                            email=instance.email)
+
             send_mail('A new account has been created for {0}!\n'.format(instance.name),
                       'Username: {0}\n'.format(username) \
                       + 'Password: {0}\n'.format(password) \
