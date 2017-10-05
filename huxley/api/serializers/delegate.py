@@ -33,8 +33,9 @@ class DelegateSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         if ('assignment' in validated_data and
-                validated_data['assignment'] != None and
-                not instance.assignment):
+             validated_data['assignment'] != None and
+             not instance.assignment
+             and not User.objects.filter(delegate__id=instance.id).exists()):
 
             names = instance.name.split(' ')
             username = names[0] + '_' + str(instance.id)
