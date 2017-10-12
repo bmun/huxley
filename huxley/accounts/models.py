@@ -29,8 +29,11 @@ class User(AbstractUser):
         Committee, related_name='chair', null=True, blank=True)  # Chairs only
 
     delegate = models.OneToOneField(
-        Delegate, related_name='delegate', null=True,
-        blank=True)  # Delegate only
+        Delegate,
+        related_name='delegate',
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE)  # Delegate only
 
     def is_advisor(self):
         return self.user_type == self.TYPE_ADVISOR
