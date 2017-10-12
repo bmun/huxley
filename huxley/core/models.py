@@ -429,7 +429,7 @@ class Delegate(models.Model):
         null=True,
         on_delete=models.SET_NULL)
     name = models.CharField(max_length=64)
-    email = models.EmailField(blank=True, null=True)
+    email = models.EmailField()
     created_at = models.DateTimeField(auto_now_add=True)
     summary = models.TextField(default='', blank=True, null=True)
     published_summary = models.TextField(default='', blank=True, null=True)
