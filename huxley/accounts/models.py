@@ -30,7 +30,7 @@ class User(AbstractUser):
 
     delegate = models.OneToOneField(
         Delegate, related_name='delegate', null=True,
-        blank=True)  # Delegate only
+        blank=True, on_delete=models.CASCADE)  # Delegate only
 
     def is_advisor(self):
         return self.user_type == self.TYPE_ADVISOR
