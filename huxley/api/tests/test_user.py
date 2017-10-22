@@ -425,10 +425,8 @@ class DelegateUserCreateTestCase(tests.PartialUpdateAPITestCase):
         self.advisor = models.new_user(username='advisor', password='advisor')
         self.school = models.new_school(user=self.advisor)
         self.registration = models.new_registration(school=self.school)
-        self.committee = models.new_committee()
-        self.country = models.new_country()
         self.assignment = models.new_assignment(
-            registration=self.registration, country=self.country, committee=self.committee)
+            registration=self.registration)
         self.delegate = models.new_delegate(
             school=self.school, assignment=self.assignment)
         self.delegate.assignment = None
@@ -462,10 +460,8 @@ class DelegateUserDestroyTestCase(tests.DestroyAPITestCase):
         self.advisor = models.new_user(username='advisor', password='advisor')
         self.school = models.new_school(user=self.advisor)
         self.registration = models.new_registration(school=self.school)
-        self.committee = models.new_committee()
-        self.country = models.new_country()
         self.assignment = models.new_assignment(
-            registration=self.registration, country=self.country, committee=self.committee)
+            registration=self.registration)
         self.delegate = models.new_delegate(
             school=self.school, assignment=self.assignment)
         self.delegate.assignment = None
