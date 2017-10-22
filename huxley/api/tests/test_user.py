@@ -425,8 +425,7 @@ class DelegateUserCreateTestCase(tests.PartialUpdateAPITestCase):
         self.advisor = models.new_user(username='advisor', password='advisor')
         self.school = models.new_school(user=self.advisor)
         self.registration = models.new_registration(school=self.school)
-        self.assignment = models.new_assignment(
-            registration=self.registration)
+        self.assignment = models.new_assignment(registration=self.registration)
         self.delegate = models.new_delegate(
             school=self.school, assignment=self.assignment)
         self.delegate.assignment = None
@@ -439,18 +438,24 @@ class DelegateUserCreateTestCase(tests.PartialUpdateAPITestCase):
     def test_delegate_no_user(self):
         self.client.login(username='advisor', password='advisor')
         response = self.get_response(self.delegate.id, params=self.params)
-        self.assertFalse(User.objects.filter(delegate__id=self.delegate.id).exists())
+        self.assertFalse(
+            User.objects.filter(delegate__id=self.delegate.id).exists())
 
     def test_delegate_user_create(self):
         self.client.login(username='advisor', password='advisor')
-        response = self.get_response(self.delegate.id, params=self.assign_params)
-        self.assertTrue(User.objects.filter(delegate__id=self.delegate.id).exists())
+        response = self.get_response(
+            self.delegate.id, params=self.assign_params)
+        self.assertTrue(
+            User.objects.filter(delegate__id=self.delegate.id).exists())
 
     def test_delegate_user_unassign(self):
         self.client.login(username='advisor', password='advisor')
-        response1 = self.get_response(self.delegate.id, params=self.assign_params)
-        response2 = self.get_response(self.delegate.id, params=self.unassign_params)
-        self.assertTrue(User.objects.filter(delegate__id=self.delegate.id).exists())
+        response1 = self.get_response(
+            self.delegate.id, params=self.assign_params)
+        response2 = self.get_response(
+            self.delegate.id, params=self.unassign_params)
+        self.assertTrue(
+            User.objects.filter(delegate__id=self.delegate.id).exists())
 
 
 class DelegateUserDestroyTestCase(tests.DestroyAPITestCase):
@@ -460,8 +465,7 @@ class DelegateUserDestroyTestCase(tests.DestroyAPITestCase):
         self.advisor = models.new_user(username='advisor', password='advisor')
         self.school = models.new_school(user=self.advisor)
         self.registration = models.new_registration(school=self.school)
-        self.assignment = models.new_assignment(
-            registration=self.registration)
+        self.assignment = models.new_assignment(registration=self.registration)
         self.delegate = models.new_delegate(
             school=self.school, assignment=self.assignment)
         self.delegate.assignment = None
@@ -469,10 +473,11 @@ class DelegateUserDestroyTestCase(tests.DestroyAPITestCase):
         self.superuser = models.new_user(is_superuser=True)
         self.delegate_user = models.new_user(
             username='delegate',
-            delegate=self.delegate,            
+            delegate=self.delegate,
             user_type=User.TYPE_DELEGATE)
 
     def test_delegate_user_destroy(self):
         self.client.login(username='advisor', password='advisor')
         response = self.get_response(self.delegate.id)
-        self.assertFalse(User.objects.filter(delegate__id=self.delegate.id).exists())
+        self.assertFalse(
+            User.objects.filter(delegate__id=self.delegate.id).exists())
