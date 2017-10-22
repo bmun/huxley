@@ -47,9 +47,10 @@ class DelegateSerializer(serializers.ModelSerializer):
                 user_type=User.TYPE_DELEGATE,
                 first_name=names[0],
                 last_name=names[-1],
-                email=instance.email)
+                email=instance.email,
+                last_login=datetime.now())
 
-            send_mail('A new account has been created for {0}!\n'.format(instance.name),
+            send_mail('An account has been created for {0}.'.format(instance.name),
                       'Username: {0}\n'.format(username) \
                       + 'Password: {0}\n'.format(password) \
                       + 'Please save this information! You will need it for '
