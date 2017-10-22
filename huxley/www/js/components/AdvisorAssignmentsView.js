@@ -173,12 +173,15 @@ var AdvisorAssignmentsView = React.createClass({
             <td>
               {finalized
                 ? this.renderDelegateDropdown(assignment, 0)
-                : <Button color="red"
+                : <Button
+                    color="red"
                     size="small"
-                    onClick={this._handleAssignmentDelete.bind(this, assignment)}>
+                    onClick={this._handleAssignmentDelete.bind(
+                      this,
+                      assignment,
+                    )}>
                     Delete Assignment
-                  </Button>
-              }
+                  </Button>}
             </td>
             <td>
               {finalized &&
