@@ -63,6 +63,18 @@ class Committee(models.Model):
     delegation_size = models.PositiveSmallIntegerField(default=2)
     special = models.BooleanField(default=False)
 
+    grade_category_1 = models.CharField(max_length=128)
+    grade_category_2 = models.CharField(max_length=128)
+    grade_category_3 = models.CharField(max_length=128)
+    grade_category_4 = models.CharField(max_length=128)
+    grade_category_5 = models.CharField(max_length=128)
+
+    grade_value_1 = models.PositiveSmallIntegerField(default=10)
+    grade_value_2 = models.PositiveSmallIntegerField(default=10)
+    grade_value_3 = models.PositiveSmallIntegerField(default=10)
+    grade_value_4 = models.PositiveSmallIntegerField(default=10)
+    grade_value_5 = models.PositiveSmallIntegerField(default=10)
+
     def __unicode__(self):
         return self.name
 
@@ -283,11 +295,29 @@ post_save.connect(Registration.email_comments, sender=Registration)
 post_save.connect(Registration.email_confirmation, sender=Registration)
 
 
+class PositionPaper(models.Model):
+    assignment = models.OneToOneField('Assignment')
+    file = models.FileField(upload_to="position_papers/")
+    graded = models.BooleanField(default=False)
+    score_1 = models.PositiveSmallIntegerField(default=0)
+    score_2 = models.PositiveSmallIntegerField(default=0)
+    score_3 = models.PositiveSmallIntegerField(default=0)
+    score_4 = models.PositiveSmallIntegerField(default=0)
+    score_5 = models.PositiveSmallIntegerField(default=0)
+
+    def __unicode__(self):
+        return '%sd' % (self.id)
+
+    class Meta:
+        db_table = u'position_papers'
+
+
 class Assignment(models.Model):
     committee = models.ForeignKey(Committee)
     country = models.ForeignKey(Country)
     registration = models.ForeignKey(Registration, null=True)
     rejected = models.BooleanField(default=False)
+    paper = models.OneToOneField(PositionPaper, null=True)
 
     @classmethod
     def update_assignments(cls, new_assignments):
