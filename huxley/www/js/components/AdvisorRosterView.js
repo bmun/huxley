@@ -162,14 +162,17 @@ var AdvisorRosterView = React.createClass({
               </Button>
             </td>
             <td>
-              {delegate.assignment ? 
-                <Button
-                  color="yellow"
-                  size="small"
-                  onClick={this._handleDelegatePasswordChange.bind(this, delegate)}>
-                  Reset Password
-                </Button> :
-                <div />}
+              {delegate.assignment
+                ? <Button
+                    color="yellow"
+                    size="small"
+                    onClick={this._handleDelegatePasswordChange.bind(
+                      this,
+                      delegate,
+                    )}>
+                    Reset Password
+                  </Button>
+                : <div />}
             </td>
           </tr>
         );
@@ -234,7 +237,10 @@ var AdvisorRosterView = React.createClass({
   },
 
   _handleDelegatePasswordChange: function(delegate) {
-    ServerAPI.resetDelegatePassword(delegate.id).then(this._handlePasswordChangeSuccess, this._handlePasswordChangeError);
+    ServerAPI.resetDelegatePassword(delegate.id).then(
+      this._handlePasswordChangeSuccess,
+      this._handlePasswordChangeError,
+    );
   },
 
   _handleAddDelegateSuccess: function(response) {
@@ -250,15 +256,11 @@ var AdvisorRosterView = React.createClass({
       loading: false,
       modal_open: false,
     });
-    window.alert(
-      `Password successfully reset.`,
-    );
+    window.alert(`Password successfully reset.`);
   },
 
   _handlePasswordChangeError: function(response) {
-    window.alert(
-      `The passowrd could not be reset.`,
-    );
+    window.alert(`The passowrd could not be reset.`);
   },
 
   _handleDeleteError: function(response) {

@@ -19,9 +19,9 @@ from huxley.core.models import Conference, School
 
 
 class UserList(generics.ListCreateAPIView):
-    authentication_classes = (SessionAuthentication,)
+    authentication_classes = (SessionAuthentication, )
     queryset = User.objects.all()
-    permission_classes = (IsPostOrSuperuserOnly,)
+    permission_classes = (IsPostOrSuperuserOnly, )
 
     def create(self, request, *args, **kwargs):
         if Conference.get_current().open_reg:
@@ -35,14 +35,14 @@ class UserList(generics.ListCreateAPIView):
 
 
 class UserDetail(generics.RetrieveUpdateDestroyAPIView):
-    authentication_classes = (SessionAuthentication,)
+    authentication_classes = (SessionAuthentication, )
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    permission_classes = (IsUserOrSuperuser,)
+    permission_classes = (IsUserOrSuperuser, )
 
 
 class CurrentUser(generics.GenericAPIView):
-    authentication_classes = (SessionAuthentication,)
+    authentication_classes = (SessionAuthentication, )
 
     def get(self, request, *args, **kwargs):
         '''Get the current user if they're authenticated.'''
@@ -62,8 +62,8 @@ class CurrentUser(generics.GenericAPIView):
             raise AuthenticationFailed(str(e))
 
         login(request, user)
-        return Response(UserSerializer(user).data,
-                        status=status.HTTP_201_CREATED)
+        return Response(
+            UserSerializer(user).data, status=status.HTTP_201_CREATED)
 
     def delete(self, request, *args, **kwargs):
         '''Log out the currently logged-in user.'''
@@ -72,7 +72,7 @@ class CurrentUser(generics.GenericAPIView):
 
 
 class UserPassword(generics.GenericAPIView):
-    authentication_classes = (SessionAuthentication,)
+    authentication_classes = (SessionAuthentication, )
 
     def post(self, request, *args, **kwargs):
         '''Reset a user's password and email it to them.'''
@@ -99,7 +99,7 @@ class UserPassword(generics.GenericAPIView):
 
 
 class DelegateUserPassword(generics.GenericAPIView):
-    authentication_classes = (SessionAuthentication,)
+    authentication_classes = (SessionAuthentication, )
     permission_classes = (DelegateUserPasswordPermission, )
 
     def post(self, request, *args, **kwargs):
