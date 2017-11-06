@@ -221,6 +221,32 @@ class SchoolDetailPermission(permissions.BasePermission):
 
         return user_is_advisor(request, view, school_id)
 
+class CommitteeFeedbackListPermission(permissions.BasePermission):
+    '''Accept GET for only the chair of the committee'''
+
+    def has_permission(self, request, view):
+        user = request.user
+        if user.is_superuser:
+            return True
+
+        method = request.method
+        committee_id = request.query_params('committee_id',-1)
+        return method == 'GET' and user_is_chair(request, view, committee_id)
+
+class CommitteeFeedbackDetailPermission(permissions.BasePermission):
+    '''Accept POST for only the delegate of the committee'''
+
+    def has_permission(self, request, view):
+        user = request.user
+        if user.is_superuser:
+            return True
+
+        method = request.method
+        committee_id = request.query_params('committee-id',-1)
+        if method == 'POST' and user_is_authenticated() and user.is_delegate() and user.delegate.assignment:
+                return user.delegate.assignment.committeei.id == committee_id
+
+        return False
 
 class DelegateUserPasswordPermission(permissions.BasePermission):
     '''Accept requests to change the password of any delegate advised by the 
