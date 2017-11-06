@@ -13,7 +13,7 @@ require('css/Button.less');
 
 var Button = React.createClass({
   propTypes: {
-    color: React.PropTypes.oneOf(['blue', 'green', 'yellow', 'red', 'orange']),
+    color: React.PropTypes.oneOf(['blue', 'green', 'yellow', 'red']),
     href: React.PropTypes.string,
     loading: React.PropTypes.bool,
     size: React.PropTypes.oneOf(['small', 'medium', 'large']),
@@ -43,7 +43,6 @@ var Button = React.createClass({
           'button-green': this.props.color == 'green',
           'button-yellow': this.props.color == 'yellow',
           'button-red': this.props.color == 'red',
-          'button-organge': this.props.color == 'orange',
           'rounded-small': true,
           loading: this.props.loading,
           'button-checkmark': this.props.success,

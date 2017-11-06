@@ -6,7 +6,6 @@ import json
 from django.http import QueryDict
 from rest_framework import permissions
 
-from huxley.accounts.models import User
 from huxley.core.models import Assignment, Delegate, Registration
 
 
