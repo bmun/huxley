@@ -6,6 +6,7 @@ import json
 from django.http import QueryDict
 from rest_framework import permissions
 
+from huxley.accounts.models import User
 from huxley.core.models import Assignment, Delegate, Registration
 
 
@@ -220,6 +221,24 @@ class SchoolDetailPermission(permissions.BasePermission):
                     user_is_delegate(request, view, school_id, 'school'))
 
         return user_is_advisor(request, view, school_id)
+
+
+class DelegateUserPasswordPermission(permissions.BasePermission):
+    '''Accept requests to change the password of any delegate advised by the 
+       current user.'''
+
+    def has_permission(self, request, view):
+        user = request.user
+        if user.is_superuser:
+            return True
+
+        delegate_id = request.data.get('delegate_id', -1)
+        queryset = Delegate.objects.filter(id=delegate_id)
+        if queryset.exists():
+            delegate = queryset.get(id=delegate_id)
+            return user_is_advisor(request, view, delegate.school_id)
+
+        return False
 
 
 def user_is_advisor(request, view, school_id):

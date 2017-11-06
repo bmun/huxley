@@ -84,6 +84,10 @@ var ServerAPI = {
     return _post('/api/users/me/password', {username});
   },
 
+  resetDelegatePassword(delegateID) {
+    return _post('/api/users/delegate/password', {delegate_id: delegateID});
+  },
+
   updateAssignment(assignmentID, data) {
     return _patch(`/api/assignments/${assignmentID}`, data);
   },

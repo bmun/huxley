@@ -129,7 +129,7 @@ class Registration(models.Model):
     country_preferences = models.ManyToManyField(
         Country, through='CountryPreference')
     committee_preferences = models.ManyToManyField(
-        Committee, blank=True, null=True)
+        Committee, blank=True)
 
     registration_comments = models.TextField(default='', blank=True)
 

@@ -11,6 +11,7 @@ urlpatterns = [
     url(r'^users/(?P<pk>[0-9]+)/?$', views.user.UserDetail.as_view(), name='user_detail'),
     url(r'^users/me/?$', views.user.CurrentUser.as_view(), name='current_user'),
     url(r'^users/me/password?$', views.user.UserPassword.as_view(), name='user_password'),
+    url(r'^users/delegate/password?$', views.user.DelegateUserPassword.as_view(), name='delegate_user_password'),
 
     url(r'^committees/?$', views.committee.CommitteeList.as_view(), name='committee_list'),
     url(r'^committees/(?P<pk>[0-9]+)/?$', views.committee.CommitteeDetail.as_view(), name='committee_detail'),
