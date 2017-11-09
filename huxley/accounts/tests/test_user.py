@@ -5,6 +5,7 @@ from django.test import TestCase
 
 from huxley.accounts.exceptions import AuthenticationError, PasswordChangeFailed
 from huxley.accounts.models import User
+from huxley.core.models import Delegate
 from huxley.utils.test import models
 
 
@@ -80,3 +81,14 @@ class UserTestCase(TestCase):
         with self.assertRaises(User.DoesNotExist):
             models.new_user(username='', email='')
             User.reset_password('')
+
+    def test_reset_delegate_password(self):
+        '''It should correctly reset a delegate's password or raise an error.'''
+        password = 'password'
+        delegate = Delegate.objects.create()
+        delegate_user = User.objects.create(username='delegate', delegate=delegate)
+        delegate_user.set_password(password)
+        delegate_user.save()
+        
+        User.reset_password(user=delegate_user)
+        self.assertFalse(delegate_user.check_password(password))
