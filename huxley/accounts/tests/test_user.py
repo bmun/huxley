@@ -10,7 +10,6 @@ from huxley.utils.test import models
 
 
 class UserTestCase(TestCase):
-
     def test_authenticate(self):
         '''It should correctly authenticate and return a user, or return an
         error message.'''
@@ -31,7 +30,8 @@ class UserTestCase(TestCase):
         assert_raises('', 'mehta', AuthenticationError.MISSING_FIELDS)
         assert_raises('kunal', 'm', AuthenticationError.INVALID_CREDENTIALS)
         assert_raises('k', 'mehta', AuthenticationError.INVALID_CREDENTIALS)
-        assert_raises('kunal', 'mehta', AuthenticationError.INVALID_CREDENTIALS)
+        assert_raises('kunal', 'mehta',
+                      AuthenticationError.INVALID_CREDENTIALS)
 
         kunal.is_active = True
         kunal.save()
@@ -54,10 +54,8 @@ class UserTestCase(TestCase):
                     self.assertTrue(user.check_password('old&busted'))
                     raise
 
-        assert_raises('', 'newhotness',
-                      PasswordChangeFailed.MISSING_FIELDS)
-        assert_raises('old&busted', '',
-                      PasswordChangeFailed.MISSING_FIELDS)
+        assert_raises('', 'newhotness', PasswordChangeFailed.MISSING_FIELDS)
+        assert_raises('old&busted', '', PasswordChangeFailed.MISSING_FIELDS)
         assert_raises('old&busted', 'a',
                       PasswordChangeFailed.PASSWORD_TOO_SHORT)
         assert_raises('old&busted', 'invalid>hotness',
@@ -86,9 +84,10 @@ class UserTestCase(TestCase):
         '''It should correctly reset a delegate's password or raise an error.'''
         password = 'password'
         delegate = Delegate.objects.create()
-        delegate_user = User.objects.create(username='delegate', delegate=delegate)
+        delegate_user = User.objects.create(
+            username='delegate', delegate=delegate)
         delegate_user.set_password(password)
         delegate_user.save()
-        
+
         User.reset_password(user=delegate_user)
         self.assertFalse(delegate_user.check_password(password))
