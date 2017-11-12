@@ -84,13 +84,14 @@ const AdvisorProfileView = React.createClass({
     var school = User.getSchool(user);
     var registration = this.state.registration;
     var fees_owed =
-      _accessSafe(registration, 'fees_owed') == null
+      _accessSafe(registration, 'delegate_fees_owed') == null
         ? null
-        : registration.fees_owed.toFixed(2);
+        : registration.delegate_fees_owed.toFixed(2);
     var fees_paid =
-      _accessSafe(registration, 'fees_paid') == null
+      _accessSafe(registration, 'delegate_fees_paid') == null
         ? null
-        : registration.fees_paid.toFixed(2);
+        : registration.delegate_fees_paid.toFixed(2);
+    var paid_registration = registration.registration_fee_paid
     return (
       <InnerView>
         <TextTemplate
@@ -311,19 +312,22 @@ const AdvisorProfileView = React.createClass({
                 <th colSpan="2">Fees</th>
               </tr>
               <tr>
-                <td>Fees Owed</td>
+                <td>Registration Fee Paid</td>
+              </tr>
+              <tr>
+                <td>Delegate Fees Owed</td>
                 <td>
                   {'$' + fees_owed}
                 </td>
               </tr>
               <tr>
-                <td>Fees Paid</td>
+                <td>Delegate Fees Paid</td>
                 <td>
                   {'$' + fees_paid}
                 </td>
               </tr>
               <tr>
-                <td>Balance</td>
+                <td>Remaining Balance</td>
                 <td>
                   {'$' + (fees_owed - fees_paid)}
                 </td>
