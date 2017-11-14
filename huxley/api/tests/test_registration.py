@@ -96,8 +96,10 @@ class RegistrationListPostTest(tests.CreateAPITestCase):
         delegate_fees_owed = response.data['delegate_fees_owed']
         delegate_fees_paid = response.data['delegate_fees_paid']
 
-        self.assertEqual(delegate_fees_owed, float(registration.delegate_fees_owed))
-        self.assertEqual(delegate_fees_paid, float(registration.delegate_fees_paid))
+        self.assertEqual(delegate_fees_owed,
+                         float(registration.delegate_fees_owed))
+        self.assertEqual(delegate_fees_paid,
+                         float(registration.delegate_fees_paid))
         self.assertNotEqual(delegate_fees_owed, 2000.0)
         self.assertNotEqual(delegate_fees_paid, 2000.0)
 
@@ -200,9 +202,12 @@ class RegistrationListGetTest(tests.ListAPITestCase):
                 list(self.registration.committee_preferences.all()),
                 'registration_comments':
                 self.registration.registration_comments,
-                'delegate_fees_owed': float(self.registration.delegate_fees_owed),
-                'delegate_fees_paid': float(self.registration.delegate_fees_paid),
-                'registration_fee_paid': self.registration.registration_fee_paid,
+                'delegate_fees_owed':
+                float(self.registration.delegate_fees_owed),
+                'delegate_fees_paid':
+                float(self.registration.delegate_fees_paid),
+                'registration_fee_paid':
+                self.registration.registration_fee_paid,
                 'assignments_finalized':
                 self.registration.assignments_finalized,
                 'modified_at': self.registration.modified_at.isoformat()
@@ -239,9 +244,12 @@ class RegistrationListGetTest(tests.ListAPITestCase):
                 list(self.registration.committee_preferences.all()),
                 'registration_comments':
                 self.registration.registration_comments,
-                'delegate_fees_owed': float(self.registration.delegate_fees_owed),
-                'delegate_fees_paid': float(self.registration.delegate_fees_paid),
-                'registration_fee_paid': self.registration.registration_fee_paid,
+                'delegate_fees_owed':
+                float(self.registration.delegate_fees_owed),
+                'delegate_fees_paid':
+                float(self.registration.delegate_fees_paid),
+                'registration_fee_paid':
+                self.registration.registration_fee_paid,
                 'assignments_finalized':
                 self.registration.assignments_finalized,
                 'modified_at': self.registration.modified_at.isoformat()

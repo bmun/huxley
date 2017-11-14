@@ -7,29 +7,24 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('core', '0024_auto_20170927_2010'),
-    ]
+    dependencies = [('core', '0024_auto_20170927_2010'), ]
 
     operations = [
         migrations.RenameField(
             model_name='registration',
             old_name='fees_owed',
-            new_name='delegate_fees_owed',
-        ),
+            new_name='delegate_fees_owed', ),
         migrations.RenameField(
             model_name='registration',
             old_name='fees_paid',
-            new_name='delegate_fees_paid',
-        ),
+            new_name='delegate_fees_paid', ),
         migrations.AddField(
             model_name='registration',
             name='registration_fee_paid',
-            field=models.BooleanField(default=False),
-        ),
+            field=models.BooleanField(default=False), ),
         migrations.AlterField(
             model_name='registration',
             name='committee_preferences',
-            field=models.ManyToManyField(blank=True, null=True, to='core.Committee'),
-        ),
+            field=models.ManyToManyField(
+                blank=True, null=True, to='core.Committee'), ),
     ]

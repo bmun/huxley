@@ -91,7 +91,7 @@ const AdvisorProfileView = React.createClass({
       _accessSafe(registration, 'delegate_fees_paid') == null
         ? null
         : registration.delegate_fees_paid.toFixed(2);
-    var paid_registration = 
+    var paid_registration =
       _accessSafe(registration, 'registration_fee_paid') == null
         ? null
         : registration.registration_fee_paid;

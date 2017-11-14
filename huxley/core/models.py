@@ -154,7 +154,8 @@ class Registration(models.Model):
             (registration.num_beginner_delegates,
              registration.num_intermediate_delegates,
              registration.num_advanced_delegates, ))
-        registration.delegate_fees_owed = Decimal(delegate_fees) + Decimal('0.00')
+        registration.delegate_fees_owed = Decimal(delegate_fees) + Decimal(
+            '0.00')
 
     @classmethod
     def update_waitlist(cls, **kwargs):
