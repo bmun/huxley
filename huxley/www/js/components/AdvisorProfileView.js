@@ -91,7 +91,10 @@ const AdvisorProfileView = React.createClass({
       _accessSafe(registration, 'delegate_fees_paid') == null
         ? null
         : registration.delegate_fees_paid.toFixed(2);
-    var paid_registration = registration.registration_fee_paid
+    var paid_registration = 
+      _accessSafe(registration, 'registration_fee_paid') == null
+        ? null
+        : registration.registration_fee_paid;
     return (
       <InnerView>
         <TextTemplate
@@ -313,6 +316,9 @@ const AdvisorProfileView = React.createClass({
               </tr>
               <tr>
                 <td>Registration Fee Paid</td>
+                <td>
+                  <input type="checkbox" checked disabled />
+                </td>
               </tr>
               <tr>
                 <td>Delegate Fees Owed</td>

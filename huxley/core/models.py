@@ -146,9 +146,6 @@ class Registration(models.Model):
 
     modified_at = models.DateTimeField(default=timezone.now)
 
-    def balance(self):
-        return self.fees_owed - self.fees_paid
-
     @classmethod
     def update_fees(cls, **kwargs):
         registration = kwargs['instance']
@@ -157,7 +154,7 @@ class Registration(models.Model):
             (registration.num_beginner_delegates,
              registration.num_intermediate_delegates,
              registration.num_advanced_delegates, ))
-        registration.fees_owed = Decimal(delegate_fees) + Decimal('0.00')
+        registration.delegate_fees_owed = Decimal(delegate_fees) + Decimal('0.00')
 
     @classmethod
     def update_waitlist(cls, **kwargs):

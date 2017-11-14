@@ -119,8 +119,9 @@ class RegisterTestCase(tests.CreateAPITestCase):
                 'is_waitlisted': registration.is_waitlisted,
                 'waivers_completed': registration.waivers_completed,
                 'assignments_finalized': registration.assignments_finalized,
-                'fees_paid': float(registration.fees_paid),
-                'fees_owed': float(registration.fees_owed),
+                'delegate_fees_owed': float(registration.delegate_fees_owed),
+                'delegate_fees_paid': float(registration.delegate_fees_paid),
+                'registration_fee_paid': registration.registration_fee_paid,
                 'modified_at': registration.modified_at.isoformat()
             }
         })
