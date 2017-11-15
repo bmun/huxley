@@ -11,7 +11,6 @@ from huxley.core.models import Registration
 
 
 class RegistrationAdmin(admin.ModelAdmin):
-
     def info(self, request):
         '''Returns a CSV file of all the registration information.'''
         registrations = HttpResponse(content_type='text/csv')
