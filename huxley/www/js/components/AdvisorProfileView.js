@@ -316,9 +316,7 @@ const AdvisorProfileView = React.createClass({
               </tr>
               <tr>
                 <td>Registration Fee Paid</td>
-                <td>
-                  <input type="checkbox" checked disabled />
-                </td>
+                {paid_registration ? <td>Yes</td> : <td>No</td>}
               </tr>
               <tr>
                 <td>Delegate Fees Owed</td>
