@@ -11,12 +11,6 @@ from huxley.core.models import Registration
 
 
 class RegistrationAdmin(admin.ModelAdmin):
-
-    readonly_fields = ('balance', )
-
-    def calc_balance(self, obj):
-        return obj.balance()
-
     def info(self, request):
         '''Returns a CSV file of all the registration information.'''
         registrations = HttpResponse(content_type='text/csv')

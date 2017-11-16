@@ -137,15 +137,13 @@ class Registration(models.Model):
 
     assignments_finalized = models.BooleanField(default=False)
 
-    fees_owed = models.DecimalField(
+    delegate_fees_owed = models.DecimalField(
         max_digits=6, decimal_places=2, default=Decimal('0.00'))
-    fees_paid = models.DecimalField(
+    delegate_fees_paid = models.DecimalField(
         max_digits=6, decimal_places=2, default=Decimal('0.00'))
+    registration_fee_paid = models.BooleanField(default=False)
 
     modified_at = models.DateTimeField(default=timezone.now)
-
-    def balance(self):
-        return self.fees_owed - self.fees_paid
 
     @classmethod
     def update_fees(cls, **kwargs):
@@ -155,9 +153,8 @@ class Registration(models.Model):
             (registration.num_beginner_delegates,
              registration.num_intermediate_delegates,
              registration.num_advanced_delegates, ))
-        registration_fee = Conference.get_current().registration_fee
-        total_fees = registration_fee + delegate_fees
-        registration.fees_owed = Decimal(total_fees) + Decimal('0.00')
+        registration.delegate_fees_owed = Decimal(delegate_fees) + Decimal(
+            '0.00')
 
     @classmethod
     def update_waitlist(cls, **kwargs):

@@ -191,11 +191,10 @@ class RegistrationTest(TestCase):
             num_advanced_delegates=a, )
 
         conference = Conference.get_current()
-        registration_fee = conference.registration_fee
         delegate_fee = conference.delegate_fee
 
-        self.assertEquals(registration.fees_owed,
-                          registration_fee + delegate_fee * (b + i + a), )
+        self.assertEquals(registration.delegate_fees_owed,
+                          delegate_fee * (b + i + a), )
 
         b2, i2, a2 = 5, 10, 15
         registration.num_beginner_delegates = b2
@@ -203,8 +202,8 @@ class RegistrationTest(TestCase):
         registration.num_advanced_delegates = a2
         registration.save()
 
-        self.assertEquals(registration.fees_owed,
-                          registration_fee + delegate_fee * (b2 + i2 + a2), )
+        self.assertEquals(registration.delegate_fees_owed,
+                          delegate_fee * (b2 + i2 + a2), )
 
     def test_update_waitlist(self):
         '''New registrations should be waitlisted based on the conference waitlist field.'''
