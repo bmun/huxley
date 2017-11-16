@@ -240,6 +240,7 @@ class RegistrationTest(TestCase):
         self.assertEquals([c3, c1], r1.country_preference_ids)
         self.assertEquals([c1, c2, c3], r2.country_preference_ids)
 
+
 class PositionPaperTest(TestCase):
     def setup(self):
         self.position_paper = PositionPaper()
@@ -254,3 +255,24 @@ class PositionPaperTest(TestCase):
 
     def test_unicode(self):
         self.assertEquals(str(self.position_paper.id), self.position_paper.__unicode__())
+        
+
+class RubricTest(TestCase):
+    def setup(self):
+        self.rubric = Rubric()
+
+    def test_default_values(self):
+        self.assertEquals(self.rubric.grade_category_1, '')
+        self.assertEquals(self.rubric.grade_category_2, '')
+        self.assertEquals(self.rubric.grade_category_3, '')
+        self.assertEquals(self.rubric.grade_category_4, '')
+        self.assertEquals(self.rubric.grade_category_5, '')
+
+        self.assertEquals(self.rubric.grade_value_1, 10)
+        self.assertEquals(self.rubric.grade_value_2, 10)
+        self.assertEquals(self.rubric.grade_value_3, 10)
+        self.assertEquals(self.rubric.grade_value_4, 10)
+        self.assertEquals(self.rubric.grade_value_5, 10)
+
+    def test_unicode(self):
+        self.assertEquals(str(self.rubric.id), self.rubric.__unicode__())
