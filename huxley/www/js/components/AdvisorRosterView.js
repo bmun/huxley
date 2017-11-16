@@ -75,6 +75,7 @@ var AdvisorRosterView = React.createClass({
               <th>Email</th>
               <th>Edit</th>
               <th>Delete</th>
+              <th>Reset Password</th>
             </tr>
           </thead>
           <tbody>
@@ -160,6 +161,19 @@ var AdvisorRosterView = React.createClass({
                 Delete
               </Button>
             </td>
+            <td>
+              {delegate.assignment
+                ? <Button
+                    color="yellow"
+                    size="small"
+                    onClick={this._handleDelegatePasswordChange.bind(
+                      this,
+                      delegate,
+                    )}>
+                    Reset Password
+                  </Button>
+                : <div />}
+            </td>
           </tr>
         );
       }.bind(this),
@@ -222,12 +236,31 @@ var AdvisorRosterView = React.createClass({
     event.preventDefault();
   },
 
+  _handleDelegatePasswordChange: function(delegate) {
+    ServerAPI.resetDelegatePassword(delegate.id).then(
+      this._handlePasswordChangeSuccess,
+      this._handlePasswordChangeError,
+    );
+  },
+
   _handleAddDelegateSuccess: function(response) {
     DelegateActions.addDelegate(response);
     this.setState({
       loading: false,
       modal_open: false,
     });
+  },
+
+  _handlePasswordChangeSuccess: function(response) {
+    this.setState({
+      loading: false,
+      modal_open: false,
+    });
+    window.alert(`Password successfully reset.`);
+  },
+
+  _handlePasswordChangeError: function(response) {
+    window.alert(`The passowrd could not be reset.`);
   },
 
   _handleDeleteError: function(response) {

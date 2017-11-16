@@ -222,6 +222,24 @@ class SchoolDetailPermission(permissions.BasePermission):
         return user_is_advisor(request, view, school_id)
 
 
+class DelegateUserPasswordPermission(permissions.BasePermission):
+    '''Accept requests to change the password of any delegate advised by the 
+       current user.'''
+
+    def has_permission(self, request, view):
+        user = request.user
+        if user.is_superuser:
+            return True
+
+        delegate_id = request.data.get('delegate_id', -1)
+        queryset = Delegate.objects.filter(id=delegate_id)
+        if queryset.exists():
+            delegate = queryset.get(id=delegate_id)
+            return user_is_advisor(request, view, delegate.school_id)
+
+        return False
+
+
 def user_is_advisor(request, view, school_id):
     user = request.user
     return (user.is_authenticated() and user.is_advisor() and
