@@ -254,8 +254,9 @@ class PositionPaperTest(TestCase):
         self.assertFalse(self.position_paper.graded)
 
     def test_unicode(self):
-        self.assertEquals(str(self.position_paper.id), self.position_paper.__unicode__())
-        
+        self.assertEquals(
+            str(self.position_paper.id), self.position_paper.__unicode__())
+
 
 class RubricTest(TestCase):
     def setup(self):
