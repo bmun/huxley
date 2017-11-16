@@ -239,3 +239,18 @@ class RegistrationTest(TestCase):
         r1.update_country_preferences([c3, c1])
         self.assertEquals([c3, c1], r1.country_preference_ids)
         self.assertEquals([c1, c2, c3], r2.country_preference_ids)
+
+class PositionPaperTest(TestCase):
+    def setup(self):
+        self.position_paper = PositionPaper()
+
+    def test_default_values(self):
+        self.assertEquals(self.position_paper.score_1, 0)
+        self.assertEquals(self.position_paper.score_2, 0)
+        self.assertEquals(self.position_paper.score_3, 0)
+        self.assertEquals(self.position_paper.score_4, 0)
+        self.assertEquals(self.position_paper.score_5, 0)
+        self.assertFalse(self.position_paper.graded)
+
+    def test_unicode(self):
+        self.assertEquals(str(self.position_paper.id), self.position_paper.__unicode__())
