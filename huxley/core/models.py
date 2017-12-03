@@ -82,13 +82,22 @@ class Committee(models.Model):
     countries = models.ManyToManyField(Country, through='Assignment')
     delegation_size = models.PositiveSmallIntegerField(default=2)
     special = models.BooleanField(default=False)
-    rubric = models.OneToOneField(Rubric, default=Rubric)
+    rubric = models.OneToOneField(Rubric, blank=True, null=True)
+
+    @classmethod
+    def create_rubric(cls, **kwargs):
+        committee = kwargs['instance']
+        if not committee.rubric:
+            committee.rubric = Rubric()
 
     def __unicode__(self):
         return self.name
 
     class Meta:
         db_table = u'committee'
+
+
+pre_save.connect(Assignment.create_rubric, sender=Committee)
 
 
 class School(models.Model):
@@ -325,7 +334,7 @@ class Assignment(models.Model):
     country = models.ForeignKey(Country)
     registration = models.ForeignKey(Registration, null=True)
     rejected = models.BooleanField(default=False)
-    paper = models.OneToOneField(PositionPaper, default=PositionPaper)
+    paper = models.OneToOneField(PositionPaper, blank=True, null=True)
 
     @classmethod
     def update_assignments(cls, new_assignments):
@@ -426,6 +435,12 @@ class Assignment(models.Model):
             Delegate.objects.filter(assignment_id=old_assignment.id).update(
                 assignment=None)
 
+    @classmethod
+    def create_position_paper(cls, **kwargs):
+        assignment = kwargs['instance']
+        if not assignment.paper:
+            assignment.paper = PositionPaper()
+
     def __unicode__(self):
         return self.committee.name + " : " + self.country.name + " : " + (
             self.registration.school.name
@@ -437,6 +452,7 @@ class Assignment(models.Model):
 
 
 pre_save.connect(Assignment.update_assignment, sender=Assignment)
+pre_save.connect(Assignment.create_position_paper, sender=Assignment)
 
 
 class CountryPreference(models.Model):
