@@ -88,7 +88,7 @@ class Committee(models.Model):
     def create_rubric(cls, **kwargs):
         committee = kwargs['instance']
         if not committee.rubric:
-            committee.rubric = Rubric()
+            committee.rubric = Rubric.objects.create()
 
     def __unicode__(self):
         return self.name
@@ -97,7 +97,7 @@ class Committee(models.Model):
         db_table = u'committee'
 
 
-pre_save.connect(Assignment.create_rubric, sender=Committee)
+pre_save.connect(Committee.create_rubric, sender=Committee)
 
 
 class School(models.Model):
@@ -439,7 +439,7 @@ class Assignment(models.Model):
     def create_position_paper(cls, **kwargs):
         assignment = kwargs['instance']
         if not assignment.paper:
-            assignment.paper = PositionPaper()
+            assignment.paper = PositionPaper.objects.create()
 
     def __unicode__(self):
         return self.committee.name + " : " + self.country.name + " : " + (
