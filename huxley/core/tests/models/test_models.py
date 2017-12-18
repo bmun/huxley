@@ -9,7 +9,8 @@ from django.db import IntegrityError
 from django.test import TestCase
 
 from huxley.core.models import (Assignment, Committee, Conference, Country,
-                                CountryPreference, Delegate, PositionPaper, Rubric)
+                                CountryPreference, Delegate, PositionPaper,
+                                Rubric)
 from huxley.utils.test import models
 
 
@@ -63,7 +64,8 @@ class CommitteeTest(TestCase):
     def test_create_rubric(self):
         '''Tests that a committee creates a new rubric upon being
            saved for the first time, but not on subsequent saves.'''
-        c = Committee(name='DISC', full_name='Disarmament and International Security')
+        c = Committee(
+            name='DISC', full_name='Disarmament and International Security')
         self.assertTrue(c.rubric == None)
         c.save()
         self.assertTrue(c.rubric != None)
