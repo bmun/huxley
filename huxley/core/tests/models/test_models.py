@@ -9,7 +9,8 @@ from django.db import IntegrityError
 from django.test import TestCase
 
 from huxley.core.models import (Assignment, Committee, Conference, Country,
-                                CountryPreference, Delegate)
+                                CountryPreference, Delegate, PositionPaper,
+                                Rubric)
 from huxley.utils.test import models
 
 
@@ -60,6 +61,25 @@ class CommitteeTest(TestCase):
         """ Tests that the object's __unicode__ outputs correctly. """
         self.assertEquals('DISC', self.committee.__unicode__())
 
+    def test_create_rubric(self):
+        '''Tests that a committee creates a new rubric upon being
+           saved for the first time, but not on subsequent saves.'''
+        c = Committee(
+            name='DISC', full_name='Disarmament and International Security')
+        self.assertTrue(c.rubric == None)
+        c.save()
+        self.assertTrue(c.rubric != None)
+        rubric_id = c.rubric.id
+        c.rubric.grade_category_1 = "Overall paper quality"
+        c.rubric.save()
+        c.save()
+        self.assertEquals(c.rubric.grade_category_1, "Overall paper quality")
+        self.assertEquals(c.rubric.id, rubric_id)
+        c.rubric = None
+        c.save()
+        self.assertFalse(c.rubric == None)
+        self.assertFalse(c.rubric.id == rubric_id)
+
 
 class AssignmentTest(TestCase):
 
@@ -104,12 +124,12 @@ class AssignmentTest(TestCase):
         ]
 
         all_assignments = [
-            (cm1.id, ct1.id, r1.id, False),
-            (cm1.id, ct2.id, r1.id, False),
-            (cm1.id, ct3.id, r1.id, False),
-            (cm2.id, ct2.id, r2.id, False),
-            (cm2.id, ct3.id, r2.id, False),
-            (cm2.id, ct1.id, r1.id, False),
+            (cm1.id, ct1.id, r1.id, False, None),
+            (cm1.id, ct2.id, r1.id, False, None),
+            (cm1.id, ct3.id, r1.id, False, None),
+            (cm2.id, ct2.id, r2.id, False, None),
+            (cm2.id, ct3.id, r2.id, False, None),
+            (cm2.id, ct1.id, r1.id, False, None),
         ]
 
         Assignment.update_assignments(updates)
@@ -137,6 +157,24 @@ class AssignmentTest(TestCase):
 
         self.assertEquals(a.delegates.count(), 0)
         self.assertEquals(a.rejected, False)
+
+    def test_create_position_paper(self):
+        '''Tests that an assigment creates a new position paper upon
+           being saved for the first time, but not on subsequent saves.'''
+        a = Assignment(committee_id=1, country_id=1, registration_id=1)
+        self.assertTrue(a.paper == None)
+        a.save()
+        self.assertTrue(a.paper != None)
+        paper_id = a.paper.id
+        a.paper.graded = True
+        a.paper.save()
+        a.save()
+        self.assertTrue(a.paper.graded)
+        self.assertEquals(a.paper.id, paper_id)
+        a.paper = None
+        a.save()
+        self.assertFalse(a.paper == None)
+        self.assertFalse(a.paper.id == paper_id)
 
 
 class CountryPreferenceTest(TestCase):
@@ -239,3 +277,41 @@ class RegistrationTest(TestCase):
         r1.update_country_preferences([c3, c1])
         self.assertEquals([c3, c1], r1.country_preference_ids)
         self.assertEquals([c1, c2, c3], r2.country_preference_ids)
+
+
+class PositionPaperTest(TestCase):
+    def setUp(self):
+        self.position_paper = PositionPaper.objects.create()
+
+    def test_default_values(self):
+        self.assertEquals(self.position_paper.score_1, 0)
+        self.assertEquals(self.position_paper.score_2, 0)
+        self.assertEquals(self.position_paper.score_3, 0)
+        self.assertEquals(self.position_paper.score_4, 0)
+        self.assertEquals(self.position_paper.score_5, 0)
+        self.assertFalse(self.position_paper.graded)
+
+    def test_unicode(self):
+        self.assertEquals(
+            str(self.position_paper.id), self.position_paper.__unicode__())
+
+
+class RubricTest(TestCase):
+    def setUp(self):
+        self.rubric = Rubric.objects.create()
+
+    def test_default_fields(self):
+        self.assertEquals(self.rubric.grade_category_1, '')
+        self.assertEquals(self.rubric.grade_category_2, '')
+        self.assertEquals(self.rubric.grade_category_3, '')
+        self.assertEquals(self.rubric.grade_category_4, '')
+        self.assertEquals(self.rubric.grade_category_5, '')
+
+        self.assertEquals(self.rubric.grade_value_1, 10)
+        self.assertEquals(self.rubric.grade_value_2, 10)
+        self.assertEquals(self.rubric.grade_value_3, 10)
+        self.assertEquals(self.rubric.grade_value_4, 10)
+        self.assertEquals(self.rubric.grade_value_5, 10)
+
+    def test_unicode(self):
+        self.assertEquals(str(self.rubric.id), self.rubric.__unicode__())
