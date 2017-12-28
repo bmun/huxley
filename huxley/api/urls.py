@@ -57,6 +57,8 @@ urlpatterns = [
         views.registration.RegistrationDetail.as_view(),
         name='registration_detail'),
     url(r'^register/?$', views.register.Register.as_view(), name='register'),
+    url(r'^papers/(?P<pk>[0-9]+)/?$', views.position_paper.PositionPaperDetail.as_view(), name='position_paper_detail'),
+    url(r'^rubrics/(?P<pk>[0-9]+)/?$', views.rubric.RubricDetail.as_view(), name='rubric_detail')
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

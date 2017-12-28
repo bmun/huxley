@@ -70,7 +70,7 @@ class Rubric(models.Model):
     grade_value_5 = models.PositiveSmallIntegerField(default=10)
 
     def __unicode__(self):
-        return '%d' % self.id
+        return '%s' % self.committee.name if self.committee else '%d' % self.id
 
     class Meta:
         db_table = u'rubric'
@@ -323,7 +323,8 @@ class PositionPaper(models.Model):
     score_5 = models.PositiveSmallIntegerField(default=0)
 
     def __unicode__(self):
-        return '%d' % (self.id)
+        a = self.assignment
+        return '%s %s %d' % (a.committee.name, a.country.name, a.id) if a else '%d' % (self.id)
 
     class Meta:
         db_table = u'position_papers'
