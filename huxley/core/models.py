@@ -10,7 +10,7 @@ from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.mail import send_mail
 from django.db import models, transaction
-from django.db.models.signals import post_save, pre_save
+from django.db.models.signals import post_save, pre_delete, pre_save
 from django.utils import timezone
 
 from huxley.core.constants import ContactGender, ContactType, ProgramTypes
@@ -322,12 +322,20 @@ class PositionPaper(models.Model):
     score_4 = models.PositiveSmallIntegerField(default=0)
     score_5 = models.PositiveSmallIntegerField(default=0)
 
+    @classmethod
+    def delete_file(cls, **kwargs):
+        position_paper = kwargs['instance']
+        position_paper.file.delete(False)
+
     def __unicode__(self):
         a = self.assignment
         return '%s %s %d' % (a.committee.name, a.country.name, a.id) if a else '%d' % (self.id)
 
     class Meta:
         db_table = u'position_papers'
+
+
+pre_delete.connect(PositionPaper.delete_file, sender=PositionPaper)
 
 
 class Assignment(models.Model):
