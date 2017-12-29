@@ -1,12 +1,14 @@
 # Copyright (c) 2011-2015 Berkeley Model United Nations. All rights reserved.
 # Use of this source code is governed by a BSD License (see LICENSE).
 
+from django.core import validators
+
 from rest_framework import generics
 from rest_framework.authentication import SessionAuthentication
 
 from huxley.api import permissions
 from huxley.api.serializers import CommitteeFeedbackSerializer
-from huxley.core.models import CommitteeFeedback
+from huxley.core.models import CommitteeFeedback, Delegate
 
 class CommitteeFeedbackList(generics.ListAPIView):
     authentication_classes = (SessionAuthentication,)
@@ -15,9 +17,8 @@ class CommitteeFeedbackList(generics.ListAPIView):
 
     def get_queryset(self):
         queryset = CommitteeFeedback.objects.all()
-        user = self.request.GET
         
-        committee_id = query_params.get('committee_id',None)
+        committee_id = self.request.query_params.get('committee',None)
         if committee_id:
             queryset = queryset.filter(committee__id=committee_id)
 
@@ -28,3 +29,9 @@ class CommitteeFeedbackDetail(generics.CreateAPIView):
     permission_classes = (permissions.CommitteeFeedbackDetailPermission,)
     serializer_class = CommitteeFeedbackSerializer
 
+    def perform_create(self, serializer):
+        if not self.request.user.is_superuser:
+            delegate = Delegate.objects.get(pk=self.request.user.delegate.id)
+            delegate.committee_feedback_submitted = True
+            #self.request.user.delegate.refresh_from_db()
+            delegate.save()

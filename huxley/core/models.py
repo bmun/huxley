@@ -100,7 +100,10 @@ class Committee(models.Model):
 
 class CommitteeFeedback(models.Model):
     committee = models.ForeignKey(Committee)
-    comment = models.TextField()
+    comment = models.TextField(default='')
+
+    def __unicode__(self):
+        return str(self.committee.name) + " - Comment " + str(self.id)
 
     class Meta:
         db_table = u'committee_feedback'

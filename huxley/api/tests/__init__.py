@@ -47,7 +47,6 @@ class AbstractAPITestCase(APITestCase):
         params = params or self.params
         if self.method != 'get':
             params = json.dumps(params)
-
         request = getattr(self.client, self.method)
         url = self.get_url(object_id)
         return request(url, params, content_type='application/json')
@@ -101,16 +100,22 @@ class AbstractAPITestCase(APITestCase):
             '%s' % field: [u'This is an invalid phone number.']})
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
+    def assertFeedbackPreviouslySubmitted(self, response):
+        self.assertEqual(response.data, {
+            'detail': u'Delegate feedback was already submitted.'})
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
 class CreateAPITestCase(AbstractAPITestCase):
     method = 'post'
     is_resource = False
 
+class PostSingleAPITestCase(AbstractAPITestCase):
+    method='post'
+    is_resource = True
 
 class ListAPITestCase(AbstractAPITestCase):
     method = 'get'
     is_resource = False
-
 
 class RetrieveAPITestCase(AbstractAPITestCase):
     method = 'get'

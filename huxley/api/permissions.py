@@ -6,6 +6,7 @@ import json
 from django.http import QueryDict
 from rest_framework import permissions
 
+from huxley.api.validators import ValidationError
 from huxley.core.models import Assignment, Committee, Delegate, Registration
 
 
@@ -230,7 +231,7 @@ class CommitteeFeedbackListPermission(permissions.BasePermission):
             return True
 
         method = request.method
-        committee_id = request.query_params('committee_id',-1)
+        committee_id = request.query_params.get('committee',-1)
         return method == 'GET' and user_is_chair(request, view, committee_id)
 
 class CommitteeFeedbackDetailPermission(permissions.BasePermission):
@@ -242,9 +243,11 @@ class CommitteeFeedbackDetailPermission(permissions.BasePermission):
             return True
 
         method = request.method
-        committee_id = request.query_params('committee-id',-1)
-        if method == 'POST' and user_is_authenticated() and user.is_delegate() and user.delegate.assignment:
-                return user.delegate.assignment.committeei.id == committee_id
+        committee_id = view.kwargs.get('committee',-1)
+        if method == 'POST' and user.is_authenticated() and user.is_delegate() and user.delegate.assignment:
+            if user.delegate.committee_feedback_submitted:
+                raise ValidationError({'detail': "Delegate feedback was already submitted."})
+            return int(user.delegate.assignment.committee.id) == int(committee_id)
 
         return False
 
