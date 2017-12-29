@@ -8,7 +8,6 @@ from huxley.api import views
 
 urlpatterns = [
     url(r'^users/?$', views.user.UserList.as_view(), name='user_list'),
-<<<<<<< 0cfb689b635c033437f11d348100753e7c1e9b59
     url(r'^users/(?P<pk>[0-9]+)/?$',
         views.user.UserDetail.as_view(),
         name='user_detail'),
@@ -38,10 +37,6 @@ urlpatterns = [
     url(r'^countries/(?P<pk>[0-9]+)/?$',
         views.country.CountryDetail.as_view(),
         name='country_detail'),
-    url(r'^users/(?P<pk>[0-9]+)/?$', views.user.UserDetail.as_view(), name='user_detail'),
-    url(r'^users/me/?$', views.user.CurrentUser.as_view(), name='current_user'),
-    url(r'^users/me/password?$', views.user.UserPassword.as_view(), name='user_password'),
-
     url(r'^committees/?$', views.committee.CommitteeList.as_view(), name='committee_list'),
     url(r'^committees/(?P<pk>[0-9]+)/?$', views.committee.CommitteeDetail.as_view(), name='committee_detail'),
 
