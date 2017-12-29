@@ -98,6 +98,7 @@ class Committee(models.Model):
     class Meta:
         db_table = u'committee'
 
+
 class CommitteeFeedback(models.Model):
     committee = models.ForeignKey(Committee)
     comment = models.TextField(default='')
@@ -107,6 +108,7 @@ class CommitteeFeedback(models.Model):
 
     class Meta:
         db_table = u'committee_feedback'
+
 
 pre_save.connect(Committee.create_rubric, sender=Committee)
 

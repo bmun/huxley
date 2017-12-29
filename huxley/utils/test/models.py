@@ -98,14 +98,15 @@ def new_committee(**kwargs):
         user.save()
     return c
 
+
 def new_committee_feedback(**kwargs):
     committee = new_committee()
     feedback = CommitteeFeedback(
-        committee = kwargs.pop('committee',committee),
-        comment = kwargs.pop('comment',"Daddy Nikhil though")
-    )
+        committee=kwargs.pop('committee', committee),
+        comment=kwargs.pop('comment', "Daddy Nikhil though"))
     feedback.save()
     return feedback
+
 
 def new_country(**kwargs):
     c = Country(

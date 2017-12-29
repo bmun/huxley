@@ -222,6 +222,7 @@ class SchoolDetailPermission(permissions.BasePermission):
 
         return user_is_advisor(request, view, school_id)
 
+
 class CommitteeFeedbackListPermission(permissions.BasePermission):
     '''Accept GET for only the chair of the committee'''
 
@@ -231,8 +232,9 @@ class CommitteeFeedbackListPermission(permissions.BasePermission):
             return True
 
         method = request.method
-        committee_id = request.query_params.get('committee',-1)
+        committee_id = request.query_params.get('committee', -1)
         return method == 'GET' and user_is_chair(request, view, committee_id)
+
 
 class CommitteeFeedbackDetailPermission(permissions.BasePermission):
     '''Accept POST for only the delegate of the committee'''
@@ -243,13 +245,17 @@ class CommitteeFeedbackDetailPermission(permissions.BasePermission):
             return True
 
         method = request.method
-        committee_id = view.kwargs.get('committee',-1)
-        if method == 'POST' and user.is_authenticated() and user.is_delegate() and user.delegate.assignment:
+        committee_id = view.kwargs.get('committee', -1)
+        if method == 'POST' and user.is_authenticated() and user.is_delegate(
+        ) and user.delegate.assignment:
             if user.delegate.committee_feedback_submitted:
-                raise ValidationError({'detail': "Delegate feedback was already submitted."})
-            return int(user.delegate.assignment.committee.id) == int(committee_id)
+                raise ValidationError(
+                    {'detail': "Delegate feedback was already submitted."})
+            return int(user.delegate.assignment.committee.id) == int(
+                committee_id)
 
         return False
+
 
 class DelegateUserPasswordPermission(permissions.BasePermission):
     '''Accept requests to change the password of any delegate advised by the 

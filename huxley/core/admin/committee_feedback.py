@@ -8,8 +8,7 @@ from django.http import HttpResponseRedirect
 
 from huxley.core.models import CommitteeFeedback
 
+
 class CommitteeFeedbackAdmin(admin.ModelAdmin):
     def get_urls(self):
         return super(CommitteeFeedbackAdmin, self).get_urls()
-
-

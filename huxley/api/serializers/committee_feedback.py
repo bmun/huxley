@@ -6,9 +6,10 @@ from rest_framework import serializers
 from huxley.api import validators
 from huxley.core.models import CommitteeFeedback
 
+
 class CommitteeFeedbackSerializer(serializers.ModelSerializer):
-    class Meta: 
+    class Meta:
         model = CommitteeFeedback
         fields = ('id',
                   'committee',
-                  'comment',)
+                  'comment', )

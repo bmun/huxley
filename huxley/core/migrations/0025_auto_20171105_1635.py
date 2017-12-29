@@ -8,30 +8,32 @@ import django.db.models.deletion
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('core', '0024_auto_20170927_2010'),
-    ]
+    dependencies = [('core', '0024_auto_20170927_2010'), ]
 
     operations = [
         migrations.CreateModel(
             name='CommitteeFeedback',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.AutoField(
+                    auto_created=True,
+                    primary_key=True,
+                    serialize=False,
+                    verbose_name='ID')),
                 ('comment', models.TextField()),
-                ('committee', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='core.Committee')),
+                ('committee', models.ForeignKey(
+                    on_delete=django.db.models.deletion.CASCADE,
+                    to='core.Committee')),
             ],
             options={
                 'db_table': 'committee_feedback',
-            },
-        ),
+            }, ),
         migrations.AddField(
             model_name='delegate',
             name='committee_feedback_submitted',
-            field=models.BooleanField(default=False),
-        ),
+            field=models.BooleanField(default=False), ),
         migrations.AlterField(
             model_name='registration',
             name='committee_preferences',
-            field=models.ManyToManyField(blank=True, null=True, to='core.Committee'),
-        ),
+            field=models.ManyToManyField(
+                blank=True, null=True, to='core.Committee'), ),
     ]
