@@ -12,7 +12,6 @@ from huxley.core.models import (Assignment, Committee, CommitteeFeedback, Confer
                                 CountryPreference, Delegate, PositionPaper,
                                 Rubric)
 
->>>>>>> Added serializers, views, permissions, and tests for Committee Feedback and some cleanup
 from huxley.utils.test import models
 
 

@@ -37,14 +37,6 @@ urlpatterns = [
     url(r'^countries/(?P<pk>[0-9]+)/?$',
         views.country.CountryDetail.as_view(),
         name='country_detail'),
-    url(r'^committees/?$', views.committee.CommitteeList.as_view(), name='committee_list'),
-    url(r'^committees/(?P<pk>[0-9]+)/?$', views.committee.CommitteeDetail.as_view(), name='committee_detail'),
-
-    url(r'^committee_feedback/?$', views.committee_feedback.CommitteeFeedbackList.as_view(), name='committee_feedback_list'),
-    url(r'^committee/(?P<pk>[0-9]+)/?$', views.committee_feedback.CommitteeFeedbackDetail.as_view(), name='committee_feedback_detail'),
-
-    url(r'^countries/?$', views.country.CountryList.as_view(), name='country_list'),
-    url(r'^countries/(?P<pk>[0-9]+)/?$', views.country.CountryDetail.as_view(), name='country_detail'),
     url(r'^schools/?$', views.school.SchoolList.as_view(), name='school_list'),
     url(r'^schools/(?P<pk>[0-9]+)/?$',
         views.school.SchoolDetail.as_view(),
