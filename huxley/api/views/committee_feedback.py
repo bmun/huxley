@@ -33,7 +33,6 @@ class CommitteeFeedbackDetail(generics.CreateAPIView):
 
     def perform_create(self, serializer):
         if not self.request.user.is_superuser:
-            delegate = Delegate.objects.get(pk=self.request.user.delegate.id)
-            delegate.committee_feedback_submitted = True
-            #self.request.user.delegate.refresh_from_db()
-            delegate.save()
+            self.request.user.delegate.committee_feedback_submitted = True
+            self.request.user.delegate.save()
+            
