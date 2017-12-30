@@ -7,19 +7,16 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('core', '0026_merge_20171206_1639'),
-    ]
+    dependencies = [('core', '0026_merge_20171206_1639'), ]
 
     operations = [
         migrations.AlterField(
             model_name='committeefeedback',
             name='comment',
-            field=models.TextField(default=b''),
-        ),
+            field=models.TextField(default=b''), ),
         migrations.AlterField(
             model_name='registration',
             name='committee_preferences',
-            field=models.ManyToManyField(blank=True, to='core.Committee'),
-        ),
+            field=models.ManyToManyField(
+                blank=True, to='core.Committee'), ),
     ]

@@ -246,10 +246,8 @@ class CommitteeFeedbackDetailPermission(permissions.BasePermission):
 
         method = request.method
         committee_id = view.kwargs.get('committee', -1)
-        if (method == 'POST' and 
-            user.is_authenticated() and 
-            user.is_delegate() and 
-            user.delegate.assignment):
+        if (method == 'POST' and user.is_authenticated() and
+                user.is_delegate() and user.delegate.assignment):
             if user.delegate.committee_feedback_submitted:
                 raise ValidationError(
                     {'detail': "Delegate feedback was already submitted."})
