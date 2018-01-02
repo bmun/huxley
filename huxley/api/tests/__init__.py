@@ -109,13 +109,6 @@ class AbstractAPITestCase(APITestCase):
         })
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-    def assertFeedbackPreviouslySubmitted(self, response):
-        self.assertEqual(response.data, {
-            'detail': u'Delegate feedback was already submitted.'
-        })
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
-
 class CreateAPITestCase(AbstractAPITestCase):
     method = 'post'
     is_resource = False

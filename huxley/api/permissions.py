@@ -9,7 +9,6 @@ from rest_framework import permissions
 from huxley.api.validators import ValidationError
 from huxley.core.models import Assignment, Committee, Delegate, Registration
 
-
 class IsSuperuserOrReadOnly(permissions.BasePermission):
     '''Allow writes if superuser, read-only otherwise.'''
 
@@ -247,12 +246,9 @@ class CommitteeFeedbackDetailPermission(permissions.BasePermission):
         method = request.method
         committee_id = view.kwargs.get('committee', -1)
         if (method == 'POST' and user.is_authenticated() and
-                user.is_delegate() and user.delegate.assignment):
-            if user.delegate.committee_feedback_submitted:
-                raise ValidationError(
-                    {'detail': "Delegate feedback was already submitted."})
-            return int(user.delegate.assignment.committee.id) == int(
-                committee_id)
+                user.is_delegate() and user.delegate.assignment and
+                (not user.delegate.committee_feedback_submitted)):
+            return int(user.delegate.assignment.committee.id) == int(committee_id)
 
         return False
 

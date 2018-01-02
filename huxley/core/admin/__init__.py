@@ -9,7 +9,6 @@ from huxley.core.models import *
 
 from .assignment import AssignmentAdmin
 from .committee import CommitteeAdmin
-from .committee_feedback import CommitteeFeedbackAdmin
 from .country import CountryAdmin
 from .delegate import DelegateAdmin
 from .schools import SchoolAdmin

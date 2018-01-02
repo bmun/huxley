@@ -47,7 +47,7 @@ class CommitteeFeedbackDetailCreateTestCase(tests.PostSingleAPITestCase):
         self.user.delegate.refresh_from_db()
         self.assertTrue(self.user.delegate.committee_feedback_submitted)
         response_2 = self.get_response(self.committee.id, params=self.params)
-        self.assertFeedbackPreviouslySubmitted(response_2)
+        self.assertPermissionDenied(response_2)
 
     def test_superuser(self):
         '''Superuser can create feedback'''
