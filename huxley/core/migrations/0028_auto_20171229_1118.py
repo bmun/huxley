@@ -6,8 +6,8 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
-    dependencies = [('core', '0026_merge_20171206_1639'), ]
+    
+    dependencies = [('core', '0027_committee_feedback'), ]
 
     operations = [
         migrations.AlterField(
