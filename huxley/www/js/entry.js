@@ -20,6 +20,7 @@ var AdvisorProfileView = require('components/AdvisorProfileView');
 var AdvisorRosterView = require('components/AdvisorRosterView');
 var ChairAttendanceView = require('components/ChairAttendanceView');
 var ChairSummaryView = require('components/ChairSummaryView');
+var DelegateCommitteeFeedbackView = require('components/DelegateCommitteeFeedbackView');
 var DelegateProfileView = require('components/DelegateProfileView');
 var ForgotPasswordView = require('components/ForgotPasswordView');
 var LoginView = require('components/LoginView');
@@ -56,6 +57,7 @@ var routes = (
     <Route path="/advisor/roster" component={AdvisorRosterView} />
     <Route path="/chair/attendance" component={ChairAttendanceView} />
     <Route path="/chair/summary" component={ChairSummaryView} />
+    <Route path="/delegate/committee_feedback" component={DelegateCommitteeFeedbackView} />
     <Route path="/delegate/profile" component={DelegateProfileView} />
     <IndexRoute component={RedirectView} />
     <Route path="*" component={NotFoundView} />

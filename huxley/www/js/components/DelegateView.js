@@ -21,6 +21,7 @@ var DelegateView = React.createClass({
         <Shaker>
           <div className="navbar rounded-top">
             <NavTab href="/delegate/profile">Profile</NavTab>
+            <NavTab href="/delegate/committee_feedback">Committee Feedback</NavTab>
           </div>
           {this.props.children}
         </Shaker>
