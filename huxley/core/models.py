@@ -335,9 +335,6 @@ class PositionPaper(models.Model):
         db_table = u'position_papers'
 
 
-pre_delete.connect(PositionPaper.delete_file, sender=PositionPaper)
-
-
 class Assignment(models.Model):
     committee = models.ForeignKey(Committee)
     country = models.ForeignKey(Country)

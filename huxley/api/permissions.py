@@ -242,8 +242,9 @@ class DelegateUserPasswordPermission(permissions.BasePermission):
 
 class PositionPaperDetailPermission(permissions.BasePermission):
     '''Accept requests to retrieve or update the position paper
-       from a superuser, the chair of the related assignment or
-       the delegate with the related assignment.'''
+       from a superuser, the chair of the related assignment,
+       the delegate with the related assignment, or that delegate's
+       advisor'''
 
     def has_permission(self, request, view):
         user = request.user
@@ -256,6 +257,7 @@ class PositionPaperDetailPermission(permissions.BasePermission):
             assignment = queryset.get(paper_id=paper_id)
             return user_is_chair(request, view, assignment.committee.id) \
                    or user_is_delegate(request, view, assignment.id, 'assignment')
+                   or user_is_advisor(request, view, assignment.registration.school.id)
 
         return False
 

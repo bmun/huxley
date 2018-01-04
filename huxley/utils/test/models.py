@@ -8,7 +8,7 @@ from django.core.exceptions import PermissionDenied
 
 from huxley.accounts.models import User
 from huxley.core.constants import ContactGender, ContactType, ProgramTypes
-from huxley.core.models import School, Committee, Country, Delegate, Assignment, Registration, Conference
+from huxley.core.models import School, Committee, Country, Delegate, Assignment, Registration, Conference, PositionPaper, Rubric
 
 if not settings.TESTING:
     raise PermissionDenied
@@ -129,11 +129,13 @@ def new_assignment(**kwargs):
     test_committee = kwargs.pop('committee', None) or new_committee()
     test_registration = kwargs.pop('registration', None) or new_registration()
     test_country = kwargs.pop('country', None) or new_country()
+    test_paper = kwargs.pop('paper', None)
 
     a = Assignment(
         committee=test_committee,
         registration=test_registration,
         country=test_country,
+        paper=test_paper,
         rejected=kwargs.pop('rejected', False), )
     a.save()
     return a
@@ -156,4 +158,16 @@ def new_registration(**kwargs):
 
     r.save()
 
+    return r
+
+
+def new_position_paper(**kwargs):
+    p = PositionPaper()
+    p.save()
+    return p
+
+
+def new_rubric(**kwargs):
+    r = Rubric()
+    r.save()
     return r
