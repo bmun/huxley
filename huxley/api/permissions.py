@@ -7,7 +7,7 @@ from django.http import QueryDict
 from rest_framework import permissions
 
 from huxley.api.validators import ValidationError
-from huxley.core.models import Assignment, Committee, Delegate, Registration
+from huxley.core.models import Assignment, Committee, CommitteeFeedback, Delegate, Registration
 
 class IsSuperuserOrReadOnly(permissions.BasePermission):
     '''Allow writes if superuser, read-only otherwise.'''
@@ -235,7 +235,8 @@ class CommitteeFeedbackListPermission(permissions.BasePermission):
 
 
 class CommitteeFeedbackDetailPermission(permissions.BasePermission):
-    '''Accept POST for only the delegate of the committee'''
+    '''Accept POST for only the delegate of the committee
+       Accept GET request from chair of committee'''
 
     def has_permission(self, request, view):
         user = request.user
@@ -244,10 +245,18 @@ class CommitteeFeedbackDetailPermission(permissions.BasePermission):
 
         method = request.method
         committee_id = request.data.get('committee', -1)
+        feedback_id = view.kwargs.get('pk', None)
+
         if (method == 'POST' and user.is_authenticated() and
                 user.is_delegate() and user.delegate.assignment and
                 (not user.delegate.committee_feedback_submitted)):
             return int(user.delegate.assignment.committee.id) == int(committee_id)
+
+        if(method == 'GET' and user.is_authenticated() and 
+            user.is_chair() and user.committee):
+            query = CommitteeFeedback.objects.get(id=feedback_id)
+            if query:
+                return user.committee.id == query.committee.id
 
         return False
 

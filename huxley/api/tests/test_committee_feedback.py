@@ -83,6 +83,76 @@ class CommitteeFeedbackDetailCreateTestCase(tests.CreateSingleAPITestCase):
         })
 
 
+class CommitteeFeedbackDetailGetTestCase(tests.RetrieveAPITestCase):
+    url_name = 'api:committee_feedback_detail'
+
+    def setUp(self):
+        self.committee_1 = models.new_committee(name='UNSC')
+        self.feedback_1 = models.new_committee_feedback(
+            committee=self.committee_1, comment='Good')
+        self.committee_2 = models.new_committee(name='HSC')
+        self.feedback_2 = models.new_committee_feedback(
+            committee=self.committee_2, comment='Not Good')
+        self.assignment_1 = models.new_assignment(committee=self.committee_1)
+
+    def test_anonymous_user(self):
+        '''Anonymous User cannot retrieve feedback'''
+        response = self.get_response(self.feedback_1.id)
+        self.assertNotAuthenticated(response)
+
+    def test_delegate(self):
+        '''Delegate cannot retrieve feedback, even their own because 
+        of anonymity.'''
+        self.user = models.new_user(
+            username='delegate',
+            password='delegate',
+            user_type=User.TYPE_DELEGATE, 
+            assignment=self.assignment_1,)
+        self.client.login(username='delegate', password='delegate')
+        response = self.get_response(self.feedback_1.id)
+        self.assertPermissionDenied(response)
+
+    def test_chair(self):
+        '''Chair can retrieve feedback from only their own committee'''
+        self.user = models.new_user(
+            username='chair',
+            password='chair',
+            user_type=User.TYPE_CHAIR,
+            committee_id=self.committee_1.id, )
+        self.client.login(username='chair', password='chair')
+        response_1 = self.get_response(self.feedback_1.id)
+        response_1.data.pop('id')
+        self.assertEqual(response_1.data, 
+            {'committee': self.committee_1.id,
+             'comment': self.feedback_1.comment})
+        response_2 = self.get_response(self.feedback_2.id)
+        self.assertPermissionDenied(response_2)
+
+    def test_advisor(self):
+        '''Advisor cannot retrieve feedback'''
+        self.user = models.new_user(
+            username='advisor',
+            password='advisor',
+            user_type=User.TYPE_ADVISOR, )
+        self.client.login(username='advisor', password='advisor')
+        response = self.get_response(self.feedback_1.id)
+        self.assertPermissionDenied(response)
+
+    def test_superuser(self):
+        '''Superuser can retrieve any feedback'''
+        models.new_superuser(username='user', password='user')
+        self.client.login(username='user', password='user')
+        response_1 = self.get_response(self.feedback_1.id)
+        response_1.data.pop('id')
+        self.assertEqual(response_1.data, 
+            {'committee': self.committee_1.id,
+             'comment': self.feedback_1.comment})
+        response_2 = self.get_response(self.feedback_2.id)
+        response_2.data.pop('id')
+        self.assertEqual(response_2.data,
+            {'committee': self.committee_2.id,
+             'comment': self.feedback_2.comment})
+
 class CommitteeFeedbackListGetTestCase(tests.ListAPITestCase):
     url_name = 'api:committee_feedback_list'
 
@@ -95,6 +165,7 @@ class CommitteeFeedbackListGetTestCase(tests.ListAPITestCase):
             committee=self.committee_1, comment="Not so good")
         self.feedback_3 = models.new_committee_feedback(
             committee=self.committee_2, comment="Awful")
+        self.assignment_1 = models.new_assignment(committee=self.committee_1)
 
     def test_anonymous_user(self):
         '''Anonymous users cannot retrieve feedback'''
@@ -106,7 +177,8 @@ class CommitteeFeedbackListGetTestCase(tests.ListAPITestCase):
         self.user = models.new_user(
             username='delegate',
             password='delegate',
-            user_type=User.TYPE_DELEGATE, )
+            user_type=User.TYPE_DELEGATE, 
+            assignment=self.assignment_1,)
         self.client.login(username='delegate', password='delegate')
         response = self.get_response(
             params={'committee_id': self.committee_1.id})

@@ -3,7 +3,7 @@
 
 from django.core import validators
 
-from rest_framework import generics
+from rest_framework import generics, mixins
 from rest_framework.authentication import SessionAuthentication
 
 from huxley.api import permissions
@@ -26,10 +26,11 @@ class CommitteeFeedbackList(generics.ListAPIView):
         return queryset
 
 
-class CommitteeFeedbackDetail(generics.CreateAPIView):
+class CommitteeFeedbackDetail(generics.CreateAPIView, generics.RetrieveAPIView):
     authentication_classes = (SessionAuthentication, )
     permission_classes = (permissions.CommitteeFeedbackDetailPermission, )
     serializer_class = CommitteeFeedbackSerializer
+    queryset = CommitteeFeedback.objects.all()
 
     def perform_create(self, serializer):
         if not self.request.user.is_superuser:
