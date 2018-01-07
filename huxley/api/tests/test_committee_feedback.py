@@ -106,8 +106,8 @@ class CommitteeFeedbackDetailGetTestCase(tests.RetrieveAPITestCase):
         self.user = models.new_user(
             username='delegate',
             password='delegate',
-            user_type=User.TYPE_DELEGATE, 
-            assignment=self.assignment_1,)
+            user_type=User.TYPE_DELEGATE,
+            assignment=self.assignment_1, )
         self.client.login(username='delegate', password='delegate')
         response = self.get_response(self.feedback_1.id)
         self.assertPermissionDenied(response)
@@ -122,9 +122,8 @@ class CommitteeFeedbackDetailGetTestCase(tests.RetrieveAPITestCase):
         self.client.login(username='chair', password='chair')
         response_1 = self.get_response(self.feedback_1.id)
         response_1.data.pop('id')
-        self.assertEqual(response_1.data, 
-            {'committee': self.committee_1.id,
-             'comment': self.feedback_1.comment})
+        self.assertEqual(response_1.data, {'committee': self.committee_1.id,
+                                           'comment': self.feedback_1.comment})
         response_2 = self.get_response(self.feedback_2.id)
         self.assertPermissionDenied(response_2)
 
@@ -144,14 +143,13 @@ class CommitteeFeedbackDetailGetTestCase(tests.RetrieveAPITestCase):
         self.client.login(username='user', password='user')
         response_1 = self.get_response(self.feedback_1.id)
         response_1.data.pop('id')
-        self.assertEqual(response_1.data, 
-            {'committee': self.committee_1.id,
-             'comment': self.feedback_1.comment})
+        self.assertEqual(response_1.data, {'committee': self.committee_1.id,
+                                           'comment': self.feedback_1.comment})
         response_2 = self.get_response(self.feedback_2.id)
         response_2.data.pop('id')
-        self.assertEqual(response_2.data,
-            {'committee': self.committee_2.id,
-             'comment': self.feedback_2.comment})
+        self.assertEqual(response_2.data, {'committee': self.committee_2.id,
+                                           'comment': self.feedback_2.comment})
+
 
 class CommitteeFeedbackListGetTestCase(tests.ListAPITestCase):
     url_name = 'api:committee_feedback_list'
@@ -177,8 +175,8 @@ class CommitteeFeedbackListGetTestCase(tests.ListAPITestCase):
         self.user = models.new_user(
             username='delegate',
             password='delegate',
-            user_type=User.TYPE_DELEGATE, 
-            assignment=self.assignment_1,)
+            user_type=User.TYPE_DELEGATE,
+            assignment=self.assignment_1, )
         self.client.login(username='delegate', password='delegate')
         response = self.get_response(
             params={'committee_id': self.committee_1.id})

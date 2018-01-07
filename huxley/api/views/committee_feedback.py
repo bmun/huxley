@@ -26,7 +26,8 @@ class CommitteeFeedbackList(generics.ListAPIView):
         return queryset
 
 
-class CommitteeFeedbackDetail(generics.CreateAPIView, generics.RetrieveAPIView):
+class CommitteeFeedbackDetail(generics.CreateAPIView,
+                              generics.RetrieveAPIView):
     authentication_classes = (SessionAuthentication, )
     permission_classes = (permissions.CommitteeFeedbackDetailPermission, )
     serializer_class = CommitteeFeedbackSerializer

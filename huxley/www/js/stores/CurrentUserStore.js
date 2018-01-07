@@ -56,11 +56,11 @@ class CurrentUserStore extends Store {
     this.updateUser(
       this._currentUser.id,
       {
-        'first_name': this._currentUser.first_name,
-        'last_name': this._currentUser.last_name,
+        first_name: this._currentUser.first_name,
+        last_name: this._currentUser.last_name,
       },
       undefined,
-      undefined
+      undefined,
     );
     return this.getCurrentUser();
   }

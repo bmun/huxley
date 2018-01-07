@@ -224,6 +224,7 @@ class SchoolDetailPermission(permissions.BasePermission):
 
 class CommitteeFeedbackListPermission(permissions.BasePermission):
     '''Accept GET for only the chair of the committee'''
+
     def has_permission(self, request, view):
         user = request.user
         if user.is_superuser:
@@ -249,11 +250,12 @@ class CommitteeFeedbackDetailPermission(permissions.BasePermission):
 
         if (method == 'POST' and user.is_authenticated() and
                 user.is_delegate() and user.delegate.assignment and
-                (not user.delegate.committee_feedback_submitted)):
-            return int(user.delegate.assignment.committee.id) == int(committee_id)
+            (not user.delegate.committee_feedback_submitted)):
+            return int(user.delegate.assignment.committee.id) == int(
+                committee_id)
 
-        if(method == 'GET' and user.is_authenticated() and 
-            user.is_chair() and user.committee):
+        if (method == 'GET' and user.is_authenticated() and user.is_chair() and
+                user.committee):
             query = CommitteeFeedback.objects.get(id=feedback_id)
             if query:
                 return user.committee.id == query.committee.id
