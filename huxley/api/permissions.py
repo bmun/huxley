@@ -224,7 +224,6 @@ class SchoolDetailPermission(permissions.BasePermission):
 
 class CommitteeFeedbackListPermission(permissions.BasePermission):
     '''Accept GET for only the chair of the committee'''
-
     def has_permission(self, request, view):
         user = request.user
         if user.is_superuser:
