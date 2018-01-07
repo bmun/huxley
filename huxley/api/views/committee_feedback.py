@@ -19,7 +19,7 @@ class CommitteeFeedbackList(generics.ListAPIView):
     def get_queryset(self):
         queryset = CommitteeFeedback.objects.all()
 
-        committee_id = self.request.query_params.get('committee', None)
+        committee_id = self.request.query_params.get('committee_id', None)
         if committee_id:
             queryset = queryset.filter(committee__id=committee_id)
 
@@ -35,3 +35,4 @@ class CommitteeFeedbackDetail(generics.CreateAPIView):
         if not self.request.user.is_superuser:
             self.request.user.delegate.committee_feedback_submitted = True
             self.request.user.delegate.save()
+        super(CommitteeFeedbackDetail, self).perform_create(serializer)    

@@ -31,7 +31,14 @@ class AbstractAPITestCase(APITestCase):
         if self.is_resource is None:
             raise NotImplementedError('Must define is_resource class member.')
 
-        args = (object_id, ) if self.is_resource else ()
+        args = None
+        if self.is_resource:
+            args = (object_id, )
+        elif isinstance(self, CreateSingleAPITestCase):
+            args = (0, )
+        else:
+            args = ()
+
         return reverse(self.url_name, args=args)
 
     def get_params(self, **kwargs):
@@ -115,30 +122,26 @@ class CreateAPITestCase(AbstractAPITestCase):
     is_resource = False
 
 
-class PostSingleAPITestCase(AbstractAPITestCase):
+class CreateSingleAPITestCase(AbstractAPITestCase):
     method = 'post'
-    is_resource = True
-
+    is_resource = False
+    is_post_single = True
 
 class ListAPITestCase(AbstractAPITestCase):
     method = 'get'
     is_resource = False
 
-
 class RetrieveAPITestCase(AbstractAPITestCase):
     method = 'get'
     is_resource = True
-
 
 class UpdateAPITestCase(AbstractAPITestCase):
     method = 'put'
     is_resource = True
 
-
 class PartialUpdateAPITestCase(AbstractAPITestCase):
     method = 'patch'
     is_resource = True
-
 
 class DestroyAPITestCase(AbstractAPITestCase):
     method = 'delete'

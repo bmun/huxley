@@ -231,7 +231,7 @@ class CommitteeFeedbackListPermission(permissions.BasePermission):
             return True
 
         method = request.method
-        committee_id = request.query_params.get('committee', -1)
+        committee_id = request.query_params.get('committee_id', -1)
         return method == 'GET' and user_is_chair(request, view, committee_id)
 
 
@@ -244,7 +244,7 @@ class CommitteeFeedbackDetailPermission(permissions.BasePermission):
             return True
 
         method = request.method
-        committee_id = view.kwargs.get('committee', -1)
+        committee_id = request.data.get('committee', -1)
         if (method == 'POST' and user.is_authenticated() and
                 user.is_delegate() and user.delegate.assignment and
                 (not user.delegate.committee_feedback_submitted)):

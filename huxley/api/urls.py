@@ -28,7 +28,7 @@ urlpatterns = [
     url(r'^committee_feedback/?$',
         views.committee_feedback.CommitteeFeedbackList.as_view(),
         name='committee_feedback_list'),
-    url(r'^committee_feedback/(?P<committee>[0-9]+)/?$',
+    url(r'^committee_feedback/(?P<pk>[0-9]+)/?$',
         views.committee_feedback.CommitteeFeedbackDetail.as_view(),
         name='committee_feedback_detail'),
     url(r'^countries/?$',
