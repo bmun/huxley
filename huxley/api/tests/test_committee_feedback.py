@@ -50,7 +50,6 @@ class CommitteeFeedbackDetailCreateTestCase(tests.CreateSingleAPITestCase):
         response_2 = self.get_response(params=self.params)
         self.assertPermissionDenied(response_2)
 
-
     def test_chair(self):
         '''Chair cannot create committee feedback'''
         self.user = models.new_user(
@@ -62,13 +61,12 @@ class CommitteeFeedbackDetailCreateTestCase(tests.CreateSingleAPITestCase):
         response = self.get_response(params=self.params)
         self.assertPermissionDenied(response)
 
-
     def test_advisor(self):
         '''Advisor cannot create committee feedback'''
         self.user = models.new_user(
             username='advisor',
             password='advisor',
-            user_type=User.TYPE_ADVISOR,)
+            user_type=User.TYPE_ADVISOR, )
         self.client.login(username='advisor', password='advisor')
         response = self.get_response(params=self.params)
         self.assertPermissionDenied(response)
@@ -108,9 +106,10 @@ class CommitteeFeedbackListGetTestCase(tests.ListAPITestCase):
         self.user = models.new_user(
             username='delegate',
             password='delegate',
-            user_type=User.TYPE_DELEGATE,)
+            user_type=User.TYPE_DELEGATE, )
         self.client.login(username='delegate', password='delegate')
-        response = self.get_response(params={'committee_id': self.committee_1.id})
+        response = self.get_response(
+            params={'committee_id': self.committee_1.id})
         self.assertPermissionDenied(response)
 
     def test_chair(self):
@@ -140,9 +139,10 @@ class CommitteeFeedbackListGetTestCase(tests.ListAPITestCase):
         self.user = models.new_user(
             username='advisor',
             password='advisor',
-            user_type=User.TYPE_ADVISOR,)
+            user_type=User.TYPE_ADVISOR, )
         self.client.login(username='advisor', password='advisor')
-        response = self.get_response(params={'committee_id': self.committee_1.id})
+        response = self.get_response(
+            params={'committee_id': self.committee_1.id})
         self.assertPermissionDenied(response)
 
     def test_superuser(self):

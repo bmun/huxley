@@ -35,4 +35,4 @@ class CommitteeFeedbackDetail(generics.CreateAPIView):
         if not self.request.user.is_superuser:
             self.request.user.delegate.committee_feedback_submitted = True
             self.request.user.delegate.save()
-        super(CommitteeFeedbackDetail, self).perform_create(serializer)    
+        super(CommitteeFeedbackDetail, self).perform_create(serializer)

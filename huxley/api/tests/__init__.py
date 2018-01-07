@@ -127,21 +127,26 @@ class CreateSingleAPITestCase(AbstractAPITestCase):
     is_resource = False
     is_post_single = True
 
+
 class ListAPITestCase(AbstractAPITestCase):
     method = 'get'
     is_resource = False
+
 
 class RetrieveAPITestCase(AbstractAPITestCase):
     method = 'get'
     is_resource = True
 
+
 class UpdateAPITestCase(AbstractAPITestCase):
     method = 'put'
     is_resource = True
 
+
 class PartialUpdateAPITestCase(AbstractAPITestCase):
     method = 'patch'
     is_resource = True
+
 
 class DestroyAPITestCase(AbstractAPITestCase):
     method = 'delete'
