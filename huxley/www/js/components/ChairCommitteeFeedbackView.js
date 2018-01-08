@@ -15,12 +15,12 @@ var TextTemplate = require('components/core/TextTemplate');
 var User = require('utils/User');
 
 require('css/Table.less');
-var ChairCommitteeFeedbackViewText = require('text/ChairCommitteeFeedbackViewText.md')
+var ChairCommitteeFeedbackViewText = require('text/ChairCommitteeFeedbackViewText.md');
 
 var ChairCommitteeFeedbackView = React.createClass({
   mixins: [ReactRouter.History],
 
-  getInitialState(){
+  getInitialState() {
     var committeeID = CurrentUserStore.getCurrentUser().committee;
     return {
       feedback: CommitteeFeedbackStore.getCommitteeFeedback(committeeID),
@@ -54,9 +54,10 @@ var ChairCommitteeFeedbackView = React.createClass({
           {ChairCommitteeFeedbackViewText}
         </TextTemplate>
         <div className="table-container">
-          <table style={{margin: '10px auto 0px auto'}}
-          emptyMessage="You have no feedback."
-          isEmpty={!this.state.feedback.length}>
+          <table
+            style={{margin: '10px auto 0px auto'}}
+            emptyMessage="You have no feedback."
+            isEmpty={!this.state.feedback.length}>
             <thead>
               <tr>
                 <th>Feedback</th>
@@ -72,19 +73,16 @@ var ChairCommitteeFeedbackView = React.createClass({
   },
 
   renderFeedbackRows() {
-    return this.state.feedback.map(
-        function(singleFeedback) {
-          return (
-              <tr>
-                <td>
-                  {singleFeedback.comment}
-                </td>
-              </tr>
-            );
-        }
+    return this.state.feedback.map(function(singleFeedback) {
+      return (
+        <tr>
+          <td>
+            {singleFeedback.comment}
+          </td>
+        </tr>
       );
+    });
   },
-
 });
 
 module.exports = ChairCommitteeFeedbackView;

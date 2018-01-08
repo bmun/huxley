@@ -14,7 +14,7 @@ const CurrentUserStore = require('stores/CurrentUserStore');
 const CommitteeFeedbackActions = require('actions/CommitteeFeedbackActions');
 const CommitteeFeedbackStore = require('stores/CommitteeFeedbackStore');
 const InnerView = require('components/InnerView');
-const ServerAPI = require('lib/ServerAPI')
+const ServerAPI = require('lib/ServerAPI');
 const TextTemplate = require('components/core/TextTemplate');
 const User = require('utils/User');
 
@@ -24,7 +24,6 @@ require('css/Table.less');
 const DelegateCommitteeFeedbackViewText = require('text/DelegateCommitteeFeedbackViewText.md');
 
 const DelegateCommitteeFeedbackView = React.createClass({
-
   mixins: [ReactRouter.History],
 
   contextTypes: {
@@ -36,9 +35,11 @@ const DelegateCommitteeFeedbackView = React.createClass({
     var delegate = user.delegate;
     return {
       delegate: delegate,
-      comment: "",
+      comment: '',
       loadingPublish: false,
-      feedbackSubmitted: CommitteeFeedbackStore.feedbackSubmitted() || delegate.committee_feedback_submitted,
+      feedbackSubmitted:
+        CommitteeFeedbackStore.feedbackSubmitted() ||
+        delegate.committee_feedback_submitted,
       errors: {},
     };
   },
@@ -59,7 +60,7 @@ const DelegateCommitteeFeedbackView = React.createClass({
     }
   },
 
-  componentWillUnmount(){
+  componentWillUnmount() {
     this._committeeFeedbackToken && this._committeeFeedbackToken.remove();
   },
 
@@ -70,38 +71,39 @@ const DelegateCommitteeFeedbackView = React.createClass({
     var committee = delegate && delegate.assignment.committee;
     var country = delegate && delegate.assignment.country;
     var school = delegate && delegate.school;
-    var body = <div />
+    var body = <div />;
 
     if (assignment && school && committee && country) {
-      if(this.state.feedbackSubmitted){
-        body = (<h3>Thank you for submitting your feedback</h3>);
+      if (this.state.feedbackSubmitted) {
+        body = <h3>Thank you for submitting your feedback</h3>;
       } else {
         body = (
-        <div>
-          <TextTemplate
-            firstName={delegate.name}
-            conferenceSession={conference.session}
-            committee={committee.full_name}>
-            {DelegateCommitteeFeedbackViewText}
-          </TextTemplate>
-          <form>
+          <div>
+            <TextTemplate
+              firstName={delegate.name}
+              conferenceSession={conference.session}
+              committee={committee.full_name}>
+              {DelegateCommitteeFeedbackViewText}
+            </TextTemplate>
+            <form>
               <textarea
-              className="text-input"
-              style={{width: '95%'}}
-              rows="6"
-              onChange={_handleChange.bind(this,'comment')}
-              defaultValue={this.state.feedback}
-          />
-          <br />
-          <br />
-          <Button color="green"
-            onClick={this._handlePublishFeedback}
-            loading={this.state.loadingPublish}
-            success={this.state.successPublish}>
-            Submit
-            </Button>
-          </form>
-        </div>
+                className="text-input"
+                style={{width: '95%'}}
+                rows="6"
+                onChange={_handleChange.bind(this, 'comment')}
+                defaultValue={this.state.feedback}
+              />
+              <br />
+              <br />
+              <Button
+                color="green"
+                onClick={this._handlePublishFeedback}
+                loading={this.state.loadingPublish}
+                success={this.state.successPublish}>
+                Submit
+              </Button>
+            </form>
+          </div>
         );
       }
     }
@@ -118,29 +120,26 @@ const DelegateCommitteeFeedbackView = React.createClass({
     );
   },
 
-  _handlePublishFeedback(event){
+  _handlePublishFeedback(event) {
     this.setState({loadingPublish: true});
     var committee_id = this.state.delegate.assignment.committee.id;
-    ServerAPI.createCommitteeFeedback(
-      {
-        comment: this.state.comment,
-        committee: committee_id,
-      }).then(this._handleAddFeedbackSuccess, this._handleAddFeedbackFail);
+    ServerAPI.createCommitteeFeedback({
+      comment: this.state.comment,
+      committee: committee_id,
+    }).then(this._handleAddFeedbackSuccess, this._handleAddFeedbackFail);
     event.preventDefault();
   },
 
-  _handleAddFeedbackSuccess(response){
+  _handleAddFeedbackSuccess(response) {
     CommitteeFeedbackActions.addCommitteeFeedback(response);
   },
 
-  _handleAddFeedbackFail(response){
+  _handleAddFeedbackFail(response) {
     this.setState({
       errors: response,
       loading: false,
     });
-  }
-
-
+  },
 });
 
 module.exports = DelegateCommitteeFeedbackView;
