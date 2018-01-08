@@ -14,12 +14,13 @@ class CommitteeFeedbackDetailCreateTestCase(tests.CreateSingleAPITestCase):
     url_name = 'api:committee_feedback_detail'
 
     def setUp(self):
-        self.committee = models.new_committee(name='CYBER')
-        self.assignment = models.new_assignment(committee=self.committee)
+        self.committee_1 = models.new_committee(name='CYBER')
+        self.committee_2 = models.new_committee(name='UNPBC')
+        self.assignment = models.new_assignment(committee=self.committee_1)
         self.delegate = models.new_delegate(assignment=self.assignment)
         self.params = {
             'comment': "I never got called on ever. SAD!",
-            'committee': self.committee.id
+            'committee': self.committee_1.id
         }
 
     def test_anonymous_user(self):
@@ -28,7 +29,8 @@ class CommitteeFeedbackDetailCreateTestCase(tests.CreateSingleAPITestCase):
         self.assertNotAuthenticated(response)
 
     def test_delegate(self):
-        '''Delegate can create feedback only once'''
+        '''Delegate can create feedback only once 
+           for the committee they are in'''
         self.user = models.new_user(
             username='delegate',
             password='delegate',
@@ -37,14 +39,18 @@ class CommitteeFeedbackDetailCreateTestCase(tests.CreateSingleAPITestCase):
             assignment=self.assignment)
         self.client.login(username='delegate', password='delegate')
         self.assertFalse(self.user.delegate.committee_feedback_submitted)
+        self.params_fail = {
+            'comment': "Fail Test",
+            'committee': self.committee_2.id
+        }
+        response_0 = self.get_response(params=self.params_fail)
+        self.assertPermissionDenied(response_0)
         response_1 = self.get_response(params=self.params)
         response_1.data.pop('id')
         self.assertEqual(response_1.data, {
-            "committee": self.committee.id,
+            "committee": self.committee_1.id,
             "comment": self.params['comment'],
         })
-
-        #This is how to refresh an object after it was updated from somewhere else
         self.user.delegate.refresh_from_db()
         self.assertTrue(self.user.delegate.committee_feedback_submitted)
         response_2 = self.get_response(params=self.params)
@@ -56,7 +62,7 @@ class CommitteeFeedbackDetailCreateTestCase(tests.CreateSingleAPITestCase):
             username='chair',
             password='chair',
             user_type=User.TYPE_CHAIR,
-            committee=self.committee)
+            committee=self.committee_1)
         self.client.login(username='chair', password='chair')
         response = self.get_response(params=self.params)
         self.assertPermissionDenied(response)
@@ -78,7 +84,7 @@ class CommitteeFeedbackDetailCreateTestCase(tests.CreateSingleAPITestCase):
         response = self.get_response(params=self.params)
         response.data.pop('id')
         self.assertEqual(response.data, {
-            "committee": self.committee.id,
+            "committee": self.committee_1.id,
             "comment": self.params['comment'],
         })
 
