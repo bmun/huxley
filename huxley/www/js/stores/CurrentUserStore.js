@@ -52,19 +52,6 @@ class CurrentUserStore extends Store {
     };
   }
 
-  refreshCurrentUser() {
-    this.updateUser(
-      this._currentUser.id,
-      {
-        first_name: this._currentUser.first_name,
-        last_name: this._currentUser.last_name,
-      },
-      undefined,
-      undefined,
-    );
-    return this.getCurrentUser();
-  }
-
   __onDispatch(action) {
     switch (action.actionType) {
       case ActionConstants.BOOTSTRAP:

@@ -15,8 +15,8 @@ var ServerAPI = {
     return _post('/api/delegates', {name, email, school});
   },
 
-  createCommitteeFeedback(committeeID, feedback) {
-    return _post(`/api/committee_feedback/${committeeID}`, feedback);
+  createCommitteeFeedback(feedback) {
+    return _post(`/api/committee_feedback/0`, feedback);
   },
 
   changePassword(currentPassword, newPassword) {
