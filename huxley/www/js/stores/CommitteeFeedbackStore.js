@@ -22,7 +22,6 @@ class CommitteeFeedbackStore extends Store {
       ServerAPI.getCommitteeFeedback(committeeID).then(value => {
         CommitteeFeedbackActions.committeeFeedbackFetched(value);
       });
-
       return [];
     }
 
