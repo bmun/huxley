@@ -37,7 +37,9 @@ const DelegateCommitteeFeedbackView = React.createClass({
       delegate: delegate,
       comment: '',
       loadingPublish: false,
-      feedbackSubmitted: delegate.committee_feedback_submitted || CommitteeFeedbackStore.feedbackSubmitted(),
+      feedbackSubmitted:
+        delegate.committee_feedback_submitted ||
+        CommitteeFeedbackStore.feedbackSubmitted(),
       errors: {},
     };
   },
@@ -45,7 +47,9 @@ const DelegateCommitteeFeedbackView = React.createClass({
   componentDidMount() {
     this._committeeFeedbackToken = CommitteeFeedbackStore.addListener(() => {
       this.setState({
-        feedbackSubmitted: this.state.feedbackSubmitted || CommitteeFeedbackStore.feedbackSubmitted(),
+        feedbackSubmitted:
+          this.state.feedbackSubmitted ||
+          CommitteeFeedbackStore.feedbackSubmitted(),
         loadingPublish: false,
       });
     });
