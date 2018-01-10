@@ -15,8 +15,8 @@ class RubricSerializer(serializers.ModelSerializer):
                   'grade_category_3',
                   'grade_category_4',
                   'grade_category_5',
-                  'grade_score_1',
-                  'grade_score_2',
-                  'grade_score_3',
-                  'grade_score_4',
-                  'grade_score_5')
+                  'grade_value_1',
+                  'grade_value_2',
+                  'grade_value_3',
+                  'grade_value_4',
+                  'grade_value_5')

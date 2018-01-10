@@ -1,8 +1,6 @@
 # Copyright (c) 2011-2017 Berkeley Model United Nations. All rights reserved.
 # Use of this source code is governed by a BSD License (see LICENSE).
 
-import os
-
 from django.core.exceptions import ValidationError
 
 from huxley.accounts.models import User
@@ -11,56 +9,42 @@ from huxley.api.tests import auto
 from huxley.utils.test import models
 
 
-class PositionPaperDetailGetTestCase(auto.RetrieveAPIAutoTestCase):
-    url_name = 'api:position_paper_detail'
+class RubricDetailGetTestCase(auto.RetrieveAPIAutoTestCase):
+    url_name = 'api:rubric_detail'
 
     @classmethod
     def get_test_object(cls):
-        return models.new_position_paper()
+        return models.new_rubric()
 
     def test_anonymous_user(self):
-        self.do_test(expected_error=auto.EXP_NOT_AUTHENTICATED)
+        self.do_test()
 
     def test_advisor(self):
         user = models.new_user()
-        school = models.new_school(user=user)
-        registration = models.new_registration(school=school)
-        a = models.new_assignment(paper=self.object, registration=registration)
-        self.as_user(user).do_test(expected_error=auto.EXP_PERMISSION_DENIED)
+        self.as_user(user).do_test()
 
     def test_chair(self):
-        a = models.new_assignment(paper=self.object)
-        chair = models.new_user(
+        chair1 = models.new_user(user_type=User.TYPE_CHAIR)
+        self.as_user(chair1).do_test()
+        c = models.new_committee(rubric_id=self.object.id)
+        chair2 = models.new_user(
             user_type=User.TYPE_CHAIR,
-            committee=a.committee)
-        self.as_user(chair).do_test()
-
-    def test_other_chair(self):
-        a = models.new_assignment()
-        chair = models.new_user(
-            user_type=User.TYPE_CHAIR,
-            committee=a.committee)
-        self.as_user(chair).do_test(expected_error=auto.EXP_PERMISSION_DENIED)
+            committee=c)
+        self.as_user(chair2).do_test()
 
     def test_delegate(self):
-        a = models.new_assignment(paper=self.object)
-
         delegate_user = models.new_user(user_type=User.TYPE_DELEGATE)
-        self.as_user(delegate_user).do_test(
-            expected_error=auto.EXP_PERMISSION_DENIED)
-
-        delegate = models.new_delegate(assignment=a, school=a.registration.school, user=delegate_user)
         self.as_user(delegate_user).do_test()
 
     def test_superuser(self):
         self.as_superuser().do_test()
 
 
-class PositionPaperPutTestCase(tests.UpdateAPITestCase):
-    url_name = 'api:position_paper_detail'
+class RubricPutTestCase(tests.UpdateAPITestCase):
+    url_name = 'api:rubric_detail'
     params = {
-        'score_1': 5,
-        'score_2': 5,
+        'grade_category_1': 'Overall Quality',
+        'grade_value_1': 5,
     }
 
     def setUp(self):
@@ -77,7 +61,8 @@ class PositionPaperPutTestCase(tests.UpdateAPITestCase):
             user_type=User.TYPE_DELEGATE)
         self.school = models.new_school(user=self.advisor)
         self.registration = models.new_registration(school=self.school)
-        self.committee = models.new_committee(user=self.chair)
+        self.rubric = models.new_rubric()
+        self.committee = models.new_committee(user=self.chair, rubric=self.rubric)
         self.paper = models.new_position_paper()
         self.assignment = models.new_assignment(
             registration=self.registration, committee=self.committee, paper=self.paper)
@@ -87,65 +72,69 @@ class PositionPaperPutTestCase(tests.UpdateAPITestCase):
             school=self.school)
 
     def test_anonymous_user(self):
-        '''Unauthenticated users should be unable to update position papers.'''
-        response = self.get_response(self.delegate.id, params=self.params)
+        '''Unauthenticated users shouldn't be able to update rubrics.'''
+        response = self.get_response(self.rubric.id, params=self.params)
         self.assertNotAuthenticated(response)
 
     def test_advisor(self):
-        '''Advisors should be unable to update position papers.'''
+        '''Advisors shouldn't be able to update rubrics.'''
         self.client.login(username='advisor', password='advisor')
-        response = self.get_response(self.paper.id, params=self.params)
+        response = self.get_response(self.rubric.id, params=self.params)
         self.assertPermissionDenied(response)
 
     def test_chair(self):
         '''It should return correct data.'''
         self.client.login(username='chair', password='chair')
-        response = self.get_response(self.paper.id, params=self.params)
+        response = self.get_response(self.rubric.id, params=self.params)
         self.assertEqual(response.data, {
             "id": self.paper.id,
-            "score_1": self.params['score_1'],
-            "score_2": self.params['score_2'],
-            "score_3": self.paper.score_3,
-            "score_4": self.paper.score_4,
-            "score_5": self.paper.score_5,
-            "graded": self.paper.graded,
-            "file": self.paper.file
+            "grade_category_1": self.params['grade_category_1'],
+            "grade_value_1": self.params['grade_value_1'],
+            "grade_category_2": self.rubric.grade_category_2,
+            "grade_value_2": self.rubric.grade_value_2,
+            "grade_category_3": self.rubric.grade_category_3,
+            "grade_value_3": self.rubric.grade_value_3,
+            "grade_category_4": self.rubric.grade_category_4,
+            "grade_value_4": self.rubric.grade_value_4,
+            "grade_category_5": self.rubric.grade_category_5,
+            "grade_value_5": self.rubric.grade_value_5,
         })
 
     def test_delegate(self):
-        '''Delegates should be unable to update scores.'''
+        '''Delegates should be unable to update rubrics.'''
         self.client.login(username='delegate', password='delegate')
-        response = self.get_response(self.paper.id, params=self.params)
+        response = self.get_response(self.rubric.id, params=self.params)
         self.assertPermissionDenied(response)
 
-    def test_other_delegate(self):
-        '''A delegate should be unable to update a position paper they do not possess.'''
         self.client.login(username='delegate_2', password='delegate')
-        response = self.get_response(self.paper.id, params=self.params)
+        response = self.get_response(self.rubric.id, params=self.params)
         self.assertPermissionDenied(response)
 
     def test_superuser(self):
         '''It should return correct data.'''
         superuser = models.new_superuser(username='s_user', password='s_user')
         self.client.login(username='s_user', password='s_user')
-        response = self.get_response(self.paper.id, params=self.params)
+        response = self.get_response(self.rubric.id, params=self.params)
         self.assertEqual(response.data, {
             "id": self.paper.id,
-            "score_1": self.params['score_1'],
-            "score_2": self.params['score_2'],
-            "score_3": self.paper.score_3,
-            "score_4": self.paper.score_4,
-            "score_5": self.paper.score_5,
-            "graded": self.paper.graded,
-            "file": self.paper.file
+            "grade_category_1": self.params['grade_category_1'],
+            "grade_value_1": self.params['grade_value_1'],
+            "grade_category_2": self.rubric.grade_category_2,
+            "grade_value_2": self.rubric.grade_value_2,
+            "grade_category_3": self.rubric.grade_category_3,
+            "grade_value_3": self.rubric.grade_value_3,
+            "grade_category_4": self.rubric.grade_category_4,
+            "grade_value_4": self.rubric.grade_value_4,
+            "grade_category_5": self.rubric.grade_category_5,
+            "grade_value_5": self.rubric.grade_value_5,
         })
 
 
-class PositionPaperDetailPatchTestCase(tests.PartialUpdateAPITestCase):
-    url_name = 'api:position_paper_detail'
+class RubricDetailPatchTestCase(tests.PartialUpdateAPITestCase):
+    url_name = 'api:rubric_detail'
     params = {
-        'score_1': 5,
-        'score_2': 5,
+        'grade_category_1': 'Overall Quality',
+        'grade_value_1': 5,
     }
 
     def setUp(self):
@@ -162,7 +151,8 @@ class PositionPaperDetailPatchTestCase(tests.PartialUpdateAPITestCase):
             user_type=User.TYPE_DELEGATE)
         self.school = models.new_school(user=self.advisor)
         self.registration = models.new_registration(school=self.school)
-        self.committee = models.new_committee(user=self.chair)
+        self.rubric = models.new_rubric()
+        self.committee = models.new_committee(user=self.chair, rubric=self.rubric)
         self.paper = models.new_position_paper()
         self.assignment = models.new_assignment(
             registration=self.registration, committee=self.committee, paper=self.paper)
@@ -172,55 +162,59 @@ class PositionPaperDetailPatchTestCase(tests.PartialUpdateAPITestCase):
             school=self.school)
 
     def test_anonymous_user(self):
-        '''Unauthenticated users should be unable able to update position papers.'''
-        response = self.get_response(self.paper.id, params=self.params)
+        '''Unauthenticated users shouldn't be able to update rubrics.'''
+        response = self.get_response(self.rubric.id, params=self.params)
         self.assertNotAuthenticated(response)
 
     def test_advisor(self):
-        '''Advisors should be unable to update position papers.'''
+        '''Advisors shouldn't be able to update rubrics.'''
         self.client.login(username='advisor', password='advisor')
-        response = self.get_response(self.paper.id, params=self.params)
+        response = self.get_response(self.rubric.id, params=self.params)
         self.assertPermissionDenied(response)
 
     def test_chair(self):
         '''It should return correct data.'''
         self.client.login(username='chair', password='chair')
-        response = self.get_response(self.paper.id, params=self.params)
+        response = self.get_response(self.rubric.id, params=self.params)
         self.assertEqual(response.data, {
             "id": self.paper.id,
-            "score_1": self.params['score_1'],
-            "score_2": self.params['score_2'],
-            "score_3": self.paper.score_3,
-            "score_4": self.paper.score_4,
-            "score_5": self.paper.score_5,
-            "graded": self.paper.graded,
-            "file": self.paper.file
+            "grade_category_1": self.params['grade_category_1'],
+            "grade_value_1": self.params['grade_value_1'],
+            "grade_category_2": self.rubric.grade_category_2,
+            "grade_value_2": self.rubric.grade_value_2,
+            "grade_category_3": self.rubric.grade_category_3,
+            "grade_value_3": self.rubric.grade_value_3,
+            "grade_category_4": self.rubric.grade_category_4,
+            "grade_value_4": self.rubric.grade_value_4,
+            "grade_category_5": self.rubric.grade_category_5,
+            "grade_value_5": self.rubric.grade_value_5,
         })
 
     def test_delegate(self):
-        '''Delegates should be unable to update scores.'''
+        '''Delegates should be unable to update rubrics.'''
         self.client.login(username='delegate', password='delegate')
-        response = self.get_response(self.paper.id, params=self.params)
+        response = self.get_response(self.rubric.id, params=self.params)
         self.assertPermissionDenied(response)
 
-    def test_other_delegate(self):
-        '''A delegate should be unable to update a position paper they do not possess.'''
         self.client.login(username='delegate_2', password='delegate')
-        response = self.get_response(self.paper.id, params=self.params)
+        response = self.get_response(self.rubric.id, params=self.params)
         self.assertPermissionDenied(response)
 
     def test_superuser(self):
         '''It should return correct data.'''
         superuser = models.new_superuser(username='s_user', password='s_user')
         self.client.login(username='s_user', password='s_user')
-        response = self.get_response(self.paper.id, params=self.params)
+        response = self.get_response(self.rubric.id, params=self.params)
         self.assertEqual(response.data, {
             "id": self.paper.id,
-            "score_1": self.params['score_1'],
-            "score_2": self.params['score_2'],
-            "score_3": self.paper.score_3,
-            "score_4": self.paper.score_4,
-            "score_5": self.paper.score_5,
-            "graded": self.paper.graded,
-            "file": self.paper.file
+            "grade_category_1": self.params['grade_category_1'],
+            "grade_value_1": self.params['grade_value_1'],
+            "grade_category_2": self.rubric.grade_category_2,
+            "grade_value_2": self.rubric.grade_value_2,
+            "grade_category_3": self.rubric.grade_category_3,
+            "grade_value_3": self.rubric.grade_value_3,
+            "grade_category_4": self.rubric.grade_category_4,
+            "grade_value_4": self.rubric.grade_value_4,
+            "grade_category_5": self.rubric.grade_category_5,
+            "grade_value_5": self.rubric.grade_value_5,
         })

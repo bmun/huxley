@@ -107,6 +107,8 @@ class CommitteeListGetTestCase(tests.ListAPITestCase):
                                           delegation_size=30)
 
         response = self.get_response()
+        for r in response.data:
+            r.pop('rubric')
         self.assertEqual(response.data, [
             {'delegation_size': c1.delegation_size,
              'special': c1.special,

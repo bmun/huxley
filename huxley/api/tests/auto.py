@@ -3,6 +3,7 @@
 
 from django.core.urlresolvers import resolve, reverse
 from django.db import models
+from django.forms.models import model_to_dict
 from rest_framework import serializers
 
 from huxley.api.tests import DestroyAPITestCase, RetrieveAPITestCase
@@ -120,7 +121,7 @@ def transform_attr(attr, test_object, model_field, serializer_field):
     if isinstance(model_field, models.DateTimeField):
         return attr.isoformat()
     if isinstance(model_field, models.ForeignKey):
-        return attr.pk
+        return attr.pk if not serializer_field else model_to_dict(attr)
 
     if not serializer_field:
         return attr
