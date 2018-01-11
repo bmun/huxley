@@ -330,7 +330,7 @@ class PositionPaper(models.Model):
         if hasattr(position_paper, '_prev_file') and \
            position_paper.file.name != position_paper._prev_file and \
            os.path.isfile(position_paper._prev_file):
-           os.remove(position_paper._prev_file)
+            os.remove(position_paper._prev_file)
 
     @classmethod
     def store_file_path(cls, **kwargs):
@@ -339,11 +339,12 @@ class PositionPaper(models.Model):
 
     def __unicode__(self):
         a = self.assignment
-        return '%s %s %d' % (a.committee.name, a.country.name, a.id) if a else '%d' % (self.id)
+        return '%s %s %d' % (a.committee.name, a.country.name,
+                             a.id) if a else '%d' % (self.id)
 
     class Meta:
         db_table = u'position_papers'
-        
+
 
 post_init.connect(PositionPaper.store_file_path, sender=PositionPaper)
 post_save.connect(PositionPaper.delete_prev_file, sender=PositionPaper)

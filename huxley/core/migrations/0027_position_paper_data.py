@@ -15,6 +15,7 @@ def create_assignment_position_papers(apps, schema_editor):
             assignment.paper = paper
             assignment.save()
 
+
 def create_committee_rubrics(apps, schema_editor):
     queryset = Committee.objects.all()
 
@@ -23,6 +24,7 @@ def create_committee_rubrics(apps, schema_editor):
             rubric = Rubric.objects.create()
             committee.rubric = rubric
             committee.save()
+
 
 class Migration(migrations.Migration):
 

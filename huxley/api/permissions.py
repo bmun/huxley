@@ -253,17 +253,20 @@ class PositionPaperDetailPermission(permissions.BasePermission):
 
         paper_id = view.kwargs.get('pk', None)
         queryset = Assignment.objects.filter(paper_id=paper_id)
-        delegate_modifiable_fields = ('file',)
+        delegate_modifiable_fields = ('file', )
         if queryset.exists():
             assignment = queryset.get(paper_id=paper_id)
             is_chair = user_is_chair(request, view, assignment.committee.id)
 
             if request.method in permissions.SAFE_METHODS:
-                return is_chair or user_is_delegate(request, view, assignment.id, 'assignment')
+                return is_chair or user_is_delegate(
+                    request, view, assignment.id, 'assignment')
 
-            return (is_chair or
-                    user_is_delegate(request, view, assignment.id, 'assignment') and
-                    all([field in delegate_modifiable_fields for field in request.data]))
+            return (
+                is_chair or
+                user_is_delegate(request, view, assignment.id, 'assignment')
+                and all([field in delegate_modifiable_fields
+                         for field in request.data]))
 
         return False
 

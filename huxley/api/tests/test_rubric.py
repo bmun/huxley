@@ -27,9 +27,7 @@ class RubricDetailGetTestCase(auto.RetrieveAPIAutoTestCase):
         chair1 = models.new_user(user_type=User.TYPE_CHAIR)
         self.as_user(chair1).do_test()
         c = models.new_committee(rubric_id=self.object.id)
-        chair2 = models.new_user(
-            user_type=User.TYPE_CHAIR,
-            committee=c)
+        chair2 = models.new_user(user_type=User.TYPE_CHAIR, committee=c)
         self.as_user(chair2).do_test()
 
     def test_delegate(self):
@@ -62,10 +60,13 @@ class RubricPutTestCase(tests.UpdateAPITestCase):
         self.school = models.new_school(user=self.advisor)
         self.registration = models.new_registration(school=self.school)
         self.rubric = models.new_rubric()
-        self.committee = models.new_committee(user=self.chair, rubric=self.rubric)
+        self.committee = models.new_committee(
+            user=self.chair, rubric=self.rubric)
         self.paper = models.new_position_paper()
         self.assignment = models.new_assignment(
-            registration=self.registration, committee=self.committee, paper=self.paper)
+            registration=self.registration,
+            committee=self.committee,
+            paper=self.paper)
         self.delegate = models.new_delegate(
             user=self.delegate_user,
             assignment=self.assignment,
@@ -152,10 +153,13 @@ class RubricDetailPatchTestCase(tests.PartialUpdateAPITestCase):
         self.school = models.new_school(user=self.advisor)
         self.registration = models.new_registration(school=self.school)
         self.rubric = models.new_rubric()
-        self.committee = models.new_committee(user=self.chair, rubric=self.rubric)
+        self.committee = models.new_committee(
+            user=self.chair, rubric=self.rubric)
         self.paper = models.new_position_paper()
         self.assignment = models.new_assignment(
-            registration=self.registration, committee=self.committee, paper=self.paper)
+            registration=self.registration,
+            committee=self.committee,
+            paper=self.paper)
         self.delegate = models.new_delegate(
             user=self.delegate_user,
             assignment=self.assignment,

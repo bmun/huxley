@@ -31,15 +31,13 @@ class PositionPaperDetailGetTestCase(auto.RetrieveAPIAutoTestCase):
     def test_chair(self):
         a = models.new_assignment(paper=self.object)
         chair = models.new_user(
-            user_type=User.TYPE_CHAIR,
-            committee=a.committee)
+            user_type=User.TYPE_CHAIR, committee=a.committee)
         self.as_user(chair).do_test()
 
     def test_other_chair(self):
         a = models.new_assignment()
         chair = models.new_user(
-            user_type=User.TYPE_CHAIR,
-            committee=a.committee)
+            user_type=User.TYPE_CHAIR, committee=a.committee)
         self.as_user(chair).do_test(expected_error=auto.EXP_PERMISSION_DENIED)
 
     def test_delegate(self):
@@ -49,7 +47,8 @@ class PositionPaperDetailGetTestCase(auto.RetrieveAPIAutoTestCase):
         self.as_user(delegate_user).do_test(
             expected_error=auto.EXP_PERMISSION_DENIED)
 
-        delegate = models.new_delegate(assignment=a, school=a.registration.school, user=delegate_user)
+        delegate = models.new_delegate(
+            assignment=a, school=a.registration.school, user=delegate_user)
         self.as_user(delegate_user).do_test()
 
     def test_superuser(self):
@@ -80,7 +79,9 @@ class PositionPaperPutTestCase(tests.UpdateAPITestCase):
         self.committee = models.new_committee(user=self.chair)
         self.paper = models.new_position_paper()
         self.assignment = models.new_assignment(
-            registration=self.registration, committee=self.committee, paper=self.paper)
+            registration=self.registration,
+            committee=self.committee,
+            paper=self.paper)
         self.delegate = models.new_delegate(
             user=self.delegate_user,
             assignment=self.assignment,
@@ -165,7 +166,9 @@ class PositionPaperDetailPatchTestCase(tests.PartialUpdateAPITestCase):
         self.committee = models.new_committee(user=self.chair)
         self.paper = models.new_position_paper()
         self.assignment = models.new_assignment(
-            registration=self.registration, committee=self.committee, paper=self.paper)
+            registration=self.registration,
+            committee=self.committee,
+            paper=self.paper)
         self.delegate = models.new_delegate(
             user=self.delegate_user,
             assignment=self.assignment,

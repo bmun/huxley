@@ -14,7 +14,8 @@ class AssignmentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Assignment
-        fields = ('id', 'committee', 'country', 'paper', 'registration', 'rejected')
+        fields = ('id', 'committee', 'country', 'paper', 'registration',
+                  'rejected')
 
 
 class AssignmentNestedSerializer(serializers.ModelSerializer):
@@ -24,4 +25,5 @@ class AssignmentNestedSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Assignment
-        fields = ('id', 'committee', 'country', 'paper', 'registration', 'rejected')
+        fields = ('id', 'committee', 'country', 'paper', 'registration',
+                  'rejected')
