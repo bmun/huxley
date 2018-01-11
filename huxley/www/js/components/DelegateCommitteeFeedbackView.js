@@ -71,11 +71,9 @@ const DelegateCommitteeFeedbackView = React.createClass({
     var delegate = this.state.delegate;
     var assignment = delegate && delegate.assignment;
     var committee = delegate && delegate.assignment.committee;
-    var country = delegate && delegate.assignment.country;
-    var school = delegate && delegate.school;
     var body = <div />;
 
-    if (assignment && school && committee && country) {
+    if (assignment && committee) {
       if (this.state.feedbackSubmitted) {
         body = <h3>Thank you for submitting your feedback</h3>;
       } else {
