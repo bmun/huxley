@@ -297,8 +297,9 @@ class PositionPaperTest(TestCase):
 
     def test_unicode(self):
         a = self.assignment
-        self.assertEquals(
-            '%s %s %d' % (a.committee.name, a.country.name, a.id), self.position_paper.__unicode__())
+        self.assertEquals('%s %s %d' %
+                          (a.committee.name, a.country.name, a.id),
+                          self.position_paper.__unicode__())
 
 
 class RubricTest(TestCase):
