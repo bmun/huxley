@@ -57,7 +57,7 @@ urlpatterns = [
         views.position_paper.PositionPaperDetail.as_view(),
         name='position_paper_detail'), url(r'^rubrics/(?P<pk>[0-9]+)/?$',
                                            views.rubric.RubricDetail.as_view(),
-                                           name='rubric_detail')
+                                           name='rubric_detail'),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
