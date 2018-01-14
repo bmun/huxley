@@ -3,6 +3,7 @@
 
 from rest_framework import generics
 from rest_framework.authentication import SessionAuthentication
+from rest_framework.parsers import MultiPartParser
 
 from huxley.api import permissions
 from huxley.api.serializers import PositionPaperSerializer
@@ -12,6 +13,7 @@ from huxley.core.models import PositionPaper
 class PositionPaperDetail(generics.RetrieveUpdateAPIView):
     authentication_classes = (SessionAuthentication, )
     queryset = PositionPaper.objects.all()
+    parser_classes = (MultiPartParser,)
     permission_classes = (permissions.PositionPaperDetailPermission, )
     serializer_class = PositionPaperSerializer
 
