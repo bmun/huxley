@@ -13,7 +13,7 @@ from huxley.core.models import PositionPaper
 class PositionPaperDetail(generics.RetrieveUpdateAPIView):
     authentication_classes = (SessionAuthentication, )
     queryset = PositionPaper.objects.all()
-    parser_classes = (MultiPartParser,)
+    parser_classes = (MultiPartParser, )
     permission_classes = (permissions.PositionPaperDetailPermission, )
     serializer_class = PositionPaperSerializer
 
