@@ -9,6 +9,7 @@ from rest_framework import permissions
 from huxley.api.validators import ValidationError
 from huxley.core.models import Assignment, Committee, CommitteeFeedback, Delegate, Registration
 
+
 class IsSuperuserOrReadOnly(permissions.BasePermission):
     '''Allow writes if superuser, read-only otherwise.'''
 
