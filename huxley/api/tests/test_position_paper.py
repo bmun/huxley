@@ -123,11 +123,33 @@ class PositionPaperPutTestCase(tests.UpdateAPITestCase):
             "file": self.paper.file
         })
 
-    def test_delegate(self):
+    def test_delegate_scores(self):
         '''Delegates should be unable to update scores.'''
         self.client.login(username='delegate', password='delegate')
         response = self.get_response(self.paper.id, params=self.params)
         self.assertPermissionDenied(response)
+
+    def test_delegate_file(self):
+        '''Delegates should be able to update the file.'''
+        if os.path.isfile('test_file.doc'):
+            os.remove('test_file.doc')
+        if os.path.isfile('position_papers/test_file.doc'):
+            os.remove('position_papers/test_file.doc')
+        self.client.login(username='delegate', password='delegate')
+        with open('test_file.doc', 'a+') as f:
+            f.write('This is a test line.')
+
+        f = open('test_file.doc', 'r')
+        response = self.get_response(self.paper.id, params={"file":f})
+        f.close()
+
+        f = open('test_file.doc', 'r')
+        new_file = response.data.pop("file", None)
+        self.assertTrue(new_file != None and new_file=="http://testserver/api/papers/position_papers/test_file.doc")
+        new_f = open('position_papers/test_file.doc', 'r')
+        self.assertEqual(f.read(), new_f.read())
+        f.close()
+        new_f.close()
 
     def test_other_delegate(self):
         '''A delegate should be unable to update a position paper they do not possess.'''
@@ -220,11 +242,33 @@ class PositionPaperDetailPatchTestCase(tests.PartialUpdateAPITestCase):
             "file": self.paper.file
         })
 
-    def test_delegate(self):
+    def test_delegate_scores(self):
         '''Delegates should be unable to update scores.'''
         self.client.login(username='delegate', password='delegate')
         response = self.get_response(self.paper.id, params=self.params)
         self.assertPermissionDenied(response)
+
+    def test_delegate_file(self):
+        '''Delegates should be able to update the file.'''
+        if os.path.isfile('test_file.doc'):
+            os.remove('test_file.doc')
+        if os.path.isfile('position_papers/test_file.doc'):
+            os.remove('position_papers/test_file.doc')
+        self.client.login(username='delegate', password='delegate')
+        with open('test_file.doc', 'a+') as f:
+            f.write('This is a test line.')
+
+        f = open('test_file.doc', 'r')
+        response = self.get_response(self.paper.id, params={"file":f})
+        f.close()
+
+        f = open('test_file.doc', 'r')
+        new_file = response.data.pop("file", None)
+        self.assertTrue(new_file != None and new_file=="http://testserver/api/papers/position_papers/test_file.doc")
+        new_f = open('position_papers/test_file.doc', 'r')
+        self.assertEqual(f.read(), new_f.read())
+        f.close()
+        new_f.close()
 
     def test_other_delegate(self):
         '''A delegate should be unable to update a position paper they do not possess.'''

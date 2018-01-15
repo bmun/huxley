@@ -253,7 +253,7 @@ class PositionPaperDetailPermission(permissions.BasePermission):
 
         paper_id = view.kwargs.get('pk', None)
         queryset = Assignment.objects.filter(paper_id=paper_id)
-        delegate_modifiable_fields = ('file', )
+        delegate_modifiable_fields = ("file", )
         if queryset.exists():
             assignment = queryset.get(paper_id=paper_id)
             is_chair = user_is_chair(request, view, assignment.committee.id)
