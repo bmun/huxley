@@ -280,8 +280,12 @@ class RegistrationTest(TestCase):
 
 
 class PositionPaperTest(TestCase):
+
+    fixtures = ['conference']
+
     def setUp(self):
         self.position_paper = PositionPaper.objects.create()
+        self.assignment = models.new_assignment(paper=self.position_paper)
 
     def test_default_values(self):
         self.assertEquals(self.position_paper.score_1, 0)
@@ -292,13 +296,16 @@ class PositionPaperTest(TestCase):
         self.assertFalse(self.position_paper.graded)
 
     def test_unicode(self):
-        self.assertEquals(
-            str(self.position_paper.id), self.position_paper.__unicode__())
+        a = self.assignment
+        self.assertEquals('%s %s %d' %
+                          (a.committee.name, a.country.name, a.id),
+                          self.position_paper.__unicode__())
 
 
 class RubricTest(TestCase):
     def setUp(self):
         self.rubric = Rubric.objects.create()
+        self.committee = models.new_committee(rubric=self.rubric)
 
     def test_default_fields(self):
         self.assertEquals(self.rubric.grade_category_1, '')
@@ -314,4 +321,4 @@ class RubricTest(TestCase):
         self.assertEquals(self.rubric.grade_value_5, 10)
 
     def test_unicode(self):
-        self.assertEquals(str(self.rubric.id), self.rubric.__unicode__())
+        self.assertEquals(self.committee.name, self.rubric.__unicode__())

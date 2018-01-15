@@ -4,13 +4,15 @@
 import json
 import requests
 
+import os
+
 from decimal import Decimal
 
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.mail import send_mail
 from django.db import models, transaction
-from django.db.models.signals import post_save, pre_save
+from django.db.models.signals import post_init, post_save, pre_delete, pre_save
 from django.utils import timezone
 
 from huxley.core.constants import ContactGender, ContactType, ProgramTypes
@@ -70,7 +72,7 @@ class Rubric(models.Model):
     grade_value_5 = models.PositiveSmallIntegerField(default=10)
 
     def __unicode__(self):
-        return '%d' % self.id
+        return '%s' % self.committee.name if self.committee else '%d' % self.id
 
     class Meta:
         db_table = u'rubric'
@@ -322,11 +324,30 @@ class PositionPaper(models.Model):
     score_4 = models.PositiveSmallIntegerField(default=0)
     score_5 = models.PositiveSmallIntegerField(default=0)
 
+    @classmethod
+    def delete_prev_file(cls, **kwargs):
+        position_paper = kwargs['instance']
+        if hasattr(position_paper, '_prev_file') and \
+           position_paper.file.name != position_paper._prev_file and \
+           os.path.isfile(position_paper._prev_file):
+            os.remove(position_paper._prev_file)
+
+    @classmethod
+    def store_file_path(cls, **kwargs):
+        position_paper = kwargs['instance']
+        position_paper._prev_file = position_paper.file.name
+
     def __unicode__(self):
-        return '%d' % (self.id)
+        a = self.assignment
+        return '%s %s %d' % (a.committee.name, a.country.name,
+                             a.id) if a else '%d' % (self.id)
 
     class Meta:
         db_table = u'position_papers'
+
+
+post_init.connect(PositionPaper.store_file_path, sender=PositionPaper)
+post_save.connect(PositionPaper.delete_prev_file, sender=PositionPaper)
 
 
 class Assignment(models.Model):

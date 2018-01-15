@@ -19,8 +19,7 @@ class CommitteeDetailGetTestCase(auto.RetrieveAPIAutoTestCase):
 
 class CommitteeDetailPutTestCase(tests.UpdateAPITestCase):
     url_name = 'api:committee_detail'
-    params = {'name':'DISC',
-              'special':True}
+    params = {'name': 'DISC', 'special': True}
 
     def setUp(self):
         self.committee = models.new_committee()
@@ -49,8 +48,7 @@ class CommitteeDetailPutTestCase(tests.UpdateAPITestCase):
 
 class CommitteeDetailPatchTestCase(tests.PartialUpdateAPITestCase):
     url_name = 'api:committee_detail'
-    params = {'name':'DISC',
-              'special':True}
+    params = {'name': 'DISC', 'special': True}
 
     def setUp(self):
         self.committee = models.new_committee()
@@ -90,7 +88,8 @@ class CommitteeDetailDeleteTestCase(auto.DestroyAPIAutoTestCase):
 
     def test_authenticated_user(self):
         '''Authenticated users cannot delete committees.'''
-        self.as_default_user().do_test(expected_error=auto.EXP_DELETE_NOT_ALLOWED)
+        self.as_default_user().do_test(
+            expected_error=auto.EXP_DELETE_NOT_ALLOWED)
 
     def test_superuser(self):
         '''Superusers cannot delete committees.'''
@@ -103,21 +102,22 @@ class CommitteeListGetTestCase(tests.ListAPITestCase):
     def test_anonymous_user(self):
         '''Anyone should be able to access a list of all the committees.'''
         c1 = models.new_committee(name='DISC', delegation_size=100)
-        c2 = models.new_committee(name='JCC', special=True,
-                                          delegation_size=30)
+        c2 = models.new_committee(name='JCC', special=True, delegation_size=30)
 
         response = self.get_response()
+        for r in response.data:
+            r.pop('rubric')
         self.assertEqual(response.data, [
             {'delegation_size': c1.delegation_size,
              'special': c1.special,
              'id': c1.id,
              'full_name': c1.full_name,
-             'name': c1.name},
-            {'delegation_size': c2.delegation_size,
-             'special': c2.special,
-             'id': c2.id,
-             'full_name': c2.full_name,
-             'name': c2.name}])
+             'name': c1.name}, {'delegation_size': c2.delegation_size,
+                                'special': c2.special,
+                                'id': c2.id,
+                                'full_name': c2.full_name,
+                                'name': c2.name}
+        ])
 
 
 class CommitteeListPostTestCase(tests.CreateAPITestCase):
