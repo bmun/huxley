@@ -140,12 +140,14 @@ class PositionPaperPutTestCase(tests.UpdateAPITestCase):
             f.write('This is a test line.')
 
         f = open('test_position_paper.doc', 'r')
-        response = self.get_response(self.paper.id, params={"file":f})
+        response = self.get_response(self.paper.id, params={"file": f})
         f.close()
 
         f = open('test_position_paper.doc', 'r')
         new_file = response.data.pop("file", None)
-        self.assertTrue(new_file != None and new_file=="http://testserver/api/papers/position_papers/test_position_paper.doc")
+        self.assertTrue(
+            new_file != None and new_file ==
+            "http://testserver/api/papers/position_papers/test_position_paper.doc")
         new_f = open('position_papers/test_position_paper.doc', 'r')
         self.assertEqual(f.read(), new_f.read())
         f.close()
@@ -261,12 +263,14 @@ class PositionPaperDetailPatchTestCase(tests.PartialUpdateAPITestCase):
             f.write('This is a test line.')
 
         f = open('test_position_paper.doc', 'r')
-        response = self.get_response(self.paper.id, params={"file":f})
+        response = self.get_response(self.paper.id, params={"file": f})
         f.close()
 
         f = open('test_position_paper.doc', 'r')
         new_file = response.data.pop("file", None)
-        self.assertTrue(new_file != None and new_file=="http://testserver/api/papers/position_papers/test_position_paper.doc")
+        self.assertTrue(
+            new_file != None and new_file ==
+            "http://testserver/api/papers/position_papers/test_position_paper.doc")
         new_f = open('position_papers/test_position_paper.doc', 'r')
         self.assertEqual(f.read(), new_f.read())
         f.close()
