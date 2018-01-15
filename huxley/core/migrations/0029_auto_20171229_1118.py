@@ -7,7 +7,7 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    dependencies = [('core', '0027_committee_feedback'), ]
+    dependencies = [('core', '0028_committee_feedback'), ]
 
     operations = [
         migrations.AlterField(
