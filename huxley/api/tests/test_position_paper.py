@@ -87,6 +87,16 @@ class PositionPaperPutTestCase(tests.UpdateAPITestCase):
             assignment=self.assignment,
             school=self.school)
 
+    def get_response(self, object_id=None, params=None):
+        if self.method is None:
+            raise NotImplementedError('Must define method class member.')
+
+        params = params or self.params
+
+        request = getattr(self.client, self.method)
+        url = self.get_url(object_id)
+        return request(url, params)
+
     def test_anonymous_user(self):
         '''Unauthenticated users should be unable to update position papers.'''
         response = self.get_response(self.delegate.id, params=self.params)
@@ -173,6 +183,16 @@ class PositionPaperDetailPatchTestCase(tests.PartialUpdateAPITestCase):
             user=self.delegate_user,
             assignment=self.assignment,
             school=self.school)
+
+    def get_response(self, object_id=None, params=None):
+        if self.method is None:
+            raise NotImplementedError('Must define method class member.')
+
+        params = params or self.params
+
+        request = getattr(self.client, self.method)
+        url = self.get_url(object_id)
+        return request(url, params)
 
     def test_anonymous_user(self):
         '''Unauthenticated users should be unable able to update position papers.'''
