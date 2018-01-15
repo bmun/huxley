@@ -246,7 +246,7 @@ class CommitteeFeedbackDetailPermission(permissions.BasePermission):
 
         method = request.method
         committee_id = request.data.get('committee', -1)
-        feedback_id = view.kwargs.get('pk', None)
+        feedback_id = view.kwargs.get('pk', -1)
 
         if (method == 'POST' and user.is_authenticated() and
                 user.is_delegate() and user.delegate.assignment and
