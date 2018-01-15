@@ -16,7 +16,7 @@ var ServerAPI = {
   },
 
   createCommitteeFeedback(feedback) {
-    return _post(`/api/committee_feedback/0`, feedback);
+    return _post(`/api/committee_feedback/post`, feedback);
   },
 
   changePassword(currentPassword, newPassword) {

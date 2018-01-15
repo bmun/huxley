@@ -34,8 +34,6 @@ class AbstractAPITestCase(APITestCase):
         args = None
         if self.is_resource:
             args = (object_id, )
-        elif isinstance(self, CreateSingleAPITestCase):
-            args = (0, )
         else:
             args = ()
 
@@ -120,12 +118,6 @@ class AbstractAPITestCase(APITestCase):
 class CreateAPITestCase(AbstractAPITestCase):
     method = 'post'
     is_resource = False
-
-
-class CreateSingleAPITestCase(AbstractAPITestCase):
-    method = 'post'
-    is_resource = False
-    is_post_single = True
 
 
 class ListAPITestCase(AbstractAPITestCase):

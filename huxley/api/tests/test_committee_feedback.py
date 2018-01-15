@@ -10,8 +10,8 @@ from huxley.utils.test import models
 import random
 
 
-class CommitteeFeedbackDetailCreateTestCase(tests.CreateSingleAPITestCase):
-    url_name = 'api:committee_feedback_detail'
+class CommitteeFeedbackDetailCreateTestCase(tests.CreateAPITestCase):
+    url_name = 'api:committee_feedback_create'
 
     def setUp(self):
         self.committee_1 = models.new_committee(name='CYBER')
