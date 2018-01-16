@@ -8,7 +8,8 @@ from django.core.exceptions import PermissionDenied
 
 from huxley.accounts.models import User
 from huxley.core.constants import ContactGender, ContactType, ProgramTypes
-from huxley.core.models import School, Committee, Country, Delegate, Assignment, Registration, Conference, PositionPaper, Rubric
+
+from huxley.core.models import School, Committee, CommitteeFeedback, Country, Delegate, Assignment, Registration, Conference, PositionPaper, Rubric
 
 if not settings.TESTING:
     raise PermissionDenied
@@ -96,6 +97,15 @@ def new_committee(**kwargs):
         user.committee = c
         user.save()
     return c
+
+
+def new_committee_feedback(**kwargs):
+    committee = new_committee()
+    feedback = CommitteeFeedback(
+        committee=kwargs.pop('committee', committee),
+        comment=kwargs.pop('comment', "Daddy Nikhil though"))
+    feedback.save()
+    return feedback
 
 
 def new_country(**kwargs):

@@ -22,6 +22,7 @@ var ChairView = React.createClass({
           <div className="navbar rounded-top">
             <NavTab href="/chair/attendance">Attendance</NavTab>
             <NavTab href="/chair/summary">Summaries</NavTab>
+            <NavTab href="/chair/committee_feedback">Committee Feedback</NavTab>
           </div>
           {this.props.children}
         </Shaker>

@@ -8,9 +8,10 @@ from django.core.exceptions import ValidationError
 from django.db import IntegrityError
 from django.test import TestCase
 
-from huxley.core.models import (Assignment, Committee, Conference, Country,
-                                CountryPreference, Delegate, PositionPaper,
-                                Rubric)
+from huxley.core.models import (Assignment, Committee, CommitteeFeedback,
+                                Conference, Country, CountryPreference,
+                                Delegate, PositionPaper, Rubric)
+
 from huxley.utils.test import models
 
 
@@ -79,6 +80,22 @@ class CommitteeTest(TestCase):
         c.save()
         self.assertFalse(c.rubric == None)
         self.assertFalse(c.rubric.id == rubric_id)
+
+
+class CommitteeFeedbackTest(TestCase):
+    def setUp(self):
+        self.committee = Committee.objects.create(
+            name='DISC', full_name='Disarmament and International Security')
+        self.committee_feedback = CommitteeFeedback.objects.create(
+            committee=self.committee,
+            comment='Jake Tibbetts was literally awful as a person')
+
+    def test_default_fields(self):
+        self.assertFalse(self.committee == None)
+
+    def test_unicode(self):
+        self.assertEquals('DISC - Comment 1',
+                          self.committee_feedback.__unicode__())
 
 
 class AssignmentTest(TestCase):

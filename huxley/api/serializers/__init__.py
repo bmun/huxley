@@ -3,6 +3,7 @@
 
 from .assignment import AssignmentSerializer, AssignmentNestedSerializer
 from .committee import CommitteeSerializer
+from .committee_feedback import CommitteeFeedbackSerializer
 from .country import CountrySerializer
 from .delegate import DelegateSerializer, DelegateNestedSerializer
 from .school import SchoolSerializer

@@ -6,7 +6,8 @@ import json
 from django.http import QueryDict
 from rest_framework import permissions
 
-from huxley.core.models import Assignment, Committee, Delegate, Registration
+from huxley.api.validators import ValidationError
+from huxley.core.models import Assignment, Committee, CommitteeFeedback, Delegate, Registration
 
 
 class IsSuperuserOrReadOnly(permissions.BasePermission):
@@ -220,6 +221,47 @@ class SchoolDetailPermission(permissions.BasePermission):
                     user_is_delegate(request, view, school_id, 'school'))
 
         return user_is_advisor(request, view, school_id)
+
+
+class CommitteeFeedbackListPermission(permissions.BasePermission):
+    '''Accept GET for only the chair of the committee'''
+
+    def has_permission(self, request, view):
+        user = request.user
+        if user.is_superuser:
+            return True
+
+        method = request.method
+        committee_id = request.query_params.get('committee_id', -1)
+        return method == 'GET' and user_is_chair(request, view, committee_id)
+
+
+class CommitteeFeedbackDetailPermission(permissions.BasePermission):
+    '''Accept POST for only the delegate of the committee
+       Accept GET request from chair of committee'''
+
+    def has_permission(self, request, view):
+        user = request.user
+        if user.is_superuser:
+            return True
+
+        method = request.method
+        committee_id = request.data.get('committee', -1)
+        feedback_id = view.kwargs.get('pk', -1)
+
+        if (method == 'POST' and user.is_authenticated() and
+                user.is_delegate() and user.delegate.assignment and
+            (not user.delegate.committee_feedback_submitted)):
+            return int(user.delegate.assignment.committee.id) == int(
+                committee_id)
+
+        if (method == 'GET' and user.is_authenticated() and user.is_chair() and
+                user.committee):
+            query = CommitteeFeedback.objects.get(id=feedback_id)
+            if query:
+                return user.committee.id == query.committee.id
+
+        return False
 
 
 class DelegateUserPasswordPermission(permissions.BasePermission):

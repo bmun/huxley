@@ -99,6 +99,17 @@ class Committee(models.Model):
         db_table = u'committee'
 
 
+class CommitteeFeedback(models.Model):
+    committee = models.ForeignKey(Committee)
+    comment = models.TextField(default='')
+
+    def __unicode__(self):
+        return str(self.committee.name) + " - Comment " + str(self.id)
+
+    class Meta:
+        db_table = u'committee_feedback'
+
+
 pre_save.connect(Committee.create_rubric, sender=Committee)
 
 
@@ -510,6 +521,8 @@ class Delegate(models.Model):
     session_two = models.BooleanField(default=False)
     session_three = models.BooleanField(default=False)
     session_four = models.BooleanField(default=False)
+
+    committee_feedback_submitted = models.BooleanField(default=False)
 
     def __unicode__(self):
         return self.name
