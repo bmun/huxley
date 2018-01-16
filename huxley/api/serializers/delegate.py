@@ -61,7 +61,7 @@ class DelegateSerializer(serializers.ModelSerializer):
                       [instance.email], fail_silently=False)
 
         if ('email' in validated_data and
-            User.objects.filter(delegate__id=instance.id).exists()):
+                User.objects.filter(delegate__id=instance.id).exists()):
 
             user = User.objects.get(delegate__id=instance.id)
             user.email = validated_data['email']
