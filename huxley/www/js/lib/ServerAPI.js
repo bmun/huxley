@@ -130,6 +130,10 @@ var ServerAPI = {
   updateRegistration(registrationID, data) {
     return _patch(`/api/registrations/${registrationID}`, data);
   },
+
+  getPositionPaperFile(fileName) {
+    return _get('/api/papers/file', {file: fileName}, 'application/force-download');
+  },
 };
 
 function _encodeQueryString(params) {
@@ -138,7 +142,11 @@ function _encodeQueryString(params) {
     .join('&');
 }
 
-function _ajax(method, uri, data) {
+function _ajax(method, uri, data, content_type) {
+  if (content_type == null) {
+    content_type = 'application/json';
+  }
+
   const isSafeMethod = /^(GET|HEAD|OPTIONS|TRACE)$/.test(method);
   if (isSafeMethod && data) {
     uri = uri + '?' + _encodeQueryString(data);
@@ -146,7 +154,7 @@ function _ajax(method, uri, data) {
   const params = {
     credentials: 'same-origin',
     headers: {
-      'Content-Type': 'application/json',
+      'Content-Type': `${content_type}`,
     },
     method: method,
   };
@@ -156,12 +164,22 @@ function _ajax(method, uri, data) {
       params.body = typeof data === 'string' ? data : JSON.stringify(data);
     }
   }
-  return fetch(uri, params).then(
-    response =>
-      response.ok
-        ? response.json()
-        : response.json().then(json => Promise.reject(json)),
-  );
+  if (content_type == 'application/json') {
+    return fetch(uri, params).then(
+      response =>
+        response.ok
+          ? response.json()
+          : response.json().then(json => Promise.reject(json)),
+    );
+  } else {
+    return fetch(uri, params).then(
+      response =>
+        response.ok
+          ? response.text()
+          : response.text().then(text => Promise.reject(text)),
+    );
+  }
+  
 }
 
 const _delete = _ajax.bind(null, 'DELETE');

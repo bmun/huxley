@@ -11,7 +11,6 @@ from huxley.core.models import Rubric
 
 class RubricDetail(generics.RetrieveUpdateAPIView):
     authentication_classes = (SessionAuthentication, )
-    queryset = Rubric.objects.all()
     permission_classes = (permissions.RubricDetailPermission, )
     serializer_class = RubricSerializer
 

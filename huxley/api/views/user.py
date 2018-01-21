@@ -9,6 +9,7 @@ from rest_framework import generics, status
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.exceptions import (APIException, AuthenticationFailed,
                                        PermissionDenied)
+from rest_framework.parsers import MultiPartParser
 from rest_framework.response import Response
 
 from huxley.accounts.models import User
@@ -39,6 +40,7 @@ class UserDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = (IsUserOrSuperuser, )
+    parser_classes = (MultiPartParser, )
 
 
 class CurrentUser(generics.GenericAPIView):

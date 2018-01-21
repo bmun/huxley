@@ -8,11 +8,14 @@
 const React = require('react');
 const ReactRouter = require('react-router');
 
+const Button = require('components/core/Button');
 const ConferenceContext = require('components/ConferenceContext');
 const CurrentUserStore = require('stores/CurrentUserStore');
 const InnerView = require('components/InnerView');
 const TextTemplate = require('components/core/TextTemplate');
 const User = require('utils/User');
+
+const ServerAPI = require('lib/ServerAPI');
 
 require('css/Table.less');
 const DelegateProfileViewText = require('text/DelegateProfileViewText.md');
