@@ -5,7 +5,7 @@ from rest_framework import generics, status
 from rest_framework.response import Response
 
 from rest_framework.authentication import SessionAuthentication
-from rest_framework.parsers import MultiPartParser
+from rest_framework.parsers import FormParser, MultiPartParser
 
 from huxley.api import permissions
 from huxley.api.serializers import PositionPaperSerializer
@@ -15,8 +15,9 @@ from django.http.response import HttpResponse
 
 class PositionPaperDetail(generics.RetrieveUpdateAPIView):
     authentication_classes = (SessionAuthentication, )
-    parser_classes = (MultiPartParser, )
+    # parser_classes = (MultiPartParser, FormParser)
     permission_classes = (permissions.PositionPaperDetailPermission, )
+    queryset = PositionPaper.objects.all()
     serializer_class = PositionPaperSerializer
 
     def put(self, request, *args, **kwargs):
@@ -32,8 +33,6 @@ class PositionPaperFile(generics.RetrieveAPIView):
             with open('position_papers/'+file_name, 'r') as f:
                 data = f.read()
             response = HttpResponse(data, status=status.HTTP_201_CREATED)
-            response['Content-Type'] = 'application/force-download'
+            response['Content-Type'] = 'text/plain'
             response['Content-Disposition'] = 'attachement; file_name="{0}"'.format(file_name)
-            print '******'
-            return response
         return Response({}, status=status.HTTP_200_OK)

@@ -32,6 +32,11 @@ class PositionPaperStore extends Store {
     return _files;
   }
 
+  updatePositionPaper(paper, onSuccess, onError) {
+    const paperCopy = {...paper};
+    ServerAPI.updatePositionPaper(paperCopy).then(onSuccess, onError);
+  }
+
   __onDispatch(action) {
     switch (action.actionType) {
       case ActionConstants.FETCH_POSITION_PAPER_FILE:
@@ -39,6 +44,9 @@ class PositionPaperStore extends Store {
         break;
       case ActionConstants.POSITION_PAPER_FILE_FETCHED:
         _files[action.id] = action.file;
+        break;
+      case ActionConstants.UPDATE_POSITION_PAPER:
+        this.updatePositionPaper(action.paper, action.onError);
         break;
       default:
         return;

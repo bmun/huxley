@@ -24,6 +24,15 @@ var PositionPaperActions = {
       id: paperID,
     });
   },
+
+  updatePositionPaper(paper, onSuccess, onError) {
+    Dispatcher.dispatch({
+      actionType: ActionConstants.UPDATE_POSITION_PAPER,
+      paper: paper,
+      onSuccess: onSuccess,
+      onError: onError,
+    });
+  },
 };
 
 module.exports = PositionPaperActions;

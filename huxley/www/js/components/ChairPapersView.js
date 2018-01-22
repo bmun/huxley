@@ -62,6 +62,7 @@ var ChairPapersView = React.createClass({
       papers: papers,
       current_assignment: null,
       files: files,
+      errors: {},
     };
   },
 
@@ -158,7 +159,7 @@ var ChairPapersView = React.createClass({
 
   renderRubric() {
     var user = CurrentUserStore.getCurrentUser();
-    var paper = this.state.current_assignment.paper;
+    var paper = this.state.papers[this.state.current_assignment.paper.id];
     var country = this.state.countries[this.state.current_assignment.country];
     var files = this.state.files;
     var rubric = Object.keys(this.state.committees).length ? this.state.committees[user.committee].rubric : null;
@@ -171,7 +172,10 @@ var ChairPapersView = React.createClass({
               countryName={country.name}
               onChange={this._handleScoreChange}
               onDownload={this._handleDownload}
-              onUnset={this._handleUnsetAssignment}>
+              onUnset={this._handleUnsetAssignment}
+              onSave={this._handleSavePaper}
+              loading={this.state.loading}
+              success={this.state.success}>
             </PaperGradeTable>);
     } else {
       return <div></div>;
@@ -215,14 +219,15 @@ var ChairPapersView = React.createClass({
     PositionPaperActions.fetchPositionPaperFile(a.paper.file, a.paper.id);
   },
 
-  _handleSaveScores(event) {
+  _handleSavePaper(paperID, event) {
     this._successTimout && clearTimeout(this._successTimeout);
     this.setState({loading: true});
     var committee = CurrentUserStore.getCurrentUser().committee;
-    var papers = this.state.papers;
-    PositionPaperActions.updatePapers(
-      committee,
-      Object.values(papers),
+    var paper = {...this.state.papers[paperID]};
+    delete paper['file'];
+    paper['graded'] = true;
+    PositionPaperActions.updatePositionPaper(
+      paper,
       this._handleSuccess,
       this._handleError,
     );
@@ -242,6 +247,7 @@ var ChairPapersView = React.createClass({
   },
 
   _handleError: function(response) {
+    console.log(response);
     this.setState({loading: false});
     window.alert(
       'Something went wrong. Please refresh your page and try again.',

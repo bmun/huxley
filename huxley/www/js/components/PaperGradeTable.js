@@ -16,10 +16,13 @@ var PaperGradeTable = React.createClass({
     onChange: React.PropTypes.func,
     onDownload: React.PropTypes.func,
     onUnset: React.PropTypes.func,
+    onSave: React.PropTypes.func,
     rubric: React.PropTypes.object,
     paper: React.PropTypes.object,
     files: React.PropTypes.object,
     countryName: React.PropTypes.string,
+    loading: React.PropTypes.bool,
+    success: React.PropTypes.bool,
   },
 
   render() {
@@ -40,6 +43,11 @@ var PaperGradeTable = React.createClass({
       var fileNames = paper.file.split('/');
       var fileName = fileNames[fileNames.length-1];
       buttons = <div>
+                  <Button
+                    color="red"
+                    onClick={this._handleUnset}>
+                    Go Back
+                  </Button>
                   <a
                     className={cx({
                                 button: true,
@@ -52,9 +60,11 @@ var PaperGradeTable = React.createClass({
                   Download
                   </a>
                   <Button
-                    color="red"
-                    onClick={this._handleUnset}>
-                    Go Back
+                    color="blue"
+                    onClick={this._handleSave}
+                    loading={this.props.loading}
+                    success={this.props.success}>
+                    Save
                   </Button>
                 </div>;  
     }
@@ -173,6 +183,11 @@ var PaperGradeTable = React.createClass({
   _handleUnset: function(event) {
     this.props.onUnset &&
       this.props.onUnset(event);
+  },
+
+  _handleSave: function(event) {
+    this.props.onSave &&
+      this.props.onSave(this.props.paper.id, event);
   }
 });
 
