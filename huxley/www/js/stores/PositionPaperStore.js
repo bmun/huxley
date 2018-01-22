@@ -46,7 +46,7 @@ class PositionPaperStore extends Store {
         _files[action.id] = action.file;
         break;
       case ActionConstants.UPDATE_POSITION_PAPER:
-        this.updatePositionPaper(action.paper, action.onError);
+        this.updatePositionPaper(action.paper, action.onSuccess, action.onError);
         break;
       default:
         return;

@@ -247,7 +247,6 @@ var ChairPapersView = React.createClass({
   },
 
   _handleError: function(response) {
-    console.log(response);
     this.setState({loading: false});
     window.alert(
       'Something went wrong. Please refresh your page and try again.',

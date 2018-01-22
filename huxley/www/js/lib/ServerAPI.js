@@ -132,7 +132,7 @@ var ServerAPI = {
   },
 
   getPositionPaperFile(fileName) {
-    return _get('/api/papers/file', {file: fileName});
+    return _get('/api/papers/file', {file: fileName}, 'application/force-download');
   },
 
   updatePositionPaper(paper) {
@@ -155,22 +155,22 @@ function _ajax(method, uri, data, content_type) {
   if (isSafeMethod && data) {
     uri = uri + '?' + _encodeQueryString(data);
   }
-  var params = {};
-  if (content_type == 'application/json') {
-    params = {
+  // var params;
+  // if (content_type == 'application/json') {
+  const params = {
       credentials: 'same-origin',
       headers: {
         'Content-Type': `${content_type}`,
       },
       method: method,
     };
-  } else {
-    params = {
-      credentials: 'same-origin',
-      headers: {},
-      method: method,
-    };
-  }
+  // } else {
+  //   params = {
+  //     credentials: 'same-origin',
+  //     headers: {},
+  //     method: method,
+  //   };
+  // }
   if (!isSafeMethod) {
     params.headers['X-CSRFToken'] = Cookie.get('csrftoken');
     if (data) {
@@ -186,10 +186,11 @@ function _ajax(method, uri, data, content_type) {
     );
   } else {
     return fetch(uri, params).then(
-      response =>
+      response => {
         response.ok
           ? response.text()
-          : response.text().then(text => Promise.reject(text)),
+          : response.text().then(text => Promise.reject(text));
+      }
     );
   }
   
