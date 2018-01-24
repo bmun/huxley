@@ -17,6 +17,8 @@ var PaperGradeTable = React.createClass({
     onDownload: React.PropTypes.func,
     onUnset: React.PropTypes.func,
     onSave: React.PropTypes.func,
+    onUpload: React.PropTypes.func,
+    onSubmit: React.PropTypes.func,
     rubric: React.PropTypes.object,
     paper: React.PropTypes.object,
     files: React.PropTypes.object,
@@ -35,11 +37,14 @@ var PaperGradeTable = React.createClass({
                       onClick={this._handleUnset}>
                       Go Back
                     </Button>
+                    <div>
+                      Waiting to receive file from server...
+                    </div>
                   </div>;
 
     if (paper.id in files) {
       var url = window.URL;
-      var hrefData = url.createObjectURL(new Blob([files[paper.id]]));
+      var hrefData = url.createObjectURL(files[paper.id]);
       var fileNames = paper.file.split('/');
       var fileName = fileNames[fileNames.length-1];
       buttons = <div>
@@ -57,14 +62,14 @@ var PaperGradeTable = React.createClass({
                               })}
                     href={hrefData}
                     download={fileName}>
-                  Download
+                  Download Paper
                   </a>
                   <Button
                     color="blue"
                     onClick={this._handleSave}
                     loading={this.props.loading}
                     success={this.props.success}>
-                    Save
+                    Save Scores
                   </Button>
                 </div>;  
     }
@@ -88,12 +93,10 @@ var PaperGradeTable = React.createClass({
                 {rubric.grade_category_1}
               </td>
               <td>
-                <label name="session">
-                  <NumberInput
-                    defaultValue={""+paper.score_1}
-                    onChange={this._handleChange.bind(this, "score_1")}
-                  />
-                </label>
+                <NumberInput
+                  defaultValue={""+paper.score_1}
+                  onChange={this._handleChange.bind(this, "score_1")}
+                />
               </td>
               <td>
                 {rubric.grade_value_1}
@@ -104,12 +107,10 @@ var PaperGradeTable = React.createClass({
                 {rubric.grade_category_2}
               </td>
               <td>
-                <label name="session">
-                  <NumberInput
-                    defaultValue={""+paper.score_2}
-                    onChange={this._handleChange.bind(this, "score_2")}
-                  />
-                </label>
+                <NumberInput
+                  defaultValue={""+paper.score_2}
+                  onChange={this._handleChange.bind(this, "score_2")}
+                />
               </td>
               <td>
                 {rubric.grade_value_2}
@@ -120,12 +121,10 @@ var PaperGradeTable = React.createClass({
                 {rubric.grade_category_3}
               </td>
               <td>
-                <label name="session">
-                  <NumberInput
-                    defaultValue={""+paper.score_3}
-                    onChange={this._handleChange.bind(this, "score_3")}
-                  />
-                </label>
+                <NumberInput
+                  defaultValue={""+paper.score_3}
+                  onChange={this._handleChange.bind(this, "score_3")}
+                />
               </td>
               <td>
                 {rubric.grade_value_3}
@@ -136,12 +135,10 @@ var PaperGradeTable = React.createClass({
                 {rubric.grade_category_4}
               </td>
               <td>
-                <label name="session">
-                  <NumberInput
-                    defaultValue={""+paper.score_4}
-                    onChange={this._handleChange.bind(this, "score_4")}
-                  />
-                </label>
+                <NumberInput
+                  defaultValue={""+paper.score_4}
+                  onChange={this._handleChange.bind(this, "score_4")}
+                />
               </td>
               <td>
                 {rubric.grade_value_4}
@@ -152,15 +149,27 @@ var PaperGradeTable = React.createClass({
                 {rubric.grade_category_5}
               </td>
               <td>
-                <label name="session">
-                  <NumberInput
-                    defaultValue={""+paper.score_5}
-                    onChange={this._handleChange.bind(this, "score_5")}
-                  />
-                </label>
+                <NumberInput
+                  defaultValue={""+paper.score_5}
+                  onChange={this._handleChange.bind(this, "score_5")}
+                />
               </td>
               <td>
                 {rubric.grade_value_5}
+              </td>
+            </tr>
+            <tr>
+              <td>Upload Graded Paper:</td>
+              <td>
+                <div>
+                    <input
+                      type="file"
+                      accept=".doc, .docx, .pdf"
+                      onChange={this._handleUpload}/>
+                    <input
+                      type="submit"
+                      onClick={this._handleSubmit}/>
+                </div>
               </td>
             </tr>
           </tbody>
@@ -188,6 +197,16 @@ var PaperGradeTable = React.createClass({
   _handleSave: function(event) {
     this.props.onSave &&
       this.props.onSave(this.props.paper.id, event);
+  },
+
+  _handleUpload: function(event) {
+    this.props.onUpload &&
+      this.props.onUpload(this.props.paper.id, event);
+  },
+
+   _handleSubmit: function(event) {
+    this.props.onSubmit &&
+      this.props.onSubmit(this.props.paper.id, event);
   }
 });
 

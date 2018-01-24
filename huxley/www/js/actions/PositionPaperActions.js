@@ -9,10 +9,9 @@ var ActionConstants = require('constants/ActionConstants');
 var Dispatcher = require('dispatcher/Dispatcher');
 
 var PositionPaperActions = {
-  fetchPositionPaperFile(fileName, paperID) {
+  fetchPositionPaperFile(paperID) {
     Dispatcher.dispatch({
       actionType: ActionConstants.FETCH_POSITION_PAPER_FILE,
-      fileName: fileName,
       id: paperID,
     });
   },
@@ -29,6 +28,16 @@ var PositionPaperActions = {
     Dispatcher.dispatch({
       actionType: ActionConstants.UPDATE_POSITION_PAPER,
       paper: paper,
+      onSuccess: onSuccess,
+      onError: onError,
+    });
+  },
+
+  uploadPaper(paper, file, onSuccess, onError) {
+    Dispatcher.dispatch({
+      actionType: ActionConstants.UPLOAD_PAPER,
+      paper: paper,
+      file: file,
       onSuccess: onSuccess,
       onError: onError,
     });

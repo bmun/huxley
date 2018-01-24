@@ -13,9 +13,6 @@ var AssignmentStore = require('stores/AssignmentStore');
 var CommitteeStore = require('stores/CommitteeStore');
 var CountryStore = require('stores/CountryStore');
 var CurrentUserStore = require('stores/CurrentUserStore');
-var DelegateActions = require('actions/DelegateActions');
-var DelegationAttendanceRow = require('components/DelegationAttendanceRow');
-var DelegateStore = require('stores/DelegateStore');
 var InnerView = require('components/InnerView');
 var PaperAssignmentList = require('components/PaperAssignmentList');
 var PaperGradeTable = require('components/PaperGradeTable');
@@ -27,7 +24,7 @@ var User = require('utils/User');
 var ServerAPI = require('lib/ServerAPI');
 
 require('css/Table.less');
-var ChairAttendanceViewText = require('text/ChairAttendanceViewText.md');
+var ChairPapersViewText = require('text/ChairPapersViewText.md');
 
 var ChairPapersView = React.createClass({
   mixins: [ReactRouter.History],
@@ -38,10 +35,10 @@ var ChairPapersView = React.createClass({
     var countries = CountryStore.getCountries();
     var committees = CommitteeStore.getCommittees();
     var papers = {};
-    var files = {};
     if (assignments.length) {
       PositionPaperStore.getPositionPaperFile(assignments[0].paper.id, assignments[0].paper.file);
     }
+    var files = PositionPaperStore.getPositionPaperFiles();
 
     if (assignments.length && Object.keys(countries).length) {
       assignments.sort(
@@ -61,6 +58,7 @@ var ChairPapersView = React.createClass({
       countries: countries,
       papers: papers,
       current_assignment: null,
+      uploadedFile: null,
       files: files,
       errors: {},
     };
@@ -122,7 +120,7 @@ var ChairPapersView = React.createClass({
 
     this._filesToken = PositionPaperStore.addListener(() => {
       this.setState({files: PositionPaperStore.getPositionPaperFiles()});
-    })
+    });
   },
 
   componentWillUnmount() {
@@ -137,6 +135,9 @@ var ChairPapersView = React.createClass({
     if (this.state.current_assignment == null) {
       return (
         <InnerView>
+          <TextTemplate>
+            {ChairPapersViewText}
+          </TextTemplate>
           <form>
             <div className="table-container">
               {this.renderAssignmentList()}
@@ -174,6 +175,8 @@ var ChairPapersView = React.createClass({
               onDownload={this._handleDownload}
               onUnset={this._handleUnsetAssignment}
               onSave={this._handleSavePaper}
+              onUpload={this._handleUploadPaper}
+              onSubmit={this._handleSubmitPaper}
               loading={this.state.loading}
               success={this.state.success}>
             </PaperGradeTable>);
@@ -209,19 +212,54 @@ var ChairPapersView = React.createClass({
   },
 
   _handleUnsetAssignment(event) {
-    this.setState({current_assignment: null});
+    this.setState({
+      current_assignment: null,
+      uploadedFile: null,
+    });
   },
 
   _handleAssignmentSelect (assignmentID, event) {
     var assignments = this.state.assignments;
     var a = assignments.find(a => a.id == assignmentID);
     this.setState({current_assignment: a});
-    PositionPaperActions.fetchPositionPaperFile(a.paper.file, a.paper.id);
+    PositionPaperActions.fetchPositionPaperFile(a.paper.id);
+  },
+
+  _handleUploadPaper(paperID, event) {
+    this.setState({uploadedFile: event.target.files[0]});
+  },
+
+  _handleSubmitPaper(paperID, event) {
+    var file = this.state.uploadedFile;
+    if (file != null) {
+      var papers = this.state.papers;
+      var files = this.state.files;
+      var paper = {...this.state.papers[paperID]};
+      paper.file = file.name;
+
+      PositionPaperActions.uploadPaper(
+        paper,
+        file,
+        this._handleSuccess,
+        this._handleError,
+      );
+
+      this.setState({
+        loading: true,
+        uploadedFile: null,
+        papers: {
+          ...papers,
+          [paper.id]: paper
+        },
+        current_assignment: null,
+      });
+      this.history.pushState(null, '/chair/papers');
+    }
   },
 
   _handleSavePaper(paperID, event) {
-    this._successTimout && clearTimeout(this._successTimeout);
     this.setState({loading: true});
+    this._successTimout && clearTimeout(this._successTimeout);
     var committee = CurrentUserStore.getCurrentUser().committee;
     var paper = {...this.state.papers[paperID]};
     delete paper['file'];

@@ -131,12 +131,24 @@ var ServerAPI = {
     return _patch(`/api/registrations/${registrationID}`, data);
   },
 
-  getPositionPaperFile(fileName) {
-    return _get('/api/papers/file', {file: fileName}, 'text/plain');
+  getPositionPaperFile(paperID) {
+    return _get('/api/papers/file', {id: paperID}, 'application/force-download');
   },
 
   updatePositionPaper(paper) {
     return _patch(`api/papers/${paper.id}`, paper);
+  },
+
+  uploadPositionPaper(paper, file) {
+    return _post(`api/papers/${paper.id}`, {file: file}, 'multipart/form-data');
+  },
+
+  getRubric(rubricID) {
+    return _get(`api/rubrics/${rubricID}`);
+  },
+
+  updateRubric(rubric) {
+    return _patch(`api/rubrics/${rubric.id}`, rubric);
   }
 };
 
@@ -171,18 +183,31 @@ function _ajax(method, uri, data, content_type) {
       method: method,
     };
   }
+
   if (!isSafeMethod) {
     params.headers['X-CSRFToken'] = Cookie.get('csrftoken');
-    if (data) {
+    if (data && content_type != "multipart/form-data") {
       params.body = typeof data === 'string' ? data : JSON.stringify(data);
+    } else if (data && content_type == "multipart/form-data") {
+      var form = new FormData();
+      form.append('file', data['file']);
+      params.body = form;
     }
   }
+  
   if (content_type == 'application/json') {
     return fetch(uri, params).then(
       response =>
         response.ok
           ? response.json()
           : response.json().then(json => Promise.reject(json)),
+    );
+  } else if (content_type == 'application/force-download') {
+    return fetch(uri, params).then(
+      response =>
+        response.ok
+          ? response.blob()
+          : response.blob().then(json => Promise.reject(json)),
     );
   } else {
     return fetch(uri, params).then(

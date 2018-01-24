@@ -16,11 +16,11 @@ var _papersFetched = false;
 var _previousUserID = -1;
 
 class PositionPaperStore extends Store {
-  getPositionPaperFile(paperID, fileName) {
+  getPositionPaperFile(paperID) {
     if (paperID in _files) {
       return _files[paperID]
     } else {
-      ServerAPI.getPositionPaperFile(fileName).then(value => {
+      ServerAPI.getPositionPaperFile(paperID).then(value => {
         PositionPaperActions.positionPaperFileFetched(value, paperID);
       });
 
@@ -33,14 +33,17 @@ class PositionPaperStore extends Store {
   }
 
   updatePositionPaper(paper, onSuccess, onError) {
-    const paperCopy = {...paper};
-    ServerAPI.updatePositionPaper(paperCopy).then(onSuccess, onError);
+    ServerAPI.updatePositionPaper(paper).then(onSuccess, onError);
+  }
+
+  uploadPaper(paper, file, onSuccess, onError) {
+    ServerAPI.uploadPositionPaper(paper, file).then(onSuccess, onError);
   }
 
   __onDispatch(action) {
     switch (action.actionType) {
       case ActionConstants.FETCH_POSITION_PAPER_FILE:
-        this.getPositionPaperFile(action.id, action.fileName);
+        this.getPositionPaperFile(action.id);
         break;
       case ActionConstants.POSITION_PAPER_FILE_FETCHED:
         _files[action.id] = action.file;
@@ -48,6 +51,9 @@ class PositionPaperStore extends Store {
       case ActionConstants.UPDATE_POSITION_PAPER:
         this.updatePositionPaper(action.paper, action.onSuccess, action.onError);
         break;
+      case ActionConstants.UPLOAD_PAPER:
+        delete _files[action.paper.id];
+        this.uploadPaper(action.paper, action.file, action.onSuccess, action.onError);
       default:
         return;
     }
