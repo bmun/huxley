@@ -83,7 +83,8 @@ class AssignmentDetailPutTestCase(tests.UpdateAPITestCase):
                                   ('score_2', self.assignment.paper.score_2),
                                   ('score_3', self.assignment.paper.score_3),
                                   ('score_4', self.assignment.paper.score_4),
-                                  ('score_5', self.assignment.paper.score_5)]),
+                                  ('score_5', self.assignment.paper.score_5),
+                                  ("submission_date", self.assignment.paper.submission_date)]),
             "rejected": True,
         })
 
@@ -116,7 +117,8 @@ class AssignmentDetailPutTestCase(tests.UpdateAPITestCase):
                                   ('score_2', self.assignment.paper.score_2),
                                   ('score_3', self.assignment.paper.score_3),
                                   ('score_4', self.assignment.paper.score_4),
-                                  ('score_5', self.assignment.paper.score_5)]),
+                                  ('score_5', self.assignment.paper.score_5),
+                                  ("submission_date", self.assignment.paper.submission_date)]),
             "rejected": True,
         })
 
@@ -164,7 +166,8 @@ class AssignmentDetailPatchTestCase(tests.PartialUpdateAPITestCase):
                                   ('score_2', self.assignment.paper.score_2),
                                   ('score_3', self.assignment.paper.score_3),
                                   ('score_4', self.assignment.paper.score_4),
-                                  ('score_5', self.assignment.paper.score_5)]),
+                                  ('score_5', self.assignment.paper.score_5),
+                                  ("submission_date", self.assignment.paper.submission_date)]),
             "rejected": True,
         })
 
@@ -197,7 +200,8 @@ class AssignmentDetailPatchTestCase(tests.PartialUpdateAPITestCase):
                                   ('score_2', self.assignment.paper.score_2),
                                   ('score_3', self.assignment.paper.score_3),
                                   ('score_4', self.assignment.paper.score_4),
-                                  ('score_5', self.assignment.paper.score_5)]),
+                                  ('score_5', self.assignment.paper.score_5),
+                                  ("submission_date", self.assignment.paper.submission_date)]),
             "rejected": True,
         })
 
@@ -389,6 +393,7 @@ class AssignmentListGetTestCase(tests.ListAPITestCase):
                 [('id', a.paper.id), ('file', a.paper.file),
                  ('graded', a.paper.graded), ('score_1', a.paper.score_1),
                  ('score_2', a.paper.score_2), ('score_3', a.paper.score_3),
-                 ('score_4', a.paper.score_4), ('score_5', a.paper.score_5)]),
+                 ('score_4', a.paper.score_4), ('score_5', a.paper.score_5),
+                 ('submission_date', a.paper.submission_date)]),
             'rejected': a.rejected,
         } for a in assignments])

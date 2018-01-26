@@ -7,6 +7,9 @@
 
 var Button = require('components/core/Button');
 var NumberInput = require('components/NumberInput');
+var TextTemplate = require('components/core/TextTemplate');
+
+var PaperGradeText = require('text/PaperGradeText');
 
 var cx = require('classnames');
 var React = require('react');
@@ -69,7 +72,7 @@ var PaperGradeTable = React.createClass({
                     onClick={this._handleSave}
                     loading={this.props.loading}
                     success={this.props.success}>
-                    Save Scores
+                    Submit
                   </Button>
                 </div>;  
     }
@@ -79,6 +82,9 @@ var PaperGradeTable = React.createClass({
         <table>
           <caption>
             <strong>{this.props.countryName}</strong>
+            <TextTemplate>
+              {PaperGradeText}
+            </TextTemplate>
           </caption>
           <thead>
             <tr>
@@ -164,11 +170,8 @@ var PaperGradeTable = React.createClass({
                 <div>
                     <input
                       type="file"
-                      accept=".doc, .docx, .pdf"
+                      accept=".doc, .docx, .pdf, application/pdf, application/ms-word, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
                       onChange={this._handleUpload}/>
-                    <input
-                      type="submit"
-                      onClick={this._handleSubmit}/>
                 </div>
               </td>
             </tr>

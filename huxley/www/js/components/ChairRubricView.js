@@ -164,7 +164,9 @@ const ChairRubricView = React.createClass({
                   </tbody>
                 </table>
                 <Button
-                  onClick={this._handleSaveRubric}>
+                  onClick={this._handleSaveRubric}
+                  loading={this.state.loading}
+                  success={this.state.success}>
                   Save
                 </Button>
               </form>

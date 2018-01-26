@@ -33,6 +33,13 @@ var PositionPaperActions = {
     });
   },
 
+  storePositionPaper(paper) {
+    Dispatcher.dispatch({
+      actionType: ActionConstants.STORE_PAPER,
+      paper: paper
+    });
+  },
+
   uploadPaper(paper, file, onSuccess, onError) {
     Dispatcher.dispatch({
       actionType: ActionConstants.UPLOAD_PAPER,

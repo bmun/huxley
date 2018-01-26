@@ -34,7 +34,7 @@ var ChairPapersView = React.createClass({
     var assignments = AssignmentStore.getCommitteeAssignments(user.committee);
     var countries = CountryStore.getCountries();
     var committees = CommitteeStore.getCommittees();
-    var papers = {};
+    var papers = PositionPaperStore.getPapers();
     if (assignments.length) {
       PositionPaperStore.getPositionPaperFile(assignments[0].paper.id, assignments[0].paper.file);
     }
@@ -45,9 +45,6 @@ var ChairPapersView = React.createClass({
         (a1, a2) =>
           countries[a1.country].name < countries[a2.country].name ? -1 : 1,
       );
-      for (var a of assignments) {
-        papers[a.paper.id] = a.paper;
-      }
     }
 
     return {
@@ -77,40 +74,31 @@ var ChairPapersView = React.createClass({
     this._assignmentsToken = AssignmentStore.addListener(() => {
       var assignments = AssignmentStore.getCommitteeAssignments(user.committee);
       var countries = this.state.countries;
-      var papers = {};
       PositionPaperStore.getPositionPaperFile(assignments[0].paper.id, assignments[0].paper.file);
       if (Object.keys(countries).length) {
         assignments.sort(
           (a1, a2) =>
             countries[a1.country].name < countries[a2.country].name ? -1 : 1,
         );
-        for (var a of assignments) {
-          papers[a.paper.id] = a.paper;
-        }
       }
+
       this.setState({
         assignments: assignments,
-        papers: papers
       });
     });
 
     this._countriesToken = CountryStore.addListener(() => {
       var assignments = this.state.assignments;
       var countries = CountryStore.getCountries();
-      var papers = {};
       if (assignments.length) {
         assignments.sort(
           (a1, a2) =>
             countries[a1.country].name < countries[a2.country].name ? -1 : 1,
         );
-        for (var a of assignments) {
-          papers[a.paper.id] = a.paper;
-        }
       }
       this.setState({
         assignments: assignments,
         countries: countries,
-        papers: papers
       });
     });
 
@@ -118,7 +106,7 @@ var ChairPapersView = React.createClass({
       this.setState({committees: CommitteeStore.getCommittees()});
     });
 
-    this._filesToken = PositionPaperStore.addListener(() => {
+    this._papersToken = PositionPaperStore.addListener(() => {
       this.setState({files: PositionPaperStore.getPositionPaperFiles()});
     });
   },
@@ -127,7 +115,7 @@ var ChairPapersView = React.createClass({
     this._countriesToken && this._countriesToken.remove();
     this._committeesToken && this._committeesToken.remove()
     this._assignmentsToken && this._assignmentsToken.remove();
-    this._filesToken && this._filesToken.remove();
+    this._papersToken && this._papersToken.remove();
     this._successTimeout && clearTimeout(this._successTimeout);
   },
 
@@ -165,7 +153,7 @@ var ChairPapersView = React.createClass({
     var files = this.state.files;
     var rubric = Object.keys(this.state.committees).length ? this.state.committees[user.committee].rubric : null;
 
-    if (rubric != null) {
+    if (rubric != null && paper != null) {
       return (<PaperGradeTable
               rubric={rubric}
               paper={paper}
@@ -201,14 +189,8 @@ var ChairPapersView = React.createClass({
   },
 
   _handleScoreChange (field, paperID, event) {
-    var paper = this.state.papers[paperID];
-    var papers = this.state.papers;
-    this.setState({
-      papers: {
-        ...papers,
-        [paperID]: {...paper, [field]: Number(event)},
-      },
-    });
+    var paper = {...this.state.papers[paperID], [field]: Number(event)};
+    PositionPaperActions.storePositionPaper(paper);
   },
 
   _handleUnsetAssignment(event) {
@@ -231,11 +213,12 @@ var ChairPapersView = React.createClass({
 
   _handleSubmitPaper(paperID, event) {
     var file = this.state.uploadedFile;
-    if (file != null) {
-      var papers = this.state.papers;
+    if (file != null &&
+        window.confirm(`Please make sure this is the file you intend to submit! You have uploaded: ${file.name}.`)) {
       var files = this.state.files;
       var paper = {...this.state.papers[paperID]};
       paper.file = file.name;
+      PositionPaperActions.storePositionPaper(paper);
 
       PositionPaperActions.uploadPaper(
         paper,
@@ -247,10 +230,6 @@ var ChairPapersView = React.createClass({
       this.setState({
         loading: true,
         uploadedFile: null,
-        papers: {
-          ...papers,
-          [paper.id]: paper
-        },
         current_assignment: null,
       });
       this.history.pushState(null, '/chair/papers');
@@ -270,6 +249,7 @@ var ChairPapersView = React.createClass({
       this._handleError,
     );
     event.preventDefault();
+    this._handleSubmitPaper(paperID, event);
   },
 
   _handleSuccess: function(response) {

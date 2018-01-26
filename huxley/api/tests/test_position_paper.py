@@ -120,7 +120,8 @@ class PositionPaperPutTestCase(tests.UpdateAPITestCase):
             "score_4": self.paper.score_4,
             "score_5": self.paper.score_5,
             "graded": self.paper.graded,
-            "file": self.paper.file
+            "file": self.paper.file,
+            "submission_date": self.paper.submission_date
         })
 
     def test_delegate_scores(self):
@@ -174,7 +175,8 @@ class PositionPaperPutTestCase(tests.UpdateAPITestCase):
             "score_4": self.paper.score_4,
             "score_5": self.paper.score_5,
             "graded": self.paper.graded,
-            "file": self.paper.file
+            "file": self.paper.file,
+            "submission_date": self.paper.submission_date
         })
 
 
@@ -243,7 +245,8 @@ class PositionPaperDetailPatchTestCase(tests.PartialUpdateAPITestCase):
             "score_4": self.paper.score_4,
             "score_5": self.paper.score_5,
             "graded": self.paper.graded,
-            "file": self.paper.file
+            "file": self.paper.file,
+            "submission_date": self.paper.submission_date
         })
 
     def test_delegate_scores(self):
@@ -297,5 +300,6 @@ class PositionPaperDetailPatchTestCase(tests.PartialUpdateAPITestCase):
             "score_4": self.paper.score_4,
             "score_5": self.paper.score_5,
             "graded": self.paper.graded,
-            "file": self.paper.file
+            "file": self.paper.file,
+            "submission_date": self.paper.submission_date
         })

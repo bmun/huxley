@@ -40,7 +40,6 @@ class UserDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = (IsUserOrSuperuser, )
-    parser_classes = (MultiPartParser, )
 
 
 class CurrentUser(generics.GenericAPIView):

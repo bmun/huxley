@@ -26,6 +26,7 @@ var PaperAssignmentList = React.createClass({
                                                 Grade
                                               </Button> :
                                               <div>No paper submitted.</div>
+      var score = a.paper.score_1+a.paper.score_2+a.paper.score_3+a.paper.score_4+a.paper.score_5;
       return (
         <tr key={a.id}>
           <td>
@@ -33,6 +34,9 @@ var PaperAssignmentList = React.createClass({
           </td>
           <td>
             {buttonCell}
+          </td>
+          <td>
+            {score > 0 ? <div>{score}</div> : <div></div>}
           </td>
         </tr>
       )
@@ -44,6 +48,7 @@ var PaperAssignmentList = React.createClass({
           <tr>
             <th>Country</th>
             <th></th>
+            <th>Current Score</th>
           </tr>
         </thead>
         <tbody>

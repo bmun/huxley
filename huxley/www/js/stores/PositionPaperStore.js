@@ -6,13 +6,14 @@
 'use strict';
 
 var ActionConstants = require('constants/ActionConstants');
+var CurrentUserStore = require('stores/CurrentUserStore');
 var PositionPaperActions = require('actions/PositionPaperActions');
 var Dispatcher = require('dispatcher/Dispatcher');
 var ServerAPI = require('lib/ServerAPI');
 var {Store} = require('flux/utils');
 
 var _files = {};
-var _papersFetched = false;
+var _papers = {};
 var _previousUserID = -1;
 
 class PositionPaperStore extends Store {
@@ -40,6 +41,14 @@ class PositionPaperStore extends Store {
     ServerAPI.uploadPositionPaper(paper, file).then(onSuccess, onError);
   }
 
+  storePaper(paper) {
+    _papers[paper.id] = paper;
+  }
+
+  getPapers() {
+    return _papers
+  }
+
   __onDispatch(action) {
     switch (action.actionType) {
       case ActionConstants.FETCH_POSITION_PAPER_FILE:
@@ -54,6 +63,22 @@ class PositionPaperStore extends Store {
       case ActionConstants.UPLOAD_PAPER:
         delete _files[action.paper.id];
         this.uploadPaper(action.paper, action.file, action.onSuccess, action.onError);
+        break;
+      case ActionConstants.STORE_PAPER:
+        this.storePaper(action.paper);
+        break;
+      case ActionConstants.ASSIGNMENTS_FETCHED:
+        for (const assignment of action.assignments) {
+          _papers[assignment.paper.id] = assignment.paper;
+        }
+        break;
+      case ActionConstants.LOGIN:
+        var userID = CurrentUserStore.getCurrentUser().id;
+        if (userID != _previousUserID) {
+          _papers = {};
+          _previousUserID = userID;
+        }
+        break;
       default:
         return;
     }

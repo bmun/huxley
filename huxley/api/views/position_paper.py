@@ -1,6 +1,11 @@
 # Copyright (c) 2011-2017 Berkeley Model United Nations. All rights reserved.
 # Use of this source code is governed by a BSD License (see LICENSE).
 
+from datetime import date
+
+from django.db import transaction
+from django.http.response import HttpResponse
+
 from rest_framework import generics, status
 from rest_framework.response import Response
 
@@ -10,9 +15,6 @@ from rest_framework.parsers import FileUploadParser, FormParser, JSONParser, Mul
 from huxley.api import permissions
 from huxley.api.serializers import PositionPaperSerializer
 from huxley.core.models import PositionPaper
-
-from django.db import transaction
-from django.http.response import HttpResponse
 
 class PositionPaperDetail(generics.RetrieveUpdateAPIView):
     authentication_classes = (SessionAuthentication, )
@@ -32,10 +34,15 @@ class PositionPaperDetail(generics.RetrieveUpdateAPIView):
         file = request.FILES['file']
         instance = PositionPaper.objects.get(id=kwargs['pk'])
         response_data = []
+        data = {'file': file}
+
+        if request.user.is_delegate():
+            data['submission_date'] = date.today()
+
         with transaction.atomic():
             serializer = self.get_serializer(
                 instance=instance,
-                data={'file': file},
+                data=data,
                 partial=True)
             serializer.is_valid(raise_exception=True)
             serializer.save()

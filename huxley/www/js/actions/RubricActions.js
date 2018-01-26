@@ -9,10 +9,12 @@ var ActionConstants = require('constants/ActionConstants');
 var Dispatcher = require('dispatcher/Dispatcher');
 
 var RubricActions = {
-  updateRubric(rubric) {
+  updateRubric(rubric, onSuccess, onError) {
     Dispatcher.dispatch({
       actionType: ActionConstants.UPDATE_RUBRIC,
       rubric: rubric,
+      onSuccess: onSuccess,
+      onError: onError
     });
   },
 
