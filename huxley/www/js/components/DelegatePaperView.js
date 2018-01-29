@@ -121,14 +121,12 @@ var DelegatePaperView = React.createClass({
       this.setState({
         uploadedFile: null,
       });
-      // this.history.pushState(null, '/');
     }
   },
 
   _handleSuccess: function(response) {},
 
   _handleError: function(response) {
-    console.log(response);
     window.alert(
       'Something went wrong. Please refresh your page and try again.',
     );
