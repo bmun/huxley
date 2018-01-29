@@ -28,7 +28,7 @@ def create_committee_rubrics(apps, schema_editor):
 
 class Migration(migrations.Migration):
 
-    dependencies = [('core', '0026_auto_20171206_1716'), ]
+    dependencies = [('core', '0029_auto_20171229_1118'), ]
 
     operations = [
         migrations.RunPython(create_assignment_position_papers),
