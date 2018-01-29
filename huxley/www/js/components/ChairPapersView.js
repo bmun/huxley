@@ -35,12 +35,6 @@ var ChairPapersView = React.createClass({
     var countries = CountryStore.getCountries();
     var committees = CommitteeStore.getCommittees();
     var papers = PositionPaperStore.getPapers();
-    if (assignments.length and assignments[0].paper.file != null) {
-      PositionPaperStore.getPositionPaperFile(
-        assignments[0].paper.id,
-        assignments[0].paper.file,
-      );
-    }
     var files = PositionPaperStore.getPositionPaperFiles();
 
     if (assignments.length && Object.keys(countries).length) {
