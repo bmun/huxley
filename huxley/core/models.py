@@ -334,6 +334,7 @@ class PositionPaper(models.Model):
     score_3 = models.PositiveSmallIntegerField(default=0)
     score_4 = models.PositiveSmallIntegerField(default=0)
     score_5 = models.PositiveSmallIntegerField(default=0)
+    submission_date = models.DateField(null=True)
 
     @classmethod
     def delete_prev_file(cls, **kwargs):

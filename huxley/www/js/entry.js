@@ -20,8 +20,11 @@ var AdvisorProfileView = require('components/AdvisorProfileView');
 var AdvisorRosterView = require('components/AdvisorRosterView');
 var ChairAttendanceView = require('components/ChairAttendanceView');
 var ChairCommitteeFeedbackView = require('components/ChairCommitteeFeedbackView');
+var ChairPapersView = require('components/ChairPapersView');
+var ChairRubricView = require('components/ChairRubricView');
 var ChairSummaryView = require('components/ChairSummaryView');
 var DelegateCommitteeFeedbackView = require('components/DelegateCommitteeFeedbackView');
+var DelegatePaperView = require('components/DelegatePaperView');
 var DelegateProfileView = require('components/DelegateProfileView');
 var ForgotPasswordView = require('components/ForgotPasswordView');
 var LoginView = require('components/LoginView');
@@ -57,6 +60,8 @@ var routes = (
     <Route path="/advisor/feedback" component={AdvisorFeedbackView} />
     <Route path="/advisor/roster" component={AdvisorRosterView} />
     <Route path="/chair/attendance" component={ChairAttendanceView} />
+    <Route path="/chair/papers" component={ChairPapersView} />
+    <Route path="/chair/rubric" component={ChairRubricView} />
     <Route
       path="/chair/committee_feedback"
       component={ChairCommitteeFeedbackView}
@@ -67,6 +72,7 @@ var routes = (
       component={DelegateCommitteeFeedbackView}
     />
     <Route path="/delegate/profile" component={DelegateProfileView} />
+    <Route path="/delegate/paper" component={DelegatePaperView} />
     <IndexRoute component={RedirectView} />
     <Route path="*" component={NotFoundView} />
   </Route>
@@ -74,9 +80,7 @@ var routes = (
 
 window.addEventListener('DOMContentLoaded', () => {
   ReactDOM.render(
-    <Router>
-      {routes}
-    </Router>,
+    <Router>{routes}</Router>,
     document.getElementById('huxley-app'),
   );
 });
