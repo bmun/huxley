@@ -36,7 +36,7 @@ var PositionPaperActions = {
   storePositionPaper(paper) {
     Dispatcher.dispatch({
       actionType: ActionConstants.STORE_PAPER,
-      paper: paper
+      paper: paper,
     });
   },
 

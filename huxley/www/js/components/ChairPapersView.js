@@ -1,7 +1,7 @@
 /**
-* Copyright (c) 2011-2017 Berkeley Model United Nations. All rights reserved.
-* Use of this source code is governed by a BSD License (see LICENSE).
-+*/
+ * Copyright (c) 2011-2017 Berkeley Model United Nations. All rights reserved.
+ * Use of this source code is governed by a BSD License (see LICENSE).
+ +*/
 
 'use strict';
 
@@ -36,7 +36,10 @@ var ChairPapersView = React.createClass({
     var committees = CommitteeStore.getCommittees();
     var papers = PositionPaperStore.getPapers();
     if (assignments.length) {
-      PositionPaperStore.getPositionPaperFile(assignments[0].paper.id, assignments[0].paper.file);
+      PositionPaperStore.getPositionPaperFile(
+        assignments[0].paper.id,
+        assignments[0].paper.file,
+      );
     }
     var files = PositionPaperStore.getPositionPaperFiles();
 
@@ -74,7 +77,10 @@ var ChairPapersView = React.createClass({
     this._assignmentsToken = AssignmentStore.addListener(() => {
       var assignments = AssignmentStore.getCommitteeAssignments(user.committee);
       var countries = this.state.countries;
-      PositionPaperStore.getPositionPaperFile(assignments[0].paper.id, assignments[0].paper.file);
+      PositionPaperStore.getPositionPaperFile(
+        assignments[0].paper.id,
+        assignments[0].paper.file,
+      );
       if (Object.keys(countries).length) {
         assignments.sort(
           (a1, a2) =>
@@ -113,7 +119,7 @@ var ChairPapersView = React.createClass({
 
   componentWillUnmount() {
     this._countriesToken && this._countriesToken.remove();
-    this._committeesToken && this._committeesToken.remove()
+    this._committeesToken && this._committeesToken.remove();
     this._assignmentsToken && this._assignmentsToken.remove();
     this._papersToken && this._papersToken.remove();
     this._successTimeout && clearTimeout(this._successTimeout);
@@ -123,13 +129,9 @@ var ChairPapersView = React.createClass({
     if (this.state.current_assignment == null) {
       return (
         <InnerView>
-          <TextTemplate>
-            {ChairPapersViewText}
-          </TextTemplate>
+          <TextTemplate>{ChairPapersViewText}</TextTemplate>
           <form>
-            <div className="table-container">
-              {this.renderAssignmentList()}
-            </div>
+            <div className="table-container">{this.renderAssignmentList()}</div>
           </form>
         </InnerView>
       );
@@ -137,9 +139,7 @@ var ChairPapersView = React.createClass({
       return (
         <InnerView>
           <form>
-            <div className="table-container">
-              {this.renderRubric()}
-            </div>
+            <div className="table-container">{this.renderRubric()}</div>
           </form>
         </InnerView>
       );
@@ -151,25 +151,29 @@ var ChairPapersView = React.createClass({
     var paper = this.state.papers[this.state.current_assignment.paper.id];
     var country = this.state.countries[this.state.current_assignment.country];
     var files = this.state.files;
-    var rubric = Object.keys(this.state.committees).length ? this.state.committees[user.committee].rubric : null;
+    var rubric = Object.keys(this.state.committees).length
+      ? this.state.committees[user.committee].rubric
+      : null;
 
     if (rubric != null && paper != null) {
-      return (<PaperGradeTable
-              rubric={rubric}
-              paper={paper}
-              files={files}
-              countryName={country.name}
-              onChange={this._handleScoreChange}
-              onDownload={this._handleDownload}
-              onUnset={this._handleUnsetAssignment}
-              onSave={this._handleSavePaper}
-              onUpload={this._handleUploadPaper}
-              onSubmit={this._handleSubmitPaper}
-              loading={this.state.loading}
-              success={this.state.success}>
-            </PaperGradeTable>);
+      return (
+        <PaperGradeTable
+          rubric={rubric}
+          paper={paper}
+          files={files}
+          countryName={country.name}
+          onChange={this._handleScoreChange}
+          onDownload={this._handleDownload}
+          onUnset={this._handleUnsetAssignment}
+          onSave={this._handleSavePaper}
+          onUpload={this._handleUploadPaper}
+          onSubmit={this._handleSubmitPaper}
+          loading={this.state.loading}
+          success={this.state.success}
+        />
+      );
     } else {
-      return <div></div>;
+      return <div />;
     }
   },
 
@@ -178,17 +182,19 @@ var ChairPapersView = React.createClass({
     var countries = this.state.countries;
 
     if (Object.keys(countries).length) {
-        return (<PaperAssignmentList
-                  assignments={assignments}
-                  countries={countries}
-                  onChange={this._handleAssignmentSelect}>
-                </PaperAssignmentList>);
+      return (
+        <PaperAssignmentList
+          assignments={assignments}
+          countries={countries}
+          onChange={this._handleAssignmentSelect}
+        />
+      );
     } else {
-      return <div></div>;
+      return <div />;
     }
   },
 
-  _handleScoreChange (field, paperID, event) {
+  _handleScoreChange(field, paperID, event) {
     var paper = {...this.state.papers[paperID], [field]: Number(event)};
     PositionPaperActions.storePositionPaper(paper);
   },
@@ -200,7 +206,7 @@ var ChairPapersView = React.createClass({
     });
   },
 
-  _handleAssignmentSelect (assignmentID, event) {
+  _handleAssignmentSelect(assignmentID, event) {
     var assignments = this.state.assignments;
     var a = assignments.find(a => a.id == assignmentID);
     this.setState({current_assignment: a});
@@ -213,8 +219,14 @@ var ChairPapersView = React.createClass({
 
   _handleSubmitPaper(paperID, event) {
     var file = this.state.uploadedFile;
-    if (file != null &&
-        window.confirm(`Please make sure this is the file you intend to submit! You have uploaded: ${file.name}.`)) {
+    if (
+      file != null &&
+      window.confirm(
+        `Please make sure this is the file you intend to submit! You have uploaded: ${
+          file.name
+        }.`,
+      )
+    ) {
       var files = this.state.files;
       var paper = {...this.state.papers[paperID]};
       paper.file = file.name;

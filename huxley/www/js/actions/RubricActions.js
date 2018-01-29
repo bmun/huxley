@@ -14,16 +14,16 @@ var RubricActions = {
       actionType: ActionConstants.UPDATE_RUBRIC,
       rubric: rubric,
       onSuccess: onSuccess,
-      onError: onError
+      onError: onError,
     });
   },
 
   rubricFetched(value) {
-  	Dispatcher.dispatch({
+    Dispatcher.dispatch({
       actionType: ActionConstants.RUBRIC_FETCHED,
       rubric: value,
     });
-  }
+  },
 };
 
 module.exports = RubricActions;

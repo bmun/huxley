@@ -30,20 +30,22 @@ var PaperSubmissionTable = React.createClass({
       var url = window.URL;
       var hrefData = url.createObjectURL(files[paper.id]);
       var fileNames = paper.file.split('/');
-      var fileName = fileNames[fileNames.length-1];
-      buttons = <div>
-                  <a
-                    className={cx({
-                                button: true,
-                                'button-large': true,
-                                'button-green': true,
-                                'rounded-small': true,
-                              })}
-                    href={hrefData}
-                    download={fileName}>
-                  Download Paper
-                  </a>
-                </div>;  
+      var fileName = fileNames[fileNames.length - 1];
+      buttons = (
+        <div>
+          <a
+            className={cx({
+              button: true,
+              'button-large': true,
+              'button-green': true,
+              'rounded-small': true,
+            })}
+            href={hrefData}
+            download={fileName}>
+            Download Paper
+          </a>
+        </div>
+      );
     }
 
     if (!paper.graded) {
@@ -55,11 +57,12 @@ var PaperSubmissionTable = React.createClass({
                 <td>Upload Paper:</td>
                 <td>
                   <div>
-                      <input
-                        type="file"
-                        accept=".doc, .docx, .pdf, application/pdf, application/ms-word, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-                        onChange={this._handleUpload}/>
-                      <input type="submit" onClick={this._handleSubmit} />
+                    <input
+                      type="file"
+                      accept=".doc, .docx, .pdf, application/pdf, application/ms-word, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                      onChange={this._handleUpload}
+                    />
+                    <input type="submit" onClick={this._handleSubmit} />
                   </div>
                 </td>
               </tr>
@@ -69,7 +72,8 @@ var PaperSubmissionTable = React.createClass({
               </tr>
             </tbody>
           </table>
-        </div>);
+        </div>
+      );
     }
 
     return (
@@ -84,74 +88,39 @@ var PaperSubmissionTable = React.createClass({
           </thead>
           <tbody>
             <tr>
+              <td>{rubric.grade_category_1}</td>
               <td>
-                {rubric.grade_category_1}
+                <NumberInput defaultValue={'' + paper.score_1} disabled />
               </td>
-              <td>
-                <NumberInput
-                  defaultValue={""+paper.score_1}
-                  disabled
-                />
-              </td>
-              <td>
-                {rubric.grade_value_1}
-              </td>
+              <td>{rubric.grade_value_1}</td>
             </tr>
             <tr>
+              <td>{rubric.grade_category_2}</td>
               <td>
-                {rubric.grade_category_2}
+                <NumberInput defaultValue={'' + paper.score_2} disabled />
               </td>
-              <td>
-                <NumberInput
-                  defaultValue={""+paper.score_2}
-                  disabled
-                />
-              </td>
-              <td>
-                {rubric.grade_value_2}
-              </td>
+              <td>{rubric.grade_value_2}</td>
             </tr>
             <tr>
+              <td>{rubric.grade_category_3}</td>
               <td>
-                {rubric.grade_category_3}
+                <NumberInput defaultValue={'' + paper.score_3} disabled />
               </td>
-              <td>
-                <NumberInput
-                  defaultValue={""+paper.score_3}
-                  disabled
-                />
-              </td>
-              <td>
-                {rubric.grade_value_3}
-              </td>
+              <td>{rubric.grade_value_3}</td>
             </tr>
             <tr>
+              <td>{rubric.grade_category_4}</td>
               <td>
-                {rubric.grade_category_4}
+                <NumberInput defaultValue={'' + paper.score_4} disabled />
               </td>
-              <td>
-                <NumberInput
-                  defaultValue={""+paper.score_4}
-                  disabled
-                />
-              </td>
-              <td>
-                {rubric.grade_value_4}
-              </td>
+              <td>{rubric.grade_value_4}</td>
             </tr>
             <tr>
+              <td>{rubric.grade_category_5}</td>
               <td>
-                {rubric.grade_category_5}
+                <NumberInput defaultValue={'' + paper.score_5} disabled />
               </td>
-              <td>
-                <NumberInput
-                  defaultValue={""+paper.score_5}
-                  disabled
-                />
-              </td>
-              <td>
-                {rubric.grade_value_5}
-              </td>
+              <td>{rubric.grade_value_5}</td>
             </tr>
           </tbody>
         </table>
@@ -161,14 +130,12 @@ var PaperSubmissionTable = React.createClass({
   },
 
   _handleUpload: function(event) {
-    this.props.onUpload &&
-      this.props.onUpload(this.props.paper.id, event);
+    this.props.onUpload && this.props.onUpload(this.props.paper.id, event);
   },
 
-   _handleSubmit: function(event) {
-    this.props.onSubmit &&
-      this.props.onSubmit(this.props.paper.id, event);
-  }
+  _handleSubmit: function(event) {
+    this.props.onSubmit && this.props.onSubmit(this.props.paper.id, event);
+  },
 });
 
 module.exports = PaperSubmissionTable;

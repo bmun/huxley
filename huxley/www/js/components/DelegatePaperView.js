@@ -1,7 +1,7 @@
 /**
-* Copyright (c) 2011-2017 Berkeley Model United Nations. All rights reserved.
-* Use of this source code is governed by a BSD License (see LICENSE).
-+*/
+ * Copyright (c) 2011-2017 Berkeley Model United Nations. All rights reserved.
+ * Use of this source code is governed by a BSD License (see LICENSE).
+ +*/
 
 'use strict';
 
@@ -52,7 +52,8 @@ var DelegatePaperView = React.createClass({
     this._papersToken = PositionPaperStore.addListener(() => {
       this.setState({
         files: PositionPaperStore.getPositionPaperFiles(),
-        papers: PositionPaperStore.getPapers()});
+        papers: PositionPaperStore.getPapers(),
+      });
     });
   },
 
@@ -64,13 +65,9 @@ var DelegatePaperView = React.createClass({
   render() {
     return (
       <InnerView>
-        <TextTemplate>
-          {DelegatePaperViewText}
-        </TextTemplate>
+        <TextTemplate>{DelegatePaperViewText}</TextTemplate>
         <form>
-          <div className="table-container">
-            {this.renderRubric()}
-          </div>
+          <div className="table-container">{this.renderRubric()}</div>
         </form>
       </InnerView>
     );
@@ -83,15 +80,17 @@ var DelegatePaperView = React.createClass({
     const rubric = user.delegate.assignment.committee.rubric;
 
     if (rubric != null && paper != null) {
-      return (<PaperSubmissionTable
-              rubric={rubric}
-              paper={paper}
-              files={files}
-              onUpload={this._handleUploadPaper}
-              onSubmit={this._handleSubmitPaper}>
-            </PaperSubmissionTable>);
+      return (
+        <PaperSubmissionTable
+          rubric={rubric}
+          paper={paper}
+          files={files}
+          onUpload={this._handleUploadPaper}
+          onSubmit={this._handleSubmitPaper}
+        />
+      );
     } else {
-      return <div></div>;
+      return <div />;
     }
   },
 
@@ -101,8 +100,14 @@ var DelegatePaperView = React.createClass({
 
   _handleSubmitPaper(paperID, event) {
     var file = this.state.uploadedFile;
-    if (file != null &&
-        window.confirm(`Please make sure this is the file you intend to submit! You have uploaded: ${file.name}.`)) {
+    if (
+      file != null &&
+      window.confirm(
+        `Please make sure this is the file you intend to submit! You have uploaded: ${
+          file.name
+        }.`,
+      )
+    ) {
       var paper = {...this.state.papers[paperID]};
       paper.file = file.name;
 
@@ -120,9 +125,7 @@ var DelegatePaperView = React.createClass({
     }
   },
 
-  _handleSuccess: function(response) {
-
-  },
+  _handleSuccess: function(response) {},
 
   _handleError: function(response) {
     console.log(response);

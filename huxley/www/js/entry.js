@@ -80,9 +80,7 @@ var routes = (
 
 window.addEventListener('DOMContentLoaded', () => {
   ReactDOM.render(
-    <Router>
-      {routes}
-    </Router>,
+    <Router>{routes}</Router>,
     document.getElementById('huxley-app'),
   );
 });

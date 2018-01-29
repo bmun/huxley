@@ -1,7 +1,7 @@
 /**
-* Copyright (c) 2011-2016 Berkeley Model United Nations. All rights reserved.
-* Use of this source code is governed by a BSD License (see LICENSE).
-+*/
+ * Copyright (c) 2011-2016 Berkeley Model United Nations. All rights reserved.
+ * Use of this source code is governed by a BSD License (see LICENSE).
+ +*/
 
 'use strict';
 
@@ -95,18 +95,10 @@ const DelegateProfileView = React.createClass({
       <tbody>
         <tr>
           <td>Attendance</td>
-          <td>
-            {delegate.session_one ? 'Attended' : ''}
-          </td>
-          <td>
-            {delegate.session_two ? 'Attended' : ''}
-          </td>
-          <td>
-            {delegate.session_three ? 'Attended' : ''}
-          </td>
-          <td>
-            {delegate.session_four ? 'Attended' : ''}
-          </td>
+          <td>{delegate.session_one ? 'Attended' : ''}</td>
+          <td>{delegate.session_two ? 'Attended' : ''}</td>
+          <td>{delegate.session_three ? 'Attended' : ''}</td>
+          <td>{delegate.session_four ? 'Attended' : ''}</td>
         </tr>
       </tbody>
     );

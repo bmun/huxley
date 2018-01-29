@@ -19,7 +19,7 @@ var _previousUserID = -1;
 class PositionPaperStore extends Store {
   getPositionPaperFile(paperID) {
     if (paperID in _files) {
-      return _files[paperID]
+      return _files[paperID];
     } else {
       ServerAPI.getPositionPaperFile(paperID).then(value => {
         PositionPaperActions.positionPaperFileFetched(value, paperID);
@@ -47,7 +47,7 @@ class PositionPaperStore extends Store {
   }
 
   getPapers() {
-    return _papers
+    return _papers;
   }
 
   __onDispatch(action) {
@@ -59,14 +59,23 @@ class PositionPaperStore extends Store {
         _files[action.id] = action.file;
         break;
       case ActionConstants.UPDATE_POSITION_PAPER:
-        this.updatePositionPaper(action.paper, action.onSuccess, action.onError);
+        this.updatePositionPaper(
+          action.paper,
+          action.onSuccess,
+          action.onError,
+        );
         break;
       case ActionConstants.UPLOAD_PAPER:
         delete _files[action.paper.id];
         if (action.paper.id in _papers) {
           _papers[action.paper.id] = action.paper;
         }
-        this.uploadPaper(action.paper, action.file, action.onSuccess, action.onError);
+        this.uploadPaper(
+          action.paper,
+          action.file,
+          action.onSuccess,
+          action.onError,
+        );
         break;
       case ActionConstants.STORE_PAPER:
         this.storePaper(action.paper);

@@ -132,7 +132,11 @@ var ServerAPI = {
   },
 
   getPositionPaperFile(paperID) {
-    return _get('/api/papers/file', {id: paperID}, 'application/force-download');
+    return _get(
+      '/api/papers/file',
+      {id: paperID},
+      'application/force-download',
+    );
   },
 
   updatePositionPaper(paper) {
@@ -149,7 +153,7 @@ var ServerAPI = {
 
   updateRubric(rubric) {
     return _patch(`api/rubrics/${rubric.id}`, rubric);
-  }
+  },
 };
 
 function _encodeQueryString(params) {
@@ -186,15 +190,15 @@ function _ajax(method, uri, data, content_type) {
 
   if (!isSafeMethod) {
     params.headers['X-CSRFToken'] = Cookie.get('csrftoken');
-    if (data && content_type != "multipart/form-data") {
+    if (data && content_type != 'multipart/form-data') {
       params.body = typeof data === 'string' ? data : JSON.stringify(data);
-    } else if (data && content_type == "multipart/form-data") {
+    } else if (data && content_type == 'multipart/form-data') {
       var form = new FormData();
       form.append('file', data['file']);
       params.body = form;
     }
   }
-  
+
   if (content_type == 'application/json') {
     return fetch(uri, params).then(
       response =>
@@ -217,7 +221,6 @@ function _ajax(method, uri, data, content_type) {
           : response.text().then(text => Promise.reject(text)),
     );
   }
-  
 }
 
 const _delete = _ajax.bind(null, 'DELETE');

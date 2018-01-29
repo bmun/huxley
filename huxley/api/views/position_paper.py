@@ -16,6 +16,7 @@ from huxley.api import permissions
 from huxley.api.serializers import PositionPaperSerializer
 from huxley.core.models import PositionPaper
 
+
 class PositionPaperDetail(generics.RetrieveUpdateAPIView):
     authentication_classes = (SessionAuthentication, )
     permission_classes = (permissions.PositionPaperDetailPermission, )
@@ -25,8 +26,9 @@ class PositionPaperDetail(generics.RetrieveUpdateAPIView):
 
     def post(self, request, *args, **kwargs):
         if 'file' not in request.FILES:
-            return Response("POST endpoint only used for file upload.", 
-                            status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                "POST endpoint only used for file upload.",
+                status=status.HTTP_400_BAD_REQUEST)
 
         file = request.FILES['file']
         instance = PositionPaper.objects.get(id=kwargs['pk'])
@@ -38,9 +40,7 @@ class PositionPaperDetail(generics.RetrieveUpdateAPIView):
 
         with transaction.atomic():
             serializer = self.get_serializer(
-                instance=instance,
-                data=data,
-                partial=True)
+                instance=instance, data=data, partial=True)
             serializer.is_valid(raise_exception=True)
             serializer.save()
             response_data = serializer.data
@@ -49,14 +49,15 @@ class PositionPaperDetail(generics.RetrieveUpdateAPIView):
     def put(self, request, *args, **kwargs):
         return self.partial_update(request, *args, **kwargs)
 
+
 class PositionPaperFile(generics.RetrieveAPIView):
     authentication_classes = (SessionAuthentication, )
 
     def retrieve(self, request, *args, **kwargs):
         paper_id = request.GET.get('id', -1)
         if paper_id < 0:
-            return Response("Must supply paper id.", 
-                            status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                "Must supply paper id.", status=status.HTTP_400_BAD_REQUEST)
         try:
             instance = PositionPaper.objects.get(id=paper_id)
             file_path = instance.file.name
@@ -65,8 +66,11 @@ class PositionPaperFile(generics.RetrieveAPIView):
             response = HttpResponse(data, status=status.HTTP_201_CREATED)
             response['Content-Type'] = 'text/plain'
             file_name = file_path.split('/')[-1]
-            response['Content-Disposition'] = 'attachement; file_name="{0}"'.format(file_name)
+            response[
+                'Content-Disposition'] = 'attachement; file_name="{0}"'.format(
+                    file_name)
             return response
         except PositionPaper.DoesNotExist:
-            return Response("Paper with id {0} does not exist".format(paper_id), 
-                            status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                "Paper with id {0} does not exist".format(paper_id),
+                status=status.HTTP_400_BAD_REQUEST)

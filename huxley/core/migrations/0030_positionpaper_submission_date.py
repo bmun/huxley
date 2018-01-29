@@ -7,14 +7,11 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('core', '0029_auto_20171229_1118'),
-    ]
+    dependencies = [('core', '0029_auto_20171229_1118'), ]
 
     operations = [
         migrations.AddField(
             model_name='positionpaper',
             name='submission_date',
-            field=models.DateField(null=True),
-        ),
+            field=models.DateField(null=True), ),
     ]
