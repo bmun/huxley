@@ -5,16 +5,16 @@
 
 'use strict';
 
-var Button = require('components/core/Button');
-var NumberInput = require('components/NumberInput');
-var TextTemplate = require('components/core/TextTemplate');
+const Button = require('components/core/Button');
+const NumberInput = require('components/NumberInput');
+const TextTemplate = require('components/core/TextTemplate');
 
-var PaperGradeText = require('text/PaperGradeText');
+const PaperGradeText = require('text/PaperGradeText.md');
 
-var cx = require('classnames');
-var React = require('react');
+const cx = require('classnames');
+const React = require('react');
 
-var PaperGradeTable = React.createClass({
+const PaperGradeTable = React.createClass({
   propTypes: {
     onChange: React.PropTypes.func,
     onDownload: React.PropTypes.func,
@@ -31,9 +31,9 @@ var PaperGradeTable = React.createClass({
   },
 
   render() {
-    var rubric = this.props.rubric;
-    var paper = this.props.paper;
-    var files = this.props.files;
+    const rubric = this.props.rubric;
+    const paper = this.props.paper;
+    const files = this.props.files;
     var buttons = <div>
                     <Button
                       color="red"
@@ -185,11 +185,6 @@ var PaperGradeTable = React.createClass({
   _handleChange: function(field, event) {
     this.props.onChange &&
       this.props.onChange(field, this.props.paper.id, event);
-  },
-
-  _handleDownload: function(event) {
-    this.props.onDownload &&
-      this.props.onDownload(this.props.paper.id, event);
   },
 
   _handleUnset: function(event) {

@@ -38,6 +38,9 @@ var PaperAssignmentList = React.createClass({
           <td>
             {score > 0 ? <div>{score}</div> : <div></div>}
           </td>
+          <td>
+            {a.paper.submission_date}
+          </td>
         </tr>
       )
     });
@@ -49,6 +52,7 @@ var PaperAssignmentList = React.createClass({
             <th>Country</th>
             <th></th>
             <th>Current Score</th>
+            <th>Submission Date (PST)</th>
           </tr>
         </thead>
         <tbody>

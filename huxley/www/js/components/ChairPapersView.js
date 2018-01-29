@@ -218,7 +218,6 @@ var ChairPapersView = React.createClass({
       var files = this.state.files;
       var paper = {...this.state.papers[paperID]};
       paper.file = file.name;
-      PositionPaperActions.storePositionPaper(paper);
 
       PositionPaperActions.uploadPaper(
         paper,
@@ -226,13 +225,13 @@ var ChairPapersView = React.createClass({
         this._handleSuccess,
         this._handleError,
       );
+      PositionPaperActions.storePositionPaper(paper);
 
       this.setState({
         loading: true,
         uploadedFile: null,
         current_assignment: null,
       });
-      this.history.pushState(null, '/chair/papers');
     }
   },
 

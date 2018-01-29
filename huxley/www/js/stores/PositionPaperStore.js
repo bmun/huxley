@@ -38,6 +38,7 @@ class PositionPaperStore extends Store {
   }
 
   uploadPaper(paper, file, onSuccess, onError) {
+    _files[paper.id] = file;
     ServerAPI.uploadPositionPaper(paper, file).then(onSuccess, onError);
   }
 
@@ -62,6 +63,9 @@ class PositionPaperStore extends Store {
         break;
       case ActionConstants.UPLOAD_PAPER:
         delete _files[action.paper.id];
+        if (action.paper.id in _papers) {
+          _papers[action.paper.id] = action.paper;
+        }
         this.uploadPaper(action.paper, action.file, action.onSuccess, action.onError);
         break;
       case ActionConstants.STORE_PAPER:

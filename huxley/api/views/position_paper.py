@@ -23,9 +23,6 @@ class PositionPaperDetail(generics.RetrieveUpdateAPIView):
     serializer_class = PositionPaperSerializer
     parser_classes = (JSONParser, MultiPartParser, FormParser)
 
-    def patch(self, request, *args, **kwargs):
-        return super(PositionPaperDetail, self).patch(request, args, kwargs)
-
     def post(self, request, *args, **kwargs):
         if 'file' not in request.FILES:
             return Response("POST endpoint only used for file upload.", 

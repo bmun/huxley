@@ -24,6 +24,7 @@ var ChairPapersView = require('components/ChairPapersView');
 var ChairRubricView = require('components/ChairRubricView');
 var ChairSummaryView = require('components/ChairSummaryView');
 var DelegateCommitteeFeedbackView = require('components/DelegateCommitteeFeedbackView');
+var DelegatePaperView = require('components/DelegatePaperView');
 var DelegateProfileView = require('components/DelegateProfileView');
 var ForgotPasswordView = require('components/ForgotPasswordView');
 var LoginView = require('components/LoginView');
@@ -71,6 +72,7 @@ var routes = (
       component={DelegateCommitteeFeedbackView}
     />
     <Route path="/delegate/profile" component={DelegateProfileView} />
+    <Route path="/delegate/paper" component={DelegatePaperView} />
     <IndexRoute component={RedirectView} />
     <Route path="*" component={NotFoundView} />
   </Route>
