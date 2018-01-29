@@ -24,7 +24,7 @@ var PaperSubmissionTable = React.createClass({
     var rubric = this.props.rubric;
     var paper = this.props.paper;
     var files = this.props.files;
-    var buttons = <div>Waiting on server...</div>;
+    var buttons = <div></div>;
 
     if (paper.id in files) {
       var url = window.URL;

@@ -35,12 +35,6 @@ var ChairPapersView = React.createClass({
     var countries = CountryStore.getCountries();
     var committees = CommitteeStore.getCommittees();
     var papers = PositionPaperStore.getPapers();
-    if (assignments.length) {
-      PositionPaperStore.getPositionPaperFile(
-        assignments[0].paper.id,
-        assignments[0].paper.file,
-      );
-    }
     var files = PositionPaperStore.getPositionPaperFiles();
 
     if (assignments.length && Object.keys(countries).length) {
@@ -77,10 +71,6 @@ var ChairPapersView = React.createClass({
     this._assignmentsToken = AssignmentStore.addListener(() => {
       var assignments = AssignmentStore.getCommitteeAssignments(user.committee);
       var countries = this.state.countries;
-      PositionPaperStore.getPositionPaperFile(
-        assignments[0].paper.id,
-        assignments[0].paper.file,
-      );
       if (Object.keys(countries).length) {
         assignments.sort(
           (a1, a2) =>
@@ -210,7 +200,9 @@ var ChairPapersView = React.createClass({
     var assignments = this.state.assignments;
     var a = assignments.find(a => a.id == assignmentID);
     this.setState({current_assignment: a});
-    PositionPaperActions.fetchPositionPaperFile(a.paper.id);
+    if (a.paper.file != null) {
+      PositionPaperActions.fetchPositionPaperFile(a.paper.id);      
+    }
   },
 
   _handleUploadPaper(paperID, event) {
