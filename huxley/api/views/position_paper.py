@@ -61,14 +61,17 @@ class PositionPaperFile(generics.RetrieveAPIView):
         try:
             instance = PositionPaper.objects.get(id=paper_id)
             file_path = instance.file.name
-            with open(file_path, 'r') as f:
-                data = f.read()
-            response = HttpResponse(data, status=status.HTTP_201_CREATED)
-            response['Content-Type'] = 'text/plain'
-            file_name = file_path.split('/')[-1]
-            response[
-                'Content-Disposition'] = 'attachement; file_name="{0}"'.format(
-                    file_name)
+            if file_path:
+                with open(file_path, 'r') as f:
+                    data = f.read()
+                response = HttpResponse(data, status=status.HTTP_201_CREATED)
+                response['Content-Type'] = 'text/plain'
+                file_name = file_path.split('/')[-1]
+                response[
+                    'Content-Disposition'] = 'attachement; file_name="{0}"'.format(
+                        file_name)
+            else:
+                response = HttpResponse({}, status=status.HTTP_200_OK)
             return response
         except PositionPaper.DoesNotExist:
             return Response(

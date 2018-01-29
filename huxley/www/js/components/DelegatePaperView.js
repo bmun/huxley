@@ -30,7 +30,9 @@ var DelegatePaperView = React.createClass({
     PositionPaperActions.storePositionPaper(user.delegate.assignment.paper);
     var papers = PositionPaperStore.getPapers();
     var assignment = user.delegate.assignment;
-    PositionPaperActions.fetchPositionPaperFile(assignment.paper.id);
+    if (assignment.paper.file != null) {
+      PositionPaperActions.fetchPositionPaperFile(assignment.paper.id);
+    }
     var files = PositionPaperStore.getPositionPaperFiles();
 
     return {
