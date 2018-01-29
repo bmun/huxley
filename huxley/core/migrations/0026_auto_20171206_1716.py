@@ -27,6 +27,7 @@ class Migration(migrations.Migration):
                 ('score_3', models.PositiveSmallIntegerField(default=0)),
                 ('score_4', models.PositiveSmallIntegerField(default=0)),
                 ('score_5', models.PositiveSmallIntegerField(default=0)),
+                ('submission_date', models.DateField(null=True))
             ],
             options={
                 'db_table': 'position_papers',
