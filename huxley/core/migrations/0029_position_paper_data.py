@@ -3,10 +3,10 @@ from __future__ import unicode_literals
 
 from django.db import migrations, models
 
-from huxley.core.models import Assignment, Committee, PositionPaper, Rubric
-
 
 def create_assignment_position_papers(apps, schema_editor):
+    Assignment = apps.get_model("core", "Assignment")
+    PositionPaper = apps.get_model("core", "PositionPaper")
     queryset = Assignment.objects.all()
 
     for assignment in queryset:
@@ -17,6 +17,8 @@ def create_assignment_position_papers(apps, schema_editor):
 
 
 def create_committee_rubrics(apps, schema_editor):
+    Rubric = apps.get_model("core", "Rubric")
+    Committee = apps.get_model("core", "Committee")
     queryset = Committee.objects.all()
 
     for committee in queryset:

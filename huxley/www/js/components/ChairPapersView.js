@@ -168,8 +168,9 @@ var ChairPapersView = React.createClass({
   },
 
   renderAssignmentList() {
-    var assignments = this.state.assignments;
-    var countries = this.state.countries;
+    const assignments = this.state.assignments;
+    const countries = this.state.countries;
+    const papers = this.state.papers;
 
     if (Object.keys(countries).length) {
       return (
@@ -177,6 +178,7 @@ var ChairPapersView = React.createClass({
           assignments={assignments}
           countries={countries}
           onChange={this._handleAssignmentSelect}
+          papers={papers}
         />
       );
     } else {
@@ -185,7 +187,7 @@ var ChairPapersView = React.createClass({
   },
 
   _handleScoreChange(field, paperID, event) {
-    var paper = {...this.state.papers[paperID], [field]: Number(event)};
+    const paper = {...this.state.papers[paperID], [field]: Number(event)};
     PositionPaperActions.storePositionPaper(paper);
   },
 
@@ -201,7 +203,7 @@ var ChairPapersView = React.createClass({
     var a = assignments.find(a => a.id == assignmentID);
     this.setState({current_assignment: a});
     if (a.paper.file != null) {
-      PositionPaperActions.fetchPositionPaperFile(a.paper.id);      
+      PositionPaperActions.fetchPositionPaperFile(a.paper.id);
     }
   },
 
