@@ -203,7 +203,7 @@ var ChairPapersView = React.createClass({
     var a = assignments.find(a => a.id == assignmentID);
     this.setState({current_assignment: a});
     if (a.paper.file != null) {
-      PositionPaperActions.fetchPositionPaperFile(a.paper.id);      
+      PositionPaperActions.fetchPositionPaperFile(a.paper.id);
     }
   },
 

@@ -24,7 +24,7 @@ var PaperSubmissionTable = React.createClass({
     var rubric = this.props.rubric;
     var paper = this.props.paper;
     var files = this.props.files;
-    var buttons = <div></div>;
+    var buttons = <div />;
 
     if (paper.id in files) {
       var url = window.URL;
@@ -76,7 +76,11 @@ var PaperSubmissionTable = React.createClass({
       );
     }
 
-    var secondRuric = rubric.use_topic_2 ? this._renderTopicTwo(rubric, paper) : <tbody></tbody>;
+    var secondRuric = rubric.use_topic_2 ? (
+      this._renderTopicTwo(rubric, paper)
+    ) : (
+      <tbody />
+    );
 
     return (
       <div>
@@ -136,46 +140,48 @@ var PaperSubmissionTable = React.createClass({
   },
 
   _renderTopicTwo: function(rubric, paper) {
-    return <tbody>
-            <tr>
-              <td>Topic: &ensp; {rubric.topic_two}</td>
-            </tr>
-            <tr>
-              <td>{rubric.grade_t2_category_1}</td>
-              <td>
-                <NumberInput defaultValue={'' + paper.score_t2_1} disabled />
-              </td>
-              <td>{rubric.grade_t2_value_1}</td>
-            </tr>
-            <tr>
-              <td>{rubric.grade_t2_category_2}</td>
-              <td>
-                <NumberInput defaultValue={'' + paper.score_t2_2} disabled />
-              </td>
-              <td>{rubric.grade_t2_value_2}</td>
-            </tr>
-            <tr>
-              <td>{rubric.grade_t2_category_3}</td>
-              <td>
-                <NumberInput defaultValue={'' + paper.score_t2_3} disabled />
-              </td>
-              <td>{rubric.grade_t2_value_3}</td>
-            </tr>
-            <tr>
-              <td>{rubric.grade_t2_category_4}</td>
-              <td>
-                <NumberInput defaultValue={'' + paper.score_t2_4} disabled />
-              </td>
-              <td>{rubric.grade_t2_value_4}</td>
-            </tr>
-            <tr>
-              <td>{rubric.grade_t2_category_5}</td>
-              <td>
-                <NumberInput defaultValue={'' + paper.score_t2_5} disabled />
-              </td>
-              <td>{rubric.grade_t2_value_5}</td>
-            </tr>
-          </tbody>;
+    return (
+      <tbody>
+        <tr>
+          <td>Topic: &ensp; {rubric.topic_two}</td>
+        </tr>
+        <tr>
+          <td>{rubric.grade_t2_category_1}</td>
+          <td>
+            <NumberInput defaultValue={'' + paper.score_t2_1} disabled />
+          </td>
+          <td>{rubric.grade_t2_value_1}</td>
+        </tr>
+        <tr>
+          <td>{rubric.grade_t2_category_2}</td>
+          <td>
+            <NumberInput defaultValue={'' + paper.score_t2_2} disabled />
+          </td>
+          <td>{rubric.grade_t2_value_2}</td>
+        </tr>
+        <tr>
+          <td>{rubric.grade_t2_category_3}</td>
+          <td>
+            <NumberInput defaultValue={'' + paper.score_t2_3} disabled />
+          </td>
+          <td>{rubric.grade_t2_value_3}</td>
+        </tr>
+        <tr>
+          <td>{rubric.grade_t2_category_4}</td>
+          <td>
+            <NumberInput defaultValue={'' + paper.score_t2_4} disabled />
+          </td>
+          <td>{rubric.grade_t2_value_4}</td>
+        </tr>
+        <tr>
+          <td>{rubric.grade_t2_category_5}</td>
+          <td>
+            <NumberInput defaultValue={'' + paper.score_t2_5} disabled />
+          </td>
+          <td>{rubric.grade_t2_value_5}</td>
+        </tr>
+      </tbody>
+    );
   },
 
   _handleUpload: function(event) {

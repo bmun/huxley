@@ -28,14 +28,14 @@ var DelegateSelect = React.createClass({
   },
 
   renderDelegateOptions: function() {
-    return this.props.delegates.map(delegate =>
+    return this.props.delegates.map(delegate => (
       <option
         key={delegate.id}
         value={delegate.id}
         disabled={delegate.assignment}>
         {delegate.name}
-      </option>,
-    );
+      </option>
+    ));
   },
 });
 

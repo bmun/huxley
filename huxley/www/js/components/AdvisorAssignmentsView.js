@@ -1,7 +1,7 @@
 /**
-* Copyright (c) 2011-2015 Berkeley Model United Nations. All rights reserved.
-* Use of this source code is governed by a BSD License (see LICENSE).
-+*/
+ * Copyright (c) 2011-2015 Berkeley Model United Nations. All rights reserved.
+ * Use of this source code is governed by a BSD License (see LICENSE).
+ +*/
 
 'use strict';
 
@@ -129,12 +129,8 @@ var AdvisorAssignmentsView = React.createClass({
               <th>Committee</th>
               <th>Country</th>
               <th>Delegation Size</th>
-              <th>
-                {finalized ? 'Delegate' : 'Delete Assignments'}
-              </th>
-              <th>
-                {finalized ? 'Delegate' : ''}
-              </th>
+              <th>{finalized ? 'Delegate' : 'Delete Assignments'}</th>
+              <th>{finalized ? 'Delegate' : ''}</th>
             </tr>
           </thead>
           <tbody>
@@ -163,33 +159,28 @@ var AdvisorAssignmentsView = React.createClass({
       function(assignment) {
         return (
           <tr>
+            <td>{committees[assignment.committee].name}</td>
+            <td>{countries[assignment.country].name}</td>
+            <td>{committees[assignment.committee].delegation_size}</td>
             <td>
-              {committees[assignment.committee].name}
-            </td>
-            <td>
-              {countries[assignment.country].name}
-            </td>
-            <td>
-              {committees[assignment.committee].delegation_size}
-            </td>
-            <td>
-              {finalized
-                ? this.renderDelegateDropdown(assignment, 0)
-                : <Button
-                    color="red"
-                    size="small"
-                    onClick={this._handleAssignmentDelete.bind(
-                      this,
-                      assignment,
-                    )}>
-                    Delete Assignment
-                  </Button>}
+              {finalized ? (
+                this.renderDelegateDropdown(assignment, 0)
+              ) : (
+                <Button
+                  color="red"
+                  size="small"
+                  onClick={this._handleAssignmentDelete.bind(this, assignment)}>
+                  Delete Assignment
+                </Button>
+              )}
             </td>
             <td>
               {finalized &&
-              committees[assignment.committee].delegation_size == 2
-                ? this.renderDelegateDropdown(assignment, 1)
-                : <div />}
+              committees[assignment.committee].delegation_size == 2 ? (
+                this.renderDelegateDropdown(assignment, 1)
+              ) : (
+                <div />
+              )}
             </td>
           </tr>
         );

@@ -75,9 +75,11 @@ const PaperGradeTable = React.createClass({
       );
     }
 
-    var secondRubric = rubric.use_topic_2 ? 
-                        this._renderTopicTwo(rubric, paper) : 
-                        <tbody></tbody>;
+    var secondRubric = rubric.use_topic_2 ? (
+      this._renderTopicTwo(rubric, paper)
+    ) : (
+      <tbody />
+    );
 
     return (
       <div>
@@ -170,61 +172,63 @@ const PaperGradeTable = React.createClass({
   },
 
   _renderTopicTwo: function(rubric, paper) {
-    return  <tbody>
-              <tr>
-                <td>Topic: &ensp; {rubric.topic_two}</td>
-              </tr>
-              <tr>
-                <td>{rubric.grade_t2_category_1}</td>
-                <td>
-                  <NumberInput
-                    defaultValue={'' + paper.score_t2_1}
-                    onChange={this._handleChange.bind(this, 'score_t2_1')}
-                  />
-                </td>
-                <td>{rubric.grade_t2_value_1}</td>
-              </tr>
-              <tr>
-                <td>{rubric.grade_t2_category_2}</td>
-                <td>
-                  <NumberInput
-                    defaultValue={'' + paper.score_t2_2}
-                    onChange={this._handleChange.bind(this, 'score_t2_2')}
-                  />
-                </td>
-                <td>{rubric.grade_t2_value_2}</td>
-              </tr>
-              <tr>
-                <td>{rubric.grade_t2_category_3}</td>
-                <td>
-                  <NumberInput
-                    defaultValue={'' + paper.score_t2_3}
-                    onChange={this._handleChange.bind(this, 'score_t2_3')}
-                  />
-                </td>
-                <td>{rubric.grade_t2_value_3}</td>
-              </tr>
-              <tr>
-                <td>{rubric.grade_t2_category_4}</td>
-                <td>
-                  <NumberInput
-                    defaultValue={'' + paper.score_t2_4}
-                    onChange={this._handleChange.bind(this, 'score_t2_4')}
-                  />
-                </td>
-                <td>{rubric.grade_t2_value_4}</td>
-              </tr>
-              <tr>
-                <td>{rubric.grade_t2_category_5}</td>
-                <td>
-                  <NumberInput
-                    defaultValue={'' + paper.score_t2_5}
-                    onChange={this._handleChange.bind(this, 'score_t2_5')}
-                  />
-                </td>
-                <td>{rubric.grade_t2_value_5}</td>
-              </tr>
-            </tbody>;
+    return (
+      <tbody>
+        <tr>
+          <td>Topic: &ensp; {rubric.topic_two}</td>
+        </tr>
+        <tr>
+          <td>{rubric.grade_t2_category_1}</td>
+          <td>
+            <NumberInput
+              defaultValue={'' + paper.score_t2_1}
+              onChange={this._handleChange.bind(this, 'score_t2_1')}
+            />
+          </td>
+          <td>{rubric.grade_t2_value_1}</td>
+        </tr>
+        <tr>
+          <td>{rubric.grade_t2_category_2}</td>
+          <td>
+            <NumberInput
+              defaultValue={'' + paper.score_t2_2}
+              onChange={this._handleChange.bind(this, 'score_t2_2')}
+            />
+          </td>
+          <td>{rubric.grade_t2_value_2}</td>
+        </tr>
+        <tr>
+          <td>{rubric.grade_t2_category_3}</td>
+          <td>
+            <NumberInput
+              defaultValue={'' + paper.score_t2_3}
+              onChange={this._handleChange.bind(this, 'score_t2_3')}
+            />
+          </td>
+          <td>{rubric.grade_t2_value_3}</td>
+        </tr>
+        <tr>
+          <td>{rubric.grade_t2_category_4}</td>
+          <td>
+            <NumberInput
+              defaultValue={'' + paper.score_t2_4}
+              onChange={this._handleChange.bind(this, 'score_t2_4')}
+            />
+          </td>
+          <td>{rubric.grade_t2_value_4}</td>
+        </tr>
+        <tr>
+          <td>{rubric.grade_t2_category_5}</td>
+          <td>
+            <NumberInput
+              defaultValue={'' + paper.score_t2_5}
+              onChange={this._handleChange.bind(this, 'score_t2_5')}
+            />
+          </td>
+          <td>{rubric.grade_t2_value_5}</td>
+        </tr>
+      </tbody>
+    );
   },
 
   _handleChange: function(field, event) {

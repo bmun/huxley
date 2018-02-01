@@ -63,20 +63,20 @@ var AdvisorRosterView = React.createClass({
 
   render: function() {
     var disableEdit = _checkDate();
-    var addButton = disableEdit ? 
-                      <div></div> :
-                      <Button
-                        color="green"
-                        onClick={this.openModal.bind(this, '', '', this._handleAddDelegate)}
-                        loading={this.state.loading}>
-                        Add Delegate
-                      </Button>;
+    var addButton = disableEdit ? (
+      <div />
+    ) : (
+      <Button
+        color="green"
+        onClick={this.openModal.bind(this, '', '', this._handleAddDelegate)}
+        loading={this.state.loading}>
+        Add Delegate
+      </Button>
+    );
 
     return (
       <InnerView>
-        <TextTemplate>
-          {AdvisorRosterViewText}
-        </TextTemplate>
+        <TextTemplate>{AdvisorRosterViewText}</TextTemplate>
         <Table
           emptyMessage="You don't have any delegates in your roster."
           isEmpty={!this.state.delegates.length}>
@@ -89,9 +89,7 @@ var AdvisorRosterView = React.createClass({
               <th>Reset Password</th>
             </tr>
           </thead>
-          <tbody>
-            {this.renderRosterRows()}
-          </tbody>
+          <tbody>{this.renderRosterRows()}</tbody>
         </Table>
         {addButton}
         <Modal
@@ -140,54 +138,56 @@ var AdvisorRosterView = React.createClass({
 
     return this.state.delegates.map(
       function(delegate) {
-        var editButton = disableEdit ? 
-                          <td></td>  : 
-                          <td>
-                            <Button
-                              color="blue"
-                              size="small"
-                              onClick={this.openModal.bind(
-                                this,
-                                delegate.name,
-                                delegate.email,
-                                this._handleEditDelegate.bind(this, delegate),
-                              )}>
-                              Edit
-                             </Button>
-                          </td>;
+        var editButton = disableEdit ? (
+          <td />
+        ) : (
+          <td>
+            <Button
+              color="blue"
+              size="small"
+              onClick={this.openModal.bind(
+                this,
+                delegate.name,
+                delegate.email,
+                this._handleEditDelegate.bind(this, delegate),
+              )}>
+              Edit
+            </Button>
+          </td>
+        );
 
-        var deleteButton = disableEdit ?
-                            <td></td> :
-                            <td>
-                              <Button
-                                color="red"
-                                size="small"
-                                onClick={this._handleDeleteDelegate.bind(this, delegate)}>
-                                Delete
-                              </Button>
-                            </td>;
+        var deleteButton = disableEdit ? (
+          <td />
+        ) : (
+          <td>
+            <Button
+              color="red"
+              size="small"
+              onClick={this._handleDeleteDelegate.bind(this, delegate)}>
+              Delete
+            </Button>
+          </td>
+        );
         return (
           <tr>
-            <td>
-              {delegate.name}
-            </td>
-            <td>
-              {delegate.email}
-            </td>
+            <td>{delegate.name}</td>
+            <td>{delegate.email}</td>
             {editButton}
             {deleteButton}
             <td>
-              {delegate.assignment
-                ? <Button
-                    color="yellow"
-                    size="small"
-                    onClick={this._handleDelegatePasswordChange.bind(
-                      this,
-                      delegate,
-                    )}>
-                    Reset Password
-                  </Button>
-                : <div />}
+              {delegate.assignment ? (
+                <Button
+                  color="yellow"
+                  size="small"
+                  onClick={this._handleDelegatePasswordChange.bind(
+                    this,
+                    delegate,
+                  )}>
+                  Reset Password
+                </Button>
+              ) : (
+                <div />
+              )}
             </td>
           </tr>
         );
@@ -214,9 +214,7 @@ var AdvisorRosterView = React.createClass({
   renderError: function(field) {
     if (this.state.errors[field]) {
       return (
-        <StatusLabel status="error">
-          {this.state.errors[field]}
-        </StatusLabel>
+        <StatusLabel status="error">{this.state.errors[field]}</StatusLabel>
       );
     }
 
