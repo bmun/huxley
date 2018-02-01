@@ -170,6 +170,11 @@ class AssignmentDetailPatchTestCase(tests.PartialUpdateAPITestCase):
                  ('score_3', self.assignment.paper.score_3),
                  ('score_4', self.assignment.paper.score_4),
                  ('score_5', self.assignment.paper.score_5),
+                 ('score_t2_1', self.assignment.paper.score_t2_1),
+                 ('score_t2_2', self.assignment.paper.score_t2_2),
+                 ('score_t2_3', self.assignment.paper.score_t2_3),
+                 ('score_t2_4', self.assignment.paper.score_t2_4),
+                 ('score_t2_5', self.assignment.paper.score_t2_5),
                  ("submission_date", self.assignment.paper.submission_date)]),
             "rejected": True,
         })
@@ -205,6 +210,11 @@ class AssignmentDetailPatchTestCase(tests.PartialUpdateAPITestCase):
                  ('score_3', self.assignment.paper.score_3),
                  ('score_4', self.assignment.paper.score_4),
                  ('score_5', self.assignment.paper.score_5),
+                 ('score_t2_1', self.assignment.paper.score_t2_1),
+                 ('score_t2_2', self.assignment.paper.score_t2_2),
+                 ('score_t2_3', self.assignment.paper.score_t2_3),
+                 ('score_t2_4', self.assignment.paper.score_t2_4),
+                 ('score_t2_5', self.assignment.paper.score_t2_5),
                  ("submission_date", self.assignment.paper.submission_date)]),
             "rejected": True,
         })
@@ -398,6 +408,9 @@ class AssignmentListGetTestCase(tests.ListAPITestCase):
                  ('graded', a.paper.graded), ('score_1', a.paper.score_1),
                  ('score_2', a.paper.score_2), ('score_3', a.paper.score_3),
                  ('score_4', a.paper.score_4), ('score_5', a.paper.score_5),
+                 ('score_t2_1', a.paper.score_t2_1), ('score_t2_2', a.paper.score_t2_2),
+                 ('score_t2_3', a.paper.score_t2_3), ('score_t2_4', a.paper.score_t2_4), 
+                 ('score_t2_5', a.paper.score_t2_5),
                  ('submission_date', a.paper.submission_date)]),
             'rejected': a.rejected,
         } for a in assignments])

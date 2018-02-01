@@ -12,13 +12,15 @@ var DelegateSelect = React.createClass({
     onChange: React.PropTypes.func,
     delegates: React.PropTypes.array,
     selectedDelegateID: React.PropTypes.number,
+    disabled: React.PropTypes.bool,
   },
 
   render: function() {
     return (
       <select
         onChange={this.props.onChange}
-        value={this.props.selectedDelegateID}>
+        value={this.props.selectedDelegateID}
+        disabled={this.props.disabled}>
         <option value="0">None</option>
         {this.renderDelegateOptions()}
       </select>

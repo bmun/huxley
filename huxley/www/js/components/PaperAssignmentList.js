@@ -13,12 +13,14 @@ var PaperAssignmentList = React.createClass({
   propTypes: {
     onChange: React.PropTypes.func,
     assignments: React.PropTypes.array,
+    papers: React.PropTypes.object,
     countries: React.PropTypes.object,
   },
 
   render() {
     var assignments = this.props.assignments;
     var countries = this.props.countries;
+    var papers = this.props.papers;
     var rows = assignments.map(a => {
       var buttonCell =
         a.paper.file != null ? (
@@ -28,12 +30,19 @@ var PaperAssignmentList = React.createClass({
         ) : (
           <div>No paper submitted.</div>
         );
+
+      var paper = papers[a.paper.id];
       var score =
-        a.paper.score_1 +
-        a.paper.score_2 +
-        a.paper.score_3 +
-        a.paper.score_4 +
-        a.paper.score_5;
+        paper.score_1 +
+        paper.score_2 +
+        paper.score_3 +
+        paper.score_4 +
+        paper.score_5 +
+        paper.score_t2_1 +
+        paper.score_t2_2 +
+        paper.score_t2_3 +
+        paper.score_t2_4 +
+        paper.score_t2_5;
       return (
         <tr key={a.id}>
           <td>{countries[a.country].name}</td>

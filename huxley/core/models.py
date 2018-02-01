@@ -59,6 +59,7 @@ class Country(models.Model):
 
 
 class Rubric(models.Model):
+    topic_one = models.CharField(max_length=64, default='')
     grade_category_1 = models.CharField(max_length=128, default='')
     grade_category_2 = models.CharField(max_length=128, default='')
     grade_category_3 = models.CharField(max_length=128, default='')
@@ -70,6 +71,21 @@ class Rubric(models.Model):
     grade_value_3 = models.PositiveSmallIntegerField(default=10)
     grade_value_4 = models.PositiveSmallIntegerField(default=10)
     grade_value_5 = models.PositiveSmallIntegerField(default=10)
+
+    # Values below this for the second paper topic
+    topic_two = models.CharField(max_length=64, default='')
+    use_topic_2 = models.BooleanField(default=True)
+    grade_t2_category_1 = models.CharField(max_length=128, default='')
+    grade_t2_category_2 = models.CharField(max_length=128, default='')
+    grade_t2_category_3 = models.CharField(max_length=128, default='')
+    grade_t2_category_4 = models.CharField(max_length=128, default='')
+    grade_t2_category_5 = models.CharField(max_length=128, default='')
+
+    grade_t2_value_1 = models.PositiveSmallIntegerField(default=10)
+    grade_t2_value_2 = models.PositiveSmallIntegerField(default=10)
+    grade_t2_value_3 = models.PositiveSmallIntegerField(default=10)
+    grade_t2_value_4 = models.PositiveSmallIntegerField(default=10)
+    grade_t2_value_5 = models.PositiveSmallIntegerField(default=10)
 
     def __unicode__(self):
         return '%s' % self.committee.name if self.committee else '%d' % self.id
@@ -334,6 +350,15 @@ class PositionPaper(models.Model):
     score_3 = models.PositiveSmallIntegerField(default=0)
     score_4 = models.PositiveSmallIntegerField(default=0)
     score_5 = models.PositiveSmallIntegerField(default=0)
+
+    # Scores below this for the second paper topic
+    # Only used for committees with two topics
+    score_t2_1 = models.PositiveSmallIntegerField(default=0)
+    score_t2_2 = models.PositiveSmallIntegerField(default=0)
+    score_t2_3 = models.PositiveSmallIntegerField(default=0)
+    score_t2_4 = models.PositiveSmallIntegerField(default=0)
+    score_t2_5 = models.PositiveSmallIntegerField(default=0)
+
     submission_date = models.DateField(null=True)
 
     @classmethod

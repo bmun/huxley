@@ -20,6 +20,7 @@ var StatusLabel = require('components/core/StatusLabel');
 var Table = require('components/core/Table');
 var TextInput = require('components/core/TextInput');
 var TextTemplate = require('components/core/TextTemplate');
+var _checkDate = require('utils/_checkDate');
 var _handleChange = require('utils/_handleChange');
 
 require('css/Modal.less');
@@ -61,6 +62,16 @@ var AdvisorRosterView = React.createClass({
   },
 
   render: function() {
+    var disableEdit = _checkDate();
+    var addButton = disableEdit ? 
+                      <div></div> :
+                      <Button
+                        color="green"
+                        onClick={this.openModal.bind(this, '', '', this._handleAddDelegate)}
+                        loading={this.state.loading}>
+                        Add Delegate
+                      </Button>;
+
     return (
       <InnerView>
         <TextTemplate>
@@ -82,12 +93,7 @@ var AdvisorRosterView = React.createClass({
             {this.renderRosterRows()}
           </tbody>
         </Table>
-        <Button
-          color="green"
-          onClick={this.openModal.bind(this, '', '', this._handleAddDelegate)}
-          loading={this.state.loading}>
-          Add Delegate
-        </Button>
+        {addButton}
         <Modal
           isOpen={this.state.modal_open}
           className="content content-outer transparent ie-layout rounded"
@@ -130,8 +136,36 @@ var AdvisorRosterView = React.createClass({
   renderRosterRows: function() {
     var committees = this.state.committees;
     var countries = this.state.countries;
+    var disableEdit = _checkDate();
+
     return this.state.delegates.map(
       function(delegate) {
+        var editButton = disableEdit ? 
+                          <td></td>  : 
+                          <td>
+                            <Button
+                              color="blue"
+                              size="small"
+                              onClick={this.openModal.bind(
+                                this,
+                                delegate.name,
+                                delegate.email,
+                                this._handleEditDelegate.bind(this, delegate),
+                              )}>
+                              Edit
+                             </Button>
+                          </td>;
+
+        var deleteButton = disableEdit ?
+                            <td></td> :
+                            <td>
+                              <Button
+                                color="red"
+                                size="small"
+                                onClick={this._handleDeleteDelegate.bind(this, delegate)}>
+                                Delete
+                              </Button>
+                            </td>;
         return (
           <tr>
             <td>
@@ -140,27 +174,8 @@ var AdvisorRosterView = React.createClass({
             <td>
               {delegate.email}
             </td>
-            <td>
-              <Button
-                color="blue"
-                size="small"
-                onClick={this.openModal.bind(
-                  this,
-                  delegate.name,
-                  delegate.email,
-                  this._handleEditDelegate.bind(this, delegate),
-                )}>
-                Edit
-              </Button>
-            </td>
-            <td>
-              <Button
-                color="red"
-                size="small"
-                onClick={this._handleDeleteDelegate.bind(this, delegate)}>
-                Delete
-              </Button>
-            </td>
+            {editButton}
+            {deleteButton}
             <td>
               {delegate.assignment
                 ? <Button

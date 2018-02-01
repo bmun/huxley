@@ -10,4 +10,5 @@ class PositionPaperSerializer(serializers.ModelSerializer):
     class Meta:
         model = PositionPaper
         fields = ('id', 'file', 'graded', 'score_1', 'score_2', 'score_3',
-                  'score_4', 'score_5', 'submission_date')
+                  'score_4', 'score_5', 'score_t2_1', 'score_t2_2', 'score_t2_3',
+                  'score_t2_4', 'score_t2_5','submission_date')

@@ -12,6 +12,7 @@ var _accessSafe = require('utils/_accessSafe');
 var AssignmentActions = require('actions/AssignmentActions');
 var AssignmentStore = require('stores/AssignmentStore');
 var Button = require('components/core/Button');
+var _checkDate = require('utils/_checkDate');
 var CommitteeStore = require('stores/CommitteeStore');
 var ConferenceContext = require('components/ConferenceContext');
 var CountryStore = require('stores/CountryStore');
@@ -114,6 +115,7 @@ var AdvisorAssignmentsView = React.createClass({
       Object.keys(countries).length > 0 &&
       this.state.assignments.length > 0 &&
       this.state.registration;
+
     return (
       <InnerView>
         <TextTemplate conferenceSession={conference.session}>
@@ -224,6 +226,8 @@ var AdvisorAssignmentsView = React.createClass({
       assignment.id in this.state.assigned
         ? this.state.assigned[assignment.id][slot]
         : 0;
+    var disableView = _checkDate();
+
     return (
       <DelegateSelect
         onChange={this._handleDelegateAssignment.bind(
@@ -233,6 +237,7 @@ var AdvisorAssignmentsView = React.createClass({
         )}
         delegates={this.state.delegates}
         selectedDelegateID={selectedDelegateID}
+        disabled={disableView}
       />
     );
   },
