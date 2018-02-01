@@ -59,12 +59,12 @@ class Country(models.Model):
 
 
 class Rubric(models.Model):
-    topic_one = models.CharField(max_length=64, default='')
-    grade_category_1 = models.CharField(max_length=128, default='')
-    grade_category_2 = models.CharField(max_length=128, default='')
-    grade_category_3 = models.CharField(max_length=128, default='')
-    grade_category_4 = models.CharField(max_length=128, default='')
-    grade_category_5 = models.CharField(max_length=128, default='')
+    topic_one = models.CharField(max_length=64, default='', blank=True)
+    grade_category_1 = models.CharField(max_length=128, default='', blank=True)
+    grade_category_2 = models.CharField(max_length=128, default='', blank=True)
+    grade_category_3 = models.CharField(max_length=128, default='', blank=True)
+    grade_category_4 = models.CharField(max_length=128, default='', blank=True)
+    grade_category_5 = models.CharField(max_length=128, default='', blank=True)
 
     grade_value_1 = models.PositiveSmallIntegerField(default=10)
     grade_value_2 = models.PositiveSmallIntegerField(default=10)
@@ -73,13 +73,13 @@ class Rubric(models.Model):
     grade_value_5 = models.PositiveSmallIntegerField(default=10)
 
     # Values below this for the second paper topic
-    topic_two = models.CharField(max_length=64, default='')
+    topic_two = models.CharField(max_length=64, default='', blank=True)
     use_topic_2 = models.BooleanField(default=True)
-    grade_t2_category_1 = models.CharField(max_length=128, default='')
-    grade_t2_category_2 = models.CharField(max_length=128, default='')
-    grade_t2_category_3 = models.CharField(max_length=128, default='')
-    grade_t2_category_4 = models.CharField(max_length=128, default='')
-    grade_t2_category_5 = models.CharField(max_length=128, default='')
+    grade_t2_category_1 = models.CharField(max_length=128, default='', blank=True)
+    grade_t2_category_2 = models.CharField(max_length=128, default='', blank=True)
+    grade_t2_category_3 = models.CharField(max_length=128, default='', blank=True)
+    grade_t2_category_4 = models.CharField(max_length=128, default='', blank=True)
+    grade_t2_category_5 = models.CharField(max_length=128, default='', blank=True)
 
     grade_t2_value_1 = models.PositiveSmallIntegerField(default=10)
     grade_t2_value_2 = models.PositiveSmallIntegerField(default=10)
