@@ -70,12 +70,6 @@ class DelegateSerializer(serializers.ModelSerializer):
 
         return super(DelegateSerializer, self).update(instance, validated_data)
 
-    def validate_email(self, value):
-        if value and User.objects.filter(email=value).exists():
-            print value, '\n\n\n\n\n'
-            raise ValidationError(
-                'Cannot choose an email already in use (including advisor emails).')
-
 
 class DelegateNestedSerializer(serializers.ModelSerializer):
     assignment = AssignmentNestedSerializer(read_only=True)
