@@ -7,6 +7,7 @@ from django.contrib.auth.base_user import BaseUserManager
 from django.core.mail import send_mail
 
 from rest_framework import serializers
+from rest_framework.serializers import ValidationError
 
 from huxley.accounts.models import User
 from huxley.api.serializers.assignment import AssignmentNestedSerializer
