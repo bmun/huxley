@@ -18,6 +18,7 @@ var PaperAssignmentList = require('components/PaperAssignmentList');
 var PaperGradeTable = require('components/PaperGradeTable');
 var PositionPaperActions = require('actions/PositionPaperActions');
 var PositionPaperStore = require('stores/PositionPaperStore');
+var RubricStore = require('stores/RubricStore');
 var TextTemplate = require('components/core/TextTemplate');
 var User = require('utils/User');
 
@@ -44,6 +45,11 @@ var ChairPapersView = React.createClass({
       );
     }
 
+    var rubric = null;
+    if (Object.keys(committees).length) {
+      rubric = RubricStore.getRubric(committees[user.committee].rubric.id);
+    }
+
     return {
       loading: false,
       success: false,
@@ -51,6 +57,7 @@ var ChairPapersView = React.createClass({
       committees: committees,
       countries: countries,
       papers: papers,
+      rubric: rubric,
       current_assignment: null,
       uploadedFile: null,
       files: files,
@@ -99,11 +106,26 @@ var ChairPapersView = React.createClass({
     });
 
     this._committeesToken = CommitteeStore.addListener(() => {
-      this.setState({committees: CommitteeStore.getCommittees()});
+      var committees = CommitteeStore.getCommittees();
+      var user = CurrentUserStore.getCurrentUser();
+      this.setState({
+        committees: committees,
+        rubric: RubricStore.getRubric(committees[user.committee].rubric.id),
+      });
     });
 
     this._papersToken = PositionPaperStore.addListener(() => {
       this.setState({files: PositionPaperStore.getPositionPaperFiles()});
+    });
+
+    this._rubricToken = RubricStore.addListener(() => {
+      var user = CurrentUserStore.getCurrentUser();
+      var committees = this.state.committees;
+      if (Object.keys(committees).length) {
+        this.setState({
+          rubric: RubricStore.getRubric(committees[user.committee].rubric.id),
+        });
+      }
     });
   },
 
@@ -112,6 +134,7 @@ var ChairPapersView = React.createClass({
     this._committeesToken && this._committeesToken.remove();
     this._assignmentsToken && this._assignmentsToken.remove();
     this._papersToken && this._papersToken.remove();
+    this._rubricToken && this._rubricToken.remove();
     this._successTimeout && clearTimeout(this._successTimeout);
   },
 
@@ -141,9 +164,7 @@ var ChairPapersView = React.createClass({
     var paper = this.state.papers[this.state.current_assignment.paper.id];
     var country = this.state.countries[this.state.current_assignment.country];
     var files = this.state.files;
-    var rubric = Object.keys(this.state.committees).length
-      ? this.state.committees[user.committee].rubric
-      : null;
+    var rubric = this.state.rubric;
 
     if (rubric != null && paper != null) {
       return (
@@ -172,7 +193,7 @@ var ChairPapersView = React.createClass({
     const countries = this.state.countries;
     const papers = this.state.papers;
 
-    if (Object.keys(countries).length) {
+    if (Object.keys(countries).length && Object.keys(papers).length) {
       return (
         <PaperAssignmentList
           assignments={assignments}

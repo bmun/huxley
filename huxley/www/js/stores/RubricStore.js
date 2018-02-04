@@ -27,8 +27,8 @@ class RubricStore extends Store {
   }
 
   updateRubric(rubric, onSuccess, onError) {
-    ServerAPI.updateRubric(rubric).then(onSuccess, onError);
     _rubrics[rubric.id] = rubric;
+    ServerAPI.updateRubric(rubric).then(onSuccess, onError);
   }
 
   __onDispatch(action) {
