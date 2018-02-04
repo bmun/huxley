@@ -197,9 +197,9 @@ class Registration(models.Model):
     assignments_finalized = models.BooleanField(default=False)
 
     delegate_fees_owed = models.DecimalField(
-        max_digits=6, decimal_places=2, default=Decimal('0.00'))
+        max_digits=7, decimal_places=2, default=Decimal('0.00'))
     delegate_fees_paid = models.DecimalField(
-        max_digits=6, decimal_places=2, default=Decimal('0.00'))
+        max_digits=7, decimal_places=2, default=Decimal('0.00'))
     registration_fee_paid = models.BooleanField(default=False)
 
     modified_at = models.DateTimeField(default=timezone.now)
