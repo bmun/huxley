@@ -122,9 +122,11 @@ var ChairPapersView = React.createClass({
       var user = CurrentUserStore.getCurrentUser();
       var committees = this.state.committees;
       if (Object.keys(committees).length) {
-        this.setState({rubric: RubricStore.getRubric(committees[user.committee].rubric.id)});
+        this.setState({
+          rubric: RubricStore.getRubric(committees[user.committee].rubric.id),
+        });
       }
-    })
+    });
   },
 
   componentWillUnmount() {
