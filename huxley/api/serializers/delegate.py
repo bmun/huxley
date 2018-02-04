@@ -7,6 +7,7 @@ from django.contrib.auth.base_user import BaseUserManager
 from django.core.mail import send_mail
 
 from rest_framework import serializers
+from rest_framework.serializers import ValidationError
 
 from huxley.accounts.models import User
 from huxley.api.serializers.assignment import AssignmentNestedSerializer
@@ -68,6 +69,10 @@ class DelegateSerializer(serializers.ModelSerializer):
             user.save()
 
         return super(DelegateSerializer, self).update(instance, validated_data)
+
+    def validate_email(self, value):
+      if User.objects.filter(email=value).exists():
+        raise ValidationError('Cannot choose an email already in use (including advisor emails).')
 
 
 class DelegateNestedSerializer(serializers.ModelSerializer):
