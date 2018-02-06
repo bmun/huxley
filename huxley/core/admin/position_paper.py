@@ -12,5 +12,11 @@ from huxley.core.models import PositionPaper
 
 
 class PositionPaperAdmin(admin.ModelAdmin):
+
+    search_fields = (
+        'assignment__committee__name',
+        'assignment__country__name'
+    )
+
     def get_urls(self):
-        return super(CommitteeAdmin, self).get_urls()
+        return super(PositionPaperAdmin, self).get_urls()
