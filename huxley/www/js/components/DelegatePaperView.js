@@ -124,9 +124,12 @@ var DelegatePaperView = React.createClass({
         uploadedFile: null,
       });
     }
+    event.preventDefault();
   },
 
-  _handleSuccess: function(response) {},
+  _handleSuccess: function(response) {
+    window.alert('Your paper has been successfully uploaded!');
+  },
 
   _handleError: function(response) {
     window.alert(

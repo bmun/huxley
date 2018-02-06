@@ -411,11 +411,12 @@ class Assignment(models.Model):
         assigned = set()
         failed_assignments = []
 
-        def add(committee, country, registration, rejected):
+        def add(committee, country, registration, paper, rejected):
             additions.append(
                 cls(committee_id=committee.id,
                     country_id=country.id,
                     registration_id=registration.id,
+                    paper_id=paper.id,
                     rejected=rejected, ))
 
         def remove(assignment_data):
@@ -460,16 +461,18 @@ class Assignment(models.Model):
 
             assigned.add(key)
             old_assignment = assignment_dict.get(key)
+            paper = PositionPaper.objects.create()
+            paper.save()
 
             if not old_assignment:
-                add(committee, country, registration, rejected)
+                add(committee, country, registration, paper, rejected)
                 continue
 
             if old_assignment['registration_id'] != registration:
                 # Remove the old assignment instead of just updating it
                 # so that its delegates are deleted by cascade.
                 remove(old_assignment)
-                add(committee, country, registration, rejected)
+                add(committee, country, registration, paper, rejected)
 
         if not failed_assignments:
             with transaction.atomic():

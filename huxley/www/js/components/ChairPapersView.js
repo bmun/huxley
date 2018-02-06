@@ -226,10 +226,12 @@ var ChairPapersView = React.createClass({
     if (a.paper.file != null) {
       PositionPaperActions.fetchPositionPaperFile(a.paper.id);
     }
+    event.preventDefault();
   },
 
   _handleUploadPaper(paperID, event) {
     this.setState({uploadedFile: event.target.files[0]});
+    event.preventDefault();
   },
 
   _handleSubmitPaper(paperID, event) {
@@ -260,6 +262,7 @@ var ChairPapersView = React.createClass({
         current_assignment: null,
       });
     }
+    event.preventDefault();
   },
 
   _handleSavePaper(paperID, event) {
