@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011-2015 Berkeley Model United Nations. All rights reserved.
+ * Copyright (c) 2011-2017 Berkeley Model United Nations. All rights reserved.
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
@@ -20,6 +20,7 @@ var AdvisorProfileView = require('components/AdvisorProfileView');
 var AdvisorRosterView = require('components/AdvisorRosterView');
 var ChairAttendanceView = require('components/ChairAttendanceView');
 var ChairCommitteeFeedbackView = require('components/ChairCommitteeFeedbackView');
+var ChairDelegateEmailView = require('components/ChairDelegateEmailView');
 var ChairPapersView = require('components/ChairPapersView');
 var ChairRubricView = require('components/ChairRubricView');
 var ChairSummaryView = require('components/ChairSummaryView');
@@ -62,6 +63,7 @@ var routes = (
     <Route path="/chair/attendance" component={ChairAttendanceView} />
     <Route path="/chair/papers" component={ChairPapersView} />
     <Route path="/chair/rubric" component={ChairRubricView} />
+    <Route path="/chair/delegate_emails" component={ChairDelegateEmailView} />
     <Route
       path="/chair/committee_feedback"
       component={ChairCommitteeFeedbackView}
