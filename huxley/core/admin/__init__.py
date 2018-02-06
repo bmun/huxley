@@ -13,6 +13,7 @@ from .country import CountryAdmin
 from .delegate import DelegateAdmin
 from .schools import SchoolAdmin
 from .registration import RegistrationAdmin
+from .position_paper import PositionPaperAdmin
 
 admin.site.register(Conference)
 admin.site.register(Country, CountryAdmin)
@@ -24,4 +25,4 @@ admin.site.register(CountryPreference)
 admin.site.register(Delegate, DelegateAdmin)
 admin.site.register(Registration, RegistrationAdmin)
 admin.site.register(Rubric)
-admin.site.register(PositionPaper)
+admin.site.register(PositionPaper, PositionPaperAdmin)
