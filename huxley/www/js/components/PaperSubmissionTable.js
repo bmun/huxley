@@ -65,7 +65,6 @@ var PaperSubmissionTable = React.createClass({
                     <input type="submit" onClick={this._handleSubmit} />
                   </div>
                 </td>
-
               </tr>
               <tr>
                 <td>Uploaded file:</td>
