@@ -36,3 +36,4 @@ class Migration(migrations.Migration):
         migrations.RunPython(create_assignment_position_papers),
         migrations.RunPython(create_committee_rubrics)
     ]
+    
