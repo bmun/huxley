@@ -67,7 +67,9 @@ var DelegatePaperView = React.createClass({
   render() {
     return (
       <InnerView>
-        <TextTemplate>{DelegatePaperViewText}</TextTemplate>
+        <div style={{margin: 'auto 20px 20px 20px'}}>
+          <TextTemplate>{DelegatePaperViewText}</TextTemplate>
+        </div>
         <form>
           <div className="table-container">{this.renderRubric()}</div>
         </form>
@@ -124,6 +126,7 @@ var DelegatePaperView = React.createClass({
         uploadedFile: null,
       });
     }
+    this.history.pushState(null, '/');
     event.preventDefault();
   },
 
