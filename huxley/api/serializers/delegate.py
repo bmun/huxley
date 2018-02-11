@@ -34,7 +34,6 @@ class DelegateSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         if ('assignment' in validated_data and
                 validated_data['assignment'] != None and
-                not instance.assignment and
                 not User.objects.filter(delegate__id=instance.id).exists()):
 
             names = instance.name.split(' ')
@@ -49,11 +48,11 @@ class DelegateSerializer(serializers.ModelSerializer):
                 last_name=names[-1],
                 email=instance.email)
 
-            send_mail('A new account has been created for {0}!\n'.format(instance.name),
-                      'Username: {0}\n'.format(username) \
+            send_mail('A new account has been created for {0}!\n'.format(instance.name.encode('utf8')),
+                      'Username: {0}\n'.format(username.encode('utf8')) \
                       + 'Password: {0}\n'.format(password) \
-                      + 'Please save this information! You will need it for '
-                      + 'important information and actions. You can access '
+                      + 'Please save this information! You will need it for ' \
+                      + 'important information and actions. You can access ' \
                       + 'this account at huxley.bmun.org.',
                       'no-reply@bmun.org',
                       [instance.email], fail_silently=False)
