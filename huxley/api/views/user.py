@@ -9,19 +9,20 @@ from rest_framework import generics, status
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.exceptions import (APIException, AuthenticationFailed,
                                        PermissionDenied)
+from rest_framework.parsers import MultiPartParser
 from rest_framework.response import Response
 
 from huxley.accounts.models import User
 from huxley.accounts.exceptions import AuthenticationError, PasswordChangeFailed
-from huxley.api.permissions import IsPostOrSuperuserOnly, IsUserOrSuperuser
+from huxley.api.permissions import DelegateUserPasswordPermission, IsPostOrSuperuserOnly, IsUserOrSuperuser
 from huxley.api.serializers import CreateUserSerializer, UserSerializer
 from huxley.core.models import Conference, School
 
 
 class UserList(generics.ListCreateAPIView):
-    authentication_classes = (SessionAuthentication,)
+    authentication_classes = (SessionAuthentication, )
     queryset = User.objects.all()
-    permission_classes = (IsPostOrSuperuserOnly,)
+    permission_classes = (IsPostOrSuperuserOnly, )
 
     def create(self, request, *args, **kwargs):
         if Conference.get_current().open_reg:
@@ -35,14 +36,14 @@ class UserList(generics.ListCreateAPIView):
 
 
 class UserDetail(generics.RetrieveUpdateDestroyAPIView):
-    authentication_classes = (SessionAuthentication,)
+    authentication_classes = (SessionAuthentication, )
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    permission_classes = (IsUserOrSuperuser,)
+    permission_classes = (IsUserOrSuperuser, )
 
 
 class CurrentUser(generics.GenericAPIView):
-    authentication_classes = (SessionAuthentication,)
+    authentication_classes = (SessionAuthentication, )
 
     def get(self, request, *args, **kwargs):
         '''Get the current user if they're authenticated.'''
@@ -62,8 +63,8 @@ class CurrentUser(generics.GenericAPIView):
             raise AuthenticationFailed(str(e))
 
         login(request, user)
-        return Response(UserSerializer(user).data,
-                        status=status.HTTP_201_CREATED)
+        return Response(
+            UserSerializer(user).data, status=status.HTTP_201_CREATED)
 
     def delete(self, request, *args, **kwargs):
         '''Log out the currently logged-in user.'''
@@ -72,12 +73,13 @@ class CurrentUser(generics.GenericAPIView):
 
 
 class UserPassword(generics.GenericAPIView):
-    authentication_classes = (SessionAuthentication,)
+    authentication_classes = (SessionAuthentication, )
 
     def post(self, request, *args, **kwargs):
         '''Reset a user's password and email it to them.'''
         try:
-            User.reset_password(request.data.get('username'))
+            username = request.data.get('username', '')
+            User.reset_password(username=username)
             return Response({}, status=status.HTTP_201_CREATED)
         except User.DoesNotExist:
             raise Http404
@@ -95,3 +97,18 @@ class UserPassword(generics.GenericAPIView):
             return Response({}, status=status.HTTP_200_OK)
         except PasswordChangeFailed as e:
             raise APIException(str(e))
+
+
+class DelegateUserPassword(generics.GenericAPIView):
+    authentication_classes = (SessionAuthentication, )
+    permission_classes = (DelegateUserPasswordPermission, )
+
+    def post(self, request, *args, **kwargs):
+        '''Reset a delegate's password and email it to them.'''
+        try:
+            delegate_id = request.data.get('delegate_id', -1)
+            user = User.objects.get(delegate__id=delegate_id)
+            User.reset_password(user=user)
+            return Response({}, status=status.HTTP_201_CREATED)
+        except User.DoesNotExist:
+            raise Http404

@@ -6,8 +6,8 @@ from huxley.core.models import Committee, Registration
 
 
 class RegistrationSerializer(serializers.ModelSerializer):
-    fees_owed = serializers.FloatField(read_only=True)
-    fees_paid = serializers.FloatField(read_only=True)
+    delegate_fees_owed = serializers.FloatField(read_only=True)
+    delegate_fees_paid = serializers.FloatField(read_only=True)
     assignments_finalized = serializers.BooleanField(required=False)
     country_preferences = serializers.ListField(
         child=serializers.IntegerField(required=False),
@@ -35,8 +35,9 @@ class RegistrationSerializer(serializers.ModelSerializer):
                   'country_preferences',
                   'committee_preferences',
                   'registration_comments',
-                  'fees_owed',
-                  'fees_paid',
+                  'delegate_fees_owed',
+                  'delegate_fees_paid',
+                  'registration_fee_paid',
                   'assignments_finalized',
                   'modified_at', )
         extra_kwargs = {
@@ -64,6 +65,16 @@ class RegistrationSerializer(serializers.ModelSerializer):
         total_delegates = sum(
             (num_beginner_delegates or 0, num_intermediate_delegates or 0,
              num_advanced_delegates or 0))
+
+        if num_beginner_delegates >= 200:
+            invalid_fields[
+                'num_beginner_delegates'] = 'Cannot register that many delegates.'
+        if num_intermediate_delegates >= 200:
+            invalid_fields[
+                'num_intermediate_delegates'] = 'Cannot register that many delegates.'
+        if num_advanced_delegates >= 200:
+            invalid_fields[
+                'num_advanced_delegates'] = 'Cannot register that many delegates.'
 
         if num_spanish_speaking_delegates > total_delegates:
             invalid_fields[

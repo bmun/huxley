@@ -4,13 +4,15 @@
 import json
 import requests
 
+import os
+
 from decimal import Decimal
 
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.mail import send_mail
 from django.db import models, transaction
-from django.db.models.signals import post_save, pre_save
+from django.db.models.signals import post_init, post_save, pre_delete, pre_save
 from django.utils import timezone
 
 from huxley.core.constants import ContactGender, ContactType, ProgramTypes
@@ -56,18 +58,75 @@ class Country(models.Model):
         db_table = u'country'
 
 
+class Rubric(models.Model):
+    topic_one = models.CharField(max_length=64, default='', blank=True)
+    grade_category_1 = models.CharField(max_length=128, default='', blank=True)
+    grade_category_2 = models.CharField(max_length=128, default='', blank=True)
+    grade_category_3 = models.CharField(max_length=128, default='', blank=True)
+    grade_category_4 = models.CharField(max_length=128, default='', blank=True)
+    grade_category_5 = models.CharField(max_length=128, default='', blank=True)
+
+    grade_value_1 = models.PositiveSmallIntegerField(default=10)
+    grade_value_2 = models.PositiveSmallIntegerField(default=10)
+    grade_value_3 = models.PositiveSmallIntegerField(default=10)
+    grade_value_4 = models.PositiveSmallIntegerField(default=10)
+    grade_value_5 = models.PositiveSmallIntegerField(default=10)
+
+    # Values below this for the second paper topic
+    topic_two = models.CharField(max_length=64, default='', blank=True)
+    use_topic_2 = models.BooleanField(default=True)
+    grade_t2_category_1 = models.CharField(max_length=128, default='', blank=True)
+    grade_t2_category_2 = models.CharField(max_length=128, default='', blank=True)
+    grade_t2_category_3 = models.CharField(max_length=128, default='', blank=True)
+    grade_t2_category_4 = models.CharField(max_length=128, default='', blank=True)
+    grade_t2_category_5 = models.CharField(max_length=128, default='', blank=True)
+
+    grade_t2_value_1 = models.PositiveSmallIntegerField(default=10)
+    grade_t2_value_2 = models.PositiveSmallIntegerField(default=10)
+    grade_t2_value_3 = models.PositiveSmallIntegerField(default=10)
+    grade_t2_value_4 = models.PositiveSmallIntegerField(default=10)
+    grade_t2_value_5 = models.PositiveSmallIntegerField(default=10)
+
+    def __unicode__(self):
+        return '%s' % self.committee.name if self.committee else '%d' % self.id
+
+    class Meta:
+        db_table = u'rubric'
+
+
 class Committee(models.Model):
     name = models.CharField(max_length=8)
     full_name = models.CharField(max_length=128)
     countries = models.ManyToManyField(Country, through='Assignment')
     delegation_size = models.PositiveSmallIntegerField(default=2)
     special = models.BooleanField(default=False)
+    rubric = models.OneToOneField(Rubric, blank=True, null=True)
+
+    @classmethod
+    def create_rubric(cls, **kwargs):
+        committee = kwargs['instance']
+        if not committee.rubric:
+            committee.rubric = Rubric.objects.create()
 
     def __unicode__(self):
         return self.name
 
     class Meta:
         db_table = u'committee'
+
+
+class CommitteeFeedback(models.Model):
+    committee = models.ForeignKey(Committee)
+    comment = models.TextField(default='')
+
+    def __unicode__(self):
+        return str(self.committee.name) + " - Comment " + str(self.id)
+
+    class Meta:
+        db_table = u'committee_feedback'
+
+
+pre_save.connect(Committee.create_rubric, sender=Committee)
 
 
 class School(models.Model):
@@ -128,8 +187,7 @@ class Registration(models.Model):
 
     country_preferences = models.ManyToManyField(
         Country, through='CountryPreference')
-    committee_preferences = models.ManyToManyField(
-        Committee, limit_choices_to={'special': True})
+    committee_preferences = models.ManyToManyField(Committee, blank=True)
 
     registration_comments = models.TextField(default='', blank=True)
 
@@ -138,15 +196,13 @@ class Registration(models.Model):
 
     assignments_finalized = models.BooleanField(default=False)
 
-    fees_owed = models.DecimalField(
-        max_digits=6, decimal_places=2, default=Decimal('0.00'))
-    fees_paid = models.DecimalField(
-        max_digits=6, decimal_places=2, default=Decimal('0.00'))
+    delegate_fees_owed = models.DecimalField(
+        max_digits=7, decimal_places=2, default=Decimal('0.00'))
+    delegate_fees_paid = models.DecimalField(
+        max_digits=7, decimal_places=2, default=Decimal('0.00'))
+    registration_fee_paid = models.BooleanField(default=False)
 
     modified_at = models.DateTimeField(default=timezone.now)
-
-    def balance(self):
-        return self.fees_owed - self.fees_paid
 
     @classmethod
     def update_fees(cls, **kwargs):
@@ -156,9 +212,8 @@ class Registration(models.Model):
             (registration.num_beginner_delegates,
              registration.num_intermediate_delegates,
              registration.num_advanced_delegates, ))
-        registration_fee = Conference.get_current().registration_fee
-        total_fees = registration_fee + delegate_fees
-        registration.fees_owed = Decimal(total_fees) + Decimal('0.00')
+        registration.delegate_fees_owed = Decimal(delegate_fees) + Decimal(
+            '0.00')
 
     @classmethod
     def update_waitlist(cls, **kwargs):
@@ -287,11 +342,57 @@ post_save.connect(Registration.email_comments, sender=Registration)
 post_save.connect(Registration.email_confirmation, sender=Registration)
 
 
+class PositionPaper(models.Model):
+    file = models.FileField(upload_to="position_papers/", null=True)
+    graded = models.BooleanField(default=False)
+    score_1 = models.PositiveSmallIntegerField(default=0)
+    score_2 = models.PositiveSmallIntegerField(default=0)
+    score_3 = models.PositiveSmallIntegerField(default=0)
+    score_4 = models.PositiveSmallIntegerField(default=0)
+    score_5 = models.PositiveSmallIntegerField(default=0)
+
+    # Scores below this for the second paper topic
+    # Only used for committees with two topics
+    score_t2_1 = models.PositiveSmallIntegerField(default=0)
+    score_t2_2 = models.PositiveSmallIntegerField(default=0)
+    score_t2_3 = models.PositiveSmallIntegerField(default=0)
+    score_t2_4 = models.PositiveSmallIntegerField(default=0)
+    score_t2_5 = models.PositiveSmallIntegerField(default=0)
+
+    submission_date = models.DateField(null=True)
+
+    @classmethod
+    def delete_prev_file(cls, **kwargs):
+        position_paper = kwargs['instance']
+        if hasattr(position_paper, '_prev_file') and \
+           position_paper.file.name != position_paper._prev_file and \
+           os.path.isfile(position_paper._prev_file):
+            os.remove(position_paper._prev_file)
+
+    @classmethod
+    def store_file_path(cls, **kwargs):
+        position_paper = kwargs['instance']
+        position_paper._prev_file = position_paper.file.name
+
+    def __unicode__(self):
+        a = self.assignment
+        return '%s %s %d' % (a.committee.name, a.country.name,
+                             a.id) if a else '%d' % (self.id)
+
+    class Meta:
+        db_table = u'position_papers'
+
+
+post_init.connect(PositionPaper.store_file_path, sender=PositionPaper)
+post_save.connect(PositionPaper.delete_prev_file, sender=PositionPaper)
+
+
 class Assignment(models.Model):
     committee = models.ForeignKey(Committee)
     country = models.ForeignKey(Country)
     registration = models.ForeignKey(Registration, null=True)
     rejected = models.BooleanField(default=False)
+    paper = models.OneToOneField(PositionPaper, blank=True, null=True)
 
     @classmethod
     def update_assignments(cls, new_assignments):
@@ -310,11 +411,12 @@ class Assignment(models.Model):
         assigned = set()
         failed_assignments = []
 
-        def add(committee, country, registration, rejected):
+        def add(committee, country, registration, paper, rejected):
             additions.append(
                 cls(committee_id=committee.id,
                     country_id=country.id,
                     registration_id=registration.id,
+                    paper_id=paper.id,
                     rejected=rejected, ))
 
         def remove(assignment_data):
@@ -359,16 +461,18 @@ class Assignment(models.Model):
 
             assigned.add(key)
             old_assignment = assignment_dict.get(key)
+            paper = PositionPaper.objects.create()
+            paper.save()
 
             if not old_assignment:
-                add(committee, country, registration, rejected)
+                add(committee, country, registration, paper, rejected)
                 continue
 
             if old_assignment['registration_id'] != registration:
                 # Remove the old assignment instead of just updating it
                 # so that its delegates are deleted by cascade.
                 remove(old_assignment)
-                add(committee, country, registration, rejected)
+                add(committee, country, registration, paper, rejected)
 
         if not failed_assignments:
             with transaction.atomic():
@@ -392,6 +496,12 @@ class Assignment(models.Model):
             Delegate.objects.filter(assignment_id=old_assignment.id).update(
                 assignment=None)
 
+    @classmethod
+    def create_position_paper(cls, **kwargs):
+        assignment = kwargs['instance']
+        if not assignment.paper:
+            assignment.paper = PositionPaper.objects.create()
+
     def __unicode__(self):
         return self.committee.name + " : " + self.country.name + " : " + (
             self.registration.school.name
@@ -403,6 +513,7 @@ class Assignment(models.Model):
 
 
 pre_save.connect(Assignment.update_assignment, sender=Assignment)
+pre_save.connect(Assignment.create_position_paper, sender=Assignment)
 
 
 class CountryPreference(models.Model):
@@ -439,6 +550,8 @@ class Delegate(models.Model):
     session_two = models.BooleanField(default=False)
     session_three = models.BooleanField(default=False)
     session_four = models.BooleanField(default=False)
+
+    committee_feedback_submitted = models.BooleanField(default=False)
 
     def __unicode__(self):
         return self.name

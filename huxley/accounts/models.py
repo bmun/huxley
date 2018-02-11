@@ -67,14 +67,15 @@ class User(AbstractUser):
         return user
 
     @classmethod
-    def reset_password(cls, username):
+    def reset_password(cls, username=None, user=None):
         '''Reset a user's password and email it to them, or raise if the
         user doesn't exist.'''
-        if not username:
-            raise User.DoesNotExist
+        if not user:
+            if not username:
+                raise User.DoesNotExist
 
-        query = models.Q(username=username) | models.Q(email=username)
-        user = cls.objects.get(query)
+            query = models.Q(username=username) | models.Q(email=username)
+            user = cls.objects.get(query)
 
         new_password = cls.objects.make_random_password(length=10)
         user.set_password(new_password)
@@ -82,8 +83,9 @@ class User(AbstractUser):
 
         user.email_user(
             'Huxley Password Reset',
-            'Your password has been reset to %s.\n'
-            'Thank you for using Huxley!' % (new_password),
+            'The password for user %s '
+            'has been reset to %s.\n'
+            'Thank you for using Huxley!' % (user.username, new_password),
             from_email='no-reply@bmun.org')
 
     def change_password(self, old_password, new_password):

@@ -6,7 +6,8 @@ import json
 from django.http import QueryDict
 from rest_framework import permissions
 
-from huxley.core.models import Assignment, Delegate, Registration
+from huxley.api.validators import ValidationError
+from huxley.core.models import Assignment, Committee, CommitteeFeedback, Delegate, Registration
 
 
 class IsSuperuserOrReadOnly(permissions.BasePermission):
@@ -222,6 +223,115 @@ class SchoolDetailPermission(permissions.BasePermission):
         return user_is_advisor(request, view, school_id)
 
 
+class CommitteeFeedbackListPermission(permissions.BasePermission):
+    '''Accept GET for only the chair of the committee'''
+
+    def has_permission(self, request, view):
+        user = request.user
+        if user.is_superuser:
+            return True
+
+        method = request.method
+        committee_id = request.query_params.get('committee_id', -1)
+        return method == 'GET' and user_is_chair(request, view, committee_id)
+
+
+class CommitteeFeedbackDetailPermission(permissions.BasePermission):
+    '''Accept POST for only the delegate of the committee
+       Accept GET request from chair of committee'''
+
+    def has_permission(self, request, view):
+        user = request.user
+        if user.is_superuser:
+            return True
+
+        method = request.method
+        committee_id = request.data.get('committee', -1)
+        feedback_id = view.kwargs.get('pk', -1)
+
+        if (method == 'POST' and user.is_authenticated() and
+                user.is_delegate() and user.delegate.assignment and
+            (not user.delegate.committee_feedback_submitted)):
+            return int(user.delegate.assignment.committee.id) == int(
+                committee_id)
+
+        if (method == 'GET' and user.is_authenticated() and user.is_chair() and
+                user.committee):
+            query = CommitteeFeedback.objects.get(id=feedback_id)
+            if query:
+                return user.committee.id == query.committee.id
+
+        return False
+
+
+class DelegateUserPasswordPermission(permissions.BasePermission):
+    '''Accept requests to change the password of any delegate advised by the 
+       current user.'''
+
+    def has_permission(self, request, view):
+        user = request.user
+        if user.is_superuser:
+            return True
+
+        delegate_id = request.data.get('delegate_id', -1)
+        queryset = Delegate.objects.filter(id=delegate_id)
+        if queryset.exists():
+            delegate = queryset.get(id=delegate_id)
+            return user_is_advisor(request, view, delegate.school_id)
+
+        return False
+
+
+class PositionPaperDetailPermission(permissions.BasePermission):
+    '''Accept requests to retrieve or update the position paper
+       from a superuser, the chair of the related assignment,
+       the delegate with the related assignment, or that delegate's
+       advisor'''
+
+    def has_permission(self, request, view):
+        user = request.user
+        if user.is_superuser:
+            return True
+
+        paper_id = view.kwargs.get('pk', None)
+        queryset = Assignment.objects.filter(paper_id=paper_id)
+        delegate_modifiable_fields = ("file", "submission_date")
+        if queryset.exists():
+            assignment = queryset.get(paper_id=paper_id)
+            is_chair = user_is_chair(request, view, assignment.committee.id)
+
+            if request.method in permissions.SAFE_METHODS:
+                return is_chair or user_is_delegate(
+                    request, view, assignment.id, 'assignment')
+
+            return (
+                is_chair or
+                user_is_delegate(request, view, assignment.id, 'assignment')
+                and all([field in delegate_modifiable_fields
+                         for field in request.data]))
+
+        return False
+
+
+class RubricDetailPermission(permissions.BasePermission):
+    '''Accept requests to update the position paper from 
+       a superuser or the chair of the related committee.
+       Accepts requests to retrieve from any user.'''
+
+    def has_permission(self, request, view):
+        user = request.user
+        if user.is_superuser or request.method in permissions.SAFE_METHODS:
+            return True
+
+        rubric_id = view.kwargs.get('pk', None)
+        queryset = Committee.objects.filter(rubric_id=rubric_id)
+        if queryset.exists():
+            committee = queryset.get(rubric_id=rubric_id)
+            return user_is_chair(request, view, committee.id)
+
+        return False
+
+
 def user_is_advisor(request, view, school_id):
     user = request.user
     return (user.is_authenticated() and user.is_advisor() and
@@ -235,6 +345,8 @@ def user_is_chair(request, view, committee_id):
 
 
 def user_is_delegate(request, view, target_id, field=None):
+    '''Field is used to represent an intermediary field,
+       e.g. assignment, to check the delegate against.'''
     user = request.user
     if not user.is_authenticated() or not user.is_delegate():
         return False

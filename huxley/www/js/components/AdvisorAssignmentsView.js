@@ -1,7 +1,7 @@
 /**
-* Copyright (c) 2011-2015 Berkeley Model United Nations. All rights reserved.
-* Use of this source code is governed by a BSD License (see LICENSE).
-+*/
+ * Copyright (c) 2011-2015 Berkeley Model United Nations. All rights reserved.
+ * Use of this source code is governed by a BSD License (see LICENSE).
+ +*/
 
 'use strict';
 
@@ -12,6 +12,7 @@ var _accessSafe = require('utils/_accessSafe');
 var AssignmentActions = require('actions/AssignmentActions');
 var AssignmentStore = require('stores/AssignmentStore');
 var Button = require('components/core/Button');
+var _checkDate = require('utils/_checkDate');
 var CommitteeStore = require('stores/CommitteeStore');
 var ConferenceContext = require('components/ConferenceContext');
 var CountryStore = require('stores/CountryStore');
@@ -114,6 +115,7 @@ var AdvisorAssignmentsView = React.createClass({
       Object.keys(countries).length > 0 &&
       this.state.assignments.length > 0 &&
       this.state.registration;
+
     return (
       <InnerView>
         <TextTemplate conferenceSession={conference.session}>
@@ -127,12 +129,8 @@ var AdvisorAssignmentsView = React.createClass({
               <th>Committee</th>
               <th>Country</th>
               <th>Delegation Size</th>
-              <th>
-                {finalized ? 'Delegate' : 'Delete Assignments'}
-              </th>
-              <th>
-                {finalized ? 'Delegate' : ''}
-              </th>
+              <th>{finalized ? 'Delegate' : 'Delete Assignments'}</th>
+              <th>{finalized ? 'Delegate' : ''}</th>
             </tr>
           </thead>
           <tbody>
@@ -161,31 +159,28 @@ var AdvisorAssignmentsView = React.createClass({
       function(assignment) {
         return (
           <tr>
+            <td>{committees[assignment.committee].name}</td>
+            <td>{countries[assignment.country].name}</td>
+            <td>{committees[assignment.committee].delegation_size}</td>
             <td>
-              {committees[assignment.committee].name}
-            </td>
-            <td>
-              {countries[assignment.country].name}
-            </td>
-            <td>
-              {committees[assignment.committee].delegation_size}
-            </td>
-            <td>
-              {finalized
-                ? this.renderDelegateDropdown(assignment, 0)
-                : 'Not available as of Jan. 23'
-              /*<Button color="red"
-                    size="small"
-                    onClick={this._handleAssignmentDelete.bind(this, assignment)}>
-                    Delete Assignment
-            </Button>*/
-              }
+              {finalized ? (
+                this.renderDelegateDropdown(assignment, 0)
+              ) : (
+                <Button
+                  color="red"
+                  size="small"
+                  onClick={this._handleAssignmentDelete.bind(this, assignment)}>
+                  Delete Assignment
+                </Button>
+              )}
             </td>
             <td>
               {finalized &&
-              committees[assignment.committee].delegation_size == 2
-                ? this.renderDelegateDropdown(assignment, 1)
-                : <div />}
+              committees[assignment.committee].delegation_size == 2 ? (
+                this.renderDelegateDropdown(assignment, 1)
+              ) : (
+                <div />
+              )}
             </td>
           </tr>
         );
@@ -222,6 +217,8 @@ var AdvisorAssignmentsView = React.createClass({
       assignment.id in this.state.assigned
         ? this.state.assigned[assignment.id][slot]
         : 0;
+    var disableView = _checkDate();
+
     return (
       <DelegateSelect
         onChange={this._handleDelegateAssignment.bind(
@@ -231,6 +228,7 @@ var AdvisorAssignmentsView = React.createClass({
         )}
         delegates={this.state.delegates}
         selectedDelegateID={selectedDelegateID}
+        disabled={disableView}
       />
     );
   },

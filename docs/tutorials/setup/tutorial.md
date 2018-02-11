@@ -30,15 +30,16 @@ After you've ensured you've downloaded python it's time to check to make sure yo
 ```
 >>> import django
 >>> print(django.get_version())
-1.8
+1.11
 ```
 
-If you get an error or nothing prints. Download version 1.7 of Django [here](https://docs.djangoproject.com/en/1.8/intro/install/#install-django). It's easiest to install using pip, so make sure that you have pip installed/updated here: https://pip.pypa.io/en/stable/installing/#upgrading-pip
+If you get an error or nothing prints. Download the latest version of Django [here](https://docs.djangoproject.com/en/1.11/intro/install/#install-django). It's easiest to install using pip, so make sure that you have pip installed/updated here: https://pip.pypa.io/en/stable/installing/#upgrading-pip
 (You can test to make sure you have pip by running the "which pip" command from terminal).
 
 Now that we've verified Python and Django are installed, let's create a django project. In your `huxleytutorial` directory run
 ```
 $ django-admin.py startproject huxleytutorial
+$ cd huxleytutorial
 ```
 
 This creates a new django project for you. On top of this project we will build our app.
@@ -47,9 +48,13 @@ This creates a new django project for you. On top of this project we will build 
 We're going to create a django application to hold our front end code. To create the app run this command in your huxleytutorial directory that has manage.py in it:
 
 ```
-python manage.py startapp www
+$ python manage.py startapp www
 ```
-We call this app `www` for conventional reasons. Then move this app into your `huxleytutorial` directory such that your file structure looks like this
+We call this app `www` for conventional reasons. Then move this app into your `huxleytutorial` directory.
+```
+$ mv www ./huxleytutorial
+```
+Your file structure should look like this:
 
 ```
 huxleytutorial
@@ -76,7 +81,13 @@ INSTALLED_APPS = (
 )
 ```
 
-Now let's begin creating our front end. To do this create a folder in your `www` directory called `templates`, and in that directory create a file called `www.html`. `www.html` will be the html backbone of our application. Your file structure should look like this:
+Now let's begin creating our front end. To do this create a folder in your `www` directory called `templates`, and in that directory create a file called `www.html`. 
+```
+$ mkdir huxleytutorial/www/templates
+$ touch huxleytutorial/www/templates/www.html
+```
+
+`www.html` will be the html backbone of our application. Your file structure should look like this now:
 ```
 huxleytutorial
     huxleytutorial
@@ -118,7 +129,11 @@ urlpatterns = patterns('',
 )
 ```
 
-Then create a file called urls.py in huxleytutorial/www and place this code in there:
+Then create a file called `urls.py` in `huxleytutorial/www`:
+```
+touch huxleytutorial/www/urls.py
+```
+And place this code in there:
 ```
 from django.conf.urls import patterns, url
 from . import views
