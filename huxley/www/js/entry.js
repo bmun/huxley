@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011-2015 Berkeley Model United Nations. All rights reserved.
+ * Copyright (c) 2011-2017 Berkeley Model United Nations. All rights reserved.
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
@@ -19,7 +19,13 @@ var AdvisorFeedbackView = require('components/AdvisorFeedbackView');
 var AdvisorProfileView = require('components/AdvisorProfileView');
 var AdvisorRosterView = require('components/AdvisorRosterView');
 var ChairAttendanceView = require('components/ChairAttendanceView');
+var ChairCommitteeFeedbackView = require('components/ChairCommitteeFeedbackView');
+var ChairDelegateEmailView = require('components/ChairDelegateEmailView');
+var ChairPapersView = require('components/ChairPapersView');
+var ChairRubricView = require('components/ChairRubricView');
 var ChairSummaryView = require('components/ChairSummaryView');
+var DelegateCommitteeFeedbackView = require('components/DelegateCommitteeFeedbackView');
+var DelegatePaperView = require('components/DelegatePaperView');
 var DelegateProfileView = require('components/DelegateProfileView');
 var ForgotPasswordView = require('components/ForgotPasswordView');
 var LoginView = require('components/LoginView');
@@ -55,8 +61,20 @@ var routes = (
     <Route path="/advisor/feedback" component={AdvisorFeedbackView} />
     <Route path="/advisor/roster" component={AdvisorRosterView} />
     <Route path="/chair/attendance" component={ChairAttendanceView} />
+    <Route path="/chair/papers" component={ChairPapersView} />
+    <Route path="/chair/rubric" component={ChairRubricView} />
+    <Route path="/chair/delegate_emails" component={ChairDelegateEmailView} />
+    <Route
+      path="/chair/committee_feedback"
+      component={ChairCommitteeFeedbackView}
+    />
     <Route path="/chair/summary" component={ChairSummaryView} />
+    <Route
+      path="/delegate/committee_feedback"
+      component={DelegateCommitteeFeedbackView}
+    />
     <Route path="/delegate/profile" component={DelegateProfileView} />
+    <Route path="/delegate/paper" component={DelegatePaperView} />
     <IndexRoute component={RedirectView} />
     <Route path="*" component={NotFoundView} />
   </Route>
@@ -64,9 +82,7 @@ var routes = (
 
 window.addEventListener('DOMContentLoaded', () => {
   ReactDOM.render(
-    <Router>
-      {routes}
-    </Router>,
+    <Router>{routes}</Router>,
     document.getElementById('huxley-app'),
   );
 });

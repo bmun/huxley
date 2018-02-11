@@ -31,7 +31,12 @@ class AbstractAPITestCase(APITestCase):
         if self.is_resource is None:
             raise NotImplementedError('Must define is_resource class member.')
 
-        args = (object_id,) if self.is_resource else ()
+        args = None
+        if self.is_resource:
+            args = (object_id, )
+        else:
+            args = ()
+
         return reverse(self.url_name, args=args)
 
     def get_params(self, **kwargs):
@@ -47,7 +52,6 @@ class AbstractAPITestCase(APITestCase):
         params = params or self.params
         if self.method != 'get':
             params = json.dumps(params)
-
         request = getattr(self.client, self.method)
         url = self.get_url(object_id)
         return request(url, params, content_type='application/json')
@@ -60,22 +64,27 @@ class AbstractAPITestCase(APITestCase):
 
     def assertPermissionDenied(self, response):
         self.assertEqual(response.data, {
-            'detail': u'You do not have permission to perform this action.'})
+            'detail': u'You do not have permission to perform this action.'
+        })
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def assertMethodNotAllowed(self, response, method):
         self.assertEqual(response.data, {
-            u'detail':  u'Method "%s" not allowed.' % method})
-        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+            u'detail': u'Method "%s" not allowed.' % method
+        })
+        self.assertEqual(response.status_code,
+                         status.HTTP_405_METHOD_NOT_ALLOWED)
 
     def assertNotAuthenticated(self, response):
         self.assertEqual(response.data, {
-            'detail':  u'Authentication credentials were not provided.'})
+            'detail': u'Authentication credentials were not provided.'
+        })
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def assertAuthenticationFailed(self, response):
         self.assertEqual(response.data, {
-            'detail':  u'Incorrect authentication credentials.'})
+            'detail': u'Incorrect authentication credentials.'
+        })
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def assertNotFound(self, response):
@@ -83,22 +92,26 @@ class AbstractAPITestCase(APITestCase):
 
     def assertInvalidCharacters(self, response, field):
         self.assertEqual(response.data, {
-            '%s' % field: [u'This field contains invalid characters.']})
+            '%s' % field: [u'This field contains invalid characters.']
+        })
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def assertInvalidEmail(self, response, field):
         self.assertEqual(response.data, {
-            '%s' % field: [u'This is an invalid email address.']})
+            '%s' % field: [u'This is an invalid email address.']
+        })
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def assertInvalidEmailFormat(self, response, field):
         self.assertEqual(response.data, {
-            '%s' % field: [u'Enter a valid email address.']})
+            '%s' % field: [u'Enter a valid email address.']
+        })
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def assertInvalidPhone(self, response, field):
         self.assertEqual(response.data, {
-            '%s' % field: [u'This is an invalid phone number.']})
+            '%s' % field: [u'This is an invalid phone number.']
+        })
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
 

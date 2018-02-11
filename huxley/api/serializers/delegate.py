@@ -7,6 +7,7 @@ from django.contrib.auth.base_user import BaseUserManager
 from django.core.mail import send_mail
 
 from rest_framework import serializers
+from rest_framework.serializers import ValidationError
 
 from huxley.accounts.models import User
 from huxley.api.serializers.assignment import AssignmentNestedSerializer
@@ -29,7 +30,8 @@ class DelegateSerializer(serializers.ModelSerializer):
                   'session_one',
                   'session_two',
                   'session_three',
-                  'session_four', )
+                  'session_four',
+                  'committee_feedback_submitted', )
 
     def update(self, instance, validated_data):
         if ('assignment' in validated_data and
@@ -46,7 +48,8 @@ class DelegateSerializer(serializers.ModelSerializer):
                 user_type=User.TYPE_DELEGATE,
                 first_name=names[0],
                 last_name=names[-1],
-                email=instance.email)
+                email=instance.email,
+                last_login=datetime.now())
 
             send_mail('A new account has been created for {0}!\n'.format(instance.name.encode('utf8')),
                       'Username: {0}\n'.format(username.encode('utf8')) \
@@ -56,6 +59,13 @@ class DelegateSerializer(serializers.ModelSerializer):
                       + 'this account at huxley.bmun.org.',
                       'no-reply@bmun.org',
                       [instance.email], fail_silently=False)
+
+        if ('email' in validated_data and
+                User.objects.filter(delegate__id=instance.id).exists()):
+
+            user = User.objects.get(delegate__id=instance.id)
+            user.email = validated_data['email']
+            user.save()
 
         return super(DelegateSerializer, self).update(instance, validated_data)
 
@@ -78,4 +88,5 @@ class DelegateNestedSerializer(serializers.ModelSerializer):
                   'session_one',
                   'session_two',
                   'session_three',
-                  'session_four', )
+                  'session_four',
+                  'committee_feedback_submitted', )

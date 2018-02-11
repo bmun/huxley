@@ -1,6 +1,8 @@
 # Copyright (c) 2011-2015 Berkeley Model United Nations. All rights reserved.
 # Use of this source code is governed by a BSD License (see LICENSE).
 
+from collections import OrderedDict
+
 from huxley.accounts.models import User
 from huxley.api import tests
 from huxley.api.tests import auto
@@ -74,6 +76,21 @@ class AssignmentDetailPutTestCase(tests.UpdateAPITestCase):
             "committee": self.assignment.committee.id,
             "country": self.assignment.country.id,
             "registration": self.registration.id,
+            "paper": OrderedDict(
+                [('id', self.assignment.paper.id),
+                 ('file', self.assignment.paper.file),
+                 ('graded', self.assignment.paper.graded),
+                 ('score_1', self.assignment.paper.score_1),
+                 ('score_2', self.assignment.paper.score_2),
+                 ('score_3', self.assignment.paper.score_3),
+                 ('score_4', self.assignment.paper.score_4),
+                 ('score_5', self.assignment.paper.score_5),
+                 ('score_t2_1', self.assignment.paper.score_t2_1),
+                 ('score_t2_2', self.assignment.paper.score_t2_2),
+                 ('score_t2_3', self.assignment.paper.score_t2_3),
+                 ('score_t2_4', self.assignment.paper.score_t2_4),
+                 ('score_t2_5', self.assignment.paper.score_t2_5),
+                 ("submission_date", self.assignment.paper.submission_date)]),
             "rejected": True,
         })
 
@@ -99,6 +116,21 @@ class AssignmentDetailPutTestCase(tests.UpdateAPITestCase):
             "committee": self.assignment.committee.id,
             "country": self.assignment.country.id,
             "registration": self.registration.id,
+            "paper": OrderedDict(
+                [('id', self.assignment.paper.id),
+                 ('file', self.assignment.paper.file),
+                 ('graded', self.assignment.paper.graded),
+                 ('score_1', self.assignment.paper.score_1),
+                 ('score_2', self.assignment.paper.score_2),
+                 ('score_3', self.assignment.paper.score_3),
+                 ('score_4', self.assignment.paper.score_4),
+                 ('score_5', self.assignment.paper.score_5),
+                 ('score_t2_1', self.assignment.paper.score_t2_1),
+                 ('score_t2_2', self.assignment.paper.score_t2_2),
+                 ('score_t2_3', self.assignment.paper.score_t2_3),
+                 ('score_t2_4', self.assignment.paper.score_t2_4),
+                 ('score_t2_5', self.assignment.paper.score_t2_5),
+                 ("submission_date", self.assignment.paper.submission_date)]),
             "rejected": True,
         })
 
@@ -139,6 +171,21 @@ class AssignmentDetailPatchTestCase(tests.PartialUpdateAPITestCase):
             "committee": self.assignment.committee.id,
             "country": self.assignment.country.id,
             "registration": self.registration.id,
+            "paper": OrderedDict(
+                [('id', self.assignment.paper.id),
+                 ('file', self.assignment.paper.file),
+                 ('graded', self.assignment.paper.graded),
+                 ('score_1', self.assignment.paper.score_1),
+                 ('score_2', self.assignment.paper.score_2),
+                 ('score_3', self.assignment.paper.score_3),
+                 ('score_4', self.assignment.paper.score_4),
+                 ('score_5', self.assignment.paper.score_5),
+                 ('score_t2_1', self.assignment.paper.score_t2_1),
+                 ('score_t2_2', self.assignment.paper.score_t2_2),
+                 ('score_t2_3', self.assignment.paper.score_t2_3),
+                 ('score_t2_4', self.assignment.paper.score_t2_4),
+                 ('score_t2_5', self.assignment.paper.score_t2_5),
+                 ("submission_date", self.assignment.paper.submission_date)]),
             "rejected": True,
         })
 
@@ -164,6 +211,21 @@ class AssignmentDetailPatchTestCase(tests.PartialUpdateAPITestCase):
             "committee": self.assignment.committee.id,
             "country": self.assignment.country.id,
             "registration": self.registration.id,
+            "paper": OrderedDict(
+                [('id', self.assignment.paper.id),
+                 ('file', self.assignment.paper.file),
+                 ('graded', self.assignment.paper.graded),
+                 ('score_1', self.assignment.paper.score_1),
+                 ('score_2', self.assignment.paper.score_2),
+                 ('score_3', self.assignment.paper.score_3),
+                 ('score_4', self.assignment.paper.score_4),
+                 ('score_5', self.assignment.paper.score_5),
+                 ('score_t2_1', self.assignment.paper.score_t2_1),
+                 ('score_t2_2', self.assignment.paper.score_t2_2),
+                 ('score_t2_3', self.assignment.paper.score_t2_3),
+                 ('score_t2_4', self.assignment.paper.score_t2_4),
+                 ('score_t2_5', self.assignment.paper.score_t2_5),
+                 ("submission_date", self.assignment.paper.submission_date)]),
             "rejected": True,
         })
 
@@ -256,6 +318,7 @@ class AssignmentListCreateTestCase(tests.CreateAPITestCase):
 
         response = self.get_response(params=self.params)
         response.data.pop('id')
+        response.data.pop('paper')
         self.assertEqual(response.data, {
             "committee": self.committee.id,
             "country": self.country.id,
@@ -350,5 +413,16 @@ class AssignmentListGetTestCase(tests.ListAPITestCase):
             'country': a.country_id,
             'committee': a.committee_id,
             'registration': a.registration_id,
+            "paper": OrderedDict(
+                [('id', a.paper.id), ('file', a.paper.file),
+                 ('graded', a.paper.graded), ('score_1', a.paper.score_1),
+                 ('score_2', a.paper.score_2), ('score_3', a.paper.score_3),
+                 ('score_4', a.paper.score_4), ('score_5', a.paper.score_5),
+                 ('score_t2_1', a.paper.score_t2_1),
+                 ('score_t2_2', a.paper.score_t2_2),
+                 ('score_t2_3', a.paper.score_t2_3),
+                 ('score_t2_4', a.paper.score_t2_4),
+                 ('score_t2_5', a.paper.score_t2_5),
+                 ('submission_date', a.paper.submission_date)]),
             'rejected': a.rejected,
         } for a in assignments])

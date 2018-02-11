@@ -8,8 +8,10 @@ from django.core.exceptions import ValidationError
 from django.db import IntegrityError
 from django.test import TestCase
 
-from huxley.core.models import (Assignment, Committee, Conference, Country,
-                                CountryPreference, Delegate)
+from huxley.core.models import (Assignment, Committee, CommitteeFeedback,
+                                Conference, Country, CountryPreference,
+                                Delegate, PositionPaper, Rubric)
+
 from huxley.utils.test import models
 
 
@@ -59,6 +61,41 @@ class CommitteeTest(TestCase):
     def test_unicode(self):
         """ Tests that the object's __unicode__ outputs correctly. """
         self.assertEquals('DISC', self.committee.__unicode__())
+
+    def test_create_rubric(self):
+        '''Tests that a committee creates a new rubric upon being
+           saved for the first time, but not on subsequent saves.'''
+        c = Committee(
+            name='DISC', full_name='Disarmament and International Security')
+        self.assertTrue(c.rubric == None)
+        c.save()
+        self.assertTrue(c.rubric != None)
+        rubric_id = c.rubric.id
+        c.rubric.grade_category_1 = "Overall paper quality"
+        c.rubric.save()
+        c.save()
+        self.assertEquals(c.rubric.grade_category_1, "Overall paper quality")
+        self.assertEquals(c.rubric.id, rubric_id)
+        c.rubric = None
+        c.save()
+        self.assertFalse(c.rubric == None)
+        self.assertFalse(c.rubric.id == rubric_id)
+
+
+class CommitteeFeedbackTest(TestCase):
+    def setUp(self):
+        self.committee = Committee.objects.create(
+            name='DISC', full_name='Disarmament and International Security')
+        self.committee_feedback = CommitteeFeedback.objects.create(
+            committee=self.committee,
+            comment='Jake Tibbetts was literally awful as a person')
+
+    def test_default_fields(self):
+        self.assertFalse(self.committee == None)
+
+    def test_unicode(self):
+        self.assertEquals('DISC - Comment 1',
+                          self.committee_feedback.__unicode__())
 
 
 class AssignmentTest(TestCase):
@@ -113,7 +150,7 @@ class AssignmentTest(TestCase):
         ]
 
         Assignment.update_assignments(updates)
-        assignments = [a[1:] for a in Assignment.objects.all().values_list()]
+        assignments = [a[1:-1] for a in Assignment.objects.all().values_list()]
         delegates = Delegate.objects.all()
         self.assertEquals(set(all_assignments), set(assignments))
         self.assertEquals(len(delegates), 2)
@@ -137,6 +174,24 @@ class AssignmentTest(TestCase):
 
         self.assertEquals(a.delegates.count(), 0)
         self.assertEquals(a.rejected, False)
+
+    def test_create_position_paper(self):
+        '''Tests that an assigment creates a new position paper upon
+           being saved for the first time, but not on subsequent saves.'''
+        a = Assignment(committee_id=1, country_id=1, registration_id=1)
+        self.assertTrue(a.paper == None)
+        a.save()
+        self.assertTrue(a.paper != None)
+        paper_id = a.paper.id
+        a.paper.graded = True
+        a.paper.save()
+        a.save()
+        self.assertTrue(a.paper.graded)
+        self.assertEquals(a.paper.id, paper_id)
+        a.paper = None
+        a.save()
+        self.assertFalse(a.paper == None)
+        self.assertFalse(a.paper.id == paper_id)
 
 
 class CountryPreferenceTest(TestCase):
@@ -191,11 +246,10 @@ class RegistrationTest(TestCase):
             num_advanced_delegates=a, )
 
         conference = Conference.get_current()
-        registration_fee = conference.registration_fee
         delegate_fee = conference.delegate_fee
 
-        self.assertEquals(registration.fees_owed,
-                          registration_fee + delegate_fee * (b + i + a), )
+        self.assertEquals(registration.delegate_fees_owed,
+                          delegate_fee * (b + i + a), )
 
         b2, i2, a2 = 5, 10, 15
         registration.num_beginner_delegates = b2
@@ -203,8 +257,8 @@ class RegistrationTest(TestCase):
         registration.num_advanced_delegates = a2
         registration.save()
 
-        self.assertEquals(registration.fees_owed,
-                          registration_fee + delegate_fee * (b2 + i2 + a2), )
+        self.assertEquals(registration.delegate_fees_owed,
+                          delegate_fee * (b2 + i2 + a2), )
 
     def test_update_waitlist(self):
         '''New registrations should be waitlisted based on the conference waitlist field.'''
@@ -240,3 +294,48 @@ class RegistrationTest(TestCase):
         r1.update_country_preferences([c3, c1])
         self.assertEquals([c3, c1], r1.country_preference_ids)
         self.assertEquals([c1, c2, c3], r2.country_preference_ids)
+
+
+class PositionPaperTest(TestCase):
+
+    fixtures = ['conference']
+
+    def setUp(self):
+        self.position_paper = PositionPaper.objects.create()
+        self.assignment = models.new_assignment(paper=self.position_paper)
+
+    def test_default_values(self):
+        self.assertEquals(self.position_paper.score_1, 0)
+        self.assertEquals(self.position_paper.score_2, 0)
+        self.assertEquals(self.position_paper.score_3, 0)
+        self.assertEquals(self.position_paper.score_4, 0)
+        self.assertEquals(self.position_paper.score_5, 0)
+        self.assertFalse(self.position_paper.graded)
+
+    def test_unicode(self):
+        a = self.assignment
+        self.assertEquals('%s %s %d' %
+                          (a.committee.name, a.country.name, a.id),
+                          self.position_paper.__unicode__())
+
+
+class RubricTest(TestCase):
+    def setUp(self):
+        self.rubric = Rubric.objects.create()
+        self.committee = models.new_committee(rubric=self.rubric)
+
+    def test_default_fields(self):
+        self.assertEquals(self.rubric.grade_category_1, '')
+        self.assertEquals(self.rubric.grade_category_2, '')
+        self.assertEquals(self.rubric.grade_category_3, '')
+        self.assertEquals(self.rubric.grade_category_4, '')
+        self.assertEquals(self.rubric.grade_category_5, '')
+
+        self.assertEquals(self.rubric.grade_value_1, 10)
+        self.assertEquals(self.rubric.grade_value_2, 10)
+        self.assertEquals(self.rubric.grade_value_3, 10)
+        self.assertEquals(self.rubric.grade_value_4, 10)
+        self.assertEquals(self.rubric.grade_value_5, 10)
+
+    def test_unicode(self):
+        self.assertEquals(self.committee.name, self.rubric.__unicode__())

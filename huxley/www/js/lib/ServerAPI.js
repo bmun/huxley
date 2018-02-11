@@ -15,6 +15,10 @@ var ServerAPI = {
     return _post('/api/delegates', {name, email, school});
   },
 
+  createCommitteeFeedback(feedback) {
+    return _post(`/api/committee_feedback/post`, feedback);
+  },
+
   changePassword(currentPassword, newPassword) {
     return _put('/api/users/me/password', {
       password: currentPassword,
@@ -54,6 +58,10 @@ var ServerAPI = {
     return _get('/api/delegates/', {committee_id: committeeID});
   },
 
+  getCommitteeFeedback(committeeID) {
+    return _get('/api/committee_feedback/', {committee_id: committeeID});
+  },
+
   /**
    * Get a list of all countries.
    */
@@ -82,6 +90,10 @@ var ServerAPI = {
 
   resetPassword(username) {
     return _post('/api/users/me/password', {username});
+  },
+
+  resetDelegatePassword(delegateID) {
+    return _post('/api/users/delegate/password', {delegate_id: delegateID});
   },
 
   updateAssignment(assignmentID, data) {
@@ -118,6 +130,30 @@ var ServerAPI = {
   updateRegistration(registrationID, data) {
     return _patch(`/api/registrations/${registrationID}`, data);
   },
+
+  getPositionPaperFile(paperID) {
+    return _get(
+      '/api/papers/file',
+      {id: paperID},
+      'application/force-download',
+    );
+  },
+
+  updatePositionPaper(paper) {
+    return _patch(`api/papers/${paper.id}`, paper);
+  },
+
+  uploadPositionPaper(paper, file) {
+    return _post(`api/papers/${paper.id}`, {file: file}, 'multipart/form-data');
+  },
+
+  getRubric(rubricID) {
+    return _get(`api/rubrics/${rubricID}`);
+  },
+
+  updateRubric(rubric) {
+    return _patch(`api/rubrics/${rubric.id}`, rubric);
+  },
 };
 
 function _encodeQueryString(params) {
@@ -126,30 +162,65 @@ function _encodeQueryString(params) {
     .join('&');
 }
 
-function _ajax(method, uri, data) {
+function _ajax(method, uri, data, content_type) {
+  if (content_type == null) {
+    content_type = 'application/json';
+  }
+
   const isSafeMethod = /^(GET|HEAD|OPTIONS|TRACE)$/.test(method);
   if (isSafeMethod && data) {
     uri = uri + '?' + _encodeQueryString(data);
   }
-  const params = {
-    credentials: 'same-origin',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    method: method,
-  };
+  var params = {};
+  if (content_type == 'application/json') {
+    params = {
+      credentials: 'same-origin',
+      headers: {
+        'Content-Type': `${content_type}`,
+      },
+      method: method,
+    };
+  } else {
+    params = {
+      credentials: 'same-origin',
+      headers: {},
+      method: method,
+    };
+  }
+
   if (!isSafeMethod) {
     params.headers['X-CSRFToken'] = Cookie.get('csrftoken');
-    if (data) {
+    if (data && content_type != 'multipart/form-data') {
       params.body = typeof data === 'string' ? data : JSON.stringify(data);
+    } else if (data && content_type == 'multipart/form-data') {
+      var form = new FormData();
+      form.append('file', data['file']);
+      params.body = form;
     }
   }
-  return fetch(uri, params).then(
-    response =>
-      response.ok
-        ? response.json()
-        : response.json().then(json => Promise.reject(json)),
-  );
+
+  if (content_type == 'application/json') {
+    return fetch(uri, params).then(
+      response =>
+        response.ok
+          ? response.json()
+          : response.json().then(json => Promise.reject(json)),
+    );
+  } else if (content_type == 'application/force-download') {
+    return fetch(uri, params).then(
+      response =>
+        response.ok
+          ? response.blob()
+          : response.blob().then(json => Promise.reject(json)),
+    );
+  } else {
+    return fetch(uri, params).then(
+      response =>
+        response.ok
+          ? response.text()
+          : response.text().then(text => Promise.reject(text)),
+    );
+  }
 }
 
 const _delete = _ajax.bind(null, 'DELETE');
