@@ -53,7 +53,6 @@ class DelegateSerializer(serializers.ModelSerializer):
 
             send_mail('A new account has been created for {0}!'.format(instance.name.encode('utf8')),
                       'Username: {0}\n'.format(username.encode('utf8')) \
-
                       + 'Password: {0}\n'.format(password) \
                       + 'Please save this information! You will need it for ' \
                       + 'important information and actions. You can access ' \
