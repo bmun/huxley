@@ -21,10 +21,11 @@ class RegistrationAdmin(admin.ModelAdmin):
         writer.writerow([
             "Registration Time", "School Name", "Total Number of Delegates",
             "Beginners", "Intermediates", "Advanced", "Spanish Speakers",
-            "Chinese Speakers", "Country 1", "Country 2", "Country 3",
-            "Country 4", "Country 5", "Country 6", "Country 7", "Country 8",
-            "Country 9", "Country 10", "Committee Preferences",
-            "Registration Comments"
+            "Chinese Speakers", "Assignments Finalized", "Waivers Complete", 
+            "Delegate Fees Paid", "Delegate Fees Owed", "Paid Registration Fee?", 
+            "Country 1", "Country 2", "Country 3", "Country 4", "Country 5", 
+            "Country 6", "Country 7", "Country 8", "Country 9", "Country 10",
+            "Committee Preferences", "Registration Comments"
         ])
 
         for registration in Registration.objects.all().order_by(
@@ -51,6 +52,11 @@ class RegistrationAdmin(admin.ModelAdmin):
                      registration.num_advanced_delegates,
                      registration.num_spanish_speaking_delegates,
                      registration.num_chinese_speaking_delegates,
+                     registration.assignments_finalized,
+                     registration.waivers_completed,
+                     registration.delegate_fees_paid,
+                     registration.delegate_fees_owed,
+                     registration.registration_fee_paid
                  ]] + country_preferences + committee_preferences + [unicode(
                      registration.registration_comments).encode('utf8')])
 
