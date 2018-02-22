@@ -23,10 +23,11 @@ class RegistrationAdminTest(TestCase):
         header = [
             "Registration Time", "School Name", "Total Number of Delegates",
             "Beginners", "Intermediates", "Advanced", "Spanish Speakers",
-            "Chinese Speakers", "Country 1", "Country 2", "Country 3",
-            "Country 4", "Country 5", "Country 6", "Country 7", "Country 8",
-            "Country 9", "Country 10", "Committee Preferences",
-            "Registration Comments"
+            "Chinese Speakers",  "Assignments Finalized", "Waivers Complete", 
+            "Delegate Fees Paid", "Delegate Fees Owed", "Paid Registration Fee?", 
+            "Country 1", "Country 2", "Country 3", "Country 4", "Country 5", 
+            "Country 6", "Country 7", "Country 8", "Country 9", "Country 10", 
+            "Committee Preferences", "Registration Comments"
         ]
 
         fields_csv = ",".join(map(str, header)) + "\r\n"
@@ -49,6 +50,11 @@ class RegistrationAdminTest(TestCase):
             registration.num_advanced_delegates,
             registration.num_spanish_speaking_delegates,
             registration.num_chinese_speaking_delegates,
+            registration.assignments_finalized,
+            registration.waivers_completed,
+            registration.delegate_fees_paid,
+            registration.delegate_fees_owed,
+            registration.registration_fee_paid
         ]
         fields.extend(country_preferences)
         fields.extend(committee_preferences)
