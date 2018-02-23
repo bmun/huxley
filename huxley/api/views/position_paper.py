@@ -69,7 +69,7 @@ class PositionPaperFile(generics.RetrieveAPIView):
                 file_name = file_path.split('/')[-1]
                 response[
                     'Content-Disposition'] = 'attachement; file_name="{0}"'.format(
-                        file_name)
+                        file_name.encode("utf8"))
             else:
                 response = HttpResponse({}, status=status.HTTP_200_OK)
             return response
