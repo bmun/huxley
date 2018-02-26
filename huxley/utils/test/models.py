@@ -103,7 +103,40 @@ def new_committee_feedback(**kwargs):
     committee = new_committee()
     feedback = CommitteeFeedback(
         committee=kwargs.pop('committee', committee),
-        comment=kwargs.pop('comment', "Daddy Nikhil though"))
+        comment=kwargs.pop('comment', "Daddy Nikhil though"),
+        rating=kwargs.pop('rating',2),
+        chair_1_name=kwargs.pop('chair_1_name',"Nikhil"),
+        chair_1_comment=kwargs.pop('chair_1_comment',"Nikhil was awe inspiring"),
+        chair_1_rating=kwargs.pop('chair_1_rating',10),
+        chair_2_name=kwargs.pop('chair_2_name',""),
+        chair_2_comment=kwargs.pop('chair_2_comment',""),
+        chair_2_rating=kwargs.pop('chair_2_rating',0),
+        chair_3_name=kwargs.pop('chair_3_name',""),
+        chair_3_comment=kwargs.pop('chair_3_comment',""),
+        chair_3_rating=kwargs.pop('chair_3_rating',0),
+        chair_4_name=kwargs.pop('chair_4_name',""),
+        chair_4_comment=kwargs.pop('chair_4_comment',""),
+        chair_4_rating=kwargs.pop('chair_4_rating',0),
+        chair_5_name=kwargs.pop('chair_5_name',""),
+        chair_5_comment=kwargs.pop('chair_5_comment',""),
+        chair_5_rating=kwargs.pop('chair_5_rating',0),
+        chair_6_name=kwargs.pop('chair_6_name',""),
+        chair_6_comment=kwargs.pop('chair_6_comment',""),
+        chair_6_rating=kwargs.pop('chair_6_rating',0),
+        chair_7_name=kwargs.pop('chair_7_name',""),
+        chair_7_comment=kwargs.pop('chair_7_comment',""),
+        chair_7_rating=kwargs.pop('chair_7_rating',0),
+        chair_8_name=kwargs.pop('chair_8_name',""),
+        chair_8_comment=kwargs.pop('chair_8_comment',""),
+        chair_8_rating=kwargs.pop('chair_8_rating',0),
+        chair_9_name=kwargs.pop('chair_9_name',""),
+        chair_9_comment=kwargs.pop('chair_9_comment',""),
+        chair_9_rating=kwargs.pop('chair_9_rating',0),
+        chair_10_name=kwargs.pop('chair_10_name',""),
+        chair_10_comment=kwargs.pop('chair_10_comment',""),
+        chair_10_rating=kwargs.pop('chair_10_rating',0),
+
+    )
     feedback.save()
     return feedback
 

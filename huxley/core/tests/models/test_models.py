@@ -88,7 +88,11 @@ class CommitteeFeedbackTest(TestCase):
             name='DISC', full_name='Disarmament and International Security')
         self.committee_feedback = CommitteeFeedback.objects.create(
             committee=self.committee,
-            comment='Jake Tibbetts was literally awful as a person')
+            comment='Jake Tibbetts was literally awful as a person',
+            rating=3,
+            chair_1_name='Jake Tibbetts',
+            chair_1_comment='He got mad at me for watching Pacific Rim the whole time',
+            chair_1_rating=1,)
 
     def test_default_fields(self):
         self.assertFalse(self.committee == None)

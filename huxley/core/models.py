@@ -116,8 +116,58 @@ class Committee(models.Model):
 
 
 class CommitteeFeedback(models.Model):
+    CHOICES = (
+        (0,0),
+        (1,1),
+        (2,2),
+        (3,3),
+        (4,4),
+        (5,5),
+        (6,6),
+        (7,7),
+        (8,8),
+        (9,9),
+        (10,10),
+    )
+
     committee = models.ForeignKey(Committee)
-    comment = models.TextField(default='')
+    comment = models.TextField(blank=True, default='')
+    rating = models.IntegerField(blank=True, default=0,choices=CHOICES)
+
+    chair_1_name = models.CharField(blank=True, default='',max_length=100)
+    chair_2_name = models.CharField(blank=True, default='',max_length=100)
+    chair_3_name = models.CharField(blank=True, default='',max_length=100)
+    chair_4_name = models.CharField(blank=True, default='',max_length=100)
+    chair_5_name = models.CharField(blank=True, default='',max_length=100)
+    chair_6_name = models.CharField(blank=True, default='',max_length=100)
+    chair_7_name = models.CharField(blank=True, default='',max_length=100)
+    chair_8_name = models.CharField(blank=True, default='',max_length=100)
+    chair_9_name = models.CharField(blank=True, default='',max_length=100)
+    chair_10_name = models.CharField(blank=True, default='',max_length=100)
+
+    chair_1_comment = models.TextField(blank=True, default='')
+    chair_2_comment = models.TextField(blank=True, default='')
+    chair_3_comment = models.TextField(blank=True, default='')
+    chair_4_comment = models.TextField(blank=True, default='')
+    chair_5_comment = models.TextField(blank=True, default='')
+    chair_6_comment = models.TextField(blank=True, default='')
+    chair_7_comment = models.TextField(blank=True, default='')
+    chair_8_comment = models.TextField(blank=True, default='')
+    chair_9_comment = models.TextField(blank=True, default='')
+    chair_10_comment = models.TextField(blank=True, default='')
+
+
+    chair_1_rating = models.IntegerField(blank=True, default=0,choices=CHOICES)
+    chair_2_rating = models.IntegerField(blank=True, default=0,choices=CHOICES)
+    chair_3_rating = models.IntegerField(blank=True, default=0,choices=CHOICES)
+    chair_4_rating = models.IntegerField(blank=True, default=0,choices=CHOICES)
+    chair_5_rating = models.IntegerField(blank=True, default=0,choices=CHOICES)
+    chair_6_rating = models.IntegerField(blank=True, default=0,choices=CHOICES)
+    chair_7_rating = models.IntegerField(blank=True, default=0,choices=CHOICES)
+    chair_8_rating = models.IntegerField(blank=True, default=0,choices=CHOICES)
+    chair_9_rating = models.IntegerField(blank=True, default=0,choices=CHOICES)
+    chair_10_rating = models.IntegerField(blank=True, default=0,choices=CHOICES)
+
 
     def __unicode__(self):
         return str(self.committee.name) + " - Comment " + str(self.id)
