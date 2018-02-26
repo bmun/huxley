@@ -17,7 +17,7 @@ class CommitteeFeedbackDetailCreateTestCase(tests.CreateAPITestCase):
         self.committee_1 = models.new_committee(name='CYBER')
         self.committee_2 = models.new_committee(name='UNPBC')
         self.assignment_1 = models.new_assignment(committee=self.committee_1)
-        self.assignment_2 = models.new_assignment(committee=self.committee_2);
+        self.assignment_2 = models.new_assignment(committee=self.committee_2)
         self.delegate_1 = models.new_delegate(assignment=self.assignment_1)
         self.delegate_2 = models.new_delegate(assignment=self.assignment_2)
         self.params = {
@@ -114,7 +114,6 @@ class CommitteeFeedbackDetailCreateTestCase(tests.CreateAPITestCase):
             'chair_10_name': self.params['chair_10_name'],
             'chair_10_comment': self.params['chair_10_comment'],
             'chair_10_rating': self.params['chair_10_rating'],
-
         })
         self.user.delegate.refresh_from_db()
         self.assertTrue(self.user.delegate.committee_feedback_submitted)
@@ -199,40 +198,42 @@ class CommitteeFeedbackDetailCreateTestCase(tests.CreateAPITestCase):
             'committee': self.committee_2.id,
             'rating': -1,
             'chair_1_name': "Hacky McHacker",
-            'chair_1_comment':"I come up with great test case comments hacking late at night",
+            'chair_1_comment':
+            "I come up with great test case comments hacking late at night",
             'chair_1_rating': -30,
             'chair_2_name': "The Spirit of California",
-            'chair_2_comment':";DROP TABLE ... haha jk I have no clue how to do SQL injection",
+            'chair_2_comment':
+            ";DROP TABLE ... haha jk I have no clue how to do SQL injection",
             'chair_2_rating': 4,
             'chair_3_name': "Nickelback",
-            'chair_3_comment':"LOOK AT THIS GRAAAAAAPH",
+            'chair_3_comment': "LOOK AT THIS GRAAAAAAPH",
             'chair_3_rating': 156,
             'chair_4_name': "",
-            'chair_4_comment':"",
+            'chair_4_comment': "",
             'chair_4_rating': 0,
             'chair_5_name': "",
-            'chair_5_comment':"",
+            'chair_5_comment': "",
             'chair_5_rating': 0,
             'chair_6_name': "",
-            'chair_6_comment':"",
+            'chair_6_comment': "",
             'chair_6_rating': 0,
             'chair_7_name': "",
-            'chair_7_comment':"",
+            'chair_7_comment': "",
             'chair_7_rating': 0,
             'chair_8_name': "",
-            'chair_8_comment':"",
+            'chair_8_comment': "",
             'chair_8_rating': 0,
             'chair_9_name': "",
-            'chair_9_comment':"",
+            'chair_9_comment': "",
             'chair_9_rating': 0,
             'chair_10_name': "",
-            'chair_10_comment':"",
+            'chair_10_comment': "",
             'chair_10_rating': 0,
         }
         response = self.get_response(params=self.bad_params)
-        bad_fields = ['rating','chair_1_rating','chair_3_rating']
-        self.assertInvalidCommitteeRating(response,bad_fields,self.bad_params)
-
+        bad_fields = ['rating', 'chair_1_rating', 'chair_3_rating']
+        self.assertInvalidCommitteeRating(response, bad_fields,
+                                          self.bad_params)
 
 
 class CommitteeFeedbackDetailGetTestCase(tests.RetrieveAPITestCase):
@@ -344,8 +345,7 @@ class CommitteeFeedbackDetailGetTestCase(tests.RetrieveAPITestCase):
             chair_9_rating=self.params1['chair_9_rating'],
             chair_10_name=self.params1['chair_10_name'],
             chair_10_comment=self.params1['chair_10_comment'],
-            chair_10_rating=self.params1['chair_10_rating']
-            )
+            chair_10_rating=self.params1['chair_10_rating'])
 
         self.feedback_2 = models.new_committee_feedback(
             committee=self.committee_2,
@@ -380,11 +380,8 @@ class CommitteeFeedbackDetailGetTestCase(tests.RetrieveAPITestCase):
             chair_9_rating=self.params2['chair_9_rating'],
             chair_10_name=self.params2['chair_10_name'],
             chair_10_comment=self.params2['chair_10_comment'],
-            chair_10_rating=self.params2['chair_10_rating']
-        )
+            chair_10_rating=self.params2['chair_10_rating'])
         self.assignment_1 = models.new_assignment(committee=self.committee_1)
-
-
 
     def test_anonymous_user(self):
         '''Anonymous User cannot retrieve feedback'''
@@ -413,43 +410,41 @@ class CommitteeFeedbackDetailGetTestCase(tests.RetrieveAPITestCase):
         self.client.login(username='chair', password='chair')
         response_1 = self.get_response(self.feedback_1.id)
         response_1.data.pop('id')
-        self.assertEqual(response_1.data, 
-            {
-                'committee': self.committee_1.id,
-                'comment': self.feedback_1.comment,
-                'rating': self.feedback_1.rating,
-                'chair_1_name': self.feedback_1.chair_1_name,
-                'chair_1_comment': self.feedback_1.chair_1_comment,
-                'chair_1_rating': self.feedback_1.chair_1_rating,
-                'chair_2_name': self.feedback_1.chair_2_name,
-                'chair_2_comment': self.feedback_1.chair_2_comment,
-                'chair_2_rating': self.feedback_1.chair_2_rating,
-                'chair_3_name': self.feedback_1.chair_3_name,
-                'chair_3_comment': self.feedback_1.chair_3_comment,
-                'chair_3_rating': self.feedback_1.chair_3_rating,
-                'chair_4_name': self.feedback_1.chair_4_name,
-                'chair_4_comment': self.feedback_1.chair_4_comment,
-                'chair_4_rating': self.feedback_1.chair_4_rating,
-                'chair_5_name': self.feedback_1.chair_5_name,
-                'chair_5_comment': self.feedback_1.chair_5_comment,
-                'chair_5_rating': self.feedback_1.chair_5_rating,
-                'chair_6_name': self.feedback_1.chair_6_name,
-                'chair_6_comment': self.feedback_1.chair_6_comment,
-                'chair_6_rating': self.feedback_1.chair_6_rating,
-                'chair_7_name': self.feedback_1.chair_7_name,
-                'chair_7_comment': self.feedback_1.chair_7_comment,
-                'chair_7_rating': self.feedback_1.chair_7_rating,
-                'chair_8_name': self.feedback_1.chair_8_name,
-                'chair_8_comment': self.feedback_1.chair_8_comment,
-                'chair_8_rating': self.feedback_1.chair_8_rating,
-                'chair_9_name': self.feedback_1.chair_9_name,
-                'chair_9_comment': self.feedback_1.chair_9_comment,
-                'chair_9_rating': self.feedback_1.chair_9_rating,
-                'chair_10_name': self.feedback_1.chair_10_name,
-                'chair_10_comment': self.feedback_1.chair_10_comment,
-                'chair_10_rating': self.feedback_1.chair_10_rating
-            }
-        )
+        self.assertEqual(response_1.data, {
+            'committee': self.committee_1.id,
+            'comment': self.feedback_1.comment,
+            'rating': self.feedback_1.rating,
+            'chair_1_name': self.feedback_1.chair_1_name,
+            'chair_1_comment': self.feedback_1.chair_1_comment,
+            'chair_1_rating': self.feedback_1.chair_1_rating,
+            'chair_2_name': self.feedback_1.chair_2_name,
+            'chair_2_comment': self.feedback_1.chair_2_comment,
+            'chair_2_rating': self.feedback_1.chair_2_rating,
+            'chair_3_name': self.feedback_1.chair_3_name,
+            'chair_3_comment': self.feedback_1.chair_3_comment,
+            'chair_3_rating': self.feedback_1.chair_3_rating,
+            'chair_4_name': self.feedback_1.chair_4_name,
+            'chair_4_comment': self.feedback_1.chair_4_comment,
+            'chair_4_rating': self.feedback_1.chair_4_rating,
+            'chair_5_name': self.feedback_1.chair_5_name,
+            'chair_5_comment': self.feedback_1.chair_5_comment,
+            'chair_5_rating': self.feedback_1.chair_5_rating,
+            'chair_6_name': self.feedback_1.chair_6_name,
+            'chair_6_comment': self.feedback_1.chair_6_comment,
+            'chair_6_rating': self.feedback_1.chair_6_rating,
+            'chair_7_name': self.feedback_1.chair_7_name,
+            'chair_7_comment': self.feedback_1.chair_7_comment,
+            'chair_7_rating': self.feedback_1.chair_7_rating,
+            'chair_8_name': self.feedback_1.chair_8_name,
+            'chair_8_comment': self.feedback_1.chair_8_comment,
+            'chair_8_rating': self.feedback_1.chair_8_rating,
+            'chair_9_name': self.feedback_1.chair_9_name,
+            'chair_9_comment': self.feedback_1.chair_9_comment,
+            'chair_9_rating': self.feedback_1.chair_9_rating,
+            'chair_10_name': self.feedback_1.chair_10_name,
+            'chair_10_comment': self.feedback_1.chair_10_comment,
+            'chair_10_rating': self.feedback_1.chair_10_rating
+        })
         response_2 = self.get_response(self.feedback_2.id)
         self.assertPermissionDenied(response_2)
 
@@ -470,77 +465,77 @@ class CommitteeFeedbackDetailGetTestCase(tests.RetrieveAPITestCase):
         response_1 = self.get_response(self.feedback_1.id)
         response_1.data.pop('id')
         self.assertEqual(response_1.data, {
-                'committee': self.committee_1.id,
-                'comment': self.feedback_1.comment,
-                'rating': self.feedback_1.rating,
-                'chair_1_name': self.feedback_1.chair_1_name,
-                'chair_1_comment': self.feedback_1.chair_1_comment,
-                'chair_1_rating': self.feedback_1.chair_1_rating,
-                'chair_2_name': self.feedback_1.chair_2_name,
-                'chair_2_comment': self.feedback_1.chair_2_comment,
-                'chair_2_rating': self.feedback_1.chair_2_rating,
-                'chair_3_name': self.feedback_1.chair_3_name,
-                'chair_3_comment': self.feedback_1.chair_3_comment,
-                'chair_3_rating': self.feedback_1.chair_3_rating,
-                'chair_4_name': self.feedback_1.chair_4_name,
-                'chair_4_comment': self.feedback_1.chair_4_comment,
-                'chair_4_rating': self.feedback_1.chair_4_rating,
-                'chair_5_name': self.feedback_1.chair_5_name,
-                'chair_5_comment': self.feedback_1.chair_5_comment,
-                'chair_5_rating': self.feedback_1.chair_5_rating,
-                'chair_6_name': self.feedback_1.chair_6_name,
-                'chair_6_comment': self.feedback_1.chair_6_comment,
-                'chair_6_rating': self.feedback_1.chair_6_rating,
-                'chair_7_name': self.feedback_1.chair_7_name,
-                'chair_7_comment': self.feedback_1.chair_7_comment,
-                'chair_7_rating': self.feedback_1.chair_7_rating,
-                'chair_8_name': self.feedback_1.chair_8_name,
-                'chair_8_comment': self.feedback_1.chair_8_comment,
-                'chair_8_rating': self.feedback_1.chair_8_rating,
-                'chair_9_name': self.feedback_1.chair_9_name,
-                'chair_9_comment': self.feedback_1.chair_9_comment,
-                'chair_9_rating': self.feedback_1.chair_9_rating,
-                'chair_10_name': self.feedback_1.chair_10_name,
-                'chair_10_comment': self.feedback_1.chair_10_comment,
-                'chair_10_rating': self.feedback_1.chair_10_rating
-            })
+            'committee': self.committee_1.id,
+            'comment': self.feedback_1.comment,
+            'rating': self.feedback_1.rating,
+            'chair_1_name': self.feedback_1.chair_1_name,
+            'chair_1_comment': self.feedback_1.chair_1_comment,
+            'chair_1_rating': self.feedback_1.chair_1_rating,
+            'chair_2_name': self.feedback_1.chair_2_name,
+            'chair_2_comment': self.feedback_1.chair_2_comment,
+            'chair_2_rating': self.feedback_1.chair_2_rating,
+            'chair_3_name': self.feedback_1.chair_3_name,
+            'chair_3_comment': self.feedback_1.chair_3_comment,
+            'chair_3_rating': self.feedback_1.chair_3_rating,
+            'chair_4_name': self.feedback_1.chair_4_name,
+            'chair_4_comment': self.feedback_1.chair_4_comment,
+            'chair_4_rating': self.feedback_1.chair_4_rating,
+            'chair_5_name': self.feedback_1.chair_5_name,
+            'chair_5_comment': self.feedback_1.chair_5_comment,
+            'chair_5_rating': self.feedback_1.chair_5_rating,
+            'chair_6_name': self.feedback_1.chair_6_name,
+            'chair_6_comment': self.feedback_1.chair_6_comment,
+            'chair_6_rating': self.feedback_1.chair_6_rating,
+            'chair_7_name': self.feedback_1.chair_7_name,
+            'chair_7_comment': self.feedback_1.chair_7_comment,
+            'chair_7_rating': self.feedback_1.chair_7_rating,
+            'chair_8_name': self.feedback_1.chair_8_name,
+            'chair_8_comment': self.feedback_1.chair_8_comment,
+            'chair_8_rating': self.feedback_1.chair_8_rating,
+            'chair_9_name': self.feedback_1.chair_9_name,
+            'chair_9_comment': self.feedback_1.chair_9_comment,
+            'chair_9_rating': self.feedback_1.chair_9_rating,
+            'chair_10_name': self.feedback_1.chair_10_name,
+            'chair_10_comment': self.feedback_1.chair_10_comment,
+            'chair_10_rating': self.feedback_1.chair_10_rating
+        })
         response_2 = self.get_response(self.feedback_2.id)
         response_2.data.pop('id')
         self.assertEqual(response_2.data, {
-                'committee': self.committee_2.id,
-                'comment': self.feedback_2.comment,
-                'rating': self.feedback_2.rating,
-                'chair_1_name': self.feedback_2.chair_1_name,
-                'chair_1_comment': self.feedback_2.chair_1_comment,
-                'chair_1_rating': self.feedback_2.chair_1_rating,
-                'chair_2_name': self.feedback_2.chair_2_name,
-                'chair_2_comment': self.feedback_2.chair_2_comment,
-                'chair_2_rating': self.feedback_2.chair_2_rating,
-                'chair_3_name': self.feedback_2.chair_3_name,
-                'chair_3_comment': self.feedback_2.chair_3_comment,
-                'chair_3_rating': self.feedback_2.chair_3_rating,
-                'chair_4_name': self.feedback_2.chair_4_name,
-                'chair_4_comment': self.feedback_2.chair_4_comment,
-                'chair_4_rating': self.feedback_2.chair_4_rating,
-                'chair_5_name': self.feedback_2.chair_5_name,
-                'chair_5_comment': self.feedback_2.chair_5_comment,
-                'chair_5_rating': self.feedback_2.chair_5_rating,
-                'chair_6_name': self.feedback_2.chair_6_name,
-                'chair_6_comment': self.feedback_2.chair_6_comment,
-                'chair_6_rating': self.feedback_2.chair_6_rating,
-                'chair_7_name': self.feedback_2.chair_7_name,
-                'chair_7_comment': self.feedback_2.chair_7_comment,
-                'chair_7_rating': self.feedback_2.chair_7_rating,
-                'chair_8_name': self.feedback_2.chair_8_name,
-                'chair_8_comment': self.feedback_2.chair_8_comment,
-                'chair_8_rating': self.feedback_2.chair_8_rating,
-                'chair_9_name': self.feedback_2.chair_9_name,
-                'chair_9_comment': self.feedback_2.chair_9_comment,
-                'chair_9_rating': self.feedback_2.chair_9_rating,
-                'chair_10_name': self.feedback_2.chair_10_name,
-                'chair_10_comment': self.feedback_2.chair_10_comment,
-                'chair_10_rating': self.feedback_2.chair_10_rating
-            })
+            'committee': self.committee_2.id,
+            'comment': self.feedback_2.comment,
+            'rating': self.feedback_2.rating,
+            'chair_1_name': self.feedback_2.chair_1_name,
+            'chair_1_comment': self.feedback_2.chair_1_comment,
+            'chair_1_rating': self.feedback_2.chair_1_rating,
+            'chair_2_name': self.feedback_2.chair_2_name,
+            'chair_2_comment': self.feedback_2.chair_2_comment,
+            'chair_2_rating': self.feedback_2.chair_2_rating,
+            'chair_3_name': self.feedback_2.chair_3_name,
+            'chair_3_comment': self.feedback_2.chair_3_comment,
+            'chair_3_rating': self.feedback_2.chair_3_rating,
+            'chair_4_name': self.feedback_2.chair_4_name,
+            'chair_4_comment': self.feedback_2.chair_4_comment,
+            'chair_4_rating': self.feedback_2.chair_4_rating,
+            'chair_5_name': self.feedback_2.chair_5_name,
+            'chair_5_comment': self.feedback_2.chair_5_comment,
+            'chair_5_rating': self.feedback_2.chair_5_rating,
+            'chair_6_name': self.feedback_2.chair_6_name,
+            'chair_6_comment': self.feedback_2.chair_6_comment,
+            'chair_6_rating': self.feedback_2.chair_6_rating,
+            'chair_7_name': self.feedback_2.chair_7_name,
+            'chair_7_comment': self.feedback_2.chair_7_comment,
+            'chair_7_rating': self.feedback_2.chair_7_rating,
+            'chair_8_name': self.feedback_2.chair_8_name,
+            'chair_8_comment': self.feedback_2.chair_8_comment,
+            'chair_8_rating': self.feedback_2.chair_8_rating,
+            'chair_9_name': self.feedback_2.chair_9_name,
+            'chair_9_comment': self.feedback_2.chair_9_comment,
+            'chair_9_rating': self.feedback_2.chair_9_rating,
+            'chair_10_name': self.feedback_2.chair_10_name,
+            'chair_10_comment': self.feedback_2.chair_10_comment,
+            'chair_10_rating': self.feedback_2.chair_10_rating
+        })
 
 
 class CommitteeFeedbackListGetTestCase(tests.ListAPITestCase):
@@ -688,8 +683,7 @@ class CommitteeFeedbackListGetTestCase(tests.ListAPITestCase):
             chair_9_rating=self.params1['chair_9_rating'],
             chair_10_name=self.params1['chair_10_name'],
             chair_10_comment=self.params1['chair_10_comment'],
-            chair_10_rating=self.params1['chair_10_rating']
-        )
+            chair_10_rating=self.params1['chair_10_rating'])
         self.feedback_2 = models.new_committee_feedback(
             committee=self.committee_1,
             comment=self.params2['comment'],
@@ -723,8 +717,7 @@ class CommitteeFeedbackListGetTestCase(tests.ListAPITestCase):
             chair_9_rating=self.params2['chair_9_rating'],
             chair_10_name=self.params2['chair_10_name'],
             chair_10_comment=self.params2['chair_10_comment'],
-            chair_10_rating=self.params2['chair_10_rating']
-            )
+            chair_10_rating=self.params2['chair_10_rating'])
         self.feedback_3 = models.new_committee_feedback(
             committee=self.committee_2,
             comment=self.params3['comment'],
@@ -758,8 +751,7 @@ class CommitteeFeedbackListGetTestCase(tests.ListAPITestCase):
             chair_9_rating=self.params3['chair_9_rating'],
             chair_10_name=self.params3['chair_10_name'],
             chair_10_comment=self.params3['chair_10_comment'],
-            chair_10_rating=self.params3['chair_10_rating']
-            )
+            chair_10_rating=self.params3['chair_10_rating'])
         self.assignment_1 = models.new_assignment(committee=self.committee_1)
 
     def test_anonymous_user(self):
@@ -825,8 +817,7 @@ class CommitteeFeedbackListGetTestCase(tests.ListAPITestCase):
                 'chair_10_name': self.feedback_1.chair_10_name,
                 'chair_10_comment': self.feedback_1.chair_10_comment,
                 'chair_10_rating': self.feedback_1.chair_10_rating
-            },
-            {
+            }, {
                 'id': self.feedback_2.id,
                 'committee': self.committee_1.id,
                 'comment': self.feedback_2.comment,
@@ -920,8 +911,7 @@ class CommitteeFeedbackListGetTestCase(tests.ListAPITestCase):
                 'chair_10_name': self.feedback_1.chair_10_name,
                 'chair_10_comment': self.feedback_1.chair_10_comment,
                 'chair_10_rating': self.feedback_1.chair_10_rating
-            },
-            {
+            }, {
                 'id': self.feedback_2.id,
                 'committee': self.committee_1.id,
                 'comment': self.feedback_2.comment,
@@ -961,39 +951,38 @@ class CommitteeFeedbackListGetTestCase(tests.ListAPITestCase):
         response_2 = self.get_response(
             params={'committee_id': self.committee_2.id})
         self.assertEqual(response_2.data, [{
-                'id': self.feedback_3.id,
-                'committee': self.committee_2.id,
-                'comment': self.feedback_3.comment,
-                'rating': self.feedback_3.rating,
-                'chair_1_name': self.feedback_3.chair_1_name,
-                'chair_1_comment': self.feedback_3.chair_1_comment,
-                'chair_1_rating': self.feedback_3.chair_1_rating,
-                'chair_2_name': self.feedback_3.chair_2_name,
-                'chair_2_comment': self.feedback_3.chair_2_comment,
-                'chair_2_rating': self.feedback_3.chair_2_rating,
-                'chair_3_name': self.feedback_3.chair_3_name,
-                'chair_3_comment': self.feedback_3.chair_3_comment,
-                'chair_3_rating': self.feedback_3.chair_3_rating,
-                'chair_4_name': self.feedback_3.chair_4_name,
-                'chair_4_comment': self.feedback_3.chair_4_comment,
-                'chair_4_rating': self.feedback_3.chair_4_rating,
-                'chair_5_name': self.feedback_3.chair_5_name,
-                'chair_5_comment': self.feedback_3.chair_5_comment,
-                'chair_5_rating': self.feedback_3.chair_5_rating,
-                'chair_6_name': self.feedback_3.chair_6_name,
-                'chair_6_comment': self.feedback_3.chair_6_comment,
-                'chair_6_rating': self.feedback_3.chair_6_rating,
-                'chair_7_name': self.feedback_3.chair_7_name,
-                'chair_7_comment': self.feedback_3.chair_7_comment,
-                'chair_7_rating': self.feedback_3.chair_7_rating,
-                'chair_8_name': self.feedback_3.chair_8_name,
-                'chair_8_comment': self.feedback_3.chair_8_comment,
-                'chair_8_rating': self.feedback_3.chair_8_rating,
-                'chair_9_name': self.feedback_3.chair_9_name,
-                'chair_9_comment': self.feedback_3.chair_9_comment,
-                'chair_9_rating': self.feedback_3.chair_9_rating,
-                'chair_10_name': self.feedback_3.chair_10_name,
-                'chair_10_comment': self.feedback_3.chair_10_comment,
-                'chair_10_rating': self.feedback_3.chair_10_rating
-                }
-        ])
+            'id': self.feedback_3.id,
+            'committee': self.committee_2.id,
+            'comment': self.feedback_3.comment,
+            'rating': self.feedback_3.rating,
+            'chair_1_name': self.feedback_3.chair_1_name,
+            'chair_1_comment': self.feedback_3.chair_1_comment,
+            'chair_1_rating': self.feedback_3.chair_1_rating,
+            'chair_2_name': self.feedback_3.chair_2_name,
+            'chair_2_comment': self.feedback_3.chair_2_comment,
+            'chair_2_rating': self.feedback_3.chair_2_rating,
+            'chair_3_name': self.feedback_3.chair_3_name,
+            'chair_3_comment': self.feedback_3.chair_3_comment,
+            'chair_3_rating': self.feedback_3.chair_3_rating,
+            'chair_4_name': self.feedback_3.chair_4_name,
+            'chair_4_comment': self.feedback_3.chair_4_comment,
+            'chair_4_rating': self.feedback_3.chair_4_rating,
+            'chair_5_name': self.feedback_3.chair_5_name,
+            'chair_5_comment': self.feedback_3.chair_5_comment,
+            'chair_5_rating': self.feedback_3.chair_5_rating,
+            'chair_6_name': self.feedback_3.chair_6_name,
+            'chair_6_comment': self.feedback_3.chair_6_comment,
+            'chair_6_rating': self.feedback_3.chair_6_rating,
+            'chair_7_name': self.feedback_3.chair_7_name,
+            'chair_7_comment': self.feedback_3.chair_7_comment,
+            'chair_7_rating': self.feedback_3.chair_7_rating,
+            'chair_8_name': self.feedback_3.chair_8_name,
+            'chair_8_comment': self.feedback_3.chair_8_comment,
+            'chair_8_rating': self.feedback_3.chair_8_rating,
+            'chair_9_name': self.feedback_3.chair_9_name,
+            'chair_9_comment': self.feedback_3.chair_9_comment,
+            'chair_9_rating': self.feedback_3.chair_9_rating,
+            'chair_10_name': self.feedback_3.chair_10_name,
+            'chair_10_comment': self.feedback_3.chair_10_comment,
+            'chair_10_rating': self.feedback_3.chair_10_rating
+        }])
