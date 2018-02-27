@@ -64,15 +64,9 @@ var routes = (
     <Route path="/chair/papers" component={ChairPapersView} />
     <Route path="/chair/rubric" component={ChairRubricView} />
     <Route path="/chair/delegate_emails" component={ChairDelegateEmailView} />
-    <Route
-      path="/chair/committee_feedback"
-      component={ChairCommitteeFeedbackView}
-    />
+    <Route path="/chair/committee_feedback" component={ChairCommitteeFeedbackView}/>
     <Route path="/chair/summary" component={ChairSummaryView} />
-    <Route
-      path="/delegate/committee_feedback"
-      component={DelegateCommitteeFeedbackView}
-    />
+    <Route path="/delegate/committee_feedback" component={DelegateCommitteeFeedbackView}/>
     <Route path="/delegate/profile" component={DelegateProfileView} />
     <Route path="/delegate/paper" component={DelegatePaperView} />
     <IndexRoute component={RedirectView} />
