@@ -1,7 +1,7 @@
 /**
-* Copyright (c) 2011-2016 Berkeley Model United Nations. All rights reserved.
-* Use of this source code is governed by a BSD License (see LICENSE).
-+*/
+ * Copyright (c) 2011-2016 Berkeley Model United Nations. All rights reserved.
+ * Use of this source code is governed by a BSD License (see LICENSE).
+ +*/
 
 'use strict';
 
@@ -109,52 +109,54 @@ const DelegateCommitteeFeedbackView = React.createClass({
       if (this.state.feedbackSubmitted) {
         body = <h3>Thank you for submitting your feedback</h3>;
       } else {
-        var chair_fields = []
+        var chair_fields = [];
 
-        for(var i = 1;i <= 10; i++){
-          var name_key = "chair_" + i + "_name";
-          var comment_key = "chair_" + i + "_comment";
-          var rating_key = "chair_" + i + "_rating";
+        for (var i = 1; i <= 10; i++) {
+          var name_key = 'chair_' + i + '_name';
+          var comment_key = 'chair_' + i + '_comment';
+          var rating_key = 'chair_' + i + '_rating';
           chair_fields.push(
             <div>
-            <br />
-            <hr />
-            <br />
-            <TextInput 
-              placeholder={"Chair " + i + "'s name"} 
-              onChange={_handleChange.bind(this,name_key)}
-              value={this.state[name_key]}
-            />
-            <br />
-            <textarea
-              className="text-input"
-              style={{width: '75%'}}
-              rows="4"
-              onChange={_handleChange.bind(this, comment_key)}
-              defaultValue={this.state[comment_key]}
-              placeholder={"Comment for Chair " + i}
-            />
-            <br />
-            <label><font size={3}><b>{"Rate Chair " + i + ": "}</b></font>
-            <select 
-              onChange={_handleChange.bind(this,rating_key)}
-              value={this.state[rating_key]}
-              default={0}
-            >
-            <option value={0}>No Rating</option>
-            <option value={10}>10</option>
-            <option value={9}>9</option>
-            <option value={8}>8</option>
-            <option value={7}>7</option>
-            <option value={6}>6</option>
-            <option value={5}>5</option>
-            <option value={4}>4</option>
-            <option value={3}>3</option>
-            <option value={2}>2</option>
-            <option value={1}>1</option>
-            </select>
-            </label>
-            </div>   
+              <br />
+              <hr />
+              <br />
+              <TextInput
+                placeholder={'Chair ' + i + "'s name"}
+                onChange={_handleChange.bind(this, name_key)}
+                value={this.state[name_key]}
+              />
+              <br />
+              <textarea
+                className="text-input"
+                style={{width: '75%'}}
+                rows="4"
+                onChange={_handleChange.bind(this, comment_key)}
+                defaultValue={this.state[comment_key]}
+                placeholder={'Comment for Chair ' + i}
+              />
+              <br />
+              <label>
+                <font size={3}>
+                  <b>{'Rate Chair ' + i + ': '}</b>
+                </font>
+                <select
+                  onChange={_handleChange.bind(this, rating_key)}
+                  value={this.state[rating_key]}
+                  default={0}>
+                  <option value={0}>No Rating</option>
+                  <option value={10}>10</option>
+                  <option value={9}>9</option>
+                  <option value={8}>8</option>
+                  <option value={7}>7</option>
+                  <option value={6}>6</option>
+                  <option value={5}>5</option>
+                  <option value={4}>4</option>
+                  <option value={3}>3</option>
+                  <option value={2}>2</option>
+                  <option value={1}>1</option>
+                </select>
+              </label>
+            </div>,
           );
         }
 
@@ -173,28 +175,30 @@ const DelegateCommitteeFeedbackView = React.createClass({
                 rows="6"
                 onChange={_handleChange.bind(this, 'comment')}
                 defaultValue={this.state.feedback}
-                placeholder={"General Committee Feedback"}
+                placeholder={'General Committee Feedback'}
               />
               <br />
-            <label><font size={3}><b>Rate Committee: </b></font>
-            <select 
-              onChange={_handleChange.bind(this,'rating')}
-              value={this.state['rating']}
-              default={0}
-            >
-            <option value={0}>No Rating</option>
-            <option value={10}>10</option>
-            <option value={9}>9</option>
-            <option value={8}>8</option>
-            <option value={7}>7</option>
-            <option value={6}>6</option>
-            <option value={5}>5</option>
-            <option value={4}>4</option>
-            <option value={3}>3</option>
-            <option value={2}>2</option>
-            <option value={1}>1</option>
-            </select>
-            </label>
+              <label>
+                <font size={3}>
+                  <b>Rate Committee: </b>
+                </font>
+                <select
+                  onChange={_handleChange.bind(this, 'rating')}
+                  value={this.state['rating']}
+                  default={0}>
+                  <option value={0}>No Rating</option>
+                  <option value={10}>10</option>
+                  <option value={9}>9</option>
+                  <option value={8}>8</option>
+                  <option value={7}>7</option>
+                  <option value={6}>6</option>
+                  <option value={5}>5</option>
+                  <option value={4}>4</option>
+                  <option value={3}>3</option>
+                  <option value={2}>2</option>
+                  <option value={1}>1</option>
+                </select>
+              </label>
               {chair_fields}
               <br />
               <br />
