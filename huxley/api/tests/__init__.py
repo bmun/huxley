@@ -114,6 +114,13 @@ class AbstractAPITestCase(APITestCase):
         })
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
+    def assertInvalidCommitteeRating(self, response, fields, data):
+        for field in fields:
+            self.assertEqual(
+                response.data.get(field),
+                [u'"' + str(data[field]) + '" is not a valid choice.'])
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
 
 class CreateAPITestCase(AbstractAPITestCase):
     method = 'post'
