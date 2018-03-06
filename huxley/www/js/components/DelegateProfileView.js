@@ -44,6 +44,7 @@ const DelegateProfileView = React.createClass({
     var committee = delegate && delegate.assignment.committee;
     var country = delegate && delegate.assignment.country;
     var school = delegate && delegate.school;
+    var summary = <div />
     var text = <div />;
 
     if (assignment && school && committee && country) {
@@ -59,6 +60,21 @@ const DelegateProfileView = React.createClass({
       );
     }
 
+    if (delegate.published_summary) {
+        summary = <table>
+                    <thead>
+                      <tr>
+                        <th>Feedback From Your Chairs:</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>{delegate.published_summary}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+    }
+
     return (
       <InnerView>
         <div style={{textAlign: 'center'}}>
@@ -67,6 +83,8 @@ const DelegateProfileView = React.createClass({
           <br />
         </div>
         {text}
+        <br />
+        {summary}
       </InnerView>
     );
   },
