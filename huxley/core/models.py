@@ -642,3 +642,14 @@ class Delegate(models.Model):
     class Meta:
         db_table = u'delegate'
         ordering = ['school']
+
+class SecretariatMember(models.Model):
+    # A lot more could be added here but this is a good start
+
+    name = models.CharField(blank=False, default='', max_length=100)
+    committee = models.ForeignKey(Committee)
+    is_head_chair = models.BooleanField(default=False)
+
+    def __unicode__(self):
+        return self.name
+        

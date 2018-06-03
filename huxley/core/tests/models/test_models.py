@@ -10,7 +10,7 @@ from django.test import TestCase
 
 from huxley.core.models import (Assignment, Committee, CommitteeFeedback,
                                 Conference, Country, CountryPreference,
-                                Delegate, PositionPaper, Rubric)
+                                Delegate, PositionPaper, Rubric, SecretariatMember)
 
 from huxley.utils.test import models
 
@@ -343,3 +343,16 @@ class RubricTest(TestCase):
 
     def test_unicode(self):
         self.assertEquals(self.committee.name, self.rubric.__unicode__())
+
+class SecretariatMemberTest(TestCase):
+    def setUp(self):
+        self.committee = Committee.objects.create(
+            name='DISC', full_name='Disarmament and International Security')
+        self.member = SecretariatMember.objects.create(
+            name='Tibbalidoo', committee=self.committee)
+
+    def test_default_fields(self):
+        self.assertFalse(self.member.is_head_chair)
+
+    def test_unicode(self):
+        self.assertTrue(self.member.__unicode__() == 'Tibbalidoo')

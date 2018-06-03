@@ -75,6 +75,15 @@ urlpatterns = [
     url(r'^rubrics/(?P<pk>[0-9]+)/?$',
         views.rubric.RubricDetail.as_view(),
         name='rubric_detail'),
+    url(r'^secretariat_member/?$',
+        views.secretariat_member.SecretariatMemberList.as_view(),
+        name='secretariat_member_list'),
+    url(r'^secretariat_member/(?P<pk>[0-9]+)/?$',
+        views.secretariat_member.SecretariatMemberDetail.as_view(),
+        name='secretariat_member_detail'),
+    url(r'^secretariat_member_committee/?$',
+        views.secretariat_member.SecretariatMemberCommitteeList.as_view(),
+        name='secretariat_member_committee_list'),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
