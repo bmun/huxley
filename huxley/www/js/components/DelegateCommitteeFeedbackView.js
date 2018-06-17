@@ -93,6 +93,12 @@ const DelegateCommitteeFeedbackView = React.createClass({
       this.setState({
         secretariatMembers: SecretariatMemberStore.getSecretariatMembers(this.state.delegate.assignment.committee.id),
       });
+      var newState = {}
+      for(var i = 0;i < this.state.secretariatMembers.length;i++) {
+        var index = i + 1;
+        newState['chair_' + index + '_name'] = this.state.secretariatMembers[i].name;
+      }
+      this.setState(newState);
     })
   },
 
@@ -121,94 +127,15 @@ const DelegateCommitteeFeedbackView = React.createClass({
       } else {
         var head_chair_field;
         var chair_fields = [];
-        for(var i in this.state.secretariatMembers) {
-          var name_key = 'chair_' + i + '_name';
-          var comment_key = 'chair_' + i + '_comment';
-          var rating_key = 'chair_' + i + '_rating';
+        for(var i = 0; i < this.state.secretariatMembers.length; i++) {
+          var index = i + 1;
+          var name_key = 'chair_' + index + '_name';
+          var comment_key = 'chair_' + index + '_comment';
+          var rating_key = 'chair_' + index + '_rating';
           if(this.state.secretariatMembers[i].is_head_chair) {
-            head_chair_field = (
-              <div key={i}>
-                <br />
-                <hr />
-                <br />
-                <font size={3}>
-                  <b>Head Chair: {this.state.secretariatMembers[i].name}</b>
-                </font>
-                <br />
-                <textarea
-                  className="text-input"
-                  style={{width: '75%'}}
-                  rows="4"
-                  onChange={_handleChange.bind(this, comment_key)}
-                  defaultValue={this.state[comment_key]}
-                  placeholder={'Feedback for ' + this.state.secretariatMembers[i].name}
-                />
-                <br />
-                <label>
-                  <font size={3}>
-                    <b>{'Rate ' + this.state.secretariatMembers[i].name + ': '}</b>
-                  </font>
-                  <select>
-                    onChange={_handleChange.bind(this, rating_key)}
-                    value={this.state[rating_key]}
-                    default={0}>
-                    <option value={0}>No Rating</option>
-                    <option value={10}>10</option>
-                    <option value={9}>9</option>
-                    <option value={8}>8</option>
-                    <option value={7}>7</option>
-                    <option value={6}>6</option>
-                    <option value={5}>5</option>
-                    <option value={4}>4</option>
-                    <option value={3}>3</option>
-                    <option value={2}>2</option>
-                    <option value={1}>1</option>
-                  </select>
-                </label>
-              </div>
-            );
+            head_chair_field = this._buildFeedbackInputs(this.state.secretariatMembers[i],'Head Chair',i+1);
           } else {
-            chair_fields.push(
-              <div key={i}>
-                <br />
-                <hr />
-                <br />
-                <font size={3}>
-                  <b>Vice Chair: {this.state.secretariatMembers[i].name}</b>
-                </font>
-                <br />
-                <textarea
-                  className="text-input"
-                  style={{width: '75%'}}
-                  rows="4"
-                  onChange={_handleChange.bind(this, comment_key)}
-                  defaultValue={this.state[comment_key]}
-                  placeholder={'Feedback for ' + this.state.secretariatMembers[i].name}
-                />
-                <br />
-                <label>
-                  <font size={3}>
-                    <b>{'Rate ' + this.state.secretariatMembers[i].name + ': '}</b>
-                  </font>
-                  <select>
-                    onChange={_handleChange.bind(this, rating_key)}
-                    value={this.state[rating_key]}
-                    default={0}>
-                    <option value={0}>No Rating</option>
-                    <option value={10}>10</option>
-                    <option value={9}>9</option>
-                    <option value={8}>8</option>
-                    <option value={7}>7</option>
-                    <option value={6}>6</option>
-                    <option value={5}>5</option>
-                    <option value={4}>4</option>
-                    <option value={3}>3</option>
-                    <option value={2}>2</option>
-                    <option value={1}>1</option>
-                  </select>
-                </label>
-              </div>,
-            );
+            chair_fields.push(this._buildFeedbackInputs(this.state.secretariatMembers[i],'Vice Chair',i+1));
           }
         }
 
@@ -277,6 +204,53 @@ const DelegateCommitteeFeedbackView = React.createClass({
         </div>
         {body}
       </InnerView>
+    );
+  },
+
+  _buildFeedbackInputs(secretariatMember, title, index) {
+    var name_key = 'chair_' + index + '_name';
+    var comment_key = 'chair_' + index + '_comment';
+    var rating_key = 'chair_' + index + '_rating';
+    return (
+      <div key={index}>
+        <br />
+        <hr />
+        <br />
+        <font size={3}>
+          <b>{title}: {secretariatMember.name}</b>
+        </font>
+        <br />
+        <textarea
+         className="text-input"
+          style={{width: '75%'}}
+          rows="4"
+          onChange={_handleChange.bind(this, comment_key)}
+          defaultValue={this.state[comment_key]}
+          placeholder={'Feedback for ' + secretariatMember.name}
+        />
+        <br />
+        <label>
+          <font size={3}>
+            <b>{'Rate ' + secretariatMember.name + ': '}</b>
+          </font>
+          <select
+            onChange={_handleChange.bind(this, rating_key)}
+            value={this.state[rating_key]}
+            default={0}>
+            <option value={0}>No Rating</option>
+            <option value={10}>10</option>
+            <option value={9}>9</option>
+            <option value={8}>8</option>
+            <option value={7}>7</option>
+            <option value={6}>6</option>
+            <option value={5}>5</option>
+            <option value={4}>4</option>
+            <option value={3}>3</option>
+            <option value={2}>2</option>
+            <option value={1}>1</option>
+          </select>
+        </label>
+      </div>
     );
   },
 
