@@ -10,7 +10,8 @@ from django.test import TestCase
 
 from huxley.core.models import (Assignment, Committee, CommitteeFeedback,
                                 Conference, Country, CountryPreference,
-                                Delegate, PositionPaper, Rubric)
+                                Delegate, PositionPaper, Room, RoomComment, 
+                                Rubric)
 
 from huxley.utils.test import models
 
@@ -49,9 +50,53 @@ class CountryTest(TestCase):
 
 
 class CommitteeTest(TestCase):
+    """ONLY EDIT TEST_UNIQUE METHOD"""
     def setUp(self):
+        self.room_1 = Room.objects.create(building_name='Dwinelle', 
+                                          room_number=55, 
+                                          number_of_seats=200)
+
+        self.room_2 = Room.objects.create(building_name='Dwinelle', 
+                                          room_number=56, 
+                                          number_of_seats=200)
+
+        self.room_3 = Room.objects.create(building_name='Dwinelle', 
+                                          room_number=57, 
+                                          number_of_seats=200)
+
         self.committee = Committee.objects.create(
-            name='DISC', full_name='Disarmament and International Security')
+            name='DISC', 
+            full_name='Disarmament and International Security', 
+            room_day_one=self.room_1,
+            room_day_two=self.room_2,
+            room_day_three=self.room_3)
+
+        self.committee_2 = Committee.objects.create(
+            name='ICJ', 
+            full_name='International Court of Justice')
+
+    def test_unique(self):
+        """Tests that two committees cannot have the same room on the same day."""
+        self.assertRaises(
+            ValidationError,
+            Committee.objects.create,
+            name='JCC',
+            full_name='Joint Cabinet Crisis',
+            room_day_one=self.room_1)
+
+        self.assertRaises(
+            ValidationError,
+            Committee.objects.create,
+            name='JCC',
+            full_name='Joint Cabinet Crisis',
+            room_day_two=self.room_2)
+
+        self.assertRaises(
+            ValidationError,
+            Committee.objects.create,
+            name='JCC',
+            full_name='Joint Cabinet Crisis',
+            room_day_three=self.room_3)
 
     def test_default_fields(self):
         """ Tests that fields with default values are correctly set. """
@@ -61,6 +106,12 @@ class CommitteeTest(TestCase):
     def test_unicode(self):
         """ Tests that the object's __unicode__ outputs correctly. """
         self.assertEquals('DISC', self.committee.__unicode__())
+
+    def test_room_assignment(self):
+        """Tests that rooms are assigned correctly."""
+        self.assertEquals(self.room_1.id, self.committee.room_day_one.id)
+        self.assertEquals(self.room_2.id, self.committee.room_day_two.id)
+        self.assertEquals(self.room_3.id, self.committee.room_day_three.id)
 
     def test_create_rubric(self):
         '''Tests that a committee creates a new rubric upon being
@@ -212,21 +263,64 @@ class DelegateTest(TestCase):
 
     fixtures = ['conference']
 
+    def setUp(self):
+        self.school = models.new_school(name='S1')
+        self.registration = models.new_registration()
+        self.assignment1 = models.new_assignment(registration=self.registration)
+        self.assignment2 = models.new_assignment(registration=self.registration)
+
     def test_save(self):
         """
         A delegate's school field and a delegate's assignment's school field
         should be the same if they both exist on the delegate.
         """
-        school = models.new_school(name='S1')
-        registration = models.new_registration()
-        assignment = models.new_assignment(registration=registration)
 
         self.assertRaises(
             ValidationError,
             Delegate.objects.create,
             name="Test Delegate",
-            school=school,
-            assignment=assignment)
+            school=self.school,
+            assignment=self.assignment1)
+
+    def test_unique(self):
+        """
+        Here we want to test three cases:
+        1. That if two delegates from the same committee have assigned seats, they cannot have the same seat
+        2. That if two delegates from different committees have assigned seats, they can have the same seat
+        3. That two delegates can both have unassigned seats
+        """
+
+        delegate_1 = Delegate.objects.create(name='delegate1', 
+                                             school=self.school, 
+                                             assignment=self.assignment1,
+                                             seat_number=1)
+
+        # 1: Here, we are verifying that an error is raised
+        self.assertRaises(
+            ValidationError,
+            Delegate.objects.create,
+            name='bad_delegate',
+            school=self.school,
+            assignment=self.assignment1,
+            seat_number=1)
+
+        # 2: Here, we verify that the values are equal. If an error is raised, it will fail the test case.
+        delegate_2 = Delegate.objects.create(name='delegate2', 
+                                             school=self.school, 
+                                             assignment=self.assignment2,
+                                             seat_number=1)
+        self.assertEquals(delegate_1.seat_number, delegate_2.seat_number)
+
+        # 3: Create two delegates with default seat numbers.
+        #    Assign them both to self.school and self.assignment1
+        #    Name them whatever you want.
+        delegate_3 = '''Your code here'''
+        delegate_4 = '''Your code here'''
+
+        # Check that delegate_3 and delegate_4 have the same seat number, 
+        # and that it is the default unassigned seat number
+        self.assertEquals('''Your code here''', '''Your code here''')
+        self.assertEquals('''Your code here''', '''Your code here''')
 
 
 class RegistrationTest(TestCase):
@@ -343,3 +437,47 @@ class RubricTest(TestCase):
 
     def test_unicode(self):
         self.assertEquals(self.committee.name, self.rubric.__unicode__())
+
+
+class RoomTest(TestCase):
+    def setUp(self):
+        self.room = Room.objects.create(building_name='Dwinelle', room_number=55)
+
+    def test_default_values(self):
+        """
+        Fill in where indicated with what the default values should be.
+        """
+        self.assertEquals(self.room.number_of_seats, '''Your code here''')
+
+    def test_unicode(self):
+        """
+        FIll in what the unicode method you defiend earlier should return.
+        """
+        self.assertEquals(self.room.__unicode__(), '''Your code here''')
+
+    def test_unique(self):
+        """
+        Two rooms cannot have the same room number and building.
+        In the setUp method above a room was already created.
+        Check that a new room cannot have the same building and room number as it.
+        """
+        self.assertRaises(
+            ValidationError,
+            Room.objects.create,
+            building_name='''Your code here''',
+            room_number='''Your code here'''
+            )
+
+
+class RoomCommentTest(TestCase):
+    def setUp(self):
+        """Your code here"""
+        pass # Delete this
+
+    def test_default_fields(self):
+        """Your code here"""
+        pass # Delete this
+
+    def test_unicode(self):
+        """Your code here"""
+        pass # Delete this

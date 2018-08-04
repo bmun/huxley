@@ -107,6 +107,21 @@ class Committee(models.Model):
     special = models.BooleanField(default=False)
     rubric = models.OneToOneField(Rubric, blank=True, null=True)
 
+    '''
+    Select the appropriate definition for a room, and delete the others.
+    '''
+    room_day_one = models.OneToOneField(Room, blank=True, null=True)
+    room_day_two = models.OneToOneField(Room, blank=True, null=True)
+    room_dat_three = models.OneToOneField(Room, blank=True, null=True)
+
+    room_day_one = models.ManyToManyField(Room, blank=True, null=True)
+    room_day_two = models.ManyToManyField(Room, blank=True, null=True)
+    room_dat_three = models.ManyToManyField(Room, blank=True, null=True)
+
+    room_day_one = models.ForeignKey(Room, blank=True, null=True)
+    room_day_two = models.ForeignKey(Room, blank=True, null=True)
+    room_dat_three = models.ForeignKey(Room, blank=True, null=True)
+
     @classmethod
     def create_rubric(cls, **kwargs):
         committee = kwargs['instance']
@@ -118,6 +133,7 @@ class Committee(models.Model):
 
     class Meta:
         db_table = u'committee'
+        unique_together = (('room_day_one',), ('room_day_two',), ('room_day_three',))
 
 
 class CommitteeFeedback(models.Model):
@@ -614,6 +630,20 @@ class Delegate(models.Model):
 
     committee_feedback_submitted = models.BooleanField(default=False)
 
+    '''
+    Choose the approrpiate model defintion and delete the remaing lines.
+    The default value should represent an unassigned seat.
+    There may be more than one valid option.
+    '''
+    seat_number = models.PositiveSmallIntegerField(default=10)
+    seat_number = models.PositiveSmallIntegerField(default=0)
+    seat_number = models.PositiveSmallIntegerField(default=-1)
+    seat_number = models.IntegerField(default=10)
+    seat_number = models.IntegerField(default=0)
+    seat_number = models.IntegerField(default=-1)
+    seat_number = models.TextField(default='')
+    seat_number = models.TextField(default='unassigned')
+
     def __unicode__(self):
         return self.name
 
@@ -639,6 +669,52 @@ class Delegate(models.Model):
 
         super(Delegate, self).save(*args, **kwargs)
 
+    '''
+    Fill this in after the Meta class and the seat_number field.
+    You want to enforce uniqueness only when the delegate has an assigned seat.
+    '''
+    def validate_unique(self, exclude=None):
+        if self.seat_number == """Your default value""":
+            exclude = ["seat_number"]
+        super(Delegate, self).validate_unique(exclude=exclude)
+
     class Meta:
         db_table = u'delegate'
         ordering = ['school']
+
+        '''
+        Have it be that no two delegates can have the same commitee and seat number.
+        This is defined as a tuple with the relevant field names, i.e. ('name', 'school')
+        '''
+        unique_together = '''Your code here'''
+
+
+class Room(models.Model):
+    building_name = models.CharField(max_length=64)
+
+    '''
+    These should be fields for positive integer values.
+    ONLY provide a default value for number_of_seats. 
+    Google Django model field types for available options.
+    '''
+    room_number = '''Your code here'''
+    number_of_seats = '''Your code here'''
+
+    
+    '''
+    This returns a unique identifier for the model.
+    Have it return a string in the format BuildingName_RoomNumber.
+    '''
+    def __unicode__(self):
+        return '''Your code here'''
+
+    class Meta:
+        db_table = u'room'
+        ordering = ['building_name', 'room_number']
+        unique_together = ('building_name', 'room_number')
+
+
+class RoomComment(models.Model):
+    """Your code here"""
+    pass # Delete this
+    
