@@ -30,13 +30,13 @@ Now decide the best definition for a committee’s relation to a room.
  
 Consider this:
  
--     On any given day, a room can only be used by one committee
--     Committees can move rooms between days
--     The definition defines three rooms for a committee; one for each day
--     A committee can move into a room another committee was using previously
--     A committee can only ever be in one room 
--     Head chairs are territorial and get anxious when you invade their space
--     We don’t want head chairs to start biting people (most people)
+* On any given day, a room can only be used by one committee
+* Committees can move rooms between days
+* The definition defines three rooms for a committee; one for each day
+* A committee can move into a room another committee was using previously
+* A committee can only ever be in one room 
+* Head chairs are territorial and get anxious when you invade their space
+* We don’t want head chairs to start biting people (most people)
  
 The choice here will affect how you build out the code.
  
@@ -48,9 +48,9 @@ You’ll find several options for giving seat numbers here; select the one that 
  
 Consider this:
  
--     A delegate only has a single seat number (so how will it work for each day?)
--     The largest committee might have ~300 seats (a relatively smallinteger)
--     You want a way to distinguish between delegates with assigned seats and those without; hint: perhaps use a special default value to represent unassigned?
+* A delegate only has a single seat number (so how will it work for each day?)
+* The largest committee might have ~300 seats (a relatively smallinteger)
+* You want a way to distinguish between delegates with assigned seats and those without; hint: perhaps use a special default value to represent unassigned?
  
 Now we want to make sure two delegates don’t end up sitting on top of each other (they might want it, but we’d probably get sued so we’re going to disallow it). Look at ```Meta``` within the ```Delegate``` class. The ```Meta``` class defines rules the database uses to store the model. One such is the ```unique_together``` attribute; this means that only a single instance of the model can have a specific pairing. But, this should only apply if the delegate actually has an assigned seat! You’re going to have to override a method called ```validate_unique```.
  
@@ -61,9 +61,9 @@ We’re almost finished with our models, but we’d still like to be able to lea
 This model you’ll going to define from scratch.
 A ```RoomComment``` must have:
 
--  A Room (a room can have many comments; this sounds like a …?)
--  A Comment that is a TextField
--  An integer rating that goes from one (the raccoon’s DeCal disrespects your political opinions on the subject) to ten (why I’d hardly believe they keep raccoons here when students aren’t around!)
+* A Room (a room can have many comments; this sounds like a …?)
+* A Comment that is a TextField
+* An integer rating that goes from one (the raccoon’s DeCal disrespects your political opinions on the subject) to ten (why I’d hardly believe they keep raccoons here when students aren’t around!)
  
 You will also have to add the Unicode method and the Metaclass; refer to other classes for examples on how to do this.
  
