@@ -5,14 +5,14 @@ By this point you should feel familiar with the general structure of Huxley; the
  
 What you will be adding is an interface for managing committee rooms. This will involve matching committees to rooms, handling seat assignments, adding room feedback, and more.
  
-Quick note: it’s important to clarify terminology. An instance refers to a specific thing, while a model/class is a general type. For example, Jake is an instance of the Human class (supposedly). 
- 
 Make sure to checkout the learn branch from Huxley in git; this is where you will do all of your coding for this tutorial.
- 
+
+If at any point you feel confused, try a Google search. Knowing how to use Google when you're stuck is a useful skill to develop and usually the answer you're looking for can be found in documentation or on StackOverflow. Don't be afraid to reach out to any older Tech members as well! We are here to help you and know what it feels like to be just getting started. No matter how silly the question seems in your head, chances are one of us got stuck on it too at some point.
+
  
 ## Part 1: The Backend
  
-This part will focus on adding the backend infrastructure to track the necessary information and expose the necessary endpoints for the REST api.
+This part will focus on adding the backend infrastructure to track the necessary information. This should be the first step you code when adding any new features; it would usually be preceded only by the design planning. For the purposes of this tutorial however, most of the design decisions have already been made for you.
  
 #### Step 1
  
@@ -24,7 +24,7 @@ Now find the ```Room``` class at the bottom of the file. You’ll notice that th
  
 Now you will give the committee model a room. Scroll up to where the ```Committee``` class is defined. Here comes your first design decision! Don’t worry, it will only hurt a little bit.
  
-When you’re relating two models you generally have three choice: one-to-one, many-to-many, and many-to-one. These are what they sound like. A one-to-one key means that the two models only relate to each other. For example, if a committee has a rubric then it has only that rubric and no other committee has that rubric. Many-to-many means both models can be related to as many of each other as you want. For example, a committee can relate to many different countries and a country can relate to many different committees. And many-to-one (which is a ```ForeignKey``` field in Django) means that many different instances of a model can share the same relation to another model, but each of them can only relate to a single instance. For example, delegates have committees. Each delegate can only be in one committee, but a committee can have many delegates. These relations are all from the point of view of the class on which you define the relation (where you type the code).
+When you’re relating two models you generally have three choice: one-to-one, many-to-many, and many-to-one. These are what they sound like. A one-to-one relation means that the two models only relate to each other. For example, if a committee has a rubric, then it has only that one rubric and no other committee has that rubric. Many-to-many means both models can be related to as many of each other as you want. For example, a committee can relate to many different countries and a country can relate to many different committees. And many-to-one (which is a ```ForeignKey``` field in Django) means that many different instances of a model can share the same relation to another model, but each of them can only relate to a single instance. For example, delegates have committees. Each delegate can only be in one committee, but a committee can have many delegates. These relations are all from the point of view of the class on which you define the relation (where you type the code).
  
 Now decide the best definition for a committee’s relation to a room.
  
@@ -36,7 +36,7 @@ Consider this:
 * A committee can move into a room another committee was using previously
 * A committee can only ever be in one room 
 * Head chairs are territorial and get anxious when you invade their space
-* We don’t want head chairs to start biting people (most people)
+* We don’t want head chairs to start biting people
  
 The choice here will affect how you build out the code.
  
@@ -52,7 +52,7 @@ Consider this:
 * The largest committee might have ~300 seats (a relatively smallinteger)
 * You want a way to distinguish between delegates with assigned seats and those without; hint: perhaps use a special default value to represent unassigned?
  
-Now we want to make sure two delegates don’t end up sitting on top of each other (they might want it, but we’d probably get sued so we’re going to disallow it). Look at ```Meta``` within the ```Delegate``` class. The ```Meta``` class defines rules the database uses to store the model. One such is the ```unique_together``` attribute; this means that only a single instance of the model can have a specific pairing. But, this should only apply if the delegate actually has an assigned seat! You’re going to have to override a method called ```validate_unique```.
+Now we want to make sure two delegates don’t end up sitting on top of each other (they might want it, but we’d probably get sued so we’re going to disallow it). Look at ```Meta``` within the ```Delegate``` class. The ```Meta``` class defines rules the database uses to store the model. One such is the ```unique_together``` attribute; this means that only a single instance of the model can have a specific pairing of field values. In this case, no two delegates should have the same seat assignment in the same committee. But, this should only apply if a delegate actually has an assigned seat! You’re going to have to override a method called ```validate_unique``` in order to let two delegates in the same committee have the value for an unassigned seat. This is an example of a great time to Google something: we have a behavior (making it impossible for two delegates ot share a commitee and seat assignment) that almost does what we want, but it does not quite handle a use case we want (having an exception if the seat value matches the unassigned seat value).
  
 #### Step 4
  
