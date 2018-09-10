@@ -17,6 +17,9 @@ const User = require('utils/User');
 require('css/Table.less');
 const DelegateProfileViewText = require('text/DelegateProfileViewText.md');
 
+const DelegateChecklistPositionPaperText = require('text/checklists/DelegateChecklistPositionPaperText.md');
+const DelegateChecklistWaiverText = require('text/checklists/DelegateChecklistWaiverText.md');
+
 const DelegateProfileView = React.createClass({
   contextTypes: {
     conference: React.PropTypes.shape(ConferenceContext),
@@ -60,6 +63,40 @@ const DelegateProfileView = React.createClass({
       );
     }
 
+    var positionPaperCheck = "";
+    if(assignment && assignment.paper && assignment.paper.file) {
+      positionPaperCheck = "\u2611";
+    } else {
+      positionPaperCheck = "\u2610";
+    }
+
+    var waiverCheck = "";
+    if(delegate && delegate.waiver_submitted) {
+      waiverCheck = "\u2611";
+    } else {
+      waiverCheck = "\u2610";
+    }
+
+    var checklist = (
+      <table>
+        <thead>
+          <tr>
+            <th>Delegate Checklist</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{positionPaperCheck} <b>Turn in Position Paper</b><br/>
+            <TextTemplate>{DelegateChecklistPositionPaperText}</TextTemplate></td>
+          </tr>
+          <tr>
+            <td>{waiverCheck} <b>Turn in Waiver Form</b><br/>
+            <TextTemplate>{DelegateChecklistWaiverText}</TextTemplate></td>
+          </tr>
+        </tbody>
+      </table>
+    );
+
     if (delegate.published_summary) {
       summary = (
         <table>
@@ -86,6 +123,7 @@ const DelegateProfileView = React.createClass({
         </div>
         {text}
         <br />
+        {checklist}
         {summary}
       </InnerView>
     );

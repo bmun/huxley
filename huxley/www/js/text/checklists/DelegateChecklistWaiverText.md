@@ -1,0 +1,1 @@
+All delegates are required to turn in a medical and media release waiver prior to attending conference.  Waiver completion is due on [date] and can be complete by following this [link].
