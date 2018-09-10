@@ -4,7 +4,7 @@
 import csv
 
 from django.conf.urls import url
-from django.contrib import admin
+from django.contrib import admin, messages
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect
 
@@ -73,6 +73,94 @@ class DelegateAdmin(admin.ModelAdmin):
 
         return HttpResponseRedirect(reverse('admin:core_delegate_changelist'))
 
+    def confirm_waivers(self, request):
+        '''Confirms delegate waivers'''
+        waiver_responses = request.FILES
+        reader = csv.reader(waiver_responses['csv'])
+
+        rows_to_write = []
+
+        waiver_input_response = HttpResponse(content_type='text/csv')
+        waiver_input_response['Content-Disposition'] = 'attachment; filename="waiver_input_response.csv"'
+        writer = csv.writer(waiver_input_response)
+
+        no_exist = 0
+        duplicate = 0
+        success = 0
+
+        for row in reader:
+            if(row[0] == "Email"):
+                continue
+            #rows: email(0), name(1), school(2), committee(3), country(4)
+            email = row[0]
+            name = row[1]
+            school = row[2]
+            committee = row[3]
+            country = row[4]
+            row = [email, name, school, committee, country]
+            results = Delegate.objects.filter(email=email);
+            if(results.count() == 0):
+                row.append("Email does not exist")
+                no_exist += 1
+            elif(not results.count() == 1):
+                row.append("Email is duplicated")
+                duplicate += 1;
+            else:
+                to_append = "";
+                delegate = results[0]
+                delegate.waiver_submitted = True
+                delegate.save()
+                row.append("Successfully waived")
+                success += 1
+                #log the successful add
+            rows_to_write.append(row)
+
+        num_total = Delegate.objects.all().count()
+        num_submitted = Delegate.objects.filter(waiver_submitted=True).count()
+        num_left = num_total - num_submitted
+
+        writer.writerow([
+            'Number of delegates',
+            num_total
+            ])
+        writer.writerow([
+            'Number of non-pending waivers',
+            num_submitted
+            ])
+        writer.writerow([
+            'Number of pending waivers',
+            num_left
+            ])
+        writer.writerow([])
+
+        writer.writerow([
+            'Number of \'Successfully waived\'',
+            success
+            ])
+        writer.writerow([
+            'Number of \'Email does not exist\'',
+            no_exist
+            ])
+        writer.writerow([
+            'Number of \'Email is duplicated\'',
+            duplicate
+            ])
+        writer.writerow([])
+
+        writer.writerow([
+            'Email',
+            'Name',
+            'School',
+            'Committee',
+            'Country',
+            'Error'
+            ])
+
+        for row in rows_to_write:
+            writer.writerow(row)
+
+        return waiver_input_response
+
     def get_urls(self):
         return super(DelegateAdmin, self).get_urls() + [
             url(
@@ -84,5 +172,10 @@ class DelegateAdmin(admin.ModelAdmin):
                 r'load',
                 self.admin_site.admin_view(self.load),
                 name='core_delegate_load',
+            ),
+            url(
+                r'confirm_waivers',
+                self.admin_site.admin_view(self.confirm_waivers),
+                name='core_delegate_confirm_waivers',
             ),
         ]

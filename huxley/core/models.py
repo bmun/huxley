@@ -613,6 +613,7 @@ class Delegate(models.Model):
     session_four = models.BooleanField(default=False)
 
     committee_feedback_submitted = models.BooleanField(default=False)
+    waiver_submitted = models.BooleanField(default=False)
 
     def __unicode__(self):
         return self.name

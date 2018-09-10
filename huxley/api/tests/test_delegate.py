@@ -92,8 +92,8 @@ class DelegateDetailPutTestCase(tests.UpdateAPITestCase):
             "session_two": self.delegate.session_two,
             "session_three": self.delegate.session_three,
             "session_four": self.delegate.session_four,
-            "committee_feedback_submitted":
-            self.delegate.committee_feedback_submitted
+            "committee_feedback_submitted": self.delegate.committee_feedback_submitted,
+            "waiver_submitted": self.delegate.waiver_submitted
         })
 
     def test_chair(self):
@@ -114,8 +114,8 @@ class DelegateDetailPutTestCase(tests.UpdateAPITestCase):
             "session_two": self.delegate.session_two,
             "session_three": self.delegate.session_three,
             "session_four": self.delegate.session_four,
-            "committee_feedback_submitted":
-            self.delegate.committee_feedback_submitted
+            "committee_feedback_submitted": self.delegate.committee_feedback_submitted,
+            "waiver_submitted": self.delegate.waiver_submitted
         })
 
     def test_delegate(self):
@@ -136,8 +136,8 @@ class DelegateDetailPutTestCase(tests.UpdateAPITestCase):
             "session_two": self.delegate.session_two,
             "session_three": self.delegate.session_three,
             "session_four": self.delegate.session_four,
-            "committee_feedback_submitted":
-            self.delegate.committee_feedback_submitted
+            "committee_feedback_submitted": self.delegate.committee_feedback_submitted,
+            "waiver_submitted": self.delegate.waiver_submitted
         })
 
     def test_superuser(self):
@@ -159,8 +159,8 @@ class DelegateDetailPutTestCase(tests.UpdateAPITestCase):
             "session_two": self.delegate.session_two,
             "session_three": self.delegate.session_three,
             "session_four": self.delegate.session_four,
-            "committee_feedback_submitted":
-            self.delegate.committee_feedback_submitted
+            "committee_feedback_submitted": self.delegate.committee_feedback_submitted,
+            "waiver_submitted": self.delegate.waiver_submitted
         })
 
 
@@ -214,8 +214,8 @@ class DelegateDetailPatchTestCase(tests.PartialUpdateAPITestCase):
             "session_two": self.delegate.session_two,
             "session_three": self.delegate.session_three,
             "session_four": self.delegate.session_four,
-            "committee_feedback_submitted":
-            self.delegate.committee_feedback_submitted
+            "committee_feedback_submitted": self.delegate.committee_feedback_submitted,
+            "waiver_submitted": self.delegate.waiver_submitted
         })
 
     def test_chair(self):
@@ -236,8 +236,8 @@ class DelegateDetailPatchTestCase(tests.PartialUpdateAPITestCase):
             "session_two": self.delegate.session_two,
             "session_three": self.delegate.session_three,
             "session_four": self.delegate.session_four,
-            "committee_feedback_submitted":
-            self.delegate.committee_feedback_submitted
+            "committee_feedback_submitted": self.delegate.committee_feedback_submitted,
+            "waiver_submitted": self.delegate.waiver_submitted
         })
 
     def test_delegate(self):
@@ -258,8 +258,8 @@ class DelegateDetailPatchTestCase(tests.PartialUpdateAPITestCase):
             "session_two": self.delegate.session_two,
             "session_three": self.delegate.session_three,
             "session_four": self.delegate.session_four,
-            "committee_feedback_submitted":
-            self.delegate.committee_feedback_submitted
+            "committee_feedback_submitted": self.delegate.committee_feedback_submitted,
+            "waiver_submitted": self.delegate.waiver_submitted
         })
 
     def test_superuser(self):
@@ -281,8 +281,8 @@ class DelegateDetailPatchTestCase(tests.PartialUpdateAPITestCase):
             "session_two": self.delegate.session_two,
             "session_three": self.delegate.session_three,
             "session_four": self.delegate.session_four,
-            "committee_feedback_submitted":
-            self.delegate.committee_feedback_submitted
+            "committee_feedback_submitted": self.delegate.committee_feedback_submitted,
+            "waiver_submitted": self.delegate.waiver_submitted
         })
 
 
@@ -375,7 +375,8 @@ class DelegateListCreateTestCase(tests.CreateAPITestCase):
             "session_two": False,
             "session_three": False,
             "session_four": False,
-            "committee_feedback_submitted": False
+            "committee_feedback_submitted": False,
+            "waiver_submitted": False
         })
 
     def test_chair(self):
@@ -415,7 +416,8 @@ class DelegateListCreateTestCase(tests.CreateAPITestCase):
             "session_two": False,
             "session_three": False,
             "session_four": False,
-            "committee_feedback_submitted": False
+            "committee_feedback_submitted": False,
+            "waiver_submitted": False
         })
 
 
@@ -523,7 +525,8 @@ class DelegateListGetTestCase(tests.ListAPITestCase):
                     'session_three': delegates[i].session_three,
                     'session_four': delegates[i].session_four,
                     'committee_feedback_submitted':
-                    delegates[i].committee_feedback_submitted
+                    delegates[i].committee_feedback_submitted,
+                    'waiver_submitted': delegates[i].waiver_submitted
                 })
 
 
@@ -607,7 +610,8 @@ class DelegateListPartialUpdateTestCase(tests.PartialUpdateAPITestCase):
                 "session_three": self.delegate1.session_three,
                 "session_four": self.delegate1.session_four,
                 "committee_feedback_submitted":
-                self.delegate1.committee_feedback_submitted
+                self.delegate1.committee_feedback_submitted,
+                "waiver_submitted": self.delegate1.waiver_submitted
             }, )
         self.assertEqual(
             dict(response.data[1]),
@@ -626,7 +630,8 @@ class DelegateListPartialUpdateTestCase(tests.PartialUpdateAPITestCase):
                 "session_three": self.delegate2.session_three,
                 "session_four": self.delegate2.session_four,
                 "committee_feedback_submitted":
-                self.delegate2.committee_feedback_submitted
+                self.delegate2.committee_feedback_submitted,
+                "waiver_submitted": self.delegate2.waiver_submitted
             }, )
 
     def test_advisor_fail(self):
@@ -672,7 +677,8 @@ class DelegateListPartialUpdateTestCase(tests.PartialUpdateAPITestCase):
                 "session_three": self.delegate1.session_three,
                 "session_four": self.delegate1.session_four,
                 "committee_feedback_submitted":
-                self.delegate1.committee_feedback_submitted
+                self.delegate1.committee_feedback_submitted,
+                "waiver_submitted": self.delegate1.waiver_submitted
             }, )
         self.assertEqual(
             dict(response.data[1]),
@@ -691,7 +697,8 @@ class DelegateListPartialUpdateTestCase(tests.PartialUpdateAPITestCase):
                 "session_three": self.delegate3.session_three,
                 "session_four": self.delegate3.session_four,
                 "committee_feedback_submitted":
-                self.delegate3.committee_feedback_submitted
+                self.delegate3.committee_feedback_submitted,
+                "waiver_submitted": self.delegate3.waiver_submitted
             }, )
 
     def test_chair_fail(self):
@@ -763,7 +770,8 @@ class DelegateListPartialUpdateTestCase(tests.PartialUpdateAPITestCase):
                 "session_three": self.delegate1.session_three,
                 "session_four": self.delegate1.session_four,
                 "committee_feedback_submitted":
-                self.delegate1.committee_feedback_submitted
+                self.delegate1.committee_feedback_submitted,
+                "waiver_submitted": self.delegate1.waiver_submitted
             }, )
         self.assertEqual(
             dict(response.data[1]),
@@ -782,7 +790,8 @@ class DelegateListPartialUpdateTestCase(tests.PartialUpdateAPITestCase):
                 "session_three": self.delegate2.session_three,
                 "session_four": self.delegate2.session_four,
                 "committee_feedback_submitted":
-                self.delegate2.committee_feedback_submitted
+                self.delegate2.committee_feedback_submitted,
+                "waiver_submitted": self.delegate2.waiver_submitted
             }, )
 
     def test_superuser_fail(self):
