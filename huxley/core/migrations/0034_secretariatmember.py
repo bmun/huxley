@@ -8,18 +8,22 @@ import django.db.models.deletion
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('core', '0033_more_committee_feedback'),
-    ]
+    dependencies = [('core', '0033_more_committee_feedback'), ]
 
     operations = [
         migrations.CreateModel(
             name='SecretariatMember',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(default=b'', max_length=100)),
+                ('id', models.AutoField(
+                    auto_created=True,
+                    primary_key=True,
+                    serialize=False,
+                    verbose_name='ID')),
+                ('name', models.CharField(
+                    default=b'', max_length=100)),
                 ('is_head_chair', models.BooleanField(default=False)),
-                ('committee', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='core.Committee')),
-            ],
-        ),
+                ('committee', models.ForeignKey(
+                    on_delete=django.db.models.deletion.CASCADE,
+                    to='core.Committee')),
+            ], ),
     ]

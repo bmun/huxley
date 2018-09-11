@@ -6,6 +6,7 @@ from huxley.api import tests
 from huxley.api.tests import auto
 from huxley.utils.test import models
 
+
 class SecretariatMemberDetailGetTestCase(tests.RetrieveAPITestCase):
     '''Tests to see that anyone can retrieve secretariat member detail information'''
     url_name = "api:secretariat_member_detail"
@@ -14,7 +15,10 @@ class SecretariatMemberDetailGetTestCase(tests.RetrieveAPITestCase):
         self.name = "Shayna"
         self.is_head_chair = True
         self.committee = models.new_committee()
-        self.sm1 = models.new_secretariat_member(name=self.name,committee=self.committee,is_head_chair=self.is_head_chair)
+        self.sm1 = models.new_secretariat_member(
+            name=self.name,
+            committee=self.committee,
+            is_head_chair=self.is_head_chair)
 
     def test_anonymous_user(self):
         '''Tests anonymous user can get secretariat information'''
@@ -28,7 +32,7 @@ class SecretariatMemberDetailGetTestCase(tests.RetrieveAPITestCase):
 
     def test_delegate(self):
         '''Tests delegate can get secretariat information'''
-        self.assignment = models.new_assignment();
+        self.assignment = models.new_assignment()
         self.user = models.new_user(
             username='delegate',
             password='delegate',
@@ -86,19 +90,24 @@ class SecretariatMemberDetailGetTestCase(tests.RetrieveAPITestCase):
             'is_head_chair': self.is_head_chair
         })
 
+
 class SecretariatMemberListGetTestCase(tests.ListAPITestCase):
     '''Tests to see that anyone can retrieve secretariat member list information'''
     url_name = "api:secretariat_member_list"
 
     def setUp(self):
         self.name1 = "Shayna"
-        self.is_head_chair1 = True;
+        self.is_head_chair1 = True
         self.committee1 = models.new_committee()
         self.name2 = "AD"
-        self.is_head_chair2 = False;
+        self.is_head_chair2 = False
         self.committee2 = models.new_committee()
-        self.sm1 = models.new_secretariat_member(name=self.name1,committee=self.committee1,is_head_chair=self.is_head_chair1)
-        self.sm2 = models.new_secretariat_member(name=self.name2,committee=self.committee2)
+        self.sm1 = models.new_secretariat_member(
+            name=self.name1,
+            committee=self.committee1,
+            is_head_chair=self.is_head_chair1)
+        self.sm2 = models.new_secretariat_member(
+            name=self.name2, committee=self.committee2)
 
     def test_anonymous_user(self):
         '''Tests anonymous user can get secretariat information'''
@@ -119,7 +128,7 @@ class SecretariatMemberListGetTestCase(tests.ListAPITestCase):
 
     def test_delegate(self):
         '''Tests delegate can get secretariat information'''
-        self.assignment = models.new_assignment();
+        self.assignment = models.new_assignment()
         self.user = models.new_user(
             username='delegate',
             password='delegate',
@@ -206,23 +215,31 @@ class SecretariatMemberListGetTestCase(tests.ListAPITestCase):
             }
         ])
 
+
 class SecretariatMemberCommitteeListGetTestCase(tests.ListAPITestCase):
     '''Tests to see that anyone can retrieve secretariat member list information'''
     url_name = "api:secretariat_member_committee_list"
 
     def setUp(self):
         self.name1 = "Shayna"
-        self.is_head_chair1 = True;
+        self.is_head_chair1 = True
         self.committee1 = models.new_committee()
         self.name2 = "AD"
-        self.is_head_chair2 = False;
+        self.is_head_chair2 = False
         self.committee2 = models.new_committee()
         self.name3 = "Michael"
-        self.is_head_chair3 = False;
+        self.is_head_chair3 = False
         self.empty_committee = models.new_committee()
-        self.sm1 = models.new_secretariat_member(name=self.name1,committee=self.committee1,is_head_chair=self.is_head_chair1)
-        self.sm2 = models.new_secretariat_member(name=self.name2,committee=self.committee2)
-        self.sm3 = models.new_secretariat_member(name=self.name3,committee=self.committee1,is_head_chair=self.is_head_chair3)
+        self.sm1 = models.new_secretariat_member(
+            name=self.name1,
+            committee=self.committee1,
+            is_head_chair=self.is_head_chair1)
+        self.sm2 = models.new_secretariat_member(
+            name=self.name2, committee=self.committee2)
+        self.sm3 = models.new_secretariat_member(
+            name=self.name3,
+            committee=self.committee1,
+            is_head_chair=self.is_head_chair3)
 
     def test_anonymous_user(self):
         '''Tests anonymous user can get secretariat information'''
@@ -262,7 +279,7 @@ class SecretariatMemberCommitteeListGetTestCase(tests.ListAPITestCase):
 
     def test_delegate(self):
         '''Tests delegate can get secretariat information'''
-        self.assignment = models.new_assignment();
+        self.assignment = models.new_assignment()
         self.user = models.new_user(
             username='delegate',
             password='delegate',

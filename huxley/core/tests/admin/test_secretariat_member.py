@@ -12,7 +12,6 @@ from huxley.utils.test import models, TestFiles
 
 
 class SecretariatMemberAdminTest(TestCase):
-
     def test_import(self):
         '''Test that the admin panel can import committees.'''
         models.new_superuser(username='testuser', password='test')
@@ -21,20 +20,19 @@ class SecretariatMemberAdminTest(TestCase):
         committee = models.new_committee(name='ICJ')
 
         f = TestFiles.new_csv([
-            ['Trent Gomberg', 'ICJ', ''],
-            ['Ali Maloney', 'ICJ', 'True']
+            ['Trent Gomberg', 'ICJ', ''], ['Ali Maloney', 'ICJ', 'True']
         ])
 
         with closing(f) as f:
-            self.client.post(reverse('admin:core_secretariatmember_load'), {'csv': f})
+            self.client.post(
+                reverse('admin:core_secretariatmember_load'), {'csv': f})
 
-        self.assertTrue(SecretariatMember.objects.filter(
-            name='Trent Gomberg',
-            committee=committee.id,
-            is_head_chair=False
-        ).exists())
-        self.assertTrue(SecretariatMember.objects.filter(
-            name='Ali Maloney',
-            committee=committee.id,
-            is_head_chair=True
-        ).exists())
+        self.assertTrue(
+            SecretariatMember.objects.filter(
+                name='Trent Gomberg',
+                committee=committee.id,
+                is_head_chair=False).exists())
+        self.assertTrue(
+            SecretariatMember.objects.filter(
+                name='Ali Maloney', committee=committee.id,
+                is_head_chair=True).exists())

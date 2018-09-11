@@ -8,10 +8,12 @@ from huxley.api.serializers import SecretariatMemberSerializer
 
 from huxley.core.models import SecretariatMember
 
+
 class SecretariatMemberList(generics.ListAPIView):
     authentication_classes = (SessionAuthentication, )
     queryset = SecretariatMember.objects.all()
     serializer_class = SecretariatMemberSerializer
+
 
 class SecretariatMemberCommitteeList(generics.ListAPIView):
     authentication_classes = (SessionAuthentication, )
@@ -22,9 +24,10 @@ class SecretariatMemberCommitteeList(generics.ListAPIView):
 
         committee_id = query_params.get('committee_id', None)
         if committee_id:
-        	return SecretariatMember.objects.filter(committee_id=committee_id)
+            return SecretariatMember.objects.filter(committee_id=committee_id)
         else:
-        	return SecretariatMember.objects.none()
+            return SecretariatMember.objects.none()
+
 
 class SecretariatMemberDetail(generics.RetrieveAPIView):
     authentication_classes = (SessionAuthentication, )

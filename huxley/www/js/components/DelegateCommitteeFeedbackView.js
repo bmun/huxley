@@ -35,7 +35,9 @@ const DelegateCommitteeFeedbackView = React.createClass({
   getInitialState() {
     var user = CurrentUserStore.getCurrentUser();
     var delegate = user.delegate;
-    var secretariatMembers = SecretariatMemberStore.getSecretariatMembers(delegate.assignment.committee.id);
+    var secretariatMembers = SecretariatMemberStore.getSecretariatMembers(
+      delegate.assignment.committee.id,
+    );
     return {
       delegate: delegate,
       secretariatMembers: secretariatMembers,
@@ -91,15 +93,19 @@ const DelegateCommitteeFeedbackView = React.createClass({
 
     this._secretariatMembersToken = SecretariatMemberStore.addListener(() => {
       this.setState({
-        secretariatMembers: SecretariatMemberStore.getSecretariatMembers(this.state.delegate.assignment.committee.id),
+        secretariatMembers: SecretariatMemberStore.getSecretariatMembers(
+          this.state.delegate.assignment.committee.id,
+        ),
       });
-      var newState = {}
-      for(var i = 0;i < this.state.secretariatMembers.length;i++) {
+      var newState = {};
+      for (var i = 0; i < this.state.secretariatMembers.length; i++) {
         var index = i + 1;
-        newState['chair_' + index + '_name'] = this.state.secretariatMembers[i].name;
+        newState['chair_' + index + '_name'] = this.state.secretariatMembers[
+          i
+        ].name;
       }
       this.setState(newState);
-    })
+    });
   },
 
   componentWillMount() {
@@ -127,15 +133,25 @@ const DelegateCommitteeFeedbackView = React.createClass({
       } else {
         var head_chair_field;
         var chair_fields = [];
-        for(var i = 0; i < this.state.secretariatMembers.length; i++) {
+        for (var i = 0; i < this.state.secretariatMembers.length; i++) {
           var index = i + 1;
           var name_key = 'chair_' + index + '_name';
           var comment_key = 'chair_' + index + '_comment';
           var rating_key = 'chair_' + index + '_rating';
-          if(this.state.secretariatMembers[i].is_head_chair) {
-            head_chair_field = this._buildFeedbackInputs(this.state.secretariatMembers[i],'Head Chair',i+1);
+          if (this.state.secretariatMembers[i].is_head_chair) {
+            head_chair_field = this._buildFeedbackInputs(
+              this.state.secretariatMembers[i],
+              'Head Chair',
+              i + 1,
+            );
           } else {
-            chair_fields.push(this._buildFeedbackInputs(this.state.secretariatMembers[i],'Vice Chair',i+1));
+            chair_fields.push(
+              this._buildFeedbackInputs(
+                this.state.secretariatMembers[i],
+                'Vice Chair',
+                i + 1,
+              ),
+            );
           }
         }
 
@@ -154,7 +170,10 @@ const DelegateCommitteeFeedbackView = React.createClass({
                 rows="6"
                 onChange={_handleChange.bind(this, 'comment')}
                 defaultValue={this.state.feedback}
-                placeholder={'General Feedback For ' + this.state.delegate.assignment.committee.name}
+                placeholder={
+                  'General Feedback For ' +
+                  this.state.delegate.assignment.committee.name
+                }
               />
               <br />
               <label>
@@ -217,11 +236,13 @@ const DelegateCommitteeFeedbackView = React.createClass({
         <hr />
         <br />
         <font size={3}>
-          <b>{title}: {secretariatMember.name}</b>
+          <b>
+            {title}: {secretariatMember.name}
+          </b>
         </font>
         <br />
         <textarea
-         className="text-input"
+          className="text-input"
           style={{width: '75%'}}
           rows="4"
           onChange={_handleChange.bind(this, comment_key)}

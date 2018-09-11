@@ -71,7 +71,9 @@ var ServerAPI = {
   },
 
   getSecretariatMembers(committeeID) {
-    return _get('/api/secretariat_member_committee/', {committee_id: committeeID});
+    return _get('/api/secretariat_member_committee/', {
+      committee_id: committeeID,
+    });
   },
 
   /**

@@ -644,6 +644,7 @@ class Delegate(models.Model):
         db_table = u'delegate'
         ordering = ['school']
 
+
 class SecretariatMember(models.Model):
     # A lot more could be added here but this is a good start
 
@@ -653,4 +654,3 @@ class SecretariatMember(models.Model):
 
     def __unicode__(self):
         return self.name
-        

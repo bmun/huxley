@@ -214,6 +214,7 @@ def new_rubric(**kwargs):
     r.save()
     return r
 
+
 def new_secretariat_member(**kwargs):
     test_name = kwargs.pop('name', None) or "Jake"
     test_committee = kwargs.pop('committee', None) or new_committee()
@@ -222,8 +223,7 @@ def new_secretariat_member(**kwargs):
     sm = SecretariatMember(
         name=test_name,
         committee=test_committee,
-        is_head_chair=test_is_head_chair,
-        )
+        is_head_chair=test_is_head_chair, )
 
     sm.save()
     return sm

@@ -8,9 +8,9 @@ from django.core.exceptions import ValidationError
 from django.db import IntegrityError
 from django.test import TestCase
 
-from huxley.core.models import (Assignment, Committee, CommitteeFeedback,
-                                Conference, Country, CountryPreference,
-                                Delegate, PositionPaper, Rubric, SecretariatMember)
+from huxley.core.models import (
+    Assignment, Committee, CommitteeFeedback, Conference, Country,
+    CountryPreference, Delegate, PositionPaper, Rubric, SecretariatMember)
 
 from huxley.utils.test import models
 
@@ -343,6 +343,7 @@ class RubricTest(TestCase):
 
     def test_unicode(self):
         self.assertEquals(self.committee.name, self.rubric.__unicode__())
+
 
 class SecretariatMemberTest(TestCase):
     def setUp(self):

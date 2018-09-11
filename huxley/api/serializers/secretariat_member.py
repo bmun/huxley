@@ -5,10 +5,11 @@ from rest_framework import serializers
 
 from huxley.core.models import SecretariatMember
 
+
 class SecretariatMemberSerializer(serializers.ModelSerializer):
     class Meta:
         model = SecretariatMember
         fields = ('id',
-            'name',
-            'committee',
-            'is_head_chair',)
+                  'name',
+                  'committee',
+                  'is_head_chair', )

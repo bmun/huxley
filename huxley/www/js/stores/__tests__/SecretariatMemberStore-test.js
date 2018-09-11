@@ -59,7 +59,9 @@ describe('SecretariatMemberStore', () => {
   });
 
   it('requests the secretariat members on the first call and caches locally', () => {
-    var secretariatMembers = SecretariatMemberStore.getSecretariatMembers(mockCommitteeID);
+    var secretariatMembers = SecretariatMemberStore.getSecretariatMembers(
+      mockCommitteeID,
+    );
     expect(secretariatMembers.length).toEqual(0);
     expect(ServerAPI.getSecretariatMembers).toBeCalledWith(mockCommitteeID);
 
@@ -68,7 +70,9 @@ describe('SecretariatMemberStore', () => {
       secretariatMembers: mockSecretariatMembers,
     });
 
-    secretariatMembers = SecretariatMemberStore.getSecretariatMembers(mockCommitteeID);
+    secretariatMembers = SecretariatMemberStore.getSecretariatMembers(
+      mockCommitteeID,
+    );
     expect(secretariatMembers).toEqual(mockSecretariatMembers);
     expect(ServerAPI.getSecretariatMembers.mock.calls.length).toEqual(1);
   });
@@ -104,5 +108,4 @@ describe('SecretariatMemberStore', () => {
     });
     expect(callback).toBeCalled();
   });
-
 });

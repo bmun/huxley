@@ -63,18 +63,18 @@ const DelegateProfileView = React.createClass({
       );
     }
 
-    var positionPaperCheck = "";
-    if(assignment && assignment.paper && assignment.paper.file) {
-      positionPaperCheck = "\u2611";
+    var positionPaperCheck = '';
+    if (assignment && assignment.paper && assignment.paper.file) {
+      positionPaperCheck = '\u2611';
     } else {
-      positionPaperCheck = "\u2610";
+      positionPaperCheck = '\u2610';
     }
 
-    var waiverCheck = "";
-    if(delegate && delegate.waiver_submitted) {
-      waiverCheck = "\u2611";
+    var waiverCheck = '';
+    if (delegate && delegate.waiver_submitted) {
+      waiverCheck = '\u2611';
     } else {
-      waiverCheck = "\u2610";
+      waiverCheck = '\u2610';
     }
 
     var checklist = (
@@ -86,12 +86,18 @@ const DelegateProfileView = React.createClass({
         </thead>
         <tbody>
           <tr>
-            <td>{positionPaperCheck} <b>Turn in Position Paper</b><br/>
-            <TextTemplate>{DelegateChecklistPositionPaperText}</TextTemplate></td>
+            <td>
+              {positionPaperCheck} <b>Turn in Position Paper</b>
+              <br />
+              <TextTemplate>{DelegateChecklistPositionPaperText}</TextTemplate>
+            </td>
           </tr>
           <tr>
-            <td>{waiverCheck} <b>Turn in Waiver Form</b><br/>
-            <TextTemplate>{DelegateChecklistWaiverText}</TextTemplate></td>
+            <td>
+              {waiverCheck} <b>Turn in Waiver Form</b>
+              <br />
+              <TextTemplate>{DelegateChecklistWaiverText}</TextTemplate>
+            </td>
           </tr>
         </tbody>
       </table>
