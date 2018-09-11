@@ -3,19 +3,19 @@
     "pk": 1,
     "model": "core.conference",
     "fields": {
-      "session": 66,
-      "start_date": "2017-03-05",
-      "end_date": "2017-03-07",
-      "reg_open": "2017-01-01",
-      "early_reg_close": "2017-02-02",
-      "reg_close": "2017-03-03",
+      "session": 67,
+      "start_date": "2019-03-01",
+      "end_date": "2019-03-03",
+      "reg_open": "2018-09-17",
+      "early_reg_close": "2018-10-19",
+      "reg_close": "2019-01-07",
       "min_attendance": 0,
-      "max_attendance": 1500,
+      "max_attendance": 2000,
       "open_reg": true,
       "waitlist_reg": false,
-      "external": "Rita Hu",
-      "registration_fee": 50.0,
-      "delegate_fee": 50.0
+      "external": "Alexandra Maloney",
+      "registration_fee": 55.0,
+      "delegate_fee": 55.0
     }
   }
 ]
