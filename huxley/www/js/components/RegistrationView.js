@@ -320,9 +320,7 @@ var RegistrationView = React.createClass({
   renderCountryDropdown: function(labelNum, fieldName) {
     return (
       <li>
-        <label>
-          {labelNum}
-        </label>
+        <label>{labelNum}</label>
         <CountrySelect
           onChange={_handleChange.bind(this, fieldName)}
           countries={this.state.countries}
@@ -408,9 +406,7 @@ var RegistrationView = React.createClass({
   renderError: function(field) {
     if (this.state.errors[field]) {
       return (
-        <StatusLabel status="error">
-          {this.state.errors[field]}
-        </StatusLabel>
+        <StatusLabel status="error">{this.state.errors[field]}</StatusLabel>
       );
     }
 

@@ -92,7 +92,8 @@ class DelegateDetailPutTestCase(tests.UpdateAPITestCase):
             "session_two": self.delegate.session_two,
             "session_three": self.delegate.session_three,
             "session_four": self.delegate.session_four,
-            "committee_feedback_submitted": self.delegate.committee_feedback_submitted,
+            "committee_feedback_submitted":
+            self.delegate.committee_feedback_submitted,
             "waiver_submitted": self.delegate.waiver_submitted
         })
 
@@ -114,7 +115,8 @@ class DelegateDetailPutTestCase(tests.UpdateAPITestCase):
             "session_two": self.delegate.session_two,
             "session_three": self.delegate.session_three,
             "session_four": self.delegate.session_four,
-            "committee_feedback_submitted": self.delegate.committee_feedback_submitted,
+            "committee_feedback_submitted":
+            self.delegate.committee_feedback_submitted,
             "waiver_submitted": self.delegate.waiver_submitted
         })
 
@@ -136,7 +138,8 @@ class DelegateDetailPutTestCase(tests.UpdateAPITestCase):
             "session_two": self.delegate.session_two,
             "session_three": self.delegate.session_three,
             "session_four": self.delegate.session_four,
-            "committee_feedback_submitted": self.delegate.committee_feedback_submitted,
+            "committee_feedback_submitted":
+            self.delegate.committee_feedback_submitted,
             "waiver_submitted": self.delegate.waiver_submitted
         })
 
@@ -159,7 +162,8 @@ class DelegateDetailPutTestCase(tests.UpdateAPITestCase):
             "session_two": self.delegate.session_two,
             "session_three": self.delegate.session_three,
             "session_four": self.delegate.session_four,
-            "committee_feedback_submitted": self.delegate.committee_feedback_submitted,
+            "committee_feedback_submitted":
+            self.delegate.committee_feedback_submitted,
             "waiver_submitted": self.delegate.waiver_submitted
         })
 
@@ -214,7 +218,8 @@ class DelegateDetailPatchTestCase(tests.PartialUpdateAPITestCase):
             "session_two": self.delegate.session_two,
             "session_three": self.delegate.session_three,
             "session_four": self.delegate.session_four,
-            "committee_feedback_submitted": self.delegate.committee_feedback_submitted,
+            "committee_feedback_submitted":
+            self.delegate.committee_feedback_submitted,
             "waiver_submitted": self.delegate.waiver_submitted
         })
 
@@ -236,7 +241,8 @@ class DelegateDetailPatchTestCase(tests.PartialUpdateAPITestCase):
             "session_two": self.delegate.session_two,
             "session_three": self.delegate.session_three,
             "session_four": self.delegate.session_four,
-            "committee_feedback_submitted": self.delegate.committee_feedback_submitted,
+            "committee_feedback_submitted":
+            self.delegate.committee_feedback_submitted,
             "waiver_submitted": self.delegate.waiver_submitted
         })
 
@@ -258,7 +264,8 @@ class DelegateDetailPatchTestCase(tests.PartialUpdateAPITestCase):
             "session_two": self.delegate.session_two,
             "session_three": self.delegate.session_three,
             "session_four": self.delegate.session_four,
-            "committee_feedback_submitted": self.delegate.committee_feedback_submitted,
+            "committee_feedback_submitted":
+            self.delegate.committee_feedback_submitted,
             "waiver_submitted": self.delegate.waiver_submitted
         })
 
@@ -281,7 +288,8 @@ class DelegateDetailPatchTestCase(tests.PartialUpdateAPITestCase):
             "session_two": self.delegate.session_two,
             "session_three": self.delegate.session_three,
             "session_four": self.delegate.session_four,
-            "committee_feedback_submitted": self.delegate.committee_feedback_submitted,
+            "committee_feedback_submitted":
+            self.delegate.committee_feedback_submitted,
             "waiver_submitted": self.delegate.waiver_submitted
         })
 

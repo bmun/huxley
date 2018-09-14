@@ -145,7 +145,7 @@ const AdvisorProfileView = React.createClass({
     }
 
     var positionPapersTurnedIn = '\u2611';
-    if(assignments.length > 0) {
+    if (assignments.length > 0) {
       for (var i = 0; i < assignments.length; i++) {
         if (
           assignments[i] == null ||
@@ -155,20 +155,19 @@ const AdvisorProfileView = React.createClass({
           positionPapersTurnedIn = '\u2610';
           break;
         }
-      }      
+      }
     } else {
       positionPapersTurnedIn = '\u2610';
     }
 
-
     var waiversTurnedIn = '\u2611';
-    if(delegates.length > 0) {
+    if (delegates.length > 0) {
       for (var i = 0; i < delegates.length; i++) {
         if (delegates[i] == null || !delegates[i].waiver_submitted) {
           waiversTurnedIn = '\u2610';
           break;
         }
-      }      
+      }
     } else {
       waiversTurnedIn = '\u2610';
     }

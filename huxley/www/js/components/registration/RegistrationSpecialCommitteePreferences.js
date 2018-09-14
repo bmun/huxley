@@ -37,9 +37,7 @@ const RegistrationSpecialCommitteePreferences = React.createClass({
             here
           </a>.
         </p>
-        <ul>
-          {this.props.renderCommittees()}
-        </ul>
+        <ul>{this.props.renderCommittees()}</ul>
         <NumberInput
           placeholder="Number of Spanish Speaking Delegates"
           onChange={accessHandlers('num_spanish_speaking_delegates')}
