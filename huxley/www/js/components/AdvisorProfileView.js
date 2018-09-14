@@ -145,23 +145,32 @@ const AdvisorProfileView = React.createClass({
     }
 
     var positionPapersTurnedIn = '\u2611';
-    for (var i = 0; i < assignments.length; i++) {
-      if (
-        assignments[i] == null ||
-        assignments[i].paper == null ||
-        assignments[i].paper.file == null
-      ) {
-        positionPapersTurnedIn = '\u2610';
-        break;
-      }
+    if(assignments.length > 0) {
+      for (var i = 0; i < assignments.length; i++) {
+        if (
+          assignments[i] == null ||
+          assignments[i].paper == null ||
+          assignments[i].paper.file == null
+        ) {
+          positionPapersTurnedIn = '\u2610';
+          break;
+        }
+      }      
+    } else {
+      positionPapersTurnedIn = '\u2610';
     }
 
+
     var waiversTurnedIn = '\u2611';
-    for (var i = 0; i < delegates.length; i++) {
-      if (delegates[i] == null || !delegates[i].waiver_submitted) {
-        waiversTurnedIn = '\u2610';
-        break;
-      }
+    if(delegates.length > 0) {
+      for (var i = 0; i < delegates.length; i++) {
+        if (delegates[i] == null || !delegates[i].waiver_submitted) {
+          waiversTurnedIn = '\u2610';
+          break;
+        }
+      }      
+    } else {
+      waiversTurnedIn = '\u2610';
     }
 
     var checklist = (
