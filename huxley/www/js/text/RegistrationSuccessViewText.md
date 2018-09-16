@@ -11,7 +11,7 @@ Thank you for registering for BMUN {{ conferenceSession }}! Country assignments 
 ### Payment Instructions
 An electronic invoice will be sent to the primary email you provided for registration via our QuickBooks Accounting Software. You may view and pay your delegate fees here. This is the preferred method of payment. If you prefer sending a physical check, we ask that you compile delegate fees into ONE check - please do not have your students mail individual checks.
 
-Cash and online payment via QuickBooks are the only two accepted forms of payment for BMUN 66.
+Cash and online payment via QuickBooks are the only two accepted forms of payment for BMUN 67.
 
 Please mail all checks out to:
 
