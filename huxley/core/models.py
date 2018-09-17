@@ -337,7 +337,7 @@ class Registration(models.Model):
                     'If you have any questions, please contact info@bmun.org.\n\n'
                     'Thank you for registering for BMUN, and we look forward to '
                     'seeing you at the oldest high school conference in the world '
-                    'on March 2-4, 2018.' %
+                    'on March 1-3, 2019.' %
                     (conference.session, int(registration_fee),
                      int(delegate_fee)),
                     'no-reply@bmun.org', [registration.school.primary_email],
