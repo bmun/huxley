@@ -337,7 +337,7 @@ class Registration(models.Model):
                     'If you have any questions, please contact info@bmun.org.\n\n'
                     'Thank you for registering for BMUN, and we look forward to '
                     'seeing you at the oldest high school conference in the world '
-                    'on March 2-4, 2018.' %
+                    'on March 1-3, 2019.' %
                     (conference.session, int(registration_fee),
                      int(delegate_fee)),
                     'no-reply@bmun.org', [registration.school.primary_email],
@@ -613,6 +613,7 @@ class Delegate(models.Model):
     session_four = models.BooleanField(default=False)
 
     committee_feedback_submitted = models.BooleanField(default=False)
+    waiver_submitted = models.BooleanField(default=False)
 
     def __unicode__(self):
         return self.name
@@ -642,3 +643,14 @@ class Delegate(models.Model):
     class Meta:
         db_table = u'delegate'
         ordering = ['school']
+
+
+class SecretariatMember(models.Model):
+    # A lot more could be added here but this is a good start
+
+    name = models.CharField(blank=False, default='', max_length=100)
+    committee = models.ForeignKey(Committee)
+    is_head_chair = models.BooleanField(default=False)
+
+    def __unicode__(self):
+        return self.name

@@ -31,7 +31,8 @@ class DelegateSerializer(serializers.ModelSerializer):
                   'session_two',
                   'session_three',
                   'session_four',
-                  'committee_feedback_submitted', )
+                  'committee_feedback_submitted',
+                  'waiver_submitted', )
 
     def update(self, instance, validated_data):
         if ('assignment' in validated_data and
@@ -89,4 +90,5 @@ class DelegateNestedSerializer(serializers.ModelSerializer):
                   'session_two',
                   'session_three',
                   'session_four',
-                  'committee_feedback_submitted', )
+                  'committee_feedback_submitted',
+                  'waiver_submitted', )

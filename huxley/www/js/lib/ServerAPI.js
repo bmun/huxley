@@ -62,6 +62,20 @@ var ServerAPI = {
     return _get('/api/committee_feedback/', {committee_id: committeeID});
   },
 
+  getSecretariatMember(secretariatMemberID) {
+    return _get(`/api/secretariat_member/${secretariat_member}`);
+  },
+
+  getSecretariatMembers() {
+    return _get('/api/secretariat_member');
+  },
+
+  getSecretariatMembers(committeeID) {
+    return _get('/api/secretariat_member_committee/', {
+      committee_id: committeeID,
+    });
+  },
+
   /**
    * Get a list of all countries.
    */

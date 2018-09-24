@@ -15,6 +15,7 @@ const CommitteeFeedbackActions = require('actions/CommitteeFeedbackActions');
 const CommitteeFeedbackStore = require('stores/CommitteeFeedbackStore');
 const InnerView = require('components/InnerView');
 const ServerAPI = require('lib/ServerAPI');
+const SecretariatMemberStore = require('stores/SecretariatMemberStore');
 const TextInput = require('components/core/TextInput');
 const TextTemplate = require('components/core/TextTemplate');
 const User = require('utils/User');
@@ -34,8 +35,12 @@ const DelegateCommitteeFeedbackView = React.createClass({
   getInitialState() {
     var user = CurrentUserStore.getCurrentUser();
     var delegate = user.delegate;
+    var secretariatMembers = SecretariatMemberStore.getSecretariatMembers(
+      delegate.assignment.committee.id,
+    );
     return {
       delegate: delegate,
+      secretariatMembers: secretariatMembers,
       comment: '',
       rating: 0,
       chair_1_name: '',
@@ -85,6 +90,22 @@ const DelegateCommitteeFeedbackView = React.createClass({
         loadingPublish: false,
       });
     });
+
+    this._secretariatMembersToken = SecretariatMemberStore.addListener(() => {
+      this.setState({
+        secretariatMembers: SecretariatMemberStore.getSecretariatMembers(
+          this.state.delegate.assignment.committee.id,
+        ),
+      });
+      var newState = {};
+      for (var i = 0; i < this.state.secretariatMembers.length; i++) {
+        var index = i + 1;
+        newState['chair_' + index + '_name'] = this.state.secretariatMembers[
+          i
+        ].name;
+      }
+      this.setState(newState);
+    });
   },
 
   componentWillMount() {
@@ -96,6 +117,7 @@ const DelegateCommitteeFeedbackView = React.createClass({
 
   componentWillUnmount() {
     this._committeeFeedbackToken && this._committeeFeedbackToken.remove();
+    this._secretariatMembersToken && this._secretariatMembersToken.remove();
   },
 
   render() {
@@ -109,55 +131,28 @@ const DelegateCommitteeFeedbackView = React.createClass({
       if (this.state.feedbackSubmitted) {
         body = <h3>Thank you for submitting your feedback</h3>;
       } else {
+        var head_chair_field;
         var chair_fields = [];
-
-        for (var i = 1; i <= 10; i++) {
-          var name_key = 'chair_' + i + '_name';
-          var comment_key = 'chair_' + i + '_comment';
-          var rating_key = 'chair_' + i + '_rating';
-          chair_fields.push(
-            <div>
-              <br />
-              <hr />
-              <br />
-              <TextInput
-                placeholder={'Chair ' + i + "'s name"}
-                onChange={_handleChange.bind(this, name_key)}
-                value={this.state[name_key]}
-              />
-              <br />
-              <textarea
-                className="text-input"
-                style={{width: '75%'}}
-                rows="4"
-                onChange={_handleChange.bind(this, comment_key)}
-                defaultValue={this.state[comment_key]}
-                placeholder={'Comment for Chair ' + i}
-              />
-              <br />
-              <label>
-                <font size={3}>
-                  <b>{'Rate Chair ' + i + ': '}</b>
-                </font>
-                <select
-                  onChange={_handleChange.bind(this, rating_key)}
-                  value={this.state[rating_key]}
-                  default={0}>
-                  <option value={0}>No Rating</option>
-                  <option value={10}>10</option>
-                  <option value={9}>9</option>
-                  <option value={8}>8</option>
-                  <option value={7}>7</option>
-                  <option value={6}>6</option>
-                  <option value={5}>5</option>
-                  <option value={4}>4</option>
-                  <option value={3}>3</option>
-                  <option value={2}>2</option>
-                  <option value={1}>1</option>
-                </select>
-              </label>
-            </div>,
-          );
+        for (var i = 0; i < this.state.secretariatMembers.length; i++) {
+          var index = i + 1;
+          var name_key = 'chair_' + index + '_name';
+          var comment_key = 'chair_' + index + '_comment';
+          var rating_key = 'chair_' + index + '_rating';
+          if (this.state.secretariatMembers[i].is_head_chair) {
+            head_chair_field = this._buildFeedbackInputs(
+              this.state.secretariatMembers[i],
+              'Head Chair',
+              i + 1,
+            );
+          } else {
+            chair_fields.push(
+              this._buildFeedbackInputs(
+                this.state.secretariatMembers[i],
+                'Vice Chair',
+                i + 1,
+              ),
+            );
+          }
         }
 
         body = (
@@ -175,7 +170,10 @@ const DelegateCommitteeFeedbackView = React.createClass({
                 rows="6"
                 onChange={_handleChange.bind(this, 'comment')}
                 defaultValue={this.state.feedback}
-                placeholder={'General Committee Feedback'}
+                placeholder={
+                  'General Feedback For ' +
+                  this.state.delegate.assignment.committee.name
+                }
               />
               <br />
               <label>
@@ -199,6 +197,7 @@ const DelegateCommitteeFeedbackView = React.createClass({
                   <option value={1}>1</option>
                 </select>
               </label>
+              {head_chair_field}
               {chair_fields}
               <br />
               <br />
@@ -224,6 +223,55 @@ const DelegateCommitteeFeedbackView = React.createClass({
         </div>
         {body}
       </InnerView>
+    );
+  },
+
+  _buildFeedbackInputs(secretariatMember, title, index) {
+    var name_key = 'chair_' + index + '_name';
+    var comment_key = 'chair_' + index + '_comment';
+    var rating_key = 'chair_' + index + '_rating';
+    return (
+      <div key={index}>
+        <br />
+        <hr />
+        <br />
+        <font size={3}>
+          <b>
+            {title}: {secretariatMember.name}
+          </b>
+        </font>
+        <br />
+        <textarea
+          className="text-input"
+          style={{width: '75%'}}
+          rows="4"
+          onChange={_handleChange.bind(this, comment_key)}
+          defaultValue={this.state[comment_key]}
+          placeholder={'Feedback for ' + secretariatMember.name}
+        />
+        <br />
+        <label>
+          <font size={3}>
+            <b>{'Rate ' + secretariatMember.name + ': '}</b>
+          </font>
+          <select
+            onChange={_handleChange.bind(this, rating_key)}
+            value={this.state[rating_key]}
+            default={0}>
+            <option value={0}>No Rating</option>
+            <option value={10}>10</option>
+            <option value={9}>9</option>
+            <option value={8}>8</option>
+            <option value={7}>7</option>
+            <option value={6}>6</option>
+            <option value={5}>5</option>
+            <option value={4}>4</option>
+            <option value={3}>3</option>
+            <option value={2}>2</option>
+            <option value={1}>1</option>
+          </select>
+        </label>
+      </div>
     );
   },
 

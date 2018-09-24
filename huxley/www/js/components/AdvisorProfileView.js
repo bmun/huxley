@@ -8,11 +8,13 @@
 const React = require('react');
 
 var _accessSafe = require('utils/_accessSafe');
+const AssignmentStore = require('stores/AssignmentStore');
 const Button = require('components/core/Button');
 const InnerView = require('components/InnerView');
 const LogoutButton = require('components/LogoutButton');
 const ConferenceContext = require('components/ConferenceContext');
 const CurrentUserActions = require('actions/CurrentUserActions');
+const DelegateStore = require('stores/DelegateStore');
 const PhoneInput = require('components/PhoneInput');
 const ProgramTypes = require('constants/ProgramTypes');
 const RegistrationStore = require('stores/RegistrationStore');
@@ -24,6 +26,11 @@ const User = require('utils/User');
 const _handleChange = require('utils/_handleChange');
 
 const AdvisorProfileViewText = require('text/AdvisorProfileViewText.md');
+const AdvisorChecklistAssignmentsFinalizedText = require('text/checklists/AdvisorChecklistAssignmentsFinalizedText.md');
+const AdvisorChecklistDelegateFeeText = require('text/checklists/AdvisorChecklistDelegateFeeText.md');
+const AdvisorChecklistPositionPapersText = require('text/checklists/AdvisorChecklistPositionPapersText.md');
+const AdvisorChecklistTeamFeeText = require('text/checklists/AdvisorChecklistTeamFeeText.md');
+const AdvisorChecklistWaiversText = require('text/checklists/AdvisorChecklistWaiversText.md');
 
 const AdvisorProfileView = React.createClass({
   // #489
@@ -60,6 +67,8 @@ const AdvisorProfileView = React.createClass({
       loading: false,
       success: false,
       registration: RegistrationStore.getRegistration(school.id, conferenceID),
+      delegates: DelegateStore.getSchoolDelegates(school.id),
+      assignments: AssignmentStore.getSchoolAssignments(school.id),
     };
   },
 
@@ -71,11 +80,23 @@ const AdvisorProfileView = React.createClass({
         registration: RegistrationStore.getRegistration(schoolID, conferenceID),
       });
     });
+    this._delegatesToken = DelegateStore.addListener(() => {
+      this.setState({
+        delegates: DelegateStore.getSchoolDelegates(schoolID),
+      });
+    });
+    this._assignmentsToken = AssignmentStore.addListener(() => {
+      this.setState({
+        assignments: AssignmentStore.getSchoolAssignments(schoolID),
+      });
+    });
   },
 
   componentWillUnmount: function() {
     this._successTimout && clearTimeout(this._successTimeout);
     this._registrationToken && this._registrationToken.remove();
+    this._delegatesToken && this._delegatesToken.remove();
+    this._assignmentsToken && this._assignmentsToken.remove();
   },
 
   render: function() {
@@ -83,6 +104,8 @@ const AdvisorProfileView = React.createClass({
     var user = this.props.user;
     var school = User.getSchool(user);
     var registration = this.state.registration;
+    var delegates = this.state.delegates;
+    var assignments = this.state.assignments;
     var fees_owed =
       _accessSafe(registration, 'delegate_fees_owed') == null
         ? null
@@ -95,6 +118,109 @@ const AdvisorProfileView = React.createClass({
       _accessSafe(registration, 'registration_fee_paid') == null
         ? null
         : registration.registration_fee_paid;
+
+    var teamFeePaid = '';
+    if (registration && registration.registration_fee_paid) {
+      teamFeePaid = '\u2611';
+    } else {
+      teamFeePaid = '\u2610';
+    }
+
+    var allFeesPaid = '';
+    if (
+      registration &&
+      registration.registration_fee_paid &&
+      registration.delegate_fees_paid == registration.delegate_fees_owed
+    ) {
+      allFeesPaid = '\u2611';
+    } else {
+      allFeesPaid = '\u2610';
+    }
+
+    var finalizeAssignments = '';
+    if (registration && registration.assignments_finalized) {
+      finalizeAssignments = '\u2611';
+    } else {
+      finalizeAssignments = '\u2610';
+    }
+
+    var positionPapersTurnedIn = '\u2611';
+    if (assignments.length > 0) {
+      for (var i = 0; i < assignments.length; i++) {
+        if (
+          assignments[i] == null ||
+          assignments[i].paper == null ||
+          assignments[i].paper.file == null
+        ) {
+          positionPapersTurnedIn = '\u2610';
+          break;
+        }
+      }
+    } else {
+      positionPapersTurnedIn = '\u2610';
+    }
+
+    var waiversTurnedIn = '\u2611';
+    if (delegates.length > 0) {
+      for (var i = 0; i < delegates.length; i++) {
+        if (delegates[i] == null || !delegates[i].waiver_submitted) {
+          waiversTurnedIn = '\u2610';
+          break;
+        }
+      }
+    } else {
+      waiversTurnedIn = '\u2610';
+    }
+
+    var checklist = (
+      <table>
+        <thead>
+          <tr>
+            <th>Advisor Checklist</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <b>{teamFeePaid} Team Fee Paid</b>
+              <br />
+              <TextTemplate>{AdvisorChecklistTeamFeeText}</TextTemplate>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <b>{allFeesPaid} All Fees Paid</b>
+              <br />
+              <TextTemplate>{AdvisorChecklistDelegateFeeText}</TextTemplate>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <b>{finalizeAssignments} Finalize Country Assignments</b>
+              <br />
+              <TextTemplate>
+                {AdvisorChecklistAssignmentsFinalizedText}
+              </TextTemplate>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <b>{positionPapersTurnedIn} Position Papers Turned In</b>
+              <br />
+              <TextTemplate>{AdvisorChecklistPositionPapersText}</TextTemplate>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <b>{waiversTurnedIn} Waivers Turned In</b>
+              <br />
+              <TextTemplate>{AdvisorChecklistWaiversText}</TextTemplate>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    );
+
     return (
       <InnerView>
         <TextTemplate
@@ -104,6 +230,7 @@ const AdvisorProfileView = React.createClass({
           conferenceExternal={conference.external}>
           {AdvisorProfileViewText}
         </TextTemplate>
+        {checklist}
         <form onSubmit={this._handleSubmit}>
           <Table emptyMessage="" isEmpty={registration == null}>
             <thead>
@@ -139,9 +266,7 @@ const AdvisorProfileView = React.createClass({
               </tr>
               <tr>
                 <td>Name</td>
-                <td>
-                  {school.name}
-                </td>
+                <td>{school.name}</td>
               </tr>
               <tr>
                 <td>Address</td>
@@ -189,21 +314,15 @@ const AdvisorProfileView = React.createClass({
               </tr>
               <tr>
                 <td>Program Type</td>
-                <td>
-                  {school.program_type === 1 ? 'Club' : 'Class'}
-                </td>
+                <td>{school.program_type === 1 ? 'Club' : 'Class'}</td>
               </tr>
               <tr>
                 <td>Times Attended</td>
-                <td>
-                  {school.times_attended}
-                </td>
+                <td>{school.times_attended}</td>
               </tr>
               <tr>
                 <td>Number of Beginner Delegates</td>
-                <td>
-                  {_accessSafe(registration, 'num_beginner_delegates')}
-                </td>
+                <td>{_accessSafe(registration, 'num_beginner_delegates')}</td>
               </tr>
               <tr>
                 <td>Number of Intermediate Delegates</td>
@@ -213,9 +332,7 @@ const AdvisorProfileView = React.createClass({
               </tr>
               <tr>
                 <td>Number of Advanced Delegates</td>
-                <td>
-                  {_accessSafe(registration, 'num_advanced_delegates')}
-                </td>
+                <td>{_accessSafe(registration, 'num_advanced_delegates')}</td>
               </tr>
               <tr>
                 <td>Number of Spanish Speaking Delegates</td>
@@ -320,21 +437,15 @@ const AdvisorProfileView = React.createClass({
               </tr>
               <tr>
                 <td>Delegate Fees Owed</td>
-                <td>
-                  {'$' + fees_owed}
-                </td>
+                <td>{'$' + fees_owed}</td>
               </tr>
               <tr>
                 <td>Delegate Fees Paid</td>
-                <td>
-                  {'$' + fees_paid}
-                </td>
+                <td>{'$' + fees_paid}</td>
               </tr>
               <tr>
                 <td>Remaining Balance</td>
-                <td>
-                  {'$' + (fees_owed - fees_paid)}
-                </td>
+                <td>{'$' + (fees_owed - fees_paid)}</td>
               </tr>
             </tbody>
           </Table>
@@ -356,9 +467,7 @@ const AdvisorProfileView = React.createClass({
   renderError: function(field) {
     if (this.state.errors[field]) {
       return (
-        <StatusLabel status="error">
-          {this.state.errors[field]}
-        </StatusLabel>
+        <StatusLabel status="error">{this.state.errors[field]}</StatusLabel>
       );
     }
 
