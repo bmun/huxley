@@ -5,15 +5,17 @@
   "main": "huxley/www/static/js/huxley.browserify.js",
   "license": "BSD",
   "dependencies": {
+    "browserify": "^16.1.1",
     "classnames": "2.2.5",
     "fbjs": "0.8.3",
     "flux": "^2.1.1",
     "history": "^1.12.0",
     "js-cookie": "~2.0.3",
-    "react": "15.0.0",
+    "react": "^15.0.0",
     "react-dom": "15.0.0",
     "react-modal": "1.4.0",
     "react-router": "1.0.0",
+    "reactify": "^1.1.1",
     "whatwg-fetch": "^2.0.3"
   },
   "scripts": {
