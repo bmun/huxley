@@ -9,7 +9,7 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect
 from django.utils import html
 
-from huxley.core.models import Assignment, Committee, Country, Registration, School
+from huxley.core.models import Assignment, Committee, Country, CountryPreference, Registration, School
 
 
 class AssignmentAdmin(admin.ModelAdmin):
@@ -91,9 +91,6 @@ class AssignmentAdmin(admin.ModelAdmin):
 
     def stable_marriage(self, suitor_preferences, suitor_max_proposals, ranking_of_suitors, accepter_max_proposals, suitors_per_accept):
         """
-        Note: This is one of the most complicated functions in Huxley.
-              It has many subtleties; be careful when making changes.
-
         This finds a stable marriage where:
         (1) each suitor contains multiple individuals
         (2) each accepter accepts proposals from multiple suitors
@@ -119,7 +116,7 @@ class AssignmentAdmin(admin.ModelAdmin):
             for s in suitor_preferences:
                 n_prefs = len(suitor_preferences[s])
                 for n in range(n_prefs):
-                    if not suitor_max_proposals[s]: break
+                    if suitor_max_proposals[s] <= 0: break
                     next_proposal = suitor_preferences[s].pop(0)
                     if suitors_per_accept[next_proposal] > suitor_max_proposals[s]:
                         suitor_preferences[s].append(next_proposal)
@@ -133,7 +130,7 @@ class AssignmentAdmin(admin.ModelAdmin):
                     unstable = True
                     accepted_proposals[a].sort(key=lambda s: ranking_of_suitors[s])
                     for s in accepted_proposals[a][max_proposals:]:
-                        suitor_max_proposals[s] += suitors_per_accept[next_proposal]
+                        suitor_max_proposals[s] += suitors_per_accept[a]
                     accepted_proposals[a] = accepted_proposals[a][:max_proposals]
 
         for a in accepter_max_proposals:
@@ -172,7 +169,6 @@ class AssignmentAdmin(admin.ModelAdmin):
 
             # Add existing assigments directly to the collection of final assignments
             final_assigments[a.committee].append((a.registration, a.country, a.rejected))
-
 
         # Registrations are ranked by their registration time
         reg_ranking = {r: r.registered_at for r in registrations}
@@ -214,22 +210,26 @@ class AssignmentAdmin(admin.ModelAdmin):
                     committee_unassigned[c] -= 1
                     reg_unassigned[r] -= c.delegation_size
 
-
         # Within each committee, determine each registration's country assignment
         for c in accepted:
-            exclude_countries = set(map(lambda a: a.country.id, assigned[c]))
+            if not len(accepted[c]): continue
+            exclude_countries = set(map(lambda a: a.country, assigned[c]))
 
             # This is a 1-to-1 pairing, so we do not need to worry about multiple proposals/acceptances
-            country_unassigned = {country:1 for country in c.countries.all() if country.id not in exclude_countries}
+            countries = c.countries.all()
+            country_unassigned = {country:1 for country in countries if country.id not in exclude_countries}
+            for country in exclude_countries:
+                country_unassigned[country] = 0
             country_per_reg = {r:1 for r in accepted[c]}
 
             # Consturct each registration's preference list
             reg_country_rankings = {r:[] for r in accepted[c]}
             for r in accepted[c]:
-                for pref in r.country_preferences.all():
-                    if pref.country.id in exclude_countries: continue
+                for pref in CountryPreference.objects.filter(registration__id=r.id):
+                    if pref.country.id in exclude_countries or pref.country.id not in countries: continue
                     reg_country_rankings[r].append(pref)
                 reg_country_rankings[r].sort(key=lambda p: p.rank)
+                reg_country_rankings[r] = map(lambda p: p.country, reg_country_rankings[r])
 
             country_pairing, country_per_reg, country_unassigned = self.stable_marriage(reg_country_rankings, 
                                                                                         country_per_reg, 
@@ -241,26 +241,31 @@ class AssignmentAdmin(admin.ModelAdmin):
             # can assume number of unpaired countries equals
             # number of unpaired registrations
             for r in country_per_reg:
-                if country_per_reg[r]:
+                if country_per_reg[r] > 0:
                     for country in country_unassigned:
                         if country_unassigned[country]:
-                            country_pairing[country] = r
-                            country_unassigned[country] -= 1
+                            country_pairing[country] = [r]
+                            country_unassigned[country] = 0
+                            country_per_reg[r] = 0
                             break
-
             
             # No further work needs to be done for these assignments
-            final_assigments[c].extend([(country_pairing[country][0], country, False) for country in country_pairing])
-
+            for country in country_pairing:
+                if not len(country_pairing[country]): continue
+                final_assigments[c].append((country_pairing[country][0], country, False))
 
         # Format and write results to CSV
         to_write = []
         for committee in final_assigments:
-            registration, country, rejected = final_assigments[committee]
+            if not len(final_assigments[committee]): continue
+            for assignment in final_assigments[committee]:
+                registration, country, rejected = assignment
 
-            # External likes the number of lines in the CSV to equal the number of delegates
-            for n in range(committee.delegation_size):
-                to_write.append((registration.school.name, committee.name, country.name, rejected))
+                # External likes the number of lines in the CSV to equal the number of delegates
+                for n in range(committee.delegation_size):
+                    to_write.append((registration.school.name, committee.name, country.name, rejected))
+
+        to_write.sort(key=lambda row: row[0]+row[1]+row[2])
 
         assignments = HttpResponse(content_type='text/csv')
         assignments['Content-Disposition'] = 'attachment; filename="assignments.csv"'
@@ -283,6 +288,11 @@ class AssignmentAdmin(admin.ModelAdmin):
                 r'list',
                 self.admin_site.admin_view(self.list),
                 name='core_assignment_list'
+            ),
+            url(
+                r'assign',
+                self.admin_site.admin_view(self.assign),
+                name='core_assignment_assign'
             ),
             url(
                 r'load',

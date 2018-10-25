@@ -9,7 +9,7 @@ from django.core.exceptions import PermissionDenied
 from huxley.accounts.models import User
 from huxley.core.constants import ContactGender, ContactType, ProgramTypes
 
-from huxley.core.models import School, Committee, CommitteeFeedback, Country, Delegate, Assignment, Registration, Conference, PositionPaper, Rubric, SecretariatMember
+from huxley.core.models import School, Committee, CommitteeFeedback, Country, CountryPreference, Delegate, Assignment, Registration, Conference, PositionPaper, Rubric, SecretariatMember
 
 if not settings.TESTING:
     raise PermissionDenied
@@ -144,6 +144,15 @@ def new_country(**kwargs):
     c = Country(
         name=kwargs.pop('name', 'TestCountry'),
         special=kwargs.pop('special', False))
+    c.save()
+    return c
+
+
+def new_country_preference(**kwargs):
+    c = CountryPreference(
+        registration=kwargs.pop('registration', None) or new_registration(),
+        country=kwargs.pop('country', None) or new_country(),
+        rank=kwargs.pop('rank', 1))
     c.save()
     return c
 
