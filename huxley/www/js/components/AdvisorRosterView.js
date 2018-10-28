@@ -84,6 +84,8 @@ var AdvisorRosterView = React.createClass({
             <tr>
               <th>Delegate</th>
               <th>Email</th>
+              <th>Waiver</th>
+              <th>Position Paper</th>
               <th>Edit</th>
               <th>Delete</th>
               <th>Reset Password</th>
@@ -168,10 +170,27 @@ var AdvisorRosterView = React.createClass({
             </Button>
           </td>
         );
+
+        var waiverCheck = '';
+        if (delegate && delegate.waiver_submitted) {
+          waiverCheck = '\u2611';
+        } else {
+          waiverCheck = '\u2610';
+        }
+
+        var positionPaperCheck = '';
+        if (delegate.assignment && delegate.assignment.paper && delegate.assignment.paper.file) {
+          positionPaperCheck = '\u2611';
+        } else {
+          positionPaperCheck = '\u2610';
+        }
+
         return (
           <tr>
             <td>{delegate.name}</td>
             <td>{delegate.email}</td>
+            <td>{waiverCheck}</td>
+            <td>{positionPaperCheck}</td>
             {editButton}
             {deleteButton}
             <td>
