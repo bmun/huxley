@@ -179,7 +179,11 @@ var AdvisorRosterView = React.createClass({
         }
 
         var positionPaperCheck = '';
-        if (delegate.assignment && delegate.assignment.paper && delegate.assignment.paper.file) {
+        if (
+          delegate.assignment &&
+          delegate.assignment.paper &&
+          delegate.assignment.paper.file
+        ) {
           positionPaperCheck = '\u2611';
         } else {
           positionPaperCheck = '\u2610';
