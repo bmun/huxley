@@ -12,6 +12,9 @@ from huxley.core.models import Country
 
 
 class CountryAdmin(admin.ModelAdmin):
+
+    search_fields = ('name', )
+    
     def load(self, request):
         '''Import a CSV file containing countries.'''
         countries = request.FILES
