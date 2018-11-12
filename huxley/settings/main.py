@@ -6,6 +6,8 @@ import sys
 
 DEBUG = True
 
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 3000
+
 # IMPORTANT: Override this in local settings!
 SECRET_KEY = '+42lz(cp=6t#dzpkah^chn760l)rmu$p&f-#7ggsde2l3%fm-i'
 

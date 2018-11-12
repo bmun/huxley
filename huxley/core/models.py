@@ -469,7 +469,7 @@ class Assignment(models.Model):
                            for a in assignments}
         additions = []
         deletions = []
-        assigned = set()
+        assigned = dict()
         failed_assignments = []
 
         def add(committee, country, registration, paper, rejected):
@@ -510,9 +510,11 @@ class Assignment(models.Model):
                 continue
 
             key = (committee.id, country.id)
-            if key in assigned:
+            if key in assigned.keys():
                 # Make sure that the same committee/country pair is not being
                 # given to more than one school in the upload
+                if assigned[key] == school.id:
+                    continue
                 committee = str(committee.name)
                 country = str(country.name)
                 failed_assignments.append(
@@ -520,7 +522,7 @@ class Assignment(models.Model):
                     ' - ASSIGNED TO MORE THAN ONE SCHOOL')
                 continue
 
-            assigned.add(key)
+            assigned[key] = school.id
             old_assignment = assignment_dict.get(key)
             paper = PositionPaper.objects.create()
             paper.save()
