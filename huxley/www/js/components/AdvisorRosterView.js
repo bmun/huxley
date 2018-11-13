@@ -170,13 +170,16 @@ var AdvisorRosterView = React.createClass({
             </Button>
           </td>
         );
-        
 
-        const waiverCheck = delegate && delegate.waiver_submitted ? '\u2611' : '\u2610';
-        
-        const positionPaperCheck = delegate.assignment && delegate.assignment.paper &&
-          delegate.assignment.paper.file ? '\u2611' : '\u2610';
+        const waiverCheck =
+          delegate && delegate.waiver_submitted ? '\u2611' : '\u2610';
 
+        const positionPaperCheck =
+          delegate.assignment &&
+          delegate.assignment.paper &&
+          delegate.assignment.paper.file
+            ? '\u2611'
+            : '\u2610';
 
         return (
           <tr>
