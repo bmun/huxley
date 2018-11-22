@@ -31,6 +31,7 @@ const AdvisorChecklistDelegateFeeText = require('text/checklists/AdvisorChecklis
 const AdvisorChecklistPositionPapersText = require('text/checklists/AdvisorChecklistPositionPapersText.md');
 const AdvisorChecklistTeamFeeText = require('text/checklists/AdvisorChecklistTeamFeeText.md');
 const AdvisorChecklistWaiversText = require('text/checklists/AdvisorChecklistWaiversText.md');
+const AdvisorWaitlistText = require('text/AdvisorWaitlistText.md');
 
 const AdvisorProfileView = React.createClass({
   // #489
@@ -58,7 +59,7 @@ const AdvisorProfileView = React.createClass({
       school_address: school.address,
       school_city: school.city,
       school_zip_code: school.zip_code,
-      primary_name: school.primary_name,
+      primary_name: school.primary_najaketibbs2me,
       primary_email: school.primary_email,
       primary_phone: school.primary_phone,
       secondary_name: school.secondary_name,
@@ -118,6 +119,10 @@ const AdvisorProfileView = React.createClass({
       _accessSafe(registration, 'registration_fee_paid') == null
         ? null
         : registration.registration_fee_paid;
+    var waitlisted =
+      _accessSafe(registration, 'is_waitlisted') == null
+        ? null
+        : registration.is_waitlisted;
 
     var teamFeePaid = '';
     if (registration && registration.registration_fee_paid) {
@@ -221,8 +226,22 @@ const AdvisorProfileView = React.createClass({
       </table>
     );
 
-    return (
-      <InnerView>
+    if (waitlisted) {
+      checklist = <div />;
+    }
+
+    var header = <div />;
+
+    if (waitlisted) {
+      header = (
+        <TextTemplate
+          conferenceSession={conference.session}
+          conferenceExternal={conference.external}>
+          {AdvisorWaitlistText}
+        </TextTemplate>
+      );
+    } else {
+      header = (
         <TextTemplate
           firstName={user.first_name}
           schoolName={school.name}
@@ -230,6 +249,12 @@ const AdvisorProfileView = React.createClass({
           conferenceExternal={conference.external}>
           {AdvisorProfileViewText}
         </TextTemplate>
+      );
+    }
+
+    return (
+      <InnerView>
+        {header}
         {checklist}
         <form onSubmit={this._handleSubmit}>
           <Table emptyMessage="" isEmpty={registration == null}>

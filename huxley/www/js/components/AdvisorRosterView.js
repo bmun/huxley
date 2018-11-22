@@ -9,12 +9,15 @@ var Modal = require('react-modal');
 var React = require('react');
 var ReactRouter = require('react-router');
 
+var _accessSafe = require('utils/_accessSafe');
 var Button = require('components/core/Button');
 var CurrentUserStore = require('stores/CurrentUserStore');
 var DelegateActions = require('actions/DelegateActions');
 var DelegateStore = require('stores/DelegateStore');
+var ConferenceContext = require('components/ConferenceContext');
 var CurrentUserActions = require('actions/CurrentUserActions');
 var InnerView = require('components/InnerView');
+var RegistrationStore = require('stores/RegistrationStore');
 var ServerAPI = require('lib/ServerAPI');
 var StatusLabel = require('components/core/StatusLabel');
 var Table = require('components/core/Table');
@@ -25,14 +28,21 @@ var _handleChange = require('utils/_handleChange');
 
 require('css/Modal.less');
 var AdvisorRosterViewText = require('text/AdvisorRosterViewText.md');
+var AdvisorWaitlistText = require('text/AdvisorWaitlistText.md');
 
 var AdvisorRosterView = React.createClass({
   mixins: [ReactRouter.History],
 
+  contextTypes: {
+    conference: React.PropTypes.shape(ConferenceContext),
+  },
+
   getInitialState: function() {
     var schoolID = CurrentUserStore.getCurrentUser().school.id;
+    var conferenceID = this.context.conference.session;
     return {
       delegates: DelegateStore.getSchoolDelegates(schoolID),
+      registration: RegistrationStore.getRegistration(schoolID, conferenceID),
       loading: false,
       modal_open: false,
       modal_name: '',
@@ -47,9 +57,16 @@ var AdvisorRosterView = React.createClass({
   },
 
   componentDidMount: function() {
-    this._delegatesToken = DelegateStore.addListener(() => {
-      var schoolID = CurrentUserStore.getCurrentUser().school.id;
+    var schoolID = CurrentUserStore.getCurrentUser().school.id;
+    var conferenceID = this.context.conference.session;
+    this._registrationToken = RegistrationStore.addListener(() => {
       this.setState({
+        registration: RegistrationStore.getRegistration(schoolID, conferenceID),
+      });
+    });
+    this._delegatesToken = DelegateStore.addListener(() => {
+      this.setState({
+        registration: RegistrationStore.getRegistration(schoolID, conferenceID),
         delegates: DelegateStore.getSchoolDelegates(schoolID),
         modal_open: false,
         loading: false,
@@ -58,10 +75,17 @@ var AdvisorRosterView = React.createClass({
   },
 
   componentWillUnmount: function() {
+    this._registrationToken && this._registrationToken.remove();
     this._delegatesToken && this._delegatesToken.remove();
   },
 
   render: function() {
+    var conference = this.context.conference;
+    var registration = this.state.registration;
+    var waitlisted =
+      _accessSafe(registration, 'is_waitlisted') == null
+        ? null
+        : registration.is_waitlisted;
     var disableEdit = _checkDate();
     var addButton = disableEdit ? (
       <div />
@@ -74,61 +98,73 @@ var AdvisorRosterView = React.createClass({
       </Button>
     );
 
-    return (
-      <InnerView>
-        <TextTemplate>{AdvisorRosterViewText}</TextTemplate>
-        <Table
-          emptyMessage="You don't have any delegates in your roster."
-          isEmpty={!this.state.delegates.length}>
-          <thead>
-            <tr>
-              <th>Delegate</th>
-              <th>Email</th>
-              <th>Edit</th>
-              <th>Delete</th>
-              <th>Reset Password</th>
-            </tr>
-          </thead>
-          <tbody>{this.renderRosterRows()}</tbody>
-        </Table>
-        {addButton}
-        <Modal
-          isOpen={this.state.modal_open}
-          className="content content-outer transparent ie-layout rounded"
-          overlayClassName="modal-overlay">
-          <form>
-            <h3>Enter your delegate's information here</h3>
-            <br />
-            <TextInput
-              placeholder="Name"
-              onChange={_handleChange.bind(this, 'modal_name')}
-              defaultValue={this.state.modal_name}
-              value={this.state.modal_name}
-            />
-            {this.renderError('name')}
-            <TextInput
-              placeholder="Email"
-              onChange={_handleChange.bind(this, 'modal_email')}
-              defaultValue={this.state.modal_email}
-              value={this.state.modal_email}
-            />
-            {this.renderError('email')}
-            <hr />
-            <div>
-              <Button
-                onClick={this.state.modal_onClick}
-                color="green"
-                loading={this.state.loading}>
-                Save
-              </Button>
-              <Button onClick={this.closeModal} color="red">
-                Cancel
-              </Button>
-            </div>
-          </form>
-        </Modal>
-      </InnerView>
-    );
+    if (waitlisted) {
+      return (
+        <InnerView>
+          <TextTemplate
+            conferenceSession={conference.session}
+            conferenceExternal={conference.external}>
+            {AdvisorWaitlistText}
+          </TextTemplate>
+        </InnerView>
+      );
+    } else {
+      return (
+        <InnerView>
+          <TextTemplate>{AdvisorRosterViewText}</TextTemplate>
+          <Table
+            emptyMessage="You don't have any delegates in your roster."
+            isEmpty={!this.state.delegates.length}>
+            <thead>
+              <tr>
+                <th>Delegate</th>
+                <th>Email</th>
+                <th>Edit</th>
+                <th>Delete</th>
+                <th>Reset Password</th>
+              </tr>
+            </thead>
+            <tbody>{this.renderRosterRows()}</tbody>
+          </Table>
+          {addButton}
+          <Modal
+            isOpen={this.state.modal_open}
+            className="content content-outer transparent ie-layout rounded"
+            overlayClassName="modal-overlay">
+            <form>
+              <h3>Enter your delegate's information here</h3>
+              <br />
+              <TextInput
+                placeholder="Name"
+                onChange={_handleChange.bind(this, 'modal_name')}
+                defaultValue={this.state.modal_name}
+                value={this.state.modal_name}
+              />
+              {this.renderError('name')}
+              <TextInput
+                placeholder="Email"
+                onChange={_handleChange.bind(this, 'modal_email')}
+                defaultValue={this.state.modal_email}
+                value={this.state.modal_email}
+              />
+              {this.renderError('email')}
+              <hr />
+              <div>
+                <Button
+                  onClick={this.state.modal_onClick}
+                  color="green"
+                  loading={this.state.loading}>
+                  Save
+                </Button>
+                <Button onClick={this.closeModal} color="red">
+                  Cancel
+                </Button>
+              </div>
+            </form>
+          </Modal>
+        </InnerView>
+      );
+    }
   },
 
   renderRosterRows: function() {

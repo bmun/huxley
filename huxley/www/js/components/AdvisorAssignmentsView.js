@@ -29,6 +29,7 @@ var Table = require('components/core/Table');
 var TextTemplate = require('components/core/TextTemplate');
 
 var AdvisorAssignmentsViewText = require('text/AdvisorAssignmentsViewText.md');
+var AdvisorWaitlistText = require('text/AdvisorWaitlistText.md');
 
 var AdvisorAssignmentsView = React.createClass({
   mixins: [ReactRouter.History],
@@ -103,6 +104,11 @@ var AdvisorAssignmentsView = React.createClass({
   },
 
   render: function() {
+    var registration = this.state.registration;
+    var waitlisted =
+      _accessSafe(registration, 'is_waitlisted') == null
+        ? null
+        : registration.is_waitlisted;
     var finalized =
       _accessSafe(this.state.registration, 'assignments_finalized') == null
         ? false
@@ -116,36 +122,48 @@ var AdvisorAssignmentsView = React.createClass({
       this.state.assignments.length > 0 &&
       this.state.registration;
 
-    return (
-      <InnerView>
-        <TextTemplate conferenceSession={conference.session}>
-          {AdvisorAssignmentsViewText}
-        </TextTemplate>
-        <Table
-          emptyMessage="You don't have any assignments."
-          isEmpty={!shouldRenderAssignments}>
-          <thead>
-            <tr>
-              <th>Committee</th>
-              <th>Country</th>
-              <th>Delegation Size</th>
-              <th>{finalized ? 'Delegate' : 'Delete Assignments'}</th>
-              <th>{finalized ? 'Delegate' : ''}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {shouldRenderAssignments ? this.renderAssignmentRows() : null}
-          </tbody>
-        </Table>
-        <Button
-          color="green"
-          onClick={finalized ? this._handleSave : this._handleFinalize}
-          loading={this.state.loading}
-          success={this.state.success}>
-          {finalized ? 'Save' : 'Finalize Assignments'}
-        </Button>
-      </InnerView>
-    );
+    if (waitlisted) {
+      return (
+        <InnerView>
+          <TextTemplate
+            conferenceSession={conference.session}
+            conferenceExternal={conference.external}>
+            {AdvisorWaitlistText}
+          </TextTemplate>
+        </InnerView>
+      );
+    } else {
+      return (
+        <InnerView>
+          <TextTemplate conferenceSession={conference.session}>
+            {AdvisorAssignmentsViewText}
+          </TextTemplate>
+          <Table
+            emptyMessage="You don't have any assignments."
+            isEmpty={!shouldRenderAssignments}>
+            <thead>
+              <tr>
+                <th>Committee</th>
+                <th>Country</th>
+                <th>Delegation Size</th>
+                <th>{finalized ? 'Delegate' : 'Delete Assignments'}</th>
+                <th>{finalized ? 'Delegate' : ''}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {shouldRenderAssignments ? this.renderAssignmentRows() : null}
+            </tbody>
+          </Table>
+          <Button
+            color="green"
+            onClick={finalized ? this._handleSave : this._handleFinalize}
+            loading={this.state.loading}
+            success={this.state.success}>
+            {finalized ? 'Save' : 'Finalize Assignments'}
+          </Button>
+        </InnerView>
+      );
+    }
   },
 
   renderAssignmentRows: function() {
