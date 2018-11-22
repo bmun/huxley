@@ -1,0 +1,3 @@
+You are currently on the waitlist for BMUN {{ conferenceSession }}. If you have any questions, please email [info@bmun.org](mailto:info@bmun.org). If you get off of the waitlist you will be contacted by our Undersecretary General of External Relations. Thank you for your interest in BMUN {{ conferenceSession }}!
+
+**{{ conferenceExternal }}** ***Under-Secretary General of External Relations, {{ conferenceSession }}th Session***
