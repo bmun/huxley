@@ -31,7 +31,7 @@ const AdvisorChecklistDelegateFeeText = require('text/checklists/AdvisorChecklis
 const AdvisorChecklistPositionPapersText = require('text/checklists/AdvisorChecklistPositionPapersText.md');
 const AdvisorChecklistTeamFeeText = require('text/checklists/AdvisorChecklistTeamFeeText.md');
 const AdvisorChecklistWaiversText = require('text/checklists/AdvisorChecklistWaiversText.md');
-const AdvisorWaitlistText = require('text/AdvisorWaitlistText.md')
+const AdvisorWaitlistText = require('text/AdvisorWaitlistText.md');
 
 const AdvisorProfileView = React.createClass({
   // #489
@@ -119,7 +119,7 @@ const AdvisorProfileView = React.createClass({
       _accessSafe(registration, 'registration_fee_paid') == null
         ? null
         : registration.registration_fee_paid;
-    var waitlisted = 
+    var waitlisted =
       _accessSafe(registration, 'is_waitlisted') == null
         ? null
         : registration.is_waitlisted;
@@ -226,13 +226,13 @@ const AdvisorProfileView = React.createClass({
       </table>
     );
 
-    if(waitlisted) {
-      checklist = (<div/>)
+    if (waitlisted) {
+      checklist = <div />;
     }
 
-    var header = (<div/>);
+    var header = <div />;
 
-    if(waitlisted) {
+    if (waitlisted) {
       header = (
         <TextTemplate
           conferenceSession={conference.session}

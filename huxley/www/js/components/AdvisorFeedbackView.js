@@ -1,7 +1,7 @@
 /**
-* Copyright (c) 2011-2015 Berkeley Model United Nations. All rights reserved.
-* Use of this source code is governed by a BSD License (see LICENSE).
-+*/
+ * Copyright (c) 2011-2015 Berkeley Model United Nations. All rights reserved.
+ * Use of this source code is governed by a BSD License (see LICENSE).
+ +*/
 
 'use strict';
 
@@ -23,7 +23,7 @@ var Table = require('components/core/Table');
 var TextTemplate = require('components/core/TextTemplate');
 
 var AdvisorFeedbackViewText = require('text/AdvisorFeedbackViewText.md');
-var AdvisorWaitlistText = require('text/AdvisorWaitlistText.md')
+var AdvisorWaitlistText = require('text/AdvisorWaitlistText.md');
 
 var AdvisorFeedbackView = React.createClass({
   mixins: [ReactRouter.History],
@@ -96,11 +96,11 @@ var AdvisorFeedbackView = React.createClass({
 
   render: function() {
     var registration = this.state.registration;
-    var waitlisted = 
+    var waitlisted =
       _accessSafe(registration, 'is_waitlisted') == null
         ? null
         : registration.is_waitlisted;
-    if(waitlisted) {
+    if (waitlisted) {
       return (
         <InnerView>
           <TextTemplate
@@ -109,13 +109,11 @@ var AdvisorFeedbackView = React.createClass({
             {AdvisorWaitlistText}
           </TextTemplate>
         </InnerView>
-      );      
+      );
     } else {
       return (
         <InnerView>
-          <TextTemplate>
-            {AdvisorFeedbackViewText}
-          </TextTemplate>
+          <TextTemplate>{AdvisorFeedbackViewText}</TextTemplate>
           <Table
             emptyMessage="You don't have any delegate feedback."
             isEmpty={!Object.keys(this.state.feedback).length}>
@@ -130,14 +128,11 @@ var AdvisorFeedbackView = React.createClass({
                 <th>Summary</th>
               </tr>
             </thead>
-            <tbody>
-              {this.renderAssignmentRows()}
-            </tbody>
+            <tbody>{this.renderAssignmentRows()}</tbody>
           </Table>
         </InnerView>
-      );      
+      );
     }
-
   },
 
   renderAssignmentRows: function() {
@@ -152,12 +147,8 @@ var AdvisorFeedbackView = React.createClass({
       }
       return (
         <tr>
-          <td>
-            {committees[assignment.committee].name}
-          </td>
-          <td>
-            {countries[assignment.country].name}
-          </td>
+          <td>{committees[assignment.committee].name}</td>
+          <td>{countries[assignment.country].name}</td>
           <td>
             <input
               className="choice"

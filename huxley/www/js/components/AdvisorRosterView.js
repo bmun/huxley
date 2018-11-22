@@ -28,7 +28,7 @@ var _handleChange = require('utils/_handleChange');
 
 require('css/Modal.less');
 var AdvisorRosterViewText = require('text/AdvisorRosterViewText.md');
-var AdvisorWaitlistText = require('text/AdvisorWaitlistText.md')
+var AdvisorWaitlistText = require('text/AdvisorWaitlistText.md');
 
 var AdvisorRosterView = React.createClass({
   mixins: [ReactRouter.History],
@@ -82,7 +82,7 @@ var AdvisorRosterView = React.createClass({
   render: function() {
     var conference = this.context.conference;
     var registration = this.state.registration;
-    var waitlisted = 
+    var waitlisted =
       _accessSafe(registration, 'is_waitlisted') == null
         ? null
         : registration.is_waitlisted;
@@ -98,7 +98,7 @@ var AdvisorRosterView = React.createClass({
       </Button>
     );
 
-    if(waitlisted) {
+    if (waitlisted) {
       return (
         <InnerView>
           <TextTemplate
@@ -163,9 +163,8 @@ var AdvisorRosterView = React.createClass({
             </form>
           </Modal>
         </InnerView>
-      );      
+      );
     }
-    
   },
 
   renderRosterRows: function() {

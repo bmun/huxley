@@ -29,7 +29,7 @@ var Table = require('components/core/Table');
 var TextTemplate = require('components/core/TextTemplate');
 
 var AdvisorAssignmentsViewText = require('text/AdvisorAssignmentsViewText.md');
-var AdvisorWaitlistText = require('text/AdvisorWaitlistText.md')
+var AdvisorWaitlistText = require('text/AdvisorWaitlistText.md');
 
 var AdvisorAssignmentsView = React.createClass({
   mixins: [ReactRouter.History],
@@ -105,7 +105,7 @@ var AdvisorAssignmentsView = React.createClass({
 
   render: function() {
     var registration = this.state.registration;
-    var waitlisted = 
+    var waitlisted =
       _accessSafe(registration, 'is_waitlisted') == null
         ? null
         : registration.is_waitlisted;
@@ -122,7 +122,7 @@ var AdvisorAssignmentsView = React.createClass({
       this.state.assignments.length > 0 &&
       this.state.registration;
 
-    if(waitlisted) {
+    if (waitlisted) {
       return (
         <InnerView>
           <TextTemplate
@@ -131,7 +131,7 @@ var AdvisorAssignmentsView = React.createClass({
             {AdvisorWaitlistText}
           </TextTemplate>
         </InnerView>
-      );  
+      );
     } else {
       return (
         <InnerView>
@@ -164,7 +164,6 @@ var AdvisorAssignmentsView = React.createClass({
         </InnerView>
       );
     }
-
   },
 
   renderAssignmentRows: function() {
