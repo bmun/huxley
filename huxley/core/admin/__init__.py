@@ -16,6 +16,12 @@ from .schools import SchoolAdmin
 from .registration import RegistrationAdmin
 from .position_paper import PositionPaperAdmin
 from .secretariat_member import SecretariatMemberAdmin
+'''
+Add an import for your new models
+'''
+
+'''Your code here'''
+'''Your code here'''
 
 admin.site.register(Conference)
 admin.site.register(Country, CountryAdmin)
@@ -29,3 +35,9 @@ admin.site.register(Registration, RegistrationAdmin)
 admin.site.register(Rubric)
 admin.site.register(PositionPaper, PositionPaperAdmin)
 admin.site.register(SecretariatMember, SecretariatMemberAdmin)
+'''
+Register your models with the admin site.
+'''
+
+'''Your code here'''
+'''Your code here'''
