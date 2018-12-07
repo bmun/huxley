@@ -16,7 +16,7 @@ def index(request):
     if request.user.is_superuser:
         return redirect(reverse('admin:index'))
 
-    user_dict = {};
+    user_dict = {}
     if request.user.is_authenticated():
         user_dict = UserSerializer(request.user).data
 

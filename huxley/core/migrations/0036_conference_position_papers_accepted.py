@@ -7,14 +7,11 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('core', '0035_delegate_waiver_submitted'),
-    ]
+    dependencies = [('core', '0035_delegate_waiver_submitted'), ]
 
     operations = [
         migrations.AddField(
             model_name='conference',
             name='position_papers_accepted',
-            field=models.BooleanField(default=False),
-        ),
+            field=models.BooleanField(default=False), ),
     ]
