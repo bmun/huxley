@@ -9,6 +9,7 @@ var React = require('react');
 var ReactRouter = require('react-router');
 
 var Button = require('components/core/Button');
+var ConferenceContext = require('components/ConferenceContext');
 var CurrentUserStore = require('stores/CurrentUserStore');
 var InnerView = require('components/InnerView');
 var PaperSubmissionTable = require('components/PaperSubmissionTable');
@@ -21,9 +22,14 @@ var ServerAPI = require('lib/ServerAPI');
 
 require('css/Table.less');
 var DelegatePaperViewText = require('text/DelegatePaperViewText.md');
+var DelegatePaperNoSubmissionViewText = require('text/DelegatePaperNoSubmissionViewText.md');
 
 var DelegatePaperView = React.createClass({
   mixins: [ReactRouter.History],
+
+  contextTypes: {
+    conference: React.PropTypes.shape(ConferenceContext),
+  },
 
   getInitialState() {
     var user = CurrentUserStore.getCurrentUser();
@@ -65,16 +71,26 @@ var DelegatePaperView = React.createClass({
   },
 
   render() {
-    return (
-      <InnerView>
-        <div style={{margin: 'auto 20px 20px 20px'}}>
-          <TextTemplate>{DelegatePaperViewText}</TextTemplate>
-        </div>
-        <form>
-          <div className="table-container">{this.renderRubric()}</div>
-        </form>
-      </InnerView>
-    );
+    if (this.context.conference.position_papers_accepted) {
+      return (
+        <InnerView>
+          <div style={{margin: 'auto 20px 20px 20px'}}>
+            <TextTemplate>{DelegatePaperViewText}</TextTemplate>
+          </div>
+          <form>
+            <div className="table-container">{this.renderRubric()}</div>
+          </form>
+        </InnerView>
+      );
+    } else {
+      return (
+        <InnerView>
+          <div style={{margin: 'auto 20px 20px 20px'}}>
+            <TextTemplate>{DelegatePaperNoSubmissionViewText}</TextTemplate>
+          </div>
+        </InnerView>
+      );
+    }
   },
 
   renderRubric() {
