@@ -29,6 +29,7 @@ class Conference(models.Model):
     max_attendance = models.PositiveSmallIntegerField(default=0)
     open_reg = models.BooleanField(default=True)
     waitlist_reg = models.BooleanField(default=False)
+    position_papers_accepted = models.BooleanField(default=False)
     external = models.CharField(max_length=128)
     registration_fee = models.DecimalField(
         max_digits=6, decimal_places=2, default=Decimal('50.00'))

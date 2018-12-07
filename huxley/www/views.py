@@ -39,6 +39,7 @@ def index(request):
         'delegate_fee': int(conference.delegate_fee),
         'registration_open': conference.open_reg,
         'registration_waitlist': conference.waitlist_reg,
+        'position_papers_accepted': conference.position_papers_accepted,
     }
 
     context = {

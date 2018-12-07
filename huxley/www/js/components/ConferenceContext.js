@@ -24,6 +24,7 @@ var ConferenceContext = {
   delegate_fee: React.PropTypes.number,
   registration_open: React.PropTypes.bool,
   registration_waitlist: React.PropTypes.bool,
+  position_papers_accepted: React.PropTypes.bool,
 };
 
 module.exports = ConferenceContext;
