@@ -212,7 +212,6 @@ var AdvisorRosterView = React.createClass({
           </td>
         );
 
-
         const waiverCheck =
           delegate && delegate.waiver_submitted ? '\u2611' : '\u2610';
 
@@ -222,9 +221,6 @@ var AdvisorRosterView = React.createClass({
           assignments[delegate.assignment - 1].paper.file
             ? '\u2611'
             : '\u2610';
-
-
-
 
         return (
           <tr>
