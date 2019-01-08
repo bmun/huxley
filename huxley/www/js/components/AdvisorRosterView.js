@@ -10,6 +10,7 @@ var React = require('react');
 var ReactRouter = require('react-router');
 
 var _accessSafe = require('utils/_accessSafe');
+var AssignmentStore = require('stores/AssignmentStore');
 var Button = require('components/core/Button');
 var CurrentUserStore = require('stores/CurrentUserStore');
 var DelegateActions = require('actions/DelegateActions');
@@ -43,6 +44,9 @@ var AdvisorRosterView = React.createClass({
     return {
       delegates: DelegateStore.getSchoolDelegates(schoolID),
       registration: RegistrationStore.getRegistration(schoolID, conferenceID),
+      assignments: AssignmentStore.getSchoolAssignments(schoolID).filter(
+        assignment => !assignment.rejected,
+      ),
       loading: false,
       modal_open: false,
       modal_name: '',
@@ -119,6 +123,8 @@ var AdvisorRosterView = React.createClass({
               <tr>
                 <th>Delegate</th>
                 <th>Email</th>
+                <th>Waiver</th>
+                <th>Position Paper</th>
                 <th>Edit</th>
                 <th>Delete</th>
                 <th>Reset Password</th>
@@ -170,6 +176,7 @@ var AdvisorRosterView = React.createClass({
   renderRosterRows: function() {
     var committees = this.state.committees;
     var countries = this.state.countries;
+    var assignments = this.state.assignments;
     var disableEdit = _checkDate();
 
     return this.state.delegates.map(
@@ -204,10 +211,27 @@ var AdvisorRosterView = React.createClass({
             </Button>
           </td>
         );
+
+
+        const waiverCheck =
+          delegate && delegate.waiver_submitted ? '\u2611' : '\u2610';
+
+        const positionPaperCheck =
+          delegate.assignment &&
+          assignments[delegate.assignment - 1].paper &&
+          assignments[delegate.assignment - 1].paper.file
+            ? '\u2611'
+            : '\u2610';
+
+
+
+
         return (
           <tr>
             <td>{delegate.name}</td>
             <td>{delegate.email}</td>
+            <td>{waiverCheck}</td>
+            <td>{positionPaperCheck}</td>
             {editButton}
             {deleteButton}
             <td>
