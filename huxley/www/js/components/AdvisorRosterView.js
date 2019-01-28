@@ -179,11 +179,13 @@ var AdvisorRosterView = React.createClass({
     var assignments = this.state.assignments;
     var disableEdit = _checkDate();
 
-    var assignment_ids = {}
+    var assignment_ids = {};
 
-    this.state.assignments.map(function(a) {
-      assignment_ids[a.id] = a
-    }.bind(this));
+    this.state.assignments.map(
+      function(a) {
+        assignment_ids[a.id] = a;
+      }.bind(this),
+    );
 
     return this.state.delegates.map(
       function(delegate) {
