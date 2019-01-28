@@ -179,6 +179,12 @@ var AdvisorRosterView = React.createClass({
     var assignments = this.state.assignments;
     var disableEdit = _checkDate();
 
+    var assignment_ids = {}
+
+    this.state.assignments.map(function(a) {
+      assignment_ids[a.id] = a
+    }.bind(this));
+
     return this.state.delegates.map(
       function(delegate) {
         var editButton = disableEdit ? (
@@ -211,14 +217,17 @@ var AdvisorRosterView = React.createClass({
             </Button>
           </td>
         );
-
+        console.log(delegate);
+        console.log(assignments);
+        console.log(assignments[0]);
         const waiverCheck =
           delegate && delegate.waiver_submitted ? '\u2611' : '\u2610';
 
         const positionPaperCheck =
           delegate.assignment &&
-          assignments[delegate.assignment - 1].paper &&
-          assignments[delegate.assignment - 1].paper.file
+          assignment_ids[delegate.assignment] &&
+          assignment_ids[delegate.assignment].paper &&
+          assignment_ids[delegate.assignment].paper.file
             ? '\u2611'
             : '\u2610';
 
