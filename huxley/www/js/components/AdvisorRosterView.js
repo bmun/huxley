@@ -42,8 +42,8 @@ var AdvisorRosterView = React.createClass({
     var schoolID = CurrentUserStore.getCurrentUser().school.id;
     var conferenceID = this.context.conference.session;
     var assignments = AssignmentStore.getSchoolAssignments(schoolID).filter(
-        assignment => !assignment.rejected,
-    )
+      assignment => !assignment.rejected,
+    );
 
     var assignment_ids = {};
     assignments.map(
@@ -88,8 +88,8 @@ var AdvisorRosterView = React.createClass({
     });
     this._assignmentsToken = AssignmentStore.addListener(() => {
       var assignments = AssignmentStore.getSchoolAssignments(schoolID).filter(
-          assignment => !assignment.rejected,
-      )
+        assignment => !assignment.rejected,
+      );
       var assignment_ids = {};
       assignments.map(
         function(a) {
@@ -99,8 +99,8 @@ var AdvisorRosterView = React.createClass({
       this.setState({
         assignments: assignments,
         assignment_ids: assignment_ids,
-      })
-    })
+      });
+    });
   },
 
   componentWillUnmount: function() {
