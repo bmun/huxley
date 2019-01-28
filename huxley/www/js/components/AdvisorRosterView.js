@@ -41,12 +41,22 @@ var AdvisorRosterView = React.createClass({
   getInitialState: function() {
     var schoolID = CurrentUserStore.getCurrentUser().school.id;
     var conferenceID = this.context.conference.session;
+    var assignments = AssignmentStore.getSchoolAssignments(schoolID).filter(
+        assignment => !assignment.rejected,
+    )
+
+    var assignment_ids = {};
+    assignments.map(
+      function(a) {
+        assignment_ids[a.id] = a;
+      }.bind(this),
+    );
+
     return {
       delegates: DelegateStore.getSchoolDelegates(schoolID),
       registration: RegistrationStore.getRegistration(schoolID, conferenceID),
-      assignments: AssignmentStore.getSchoolAssignments(schoolID).filter(
-        assignment => !assignment.rejected,
-      ),
+      assignments: assignments,
+      assignment_ids: assignment_ids,
       loading: false,
       modal_open: false,
       modal_name: '',
@@ -76,11 +86,27 @@ var AdvisorRosterView = React.createClass({
         loading: false,
       });
     });
+    this._assignmentsToken = AssignmentStore.addListener(() => {
+      var assignments = AssignmentStore.getSchoolAssignments(schoolID).filter(
+          assignment => !assignment.rejected,
+      )
+      var assignment_ids = {};
+      assignments.map(
+        function(a) {
+          assignment_ids[a.id] = a;
+        }.bind(this),
+      );
+      this.setState({
+        assignments: assignments,
+        assignment_ids: assignment_ids,
+      })
+    })
   },
 
   componentWillUnmount: function() {
     this._registrationToken && this._registrationToken.remove();
     this._delegatesToken && this._delegatesToken.remove();
+    this._assignmentsToken && this._assignmentsToken.remove();
   },
 
   render: function() {
@@ -177,15 +203,8 @@ var AdvisorRosterView = React.createClass({
     var committees = this.state.committees;
     var countries = this.state.countries;
     var assignments = this.state.assignments;
+    var assignment_ids = this.state.assignment_ids;
     var disableEdit = _checkDate();
-
-    var assignment_ids = {};
-
-    this.state.assignments.map(
-      function(a) {
-        assignment_ids[a.id] = a;
-      }.bind(this),
-    );
 
     return this.state.delegates.map(
       function(delegate) {
@@ -219,9 +238,6 @@ var AdvisorRosterView = React.createClass({
             </Button>
           </td>
         );
-        console.log(delegate);
-        console.log(assignments);
-        console.log(assignments[0]);
         const waiverCheck =
           delegate && delegate.waiver_submitted ? '\u2611' : '\u2610';
 
