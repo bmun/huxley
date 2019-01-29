@@ -18,6 +18,7 @@ var DelegateStore = require('stores/DelegateStore');
 var ConferenceContext = require('components/ConferenceContext');
 var CurrentUserActions = require('actions/CurrentUserActions');
 var InnerView = require('components/InnerView');
+var PositionPaperStore = require('stores/PositionPaperStore')
 var RegistrationStore = require('stores/RegistrationStore');
 var ServerAPI = require('lib/ServerAPI');
 var StatusLabel = require('components/core/StatusLabel');
@@ -28,6 +29,7 @@ var _checkDate = require('utils/_checkDate');
 var _handleChange = require('utils/_handleChange');
 
 require('css/Modal.less');
+const cx = require('classnames');
 var AdvisorRosterViewText = require('text/AdvisorRosterViewText.md');
 var AdvisorWaitlistText = require('text/AdvisorWaitlistText.md');
 
@@ -44,6 +46,7 @@ var AdvisorRosterView = React.createClass({
     var assignments = AssignmentStore.getSchoolAssignments(schoolID).filter(
       assignment => !assignment.rejected,
     );
+    var files = PositionPaperStore.getPositionPaperFiles();
 
     var assignment_ids = {};
     assignments.map(
@@ -57,6 +60,7 @@ var AdvisorRosterView = React.createClass({
       registration: RegistrationStore.getRegistration(schoolID, conferenceID),
       assignments: assignments,
       assignment_ids: assignment_ids,
+      files: files,
       loading: false,
       modal_open: false,
       modal_name: '',
@@ -101,12 +105,16 @@ var AdvisorRosterView = React.createClass({
         assignment_ids: assignment_ids,
       });
     });
+    this._papersToken = PositionPaperStore.addListener(() => {
+      this.setState({files: PositionPaperStore.getPositionPaperFiles()});
+    });
   },
 
   componentWillUnmount: function() {
     this._registrationToken && this._registrationToken.remove();
     this._delegatesToken && this._delegatesToken.remove();
     this._assignmentsToken && this._assignmentsToken.remove();
+    this._papersToken && this._papersToken.remove();
   },
 
   render: function() {
@@ -151,6 +159,7 @@ var AdvisorRosterView = React.createClass({
                 <th>Email</th>
                 <th>Waiver</th>
                 <th>Position Paper</th>
+                <th>Download Paper</th>
                 <th>Edit</th>
                 <th>Delete</th>
                 <th>Reset Password</th>
@@ -204,6 +213,7 @@ var AdvisorRosterView = React.createClass({
     var countries = this.state.countries;
     var assignments = this.state.assignments;
     var assignment_ids = this.state.assignment_ids;
+    var files = this.state.files;
     var disableEdit = _checkDate();
 
     return this.state.delegates.map(
@@ -249,12 +259,29 @@ var AdvisorRosterView = React.createClass({
             ? '\u2611'
             : '\u2610';
 
+        var positionPaper = positionPaperCheck  == '\u2611' ? PositionPaperStore.getPositionPaperFile(assignment_ids[delegate.assignment].paper.id) : null;
+        var names = positionPaper ? assignment_ids[delegate.assignment].paper.file.split('/') : null;
+        var fileName = names ? names[names.length - 1] : null;
+
+         var downloadButton = positionPaper ? (<td><a
+            className={cx({
+              button: true,
+              'button-small': true,
+              'button-green': true,
+              'rounded-small': true,
+            })}
+            href={this._href.bind(this, positionPaper)}
+            download={fileName}>
+            &#10515;
+          </a></td>) : (<td />);
+
         return (
           <tr>
             <td>{delegate.name}</td>
             <td>{delegate.email}</td>
             <td>{waiverCheck}</td>
             <td>{positionPaperCheck}</td>
+            {downloadButton}
             {editButton}
             {deleteButton}
             <td>
@@ -302,6 +329,10 @@ var AdvisorRosterView = React.createClass({
     }
 
     return null;
+  },
+
+  _href: function(file) {
+      return window.URL.createObjectURL(file);
   },
 
   _handleDeleteDelegate: function(delegate) {
