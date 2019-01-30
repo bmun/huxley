@@ -18,7 +18,7 @@ var DelegateStore = require('stores/DelegateStore');
 var ConferenceContext = require('components/ConferenceContext');
 var CurrentUserActions = require('actions/CurrentUserActions');
 var InnerView = require('components/InnerView');
-var PositionPaperStore = require('stores/PositionPaperStore')
+var PositionPaperStore = require('stores/PositionPaperStore');
 var RegistrationStore = require('stores/RegistrationStore');
 var ServerAPI = require('lib/ServerAPI');
 var StatusLabel = require('components/core/StatusLabel');
@@ -107,7 +107,8 @@ var AdvisorRosterView = React.createClass({
       });
     });
     this._papersToken = PositionPaperStore.addListener(() => {
-      this.setState({files: PositionPaperStore.getPositionPaperFiles(),
+      this.setState({
+        files: PositionPaperStore.getPositionPaperFiles(),
         papers: PositionPaperStore.getPapers(),
       });
     });
@@ -253,7 +254,6 @@ var AdvisorRosterView = React.createClass({
           </td>
         );
 
-
         const waiverCheck =
           delegate && delegate.waiver_submitted ? '\u2611' : '\u2610';
 
@@ -265,22 +265,37 @@ var AdvisorRosterView = React.createClass({
             ? '\u2611'
             : '\u2610';
 
-        var positionPaper = positionPaperCheck  == '\u2611' ? PositionPaperStore.getPositionPaperFile(assignment_ids[delegate.assignment].paper.id) : null;
-        var names = positionPaper ? assignment_ids[delegate.assignment].paper.file.split('/') : null;
+        var positionPaper =
+          positionPaperCheck == '\u2611'
+            ? PositionPaperStore.getPositionPaperFile(
+                assignment_ids[delegate.assignment].paper.id,
+              )
+            : null;
+        var names = positionPaper
+          ? assignment_ids[delegate.assignment].paper.file.split('/')
+          : null;
         var fileName = names ? names[names.length - 1] : null;
         var url = window.URL;
-        var hrefData = positionPaper ? url.createObjectURL(positionPaper) : null;
-         var downloadButton = positionPaper ? (<td><a
-            className={cx({
-              button: true,
-              'button-small': true,
-              'button-green': true,
-              'rounded-small': true,
-            })}
-            href={hrefData}
-            download={fileName}>
-            &#10515;
-          </a></td>) : (<td />);
+        var hrefData = positionPaper
+          ? url.createObjectURL(positionPaper)
+          : null;
+        var downloadButton = positionPaper ? (
+          <td>
+            <a
+              className={cx({
+                button: true,
+                'button-small': true,
+                'button-green': true,
+                'rounded-small': true,
+              })}
+              href={hrefData}
+              download={fileName}>
+              &#10515;
+            </a>
+          </td>
+        ) : (
+          <td />
+        );
 
         return (
           <tr>
