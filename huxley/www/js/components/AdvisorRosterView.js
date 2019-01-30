@@ -46,6 +46,7 @@ var AdvisorRosterView = React.createClass({
     var assignments = AssignmentStore.getSchoolAssignments(schoolID).filter(
       assignment => !assignment.rejected,
     );
+    var papers = PositionPaperStore.getPapers();
     var files = PositionPaperStore.getPositionPaperFiles();
 
     var assignment_ids = {};
@@ -106,7 +107,9 @@ var AdvisorRosterView = React.createClass({
       });
     });
     this._papersToken = PositionPaperStore.addListener(() => {
-      this.setState({files: PositionPaperStore.getPositionPaperFiles()});
+      this.setState({files: PositionPaperStore.getPositionPaperFiles(),
+        papers: PositionPaperStore.getPapers(),
+      });
     });
   },
 
@@ -214,6 +217,7 @@ var AdvisorRosterView = React.createClass({
     var assignments = this.state.assignments;
     var assignment_ids = this.state.assignment_ids;
     var files = this.state.files;
+    var papers = this.state.papers;
     var disableEdit = _checkDate();
 
     return this.state.delegates.map(
@@ -248,6 +252,8 @@ var AdvisorRosterView = React.createClass({
             </Button>
           </td>
         );
+
+
         const waiverCheck =
           delegate && delegate.waiver_submitted ? '\u2611' : '\u2610';
 
@@ -262,7 +268,8 @@ var AdvisorRosterView = React.createClass({
         var positionPaper = positionPaperCheck  == '\u2611' ? PositionPaperStore.getPositionPaperFile(assignment_ids[delegate.assignment].paper.id) : null;
         var names = positionPaper ? assignment_ids[delegate.assignment].paper.file.split('/') : null;
         var fileName = names ? names[names.length - 1] : null;
-
+        var url = window.URL;
+        var hrefData = positionPaper ? url.createObjectURL(positionPaper) : null;
          var downloadButton = positionPaper ? (<td><a
             className={cx({
               button: true,
@@ -270,7 +277,7 @@ var AdvisorRosterView = React.createClass({
               'button-green': true,
               'rounded-small': true,
             })}
-            href={this._href.bind(this, positionPaper)}
+            href={hrefData}
             download={fileName}>
             &#10515;
           </a></td>) : (<td />);
@@ -329,10 +336,6 @@ var AdvisorRosterView = React.createClass({
     }
 
     return null;
-  },
-
-  _href: function(file) {
-      return window.URL.createObjectURL(file);
   },
 
   _handleDeleteDelegate: function(delegate) {
