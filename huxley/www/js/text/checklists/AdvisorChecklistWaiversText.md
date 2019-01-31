@@ -1,3 +1,3 @@
-All delegates are required to turn in a medical and media release waiver prior to attending conference.  Waiver completion is due on 2/15. The waiver will become available to delegates on 1/28.
+All delegates are required to turn in a medical and media release waiver prior to attending conference.  Waiver completion is due on 2/15. The waiver will become available to delegates on 1/28. [The link to the waiver is here](https://www.waiverfile.com/b/BerkeleyModelUnitedNations/Waiver.aspx?formid=cf4fe2ab-22da-4e81-8a6c-4fe7005debd0).
 
 This checklist item is updated manually by BMUN's Undersecretary General of External Relations, Alexandra Maloney, every non-holiday Wednesday and Sunday night on a rolling basis. If your all your delgates have submitted waivers electronically and this item has not been checked, please contact info@bmun.org.
