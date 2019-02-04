@@ -40,11 +40,13 @@ var DelegatePaperView = React.createClass({
       PositionPaperActions.fetchPositionPaperFile(assignment.paper.id);
     }
     var files = PositionPaperStore.getPositionPaperFiles();
+    var graded_files = PositionPaperStore.getGradedPositionPaperFiles();
 
     return {
       papers: papers,
       uploadedFile: null,
       files: files,
+      graded_files: graded_files,
       errors: {},
     };
   },
@@ -61,6 +63,7 @@ var DelegatePaperView = React.createClass({
       this.setState({
         files: PositionPaperStore.getPositionPaperFiles(),
         papers: PositionPaperStore.getPapers(),
+        graded_files: PositionPaperStore.getGradedPositionPaperFiles(),
       });
     });
   },
@@ -97,6 +100,7 @@ var DelegatePaperView = React.createClass({
     const user = CurrentUserStore.getCurrentUser();
     const paper = this.state.papers[user.delegate.assignment.paper.id];
     const files = this.state.files;
+    const graded_files = this.state.graded_files;
     const rubric = user.delegate.assignment.committee.rubric;
 
     if (rubric != null && paper != null) {
@@ -105,6 +109,7 @@ var DelegatePaperView = React.createClass({
           rubric={rubric}
           paper={paper}
           files={files}
+          graded_files={graded_files}
           onUpload={this._handleUploadPaper}
           onSubmit={this._handleSubmitPaper}
         />

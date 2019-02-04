@@ -18,19 +18,35 @@ var PaperSubmissionTable = React.createClass({
     rubric: React.PropTypes.object,
     paper: React.PropTypes.object,
     files: React.PropTypes.object,
+    graded_files: React.PropTypes.object,
   },
 
   render() {
     var rubric = this.props.rubric;
     var paper = this.props.paper;
     var files = this.props.files;
+    var graded_files = this.props.graded_files;
     var buttons = <div />;
 
     if (paper.id in files) {
       var url = window.URL;
       var hrefData = url.createObjectURL(files[paper.id]);
+      var gradedHrefData = url.createObjectURL(graded_files[paper.id])
       var fileNames = paper.file.split('/');
       var fileName = fileNames[fileNames.length - 1];
+      var gradedButton = paper.graded ?
+          <a
+            className={cx({
+              button: true,
+              'button-large': true,
+              'button-blue': true,
+              'rounded-small': true,
+            })}
+            href={gradedHrefData}
+            download={"graded_" + fileName}>
+            Download Graded Paper
+          </a>
+        : null;
       buttons = (
         <div>
           <a
@@ -44,7 +60,7 @@ var PaperSubmissionTable = React.createClass({
             download={fileName}>
             Download Paper
           </a>
-        </div>
+          {gradedButton}</div>
       );
     }
 
