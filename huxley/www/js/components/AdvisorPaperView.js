@@ -5,34 +5,27 @@
 
 'use strict';
 
-var Modal = require('react-modal');
 var React = require('react');
 var ReactRouter = require('react-router');
 
 var _accessSafe = require('utils/_accessSafe');
-var AssignmentActions = require('actions/AssignmentActions');
 var AssignmentStore = require('stores/AssignmentStore');
 var Button = require('components/core/Button');
 var CommitteeStore = require('stores/CommitteeStore');
 var CountryStore = require('stores/CountryStore');
 var CurrentUserStore = require('stores/CurrentUserStore');
-var DelegateActions = require('actions/DelegateActions');
-var DelegateStore = require('stores/DelegateStore');
 var ConferenceContext = require('components/ConferenceContext');
-var CurrentUserActions = require('actions/CurrentUserActions');
 var InnerView = require('components/InnerView');
-var RegistrationStore = require('stores/RegistrationStore');
+var PositionPaperStore = require('stores/PositionPaperStore');
 var RubricStore = require('stores/RubricStore');
 var ServerAPI = require('lib/ServerAPI');
 var StatusLabel = require('components/core/StatusLabel');
 var Table = require('components/core/Table');
-var TextInput = require('components/core/TextInput');
 var TextTemplate = require('components/core/TextTemplate');
 var _checkDate = require('utils/_checkDate');
 var _handleChange = require('utils/_handleChange');
 
-require('css/Modal.less');
-var AdvisorRosterViewText = require('text/AdvisorRosterViewText.md');
+const cx = require('classnames');
 var AdvisorPaperViewText = require('text/AdvisorPaperViewText.md');
 var AdvisorWaitlistText = require('text/AdvisorWaitlistText.md');
 
@@ -47,45 +40,61 @@ var AdvisorPaperView = React.createClass({
     var schoolID = CurrentUserStore.getCurrentUser().school.id;
     var conferenceID = this.context.conference.session;
     return {
-      delegates: DelegateStore.getSchoolDelegates(schoolID),
-      registration: RegistrationStore.getRegistration(schoolID, conferenceID),
       assignments: AssignmentStore.getSchoolAssignments(schoolID),
       committees: CommitteeStore.getCommittees(),
       countries: CountryStore.getCountries(),
+      files: PositionPaperStore.getPositionPaperFiles(),
+      rubric: RubricStore.getRubric,
       loading: false,
-      modal_open: false,
-      modal_name: '',
-      modal_email: '',
-      modal_onClick: null,
       errors: {},
     };
-  },
-
-  componentWillMount: function() {
-    Modal.setAppElement('body');
   },
 
   componentDidMount: function() {
     var schoolID = CurrentUserStore.getCurrentUser().school.id;
     var conferenceID = this.context.conference.session;
-    this._registrationToken = RegistrationStore.addListener(() => {
+    this._committeesToken = CommitteeStore.addListener(() => {
       this.setState({
-        registration: RegistrationStore.getRegistration(schoolID, conferenceID),
+        committees: CommitteeStore.getCommittees(),
       });
     });
-    this._delegatesToken = DelegateStore.addListener(() => {
+    this._countriesToken = CountryStore.addListener(() => {
       this.setState({
-        registration: RegistrationStore.getRegistration(schoolID, conferenceID),
-        delegates: DelegateStore.getSchoolDelegates(schoolID),
-        modal_open: false,
-        loading: false,
+        countries: CountryStore.getCountries(),
+      });
+    });
+    this._assignmentsToken = AssignmentStore.addListener(() => {
+      var assignments = AssignmentStore.getSchoolAssignments(schoolID).filter(
+        assignment => !assignment.rejected,
+      );
+      var assignment_ids = {};
+      assignments.map(
+        function(a) {
+          assignment_ids[a.id] = a;
+        }.bind(this),
+      );
+      this.setState({
+        assignments: assignments,
+        assignment_ids: assignment_ids,
+      });
+    });
+    this._papersToken = PositionPaperStore.addListener(() => {
+      this.setState({files: PositionPaperStore.getPositionPaperFiles()});
+    });
+    this._rubricsToken = RubricStore.addListener(() => {
+      this.setState({
+        rubric: RubricStore.getRubric,
       });
     });
   },
 
   componentWillUnmount: function() {
     this._registrationToken && this._registrationToken.remove();
-    this._delegatesToken && this._delegatesToken.remove();
+    this._rubricsToken && this._rubricsToken.remove();
+    this._papersToken && this._papersToken.remove();
+    this._countriesToken && this._countriesToken.remove();
+    this._committeesToken && this._committeesToken.remove();
+    this._assignmentsToken && this._assignmentsToken.remove();
   },
 
   render: function() {
@@ -96,6 +105,7 @@ var AdvisorPaperView = React.createClass({
         ? null
         : registration.is_waitlisted;
     var disableEdit = _checkDate();
+
 
     if (waitlisted) {
       return (
@@ -122,174 +132,112 @@ var AdvisorPaperView = React.createClass({
     var cm = this.state.committees;
     var countries = this.state.countries;
     var assignments = this.state.assignments;
-    var rubrics = this.state.rubrics;
-    this.state.assignments.map(
-      function(a) {
-        var current_committee = cm[a.committee].name;
-        committees[current_committee] =
-          committees[current_committee] == undefined
-            ? [a]
-            : committees[current_committee].concat([a]);
-        console.log(committees);
+    var get_rubric = this.state.rubric;
+    this.state.assignments.map(function(a) {
+      var current_committee = cm[a.committee] ? cm[a.committee].name : null;
+      if (current_committee) {
+        committees[current_committee] = committees[current_committee] == undefined ? [a] : committees[current_committee].concat([a]);
+      }
+    }.bind(this));
+
+    return Object.keys(committees).map(
+      function(c) {
+        var countryAssignments = committees[c];
+        var committee = cm[countryAssignments[0].committee];
+        var rubric = committee.rubric;
+        return (<div><h4>{committee.name}</h4><Table emptyMessage="You don't have any assignments."
+          isEmpty={!assignments.length}>
+          <thead>
+            <tr>
+              <th width="13%">Assignment</th>
+              <th width="12%">Submitted</th>
+              <th width="10.5%">Graded</th>
+              {rubric.use_topic_2 ? <th width="7%">Topic</th> : null}
+              <th width="11.5%">Category 1</th>
+              <th width="11.5%">Category 2</th>
+              <th width="11.5%">Category 3</th>
+              <th width="11.5%">Category 4</th>
+              <th width="11.5%">Category 5</th>
+            </tr>
+          </thead>
+          {this.renderCommitteeRows(countryAssignments, rubric, rubric.use_topic_2)}
+          </Table></div>);
       }.bind(this),
     );
-
-    return Object.keys(committees).map(function(c) {
-      var countryAssignments = committees[c];
-      var committee = cm[countryAssignments[0].committee];
-      var rubric = RubricStore.getRubric(committee.rubric);
-      if (rubric.use_topic_2) {
-        return (
-          <Table
-            emptyMessage="You don't have any delegates in your roster."
-            isEmpty={!this.state.delegates.length}>
-            <thead>
-              <tr>
-                <th>Assignment</th>
-                <th>Position Paper</th>
-                <th>Graded</th>
-                <th>Delete</th>
-                <th>{rubric.grade_category_1}</th>
-                <th>{rubric.grade_category_2}</th>
-                <th>{rubric.grade_category_3}</th>
-                <th>{rubric.grade_category_4}</th>
-                <th>{rubric.grade_category_5}</th>
-                <th>{rubric.grade_t2_category_1}</th>
-                <th>{rubric.grade_t2_category_2}</th>
-                <th>{rubric.grade_t2_category_3}</th>
-                <th>{rubric.grade_t2_category_4}</th>
-                <th>{rubric.grade_t2_category_5}</th>
-              </tr>
-            </thead>
-            <tbody>{renderCommitteeRows(countryAssignments, true)}</tbody>
-          </Table>
-        );
-      } else {
-        return (
-          <Table
-            emptyMessage="You don't have any delegates in your roster."
-            isEmpty={!this.state.delegates.length}>
-            <thead>
-              <tr>
-                <th>Assignment</th>
-                <th>Position Paper</th>
-                <th>Graded</th>
-                <th>Delete</th>
-                <th>{rubric.grade_category_1}</th>
-                <th>{rubric.grade_category_2}</th>
-                <th>{rubric.grade_category_3}</th>
-                <th>{rubric.grade_category_4}</th>
-                <th>{rubric.grade_category_5}</th>
-              </tr>
-            </thead>
-            <tbody>{renderCommitteeRows(countryAssignments, false)}</tbody>
-          </Table>
-        );
-      }
-    });
   },
 
-  renderCommitteeRows: function(countryAssignments, topic_2) {
-    if (!topic_2) {
-      return countryAssignments.map(function(assignment) {
-        return (
-          <tr>
-            <td>{assignment.country}</td>
-            <td>
-              <a
-                className={cx({
-                  button: true,
-                  'button-large': true,
-                  'button-green': true,
-                  'rounded-small': true,
-                })}
-                href={hrefData}
-                download={assignment.paper.file}>
-                Download Paper
-              </a>
-            </td>
-            <td>
-              <a
-                className={cx({
-                  button: true,
-                  'button-large': true,
-                  'button-green': true,
-                  'rounded-small': true,
-                })}
-                href={hrefData}
-                download={assignment.paper.file}>
-                Download Paper
-              </a>
-            </td>
-            <td>{assignment.paper.score_1}</td>
-            <td>{assignment.paper.score_2}</td>
-            <td>{assignment.paper.score_3}</td>
-            <td>{assignment.paper.score_4}</td>
-            <td>{assignment.paper.score_5}</td>
+  renderCommitteeRows: function(countryAssignments, rubric, topic_2) {
+      return countryAssignments.map(
+      function(assignment) {
+        var paper = 
+          assignment.paper &&
+          assignment.paper.file 
+          ? assignment.paper : null;
+        var originalHrefData = paper && paper.file
+          ? window.URL.createObjectURL(PositionPaperStore.getPositionPaperFile(assignment.paper.id))
+          : null;
+        var gradedHrefData = paper && paper.graded && paper.graded_file ? window.URL.createObjectURL(PositionPaperStore.getGradedPositionPaperFile(assignment.paper.id))
+          : null;
+        var names = paper
+          ? paper.file.split('/')
+          : null;
+        var graded = assignment.paper.graded;
+        var fileName = names ? names[names.length - 1] : null;
+        var gradedFileName = fileName ? "graded_" + fileName : null;
+        var downloadPaper = paper ? <a
+              className={cx({
+                button: true,
+                'button-small': true,
+                'button-green': true,
+                'rounded-small': true,
+              })}
+              href={originalHrefData}
+              download={assignment.paper.file}>
+              &#10515;
+            </a> : null;
+        var gradedPaper = paper && graded ? <a
+              className={cx({
+                button: true,
+                'button-small': true,
+                'button-blue': true,
+                'rounded-small': true,
+              })}
+              href={gradedHrefData}
+              download={assignment.paper.graded_file}>
+              &#10515;
+            </a> : null;
+        var rows = topic_2 ? "2" : "1";
+        var topic_1_row = <tr>
+            <td rowSpan={rows}>{this.state.countries[assignment.country].name}</td>
+            <td rowSpan={rows}>
+            {downloadPaper}
+          </td>
+          <td rowSpan={rows}>
+            {gradedPaper}
+          </td>
+          {topic_2 ? <td>A</td> : null}
+          <td>{graded ? assignment.paper.score_1 : null}</td>
+          <td>{graded ? assignment.paper.score_2 : null}</td>
+          <td>{graded ? assignment.paper.score_3 : null}</td>
+          <td>{graded ? assignment.paper.score_4 : null}</td>
+          <td>{graded ? assignment.paper.score_5 : null}</td>
           </tr>
+        var topic_2_row = topic_2 ? <tr>
+          <td>B</td>
+          <td>{graded ? assignment.paper.score_t2_1 : null}</td>
+          <td>{graded ? assignment.paper.score_t2_2 : null}</td>
+          <td>{graded ? assignment.paper.score_t2_3 : null}</td>
+          <td>{graded ? assignment.paper.score_t2_4 : null}</td>
+          <td>{graded ? assignment.paper.score_t2_5 : null}</td>
+          </tr> : null;
+        return (<tbody>
+          {topic_1_row}
+          {topic_2_row}
+          </tbody>
         );
-      });
-    } else {
-      return countryAssignments.map(function(assignment) {
-        return (
-          <tr>
-            <td>{assignment.country}</td>
-            <td>
-              <a
-                className={cx({
-                  button: true,
-                  'button-large': true,
-                  'button-green': true,
-                  'rounded-small': true,
-                })}
-                href={hrefData}
-                download={assignment.paper.file}>
-                Download Paper
-              </a>
-            </td>
-            <td>
-              <a
-                className={cx({
-                  button: true,
-                  'button-large': true,
-                  'button-green': true,
-                  'rounded-small': true,
-                })}
-                href={hrefData}
-                download={assignment.paper.file}>
-                Download Paper
-              </a>
-            </td>
-            <td>{assignment.paper.score_1}</td>
-            <td>{assignment.paper.score_2}</td>
-            <td>{assignment.paper.score_3}</td>
-            <td>{assignment.paper.score_4}</td>
-            <td>{assignment.paper.score_5}</td>
-            <td>{assignment.paper.score_t2_1}</td>
-            <td>{assignment.paper.score_t2_2}</td>
-            <td>{assignment.paper.score_t2_3}</td>
-            <td>{assignment.paper.score_t2_4}</td>
-            <td>{assignment.paper.score_t2_5}</td>
-          </tr>
-        );
-      });
-    }
-  },
-
-  openModal: function(name, email, fn, event) {
-    this.setState({
-      modal_open: true,
-      modal_name: name,
-      modal_email: email,
-      modal_onClick: fn,
-      errors: {},
-    });
-    event.preventDefault();
-  },
-
-  closeModal: function(event) {
-    this.setState({modal_open: false});
-    event.preventDefault();
+      }.bind(this),
+    );
+    
   },
 
   renderError: function(field) {
@@ -302,72 +250,10 @@ var AdvisorPaperView = React.createClass({
     return null;
   },
 
-  _handleDeleteDelegate: function(delegate) {
-    const confirmed = window.confirm(
-      `Are you sure you want to delete this delegate (${delegate.name})?`,
-    );
-    if (confirmed) {
-      DelegateActions.deleteDelegate(delegate.id, this._handleDeleteError);
-    }
-  },
-
-  _handleAddDelegate: function(data) {
-    this.setState({loading: true});
-    var user = CurrentUserStore.getCurrentUser();
-    ServerAPI.createDelegate(
-      this.state.modal_name,
-      this.state.modal_email,
-      user.school.id,
-    ).then(this._handleAddDelegateSuccess, this._handleError);
-    event.preventDefault();
-  },
-
-  _handleEditDelegate: function(delegate) {
-    var user = CurrentUserStore.getCurrentUser();
-    this.setState({loading: true});
-    var delta = {name: this.state.modal_name, email: this.state.modal_email};
-    DelegateActions.updateDelegate(delegate.id, delta, this._handleError);
-    event.preventDefault();
-  },
-
-  _handleDelegatePasswordChange: function(delegate) {
-    ServerAPI.resetDelegatePassword(delegate.id).then(
-      this._handlePasswordChangeSuccess,
-      this._handlePasswordChangeError,
-    );
-  },
-
-  _handleAddDelegateSuccess: function(response) {
-    DelegateActions.addDelegate(response);
-    this.setState({
-      loading: false,
-      modal_open: false,
-    });
-  },
-
-  _handlePasswordChangeSuccess: function(response) {
-    this.setState({
-      loading: false,
-      modal_open: false,
-    });
-    window.alert(`Password successfully reset.`);
-  },
-
-  _handlePasswordChangeError: function(response) {
-    window.alert(`The passowrd could not be reset.`);
-  },
-
-  _handleDeleteError: function(response) {
-    window.alert(
-      `There was an issue processing your request. Please refresh you page and try again.`,
-    );
-  },
-
   _handleError: function(response) {
     this.setState({
       errors: response,
       loading: false,
-      modal_open: true,
     });
   },
 });
