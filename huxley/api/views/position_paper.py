@@ -81,6 +81,7 @@ class PositionPaperFile(generics.RetrieveAPIView):
                 "Paper with id {0} does not exist".format(paper_id),
                 status=status.HTTP_400_BAD_REQUEST)
 
+
 class PositionPaperGradedFile(generics.RetrieveAPIView):
     authentication_classes = (SessionAuthentication, )
 
@@ -108,4 +109,3 @@ class PositionPaperGradedFile(generics.RetrieveAPIView):
             return Response(
                 "Paper with id {0} does not exist".format(paper_id),
                 status=status.HTTP_400_BAD_REQUEST)
-

@@ -106,7 +106,6 @@ var AdvisorPaperView = React.createClass({
         : registration.is_waitlisted;
     var disableEdit = _checkDate();
 
-
     if (waitlisted) {
       return (
         <InnerView>
@@ -133,69 +132,93 @@ var AdvisorPaperView = React.createClass({
     var countries = this.state.countries;
     var assignments = this.state.assignments;
     var get_rubric = this.state.rubric;
-    this.state.assignments.map(function(a) {
-      var current_committee = cm[a.committee] ? cm[a.committee].name : null;
-      if (current_committee) {
-        committees[current_committee] = committees[current_committee] == undefined ? [a] : committees[current_committee].concat([a]);
-      }
-    }.bind(this));
+    this.state.assignments.map(
+      function(a) {
+        var current_committee = cm[a.committee] ? cm[a.committee].name : null;
+        if (current_committee) {
+          committees[current_committee] =
+            committees[current_committee] == undefined
+              ? [a]
+              : committees[current_committee].concat([a]);
+        }
+      }.bind(this),
+    );
 
     return Object.keys(committees).map(
       function(c) {
         var countryAssignments = committees[c];
         var committee = cm[countryAssignments[0].committee];
         var rubric = committee.rubric;
-        return (<div><h4>{committee.name}</h4><Table emptyMessage="You don't have any assignments."
-          isEmpty={!assignments.length}>
-          <thead>
-            <tr>
-              <th width="13%">Assignment</th>
-              <th width="12%">Submitted</th>
-              <th width="10.5%">Graded</th>
-              {rubric.use_topic_2 ? <th width="7%">Topic</th> : null}
-              <th width="11.5%">Category 1</th>
-              <th width="11.5%">Category 2</th>
-              <th width="11.5%">Category 3</th>
-              <th width="11.5%">Category 4</th>
-              <th width="11.5%">Category 5</th>
-            </tr>
-          </thead>
-          {this.renderCommitteeRows(countryAssignments, rubric, rubric.use_topic_2)}
-          </Table></div>);
+        return (
+          <div>
+            <h4>{committee.name}</h4>
+            <Table
+              emptyMessage="You don't have any assignments."
+              isEmpty={!assignments.length}>
+              <thead>
+                <tr>
+                  <th width="13%">Assignment</th>
+                  <th width="12%">Submitted</th>
+                  <th width="10.5%">Graded</th>
+                  {rubric.use_topic_2 ? <th width="7%">Topic</th> : null}
+                  <th width="11.5%">Category 1</th>
+                  <th width="11.5%">Category 2</th>
+                  <th width="11.5%">Category 3</th>
+                  <th width="11.5%">Category 4</th>
+                  <th width="11.5%">Category 5</th>
+                </tr>
+              </thead>
+              {this.renderCommitteeRows(
+                countryAssignments,
+                rubric,
+                rubric.use_topic_2,
+              )}
+            </Table>
+          </div>
+        );
       }.bind(this),
     );
   },
 
   renderCommitteeRows: function(countryAssignments, rubric, topic_2) {
-      return countryAssignments.map(
+    return countryAssignments.map(
       function(assignment) {
-        var paper = 
-          assignment.paper &&
-          assignment.paper.file 
-          ? assignment.paper : null;
-        var originalHrefData = paper && paper.file
-          ? window.URL.createObjectURL(PositionPaperStore.getPositionPaperFile(assignment.paper.id))
-          : null;
-        var gradedHrefData = paper && paper.graded && paper.graded_file ? window.URL.createObjectURL(PositionPaperStore.getGradedPositionPaperFile(assignment.paper.id))
-          : null;
-        var names = paper
-          ? paper.file.split('/')
-          : null;
+        var paper =
+          assignment.paper && assignment.paper.file ? assignment.paper : null;
+        var originalHrefData =
+          paper && paper.file
+            ? window.URL.createObjectURL(
+                PositionPaperStore.getPositionPaperFile(assignment.paper.id),
+              )
+            : null;
+        var gradedHrefData =
+          paper && paper.graded && paper.graded_file
+            ? window.URL.createObjectURL(
+                PositionPaperStore.getGradedPositionPaperFile(
+                  assignment.paper.id,
+                ),
+              )
+            : null;
+        var names = paper ? paper.file.split('/') : null;
         var graded = assignment.paper.graded;
         var fileName = names ? names[names.length - 1] : null;
-        var gradedFileName = fileName ? "graded_" + fileName : null;
-        var downloadPaper = paper ? <a
-              className={cx({
-                button: true,
-                'button-small': true,
-                'button-green': true,
-                'rounded-small': true,
-              })}
-              href={originalHrefData}
-              download={assignment.paper.file}>
-              &#10515;
-            </a> : null;
-        var gradedPaper = paper && graded ? <a
+        var gradedFileName = fileName ? 'graded_' + fileName : null;
+        var downloadPaper = paper ? (
+          <a
+            className={cx({
+              button: true,
+              'button-small': true,
+              'button-green': true,
+              'rounded-small': true,
+            })}
+            href={originalHrefData}
+            download={assignment.paper.file}>
+            &#10515;
+          </a>
+        ) : null;
+        var gradedPaper =
+          paper && graded ? (
+            <a
               className={cx({
                 button: true,
                 'button-small': true,
@@ -205,39 +228,42 @@ var AdvisorPaperView = React.createClass({
               href={gradedHrefData}
               download={assignment.paper.graded_file}>
               &#10515;
-            </a> : null;
-        var rows = topic_2 ? "2" : "1";
-        var topic_1_row = <tr>
-            <td rowSpan={rows}>{this.state.countries[assignment.country].name}</td>
+            </a>
+          ) : null;
+        var rows = topic_2 ? '2' : '1';
+        var topic_1_row = (
+          <tr>
             <td rowSpan={rows}>
-            {downloadPaper}
-          </td>
-          <td rowSpan={rows}>
-            {gradedPaper}
-          </td>
-          {topic_2 ? <td>A</td> : null}
-          <td>{graded ? assignment.paper.score_1 : null}</td>
-          <td>{graded ? assignment.paper.score_2 : null}</td>
-          <td>{graded ? assignment.paper.score_3 : null}</td>
-          <td>{graded ? assignment.paper.score_4 : null}</td>
-          <td>{graded ? assignment.paper.score_5 : null}</td>
+              {this.state.countries[assignment.country].name}
+            </td>
+            <td rowSpan={rows}>{downloadPaper}</td>
+            <td rowSpan={rows}>{gradedPaper}</td>
+            {topic_2 ? <td>A</td> : null}
+            <td>{graded ? assignment.paper.score_1 : null}</td>
+            <td>{graded ? assignment.paper.score_2 : null}</td>
+            <td>{graded ? assignment.paper.score_3 : null}</td>
+            <td>{graded ? assignment.paper.score_4 : null}</td>
+            <td>{graded ? assignment.paper.score_5 : null}</td>
           </tr>
-        var topic_2_row = topic_2 ? <tr>
-          <td>B</td>
-          <td>{graded ? assignment.paper.score_t2_1 : null}</td>
-          <td>{graded ? assignment.paper.score_t2_2 : null}</td>
-          <td>{graded ? assignment.paper.score_t2_3 : null}</td>
-          <td>{graded ? assignment.paper.score_t2_4 : null}</td>
-          <td>{graded ? assignment.paper.score_t2_5 : null}</td>
-          </tr> : null;
-        return (<tbody>
-          {topic_1_row}
-          {topic_2_row}
+        );
+        var topic_2_row = topic_2 ? (
+          <tr>
+            <td>B</td>
+            <td>{graded ? assignment.paper.score_t2_1 : null}</td>
+            <td>{graded ? assignment.paper.score_t2_2 : null}</td>
+            <td>{graded ? assignment.paper.score_t2_3 : null}</td>
+            <td>{graded ? assignment.paper.score_t2_4 : null}</td>
+            <td>{graded ? assignment.paper.score_t2_5 : null}</td>
+          </tr>
+        ) : null;
+        return (
+          <tbody>
+            {topic_1_row}
+            {topic_2_row}
           </tbody>
         );
       }.bind(this),
     );
-    
   },
 
   renderError: function(field) {
