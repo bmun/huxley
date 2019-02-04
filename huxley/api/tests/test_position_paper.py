@@ -188,7 +188,6 @@ class PositionPaperPutTestCase(tests.UpdateAPITestCase):
         os.remove('test_position_paper.doc')
         os.remove('graded_papers/test_position_paper.doc')
 
-
     def test_other_delegate(self):
         '''A delegate should be unable to update a position paper they do not possess.'''
         self.client.login(username='delegate_2', password='delegate')
