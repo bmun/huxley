@@ -162,32 +162,6 @@ class PositionPaperPutTestCase(tests.UpdateAPITestCase):
         os.remove('test_position_paper.doc')
         os.remove('position_papers/test_position_paper.doc')
 
-    def test_delegate_graded_file(self):
-        '''Delegates should be able to update the file.'''
-        if os.path.isfile('test_position_paper.doc'):
-            os.remove('test_position_paper.doc')
-        if os.path.isfile('graded_papers/test_position_paper.doc'):
-            os.remove('graded_papers/test_position_paper.doc')
-        self.client.login(username='delegate', password='delegate')
-        with open('test_position_paper.doc', 'a+') as f:
-            f.write('This is a test line.')
-
-        f = open('test_position_paper.doc', 'r')
-        response = self.get_response(self.paper.id, params={"graded_file": f})
-        f.close()
-
-        f = open('test_position_paper.doc', 'r')
-        new_file = response.data.pop("graded_file", None)
-        self.assertTrue(
-            new_file != None and new_file ==
-            "http://testserver/api/papers/graded_papers/test_position_paper.doc")
-        new_f = open('graded_papers/test_position_paper.doc', 'r')
-        self.assertEqual(f.read(), new_f.read())
-        f.close()
-        new_f.close()
-        os.remove('test_position_paper.doc')
-        os.remove('graded_papers/test_position_paper.doc')
-
     def test_other_delegate(self):
         '''A delegate should be unable to update a position paper they do not possess.'''
         self.client.login(username='delegate_2', password='delegate')
@@ -324,32 +298,6 @@ class PositionPaperDetailPatchTestCase(tests.PartialUpdateAPITestCase):
         new_f.close()
         os.remove('test_position_paper.doc')
         os.remove('position_papers/test_position_paper.doc')
-
-    def test_delegate_graded_file(self):
-        '''Delegates should be able to update the file.'''
-        if os.path.isfile('test_position_paper.doc'):
-            os.remove('test_position_paper.doc')
-        if os.path.isfile('graded_papers/test_position_paper.doc'):
-            os.remove('graded_papers/test_position_paper.doc')
-        self.client.login(username='delegate', password='delegate')
-        with open('test_position_paper.doc', 'a+') as f:
-            f.write('This is a test line.')
-
-        f = open('test_position_paper.doc', 'r')
-        response = self.get_response(self.paper.id, params={"graded_file": f})
-        f.close()
-
-        f = open('test_position_paper.doc', 'r')
-        new_file = response.data.pop("graded_file", None)
-        self.assertTrue(
-            new_file != None and new_file ==
-            "http://testserver/api/papers/graded_papers/test_position_paper.doc")
-        new_f = open('graded_papers/test_position_paper.doc', 'r')
-        self.assertEqual(f.read(), new_f.read())
-        f.close()
-        new_f.close()
-        os.remove('test_position_paper.doc')
-        os.remove('graded_papers/test_position_paper.doc')
 
     def test_other_delegate(self):
         '''A delegate should be unable to update a position paper they do not possess.'''
