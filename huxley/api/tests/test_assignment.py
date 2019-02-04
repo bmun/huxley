@@ -429,5 +429,4 @@ class AssignmentListGetTestCase(tests.ListAPITestCase):
                  ('score_t2_4', a.paper.score_t2_4),
                  ('score_t2_5', a.paper.score_t2_5),
                  ('submission_date', a.paper.submission_date)]),
-            'rejected': a.rejected,
-        } for a in assignments])
+            'rejected': a.rejected,} for a in assignments])
