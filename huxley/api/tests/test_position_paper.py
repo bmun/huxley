@@ -173,7 +173,7 @@ class PositionPaperPutTestCase(tests.UpdateAPITestCase):
             f.write('This is a test line.')
 
         f = open('test_position_paper.doc', 'r')
-        response = self.get_response(self.paper.id, params={"file": f})
+        response = self.get_response(self.paper.id, params={"graded_file": f})
         f.close()
 
         f = open('test_position_paper.doc', 'r')
@@ -336,7 +336,7 @@ class PositionPaperDetailPatchTestCase(tests.PartialUpdateAPITestCase):
             f.write('This is a test line.')
 
         f = open('test_position_paper.doc', 'r')
-        response = self.get_response(self.paper.id, params={"file": f})
+        response = self.get_response(self.paper.id, params={"graded_file": f})
         f.close()
 
         f = open('test_position_paper.doc', 'r')
