@@ -419,7 +419,7 @@ class AssignmentListGetTestCase(tests.ListAPITestCase):
             'registration': a.registration_id,
             "paper": OrderedDict(
                 [('id', a.paper.id), ('file', a.paper.file),
-                 ('graded_file', self.assignment.paper.graded_file),
+                 ('graded_file', a.paper.graded_file),
                  ('graded', a.paper.graded), ('score_1', a.paper.score_1),
                  ('score_2', a.paper.score_2), ('score_3', a.paper.score_3),
                  ('score_4', a.paper.score_4), ('score_5', a.paper.score_5),
