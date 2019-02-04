@@ -26,9 +26,11 @@ var AdvisorView = React.createClass({
   },
 
   render: function() {
-    var content = User.isAdvisor(this.props.user)
-      ? this.props.children
-      : <PermissionDeniedView />;
+    var content = User.isAdvisor(this.props.user) ? (
+      this.props.children
+    ) : (
+      <PermissionDeniedView />
+    );
 
     return (
       <div>

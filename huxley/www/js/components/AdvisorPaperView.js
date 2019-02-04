@@ -97,7 +97,6 @@ var AdvisorPaperView = React.createClass({
         : registration.is_waitlisted;
     var disableEdit = _checkDate();
 
-
     if (waitlisted) {
       return (
         <InnerView>
@@ -124,19 +123,25 @@ var AdvisorPaperView = React.createClass({
     var countries = this.state.countries;
     var assignments = this.state.assignments;
     var rubrics = this.state.rubrics;
-    this.state.assignments.map(function(a) {
-      var current_committee = cm[a.committee].name;
-      committees[current_committee] = committees[current_committee] == undefined ? [a] : committees[current_committee].concat([a]);
-      console.log(committees);
-    }.bind(this));
+    this.state.assignments.map(
+      function(a) {
+        var current_committee = cm[a.committee].name;
+        committees[current_committee] =
+          committees[current_committee] == undefined
+            ? [a]
+            : committees[current_committee].concat([a]);
+        console.log(committees);
+      }.bind(this),
+    );
 
-    return Object.keys(committees).map(
-      function(c) {
-        var countryAssignments = committees[c];
-        var committee = cm[countryAssignments[0].committee];
-        var rubric = RubricStore.getRubric(committee.rubric);
-        if (rubric.use_topic_2) {
-          return (<Table emptyMessage="You don't have any delegates in your roster."
+    return Object.keys(committees).map(function(c) {
+      var countryAssignments = committees[c];
+      var committee = cm[countryAssignments[0].committee];
+      var rubric = RubricStore.getRubric(committee.rubric);
+      if (rubric.use_topic_2) {
+        return (
+          <Table
+            emptyMessage="You don't have any delegates in your roster."
             isEmpty={!this.state.delegates.length}>
             <thead>
               <tr>
@@ -156,12 +161,13 @@ var AdvisorPaperView = React.createClass({
                 <th>{rubric.grade_t2_category_5}</th>
               </tr>
             </thead>
-            <tbody>
-            {renderCommitteeRows(countryAssignments, true)}
-            </tbody>
-            </Table>);
-        } else {
-        return (<Table emptyMessage="You don't have any delegates in your roster."
+            <tbody>{renderCommitteeRows(countryAssignments, true)}</tbody>
+          </Table>
+        );
+      } else {
+        return (
+          <Table
+            emptyMessage="You don't have any delegates in your roster."
             isEmpty={!this.state.delegates.length}>
             <thead>
               <tr>
@@ -176,107 +182,99 @@ var AdvisorPaperView = React.createClass({
                 <th>{rubric.grade_category_5}</th>
               </tr>
             </thead>
-            <tbody>
-            {renderCommitteeRows(countryAssignments, false)}
-            </tbody>
-            </Table>);
-        }
+            <tbody>{renderCommitteeRows(countryAssignments, false)}</tbody>
+          </Table>
+        );
       }
-    );
+    });
   },
 
   renderCommitteeRows: function(countryAssignments, topic_2) {
     if (!topic_2) {
-      return countryAssignments.map(
-      function(assignment) {
+      return countryAssignments.map(function(assignment) {
         return (
           <tr>
             <td>{assignment.country}</td>
             <td>
-            <a
-              className={cx({
-                button: true,
-                'button-large': true,
-                'button-green': true,
-                'rounded-small': true,
-              })}
-              href={hrefData}
-              download={assignment.paper.file}>
-              Download Paper
-            </a>
-          </td>
-          <td>
-            <a
-              className={cx({
-                button: true,
-                'button-large': true,
-                'button-green': true,
-                'rounded-small': true,
-              })}
-              href={hrefData}
-              download={assignment.paper.file}>
-              Download Paper
-            </a>
-          </td>
-          <td>{assignment.paper.score_1}</td>
-          <td>{assignment.paper.score_2}</td>
-          <td>{assignment.paper.score_3}</td>
-          <td>{assignment.paper.score_4}</td>
-          <td>{assignment.paper.score_5}</td>
+              <a
+                className={cx({
+                  button: true,
+                  'button-large': true,
+                  'button-green': true,
+                  'rounded-small': true,
+                })}
+                href={hrefData}
+                download={assignment.paper.file}>
+                Download Paper
+              </a>
+            </td>
+            <td>
+              <a
+                className={cx({
+                  button: true,
+                  'button-large': true,
+                  'button-green': true,
+                  'rounded-small': true,
+                })}
+                href={hrefData}
+                download={assignment.paper.file}>
+                Download Paper
+              </a>
+            </td>
+            <td>{assignment.paper.score_1}</td>
+            <td>{assignment.paper.score_2}</td>
+            <td>{assignment.paper.score_3}</td>
+            <td>{assignment.paper.score_4}</td>
+            <td>{assignment.paper.score_5}</td>
           </tr>
         );
-      }
-    );
-  } else {
-    return countryAssignments.map(
-      function(assignment) {
+      });
+    } else {
+      return countryAssignments.map(function(assignment) {
         return (
           <tr>
             <td>{assignment.country}</td>
             <td>
-            <a
-              className={cx({
-                button: true,
-                'button-large': true,
-                'button-green': true,
-                'rounded-small': true,
-              })}
-              href={hrefData}
-              download={assignment.paper.file}>
-              Download Paper
-            </a>
-          </td>
-          <td>
-            <a
-              className={cx({
-                button: true,
-                'button-large': true,
-                'button-green': true,
-                'rounded-small': true,
-              })}
-              href={hrefData}
-              download={assignment.paper.file}>
-              Download Paper
-            </a>
-          </td>
-          <td>{assignment.paper.score_1}</td>
-          <td>{assignment.paper.score_2}</td>
-          <td>{assignment.paper.score_3}</td>
-          <td>{assignment.paper.score_4}</td>
-          <td>{assignment.paper.score_5}</td>
-          <td>{assignment.paper.score_t2_1}</td>
-          <td>{assignment.paper.score_t2_2}</td>
-          <td>{assignment.paper.score_t2_3}</td>
-          <td>{assignment.paper.score_t2_4}</td>
-          <td>{assignment.paper.score_t2_5}</td>
+              <a
+                className={cx({
+                  button: true,
+                  'button-large': true,
+                  'button-green': true,
+                  'rounded-small': true,
+                })}
+                href={hrefData}
+                download={assignment.paper.file}>
+                Download Paper
+              </a>
+            </td>
+            <td>
+              <a
+                className={cx({
+                  button: true,
+                  'button-large': true,
+                  'button-green': true,
+                  'rounded-small': true,
+                })}
+                href={hrefData}
+                download={assignment.paper.file}>
+                Download Paper
+              </a>
+            </td>
+            <td>{assignment.paper.score_1}</td>
+            <td>{assignment.paper.score_2}</td>
+            <td>{assignment.paper.score_3}</td>
+            <td>{assignment.paper.score_4}</td>
+            <td>{assignment.paper.score_5}</td>
+            <td>{assignment.paper.score_t2_1}</td>
+            <td>{assignment.paper.score_t2_2}</td>
+            <td>{assignment.paper.score_t2_3}</td>
+            <td>{assignment.paper.score_t2_4}</td>
+            <td>{assignment.paper.score_t2_5}</td>
           </tr>
         );
-      }
-    );
-  }
-    
+      });
+    }
   },
-
 
   openModal: function(name, email, fn, event) {
     this.setState({
