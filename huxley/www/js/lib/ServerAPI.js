@@ -170,7 +170,11 @@ var ServerAPI = {
   },
 
   uploadGradedPositionPaper(paper, file) {
-    return _post(`api/papers/${paper.id}`, {graded_file: file}, 'multipart/form-data');
+    return _post(
+      `api/papers/${paper.id}`,
+      {graded_file: file},
+      'multipart/form-data',
+    );
   },
 
   getRubric(rubricID) {

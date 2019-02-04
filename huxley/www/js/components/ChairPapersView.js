@@ -117,8 +117,10 @@ var ChairPapersView = React.createClass({
     });
 
     this._papersToken = PositionPaperStore.addListener(() => {
-      this.setState({files: PositionPaperStore.getPositionPaperFiles(),
-        graded_files: PositionPaperStore.getGradedPositionPaperFiles()});
+      this.setState({
+        files: PositionPaperStore.getPositionPaperFiles(),
+        graded_files: PositionPaperStore.getGradedPositionPaperFiles(),
+      });
     });
 
     this._rubricToken = RubricStore.addListener(() => {
