@@ -7,14 +7,12 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('core', '0036_conference_position_papers_accepted'),
-    ]
+    dependencies = [('core', '0036_conference_position_papers_accepted'), ]
 
     operations = [
         migrations.AddField(
             model_name='positionpaper',
             name='graded_file',
-            field=models.FileField(null=True, upload_to=b'graded_papers/'),
-        ),
+            field=models.FileField(
+                null=True, upload_to=b'graded_papers/'), ),
     ]
