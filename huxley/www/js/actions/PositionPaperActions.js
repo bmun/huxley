@@ -24,6 +24,14 @@ var PositionPaperActions = {
     });
   },
 
+  gradedPositionPaperFileFetched(graded_file, paperID) {
+    Dispatcher.dispatch({
+      actionType: ActionConstants.GRADED_POSITION_PAPER_FILE_FETCHED,
+      graded_file: graded_file,
+      id: paperID,
+    });
+  },
+
   updatePositionPaper(paper, onSuccess, onError) {
     Dispatcher.dispatch({
       actionType: ActionConstants.UPDATE_POSITION_PAPER,
@@ -37,6 +45,16 @@ var PositionPaperActions = {
     Dispatcher.dispatch({
       actionType: ActionConstants.STORE_PAPER,
       paper: paper,
+    });
+  },
+
+  uploadGradedPaper(paper, graded_file, onSuccess, onError) {
+    Dispatcher.dispatch({
+      actionType: ActionConstants.UPLOAD_GRADED_PAPER,
+      paper: paper,
+      graded_file: graded_file,
+      onSuccess: onSuccess,
+      onError: onError,
     });
   },
 

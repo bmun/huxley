@@ -12,6 +12,7 @@ var Dispatcher = require('dispatcher/Dispatcher');
 var ServerAPI = require('lib/ServerAPI');
 var {Store} = require('flux/utils');
 
+var _graded = {};
 var _files = {};
 var _papers = {};
 var _previousUserID = -1;
@@ -29,8 +30,23 @@ class PositionPaperStore extends Store {
     }
   }
 
+  getGradedPositionPaperFile(paperID) {
+    if (paperID in _graded) {
+      return _graded[paperID];
+    } else {
+      ServerAPI.getGradedPositionPaperFile(paperID).then(value => {
+        PositionPaperActions.gradedPositionPaperFileFetched(value, paperID);
+      });
+      return null;
+    }
+  }
+
   getPositionPaperFiles() {
     return _files;
+  }
+
+  getGradedPositionPaperFiles() {
+    return _graded;
   }
 
   updatePositionPaper(paper, onSuccess, onError) {
@@ -40,6 +56,11 @@ class PositionPaperStore extends Store {
   uploadPaper(paper, file, onSuccess, onError) {
     _files[paper.id] = file;
     ServerAPI.uploadPositionPaper(paper, file).then(onSuccess, onError);
+  }
+
+  uploadGradedPaper(paper, file, onSuccess, onError) {
+    _graded[paper.id] = file;
+    ServerAPI.uploadGradedPositionPaper(paper, file).then(onSuccess, onError);
   }
 
   storePaper(paper) {
@@ -58,6 +79,9 @@ class PositionPaperStore extends Store {
       case ActionConstants.POSITION_PAPER_FILE_FETCHED:
         _files[action.id] = action.file;
         break;
+      case ActionConstants.GRADED_POSITION_PAPER_FILE_FETCHED:
+        _graded[action.id] = action.graded_file;
+        break;
       case ActionConstants.UPDATE_POSITION_PAPER:
         this.updatePositionPaper(
           action.paper,
@@ -73,6 +97,18 @@ class PositionPaperStore extends Store {
         this.uploadPaper(
           action.paper,
           action.file,
+          action.onSuccess,
+          action.onError,
+        );
+        break;
+      case ActionConstants.UPLOAD_GRADED_PAPER:
+        delete _graded[action.paper.id];
+        if (action.paper.id in _papers) {
+          _papers[action.paper.id] = action.paper;
+        }
+        this.uploadPaper(
+          action.paper,
+          action.graded_file,
           action.onSuccess,
           action.onError,
         );
