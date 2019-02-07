@@ -279,7 +279,9 @@ var ChairPapersView = React.createClass({
     this._successTimout && clearTimeout(this._successTimeout);
     var committee = CurrentUserStore.getCurrentUser().committee;
     var paper = {...this.state.papers[paperID]};
-    delete paper['graded_file'];
+    if (paper['graded_file']) {
+      delete paper['graded_file'];
+    }
     paper['graded'] = true;
     PositionPaperActions.updatePositionPaper(
       paper,

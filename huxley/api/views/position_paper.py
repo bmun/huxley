@@ -29,7 +29,6 @@ class PositionPaperDetail(generics.RetrieveUpdateAPIView):
             return Response(
                 "POST endpoint only used for file upload.",
                 status=status.HTTP_400_BAD_REQUEST)
-
         file = request.FILES['file']
         instance = PositionPaper.objects.get(id=kwargs['pk'])
         response_data = []
