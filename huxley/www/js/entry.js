@@ -18,6 +18,7 @@ var AdvisorAssignmentsView = require('components/AdvisorAssignmentsView');
 var AdvisorFeedbackView = require('components/AdvisorFeedbackView');
 var AdvisorProfileView = require('components/AdvisorProfileView');
 var AdvisorRosterView = require('components/AdvisorRosterView');
+var AdvisorPaperView = require('components/AdvisorPaperView');
 var ChairAttendanceView = require('components/ChairAttendanceView');
 var ChairCommitteeFeedbackView = require('components/ChairCommitteeFeedbackView');
 var ChairDelegateEmailView = require('components/ChairDelegateEmailView');
@@ -60,6 +61,7 @@ var routes = (
     <Route path="/advisor/assignments" component={AdvisorAssignmentsView} />
     <Route path="/advisor/feedback" component={AdvisorFeedbackView} />
     <Route path="/advisor/roster" component={AdvisorRosterView} />
+    <Route path="/advisor/papers" component={AdvisorPaperView} />
     <Route path="/chair/attendance" component={ChairAttendanceView} />
     <Route path="/chair/papers" component={ChairPapersView} />
     <Route path="/chair/rubric" component={ChairRubricView} />
