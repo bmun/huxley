@@ -44,6 +44,7 @@ var AdvisorPaperView = React.createClass({
       committees: CommitteeStore.getCommittees(),
       countries: CountryStore.getCountries(),
       files: PositionPaperStore.getPositionPaperFiles(),
+      graded_files: PositionPaperStore.getGradedPositionPaperFiles(),
       rubric: RubricStore.getRubric,
       loading: false,
       errors: {},
@@ -79,7 +80,8 @@ var AdvisorPaperView = React.createClass({
       });
     });
     this._papersToken = PositionPaperStore.addListener(() => {
-      this.setState({files: PositionPaperStore.getPositionPaperFiles()});
+      this.setState({files: PositionPaperStore.getPositionPaperFiles(),
+        graded_files: PositionPaperStore.getGradedPositionPaperFiles(),});
     });
     this._rubricsToken = RubricStore.addListener(() => {
       this.setState({
@@ -186,18 +188,12 @@ var AdvisorPaperView = React.createClass({
         var paper =
           assignment.paper && assignment.paper.file ? assignment.paper : null;
         var originalHrefData =
-          paper && paper.file
-            ? window.URL.createObjectURL(
-                PositionPaperStore.getPositionPaperFile(assignment.paper.id),
-              )
+          paper && paper.file && files[assignment.paper.id]
+            ? window.URL.createObjectURL(files[assignment.paper.id])
             : null;
         var gradedHrefData =
-          paper && paper.graded && paper.graded_file
-            ? window.URL.createObjectURL(
-                PositionPaperStore.getGradedPositionPaperFile(
-                  assignment.paper.id,
-                ),
-              )
+          paper && paper.graded && paper.graded_file && graded_files[assignment.paper.id]
+            ? window.URL.createObjectURL(graded_files[assignment.paper.id])
             : null;
         var names = paper ? paper.file.split('/') : null;
         var graded = assignment.paper.graded;
