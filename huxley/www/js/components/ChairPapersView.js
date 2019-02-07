@@ -170,10 +170,8 @@ var ChairPapersView = React.createClass({
     var country = this.state.countries[this.state.current_assignment.country];
     var files = this.state.files;
     var graded_files = this.state.graded_files;
+    var graded_file = PositionPaperStore.getGradedPositionPaperFile(paper.id);
     var rubric = this.state.rubric;
-    console.log(paper);
-    console.log(graded_files);
-    console.log(PositionPaperStore.getGradedPositionPaperFile(paper.id));
 
     if (rubric != null && paper != null) {
       return (
@@ -257,12 +255,14 @@ var ChairPapersView = React.createClass({
       var files = this.state.files;
       var paper = {...this.state.papers[paperID]};
       paper.graded_file = file.name;
+
       PositionPaperActions.uploadGradedPaper(
         paper,
         file,
         this._handleSuccess,
         this._handleError,
       );
+
       PositionPaperActions.storePositionPaper(paper);
 
       this.setState({
@@ -283,6 +283,7 @@ var ChairPapersView = React.createClass({
       delete paper['graded_file'];
     }
     paper['graded'] = true;
+    delete paper['file'];
     PositionPaperActions.updatePositionPaper(
       paper,
       this._handleSuccess,

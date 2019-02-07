@@ -37,7 +37,6 @@ class PositionPaperDetail(generics.RetrieveUpdateAPIView):
         if request.user.is_delegate():
             data['submission_date'] = date.today()
         elif request.user.is_chair():
-            print('post request for graded paper')
             data = {'graded_file': file}
 
         with transaction.atomic():
