@@ -30,8 +30,12 @@ var PaperSubmissionTable = React.createClass({
 
     if (paper.id in files) {
       var url = window.URL;
-      var hrefData = files[paper.id] ? url.createObjectURL(files[paper.id]) : null;
-      var gradedHrefData = graded_files[paper.id] ? url.createObjectURL(graded_files[paper.id]) : null;
+      var hrefData = files[paper.id]
+        ? url.createObjectURL(files[paper.id])
+        : null;
+      var gradedHrefData = graded_files[paper.id]
+        ? url.createObjectURL(graded_files[paper.id])
+        : null;
       var fileNames = paper.file.split('/');
       var fileName = fileNames[fileNames.length - 1];
       var gradedButton = paper.graded ? (

@@ -80,8 +80,10 @@ var AdvisorPaperView = React.createClass({
       });
     });
     this._papersToken = PositionPaperStore.addListener(() => {
-      this.setState({files: PositionPaperStore.getPositionPaperFiles(),
-        graded_files: PositionPaperStore.getGradedPositionPaperFiles(),});
+      this.setState({
+        files: PositionPaperStore.getPositionPaperFiles(),
+        graded_files: PositionPaperStore.getGradedPositionPaperFiles(),
+      });
     });
     this._rubricsToken = RubricStore.addListener(() => {
       this.setState({
@@ -186,19 +188,32 @@ var AdvisorPaperView = React.createClass({
     );
   },
 
-  renderCommitteeRows: function(countryAssignments, rubric, files, graded_files, topic_2) {
+  renderCommitteeRows: function(
+    countryAssignments,
+    rubric,
+    files,
+    graded_files,
+    topic_2,
+  ) {
     return countryAssignments.map(
       function(assignment) {
         var paper =
           assignment.paper && assignment.paper.file ? assignment.paper : null;
-        var originalFile = paper ? PositionPaperStore.getPositionPaperFile(paper.id) : null;
-        var gradedFile = paper ? PositionPaperStore.getGradedPositionPaperFile(paper.id) : null;
+        var originalFile = paper
+          ? PositionPaperStore.getPositionPaperFile(paper.id)
+          : null;
+        var gradedFile = paper
+          ? PositionPaperStore.getGradedPositionPaperFile(paper.id)
+          : null;
         var originalHrefData =
           paper && paper.file && files[assignment.paper.id]
             ? window.URL.createObjectURL(files[assignment.paper.id])
             : null;
         var gradedHrefData =
-          paper && paper.graded && paper.graded_file && graded_files[assignment.paper.id]
+          paper &&
+          paper.graded &&
+          paper.graded_file &&
+          graded_files[assignment.paper.id]
             ? window.URL.createObjectURL(graded_files[assignment.paper.id])
             : null;
         var names = paper ? paper.file.split('/') : null;
