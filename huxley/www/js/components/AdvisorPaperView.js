@@ -79,8 +79,9 @@ var AdvisorPaperView = React.createClass({
       });
     });
     this._papersToken = PositionPaperStore.addListener(() => {
-      this.setState({files: PositionPaperStore.getPositionPaperFiles(),
-        });
+      this.setState({
+        files: PositionPaperStore.getPositionPaperFiles(),
+      });
     });
     this._rubricsToken = RubricStore.addListener(() => {
       this.setState({
@@ -187,7 +188,9 @@ var AdvisorPaperView = React.createClass({
       function(assignment) {
         var paper =
           assignment.paper && assignment.paper.file ? assignment.paper : null;
-        var originalFile = paper ? PositionPaperStore.getPositionPaperFile(paper.id) : null;
+        var originalFile = paper
+          ? PositionPaperStore.getPositionPaperFile(paper.id)
+          : null;
         var originalHrefData =
           paper && paper.file && files[assignment.paper.id]
             ? window.URL.createObjectURL(files[assignment.paper.id])
@@ -220,7 +223,9 @@ var AdvisorPaperView = React.createClass({
             download={fileName}>
             &#10515;
           </a>
-        ) : downloadPaper;
+        ) : (
+          downloadPaper
+        );
         var rows = topic_2 ? '2' : '1';
         var topic_1_row = (
           <tr>
