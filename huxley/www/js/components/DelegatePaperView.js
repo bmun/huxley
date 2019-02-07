@@ -100,6 +100,7 @@ var DelegatePaperView = React.createClass({
     const user = CurrentUserStore.getCurrentUser();
     const paper = this.state.papers[user.delegate.assignment.paper.id];
     const files = this.state.files;
+    const graded_file = PositionPaperStore.getGradedPositionPaperFile(paper.id);
     const graded_files = this.state.graded_files;
     const rubric = user.delegate.assignment.committee.rubric;
 

@@ -133,6 +133,8 @@ var AdvisorPaperView = React.createClass({
     var cm = this.state.committees;
     var countries = this.state.countries;
     var assignments = this.state.assignments;
+    var files = this.state.files;
+    var graded_files = this.state.graded_files;
     var get_rubric = this.state.rubric;
     this.state.assignments.map(
       function(a) {
@@ -173,6 +175,8 @@ var AdvisorPaperView = React.createClass({
               {this.renderCommitteeRows(
                 countryAssignments,
                 rubric,
+                files,
+                graded_files,
                 rubric.use_topic_2,
               )}
             </Table>
@@ -182,11 +186,13 @@ var AdvisorPaperView = React.createClass({
     );
   },
 
-  renderCommitteeRows: function(countryAssignments, rubric, topic_2) {
+  renderCommitteeRows: function(countryAssignments, rubric, files, graded_files, topic_2) {
     return countryAssignments.map(
       function(assignment) {
         var paper =
           assignment.paper && assignment.paper.file ? assignment.paper : null;
+        var originalFile = paper ? PositionPaperStore.getPositionPaperFile(paper.id) : null;
+        var gradedFile = paper ? PositionPaperStore.getGradedPositionPaperFile(paper.id) : null;
         var originalHrefData =
           paper && paper.file && files[assignment.paper.id]
             ? window.URL.createObjectURL(files[assignment.paper.id])
@@ -208,7 +214,7 @@ var AdvisorPaperView = React.createClass({
               'rounded-small': true,
             })}
             href={originalHrefData}
-            download={assignment.paper.file}>
+            download={fileName}>
             &#10515;
           </a>
         ) : null;
@@ -222,7 +228,7 @@ var AdvisorPaperView = React.createClass({
                 'rounded-small': true,
               })}
               href={gradedHrefData}
-              download={assignment.paper.graded_file}>
+              download={gradedFileName}>
               &#10515;
             </a>
           ) : null;
