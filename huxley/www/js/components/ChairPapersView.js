@@ -194,14 +194,16 @@ var ChairPapersView = React.createClass({
     const assignments = this.state.assignments;
     const countries = this.state.countries;
     const papers = this.state.papers;
+    const rubric = this.state.rubric;
 
-    if (Object.keys(countries).length && Object.keys(papers).length) {
+    if (Object.keys(countries).length && Object.keys(papers).length && rubric) {
       return (
         <PaperAssignmentList
           assignments={assignments}
           countries={countries}
           onChange={this._handleAssignmentSelect}
           papers={papers}
+          rubric={rubric}
         />
       );
     } else {

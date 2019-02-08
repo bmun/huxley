@@ -103,54 +103,26 @@ var PaperSubmissionTable = React.createClass({
       <tbody />
     );
 
+    var paper = this.props.paper;
+    var rubric = this.props.rubric;
+
+    var score1 = this.calculateTotalScore(paper);
+    var maxScore1 = this.calculateMaxScore(rubric);
+    var category1 = this.calculateCategory(score1,maxScore1);
+
     return (
       <div>
         <table>
           <thead>
             <tr>
-              <th>Category</th>
+              <th>Topic</th>
               <th>Score</th>
-              <th>Max Score</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td>Topic: &ensp; {rubric.topic_one}</td>
-            </tr>
-            <tr>
-              <td>{rubric.grade_category_1}</td>
-              <td>
-                <NumberInput defaultValue={'' + paper.score_1} disabled />
-              </td>
-              <td>{rubric.grade_value_1}</td>
-            </tr>
-            <tr>
-              <td>{rubric.grade_category_2}</td>
-              <td>
-                <NumberInput defaultValue={'' + paper.score_2} disabled />
-              </td>
-              <td>{rubric.grade_value_2}</td>
-            </tr>
-            <tr>
-              <td>{rubric.grade_category_3}</td>
-              <td>
-                <NumberInput defaultValue={'' + paper.score_3} disabled />
-              </td>
-              <td>{rubric.grade_value_3}</td>
-            </tr>
-            <tr>
-              <td>{rubric.grade_category_4}</td>
-              <td>
-                <NumberInput defaultValue={'' + paper.score_4} disabled />
-              </td>
-              <td>{rubric.grade_value_4}</td>
-            </tr>
-            <tr>
-              <td>{rubric.grade_category_5}</td>
-              <td>
-                <NumberInput defaultValue={'' + paper.score_5} disabled />
-              </td>
-              <td>{rubric.grade_value_5}</td>
+              <td>Topic: &ensp; {rubric.topic_one} </td>
+              <td><b>{category1}</b></td>
             </tr>
           </tbody>
           {secondRuric}
@@ -161,48 +133,74 @@ var PaperSubmissionTable = React.createClass({
   },
 
   _renderTopicTwo: function(rubric, paper) {
+    var paper = this.props.paper;
+    var rubric = this.props.rubric;
+    var score2 = this.calculateTotalScore(paper,true);
+    var maxScore2 = this.calculateMaxScore(rubric,true);
+    var category2 = this.calculateCategory(score2,maxScore2);
+
     return (
       <tbody>
         <tr>
           <td>Topic: &ensp; {rubric.topic_two}</td>
-        </tr>
-        <tr>
-          <td>{rubric.grade_t2_category_1}</td>
-          <td>
-            <NumberInput defaultValue={'' + paper.score_t2_1} disabled />
-          </td>
-          <td>{rubric.grade_t2_value_1}</td>
-        </tr>
-        <tr>
-          <td>{rubric.grade_t2_category_2}</td>
-          <td>
-            <NumberInput defaultValue={'' + paper.score_t2_2} disabled />
-          </td>
-          <td>{rubric.grade_t2_value_2}</td>
-        </tr>
-        <tr>
-          <td>{rubric.grade_t2_category_3}</td>
-          <td>
-            <NumberInput defaultValue={'' + paper.score_t2_3} disabled />
-          </td>
-          <td>{rubric.grade_t2_value_3}</td>
-        </tr>
-        <tr>
-          <td>{rubric.grade_t2_category_4}</td>
-          <td>
-            <NumberInput defaultValue={'' + paper.score_t2_4} disabled />
-          </td>
-          <td>{rubric.grade_t2_value_4}</td>
-        </tr>
-        <tr>
-          <td>{rubric.grade_t2_category_5}</td>
-          <td>
-            <NumberInput defaultValue={'' + paper.score_t2_5} disabled />
-          </td>
-          <td>{rubric.grade_t2_value_5}</td>
+          <td><b>{category2}</b></td>
         </tr>
       </tbody>
     );
+  },
+
+  calculateTotalScore: function(paper, topic_2=false) {
+    var totalScore = -1;
+    if(topic_2) {
+      totalScore = paper.score_t2_1 + paper.score_t2_2 + paper.score_t2_3 + paper.score_t2_4 + paper.score_t2_5;
+    } else {
+      totalScore = paper.score_1 + paper.score_2 + paper.score_3 + paper.score_4 + paper.score_5;
+    }
+    return totalScore;
+  },
+
+  calculateMaxScore: function(rubric, topic_2=false) {
+    var totalMaxScore = -1;
+    if(topic_2) {
+      totalMaxScore = rubric.grade_t2_value_1 + rubric.grade_t2_value_2 + rubric.grade_t2_value_3 + rubric.grade_t2_value_4 + rubric.grade_t2_value_5;
+    } else {
+      totalMaxScore = rubric.grade_value_1 + rubric.grade_value_2 + rubric.grade_value_3 + rubric.grade_value_4 + rubric.grade_value_5;
+    }
+    return totalMaxScore;
+  },
+
+  calculateCategory: function(value, weight) {
+    var interval = weight / 5;
+    if(value >= interval*5) {
+      return "5 - Exceeds Expectations";
+    } else if(value >= interval*4) {
+      return "4 - Exceeds Expectations";
+    } else if(value >= interval*3) {
+      return "3 - Meets Expectations";
+    } else if(value >= interval*2) {
+      return "2 - Attempts to Meet Expectations";
+    } else if(value >= interval) {
+      return "1 - Needs Improvment";
+    } else {
+      "0 - Needs Improvment"
+    }
+  },
+
+  calculateScore: function(category, weight) {
+    var interval = weight / 5;
+    if(category == "5 - Exceeds Expectations") {
+      return interval*5;
+    } else if(category == "4 - Exceeds Expectations") {
+      return interval*4;
+    } else if(category == "3 - Meets Expectations") {
+      return interval*3;
+    } else if(category == "2 - Attempts to Meet Expectations") {
+      return interval*2;
+    } else if(category == "1 - Needs Improvment") {
+      return interval;
+    } else {
+      return 0;
+    }
   },
 
   _handleUpload: function(event) {

@@ -155,6 +155,35 @@ var AdvisorPaperView = React.createClass({
         var countryAssignments = committees[c];
         var committee = cm[countryAssignments[0].committee];
         var rubric = committee.rubric;
+
+        var rows = rubric.use_topic_2 ? '2' : '1';
+        var rubric_row_1 = (   
+          <tr>         
+            <td rowSpan={rows}>Rubric</td>
+            <td rowSpan={rows}></td>
+            <td rowSpan={rows}></td>
+            {rubric.use_topic_2 ? <td>1</td> : null}
+            <td>{rubric.grade_value_1}%</td>
+            <td>{rubric.grade_value_2}%</td>
+            <td>{rubric.grade_value_3}%</td>
+            <td>{rubric.grade_value_4}%</td>
+            <td>{rubric.grade_value_5}%</td>
+            <td>{this.calculateMaxScore(rubric)}%</td>
+            <td></td>
+          </tr>
+        );
+        var rubric_row_2 = rubric.use_topic_2 ? (
+          <tr>
+            <td>2</td>
+            <td>{rubric.grade_t2_value_1}%</td>
+            <td>{rubric.grade_t2_value_2}%</td>
+            <td>{rubric.grade_t2_value_3}%</td>
+            <td>{rubric.grade_t2_value_4}%</td>
+            <td>{rubric.grade_t2_value_5}%</td>
+            <td>{this.calculateMaxScore(rubric,true)}%</td>
+          </tr>
+        ) : null;
+
         return (
           <div>
             <h4>{committee.name}</h4>
@@ -172,8 +201,11 @@ var AdvisorPaperView = React.createClass({
                   <th width="11.5%">Category 3</th>
                   <th width="11.5%">Category 4</th>
                   <th width="11.5%">Category 5</th>
+                  <th>Total</th>
                 </tr>
               </thead>
+              {rubric_row_1}
+              {rubric_row_2}
               {this.renderCommitteeRows(
                 countryAssignments,
                 rubric,
@@ -247,6 +279,27 @@ var AdvisorPaperView = React.createClass({
               &#10515;
             </a>
           ) : null;
+
+        var score1 = this.calculateTotalScore(paper);
+        var maxScore1 = this.calculateMaxScore(rubric);
+        var category1 = this.calculateCategory(score1,maxScore1);
+
+        var shown1 = this.calculateCategory(paper.score_1,rubric.grade_value_1);
+        var shown2 = this.calculateCategory(paper.score_2,rubric.grade_value_2);
+        var shown3 = this.calculateCategory(paper.score_3,rubric.grade_value_3);
+        var shown4 = this.calculateCategory(paper.score_4,rubric.grade_value_4);
+        var shown5 = this.calculateCategory(paper.score_5,rubric.grade_value_5);
+
+        var score2 = this.calculateTotalScore(paper,true);
+        var maxScore2 = this.calculateMaxScore(rubric,true);
+        var category2 = this.calculateCategory(score2,maxScore2);
+
+        var shown1_t2 = this.calculateCategory(paper.score_t2_1,rubric.grade_t2_value_1);
+        var shown2_t2 = this.calculateCategory(paper.score_t2_2,rubric.grade_t2_value_2);
+        var shown3_t2 = this.calculateCategory(paper.score_t2_3,rubric.grade_t2_value_3);
+        var shown4_t2 = this.calculateCategory(paper.score_t2_4,rubric.grade_t2_value_4);
+        var shown5_t2 = this.calculateCategory(paper.score_t2_5,rubric.grade_t2_value_5);
+
         var rows = topic_2 ? '2' : '1';
         var topic_1_row = (
           <tr>
@@ -255,22 +308,24 @@ var AdvisorPaperView = React.createClass({
             </td>
             <td rowSpan={rows}>{downloadPaper}</td>
             <td rowSpan={rows}>{gradedPaper}</td>
-            {topic_2 ? <td>A</td> : null}
-            <td>{graded ? assignment.paper.score_1 : null}</td>
-            <td>{graded ? assignment.paper.score_2 : null}</td>
-            <td>{graded ? assignment.paper.score_3 : null}</td>
-            <td>{graded ? assignment.paper.score_4 : null}</td>
-            <td>{graded ? assignment.paper.score_5 : null}</td>
+            {topic_2 ? <td>1</td> : null}
+            <td>{graded ? shown1.substring(0,1) : null}</td>
+            <td>{graded ? shown2.substring(0,1) : null}</td>
+            <td>{graded ? shown3.substring(0,1) : null}</td>
+            <td>{graded ? shown4.substring(0,1) : null}</td>
+            <td>{graded ? shown5.substring(0,1) : null}</td>
+            <td>{graded ? category1 : null}</td>
           </tr>
         );
         var topic_2_row = topic_2 ? (
           <tr>
-            <td>B</td>
-            <td>{graded ? assignment.paper.score_t2_1 : null}</td>
-            <td>{graded ? assignment.paper.score_t2_2 : null}</td>
-            <td>{graded ? assignment.paper.score_t2_3 : null}</td>
-            <td>{graded ? assignment.paper.score_t2_4 : null}</td>
-            <td>{graded ? assignment.paper.score_t2_5 : null}</td>
+            <td>2</td>
+            <td>{graded ? shown1_t2.substring(0,1) : null}</td>
+            <td>{graded ? shown2_t2.substring(0,1) : null}</td>
+            <td>{graded ? shown3_t2.substring(0,1) : null}</td>
+            <td>{graded ? shown4_t2.substring(0,1) : null}</td>
+            <td>{graded ? shown5_t2.substring(0,1) : null}</td>
+            <td>{graded ? category2 : null}</td>
           </tr>
         ) : null;
         return (
@@ -281,6 +336,60 @@ var AdvisorPaperView = React.createClass({
         );
       }.bind(this),
     );
+  },
+
+  calculateTotalScore: function(paper, topic_2=false) {
+    var totalScore = -1;
+    if(topic_2) {
+      totalScore = paper.score_t2_1 + paper.score_t2_2 + paper.score_t2_3 + paper.score_t2_4 + paper.score_t2_5;
+    } else {
+      totalScore = paper.score_1 + paper.score_2 + paper.score_3 + paper.score_4 + paper.score_5;
+    }
+    return totalScore;
+  },
+
+  calculateMaxScore: function(rubric, topic_2=false) {
+    var totalMaxScore = -1;
+    if(topic_2) {
+      totalMaxScore = rubric.grade_t2_value_1 + rubric.grade_t2_value_2 + rubric.grade_t2_value_3 + rubric.grade_t2_value_4 + rubric.grade_t2_value_5;
+    } else {
+      totalMaxScore = rubric.grade_value_1 + rubric.grade_value_2 + rubric.grade_value_3 + rubric.grade_value_4 + rubric.grade_value_5;
+    }
+    return totalMaxScore;
+  },
+
+  calculateCategory: function(value, weight) {
+    var interval = weight / 5;
+    if(value >= interval*5) {
+      return "5 - Exceeds Expectations";
+    } else if(value >= interval*4) {
+      return "4 - Exceeds Expectations";
+    } else if(value >= interval*3) {
+      return "3 - Meets Expectations";
+    } else if(value >= interval*2) {
+      return "2 - Attempts to Meet Expectations";
+    } else if(value >= interval) {
+      return "1 - Needs Improvment";
+    } else {
+      "0 - Needs Improvment"
+    }
+  },
+
+  calculateScore: function(category, weight) {
+    var interval = weight / 5;
+    if(category == "5 - Exceeds Expectations") {
+      return interval*5;
+    } else if(category == "4 - Exceeds Expectations") {
+      return interval*4;
+    } else if(category == "3 - Meets Expectations") {
+      return interval*3;
+    } else if(category == "2 - Attempts to Meet Expectations") {
+      return interval*2;
+    } else if(category == "1 - Needs Improvment") {
+      return interval;
+    } else {
+      return 0;
+    }
   },
 
   renderError: function(field) {
