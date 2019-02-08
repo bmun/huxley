@@ -121,7 +121,7 @@ var PaperSubmissionTable = React.createClass({
           </thead>
           <tbody>
             <tr>
-              <td>Topic: &ensp; {rubric.topic_one} </td>
+              <td>{rubric.topic_one} </td>
               <td><b>{category1}</b></td>
             </tr>
           </tbody>
@@ -142,7 +142,7 @@ var PaperSubmissionTable = React.createClass({
     return (
       <tbody>
         <tr>
-          <td>Topic: &ensp; {rubric.topic_two}</td>
+          <td>{rubric.topic_two}</td>
           <td><b>{category2}</b></td>
         </tr>
       </tbody>

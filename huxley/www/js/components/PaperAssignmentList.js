@@ -40,13 +40,22 @@ var PaperAssignmentList = React.createClass({
       var category1 = this.calculateCategory(score1,maxScore1);
       var category2 = this.calculateCategory(score2,maxScore2);
 
-      var score = paper.graded ? (
-            <div>     
-            T1: <b>{score1} / {maxScore1}</b> {category1}
-            <br/>
-            T2: <b>{score2} / {maxScore2}</b> {category2}
-            </div>
-            ) : ""; 
+      var score = null;
+      if(this.props.rubric.use_topic_2) {
+        var score = paper.graded ? (
+              <div>     
+              T1: <b>{score1} / {maxScore1}</b> {category1}
+              <br/>
+              T2: <b>{score2} / {maxScore2}</b> {category2}
+              </div>
+              ) : "";         
+      } else {
+        var score = paper.graded ? (
+              <div>     
+              T1: <b>{score1} / {maxScore1}</b> {category1}
+              </div>
+              ) : "";           
+      }
 
 
       return (

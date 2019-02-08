@@ -162,7 +162,7 @@ var AdvisorPaperView = React.createClass({
             <td rowSpan={rows}>Rubric</td>
             <td rowSpan={rows}></td>
             <td rowSpan={rows}></td>
-            {rubric.use_topic_2 ? <td>1</td> : null}
+            {rubric.use_topic_2 ? <td>A</td> : null}
             <td>{rubric.grade_value_1}%</td>
             <td>{rubric.grade_value_2}%</td>
             <td>{rubric.grade_value_3}%</td>
@@ -174,7 +174,7 @@ var AdvisorPaperView = React.createClass({
         );
         var rubric_row_2 = rubric.use_topic_2 ? (
           <tr>
-            <td>2</td>
+            <td>B</td>
             <td>{rubric.grade_t2_value_1}%</td>
             <td>{rubric.grade_t2_value_2}%</td>
             <td>{rubric.grade_t2_value_3}%</td>
@@ -271,7 +271,7 @@ var AdvisorPaperView = React.createClass({
               className={cx({
                 button: true,
                 'button-small': true,
-                'button-blue': true,
+                'button-blpaperue': true,
                 'rounded-small': true,
               })}
               href={gradedHrefData}
@@ -280,25 +280,39 @@ var AdvisorPaperView = React.createClass({
             </a>
           ) : null;
 
-        var score1 = this.calculateTotalScore(paper);
-        var maxScore1 = this.calculateMaxScore(rubric);
-        var category1 = this.calculateCategory(score1,maxScore1);
+        var category1 = null;
+        var category2 = null;
+        var shown1 = null;
+        var shown2 = null;
+        var shown3 = null;
+        var shown4 = null;
+        var shown5 = null;
+        var shown1_t2 = null;
+        var shown2_t2 = null;
+        var shown3_t2 = null;
+        var shown4_t2 = null;
+        var shown5_t2 = null;
+        if(paper != null) {
+          var score1 = this.calculateTotalScore(paper);
+          var maxScore1 = this.calculateMaxScore(rubric);
+          var category1 = this.calculateCategory(score1,maxScore1);
 
-        var shown1 = this.calculateCategory(paper.score_1,rubric.grade_value_1);
-        var shown2 = this.calculateCategory(paper.score_2,rubric.grade_value_2);
-        var shown3 = this.calculateCategory(paper.score_3,rubric.grade_value_3);
-        var shown4 = this.calculateCategory(paper.score_4,rubric.grade_value_4);
-        var shown5 = this.calculateCategory(paper.score_5,rubric.grade_value_5);
+          var shown1 = this.calculateCategory(paper.score_1,rubric.grade_value_1);
+          var shown2 = this.calculateCategory(paper.score_2,rubric.grade_value_2);
+          var shown3 = this.calculateCategory(paper.score_3,rubric.grade_value_3);
+          var shown4 = this.calculateCategory(paper.score_4,rubric.grade_value_4);
+          var shown5 = this.calculateCategory(paper.score_5,rubric.grade_value_5);
 
-        var score2 = this.calculateTotalScore(paper,true);
-        var maxScore2 = this.calculateMaxScore(rubric,true);
-        var category2 = this.calculateCategory(score2,maxScore2);
+          var score2 = this.calculateTotalScore(paper,true);
+          var maxScore2 = this.calculateMaxScore(rubric,true);
+          var category2 = this.calculateCategory(score2,maxScore2);
 
-        var shown1_t2 = this.calculateCategory(paper.score_t2_1,rubric.grade_t2_value_1);
-        var shown2_t2 = this.calculateCategory(paper.score_t2_2,rubric.grade_t2_value_2);
-        var shown3_t2 = this.calculateCategory(paper.score_t2_3,rubric.grade_t2_value_3);
-        var shown4_t2 = this.calculateCategory(paper.score_t2_4,rubric.grade_t2_value_4);
-        var shown5_t2 = this.calculateCategory(paper.score_t2_5,rubric.grade_t2_value_5);
+          var shown1_t2 = this.calculateCategory(paper.score_t2_1,rubric.grade_t2_value_1);
+          var shown2_t2 = this.calculateCategory(paper.score_t2_2,rubric.grade_t2_value_2);
+          var shown3_t2 = this.calculateCategory(paper.score_t2_3,rubric.grade_t2_value_3);
+          var shown4_t2 = this.calculateCategory(paper.score_t2_4,rubric.grade_t2_value_4);
+          var shown5_t2 = this.calculateCategory(paper.score_t2_5,rubric.grade_t2_value_5);
+        }
 
         var rows = topic_2 ? '2' : '1';
         var topic_1_row = (
@@ -308,24 +322,24 @@ var AdvisorPaperView = React.createClass({
             </td>
             <td rowSpan={rows}>{downloadPaper}</td>
             <td rowSpan={rows}>{gradedPaper}</td>
-            {topic_2 ? <td>1</td> : null}
-            <td>{graded ? shown1.substring(0,1) : null}</td>
-            <td>{graded ? shown2.substring(0,1) : null}</td>
-            <td>{graded ? shown3.substring(0,1) : null}</td>
-            <td>{graded ? shown4.substring(0,1) : null}</td>
-            <td>{graded ? shown5.substring(0,1) : null}</td>
-            <td>{graded ? category1 : null}</td>
+            {topic_2 ? <td>A</td> : null}
+            <td>{shown1 && graded ? shown1.substring(0,1) : null}</td>
+            <td>{shown2 && graded ? shown2.substring(0,1) : null}</td>
+            <td>{shown3 && graded ? shown3.substring(0,1) : null}</td>
+            <td>{shown4 && graded ? shown4.substring(0,1) : null}</td>
+            <td>{shown5 && graded ? shown5.substring(0,1) : null}</td>
+            <td>{category1 && graded ? category1 : null}</td>
           </tr>
         );
         var topic_2_row = topic_2 ? (
           <tr>
-            <td>2</td>
-            <td>{graded ? shown1_t2.substring(0,1) : null}</td>
-            <td>{graded ? shown2_t2.substring(0,1) : null}</td>
-            <td>{graded ? shown3_t2.substring(0,1) : null}</td>
-            <td>{graded ? shown4_t2.substring(0,1) : null}</td>
-            <td>{graded ? shown5_t2.substring(0,1) : null}</td>
-            <td>{graded ? category2 : null}</td>
+            <td>B</td>
+            <td>{shown1_t2 && graded ? shown1_t2.substring(0,1) : null}</td>
+            <td>{shown2_t2 && graded ? shown2_t2.substring(0,1) : null}</td>
+            <td>{shown3_t2 && graded ? shown3_t2.substring(0,1) : null}</td>
+            <td>{shown4_t2 && graded ? shown4_t2.substring(0,1) : null}</td>
+            <td>{shown5_t2 && graded ? shown5_t2.substring(0,1) : null}</td>
+            <td>{category2 && graded ? category2 : null}</td>
           </tr>
         ) : null;
         return (
