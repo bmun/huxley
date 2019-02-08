@@ -74,7 +74,7 @@ var DelegatePaperView = React.createClass({
   },
 
   render() {
-    if (!this.context.conference.position_papers_accepted) {
+    if (this.context.conference.position_papers_accepted) {
       return (
         <InnerView>
           <div style={{margin: 'auto 20px 20px 20px'}}>

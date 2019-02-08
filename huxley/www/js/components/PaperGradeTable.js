@@ -25,7 +25,6 @@ const PaperGradeTable = React.createClass({
     rubric: React.PropTypes.object,
     paper: React.PropTypes.object,
     files: React.PropTypes.object,
-    graded_files: React.PropTypes.object,
     countryName: React.PropTypes.string,
     loading: React.PropTypes.bool,
     success: React.PropTypes.bool,
@@ -35,7 +34,6 @@ const PaperGradeTable = React.createClass({
     const rubric = this.props.rubric;
     const paper = this.props.paper;
     const files = this.props.files;
-    const graded_files = this.props.graded_files;
     var buttons = (
       <div>
         <Button color="red" onClick={this._handleUnset}>
@@ -48,25 +46,8 @@ const PaperGradeTable = React.createClass({
     if (paper.id in files) {
       var url = window.URL;
       var hrefData = url.createObjectURL(files[paper.id]);
-      var gradedHrefData = graded_files[paper.id]
-        ? url.createObjectURL(graded_files[paper.id])
-        : null;
       var fileNames = paper.file.split('/');
       var fileName = fileNames[fileNames.length - 1];
-      var gradedName = gradedHrefData ? 'graded_' + fileName : null;
-      var downloadGraded = gradedHrefData ? (
-        <a
-          className={cx({
-            button: true,
-            'button-large': true,
-            'button-green': true,
-            'rounded-small': true,
-          })}
-          href={gradedHrefData}
-          download={gradedName}>
-          Download Graded
-        </a>
-      ) : null;
       buttons = (
         <div>
           <Button color="red" onClick={this._handleUnset}>
@@ -83,7 +64,6 @@ const PaperGradeTable = React.createClass({
             download={fileName}>
             Download Original
           </a>
-          {downloadGraded}
           <Button
             color="blue"
             onClick={this._handleSave}
