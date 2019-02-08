@@ -48,9 +48,10 @@ const PaperGradeTable = React.createClass({
     if (paper.id in files) {
       var url = window.URL;
       var hrefData = url.createObjectURL(files[paper.id]);
-      var gradedHrefData = graded_files[paper.id] && paper.graded
-        ? url.createObjectURL(graded_files[paper.id])
-        : null;
+      var gradedHrefData =
+        graded_files[paper.id] && paper.graded
+          ? url.createObjectURL(graded_files[paper.id])
+          : null;
       var fileNames = paper.file.split('/');
       var fileName = fileNames[fileNames.length - 1];
       var gradedName = gradedHrefData ? 'graded_' + fileName : null;
