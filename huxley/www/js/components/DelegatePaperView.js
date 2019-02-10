@@ -40,11 +40,13 @@ var DelegatePaperView = React.createClass({
       PositionPaperActions.fetchPositionPaperFile(assignment.paper.id);
     }
     var files = PositionPaperStore.getPositionPaperFiles();
+    var graded_files = PositionPaperStore.getGradedPositionPaperFiles();
 
     return {
       papers: papers,
       uploadedFile: null,
       files: files,
+      graded_files: graded_files,
       errors: {},
     };
   },
@@ -61,6 +63,7 @@ var DelegatePaperView = React.createClass({
       this.setState({
         files: PositionPaperStore.getPositionPaperFiles(),
         papers: PositionPaperStore.getPapers(),
+        graded_files: PositionPaperStore.getGradedPositionPaperFiles(),
       });
     });
   },
@@ -97,6 +100,8 @@ var DelegatePaperView = React.createClass({
     const user = CurrentUserStore.getCurrentUser();
     const paper = this.state.papers[user.delegate.assignment.paper.id];
     const files = this.state.files;
+    const graded_file = PositionPaperStore.getGradedPositionPaperFile(paper.id);
+    const graded_files = this.state.graded_files;
     const rubric = user.delegate.assignment.committee.rubric;
 
     if (rubric != null && paper != null) {
@@ -105,12 +110,87 @@ var DelegatePaperView = React.createClass({
           rubric={rubric}
           paper={paper}
           files={files}
+          graded_files={graded_files}
           onUpload={this._handleUploadPaper}
           onSubmit={this._handleSubmitPaper}
         />
       );
     } else {
       return <div />;
+    }
+  },
+
+  calculateTotalScore: function(paper, topic_2 = false) {
+    var totalScore = -1;
+    if (topic_2) {
+      totalScore =
+        paper.score_t2_1 +
+        paper.score_t2_2 +
+        paper.score_t2_3 +
+        paper.score_t2_4 +
+        paper.score_t2_5;
+    } else {
+      totalScore =
+        paper.score_1 +
+        paper.score_2 +
+        paper.score_3 +
+        paper.score_4 +
+        paper.score_5;
+    }
+    return totalScore;
+  },
+
+  calculateMaxScore: function(rubric, topic_2 = false) {
+    var totalMaxScore = -1;
+    if (topic_2) {
+      totalMaxScore =
+        rubric.grade_t2_value_1 +
+        rubric.grade_t2_value_2 +
+        rubric.grade_t2_value_3 +
+        rubric.grade_t2_value_4 +
+        rubric.grade_t2_value_5;
+    } else {
+      totalMaxScore =
+        rubric.grade_value_1 +
+        rubric.grade_value_2 +
+        rubric.grade_value_3 +
+        rubric.grade_value_4 +
+        rubric.grade_value_5;
+    }
+    return totalMaxScore;
+  },
+
+  calculateCategory: function(value, weight) {
+    var interval = weight / 5;
+    if (value >= interval * 5) {
+      return '5 - Exceeds Expectations';
+    } else if (value >= interval * 4) {
+      return '4 - Exceeds Expectations';
+    } else if (value >= interval * 3) {
+      return '3 - Meets Expectations';
+    } else if (value >= interval * 2) {
+      return '2 - Attempts to Meet Expectations';
+    } else if (value >= interval) {
+      return '1 - Needs Improvment';
+    } else {
+      ('0 - Needs Improvment');
+    }
+  },
+
+  calculateScore: function(category, weight) {
+    var interval = weight / 5;
+    if (category == '5 - Exceeds Expectations') {
+      return interval * 5;
+    } else if (category == '4 - Exceeds Expectations') {
+      return interval * 4;
+    } else if (category == '3 - Meets Expectations') {
+      return interval * 3;
+    } else if (category == '2 - Attempts to Meet Expectations') {
+      return interval * 2;
+    } else if (category == '1 - Needs Improvment') {
+      return interval;
+    } else {
+      return 0;
     }
   },
 

@@ -406,6 +406,8 @@ post_save.connect(Registration.email_confirmation, sender=Registration)
 
 class PositionPaper(models.Model):
     file = models.FileField(upload_to="position_papers/", null=True)
+    graded_file = models.FileField(
+        upload_to="graded_papers/", null=True, blank=True)
     graded = models.BooleanField(default=False)
     score_1 = models.PositiveSmallIntegerField(default=0)
     score_2 = models.PositiveSmallIntegerField(default=0)
