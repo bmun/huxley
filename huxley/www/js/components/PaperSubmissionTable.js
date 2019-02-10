@@ -108,7 +108,7 @@ var PaperSubmissionTable = React.createClass({
 
     var score1 = this.calculateTotalScore(paper);
     var maxScore1 = this.calculateMaxScore(rubric);
-    var category1 = this.calculateCategory(score1,maxScore1);
+    var category1 = this.calculateCategory(score1, maxScore1);
 
     return (
       <div>
@@ -122,7 +122,9 @@ var PaperSubmissionTable = React.createClass({
           <tbody>
             <tr>
               <td>{rubric.topic_one} </td>
-              <td><b>{category1}</b></td>
+              <td>
+                <b>{category1}</b>
+              </td>
             </tr>
           </tbody>
           {secondRuric}
@@ -135,68 +137,90 @@ var PaperSubmissionTable = React.createClass({
   _renderTopicTwo: function(rubric, paper) {
     var paper = this.props.paper;
     var rubric = this.props.rubric;
-    var score2 = this.calculateTotalScore(paper,true);
-    var maxScore2 = this.calculateMaxScore(rubric,true);
-    var category2 = this.calculateCategory(score2,maxScore2);
+    var score2 = this.calculateTotalScore(paper, true);
+    var maxScore2 = this.calculateMaxScore(rubric, true);
+    var category2 = this.calculateCategory(score2, maxScore2);
 
     return (
       <tbody>
         <tr>
           <td>{rubric.topic_two}</td>
-          <td><b>{category2}</b></td>
+          <td>
+            <b>{category2}</b>
+          </td>
         </tr>
       </tbody>
     );
   },
 
-  calculateTotalScore: function(paper, topic_2=false) {
+  calculateTotalScore: function(paper, topic_2 = false) {
     var totalScore = -1;
-    if(topic_2) {
-      totalScore = paper.score_t2_1 + paper.score_t2_2 + paper.score_t2_3 + paper.score_t2_4 + paper.score_t2_5;
+    if (topic_2) {
+      totalScore =
+        paper.score_t2_1 +
+        paper.score_t2_2 +
+        paper.score_t2_3 +
+        paper.score_t2_4 +
+        paper.score_t2_5;
     } else {
-      totalScore = paper.score_1 + paper.score_2 + paper.score_3 + paper.score_4 + paper.score_5;
+      totalScore =
+        paper.score_1 +
+        paper.score_2 +
+        paper.score_3 +
+        paper.score_4 +
+        paper.score_5;
     }
     return totalScore;
   },
 
-  calculateMaxScore: function(rubric, topic_2=false) {
+  calculateMaxScore: function(rubric, topic_2 = false) {
     var totalMaxScore = -1;
-    if(topic_2) {
-      totalMaxScore = rubric.grade_t2_value_1 + rubric.grade_t2_value_2 + rubric.grade_t2_value_3 + rubric.grade_t2_value_4 + rubric.grade_t2_value_5;
+    if (topic_2) {
+      totalMaxScore =
+        rubric.grade_t2_value_1 +
+        rubric.grade_t2_value_2 +
+        rubric.grade_t2_value_3 +
+        rubric.grade_t2_value_4 +
+        rubric.grade_t2_value_5;
     } else {
-      totalMaxScore = rubric.grade_value_1 + rubric.grade_value_2 + rubric.grade_value_3 + rubric.grade_value_4 + rubric.grade_value_5;
+      totalMaxScore =
+        rubric.grade_value_1 +
+        rubric.grade_value_2 +
+        rubric.grade_value_3 +
+        rubric.grade_value_4 +
+        rubric.grade_value_5;
     }
     return totalMaxScore;
   },
 
   calculateCategory: function(value, weight) {
     var interval = weight / 5;
-    if(value >= interval*5) {
-      return "5 - Exceeds Expectations";
-    } else if(value >= interval*4) {
-      return "4 - Exceeds Expectations";
-    } else if(value >= interval*3) {
-      return "3 - Meets Expectations";
-    } else if(value >= interval*2) {
-      return "2 - Attempts to Meet Expectations";
-    } else if(value >= interval) {
-      return "1 - Needs Improvment";
+    if (value >= interval * 5) {
+      return '5 - Exceeds Expectations';
+    } else if (value >= interval * 4) {
+      return '4 - Exceeds Expectations';
+    } else if (value >= interval * 3) {
+      return '3 - Meets Expectations';
+    } else if (value >= interval * 2) {
+      return '2 - Attempts to Meet Expectations';
+    } else if (value >= interval) {
+      return '1 - Needs Improvment';
     } else {
-      "0 - Needs Improvment"
+      ('0 - Needs Improvment');
     }
   },
 
   calculateScore: function(category, weight) {
     var interval = weight / 5;
-    if(category == "5 - Exceeds Expectations") {
-      return interval*5;
-    } else if(category == "4 - Exceeds Expectations") {
-      return interval*4;
-    } else if(category == "3 - Meets Expectations") {
-      return interval*3;
-    } else if(category == "2 - Attempts to Meet Expectations") {
-      return interval*2;
-    } else if(category == "1 - Needs Improvment") {
+    if (category == '5 - Exceeds Expectations') {
+      return interval * 5;
+    } else if (category == '4 - Exceeds Expectations') {
+      return interval * 4;
+    } else if (category == '3 - Meets Expectations') {
+      return interval * 3;
+    } else if (category == '2 - Attempts to Meet Expectations') {
+      return interval * 2;
+    } else if (category == '1 - Needs Improvment') {
       return interval;
     } else {
       return 0;

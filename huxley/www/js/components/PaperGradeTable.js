@@ -123,35 +123,55 @@ const PaperGradeTable = React.createClass({
             <tr>
               <td>{rubric.grade_category_1}</td>
               <td>
-                {this.renderDropdown('score_1',paper.score_1,rubric.grade_value_1)}
+                {this.renderDropdown(
+                  'score_1',
+                  paper.score_1,
+                  rubric.grade_value_1,
+                )}
               </td>
               <td>{rubric.grade_value_1}</td>
             </tr>
             <tr>
               <td>{rubric.grade_category_2}</td>
               <td>
-                {this.renderDropdown('score_2',paper.score_2,rubric.grade_value_2)}
+                {this.renderDropdown(
+                  'score_2',
+                  paper.score_2,
+                  rubric.grade_value_2,
+                )}
               </td>
               <td>{rubric.grade_value_2}</td>
             </tr>
             <tr>
               <td>{rubric.grade_category_3}</td>
               <td>
-                {this.renderDropdown('score_3',paper.score_3,rubric.grade_value_3)}
+                {this.renderDropdown(
+                  'score_3',
+                  paper.score_3,
+                  rubric.grade_value_3,
+                )}
               </td>
               <td>{rubric.grade_value_3}</td>
             </tr>
             <tr>
               <td>{rubric.grade_category_4}</td>
               <td>
-                {this.renderDropdown('score_4',paper.score_4,rubric.grade_value_4)}
+                {this.renderDropdown(
+                  'score_4',
+                  paper.score_4,
+                  rubric.grade_value_4,
+                )}
               </td>
               <td>{rubric.grade_value_4}</td>
             </tr>
             <tr>
               <td>{rubric.grade_category_5}</td>
               <td>
-                {this.renderDropdown('score_5',paper.score_5,rubric.grade_value_5)}
+                {this.renderDropdown(
+                  'score_5',
+                  paper.score_5,
+                  rubric.grade_value_5,
+                )}
               </td>
               <td>{rubric.grade_value_5}</td>
             </tr>
@@ -186,35 +206,55 @@ const PaperGradeTable = React.createClass({
         <tr>
           <td>{rubric.grade_t2_category_1}</td>
           <td>
-            {this.renderDropdown('score_t2_1',paper.score_t2_1,rubric.grade_t2_value_1)}
+            {this.renderDropdown(
+              'score_t2_1',
+              paper.score_t2_1,
+              rubric.grade_t2_value_1,
+            )}
           </td>
           <td>{rubric.grade_t2_value_1}</td>
         </tr>
         <tr>
           <td>{rubric.grade_t2_category_2}</td>
           <td>
-            {this.renderDropdown('score_t2_2',paper.score_t2_2,rubric.grade_t2_value_2)}
+            {this.renderDropdown(
+              'score_t2_2',
+              paper.score_t2_2,
+              rubric.grade_t2_value_2,
+            )}
           </td>
           <td>{rubric.grade_t2_value_2}</td>
         </tr>
         <tr>
           <td>{rubric.grade_t2_category_3}</td>
           <td>
-            {this.renderDropdown('score_t2_3',paper.score_t2_3,rubric.grade_t2_value_3)}
+            {this.renderDropdown(
+              'score_t2_3',
+              paper.score_t2_3,
+              rubric.grade_t2_value_3,
+            )}
           </td>
           <td>{rubric.grade_t2_value_3}</td>
         </tr>
         <tr>
           <td>{rubric.grade_t2_category_4}</td>
           <td>
-            {this.renderDropdown('score_t2_4',paper.score_t2_4,rubric.grade_t2_value_4)}
+            {this.renderDropdown(
+              'score_t2_4',
+              paper.score_t2_4,
+              rubric.grade_t2_value_4,
+            )}
           </td>
           <td>{rubric.grade_t2_value_4}</td>
         </tr>
         <tr>
           <td>{rubric.grade_t2_category_5}</td>
           <td>
-            {this.renderDropdown('score_t2_5',paper.score_t2_5,rubric.grade_t2_value_5)}
+            {this.renderDropdown(
+              'score_t2_5',
+              paper.score_t2_5,
+              rubric.grade_t2_value_5,
+            )}
           </td>
           <td>{rubric.grade_t2_value_5}</td>
         </tr>
@@ -224,32 +264,32 @@ const PaperGradeTable = React.createClass({
 
   calculateCategory: function(value, weight) {
     var interval = weight / 5;
-    if(value >= interval*5) {
-      return "5 - Exceeds Expectations";
-    } else if(value >= interval*4) {
-      return "4 - Exceeds Expectations";
-    } else if(value >= interval*3) {
-      return "3 - Meets Expectations";
-    } else if(value >= interval*2) {
-      return "2 - Attempts to Meet Expectations";
-    } else if(value >= interval) {
-      return "1 - Needs Improvment";
+    if (value >= interval * 5) {
+      return '5 - Exceeds Expectations';
+    } else if (value >= interval * 4) {
+      return '4 - Exceeds Expectations';
+    } else if (value >= interval * 3) {
+      return '3 - Meets Expectations';
+    } else if (value >= interval * 2) {
+      return '2 - Attempts to Meet Expectations';
+    } else if (value >= interval) {
+      return '1 - Needs Improvment';
     } else {
-      "0 - Missing Section"
+      ('0 - Missing Section');
     }
   },
 
   calculateScore: function(category, weight) {
     var interval = weight / 5;
-    if(category == "5 - Exceeds Expectations") {
-      return interval*5;
-    } else if(category == "4 - Exceeds Expectations") {
-      return interval*4;
-    } else if(category == "3 - Meets Expectations") {
-      return interval*3;
-    } else if(category == "2 - Attempts to Meet Expectations") {
-      return interval*2;
-    } else if(category == "1 - Needs Improvment") {
+    if (category == '5 - Exceeds Expectations') {
+      return interval * 5;
+    } else if (category == '4 - Exceeds Expectations') {
+      return interval * 4;
+    } else if (category == '3 - Meets Expectations') {
+      return interval * 3;
+    } else if (category == '2 - Attempts to Meet Expectations') {
+      return interval * 2;
+    } else if (category == '1 - Needs Improvment') {
       return interval;
     } else {
       return 0;
@@ -257,49 +297,43 @@ const PaperGradeTable = React.createClass({
   },
 
   renderDropdown: function(name, score, max_score) {
-    var interval = this.calculateCategory(score,max_score);
+    var interval = this.calculateCategory(score, max_score);
     return (
       <select
         onChange={this._handleDropdownChange.bind(this, name, max_score)}
         value={interval}>
-        <option
-          key={"0 - Missing Section"}
-          value={"0 - Missing Section"}>
+        <option key={'0 - Missing Section'} value={'0 - Missing Section'}>
           0 - Missing Section
         </option>
         <option
-          key={"5 - Exceeds Expectations"}
-          value={"5 - Exceeds Expectations"}>
+          key={'5 - Exceeds Expectations'}
+          value={'5 - Exceeds Expectations'}>
           5 - Exceeds Expectations
         </option>
         <option
-          key={"4 - Exceeds Expectations"}
-          value={"4 - Exceeds Expectations"}>
+          key={'4 - Exceeds Expectations'}
+          value={'4 - Exceeds Expectations'}>
           4 - Exceeds Expectations
         </option>
-        <option
-          key={"3 - Meets Expectations"}
-          value={"3 - Meets Expectations"}>
+        <option key={'3 - Meets Expectations'} value={'3 - Meets Expectations'}>
           3 - Meets Expectations
         </option>
         <option
-          key={"2 - Attempts to Meet Expectations"}
-          value={"2 - Attempts to Meet Expectations"}>
+          key={'2 - Attempts to Meet Expectations'}
+          value={'2 - Attempts to Meet Expectations'}>
           2 - Attempts to Meet Expectations
         </option>
-        <option
-          key={"1 - Needs Improvment"}
-          value={"1 - Needs Improvment"}>
+        <option key={'1 - Needs Improvment'} value={'1 - Needs Improvment'}>
           1 - Needs Improvment
         </option>
       </select>
-    );    
+    );
   },
 
   _handleDropdownChange: function(field, max_score, event) {
-    var new_score = this.calculateScore(event.target.value,max_score);
-    this.props.onChange && 
-      this.props.onChange(field,this.props.paper.id,new_score);
+    var new_score = this.calculateScore(event.target.value, max_score);
+    this.props.onChange &&
+      this.props.onChange(field, this.props.paper.id, new_score);
   },
 
   _handleChange: function(field, event) {
