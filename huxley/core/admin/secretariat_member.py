@@ -18,10 +18,9 @@ class SecretariatMemberAdmin(admin.ModelAdmin):
         reader = csv.reader(members['csv'])
         for row in reader:
             row_committee = Committee.objects.get(name__exact=row[1])
+            head_chair = True if (len(row) > 2 and row[2] == "TRUE") else False
             sm = SecretariatMember(
-                name=row[0],
-                committee=row_committee,
-                is_head_chair=bool(row[2]))
+                name=row[0], committee=row_committee, is_head_chair=head_chair)
             sm.save()
 
         return HttpResponseRedirect(

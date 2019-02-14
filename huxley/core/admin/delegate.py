@@ -83,7 +83,7 @@ class DelegateAdmin(admin.ModelAdmin):
             committee = row[3]
             country = row[4]
             row = [email, name, school, committee, country]
-            results = Delegate.objects.filter(email=email)
+            results = Delegate.objects.filter(email__iexact=email)
             if (results.count() == 0):
                 row.append("Email does not exist")
                 no_exist += 1

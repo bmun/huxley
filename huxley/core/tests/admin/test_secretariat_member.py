@@ -20,7 +20,7 @@ class SecretariatMemberAdminTest(TestCase):
         committee = models.new_committee(name='ICJ')
 
         f = TestFiles.new_csv([
-            ['Trent Gomberg', 'ICJ', ''], ['Ali Maloney', 'ICJ', 'True']
+            ['Trent Gomberg', 'ICJ', ''], ['Ali Maloney', 'ICJ', 'TRUE']
         ])
 
         with closing(f) as f:
