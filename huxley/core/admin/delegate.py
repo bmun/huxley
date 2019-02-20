@@ -22,17 +22,17 @@ class DelegateAdmin(admin.ModelAdmin):
         roster['Content-Disposition'] = 'attachment; filename="roster.csv"'
         writer = csv.writer(roster)
         writer.writerow([
-            'Name', 'School', 'Committee', 'Country', 'Email', 'Session One',
-            'Session Two', 'Session Three', 'Session Four'
+            'Name', 'School', 'Committee', 'Country', 'Email', 'Waiver?',
+            'Session One', 'Session Two', 'Session Three', 'Session Four'
         ])
 
         ordering = 'assignment__registration__school__name'
         for delegate in Delegate.objects.all().order_by(ordering):
             writer.writerow([
                 delegate, delegate.school, delegate.committee,
-                delegate.country, delegate.email, delegate.session_one,
-                delegate.session_two, delegate.session_three,
-                delegate.session_four
+                delegate.country, delegate.email, delegate.waiver_submitted,
+                delegate.session_one, delegate.session_two,
+                delegate.session_three, delegate.session_four
             ])
 
         return roster
