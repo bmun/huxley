@@ -273,7 +273,7 @@ const PaperGradeTable = React.createClass({
     } else if (value >= interval * 2) {
       return '2 - Attempts to Meet Expectations';
     } else if (value >= interval) {
-      return '1 - Needs Improvment';
+      return '1 - Needs Improvement';
     } else {
       ('0 - Missing Section');
     }
@@ -289,7 +289,7 @@ const PaperGradeTable = React.createClass({
       return interval * 3;
     } else if (category == '2 - Attempts to Meet Expectations') {
       return interval * 2;
-    } else if (category == '1 - Needs Improvment') {
+    } else if (category == '1 - Needs Improvement') {
       return interval;
     } else {
       return 0;
@@ -323,8 +323,8 @@ const PaperGradeTable = React.createClass({
           value={'2 - Attempts to Meet Expectations'}>
           2 - Attempts to Meet Expectations
         </option>
-        <option key={'1 - Needs Improvment'} value={'1 - Needs Improvment'}>
-          1 - Needs Improvment
+        <option key={'1 - Needs Improvement'} value={'1 - Needs Improvement'}>
+          1 - Needs Improvement
         </option>
       </select>
     );
