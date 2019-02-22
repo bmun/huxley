@@ -171,9 +171,9 @@ var DelegatePaperView = React.createClass({
     } else if (value >= interval * 2) {
       return '2 - Attempts to Meet Expectations';
     } else if (value >= interval) {
-      return '1 - Needs Improvment';
+      return '1 - Needs Improvement';
     } else {
-      ('0 - Needs Improvment');
+      ('0 - Needs Improvement');
     }
   },
 
@@ -187,7 +187,7 @@ var DelegatePaperView = React.createClass({
       return interval * 3;
     } else if (category == '2 - Attempts to Meet Expectations') {
       return interval * 2;
-    } else if (category == '1 - Needs Improvment') {
+    } else if (category == '1 - Needs Improvement') {
       return interval;
     } else {
       return 0;
