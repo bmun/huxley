@@ -7,6 +7,7 @@ import requests
 import os
 
 from decimal import Decimal
+from enum import Enum
 
 from django.conf import settings
 from django.core.exceptions import ValidationError
@@ -16,7 +17,6 @@ from django.db.models.signals import post_init, post_save, pre_delete, pre_save
 from django.utils import timezone
 
 from huxley.core.constants import ContactGender, ContactType, ProgramTypes
-
 
 class Conference(models.Model):
     session = models.PositiveSmallIntegerField(default=0, primary_key=True)
@@ -659,3 +659,21 @@ class SecretariatMember(models.Model):
 
     def __unicode__(self):
         return self.name
+
+
+class SpeechChoice(Enum):
+    SP = "Speaker's List"
+    MD = "Moderated Caucus"
+    CM = "Comment"
+    FM = "Formal Caucus"
+    QU = "Question"
+
+class Speech(models.Model):
+    assignment = models.ForeignKey(Assignment)
+    speechtype = models.CharField(
+            max_length = 2,
+            choices=[(tag.name, tag.value) for tag in SpeechChoice]
+            )
+    def __unicode__(self):
+        return "%s_%s_%d" % (self.assignment.committee.name, self.assignment.country.name, self.id)
+
