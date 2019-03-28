@@ -339,9 +339,7 @@ class SpeechListPermission(permissions.BasePermission):
         if user.is_superuser:
             return True
 
-        committee_id = request.query_params.get('committee_id', -1)
-
-        return user_is_chair(request, view, committee_id)
+        return user.is_authenticated() and user.is_chair()
 
 
 

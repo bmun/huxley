@@ -19,7 +19,7 @@ class SpeechListGetTestCase(tests.ListAPITestCase):
         self.assi1 = models.new_assignment()
         self.assi2 = models.new_assignment()
         self.sp1 = models.new_speech(assignment=self.assi1)
-        self.sp2 = models.new_speech(assignment=self.assi1, speechtype=SpeechTypes.QUESTION)
+        self.sp2 = models.new_speech(assignment=self.assi2, speechtype=SpeechTypes.QUESTION)
 
     def test_anonymous_user(self):
         '''Tests anonymous user can not get speech list'''
@@ -47,45 +47,60 @@ class SpeechListGetTestCase(tests.ListAPITestCase):
             committee_id=self.chair_committee.id, )
         self.client.login(username='chair', password='chair')
         response = self.get_response()
-        self.assertEqual(response.data, [
-            {
-                'assignment': OrderedDict(
-                [('id', self.assi1.paper.id),
-                 ('file', self.assi1.paper.file),
-                 ('graded_file', self.assi1.paper.graded_file),
-                 ('graded', self.assi1.paper.graded),
-                 ('score_1', self.assi1.paper.score_1),
-                 ('score_2', self.assi1.paper.score_2),
-                 ('score_3', self.assi1.paper.score_3),
-                 ('score_4', self.assi1.paper.score_4),
-                 ('score_5', self.assi1.paper.score_5),
-                 ('score_t2_1', self.assi1.paper.score_t2_1),
-                 ('score_t2_2', self.assi1.paper.score_t2_2),
-                 ('score_t2_3', self.assi1.paper.score_t2_3),
-                 ('score_t2_4', self.assi1.paper.score_t2_4),
-                 ('score_t2_5', self.assi1.paper.score_t2_5),
-                 ("submission_date", self.assi1.paper.submission_date)]),
-                'speechtype': SpeechTypes.SPEAKER,
-            }, {
-                'assignment': OrderedDict(
-                [('id', self.assi2.paper.id),
-                 ('file', self.assi2.paper.file),
-                 ('graded_file', self.assi2.paper.graded_file),
-                 ('graded', self.assi2.paper.graded),
-                 ('score_1', self.assi2.paper.score_1),
-                 ('score_2', self.assi2.paper.score_2),
-                 ('score_3', self.assi2.paper.score_3),
-                 ('score_4', self.assi2.paper.score_4),
-                 ('score_5', self.assi2.paper.score_5),
-                 ('score_t2_1', self.assi2.paper.score_t2_1),
-                 ('score_t2_2', self.assi2.paper.score_t2_2),
-                 ('score_t2_3', self.assi2.paper.score_t2_3),
-                 ('score_t2_4', self.assi2.paper.score_t2_4),
-                 ('score_t2_5', self.assi2.paper.score_t2_5),
-                 ("submission_date", self.assi2.paper.submission_date)]),
-                'speechtype': SpeechTypes.QUESTION,
-            }
-        ])
+        self.assertEqual(response.data, [OrderedDict([
+            ('assignment' , OrderedDict([
+                ("id", self.assi1.id),
+                ("committee", self.assi1.committee.id),
+                ("country", self.assi1.country.id),
+                ("paper", OrderedDict(
+                    [('id', self.assi1.paper.id),
+                     ('file', self.assi1.paper.file),
+                     ('graded_file', self.assi1.paper.graded_file),
+                     ('graded', self.assi1.paper.graded),
+                     ('score_1', self.assi1.paper.score_1),
+                     ('score_2', self.assi1.paper.score_2),
+                     ('score_3', self.assi1.paper.score_3),
+                     ('score_4', self.assi1.paper.score_4),
+                     ('score_5', self.assi1.paper.score_5),
+                     ('score_t2_1', self.assi1.paper.score_t2_1),
+                     ('score_t2_2', self.assi1.paper.score_t2_2),
+                     ('score_t2_3', self.assi1.paper.score_t2_3),
+                     ('score_t2_4', self.assi1.paper.score_t2_4),
+                     ('score_t2_5', self.assi1.paper.score_t2_5),
+                     ("submission_date", self.assi1.paper.submission_date)])),
+                ("registration", self.assi1.registration.id),
+                ("rejected", False),
+                ])),
+            ('speechtype', SpeechTypes.SPEAKER),
+            ]),
+            OrderedDict([
+            ('assignment' , OrderedDict([
+                ("id", self.assi2.id),
+                ("committee", self.assi2.committee.id),
+                ("country", self.assi2.country.id),
+                ("paper", OrderedDict(
+                    [('id', self.assi2.paper.id),
+                     ('file', self.assi2.paper.file),
+                     ('graded_file', self.assi2.paper.graded_file),
+                     ('graded', self.assi2.paper.graded),
+                     ('score_1', self.assi2.paper.score_1),
+                     ('score_2', self.assi2.paper.score_2),
+                     ('score_3', self.assi2.paper.score_3),
+                     ('score_4', self.assi2.paper.score_4),
+                     ('score_5', self.assi2.paper.score_5),
+                     ('score_t2_1', self.assi2.paper.score_t2_1),
+                     ('score_t2_2', self.assi2.paper.score_t2_2),
+                     ('score_t2_3', self.assi2.paper.score_t2_3),
+                     ('score_t2_4', self.assi2.paper.score_t2_4),
+                     ('score_t2_5', self.assi2.paper.score_t2_5),
+                     ("submission_date", self.assi2.paper.submission_date)])),
+                ("registration", self.assi2.registration.id),
+
+                ("rejected", False),
+                ])),
+            ('speechtype', SpeechTypes.QUESTION),
+            ]),
+            ])
 
     def test_advisor(self):
         '''Tests advisor can not get speeches'''
@@ -103,42 +118,57 @@ class SpeechListGetTestCase(tests.ListAPITestCase):
         models.new_superuser(username='user', password='user')
         self.client.login(username='user', password='user')
         response = self.get_response()
-        self.assertEqual(response.data, [
-            {
-                'assignment': OrderedDict(
-                [('id', self.assi1.paper.id),
-                 ('file', self.assi1.paper.file),
-                 ('graded_file', self.assi1.paper.graded_file),
-                 ('graded', self.assi1.paper.graded),
-                 ('score_1', self.assi1.paper.score_1),
-                 ('score_2', self.assi1.paper.score_2),
-                 ('score_3', self.assi1.paper.score_3),
-                 ('score_4', self.assi1.paper.score_4),
-                 ('score_5', self.assi1.paper.score_5),
-                 ('score_t2_1', self.assi1.paper.score_t2_1),
-                 ('score_t2_2', self.assi1.paper.score_t2_2),
-                 ('score_t2_3', self.assi1.paper.score_t2_3),
-                 ('score_t2_4', self.assi1.paper.score_t2_4),
-                 ('score_t2_5', self.assi1.paper.score_t2_5),
-                 ("submission_date", self.assi1.paper.submission_date)]),
-                'speechtype': SpeechTypes.SPEAKER,
-            }, {
-                'assignment': OrderedDict(
-                [('id', self.assi2.paper.id),
-                 ('file', self.assi2.paper.file),
-                 ('graded_file', self.assi2.paper.graded_file),
-                 ('graded', self.assi2.paper.graded),
-                 ('score_1', self.assi2.paper.score_1),
-                 ('score_2', self.assi2.paper.score_2),
-                 ('score_3', self.assi2.paper.score_3),
-                 ('score_4', self.assi2.paper.score_4),
-                 ('score_5', self.assi2.paper.score_5),
-                 ('score_t2_1', self.assi2.paper.score_t2_1),
-                 ('score_t2_2', self.assi2.paper.score_t2_2),
-                 ('score_t2_3', self.assi2.paper.score_t2_3),
-                 ('score_t2_4', self.assi2.paper.score_t2_4),
-                 ('score_t2_5', self.assi2.paper.score_t2_5),
-                 ("submission_date", self.assi2.paper.submission_date)]),
-                'speechtype': SpeechTypes.QUESTION,
-            }
-        ])
+        self.assertEqual(response.data, [OrderedDict([
+            ('assignment' , OrderedDict([
+                ("id", self.assi1.id),
+                ("committee", self.assi1.committee.id),
+                ("country", self.assi1.country.id),
+                ("paper", OrderedDict(
+                    [('id', self.assi1.paper.id),
+                     ('file', self.assi1.paper.file),
+                     ('graded_file', self.assi1.paper.graded_file),
+                     ('graded', self.assi1.paper.graded),
+                     ('score_1', self.assi1.paper.score_1),
+                     ('score_2', self.assi1.paper.score_2),
+                     ('score_3', self.assi1.paper.score_3),
+                     ('score_4', self.assi1.paper.score_4),
+                     ('score_5', self.assi1.paper.score_5),
+                     ('score_t2_1', self.assi1.paper.score_t2_1),
+                     ('score_t2_2', self.assi1.paper.score_t2_2),
+                     ('score_t2_3', self.assi1.paper.score_t2_3),
+                     ('score_t2_4', self.assi1.paper.score_t2_4),
+                     ('score_t2_5', self.assi1.paper.score_t2_5),
+                     ("submission_date", self.assi1.paper.submission_date)])),
+                ("registration", self.assi1.registration.id),
+                ("rejected", False),
+                ])),
+            ('speechtype', SpeechTypes.SPEAKER),
+            ]),
+            OrderedDict([
+            ('assignment' , OrderedDict([
+                ("id", self.assi2.id),
+                ("committee", self.assi2.committee.id),
+                ("country", self.assi2.country.id),
+                ("paper", OrderedDict(
+                    [('id', self.assi2.paper.id),
+                     ('file', self.assi2.paper.file),
+                     ('graded_file', self.assi2.paper.graded_file),
+                     ('graded', self.assi2.paper.graded),
+                     ('score_1', self.assi2.paper.score_1),
+                     ('score_2', self.assi2.paper.score_2),
+                     ('score_3', self.assi2.paper.score_3),
+                     ('score_4', self.assi2.paper.score_4),
+                     ('score_5', self.assi2.paper.score_5),
+                     ('score_t2_1', self.assi2.paper.score_t2_1),
+                     ('score_t2_2', self.assi2.paper.score_t2_2),
+                     ('score_t2_3', self.assi2.paper.score_t2_3),
+                     ('score_t2_4', self.assi2.paper.score_t2_4),
+                     ('score_t2_5', self.assi2.paper.score_t2_5),
+                     ("submission_date", self.assi2.paper.submission_date)])),
+                ("registration", self.assi2.registration.id),
+
+                ("rejected", False),
+                ])),
+            ('speechtype', SpeechTypes.QUESTION),
+            ]),
+            ])

@@ -368,7 +368,7 @@ class SpeechTest(TestCase):
         self.speech = models.new_speech(assignment=self.assignment)
 
     def test_default_fields(self):
-        self.assertTrue(self.speechtype == SpeechTypes.SPEAKER)
+        self.assertTrue(self.speech.speechtype == SpeechTypes.SPEAKER)
 
     def test_unicode(self):
-        self.assertTrue(self.speech.__unicode__() == str(assignment.committee.name)+'_'+str(assignment.country.name))
+        self.assertTrue(self.speech.__unicode__() == str(self.assignment.committee.name)+'_'+str(self.assignment.country.name))

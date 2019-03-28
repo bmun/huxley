@@ -666,8 +666,7 @@ class Speech(models.Model):
                             (SpeechTypes.QUESTION, 'Question'),
                             (SpeechTypes.FORMAL, 'Formal'),)
     assignment = models.ForeignKey(Assignment)
-    speechtype = models.CharField(
-            max_length = 2,
+    speechtype = models.PositiveSmallIntegerField(
             choices=SPEECH_TYPE_OPTIONS,
             default=SpeechTypes.SPEAKER
             )
@@ -676,4 +675,4 @@ class Speech(models.Model):
         return "%s_%s" % (self.assignment.committee.name, self.assignment.country.name)
 
     class Meta:
-        db_table = u'speeches'
+        db_table = u'speech'
