@@ -12,3 +12,4 @@ from .registration import RegistrationSerializer
 from .position_paper import PositionPaperSerializer
 from .rubric import RubricSerializer
 from .secretariat_member import SecretariatMemberSerializer
+from .speech import SpeechSerializer

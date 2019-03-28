@@ -7,7 +7,6 @@ import requests
 import os
 
 from decimal import Decimal
-from enum import Enum
 
 from django.conf import settings
 from django.core.exceptions import ValidationError
@@ -16,7 +15,7 @@ from django.db import models, transaction
 from django.db.models.signals import post_init, post_save, pre_delete, pre_save
 from django.utils import timezone
 
-from huxley.core.constants import ContactGender, ContactType, ProgramTypes
+from huxley.core.constants import ContactGender, ContactType, ProgramTypes, SpeechTypes
 
 class Conference(models.Model):
     session = models.PositiveSmallIntegerField(default=0, primary_key=True)
@@ -660,24 +659,21 @@ class SecretariatMember(models.Model):
     def __unicode__(self):
         return self.name
 
-
-class SpeechChoice(Enum):
-    SP = "Speaker's List"
-    MD = "Moderated Caucus"
-    CM = "Comment"
-    FM = "Formal Caucus"
-    QU = "Question"
-
 class Speech(models.Model):
+    SPEECH_TYPE_OPTIONS = ((SpeechTypes.SPEAKER, 'Speaker\'s List'),
+                            (SpeechTypes.MODERATE, 'Moderated Caucus'), 
+                            (SpeechTypes.COMMENT, 'Comment'),
+                            (SpeechTypes.QUESTION, 'Question'),
+                            (SpeechTypes.FORMAL, 'Formal'),)
     assignment = models.ForeignKey(Assignment)
     speechtype = models.CharField(
             max_length = 2,
-            choices=[(tag.name, tag.value) for tag in SpeechChoice],
-            default=SpeechChoice.SP
+            choices=SPEECH_TYPE_OPTIONS,
+            default=SpeechTypes.SPEAKER
             )
 
     def __unicode__(self):
         return "%s_%s" % (self.assignment.committee.name, self.assignment.country.name)
 
     class Meta:
-        db_table = u'speech'
+        db_table = u'speeches'

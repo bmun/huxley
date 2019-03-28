@@ -10,7 +10,8 @@ from django.test import TestCase
 
 from huxley.core.models import (
     Assignment, Committee, CommitteeFeedback, Conference, Country,
-    CountryPreference, Delegate, PositionPaper, Rubric, SecretariatMember, SpeechChoice, Speech)
+    CountryPreference, Delegate, PositionPaper, Rubric, SecretariatMember, Speech)
+from huxley.core.constants import SpeechTypes
 
 from huxley.utils.test import models
 
@@ -360,12 +361,14 @@ class SecretariatMemberTest(TestCase):
 
 
 class SpeechTest(TestCase):
+    fixtures = ['conference']
+
     def setUp(self):
         self.assignment = models.new_assignment()
         self.speech = models.new_speech(assignment=self.assignment)
 
     def test_default_fields(self):
-        self.assertTrue(self.speechtype == SpeechChoice.SP)
+        self.assertTrue(self.speechtype == SpeechTypes.SPEAKER)
 
     def test_unicode(self):
         self.assertTrue(self.speech.__unicode__() == str(assignment.committee.name)+'_'+str(assignment.country.name))

@@ -7,7 +7,7 @@ from django.http import QueryDict
 from rest_framework import permissions
 
 from huxley.api.validators import ValidationError
-from huxley.core.models import Assignment, Committee, CommitteeFeedback, Delegate, Registration
+from huxley.core.models import Assignment, Committee, CommitteeFeedback, Delegate, Registration, Speech
 
 
 class IsSuperuserOrReadOnly(permissions.BasePermission):
@@ -330,6 +330,20 @@ class RubricDetailPermission(permissions.BasePermission):
             return user_is_chair(request, view, committee.id)
 
         return False
+
+class SpeechListPermission(permissions.BasePermission):
+    '''Accepts requests to update or retrieve speeches from
+        a superuser or the chair of the related committee'''
+    def has_permission(self, request, view):
+        user = request.user
+        if user.is_superuser:
+            return True
+
+        committee_id = request.query_params.get('committee_id', -1)
+
+        return user_is_chair(request, view, committee_id)
+
+
 
 
 def user_is_advisor(request, view, school_id):

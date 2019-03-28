@@ -34,3 +34,11 @@ class ProgramTypes(Constants):
     '''Type of a school's MUN program.'''
     CLUB = 1
     CLASS = 2
+
+class SpeechTypes(Constants):
+    '''Types of speeches'''
+    SPEAKER = 0
+    MODERATE = 1
+    COMMENT = 2
+    QUESTION = 3
+    FORMAL = 4

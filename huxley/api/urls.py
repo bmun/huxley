@@ -87,6 +87,9 @@ urlpatterns = [
     url(r'^secretariat_member_committee/?$',
         views.secretariat_member.SecretariatMemberCommitteeList.as_view(),
         name='secretariat_member_committee_list'),
+    url(r'^speech/?$',
+        views.speech.SpeechList.as_view(),
+        name='speech_list'),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
