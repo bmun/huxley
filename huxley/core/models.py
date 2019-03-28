@@ -672,8 +672,12 @@ class Speech(models.Model):
     assignment = models.ForeignKey(Assignment)
     speechtype = models.CharField(
             max_length = 2,
-            choices=[(tag.name, tag.value) for tag in SpeechChoice]
+            choices=[(tag.name, tag.value) for tag in SpeechChoice],
+            default=SpeechChoice.SP
             )
-    def __unicode__(self):
-        return "%s_%s_%d" % (self.assignment.committee.name, self.assignment.country.name, self.id)
 
+    def __unicode__(self):
+        return "%s_%s" % (self.assignment.committee.name, self.assignment.country.name)
+
+    class Meta:
+        db_table = u'speech'

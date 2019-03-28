@@ -9,7 +9,7 @@ from django.core.exceptions import PermissionDenied
 from huxley.accounts.models import User
 from huxley.core.constants import ContactGender, ContactType, ProgramTypes
 
-from huxley.core.models import School, Committee, CommitteeFeedback, Country, Delegate, Assignment, Registration, Conference, PositionPaper, Rubric, SecretariatMember
+from huxley.core.models import School, Committee, CommitteeFeedback, Country, Delegate, Assignment, Registration, Conference, PositionPaper, Rubric, SecretariatMember, SpeechChoice, Speech
 
 if not settings.TESTING:
     raise PermissionDenied
@@ -227,3 +227,14 @@ def new_secretariat_member(**kwargs):
 
     sm.save()
     return sm
+
+def new_speech(**kwargs):
+    assi = new_assignment()
+    sp = Speech(
+            assignment=kwargs.pop('assignment', assi),
+            speechtype=kwargs.pop('speechtype', SpeechChoice.SP)
+            )
+    sp.save()
+    return sp
+
+    
