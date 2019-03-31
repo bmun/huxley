@@ -194,10 +194,22 @@ class Speech(models.Model):
     pass
 
 class InCommitteeFeedback(models.Model):
+    CHOICES = ((0, 0),
+               (1, 1),
+               (2, 2),
+               (3, 3),
+               (4, 4),
+               (5, 5),
+               (6, 6),
+               (7, 7),
+               (8, 8),
+               (9, 9),
+               (10, 10),)
+
     feedback = models.TextField()
     assignment = models.ForeignKey(Assignment)
     speech = models.OneToOneField('Speech', blank=True, null=True)
-    score = models.PositiveIntegerField(default=0)
+    score = models.IntegerField(blank=True, default=0, choices=CHOICES)
 
     def __unicode__(self):
         a = self.assignment

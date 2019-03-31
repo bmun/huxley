@@ -7,7 +7,7 @@ from django.http import QueryDict
 from rest_framework import permissions
 
 from huxley.api.validators import ValidationError
-from huxley.core.models import Assignment, Committee, CommitteeFeedback, Delegate, Registration
+from huxley.core.models import Assignment, Committee, CommitteeFeedback, Delegate, InCommitteeFeedback, Registration
 
 
 class IsSuperuserOrReadOnly(permissions.BasePermission):
@@ -280,6 +280,39 @@ class DelegateUserPasswordPermission(permissions.BasePermission):
             return user_is_advisor(request, view, delegate.school_id)
 
         return False
+
+class InCommitteeFeedbackListPermission(permissions.BasePermission):
+    '''Accept GET for only the chair of the committee'''
+
+    def has_permission(self, request, view):
+        user = request.user
+        if user.is_superuser:
+            return True
+
+        method = request.method
+        assignment_id = request.query_params.get('assignment_id', -1)
+        assignment = Assignment.objects.get(id=assignment_id)
+        committee_id = assignment.committee.id
+        return method == 'GET' and user_is_chair(request, view, committee_id)
+
+
+class InCommitteeFeedbackDetailPermission(permissions.BasePermission):
+    '''Accept requests from chairs of the committee'''
+
+    def has_permission(self, request, view):
+        user = request.user
+        if user.is_superuser:
+            return True
+
+        feedback_id = view.kwargs.get('pk', -1)
+
+        if user.is_authenticated() and user.is_chair() and user.committee:
+            query = InCommitteeFeedback.objects.get(id=feedback_id)
+            if query:
+                return user.committee.id == query.assignment.committee.id
+
+        return False
+
 
 
 class PositionPaperDetailPermission(permissions.BasePermission):

@@ -6,6 +6,7 @@ from .committee import CommitteeSerializer
 from .committee_feedback import CommitteeFeedbackSerializer
 from .country import CountrySerializer
 from .delegate import DelegateSerializer, DelegateNestedSerializer
+from .in_committee_feedback import InCommitteeFeedbackSerializer
 from .school import SchoolSerializer
 from .user import CreateUserSerializer, UserSerializer
 from .registration import RegistrationSerializer
