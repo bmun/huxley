@@ -155,6 +155,7 @@ class InCommitteeFeedbackDetailPatchTestCase(tests.PartialUpdateAPITestCase):
             "speech": self.feedback.speech and self.feedback.speech.id,
         })
 
+
 class InCommitteeFeedbackDetailCreateTestCase(tests.CreateAPITestCase):
     url_name = 'api:in_committee_feedback_detail'
 
@@ -213,6 +214,7 @@ class InCommitteeFeedbackDetailCreateTestCase(tests.CreateAPITestCase):
             "speech": self.feedback.speech and self.feedback.speech.id,
         })
 
+
 class InCommitteeFeedbackListCreateTestCase(tests.CreateAPITestCase):
     url_name = 'api:in_committee_feedback_list'
 
@@ -237,36 +239,32 @@ class InCommitteeFeedbackListCreateTestCase(tests.CreateAPITestCase):
     def test_anonymous_user(self):
         '''It rejects a request from an anonymous user.'''
 
-        response = self.get_response(
-            params=self.params)
+        response = self.get_response(params=self.params)
         self.assertNotAuthenticated(response)
 
     def test_advisor(self):
         '''Advisors cannot create in-committee feedback.'''
         self.client.login(username='advisor', password='advisor')
 
-        response = self.get_response(
-            params=self.params)
+        response = self.get_response(params=self.params)
         self.assertPermissionDenied(response)
 
     def test_chair(self):
         '''Chairs should be able to create feedback.'''
         self.client.login(username='chair', password='chair')
 
-        response = self.get_response(
-            params=self.params)
+        response = self.get_response(params=self.params)
         self.assertEqual(response, {
-                'assignment': self.assignment.id,
-                'score': 8,
-                'feedback': "Great job!",
-            })
+            'assignment': self.assignment.id,
+            'score': 8,
+            'feedback': "Great job!",
+        })
 
     def test_delegate(self):
         '''Delegates cannot create in-committee feedback.'''
         self.client.login(username='delegate', password='delegate')
 
-        response = self.get_response(
-            params=self.params)
+        response = self.get_response(params=self.params)
         self.assertPermissionDenied(response)
 
     def test_other_user(self):
@@ -275,8 +273,7 @@ class InCommitteeFeedbackListCreateTestCase(tests.CreateAPITestCase):
         models.new_school(user=user2)
         self.client.login(username='another', password='user')
 
-        response = self.get_response(
-            params=self.params)
+        response = self.get_response(params=self.params)
         self.assertPermissionDenied(response)
 
     def test_superuser(self):
@@ -284,13 +281,12 @@ class InCommitteeFeedbackListCreateTestCase(tests.CreateAPITestCase):
         models.new_superuser(username='test', password='user')
         self.client.login(username='test', password='user')
 
-        response = self.get_response(
-            params=self.params)
+        response = self.get_response(params=self.params)
         self.assertEqual(response, {
-                'assignment': self.assignment.id,
-                'score': 8,
-                'feedback': "Great job!",
-            })
+            'assignment': self.assignment.id,
+            'score': 8,
+            'feedback': "Great job!",
+        })
 
     def assert_feedbacks_equal(self, response, feedbacks):
         '''Assert that the response contains the feedback in order.'''
@@ -301,6 +297,7 @@ class InCommitteeFeedbackListCreateTestCase(tests.CreateAPITestCase):
             'score': f.score,
             'speech': f.speech and f.speech.id,
         } for f in feedbacks])
+
 
 class InCommitteeFeedbackListGetTestCase(tests.ListAPITestCase):
     url_name = 'api:in_committee_feedback_list'
