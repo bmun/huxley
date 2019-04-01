@@ -89,6 +89,57 @@ class InCommitteeFeedbackDetailPutTestCase(tests.UpdateAPITestCase):
             "speech": self.feedback.speech and self.feedback.speech.id,
         })
 
+class InCommitteeFeedbackDetailPatchTestCase(tests.PartialUpdateAPITestCase):
+    url_name = 'api:in_committee_feedback_detail'
+
+    def setUp(self):
+        self.committee = models.new_committee(name='CYBER')
+        self.assignment = models.new_assignment(committee=self.committee)
+        self.feedback = models.new_in_committee_feedback(
+            assignment=self.assignment)
+
+    def test_anonymous_user(self):
+        '''Unauthenticated users shouldn't be able to update feedback.'''
+        response = self.get_response(self.feedback.id)
+        self.assertNotAuthenticated(response)
+
+    def test_advisor(self):
+        '''Advisors should not be able to update feedback.'''
+        self.client.login(username='advisor', password='advisor')
+        response = self.get_response(self.feedback.id)
+        self.assertPermissionDenied(response)
+
+    def test_chair(self):
+        '''Chairs should be able to update feedback'''
+        self.client.login(username='chair', password='chair')
+        response = self.get_response(self.feedback.id)
+        self.assertEqual(response.data, {
+            "id": self.feedback.id,
+            "feedback": self.feedback.feedback,
+            "assignment": self.assignment.id,
+            "score": self.feedback.score,
+            "speech": self.feedback.speech and self.feedback.speech.id,
+        })
+
+    def test_delegate(self):
+        '''Delegates should not be able to update feedback'''
+        self.client.login(username='delegate', password='delegate')
+        response = self.get_response(self.feedback.id)
+        self.assertPermissionDenied(response)
+
+    def test_superuser(self):
+        '''Should return correct data; superusers should be able to update feedback'''
+        superuser = models.new_superuser(username='s_user', password='s_user')
+        self.client.login(username='s_user', password='s_user')
+        response = self.get_response(self.feedback.id)
+        self.assertEqual(response.data, {
+            "id": self.feedback.id,
+            "feedback": self.feedback.feedback,
+            "assignment": self.assignment.id,
+            "score": self.feedback.score,
+            "speech": self.feedback.speech and self.feedback.speech.id,
+        })
+
 
 class InCommitteeFeedbackListGetTestCase(tests.ListAPITestCase):
     url_name = 'api:in_committee_feedback_list'
@@ -106,8 +157,6 @@ class InCommitteeFeedbackListGetTestCase(tests.ListAPITestCase):
 
     def test_anonymous_user(self):
         '''It rejects a request from an anonymous user.'''
-        response = self.get_response()
-        self.assertNotAuthenticated(response)
 
         response = self.get_response(
             params={'assignment_id': self.assignment1.id})
@@ -117,9 +166,6 @@ class InCommitteeFeedbackListGetTestCase(tests.ListAPITestCase):
         '''Advisors cannot access in-committee feedback.'''
         self.client.login(username='advisor', password='advisor')
 
-        response = self.get_response()
-        self.assertPermissionDenied(response)
-
         response = self.get_response(
             params={'assignment_id': self.assignment1.id})
         self.assertPermissionDenied(response)
@@ -128,10 +174,6 @@ class InCommitteeFeedbackListGetTestCase(tests.ListAPITestCase):
         '''It returns the feedback associated with the assignment the chair is looking up.'''
         self.client.login(username='chair', password='chair')
 
-        response = self.get_response()
-        self.assert_feedbacks_equal(
-            response, [self.feedback1, self.feedback2, self.feedback3])
-
         response = self.get_response(
             params={'assignment_id': self.assignment1.id})
         self.assert_feedbacks_equal(response, [self.feedback1, self.feedback2])
@@ -139,9 +181,6 @@ class InCommitteeFeedbackListGetTestCase(tests.ListAPITestCase):
     def test_delegate(self):
         '''Delegates cannot access in-committee feedback.'''
         self.client.login(username='delegate', password='delegate')
-
-        response = self.get_response()
-        self.assertPermissionDenied(response)
 
         response = self.get_response(
             params={'assignment_id': self.assignment1.id})
@@ -153,9 +192,6 @@ class InCommitteeFeedbackListGetTestCase(tests.ListAPITestCase):
         models.new_school(user=user2)
         self.client.login(username='another', password='user')
 
-        response = self.get_response()
-        self.assertPermissionDenied(response)
-
         response = self.get_response(
             params={'assignment_id': self.assignment1.id})
         self.assertPermissionDenied(response)
@@ -164,10 +200,6 @@ class InCommitteeFeedbackListGetTestCase(tests.ListAPITestCase):
         '''It returns the feedback associated with the assignment the superuser is looking up.'''
         models.new_superuser(username='test', password='user')
         self.client.login(username='test', password='user')
-
-        response = self.get_response()
-        self.assert_feedbacks_equal(
-            response, [self.feedback1, self.feedback2, self.feedback3])
 
         response = self.get_response(
             params={'assignment_id': self.assignment1.id})
