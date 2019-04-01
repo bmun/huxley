@@ -26,7 +26,6 @@ class InCommitteeFeedbackDetailGetTestCase(tests.RetrieveAPITestCase):
         self.feedback = models.new_in_committee_feedback(
             assignment=self.assignment)
 
-
     def test_anonymous_user(self):
         '''Unauthenticated users shouldn't be able to update feedback.'''
         response = self.get_response(self.feedback.id)
