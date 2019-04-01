@@ -54,7 +54,7 @@ class InCommitteeFeedbackDetailPutTestCase(tests.UpdateAPITestCase):
         self.feedback = models.new_in_committee_feedback(
             assignment=self.assignment)
         self.params = {
-            'assignment': self.assignment,
+            'assignment': self.assignment.id,
             'feedback': self.feedback.feedback,
         }
 
@@ -117,7 +117,7 @@ class InCommitteeFeedbackDetailPatchTestCase(tests.PartialUpdateAPITestCase):
         self.feedback = models.new_in_committee_feedback(
             assignment=self.assignment)
         self.params = {
-            'assignment': self.assignment,
+            'assignment': self.assignment.id,
             'feedback': self.feedback.feedback,
         }
 
@@ -207,7 +207,7 @@ class InCommitteeFeedbackListCreateTestCase(tests.CreateAPITestCase):
             'assignment': self.assignment.id,
             'score': 8,
             'feedback': "Great job!",
-            'speech': self.speech and self.speech.id,
+            'speech': self.feedback.speech and self.feedback.speech.id,
         })
 
     def test_delegate(self):
@@ -236,7 +236,7 @@ class InCommitteeFeedbackListCreateTestCase(tests.CreateAPITestCase):
             'assignment': self.assignment.id,
             'score': 8,
             'feedback': "Great job!",
-            'speech': self.speech and self.speech.id,
+            'speech': self.feedback.speech and self.feedback.speech.id,
         })
 
 
