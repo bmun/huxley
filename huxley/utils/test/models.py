@@ -9,7 +9,7 @@ from django.core.exceptions import PermissionDenied
 from huxley.accounts.models import User
 from huxley.core.constants import ContactGender, ContactType, ProgramTypes
 
-from huxley.core.models import School, Committee, CommitteeFeedback, Country, Delegate, Assignment, Registration, Conference, PositionPaper, Rubric, SecretariatMember
+from huxley.core.models import School, Committee, CommitteeFeedback, Country, Delegate, InCommitteeFeedback, Speech, Assignment, Registration, Conference, PositionPaper, Rubric, SecretariatMember
 
 if not settings.TESTING:
     raise PermissionDenied
@@ -214,6 +214,18 @@ def new_rubric(**kwargs):
     r.save()
     return r
 
+def new_speech(**kwargs):
+    s = Speech()
+    s.save()
+    return s
+
+def new_in_committee_feedback(**kwargs):
+    test_feedback = kwargs.pop('feedback', None) or "Did amazing!"
+    test_assignment = kwargs.pop('assignment', None) or new_assignment()
+    test_speech = kwargs.pop('speech', None)
+    f = InCommitteeFeedback(feedback=test_feedback, assignment=test_assignment, speech=test_speech, score=8)
+    f.save()
+    return f
 
 def new_secretariat_member(**kwargs):
     test_name = kwargs.pop('name', None) or "Jake"
