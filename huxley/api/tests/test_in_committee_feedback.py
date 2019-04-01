@@ -10,32 +10,64 @@ from huxley.utils.test import models
 import random
 
 
-class InCommitteeFeedbackDetailGetTestCase(auto.RetrieveAPIAutoTestCase):
+class InCommitteeFeedbackDetailGetTestCase(tests.RetrieveAPITestCase):
     url_name = 'api:in_committee_feedback_detail'
 
-    @classmethod
-    def get_test_object(cls):
-        return models.new_in_committee_feedback()
+    def setUp(self):
+        self.advisor = models.new_user(username='advisor', password='advisor')
+        self.delegate_user = models.new_user(
+            username='delegate',
+            password='delegate',
+            user_type=User.TYPE_DELEGATE)
+        self.chair = models.new_user(
+            username='chair', password='chair', user_type=User.TYPE_CHAIR)
+        self.committee = models.new_committee(name='CYBER')
+        self.assignment = models.new_assignment(committee=self.committee)
+        self.feedback = models.new_in_committee_feedback(
+            assignment=self.assignment)
+
 
     def test_anonymous_user(self):
-        self.do_test(expected_error=auto.EXP_NOT_AUTHENTICATED)
+        '''Unauthenticated users shouldn't be able to update feedback.'''
+        response = self.get_response(self.feedback.id)
+        self.assertNotAuthenticated(response)
 
     def test_advisor(self):
-        advisor = models.new_user(user_type=User.TYPE_ADVISOR)
-        self.as_user(advisor).do_test(
-            expected_error=auto.EXP_PERMISSION_DENIED)
+        '''Advisors should not be able to update feedback.'''
+        self.client.login(username='advisor', password='advisor')
+        response = self.get_response(self.feedback.id)
+        self.assertPermissionDenied(response)
 
     def test_chair(self):
-        chair = models.new_user(user_type=User.TYPE_CHAIR)
-        self.as_user(chair).do_test()
+        '''Chairs should be able to update feedback'''
+        self.client.login(username='chair', password='chair')
+        response = self.get_response(self.feedback.id)
+        self.assertEqual(response.data, {
+            "id": self.feedback.id,
+            "feedback": self.feedback.feedback,
+            "assignment": self.assignment.id,
+            "score": self.feedback.score,
+            "speech": self.feedback.speech and self.feedback.speech.id,
+        })
 
     def test_delegate(self):
-        delegate = models.new_user(user_type=User.TYPE_DELEGATE)
-        self.as_user(delegate).do_test(
-            expected_error=auto.EXP_PERMISSION_DENIED)
+        '''Delegates should not be able to update feedback'''
+        self.client.login(username='delegate', password='delegate')
+        response = self.get_response(self.feedback.id)
+        self.assertPermissionDenied(response)
 
     def test_superuser(self):
-        self.as_superuser().do_test()
+        '''Should return correct data; superusers should be able to update feedback'''
+        superuser = models.new_superuser(username='s_user', password='s_user')
+        self.client.login(username='s_user', password='s_user')
+        response = self.get_response(self.feedback.id)
+        self.assertEqual(response.data, {
+            "id": self.feedback.id,
+            "feedback": self.feedback.feedback,
+            "assignment": self.assignment.id,
+            "score": self.feedback.score,
+            "speech": self.feedback.speech and self.feedback.speech.id,
+        })
 
 
 class InCommitteeFeedbackDetailPutTestCase(tests.UpdateAPITestCase):
@@ -204,6 +236,7 @@ class InCommitteeFeedbackListCreateTestCase(tests.CreateAPITestCase):
 
         response = self.get_response(params=self.params)
         self.assertEqual(response.data, {
+            'id': self.feedback.id,
             'assignment': self.assignment.id,
             'score': 8,
             'feedback': "Great job!",
@@ -233,6 +266,7 @@ class InCommitteeFeedbackListCreateTestCase(tests.CreateAPITestCase):
 
         response = self.get_response(params=self.params)
         self.assertEqual(response.data, {
+            'id': self.feedback.id,
             'assignment': self.assignment.id,
             'score': 8,
             'feedback': "Great job!",
