@@ -89,6 +89,7 @@ class InCommitteeFeedbackDetailPutTestCase(tests.UpdateAPITestCase):
             "speech": self.feedback.speech and self.feedback.speech.id,
         })
 
+
 class InCommitteeFeedbackDetailPatchTestCase(tests.PartialUpdateAPITestCase):
     url_name = 'api:in_committee_feedback_detail'
 
