@@ -26,12 +26,10 @@ class InCommitteeFeedbackList(generics.ListAPIView):
         return queryset
 
 
-class InCommitteeFeedbackDetail(generics.CreateAPIView,
+class InCommitteeFeedbackDetail(generics.UpdateAPIView,
                                 generics.RetrieveAPIView):
     authentication_classes = (SessionAuthentication, )
     permission_classes = (permissions.InCommitteeFeedbackDetailPermission, )
     serializer_class = InCommitteeFeedbackSerializer
     queryset = InCommitteeFeedback.objects.all()
 
-    def put(self, request, *args, **kwargs):
-        return self.partial_update(request, *args, **kwargs)
