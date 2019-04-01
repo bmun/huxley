@@ -235,7 +235,7 @@ class InCommitteeFeedbackListCreateTestCase(tests.CreateAPITestCase):
 
         response = self.get_response(params=self.params)
         self.assertEqual(response.data, {
-            'id': self.feedback.id,
+            'id': response.data['id'],
             'assignment': self.assignment.id,
             'score': 8,
             'feedback': "Great job!",
@@ -265,12 +265,13 @@ class InCommitteeFeedbackListCreateTestCase(tests.CreateAPITestCase):
 
         response = self.get_response(params=self.params)
         self.assertEqual(response.data, {
-            'id': self.feedback.id,
+            'id': response.data['id'],
             'assignment': self.assignment.id,
             'score': 8,
             'feedback': "Great job!",
             'speech': self.feedback.speech and self.feedback.speech.id,
         })
+
 
 
 class InCommitteeFeedbackListGetTestCase(tests.ListAPITestCase):

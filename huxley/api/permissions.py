@@ -290,8 +290,7 @@ class InCommitteeFeedbackListPermission(permissions.BasePermission):
         if user.is_superuser:
             return True
 
-        method = request.method
-        return method == 'GET' and user.is_authenticated() and user.is_chair()
+        return user.is_authenticated() and user.is_chair()
 
 
 class InCommitteeFeedbackDetailPermission(permissions.BasePermission):
