@@ -291,10 +291,7 @@ class InCommitteeFeedbackListPermission(permissions.BasePermission):
             return True
 
         method = request.method
-        assignment_id = request.query_params.get('assignment_id', -1)
-        assignment = Assignment.objects.get(id=assignment_id)
-        committee_id = assignment.committee.id
-        return method == 'GET' and user_is_chair(request, view, committee_id)
+        return method == 'GET' and user.is_chair()
 
 
 class InCommitteeFeedbackDetailPermission(permissions.BasePermission):
@@ -307,10 +304,10 @@ class InCommitteeFeedbackDetailPermission(permissions.BasePermission):
 
         feedback_id = view.kwargs.get('pk', -1)
 
-        if user.is_authenticated() and user.is_chair() and user.committee:
+        if user.is_authenticated() and user.is_chair():
             query = InCommitteeFeedback.objects.get(id=feedback_id)
             if query:
-                return user.committee.id == query.assignment.committee.id
+                return True
 
         return False
 

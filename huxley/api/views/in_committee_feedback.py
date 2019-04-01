@@ -26,8 +26,7 @@ class InCommitteeFeedbackList(generics.ListCreateAPIView):
         return queryset
 
 
-class InCommitteeFeedbackDetail(generics.RetrieveUpdateAPIView,
-                                generics.CreateAPIView):
+class InCommitteeFeedbackDetail(generics.RetrieveUpdateAPIView):
     authentication_classes = (SessionAuthentication, )
     permission_classes = (permissions.InCommitteeFeedbackDetailPermission, )
     serializer_class = InCommitteeFeedbackSerializer
