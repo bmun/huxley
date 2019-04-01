@@ -11,7 +11,7 @@ from huxley.api.serializers import InCommitteeFeedbackSerializer
 from huxley.core.models import InCommitteeFeedback
 
 
-class InCommitteeFeedbackList(generics.ListAPIView):
+class InCommitteeFeedbackList(generics.ListCreateAPIView):
     authentication_classes = (SessionAuthentication, )
     permission_classes = (permissions.InCommitteeFeedbackListPermission, )
     serializer_class = InCommitteeFeedbackSerializer
@@ -26,8 +26,8 @@ class InCommitteeFeedbackList(generics.ListAPIView):
         return queryset
 
 
-class InCommitteeFeedbackDetail(generics.UpdateAPIView,
-                                generics.RetrieveAPIView):
+class InCommitteeFeedbackDetail(generics.RetrieveUpdateAPIView,
+                                generics.CreateAPIView):
     authentication_classes = (SessionAuthentication, )
     permission_classes = (permissions.InCommitteeFeedbackDetailPermission, )
     serializer_class = InCommitteeFeedbackSerializer
