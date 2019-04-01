@@ -32,4 +32,3 @@ class InCommitteeFeedbackDetail(generics.UpdateAPIView,
     permission_classes = (permissions.InCommitteeFeedbackDetailPermission, )
     serializer_class = InCommitteeFeedbackSerializer
     queryset = InCommitteeFeedback.objects.all()
-
