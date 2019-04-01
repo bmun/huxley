@@ -190,6 +190,7 @@ class CommitteeFeedback(models.Model):
 
 pre_save.connect(Committee.create_rubric, sender=Committee)
 
+
 class School(models.Model):
     PROGRAM_TYPE_OPTIONS = ((ProgramTypes.CLUB, 'Club'),
                             (ProgramTypes.CLASS, 'Class'), )
@@ -580,8 +581,10 @@ class Assignment(models.Model):
 pre_save.connect(Assignment.update_assignment, sender=Assignment)
 pre_save.connect(Assignment.create_position_paper, sender=Assignment)
 
+
 class Speech(models.Model):
     pass
+
 
 class InCommitteeFeedback(models.Model):
     CHOICES = ((0, 0),
@@ -594,7 +597,7 @@ class InCommitteeFeedback(models.Model):
                (7, 7),
                (8, 8),
                (9, 9),
-               (10, 10),)
+               (10, 10), )
 
     feedback = models.TextField()
     assignment = models.ForeignKey(Assignment)
@@ -603,8 +606,9 @@ class InCommitteeFeedback(models.Model):
 
     def __unicode__(self):
         a = self.assignment
-        return '%s %s Feedback %d' % (a.committee.name, a.country.name,
-                             self.id) if a else 'Feedback %d' % (self.id)
+        return '%s %s Feedback %d' % (
+            a.committee.name, a.country.name,
+            self.id) if a else 'Feedback %d' % (self.id)
 
     class Meta:
         db_table = u'in_committee_feedback'

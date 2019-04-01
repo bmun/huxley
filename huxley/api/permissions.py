@@ -281,6 +281,7 @@ class DelegateUserPasswordPermission(permissions.BasePermission):
 
         return False
 
+
 class InCommitteeFeedbackListPermission(permissions.BasePermission):
     '''Accept GET for only the chair of the committee'''
 
@@ -312,7 +313,6 @@ class InCommitteeFeedbackDetailPermission(permissions.BasePermission):
                 return user.committee.id == query.assignment.committee.id
 
         return False
-
 
 
 class PositionPaperDetailPermission(permissions.BasePermission):

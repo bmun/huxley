@@ -9,6 +9,7 @@ from huxley.api.tests import auto
 from huxley.utils.test import models
 import random
 
+
 class InCommitteeFeedbackDetailGetTestCase(tests.RetrieveAPITestCase):
     url_name = 'api:in_committee_feedback_detail'
 
@@ -21,7 +22,8 @@ class InCommitteeFeedbackDetailGetTestCase(tests.RetrieveAPITestCase):
 
     def test_advisor(self):
         advisor = models.new_user(user_type=User.TYPE_ADVISOR)
-        self.as_user(advisor).do_test(expected_error=auto.EXP_PERMISSION_DENIED)
+        self.as_user(advisor).do_test(
+            expected_error=auto.EXP_PERMISSION_DENIED)
 
     def test_chair(self):
         chair = models.new_user(user_type=User.TYPE_CHAIR)
@@ -42,7 +44,8 @@ class InCommitteeFeedbackDetailPutTestCase(tests.UpdateAPITestCase):
     def setUp(self):
         self.committee = models.new_committee(name='CYBER')
         self.assignment = models.new_assignment(committee=self.committee)
-        self.feedback = models.new_in_committee_feedback(assignment=self.assignment)
+        self.feedback = models.new_in_committee_feedback(
+            assignment=self.assignment)
 
     def test_anonymous_user(self):
         '''Unauthenticated users shouldn't be able to update feedback.'''
@@ -65,7 +68,7 @@ class InCommitteeFeedbackDetailPutTestCase(tests.UpdateAPITestCase):
             "assignment": self.assignment.id,
             "score": self.feedback.score,
             "speech": self.feedback.speech.id,
-            })
+        })
 
     def test_delegate(self):
         '''Delegates should not be able to update feedback'''
@@ -84,7 +87,7 @@ class InCommitteeFeedbackDetailPutTestCase(tests.UpdateAPITestCase):
             "assignment": self.assignment.id,
             "score": self.feedback.score,
             "speech": self.feedback.speech.id,
-            })
+        })
 
 
 class InCommitteeFeedbackDetailPatchTestCase(tests.PartialUpdateAPITestCase):
@@ -93,7 +96,8 @@ class InCommitteeFeedbackDetailPatchTestCase(tests.PartialUpdateAPITestCase):
     def setUp(self):
         self.committee = models.new_committee(name='CYBER')
         self.assignment = models.new_assignment(committee=self.committee)
-        self.feedback = models.new_in_committee_feedback(assignment=self.assignment)
+        self.feedback = models.new_in_committee_feedback(
+            assignment=self.assignment)
 
     def test_anonymous_user(self):
         '''Unauthenticated users shouldn't be able to update feedback.'''
@@ -116,7 +120,7 @@ class InCommitteeFeedbackDetailPatchTestCase(tests.PartialUpdateAPITestCase):
             "assignment": self.assignment.id,
             "score": self.feedback.score,
             "speech": self.feedback.speech.id,
-            })
+        })
 
     def test_delegate(self):
         '''Delegates should not be able to update feedback'''
@@ -135,7 +139,7 @@ class InCommitteeFeedbackDetailPatchTestCase(tests.PartialUpdateAPITestCase):
             "assignment": self.assignment.id,
             "score": self.feedback.score,
             "speech": self.feedback.speech.id,
-            })
+        })
 
 # class InCommitteeFeedbackListCreateTestCase(tests.CreateAPITestCase):
 #     url_name = 'api:in_committee_feedback_list'
@@ -224,6 +228,7 @@ class InCommitteeFeedbackDetailPatchTestCase(tests.PartialUpdateAPITestCase):
 #             'speech': f.speech.id,
 #         } for f in feedbacks])
 
+
 class InCommitteeFeedbackListGetTestCase(tests.ListAPITestCase):
     url_name = 'api:in_committee_feedback_list'
 
@@ -231,16 +236,20 @@ class InCommitteeFeedbackListGetTestCase(tests.ListAPITestCase):
         self.committee = models.new_committee(name='CYBER')
         self.assignment1 = models.new_assignment(committee=self.committee)
         self.assignment2 = models.new_assignment()
-        self.feedback1 = models.new_in_committee_feedback(assignment=self.assignment1)
-        self.feedback2 = models.new_in_committee_feedback(assignment=self.assignment1)
-        self.feedback3 = models.new_in_committee_feedback(assignment=self.assignment2)
+        self.feedback1 = models.new_in_committee_feedback(
+            assignment=self.assignment1)
+        self.feedback2 = models.new_in_committee_feedback(
+            assignment=self.assignment1)
+        self.feedback3 = models.new_in_committee_feedback(
+            assignment=self.assignment2)
 
     def test_anonymous_user(self):
         '''It rejects a request from an anonymous user.'''
         response = self.get_response()
         self.assertNotAuthenticated(response)
 
-        response = self.get_response(params={'assignment_id': self.assignment1.id})
+        response = self.get_response(
+            params={'assignment_id': self.assignment1.id})
         self.assertNotAuthenticated(response)
 
     def test_advisor(self):
@@ -259,7 +268,8 @@ class InCommitteeFeedbackListGetTestCase(tests.ListAPITestCase):
         self.client.login(username='chair', password='chair')
 
         response = self.get_response()
-        self.assert_feedbacks_equal(response, [self.feedback1, self.feedback2, self.feedback3])
+        self.assert_feedbacks_equal(
+            response, [self.feedback1, self.feedback2, self.feedback3])
 
         response = self.get_response(
             params={'assignment_id': self.assignment1.id})
@@ -295,7 +305,8 @@ class InCommitteeFeedbackListGetTestCase(tests.ListAPITestCase):
         self.client.login(username='test', password='user')
 
         response = self.get_response()
-        self.assert_assignments_equal(response, [self.feedback1, self.feedback2, self.feedback3])
+        self.assert_assignments_equal(
+            response, [self.feedback1, self.feedback2, self.feedback3])
 
         response = self.get_response(
             params={'assignment_id': self.assignment1.id})
@@ -310,5 +321,3 @@ class InCommitteeFeedbackListGetTestCase(tests.ListAPITestCase):
             'score': f.score,
             'speech': f.speech.id,
         } for f in feedbacks])
-
-
