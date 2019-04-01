@@ -53,22 +53,26 @@ class InCommitteeFeedbackDetailPutTestCase(tests.UpdateAPITestCase):
         self.assignment = models.new_assignment(committee=self.committee)
         self.feedback = models.new_in_committee_feedback(
             assignment=self.assignment)
+        self.params = {
+            'assignment': self.assignment,
+            'feedback': self.feedback.feedback,
+        }
 
     def test_anonymous_user(self):
         '''Unauthenticated users shouldn't be able to update feedback.'''
-        response = self.get_response(self.feedback.id)
+        response = self.get_response(self.feedback.id, params=self.params)
         self.assertNotAuthenticated(response)
 
     def test_advisor(self):
         '''Advisors should not be able to update feedback.'''
         self.client.login(username='advisor', password='advisor')
-        response = self.get_response(self.feedback.id)
+        response = self.get_response(self.feedback.id, params=self.params)
         self.assertPermissionDenied(response)
 
     def test_chair(self):
         '''Chairs should be able to update feedback'''
         self.client.login(username='chair', password='chair')
-        response = self.get_response(self.feedback.id)
+        response = self.get_response(self.feedback.id, params=self.params)
         self.assertEqual(response.data, {
             "id": self.feedback.id,
             "feedback": self.feedback.feedback,
@@ -80,14 +84,14 @@ class InCommitteeFeedbackDetailPutTestCase(tests.UpdateAPITestCase):
     def test_delegate(self):
         '''Delegates should not be able to update feedback'''
         self.client.login(username='delegate', password='delegate')
-        response = self.get_response(self.feedback.id)
+        response = self.get_response(self.feedback.id, params=self.params)
         self.assertPermissionDenied(response)
 
     def test_superuser(self):
         '''Should return correct data; superusers should be able to update feedback'''
         superuser = models.new_superuser(username='s_user', password='s_user')
         self.client.login(username='s_user', password='s_user')
-        response = self.get_response(self.feedback.id)
+        response = self.get_response(self.feedback.id, params=self.params)
         self.assertEqual(response.data, {
             "id": self.feedback.id,
             "feedback": self.feedback.feedback,
@@ -112,22 +116,26 @@ class InCommitteeFeedbackDetailPatchTestCase(tests.PartialUpdateAPITestCase):
         self.assignment = models.new_assignment(committee=self.committee)
         self.feedback = models.new_in_committee_feedback(
             assignment=self.assignment)
+        self.params = {
+            'assignment': self.assignment,
+            'feedback': self.feedback.feedback,
+        }
 
     def test_anonymous_user(self):
         '''Unauthenticated users shouldn't be able to update feedback.'''
-        response = self.get_response(self.feedback.id)
+        response = self.get_response(self.feedback.id, params=self.params)
         self.assertNotAuthenticated(response)
 
     def test_advisor(self):
         '''Advisors should not be able to update feedback.'''
         self.client.login(username='advisor', password='advisor')
-        response = self.get_response(self.feedback.id)
+        response = self.get_response(self.feedback.id, params=self.params)
         self.assertPermissionDenied(response)
 
     def test_chair(self):
         '''Chairs should be able to update feedback'''
         self.client.login(username='chair', password='chair')
-        response = self.get_response(self.feedback.id)
+        response = self.get_response(self.feedback.id, params=self.params)
         self.assertEqual(response.data, {
             "id": self.feedback.id,
             "feedback": self.feedback.feedback,
@@ -139,14 +147,14 @@ class InCommitteeFeedbackDetailPatchTestCase(tests.PartialUpdateAPITestCase):
     def test_delegate(self):
         '''Delegates should not be able to update feedback'''
         self.client.login(username='delegate', password='delegate')
-        response = self.get_response(self.feedback.id)
+        response = self.get_response(self.feedback.id, params=self.params)
         self.assertPermissionDenied(response)
 
     def test_superuser(self):
         '''Should return correct data; superusers should be able to update feedback'''
         superuser = models.new_superuser(username='s_user', password='s_user')
         self.client.login(username='s_user', password='s_user')
-        response = self.get_response(self.feedback.id)
+        response = self.get_response(self.feedback.id, params=self.params)
         self.assertEqual(response.data, {
             "id": self.feedback.id,
             "feedback": self.feedback.feedback,
@@ -195,10 +203,11 @@ class InCommitteeFeedbackListCreateTestCase(tests.CreateAPITestCase):
         self.client.login(username='chair', password='chair')
 
         response = self.get_response(params=self.params)
-        self.assertEqual(response, {
+        self.assertEqual(response.data, {
             'assignment': self.assignment.id,
             'score': 8,
             'feedback': "Great job!",
+            'speech': self.speech and self.speech.id,
         })
 
     def test_delegate(self):
@@ -223,10 +232,11 @@ class InCommitteeFeedbackListCreateTestCase(tests.CreateAPITestCase):
         self.client.login(username='test', password='user')
 
         response = self.get_response(params=self.params)
-        self.assertEqual(response, {
+        self.assertEqual(response.data, {
             'assignment': self.assignment.id,
             'score': 8,
             'feedback': "Great job!",
+            'speech': self.speech and self.speech.id,
         })
 
 
