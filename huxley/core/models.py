@@ -190,35 +190,6 @@ class CommitteeFeedback(models.Model):
 
 pre_save.connect(Committee.create_rubric, sender=Committee)
 
-class Speech(models.Model):
-    pass
-
-class InCommitteeFeedback(models.Model):
-    CHOICES = ((0, 0),
-               (1, 1),
-               (2, 2),
-               (3, 3),
-               (4, 4),
-               (5, 5),
-               (6, 6),
-               (7, 7),
-               (8, 8),
-               (9, 9),
-               (10, 10),)
-
-    feedback = models.TextField()
-    assignment = models.ForeignKey(Assignment)
-    speech = models.OneToOneField('Speech', blank=True, null=True)
-    score = models.IntegerField(blank=True, default=0, choices=CHOICES)
-
-    def __unicode__(self):
-        a = self.assignment
-        return '%s %s Feedback %d' % (a.committee.name, a.country.name,
-                             self.id) if a else 'Feedback %d' % (self.id)
-
-    class Meta:
-        db_table = u'in_committee_feedback'
-
 class School(models.Model):
     PROGRAM_TYPE_OPTIONS = ((ProgramTypes.CLUB, 'Club'),
                             (ProgramTypes.CLASS, 'Class'), )
@@ -608,6 +579,35 @@ class Assignment(models.Model):
 
 pre_save.connect(Assignment.update_assignment, sender=Assignment)
 pre_save.connect(Assignment.create_position_paper, sender=Assignment)
+
+class Speech(models.Model):
+    pass
+
+class InCommitteeFeedback(models.Model):
+    CHOICES = ((0, 0),
+               (1, 1),
+               (2, 2),
+               (3, 3),
+               (4, 4),
+               (5, 5),
+               (6, 6),
+               (7, 7),
+               (8, 8),
+               (9, 9),
+               (10, 10),)
+
+    feedback = models.TextField()
+    assignment = models.ForeignKey(Assignment)
+    speech = models.OneToOneField('Speech', blank=True, null=True)
+    score = models.IntegerField(blank=True, default=0, choices=CHOICES)
+
+    def __unicode__(self):
+        a = self.assignment
+        return '%s %s Feedback %d' % (a.committee.name, a.country.name,
+                             self.id) if a else 'Feedback %d' % (self.id)
+
+    class Meta:
+        db_table = u'in_committee_feedback'
 
 
 class CountryPreference(models.Model):
