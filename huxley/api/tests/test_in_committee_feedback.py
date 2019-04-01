@@ -10,7 +10,7 @@ from huxley.utils.test import models
 import random
 
 
-class InCommitteeFeedbackDetailGetTestCase(tests.RetrieveAPITestCase):
+class InCommitteeFeedbackDetailGetTestCase(auto.RetrieveAPITestCase):
     url_name = 'api:in_committee_feedback_detail'
 
     @classmethod
@@ -67,7 +67,7 @@ class InCommitteeFeedbackDetailPutTestCase(tests.UpdateAPITestCase):
             "feedback": self.feedback.feedback,
             "assignment": self.assignment.id,
             "score": self.feedback.score,
-            "speech": self.feedback.speech.id,
+            "speech": self.feedback.speech and self.feedback.speech.id,
         })
 
     def test_delegate(self):
@@ -86,7 +86,7 @@ class InCommitteeFeedbackDetailPutTestCase(tests.UpdateAPITestCase):
             "feedback": self.feedback.feedback,
             "assignment": self.assignment.id,
             "score": self.feedback.score,
-            "speech": self.feedback.speech.id,
+            "speech": self.feedback.speech and self.feedback.speech.id,
         })
 
 
@@ -119,7 +119,7 @@ class InCommitteeFeedbackDetailPatchTestCase(tests.PartialUpdateAPITestCase):
             "feedback": self.feedback.feedback,
             "assignment": self.assignment.id,
             "score": self.feedback.score,
-            "speech": self.feedback.speech.id,
+            "speech": self.feedback.speech and self.feedback.speech.id,
         })
 
     def test_delegate(self):
@@ -138,7 +138,7 @@ class InCommitteeFeedbackDetailPatchTestCase(tests.PartialUpdateAPITestCase):
             "feedback": self.feedback.feedback,
             "assignment": self.assignment.id,
             "score": self.feedback.score,
-            "speech": self.feedback.speech.id,
+            "speech": self.feedback.speech and self.feedback.speech.id,
         })
 
 # class InCommitteeFeedbackListCreateTestCase(tests.CreateAPITestCase):
@@ -319,5 +319,5 @@ class InCommitteeFeedbackListGetTestCase(tests.ListAPITestCase):
             'feedback': f.feedback,
             'assignment': f.assignment.id,
             'score': f.score,
-            'speech': f.speech.id,
+            'speech': f.speech and f.speech.id,
         } for f in feedbacks])
