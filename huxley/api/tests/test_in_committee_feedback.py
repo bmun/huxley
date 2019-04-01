@@ -273,7 +273,6 @@ class InCommitteeFeedbackListCreateTestCase(tests.CreateAPITestCase):
         })
 
 
-
 class InCommitteeFeedbackListGetTestCase(tests.ListAPITestCase):
     url_name = 'api:in_committee_feedback_list'
 
