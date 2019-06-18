@@ -11,7 +11,7 @@
       "reg_close": "2020-01-20",
       "min_attendance": 0,
       "max_attendance": 2230,
-      "open_reg": false,
+      "open_reg": true,
       "waitlist_reg": false,
       "external": "Ashwin Srikanth",
       "registration_fee": 55.0,
