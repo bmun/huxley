@@ -40,7 +40,7 @@ class Conference(models.Model):
     def get_current(cls):
         return Conference.objects.get(session=settings.SESSION)
 
-    def __unicode__(self):
+    def __str__(self):
         return 'BMUN %d' % self.session
 
     class Meta:
@@ -52,7 +52,7 @@ class Country(models.Model):
     name = models.CharField(max_length=128)
     special = models.BooleanField(default=False)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
     class Meta:
@@ -93,7 +93,7 @@ class Rubric(models.Model):
     grade_t2_value_4 = models.PositiveSmallIntegerField(default=10)
     grade_t2_value_5 = models.PositiveSmallIntegerField(default=10)
 
-    def __unicode__(self):
+    def __str__(self):
         return '%s' % self.committee.name if self.committee else '%d' % self.id
 
     class Meta:
@@ -106,7 +106,7 @@ class Committee(models.Model):
     countries = models.ManyToManyField(Country, through='Assignment')
     delegation_size = models.PositiveSmallIntegerField(default=2)
     special = models.BooleanField(default=False)
-    rubric = models.OneToOneField(Rubric, blank=True, null=True)
+    rubric = models.OneToOneField(Rubric, on_delete=models.SET_NULL, blank=True, null=True)
 
     @classmethod
     def create_rubric(cls, **kwargs):
@@ -114,7 +114,7 @@ class Committee(models.Model):
         if not committee.rubric:
             committee.rubric = Rubric.objects.create()
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
     class Meta:
@@ -134,7 +134,7 @@ class CommitteeFeedback(models.Model):
                (9, 9),
                (10, 10), )
 
-    committee = models.ForeignKey(Committee)
+    committee = models.ForeignKey(Committee, on_delete=models.CASCADE)
     comment = models.TextField(blank=True, default='')
     rating = models.IntegerField(blank=True, default=0, choices=CHOICES)
 
@@ -181,7 +181,7 @@ class CommitteeFeedback(models.Model):
     chair_10_rating = models.IntegerField(
         blank=True, default=0, choices=CHOICES)
 
-    def __unicode__(self):
+    def __str__(self):
         return str(self.committee.name) + " - Comment " + str(self.id)
 
     class Meta:
@@ -228,7 +228,7 @@ class School(models.Model):
     times_attended = models.PositiveSmallIntegerField(default=0)
     international = models.BooleanField(default=False)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
     class Meta:
@@ -236,8 +236,8 @@ class School(models.Model):
 
 
 class Registration(models.Model):
-    school = models.ForeignKey(School, related_name='registrations')
-    conference = models.ForeignKey(Conference, related_name='registrations')
+    school = models.ForeignKey(School, on_delete=models.CASCADE, related_name='registrations')
+    conference = models.ForeignKey(Conference, on_delete=models.CASCADE, related_name='registrations')
 
     registered_at = models.DateTimeField(auto_now_add=True)
 
@@ -248,7 +248,7 @@ class Registration(models.Model):
     num_chinese_speaking_delegates = models.PositiveSmallIntegerField()
 
     country_preferences = models.ManyToManyField(
-        Country, through='CountryPreference')
+        Country, through='CountryPreference', blank=True)
     committee_preferences = models.ManyToManyField(Committee, blank=True)
 
     registration_comments = models.TextField(default='', blank=True)
@@ -390,7 +390,7 @@ class Registration(models.Model):
                 self._pending_country_preference_ids)
             self._pending_country_preference_ids = []
 
-    def __unicode__(self):
+    def __str__(self):
         return self.school.name + ' - ' + str(self.conference.session)
 
     class Meta:
@@ -438,7 +438,7 @@ class PositionPaper(models.Model):
         position_paper = kwargs['instance']
         position_paper._prev_file = position_paper.file.name
 
-    def __unicode__(self):
+    def __str__(self):
         a = self.assignment
         return '%s %s %d' % (a.committee.name, a.country.name,
                              a.id) if a else '%d' % (self.id)
@@ -452,17 +452,16 @@ post_save.connect(PositionPaper.delete_prev_file, sender=PositionPaper)
 
 
 class Assignment(models.Model):
-    committee = models.ForeignKey(Committee)
-    country = models.ForeignKey(Country)
-    registration = models.ForeignKey(Registration, null=True)
+    committee = models.ForeignKey(Committee, on_delete=models.CASCADE)
+    country = models.ForeignKey(Country, on_delete=models.CASCADE)
+    registration = models.ForeignKey(Registration, on_delete=models.CASCADE, null=True)
     rejected = models.BooleanField(default=False)
-    paper = models.OneToOneField(PositionPaper, blank=True, null=True)
+    paper = models.OneToOneField(PositionPaper, on_delete=models.SET_NULL, blank=True, null=True)
 
     @classmethod
     def update_assignments(cls, new_assignments):
         '''
         Atomically update the set of country assignments in a transaction.
-
         For each assignment in the updated list, either update the existing
         one (and delete its delegates), or create a new one if it doesn't
         exist.
@@ -568,7 +567,7 @@ class Assignment(models.Model):
         if not assignment.paper:
             assignment.paper = PositionPaper.objects.create()
 
-    def __unicode__(self):
+    def __str__(self):
         return self.committee.name + " : " + self.country.name + " : " + (
             self.registration.school.name
             if self.registration else "Unassigned")
@@ -583,11 +582,11 @@ pre_save.connect(Assignment.create_position_paper, sender=Assignment)
 
 
 class CountryPreference(models.Model):
-    registration = models.ForeignKey(Registration, null=True)
-    country = models.ForeignKey(Country, limit_choices_to={'special': False})
+    registration = models.ForeignKey(Registration, on_delete=models.CASCADE, null=True)
+    country = models.ForeignKey(Country, on_delete=models.CASCADE, limit_choices_to={'special': False})
     rank = models.PositiveSmallIntegerField()
 
-    def __unicode__(self):
+    def __str__(self):
         return '%s : %s (%d)' % (self.registration.school.name,
                                  self.country.name, self.rank)
 
@@ -598,7 +597,7 @@ class CountryPreference(models.Model):
 
 
 class Delegate(models.Model):
-    school = models.ForeignKey(School, related_name='delegates', null=True)
+    school = models.ForeignKey(School, on_delete=models.CASCADE, related_name='delegates', null=True)
     assignment = models.ForeignKey(
         Assignment,
         related_name='delegates',
@@ -620,7 +619,7 @@ class Delegate(models.Model):
     committee_feedback_submitted = models.BooleanField(default=False)
     waiver_submitted = models.BooleanField(default=False)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
     @property
@@ -654,8 +653,9 @@ class SecretariatMember(models.Model):
     # A lot more could be added here but this is a good start
 
     name = models.CharField(blank=False, default='', max_length=100)
-    committee = models.ForeignKey(Committee)
+    committee = models.ForeignKey(Committee, on_delete=models.CASCADE) # TODO(shayna) decide whether this is correct behavior
     is_head_chair = models.BooleanField(default=False)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
+

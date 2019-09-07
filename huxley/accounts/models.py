@@ -23,10 +23,10 @@ class User(AbstractUser):
         choices=USER_TYPE_CHOICES, default=TYPE_ADVISOR)
 
     school = models.OneToOneField(
-        School, related_name='advisor', null=True, blank=True)  # Advisors only
+        School, related_name='advisor', null=True, blank=True, on_delete=models.CASCADE)  # Advisors only
 
     committee = models.ForeignKey(
-        Committee, related_name='chair', null=True, blank=True)  # Chairs only
+        Committee, related_name='chair', null=True, blank=True, on_delete=models.CASCADE)  # Chairs only
 
     delegate = models.OneToOneField(
         Delegate,

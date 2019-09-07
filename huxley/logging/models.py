@@ -3,7 +3,6 @@
 
 from django.db import models
 
-
 class LogEntry(models.Model):
     level = models.CharField(max_length=200)
     message = models.TextField()
@@ -13,5 +12,5 @@ class LogEntry(models.Model):
     status_code = models.PositiveSmallIntegerField(default=0)
     username = models.CharField(max_length=200)
 
-    def __unicode__(self):
+    def __str__(self):
         return u'%s: %s' % (self.level, self.timestamp)

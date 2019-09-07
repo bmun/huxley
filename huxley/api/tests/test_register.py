@@ -41,7 +41,7 @@ class RegisterTestCase(tests.CreateAPITestCase):
             },
         },
         'registration': {
-            'conference': 65,
+            'conference': 68,
             'num_beginner_delegates': 1,
             'num_intermediate_delegates': 0,
             'num_advanced_delegates': 0,
@@ -54,6 +54,8 @@ class RegisterTestCase(tests.CreateAPITestCase):
         '''It creates User, School, and Registration model instances for a
            successful request and returns them in the response.'''
         response = self.get_response(params=self.params)
+        print("RESPONSE DATA VALID USER")
+        print(response.data)
         user_query = User.objects.filter(id=response.data['user']['id'])
         self.assertTrue(user_query.exists())
         school_query = School.objects.filter(
@@ -200,7 +202,7 @@ class RegisterTestCase(tests.CreateAPITestCase):
         '''It does not create User and School model instances on an invalid
            input for Registration and valid inputs for User and School.'''
         params = self.get_params(registration={
-            'conference': '65',
+            'conference': '68',
             'num_beginner_delegates': 1,
             'num_intermediate_delegates': 0,
             'num_advanced_delegates': 0,
@@ -208,7 +210,11 @@ class RegisterTestCase(tests.CreateAPITestCase):
             'num_chinese_speaking_delegates': 2,
         })
 
+        print('PARAMS')
+        print(params)
+
         response = self.get_response(params=params)
+        print(response.data)
         self.assertEqual(response.data, {
             'num_spanish_speaking_delegates':
             ['Cannot exceed total number of delegates.'],

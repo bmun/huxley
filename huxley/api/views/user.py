@@ -47,13 +47,13 @@ class CurrentUser(generics.GenericAPIView):
 
     def get(self, request, *args, **kwargs):
         '''Get the current user if they're authenticated.'''
-        if not request.user.is_authenticated():
+        if not request.user.is_authenticated:
             raise Http404
         return Response(UserSerializer(request.user).data)
 
     def post(self, request, *args, **kwargs):
         '''Log in a new user.'''
-        if request.user.is_authenticated():
+        if request.user.is_authenticated:
             raise PermissionDenied('Another user is currently logged in.')
 
         try:
@@ -86,7 +86,7 @@ class UserPassword(generics.GenericAPIView):
 
     def put(self, request, *args, **kwargs):
         '''Change the authenticated user's password.'''
-        if not request.user.is_authenticated():
+        if not request.user.is_authenticated:
             raise PermissionDenied()
 
         data = request.data

@@ -40,7 +40,7 @@ class RegistrationAdmin(admin.ModelAdmin):
                 cp.name for cp in registration.committee_preferences.all())]
 
             writer.writerow(
-                [unicode(field).encode('utf8')
+                [str(field).encode('utf8')
                  for field in [
                      registration.registered_at,
                      registration.school.name,
@@ -57,7 +57,7 @@ class RegistrationAdmin(admin.ModelAdmin):
                      registration.delegate_fees_paid,
                      registration.delegate_fees_owed,
                      registration.registration_fee_paid
-                 ]] + country_preferences + committee_preferences + [unicode(
+                 ]] + country_preferences + committee_preferences + [str(
                      registration.registration_comments).encode('utf8')])
 
         return registrations

@@ -1,9 +1,8 @@
 # Copyright (c) 2011-2015 Berkeley Model United Nations. All rights reserved.
 # Use of this source code is governed by a BSD License (see LICENSE).
-
 import json
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.shortcuts import redirect, render
 from django.template import RequestContext
 
@@ -17,7 +16,7 @@ def index(request):
         return redirect(reverse('admin:index'))
 
     user_dict = {}
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         user_dict = UserSerializer(request.user).data
 
     conference = Conference.get_current()

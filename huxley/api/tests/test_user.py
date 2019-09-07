@@ -3,7 +3,7 @@
 
 import json
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.test import TestCase
 from django.test.client import Client
 
@@ -396,21 +396,21 @@ class CurrentUserTestCase(TestCase):
         self.assertEqual(data['user_type'], User.TYPE_ADVISOR)
         self.assertEqual(data['school'], {
             u'id': school.id,
-            u'name': unicode(school.name),
-            u'address': unicode(school.address),
-            u'city': unicode(school.city),
-            u'state': unicode(school.state),
-            u'zip_code': unicode(school.zip_code),
-            u'country': unicode(school.country),
-            u'primary_name': unicode(school.primary_name),
+            u'name': str(school.name),
+            u'address': str(school.address),
+            u'city': str(school.city),
+            u'state': str(school.state),
+            u'zip_code': str(school.zip_code),
+            u'country': str(school.country),
+            u'primary_name': str(school.primary_name),
             u'primary_gender': school.primary_gender,
-            u'primary_email': unicode(school.primary_email),
-            u'primary_phone': unicode(school.primary_phone),
+            u'primary_email': str(school.primary_email),
+            u'primary_phone': str(school.primary_phone),
             u'primary_type': school.primary_type,
-            u'secondary_name': unicode(school.secondary_name),
+            u'secondary_name': str(school.secondary_name),
             u'secondary_gender': school.secondary_gender,
-            u'secondary_email': unicode(school.secondary_email),
-            u'secondary_phone': unicode(school.secondary_phone),
+            u'secondary_email': str(school.secondary_email),
+            u'secondary_phone': str(school.secondary_phone),
             u'secondary_type': school.secondary_type,
             u'program_type': school.program_type,
             u'times_attended': school.times_attended,

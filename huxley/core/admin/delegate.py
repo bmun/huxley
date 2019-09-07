@@ -5,7 +5,7 @@ import csv
 
 from django.conf.urls import url
 from django.contrib import admin, messages
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.http import HttpResponse, HttpResponseRedirect
 
 from huxley.core.models import Assignment, Delegate
@@ -40,27 +40,28 @@ class DelegateAdmin(admin.ModelAdmin):
     def load(self, request):
         '''Loads new Assignments.'''
         delegates = request.FILES
-        reader = csv.reader(delegates['csv'])
+        reader = csv.reader(delegates['csv'].read().decode('utf-8').split('\n'))
 
         assignments = {}
         for assignment in Assignment.objects.all():
-            assignments[assignment.committee.name.encode('ascii', 'ignore'),
-                        assignment.country.name.encode('ascii', 'ignore'),
+            assignments[assignment.committee.name,
+                        assignment.country.name,
                         assignment.registration.school.name, ] = assignment
         for row in reader:
-            if row[1] == 'Committee':
-                continue
-            assignment = assignments[unicode(
-                row[1], errors='ignore'), unicode(
-                    row[2], errors='ignore'), row[3], ]
-            d = Delegate.objects.create(name=row[0], assignment=assignment)
+            if row:
+                if row[1] == 'Committee':
+                    continue
+                assignment = assignments[str(
+                    row[1], errors='ignore'), str(
+                        row[2], errors='ignore'), row[3], ]
+                d = Delegate.objects.create(name=row[0], assignment=assignment)
 
         return HttpResponseRedirect(reverse('admin:core_delegate_changelist'))
 
     def confirm_waivers(self, request):
         '''Confirms delegate waivers'''
         waiver_responses = request.FILES
-        reader = csv.reader(waiver_responses['csv'])
+        reader = csv.reader(waiver_responses['csv'].read().decode('utf-8').split('\n'))
 
         rows_to_write = []
 
@@ -74,7 +75,7 @@ class DelegateAdmin(admin.ModelAdmin):
         success = 0
 
         for row in reader:
-            if (row[0] == "Email"):
+            if (not row or row[0] == "Email"):
                 continue
             #rows: email(0), name(1), school(2), committee(3), country(4)
             email = row[0]

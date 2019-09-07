@@ -150,6 +150,8 @@ class RegistrationListGetTest(tests.ListAPITestCase):
         self.advisor = models.new_user(username='username', password='pass')
         self.school = models.new_school(user=self.advisor)
         self.registration = models.new_registration(school=self.school)
+        print('SET UP REGISTRATION')
+        print(self.registration)
 
     def test_anonymous_user(self):
         response = self.get_response({'school_id': self.school.id,
@@ -292,7 +294,12 @@ class RegistrationDetailPutTest(tests.UpdateAPITestCase):
             'conference': self.registration.conference.session,
             'school': self.registration.school.id,
             'country_preferences': self.registration.country_preference_ids,
-            'assignments_finalized': True
+            'assignments_finalized': True,
+            'num_beginner_delegates': 0,
+            'num_intermediate_delegates': 0,
+            'num_advanced_delegates': 0,
+            'num_spanish_speaking_delegates': 0,
+            'num_chinese_speaking_delegates': 0,
         }
 
     def test_anonymous_user(self):
@@ -381,7 +388,7 @@ class RegistrationDetailPatchTest(tests.PartialUpdateAPITestCase):
             'conference': self.registration.conference.session,
             'school': self.registration.school.id,
             'country_preferences': self.registration.country_preference_ids,
-            'assignments_finalized': True
+            'assignments_finalized': True,
         }
 
     def test_anonymous_user(self):

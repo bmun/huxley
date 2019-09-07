@@ -3,7 +3,7 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-/*
+/**
  * General purpose safe object accessing function
  */
 var _accessSafe = function(obj, key) {

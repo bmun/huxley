@@ -4,8 +4,8 @@
 import csv
 
 from django.conf.urls import url
+from django.urls import reverse
 from django.contrib import admin, messages
-from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect
 from django.utils import html
 
@@ -47,7 +47,7 @@ class AssignmentAdmin(admin.ModelAdmin):
     def load(self, request):
         '''Loads new Assignments.'''
         assignments = request.FILES
-        reader = csv.reader(assignments['csv'])
+        reader = csv.reader(assignments['csv'].read().decode('utf-8').split('\n'))
 
         def get_model(model, name, cache):
             name = name.strip()
@@ -64,9 +64,12 @@ class AssignmentAdmin(admin.ModelAdmin):
             schools = {}
 
             for row in reader:
+                if len(row) == 0:
+                    continue
+
                 if (row[0]=='School' and row[1]=='Committee' and row[2]=='Country'):
                     continue # skip the first row if it is a header
-
+                
                 while len(row) < 3:
                     row.append("") # extend the row to have the minimum proper num of columns
 
