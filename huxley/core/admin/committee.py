@@ -22,7 +22,7 @@ class CommitteeAdmin(admin.ModelAdmin):
                 com = Committee(name=row[0],
                                 full_name=row[1],
                                 delegation_size=int(row[2]),
-                                special=special)
+                                special=bool(int(row[3])))
                 com.save()
 
         return HttpResponseRedirect(reverse('admin:core_committee_changelist'))

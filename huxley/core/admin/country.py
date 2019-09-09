@@ -20,7 +20,7 @@ class CountryAdmin(admin.ModelAdmin):
         countries = request.FILES
         reader = csv.reader(countries['csv'].read().decode('utf-8').splitlines())
         for row in reader:
-            c = Country(name=row[0], special=bool(row[1]))
+            c = Country(name=row[0], special=bool(int(row[1])))
             c.save()
 
         return HttpResponseRedirect(reverse('admin:core_country_changelist'))

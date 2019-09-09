@@ -40,11 +40,7 @@ class DelegateAdmin(admin.ModelAdmin):
     def load(self, request):
         '''Loads new Assignments.'''
         delegates = request.FILES
-        reader = csv.reader(delegates['csv'].read().decode('utf-8'))
-        print('PRINTING THE THINGS')
-        for row in reader:
-            print(row)
-
+        reader = csv.reader(delegates['csv'].read().decode('utf-8').splitlines())
         assignments = {}
         for assignment in Assignment.objects.all():
             assignments[assignment.committee.name,
