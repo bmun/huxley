@@ -322,7 +322,7 @@ class Registration(models.Model):
                     'To access your account, please log in at huxley.bmun.org.\n\n'
                     'In order to confirm your spot on our registration list, '
                     'you must pay the non-refundable school fee of $%d. '
-                    'In 24-48 hours, you will receive an invoice from QuickBooks, '
+                    'In 5-7 business days, you will receive an invoice from QuickBooks, '
                     'our accounting system, for your school fee. '
                     'You can either pay online through the QuickBooks payment portal '
                     'or mail a check to the address listed on the invoice. '
