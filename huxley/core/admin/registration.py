@@ -40,7 +40,7 @@ class RegistrationAdmin(admin.ModelAdmin):
                 cp.name for cp in registration.committee_preferences.all())]
 
             writer.writerow(
-                [str(field).encode('utf8')
+                [str(field)
                  for field in [
                      registration.registered_at,
                      registration.school.name,
