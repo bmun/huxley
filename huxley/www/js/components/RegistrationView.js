@@ -323,7 +323,7 @@ var RegistrationView = React.createClass({
         <label>{labelNum}</label>
         <CountrySelect
           onChange={_handleChange.bind(this, fieldName)}
-          countries={this.state.countries.sort()}
+          countries={this.state.countries.sort(country => country.name)}
           selectedCountryID={this.state[fieldName]}
           countryPreferences={[
             this.state.country_pref1,
