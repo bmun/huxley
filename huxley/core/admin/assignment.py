@@ -47,7 +47,7 @@ class AssignmentAdmin(admin.ModelAdmin):
     def load(self, request):
         '''Loads new Assignments.'''
         assignments = request.FILES
-        reader = csv.reader(assignments['csv'].read().decode('utf-8').split('\n'))
+        reader = csv.reader(assignments['csv'].read().decode('utf-8').splitlines())
 
         def get_model(model, name, cache):
             name = name.strip()

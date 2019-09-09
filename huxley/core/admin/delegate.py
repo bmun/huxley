@@ -40,7 +40,10 @@ class DelegateAdmin(admin.ModelAdmin):
     def load(self, request):
         '''Loads new Assignments.'''
         delegates = request.FILES
-        reader = csv.reader(delegates['csv'].read().decode('utf-8').split('\n'))
+        reader = csv.reader(delegates['csv'].read().decode('utf-8'))
+        print('PRINTING THE THINGS')
+        for row in reader:
+            print(row)
 
         assignments = {}
         for assignment in Assignment.objects.all():
@@ -61,7 +64,7 @@ class DelegateAdmin(admin.ModelAdmin):
     def confirm_waivers(self, request):
         '''Confirms delegate waivers'''
         waiver_responses = request.FILES
-        reader = csv.reader(waiver_responses['csv'].read().decode('utf-8').split('\n'))
+        reader = csv.reader(waiver_responses['csv'].read().decode('utf-8').splitlines())
 
         rows_to_write = []
 

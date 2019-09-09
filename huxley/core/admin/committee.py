@@ -15,7 +15,7 @@ class CommitteeAdmin(admin.ModelAdmin):
     def load(self, request):
         '''Import a CSV file containing committees.'''
         committees = request.FILES
-        reader = csv.reader(committees['csv'].read().decode('utf-8').split('\n'))
+        reader = csv.reader(committees['csv'].read().decode('utf-8').splitlines())
         for row in reader:
             if row:
                 special = False if row[3] == '0' or row[3] == 'False' or not row[3] else True

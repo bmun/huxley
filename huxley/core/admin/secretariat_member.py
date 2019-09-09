@@ -15,7 +15,7 @@ class SecretariatMemberAdmin(admin.ModelAdmin):
     def load(self, request):
         '''Import a CSV file containing secretariat members.'''
         members = request.FILES
-        reader = csv.reader(members['csv'].read().decode('utf-8').split('\n'))
+        reader = csv.reader(members['csv'].read().decode('utf-8').splitlines())
         for row in reader:
             row_committee = Committee.objects.get(name__exact=row[1])
             head_chair = True if (len(row) > 2 and row[2] == "TRUE") else False

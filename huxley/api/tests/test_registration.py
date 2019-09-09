@@ -150,8 +150,6 @@ class RegistrationListGetTest(tests.ListAPITestCase):
         self.advisor = models.new_user(username='username', password='pass')
         self.school = models.new_school(user=self.advisor)
         self.registration = models.new_registration(school=self.school)
-        print('SET UP REGISTRATION')
-        print(self.registration)
 
     def test_anonymous_user(self):
         response = self.get_response({'school_id': self.school.id,
