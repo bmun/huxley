@@ -31,6 +31,7 @@ const RegistrationSecondaryContact = React.createClass({
     return (
       <div id="secondary_contact">
         <h3>Secondary Contact</h3>
+        <p className="instructions">Please make sure to fill out all fields.</p>
         {this.props.renderContactGenderField('secondary_gender')}
         <RegistrationTextInput
           errors={accessErrors('secondary_name')}

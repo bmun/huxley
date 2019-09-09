@@ -245,7 +245,7 @@ class Registration(models.Model):
     num_intermediate_delegates = models.PositiveSmallIntegerField()
     num_advanced_delegates = models.PositiveSmallIntegerField()
     num_spanish_speaking_delegates = models.PositiveSmallIntegerField()
-    num_chinese_speaking_delegates = models.PositiveSmallIntegerField()
+    num_chinese_speaking_delegates = models.PositiveSmallIntegerField(default=0)
 
     country_preferences = models.ManyToManyField(
         Country, through='CountryPreference', blank=True)

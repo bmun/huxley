@@ -31,13 +31,13 @@ class SchoolSerializer(serializers.ModelSerializer):
                   'times_attended',
                   'international', )
         extra_kwargs = {
-            'secondary_name': {'required': False},
-            'secondary_gender': {'required': False},
-            'secondary_email': {'required': False},
-            'secondary_phone': {'required': False},
-            'secondary_type': {'required': False},
-            'program_type': {'required': False},
-            'times_attended': {'required': False}
+            # 'secondary_name': {'required': False},
+            # 'secondary_gender': {'required': False},
+            # 'secondary_email': {'required': False},
+            # 'secondary_phone': {'required': False},
+            # 'secondary_type': {'required': False},
+            # 'program_type': {'required': False},
+            # 'times_attended': {'required': False}
         }
 
     def validate(self, data):
