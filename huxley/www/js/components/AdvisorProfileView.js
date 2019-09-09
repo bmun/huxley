@@ -366,7 +366,7 @@ const AdvisorProfileView = React.createClass({
                 </td>
               </tr>
               <tr>
-                <td>Number of Chinese Speaking Delegates</td>
+                <td>Number of Mandarin Speaking Delegates</td>
                 <td>
                   {_accessSafe(registration, 'num_chinese_speaking_delegates')}
                 </td>
