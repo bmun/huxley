@@ -58,7 +58,7 @@ class RegistrationAdmin(admin.ModelAdmin):
                      registration.delegate_fees_owed,
                      registration.registration_fee_paid
                  ]] + country_preferences + committee_preferences + [str(
-                     registration.registration_comments).encode('utf8')])
+                     registration.registration_comments)])
 
         return registrations
 

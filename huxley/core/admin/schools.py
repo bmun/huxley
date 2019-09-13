@@ -45,7 +45,7 @@ class SchoolAdmin(admin.ModelAdmin):
         ])
 
         for school in School.objects.all().order_by('name'):
-            writer.writerow([str(field).encode('utf8')
+            writer.writerow([str(field)
                              for field in [
                                  school.id,
                                  school.name,
