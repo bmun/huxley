@@ -73,4 +73,4 @@ class SchoolAdminTest(TestCase):
         ]
 
         fields_csv += ",".join(map(str, fields))
-        self.assertEquals(fields_csv, response.content[:-2])
+        self.assertEquals(fields_csv, response.content[:-2].decode('utf-8'))

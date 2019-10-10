@@ -4,6 +4,7 @@
 from rest_framework import serializers
 
 from huxley.core.models import Committee, Registration
+from django.core.mail import send_mail
 
 
 class RegistrationSerializer(serializers.ModelSerializer):
@@ -51,6 +52,18 @@ class RegistrationSerializer(serializers.ModelSerializer):
             'num_chinese_speaking_delegates': {'required': False},
             'registration_comments': {'required': False}
         }
+
+    def update(self, instance, validated_data):
+        if ('assignments_finalized' in validated_data):
+            finalized = validated_data['assignments_finalized']
+            if bool(finalized) and finalized != 'False':
+                    send_mail('{0} has finalized its assignments'.format(instance.school),
+                      'New information for {0}: \n\n'.format(instance.school) \
+                          + 'Assignments have been finalized!',
+                      'tech@bmun.org',
+                      ['info@bmun.org', 'admin@bmun.org'], fail_silently=False)
+
+        return super(RegistrationSerializer, self).update(instance, validated_data)
 
     def validate(self, data):
         invalid_fields = {}

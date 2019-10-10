@@ -295,7 +295,7 @@ class Registration(models.Model):
                 registration.school.name +
                 ' made comments about registration: ' +
                 registration.registration_comments,
-                'tech@bmun.org', ['info@bmun.org'],
+                'tech@bmun.org', ['info@bmun.org', 'admin@bmun.org'],
                 fail_silently=False)
 
     @classmethod
