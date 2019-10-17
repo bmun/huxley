@@ -1,4 +1,4 @@
-Django==1.10.7
+Django==1.11.23
 Fabric==1.9.0
 Pillow==5.2.0
 PyPDF2==1.25.1
