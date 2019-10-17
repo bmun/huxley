@@ -5,7 +5,7 @@ PyPDF2==1.25.1
 astroid==1.4.8
 coverage==3.7.1
 django-easy-pdf==0.1.0
-djangorestframework==3.6.3
+djangorestframework==3.9.1
 ecdsa==0.11
 futures==3.1.1
 html5lib==0.9999999
