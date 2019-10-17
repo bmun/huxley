@@ -6,7 +6,7 @@ astroid==1.4.8
 coverage==3.7.1
 django-easy-pdf==0.1.0
 djangorestframework==3.6.3
-ecdsa==0.11
+ecdsa==0.13.3
 futures==3.1.1
 html5lib==0.9999999
 isort==4.2.5
