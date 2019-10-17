@@ -17,7 +17,7 @@ paramiko==2.4.1
 pycrypto==2.6.1
 pylint==1.6.4
 reportlab==3.2.0
-requests==2.4.3
+requests==2.20.0
 six==1.10.0
 wrapt==1.10.8
 wsgiref==0.1.2
