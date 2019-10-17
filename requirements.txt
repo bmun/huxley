@@ -13,7 +13,7 @@ isort==4.2.5
 lazy-object-proxy==1.2.2
 mccabe==0.5.2
 mock==1.0.1
-paramiko==2.4.1
+paramiko==2.4.2
 pycrypto==2.6.1
 pylint==1.6.4
 reportlab==3.2.0
