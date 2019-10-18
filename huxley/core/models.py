@@ -477,10 +477,10 @@ class Assignment(models.Model):
 
         def add(committee, country, registration, paper, rejected):
             additions.append(
-                cls(committee_id=committee.id,
-                    country_id=country.id,
-                    registration_id=registration.id,
-                    paper_id=paper.id,
+                cls(committee=committee,
+                    country=country,
+                    registration=registration,
+                    paper=paper,
                     rejected=rejected, ))
 
         def remove(assignment_data):
@@ -496,9 +496,11 @@ class Assignment(models.Model):
             if type(country) is not Country:
                 country = Country(name=country + ' - DOES NOT EXIST')
                 is_invalid = True
-            if type(school) is not School:
+            if type(school) is not School and school != '':
                 school = School(name=school + ' - DOES NOT EXIST')
                 is_invalid = True
+            elif school == '':
+                registration = None
             else:
                 try:
                     registration = Registration.objects.get(
