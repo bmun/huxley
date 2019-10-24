@@ -7,7 +7,7 @@ from django.urls import reverse
 from django.test import TestCase
 from django.test.client import Client
 
-from rest_framework import exceptions.ErrorDetail
+from rest_framework import exceptions
 
 from huxley.accounts.models import User
 from huxley.core.models import Conference
@@ -277,12 +277,11 @@ class UserListPostTestCase(tests.CreateAPITestCase):
 
     def test_invalid_username(self):
         response = self.get_response(params=self.get_params(username='>Kunal'))
-        self.assertEqual(response.data, {
-            'username': [
-                ErrorDetail(u'Enter a valid username. This value may contain only English '
-                u'letters, numbers, and @/./+/-/_ characters.')
+        self.assertEqual(response.data['username'], [
+                exceptions.ErrorDetail(u'Enter a valid username. This value may contain only '
+                u'letters, numbers, and @/./+/-/_ characters.', code='invalid')
             ]
-        })
+        )
 
     def test_empty_password(self):
         response = self.get_response(params=self.get_params(password=''))

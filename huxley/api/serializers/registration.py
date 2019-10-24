@@ -96,6 +96,10 @@ class RegistrationSerializer(serializers.ModelSerializer):
         if num_chinese_speaking_delegates and num_chinese_speaking_delegates > total_delegates:
             invalid_fields[
                 'num_chinese_speaking_delegates'] = 'Cannot exceed total number of delegates.'
+        if num_spanish_speaking_delegates and num_spanish_speaking_delegates > total_delegates:
+            invalid_fields[
+                'num_spanish_speaking_delegates'] = 'Cannot exceed total number of delegates.'
+
 
         if invalid_fields:
             raise serializers.ValidationError(invalid_fields)
