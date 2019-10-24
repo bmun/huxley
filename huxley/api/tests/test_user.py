@@ -7,6 +7,8 @@ from django.urls import reverse
 from django.test import TestCase
 from django.test.client import Client
 
+from rest_framework import exceptions.ErrorDetail
+
 from huxley.accounts.models import User
 from huxley.core.models import Conference
 from huxley.api import tests
@@ -277,8 +279,8 @@ class UserListPostTestCase(tests.CreateAPITestCase):
         response = self.get_response(params=self.get_params(username='>Kunal'))
         self.assertEqual(response.data, {
             'username': [
-                u'Enter a valid username. This value may contain only English '
-                u'letters, numbers, and @/./+/-/_ characters.'
+                ErrorDetail(u'Enter a valid username. This value may contain only English '
+                u'letters, numbers, and @/./+/-/_ characters.')
             ]
         })
 

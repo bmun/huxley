@@ -3,6 +3,8 @@
 
 import collections
 
+from rest_framework import exceptions.ErrorDetail
+
 from huxley.accounts.models import User
 from huxley.api import tests
 from huxley.core.constants import ContactGender, ContactType, ProgramTypes
@@ -212,9 +214,9 @@ class RegisterTestCase(tests.CreateAPITestCase):
         response = self.get_response(params=params)
         self.assertEqual(response.data, {
             'num_spanish_speaking_delegates':
-            ['Cannot exceed total number of delegates.'],
+            [ErrorDetail('Cannot exceed total number of delegates.')],
             'num_chinese_speaking_delegates':
-            ['Cannot exceed total number of delegates.']
+            [ErrorDetail('Cannot exceed total number of delegates.')]
         })
         self.assertFalse(User.objects.all().exists())
         self.assertFalse(School.objects.all().exists())

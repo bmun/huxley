@@ -51,8 +51,7 @@ class DelegateAdmin(admin.ModelAdmin):
                 if row[1] == 'Committee':
                     continue
                 assignment = assignments[str(
-                    row[1], errors='ignore'), str(
-                        row[2], errors='ignore'), row[3], ]
+                    row[1]), str(row[2]), row[3], ]
                 d = Delegate.objects.create(name=row[0], assignment=assignment)
 
         return HttpResponseRedirect(reverse('admin:core_delegate_changelist'))

@@ -80,20 +80,20 @@ class RegistrationSerializer(serializers.ModelSerializer):
             (num_beginner_delegates or 0, num_intermediate_delegates or 0,
              num_advanced_delegates or 0))
 
-        if num_beginner_delegates >= 200:
+        if num_beginner_delegates and num_beginner_delegates >= 200:
             invalid_fields[
                 'num_beginner_delegates'] = 'Cannot register that many delegates.'
-        if num_intermediate_delegates >= 200:
+        if num_intermediate_delegates and num_intermediate_delegates >= 200:
             invalid_fields[
                 'num_intermediate_delegates'] = 'Cannot register that many delegates.'
-        if num_advanced_delegates >= 200:
+        if num_advanced_delegates and num_advanced_delegates >= 200:
             invalid_fields[
                 'num_advanced_delegates'] = 'Cannot register that many delegates.'
 
-        if num_spanish_speaking_delegates > total_delegates:
+        if num_advanced_delegates and num_spanish_speaking_delegates > total_delegates:
             invalid_fields[
                 'num_spanish_speaking_delegates'] = 'Cannot exceed total number of delegates.'
-        if num_chinese_speaking_delegates > total_delegates:
+        if num_chinese_speaking_delegates and num_chinese_speaking_delegates > total_delegates:
             invalid_fields[
                 'num_chinese_speaking_delegates'] = 'Cannot exceed total number of delegates.'
 
