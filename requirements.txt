@@ -3,7 +3,7 @@ certifi==2019.6.16
 chardet==3.0.4
 Django==2.2.3
 django-easy-pdf==0.1.1
-djangorestframework==3.10.1
+djangorestframework==3.10.3
 html5lib==1.0.1
 idna==2.8
 isort==4.3.21
