@@ -1,8 +1,10 @@
 # Copyright (c) 2011-2017 Berkeley Model United Nations. All rights reserved.
 # Use of this source code is governed by a BSD License (see LICENSE).
+
 from rest_framework import serializers
 
 from huxley.core.models import Committee, Registration
+from django.core.mail import send_mail
 
 
 class RegistrationSerializer(serializers.ModelSerializer):
@@ -51,6 +53,18 @@ class RegistrationSerializer(serializers.ModelSerializer):
             'registration_comments': {'required': False}
         }
 
+    def update(self, instance, validated_data):
+        if ('assignments_finalized' in validated_data):
+            finalized = validated_data['assignments_finalized']
+            if bool(finalized) and finalized != 'False':
+                    send_mail('{0} has finalized its assignments'.format(instance.school),
+                      'New information for {0}: \n\n'.format(instance.school) \
+                          + 'Assignments have been finalized!',
+                      'tech@bmun.org',
+                      ['info@bmun.org', 'admin@bmun.org'], fail_silently=False)
+
+        return super(RegistrationSerializer, self).update(instance, validated_data)
+
     def validate(self, data):
         invalid_fields = {}
 
@@ -66,22 +80,26 @@ class RegistrationSerializer(serializers.ModelSerializer):
             (num_beginner_delegates or 0, num_intermediate_delegates or 0,
              num_advanced_delegates or 0))
 
-        if num_beginner_delegates >= 200:
+        if num_beginner_delegates and num_beginner_delegates >= 200:
             invalid_fields[
                 'num_beginner_delegates'] = 'Cannot register that many delegates.'
-        if num_intermediate_delegates >= 200:
+        if num_intermediate_delegates and num_intermediate_delegates >= 200:
             invalid_fields[
                 'num_intermediate_delegates'] = 'Cannot register that many delegates.'
-        if num_advanced_delegates >= 200:
+        if num_advanced_delegates and num_advanced_delegates >= 200:
             invalid_fields[
                 'num_advanced_delegates'] = 'Cannot register that many delegates.'
 
-        if num_spanish_speaking_delegates > total_delegates:
+        if num_advanced_delegates and num_spanish_speaking_delegates > total_delegates:
             invalid_fields[
                 'num_spanish_speaking_delegates'] = 'Cannot exceed total number of delegates.'
-        if num_chinese_speaking_delegates > total_delegates:
+        if num_chinese_speaking_delegates and num_chinese_speaking_delegates > total_delegates:
             invalid_fields[
                 'num_chinese_speaking_delegates'] = 'Cannot exceed total number of delegates.'
+        if num_spanish_speaking_delegates and num_spanish_speaking_delegates > total_delegates:
+            invalid_fields[
+                'num_spanish_speaking_delegates'] = 'Cannot exceed total number of delegates.'
+
 
         if invalid_fields:
             raise serializers.ValidationError(invalid_fields)

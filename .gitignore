@@ -2,9 +2,13 @@
 .idea
 .sass-cache
 *~
-*.log
+*/__pycache__/*
+*.db
+*.sqlite3
+*.idea
 *.pyc
 *.csv
+*.log
 *.browserified.js
 
 *.db
@@ -21,6 +25,8 @@ fabfile/deploy.py
 htmlcov/
 
 node_modules/
+node_modules/
+package-lock.json
 
 huxley/www/static/js/bundle.js
 huxley/www/static/js/huxley.js
@@ -31,3 +37,6 @@ huxley/www/static/js/huxley.css
 position_papers/
 graded_papers/
 test_position_paper.doc
+
+env/
+.vscode/

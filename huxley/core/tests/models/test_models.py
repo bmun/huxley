@@ -1,7 +1,7 @@
-# -*- coding: utf-8 -*-
 # Copyright (c) 2011-2016 Berkeley Model United Nations. All rights reserved.
 # Use of this source code is governed by a BSD License (see LICENSE).
 
+# -*- coding: utf-8 -*-
 from datetime import date
 
 from django.core.exceptions import ValidationError
@@ -30,9 +30,9 @@ class ConferenceTest(TestCase):
         self.assertEquals(0, self.conference.min_attendance)
         self.assertEquals(0, self.conference.max_attendance)
 
-    def test_unicode(self):
-        """ Tests that the object's __unicode__ outputs correctly. """
-        self.assertTrue(self.conference.__unicode__() == 'BMUN 61')
+    def test_str(self):
+        """ Tests that the object's __str__ outputs correctly. """
+        self.assertTrue(self.conference.__str__() == 'BMUN 61')
 
 
 class CountryTest(TestCase):
@@ -43,9 +43,9 @@ class CountryTest(TestCase):
         """ Tests that fields with default values are correctly set. """
         self.assertFalse(self.country.special)
 
-    def test_unicode(self):
-        """ Tests that the object's __unicode__ outputs correctly. """
-        self.assertTrue(self.country.__unicode__() == 'Lolville')
+    def test_str(self):
+        """ Tests that the object's __str__ outputs correctly. """
+        self.assertTrue(self.country.__str__() == 'Lolville')
 
 
 class CommitteeTest(TestCase):
@@ -58,9 +58,9 @@ class CommitteeTest(TestCase):
         self.assertEquals(2, self.committee.delegation_size)
         self.assertFalse(self.committee.special)
 
-    def test_unicode(self):
-        """ Tests that the object's __unicode__ outputs correctly. """
-        self.assertEquals('DISC', self.committee.__unicode__())
+    def test_str(self):
+        """ Tests that the object's __str__ outputs correctly. """
+        self.assertEquals('DISC', self.committee.__str__())
 
     def test_create_rubric(self):
         '''Tests that a committee creates a new rubric upon being
@@ -97,9 +97,9 @@ class CommitteeFeedbackTest(TestCase):
     def test_default_fields(self):
         self.assertFalse(self.committee == None)
 
-    def test_unicode(self):
+    def test_str(self):
         self.assertEquals('DISC - Comment 1',
-                          self.committee_feedback.__unicode__())
+                          self.committee_feedback.__str__())
 
 
 class AssignmentTest(TestCase):
@@ -316,11 +316,11 @@ class PositionPaperTest(TestCase):
         self.assertEquals(self.position_paper.score_5, 0)
         self.assertFalse(self.position_paper.graded)
 
-    def test_unicode(self):
+    def test_str(self):
         a = self.assignment
         self.assertEquals('%s %s %d' %
                           (a.committee.name, a.country.name, a.id),
-                          self.position_paper.__unicode__())
+                          self.position_paper.__str__())
 
 
 class RubricTest(TestCase):
@@ -341,8 +341,8 @@ class RubricTest(TestCase):
         self.assertEquals(self.rubric.grade_value_4, 10)
         self.assertEquals(self.rubric.grade_value_5, 10)
 
-    def test_unicode(self):
-        self.assertEquals(self.committee.name, self.rubric.__unicode__())
+    def test_str(self):
+        self.assertEquals(self.committee.name, self.rubric.__str__())
 
 
 class SecretariatMemberTest(TestCase):
@@ -355,5 +355,5 @@ class SecretariatMemberTest(TestCase):
     def test_default_fields(self):
         self.assertFalse(self.member.is_head_chair)
 
-    def test_unicode(self):
-        self.assertTrue(self.member.__unicode__() == 'Tibbalidoo')
+    def test_str(self):
+        self.assertTrue(self.member.__str__() == 'Tibbalidoo')

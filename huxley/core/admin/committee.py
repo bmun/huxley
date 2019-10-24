@@ -5,7 +5,7 @@ import csv
 
 from django.conf.urls import url
 from django.contrib import admin
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.http import HttpResponseRedirect
 
 from huxley.core.models import Committee
@@ -15,13 +15,15 @@ class CommitteeAdmin(admin.ModelAdmin):
     def load(self, request):
         '''Import a CSV file containing committees.'''
         committees = request.FILES
-        reader = csv.reader(committees['csv'])
+        reader = csv.reader(committees['csv'].read().decode('utf-8').splitlines())
         for row in reader:
-            com = Committee(name=row[0],
-                            full_name=row[1],
-                            delegation_size=int(row[2]),
-                            special=bool(row[3]))
-            com.save()
+            if row:
+                special = False if row[3] == '0' or row[3] == 'False' or not row[3] else True
+                com = Committee(name=row[0],
+                                full_name=row[1],
+                                delegation_size=int(row[2]),
+                                special=special)
+                com.save()
 
         return HttpResponseRedirect(reverse('admin:core_committee_changelist'))
 

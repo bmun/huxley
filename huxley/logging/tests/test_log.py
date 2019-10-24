@@ -17,14 +17,14 @@ class LogEntryTestCase(TestCase):
         log_entry = LogEntry.objects.create(
             level='DEBUG',
             message='This is a message',
-            timestamp=datetime.datetime(2015, 05, 27),
+            timestamp=datetime.datetime(2015, 5, 27),
             uri="/some/random/uri",
             status_code=200,
             username='username')
 
         self.assertEqual(log_entry.level, 'DEBUG')
         self.assertEqual(log_entry.message, 'This is a message')
-        self.assertEqual(log_entry.timestamp, datetime.datetime(2015, 05, 27))
+        self.assertEqual(log_entry.timestamp, datetime.datetime(2015, 5, 27))
         self.assertEqual(log_entry.uri, "/some/random/uri")
         self.assertEqual(log_entry.status_code, 200)
         self.assertEqual(log_entry.username, 'username')

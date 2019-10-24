@@ -5,7 +5,7 @@ import csv
 
 from django.conf.urls import url
 from django.contrib import admin
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.http import HttpResponseRedirect
 
 from huxley.core.models import PositionPaper

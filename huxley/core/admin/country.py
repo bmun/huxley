@@ -5,7 +5,7 @@ import csv
 
 from django.conf.urls import url
 from django.contrib import admin
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.http import HttpResponseRedirect
 
 from huxley.core.models import Country
@@ -18,9 +18,10 @@ class CountryAdmin(admin.ModelAdmin):
     def load(self, request):
         '''Import a CSV file containing countries.'''
         countries = request.FILES
-        reader = csv.reader(countries['csv'])
+        reader = csv.reader(countries['csv'].read().decode('utf-8').splitlines())
         for row in reader:
-            c = Country(name=row[0], special=bool(row[1]))
+            special = False if row[1] == '0' or row[1] == 'False' or not row[1] else True
+            c = Country(name=row[0], special=special)
             c.save()
 
         return HttpResponseRedirect(reverse('admin:core_country_changelist'))

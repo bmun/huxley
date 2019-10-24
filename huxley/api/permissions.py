@@ -177,7 +177,7 @@ class DelegateListPermission(permissions.BasePermission):
         if user.is_superuser:
             return True
 
-        if not user.is_authenticated():
+        if not user.is_authenticated:
             return False
 
         method = request.method
@@ -249,13 +249,13 @@ class CommitteeFeedbackDetailPermission(permissions.BasePermission):
         committee_id = request.data.get('committee', -1)
         feedback_id = view.kwargs.get('pk', -1)
 
-        if (method == 'POST' and user.is_authenticated() and
+        if (method == 'POST' and user.is_authenticated and
                 user.is_delegate() and user.delegate.assignment and
             (not user.delegate.committee_feedback_submitted)):
             return int(user.delegate.assignment.committee.id) == int(
                 committee_id)
 
-        if (method == 'GET' and user.is_authenticated() and user.is_chair() and
+        if (method == 'GET' and user.is_authenticated and user.is_chair() and
                 user.committee):
             query = CommitteeFeedback.objects.get(id=feedback_id)
             if query:
@@ -334,13 +334,13 @@ class RubricDetailPermission(permissions.BasePermission):
 
 def user_is_advisor(request, view, school_id):
     user = request.user
-    return (user.is_authenticated() and user.is_advisor() and
+    return (user.is_authenticated and user.is_advisor() and
             user.school_id == int(school_id))
 
 
 def user_is_chair(request, view, committee_id):
     user = request.user
-    return (user.is_authenticated() and user.is_chair() and
+    return (user.is_authenticated and user.is_chair() and
             user.committee_id == int(committee_id))
 
 
@@ -348,7 +348,7 @@ def user_is_delegate(request, view, target_id, field=None):
     '''Field is used to represent an intermediary field,
        e.g. assignment, to check the delegate against.'''
     user = request.user
-    if not user.is_authenticated() or not user.is_delegate():
+    if not user.is_authenticated or not user.is_delegate():
         return False
 
     if field:

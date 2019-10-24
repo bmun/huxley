@@ -36,11 +36,19 @@ class LoggingMiddleware(object):
       logger = logging.getLogger('huxley.api')
       status_code = response.status_code
       message = response.getvalue() if 500 > status_code >= 400 else ""
-      log = json.dumps({
+      logData = {
             'message': message,
             'uri': request.path,
             'status_code': status_code,
-            'username': request.user.username})
+            'username': request.user.username
+            }
+      for key in logData:
+        try:
+          logData[key] = logData[key].decode('utf-8')
+        except AttributeError:
+          pass
+          
+      log = json.dumps(logData)
       logger.info(log)
 
     return response
