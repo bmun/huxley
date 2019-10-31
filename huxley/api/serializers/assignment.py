@@ -19,10 +19,8 @@ class AssignmentSerializer(serializers.ModelSerializer):
                   'rejected')
 
     def update(self, instance, validated_data):
-        print(validated_data)
         if ('rejected' in validated_data):
             rejected = validated_data['rejected']
-            print(rejected)
             if bool(rejected):
                 send_mail('{0} has deleted an assignment'.format(instance.registration.school),
                     'New information for {0}: \n\n'.format(instance.registration.school) \
