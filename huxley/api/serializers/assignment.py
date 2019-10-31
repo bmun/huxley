@@ -22,12 +22,13 @@ class AssignmentSerializer(serializers.ModelSerializer):
         print(validated_data)
         if ('rejected' in validated_data):
             rejected = validated_data['rejected']
-            if not bool(rejected):
-                    send_mail('{0} has deleted an assignment'.format(instance.registration.school),
-                      'New information for {0}: \n\n'.format(instance.registration.school) \
-                          + 'Assignment {0}: {1} has been deleted.'.format(instance.committee, instance.country),
-                      'tech@bmun.org',
-                      ['info@bmun.org', 'admin@bmun.org'], fail_silently=False)
+            print(rejected)
+            if bool(rejected):
+                send_mail('{0} has deleted an assignment'.format(instance.registration.school),
+                    'New information for {0}: \n\n'.format(instance.registration.school) \
+                        + 'Assignment {0}: {1} has been deleted.'.format(instance.committee, instance.country),
+                    'tech@bmun.org',
+                    ['info@bmun.org', 'admin@bmun.org'], fail_silently=False)
 
         return super(AssignmentSerializer, self).update(instance, validated_data)
 
