@@ -1,10 +1,11 @@
-# -*- coding: utf-8 -*-
 # Copyright (c) 2011-2015 Berkeley Model United Nations. All rights reserved.
 # Use of this source code is governed by a BSD License (see LICENSE).
 
+# -*- coding: utf-8 -*-
+
 from contextlib import closing
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.test import TestCase
 
 from huxley.core.models import SecretariatMember
@@ -20,7 +21,7 @@ class SecretariatMemberAdminTest(TestCase):
         committee = models.new_committee(name='ICJ')
 
         f = TestFiles.new_csv([
-            ['Trent Gomberg', 'ICJ', ''], ['Ali Maloney', 'ICJ', 'True']
+            ['Trent Gomberg', 'ICJ', ''], ['Ali Maloney', 'ICJ', 'TRUE']
         ])
 
         with closing(f) as f:

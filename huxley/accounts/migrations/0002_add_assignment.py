@@ -14,6 +14,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='user',
             name='assignment',
-            field=models.ForeignKey(related_name='delegate', blank=True, to='core.Assignment', null=True),
+            field=models.ForeignKey(related_name='delegate', blank=True, to='core.Assignment', null=True, on_delete=models.SET_NULL),
         ),
     ]

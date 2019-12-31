@@ -6,6 +6,8 @@ from rest_framework.urlpatterns import format_suffix_patterns
 
 from huxley.api import views
 
+app_name = "api"
+
 urlpatterns = [
     url(r'^users/?$', views.user.UserList.as_view(), name='user_list'),
     url(r'^users/(?P<pk>[0-9]+)/?$',
@@ -72,6 +74,9 @@ urlpatterns = [
     url(r'^papers/file/?$',
         views.position_paper.PositionPaperFile.as_view(),
         name='position_paper_file'),
+    url(r'^papers/graded_file/?$',
+        views.position_paper.PositionPaperGradedFile.as_view(),
+        name='position_paper_graded_file'),
     url(r'^rubrics/(?P<pk>[0-9]+)/?$',
         views.rubric.RubricDetail.as_view(),
         name='rubric_detail'),

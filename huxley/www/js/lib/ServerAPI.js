@@ -153,12 +153,28 @@ var ServerAPI = {
     );
   },
 
+  getGradedPositionPaperFile(paperID) {
+    return _get(
+      '/api/papers/graded_file',
+      {id: paperID},
+      'application/force-download',
+    );
+  },
+
   updatePositionPaper(paper) {
     return _patch(`api/papers/${paper.id}`, paper);
   },
 
   uploadPositionPaper(paper, file) {
     return _post(`api/papers/${paper.id}`, {file: file}, 'multipart/form-data');
+  },
+
+  uploadGradedPositionPaper(paper, file) {
+    return _post(
+      `api/papers/${paper.id}`,
+      {graded_file: file},
+      'multipart/form-data',
+    );
   },
 
   getRubric(rubricID) {

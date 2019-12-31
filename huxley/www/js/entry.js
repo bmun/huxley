@@ -16,6 +16,7 @@ var CurrentUserActions = require('actions/CurrentUserActions');
 var Huxley = require('components/Huxley');
 var AdvisorAssignmentsView = require('components/AdvisorAssignmentsView');
 var AdvisorFeedbackView = require('components/AdvisorFeedbackView');
+var AdvisorPaperView = require('components/AdvisorPaperView');
 var AdvisorProfileView = require('components/AdvisorProfileView');
 var AdvisorRosterView = require('components/AdvisorRosterView');
 var ChairAttendanceView = require('components/ChairAttendanceView');
@@ -60,6 +61,7 @@ var routes = (
     <Route path="/advisor/assignments" component={AdvisorAssignmentsView} />
     <Route path="/advisor/feedback" component={AdvisorFeedbackView} />
     <Route path="/advisor/roster" component={AdvisorRosterView} />
+    <Route path="/advisor/papers" component={AdvisorPaperView} />
     <Route path="/chair/attendance" component={ChairAttendanceView} />
     <Route path="/chair/papers" component={ChairPapersView} />
     <Route path="/chair/rubric" component={ChairRubricView} />

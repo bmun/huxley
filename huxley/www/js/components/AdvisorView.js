@@ -26,9 +26,11 @@ var AdvisorView = React.createClass({
   },
 
   render: function() {
-    var content = User.isAdvisor(this.props.user)
-      ? this.props.children
-      : <PermissionDeniedView />;
+    var content = User.isAdvisor(this.props.user) ? (
+      this.props.children
+    ) : (
+      <PermissionDeniedView />
+    );
 
     return (
       <div>
@@ -38,6 +40,7 @@ var AdvisorView = React.createClass({
             <NavTab href="/advisor/profile">Profile</NavTab>
             <NavTab href="/advisor/assignments">Assignments</NavTab>
             <NavTab href="/advisor/roster">Delegates</NavTab>
+            <NavTab href="/advisor/papers">Position Papers</NavTab>
             <NavTab href="/advisor/feedback">Feedback</NavTab>
           </div>
           {this.props.children}

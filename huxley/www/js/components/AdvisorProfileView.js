@@ -59,7 +59,7 @@ const AdvisorProfileView = React.createClass({
       school_address: school.address,
       school_city: school.city,
       school_zip_code: school.zip_code,
-      primary_name: school.primary_najaketibbs2me,
+      primary_name: school.primary_name,
       primary_email: school.primary_email,
       primary_phone: school.primary_phone,
       secondary_name: school.secondary_name,
@@ -365,14 +365,12 @@ const AdvisorProfileView = React.createClass({
                   {_accessSafe(registration, 'num_spanish_speaking_delegates')}
                 </td>
               </tr>
-              {/*
               <tr>
-                <td>Number of Chinese Speaking Delegates</td>
+                <td>Number of Mandarin Speaking Delegates</td>
                 <td>
                   {_accessSafe(registration, 'num_chinese_speaking_delegates')}
                 </td>
               </tr>
-              */}
               <tr>
                 <td>All Waivers Completed?</td>
                 <td>

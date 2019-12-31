@@ -1,7 +1,7 @@
 # Copyright (c) 2011-2017 Berkeley Model United Nations. All rights reserved.
 # Use of this source code is governed by a BSD License (see LICENSE).
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.test import TestCase
 
 from huxley.utils.test import models
@@ -61,4 +61,4 @@ class RegistrationAdminTest(TestCase):
         fields.extend(registration.registration_comments)
 
         fields_csv += ','.join(map(str, fields))
-        self.assertEquals(fields_csv, response.content[:-3])
+        self.assertEquals(fields_csv, response.content[:-3].decode('utf-8'))

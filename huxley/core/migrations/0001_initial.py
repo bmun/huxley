@@ -72,7 +72,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('rank', models.PositiveSmallIntegerField()),
-                ('country', models.ForeignKey(to='core.Country')),
+                ('country', models.ForeignKey(to='core.Country', on_delete=models.CASCADE)),
             ],
             options={
                 'ordering': ['-school', 'rank'],
@@ -88,7 +88,7 @@ class Migration(migrations.Migration):
                 ('email', models.EmailField(max_length=75, blank=True)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('summary', models.TextField(default=b'', null=True)),
-                ('assignment', models.ForeignKey(related_name='delegates', to='core.Assignment')),
+                ('assignment', models.ForeignKey(related_name='delegates', to='core.Assignment', on_delete=models.SET_NULL)),
             ],
             options={
                 'ordering': ['assignment__country'],
@@ -143,7 +143,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='countrypreference',
             name='school',
-            field=models.ForeignKey(to='core.School'),
+            field=models.ForeignKey(to='core.School', on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.AlterUniqueTogether(
@@ -159,19 +159,19 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='assignment',
             name='committee',
-            field=models.ForeignKey(to='core.Committee'),
+            field=models.ForeignKey(to='core.Committee', on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='assignment',
             name='country',
-            field=models.ForeignKey(to='core.Country'),
+            field=models.ForeignKey(to='core.Country', on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='assignment',
             name='school',
-            field=models.ForeignKey(default=None, blank=True, to='core.School', null=True),
+            field=models.ForeignKey(default=None, blank=True, to='core.School', null=True, on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.AlterUniqueTogether(

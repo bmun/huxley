@@ -18,12 +18,12 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='delegate',
             name='school',
-            field=models.ForeignKey(related_name='delegates', to='core.School', null=True),
+            field=models.ForeignKey(related_name='delegates', to='core.School', null=True, on_delete=models.CASCADE),
         ),
         migrations.AlterField(
             model_name='delegate',
             name='assignment',
-            field=models.ForeignKey(related_name='delegates', blank=True, to='core.Assignment'),
+            field=models.ForeignKey(related_name='delegates', blank=True, to='core.Assignment', on_delete=models.SET_NULL),
         ),
         migrations.AlterField(
             model_name='delegate',

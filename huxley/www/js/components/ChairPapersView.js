@@ -37,6 +37,7 @@ var ChairPapersView = React.createClass({
     var committees = CommitteeStore.getCommittees();
     var papers = PositionPaperStore.getPapers();
     var files = PositionPaperStore.getPositionPaperFiles();
+    var graded_files = PositionPaperStore.getGradedPositionPaperFiles();
 
     if (assignments.length && Object.keys(countries).length) {
       assignments.sort(
@@ -61,6 +62,7 @@ var ChairPapersView = React.createClass({
       current_assignment: null,
       uploadedFile: null,
       files: files,
+      graded_files: graded_files,
       errors: {},
     };
   },
@@ -115,7 +117,10 @@ var ChairPapersView = React.createClass({
     });
 
     this._papersToken = PositionPaperStore.addListener(() => {
-      this.setState({files: PositionPaperStore.getPositionPaperFiles()});
+      this.setState({
+        files: PositionPaperStore.getPositionPaperFiles(),
+        graded_files: PositionPaperStore.getGradedPositionPaperFiles(),
+      });
     });
 
     this._rubricToken = RubricStore.addListener(() => {
@@ -164,6 +169,8 @@ var ChairPapersView = React.createClass({
     var paper = this.state.papers[this.state.current_assignment.paper.id];
     var country = this.state.countries[this.state.current_assignment.country];
     var files = this.state.files;
+    var graded_files = this.state.graded_files;
+    var graded_file = PositionPaperStore.getGradedPositionPaperFile(paper.id);
     var rubric = this.state.rubric;
 
     if (rubric != null && paper != null) {
@@ -172,6 +179,7 @@ var ChairPapersView = React.createClass({
           rubric={rubric}
           paper={paper}
           files={files}
+          graded_files={graded_files}
           countryName={country.name}
           onChange={this._handleScoreChange}
           onDownload={this._handleDownload}
@@ -192,14 +200,16 @@ var ChairPapersView = React.createClass({
     const assignments = this.state.assignments;
     const countries = this.state.countries;
     const papers = this.state.papers;
+    const rubric = this.state.rubric;
 
-    if (Object.keys(countries).length && Object.keys(papers).length) {
+    if (Object.keys(countries).length && Object.keys(papers).length && rubric) {
       return (
         <PaperAssignmentList
           assignments={assignments}
           countries={countries}
           onChange={this._handleAssignmentSelect}
           papers={papers}
+          rubric={rubric}
         />
       );
     } else {
@@ -246,14 +256,15 @@ var ChairPapersView = React.createClass({
     ) {
       var files = this.state.files;
       var paper = {...this.state.papers[paperID]};
-      paper.file = file.name;
+      paper.graded_file = file.name;
 
-      PositionPaperActions.uploadPaper(
+      PositionPaperActions.uploadGradedPaper(
         paper,
         file,
         this._handleSuccess,
         this._handleError,
       );
+
       PositionPaperActions.storePositionPaper(paper);
 
       this.setState({
@@ -270,8 +281,11 @@ var ChairPapersView = React.createClass({
     this._successTimout && clearTimeout(this._successTimeout);
     var committee = CurrentUserStore.getCurrentUser().committee;
     var paper = {...this.state.papers[paperID]};
-    delete paper['file'];
+    if (paper['graded_file']) {
+      delete paper['graded_file'];
+    }
     paper['graded'] = true;
+    delete paper['file'];
     PositionPaperActions.updatePositionPaper(
       paper,
       this._handleSuccess,

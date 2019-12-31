@@ -1,5 +1,6 @@
 # Copyright (c) 2011-2015 Berkeley Model United Nations. All rights reserved.
 # Use of this source code is governed by a BSD License (see LICENSE).
+
 from rest_framework import serializers
 
 from huxley.api import validators
@@ -30,13 +31,13 @@ class SchoolSerializer(serializers.ModelSerializer):
                   'times_attended',
                   'international', )
         extra_kwargs = {
-            'secondary_name': {'required': False},
-            'secondary_gender': {'required': False},
-            'secondary_email': {'required': False},
-            'secondary_phone': {'required': False},
-            'secondary_type': {'required': False},
-            'program_type': {'required': False},
-            'times_attended': {'required': False}
+            # 'secondary_name': {'required': False},
+            # 'secondary_gender': {'required': False},
+            # 'secondary_email': {'required': False},
+            # 'secondary_phone': {'required': False},
+            # 'secondary_type': {'required': False},
+            # 'program_type': {'required': False},
+            # 'times_attended': {'required': False}
         }
 
     def validate(self, data):

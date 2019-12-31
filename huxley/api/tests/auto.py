@@ -1,7 +1,7 @@
 # Copyright (c) 2011-2016 Berkeley Model United Nations. All rights reserved.
 # Use of this source code is governed by a BSD License (see LICENSE).
 
-from django.core.urlresolvers import resolve, reverse
+from django.urls import resolve, reverse
 from django.db import models
 from django.forms.models import model_to_dict
 from rest_framework import serializers

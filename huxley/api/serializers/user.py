@@ -46,7 +46,7 @@ class UserSerializer(ModelSerializer):
                       + '\n\nSchool: \n' \
                       + '\n'.join(['{0}: {1}'.format(field, school_data[field]) for field in school_data]),
                       'tech@bmun.org',
-                      ['info@bmun.org'], fail_silently=False)
+                      ['info@bmun.org', 'admin@bmun.org'], fail_silently=False)
 
         return super(UserSerializer, self).update(instance, validated_data)
 
