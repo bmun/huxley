@@ -103,6 +103,13 @@ Did anything break? If so, it sounds like you need to fix your code! Make sure t
 
 There are plenty more tests we could add if we wanted to; unit tests always involve design decisions on what to include and what not to. It comes down to one question: what's going to be the most confusing later on if it breaks? It does not come down to: "writing unit tests is so boring please make it stop if you have any pity on my soul!" (I guarantee you will say almost these exact words at least a few hundred times in your coding career). Unit tests may be boring to do, but they are the backbone of any major codebase and you will be glad you wrote them.
  
-Step 8
+#### Step 8
  
 Commit your code changes and push them to your local repository now, if you haven’t been doing that already. (You should do this as often as possible. Feel shame now. Deep shame. You forgot to commit, didn’t you? And what is life without commitment?).
+
+Remember, you can commit using the following series of commands:
+
+```
+git add [files and/or directories you want to commit, separated by spaces]
+git commit -m "commit message here"
+```

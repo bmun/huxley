@@ -450,7 +450,7 @@ class SecretariatMemberTest(TestCase):
         self.assertFalse(self.member.is_head_chair)
 
     def test_str(self):
-        self.assertTrue(self.member.__unicode__() == 'Tibbalidoo')
+        self.assertTrue(self.member.__str__() == 'Tibbalidoo')
 
 class RoomTest(TestCase):
     def setUp(self):
@@ -466,7 +466,7 @@ class RoomTest(TestCase):
         """
         FIll in what the str method you defiend earlier should return.
         """
-        self.assertEquals(self.room.__unicode__(), '''Your code here''')
+        self.assertEquals(self.room.__str__(), '''Your code here''')
 
     def test_unique(self):
         """
