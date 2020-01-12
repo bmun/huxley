@@ -111,17 +111,17 @@ class Committee(models.Model):
     '''
     Select the appropriate definition for a room, and delete the others.
     '''
-    room_day_one = models.OneToOneField(Room, blank=True, null=True)
-    room_day_two = models.OneToOneField(Room, blank=True, null=True)
-    room_dat_three = models.OneToOneField(Room, blank=True, null=True)
+    room_day_one = models.OneToOneField(Room, blank=True, null=True, on_delete=models.SET_NULL)
+    room_day_two = models.OneToOneField(Room, blank=True, null=True, on_delete=models.SET_NULL)
+    room_day_three = models.OneToOneField(Room, blank=True, null=True, on_delete=models.SET_NULL)
 
-    room_day_one = models.ManyToManyField(Room, blank=True, null=True)
-    room_day_two = models.ManyToManyField(Room, blank=True, null=True)
-    room_dat_three = models.ManyToManyField(Room, blank=True, null=True)
+    room_day_one = models.ManyToManyField(Room, blank=True, null=True, on_delete=models.SET_NULL)
+    room_day_two = models.ManyToManyField(Room, blank=True, null=True, on_delete=models.SET_NULL)
+    room_day_three = models.ManyToManyField(Room, blank=True, null=True, on_delete=models.SET_NULL)
 
-    room_day_one = models.ForeignKey(Room, blank=True, null=True)
-    room_day_two = models.ForeignKey(Room, blank=True, null=True)
-    room_dat_three = models.ForeignKey(Room, blank=True, null=True)
+    room_day_one = models.ForeignKey(Room, blank=True, null=True, on_delete=models.SET_NULL)
+    room_day_two = models.ForeignKey(Room, blank=True, null=True, on_delete=models.SET_NULL)
+    room_day_three = models.ForeignKey(Room, blank=True, null=True, on_delete=models.SET_NULL)
 
     @classmethod
     def create_rubric(cls, **kwargs):
@@ -716,7 +716,7 @@ class Room(models.Model):
     
     '''
     This returns a unique identifier for the model.
-    Have it return a string in the format BuildingName_RoomNumber.
+    Have it return a string in the format BuildingName RoomNumber.
     '''
     def __str__(self):
         return '''Your code here'''
@@ -730,4 +730,4 @@ class Room(models.Model):
 class RoomComment(models.Model):
     """Your code here"""
     pass # Delete this
-    
+

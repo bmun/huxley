@@ -9,6 +9,10 @@ Make sure to checkout the learn branch from Huxley in git; this is where you wil
 
 If at any point you feel confused, try a Google search. Knowing how to use Google when you're stuck is a useful skill to develop and usually the answer you're looking for can be found in documentation or on StackOverflow. Don't be afraid to reach out to any older Tech members as well! We are here to help you and know what it feels like to be just getting started. No matter how silly the question seems in your head, chances are one of us got stuck on it too at some point.
 
+
+## Stop! Before doing anything else:
+Go to `docs/setup.md` and run all the setup stuff there! Once everything works, run the following command in your Huxley directory to get the tutorial locally: `git checkout learn`. 
+
  
 ## Part 1: The Backend
  
@@ -25,6 +29,8 @@ Now find the ```Room``` class at the bottom of the file. You’ll notice that th
 Now you will give the committee model a room. Scroll up to where the ```Committee``` class is defined. Here comes your first design decision! Don’t worry, it will only hurt a little bit.
  
 When you’re relating two models you generally have three choice: one-to-one, many-to-many, and many-to-one. These are what they sound like. A one-to-one relation means that the two models only relate to each other. For example, if a committee has a rubric, then it has only that one rubric and no other committee has that rubric. Many-to-many means both models can be related to as many of each other as you want. For example, a committee can relate to many different countries and a country can relate to many different committees. And many-to-one (which is a ```ForeignKey``` field in Django) means that many different instances of a model can share the same relation to another model, but each of them can only relate to a single instance. For example, delegates have committees. Each delegate can only be in one committee, but a committee can have many delegates. These relations are all from the point of view of the class on which you define the relation (where you type the code).
+
+Also, you have to decide what happens when the thing you're referencing is deleted! Every model relation takes in an `on_delete` argument; this can be set to either `models.CASCADE` or `models.SET_NULL`. In this case, we're using `models.SET_NULL` -- if a room disappears (maybe another club booked it!), we want to set our current room value to null instead of deleting our committee as a whole! However, there may be cases when we want to cascade that deletion downwards. For example, if a committee disappears, we want its assignment to disappear as well!
  
 Now decide the best definition for a committee’s relation to a room.
  
@@ -113,3 +119,35 @@ Remember, you can commit using the following series of commands:
 git add [files and/or directories you want to commit, separated by spaces]
 git commit -m "commit message here"
 ```
+
+## Part 2: The Frontend
+
+Now that we've added things to the backend, we can start thinking about what people will see! Where might we use this information in Huxley? Remember, Huxley has three kinds of users: the delegate, the advisor, and the chair.
+
+We can use our newly-created rooms to provide information to two of these groups!
+* Advisors want to know what rooms their delegates are in so they can see how they're doing.
+* Chairs want to know what seat numbers each of their delegates is in so they can easily keep track of what's happening in the room.
+
+Before we get started, try "registering" for BMUN (on your local server -- http://127.0.0.1:8000/ -- not the actual Huxley website) and creating a fake advisor account with some delegates! Also create a fake chair account by going to the admin panel (/admin) and going to "Users". 
+
+#### Step 1
+
+The very first thing we're going to do is add an extra column to the advisors' assignments table that has delegates' rooms. This is located in `AdvisorAssignmentsView.js`. To change what the advisor sees, we will be modifying the `render` function! We'll be adding three extra columns. Try filling in the `TODO` comments with code that will add delegates' seats on days 1, 2, and 3 to the advisors' tables!
+
+When working with tables, note that the `tr` tag in HTML denotes a row, and the `td` tag denotes a cell within that row. 
+
+Hint: You can get a `committee` object for a given assignment by using `committees[assignment.committee]`; this will have the same fields as the corresponding committee object in `models.py`.
+
+#### Step 2
+
+Now, add three columns to `ChairDelegateEmailView.js` so that chairs are able to see where their delegates are seated on each day! In this case, you should be using seat numbers for each delegate.
+
+There are no TODO comments here -- try seeing how the code is similar to the previous file you edited!
+
+Hint: How does the rest of the code get a specific assignment? What about a delegate? What field holds a delegate's seat number, and what object is it located in?
+
+#### Step 3
+
+Congratulations, you've finished your tutorial! Of course, you have to make sure to test your code -- to do so, run the test server using `python manage.py runserver` and then log into the fake advisor account / fake chair accounts you created! Head's up: you might need to create some fake delegates as well so you can assign them seat numbers.
+
+Commit and push your code, and let your Tech know that you're done!

@@ -148,6 +148,9 @@ var AdvisorAssignmentsView = React.createClass({
                 <th>Delegation Size</th>
                 <th>{finalized ? 'Delegate' : 'Delete Assignments'}</th>
                 <th>{finalized ? 'Delegate' : ''}</th>
+                <th>{/* TODO */}</th> 
+                <th>{/* TODO */}</th> 
+                <th>{/* TODO */}</th>
               </tr>
             </thead>
             <tbody>
@@ -199,6 +202,15 @@ var AdvisorAssignmentsView = React.createClass({
               ) : (
                 <div />
               )}
+            </td>
+            <td>
+              {/* TODO */}
+            </td>
+            <td>
+              {/* TODO */}
+            </td>
+            <td>
+              {/* TODO */}
             </td>
           </tr>
         );
