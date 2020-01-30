@@ -56,21 +56,21 @@ class PositionPaperFile(generics.RetrieveAPIView):
 
     def retrieve(self, request, *args, **kwargs):
         paper_id = request.GET.get('id', -1)
-        if paper_id < 0:
+        if int(paper_id) < 0:
             return Response(
                 "Must supply paper id.", status=status.HTTP_400_BAD_REQUEST)
         try:
             instance = PositionPaper.objects.get(id=paper_id)
             file_path = instance.file.name
             if file_path:
-                with open(file_path, 'r') as f:
+                with open(file_path, 'rb') as f:
                     data = f.read()
                 response = HttpResponse(data, status=status.HTTP_201_CREATED)
                 response['Content-Type'] = 'text/plain'
                 file_name = file_path.split('/')[-1]
                 response[
                     'Content-Disposition'] = 'attachement; file_name="{0}"'.format(
-                        file_name.encode("utf8"))
+                        file_name)
             else:
                 response = HttpResponse({}, status=status.HTTP_200_OK)
             return response
@@ -85,14 +85,14 @@ class PositionPaperGradedFile(generics.RetrieveAPIView):
 
     def retrieve(self, request, *args, **kwargs):
         paper_id = request.GET.get('id', -1)
-        if paper_id < 0:
+        if int(paper_id) < 0:
             return Response(
                 "Must supply paper id.", status=status.HTTP_400_BAD_REQUEST)
         try:
             instance = PositionPaper.objects.get(id=paper_id)
             file_path = instance.graded_file.name
             if file_path:
-                with open(file_path, 'r') as f:
+                with open(file_path, 'rb') as f:
                     data = f.read()
                 response = HttpResponse(data, status=status.HTTP_201_CREATED)
                 response['Content-Type'] = 'text/plain'
