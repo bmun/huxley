@@ -22,6 +22,7 @@ var ServerAPI = require('lib/ServerAPI');
 var StatusLabel = require('components/core/StatusLabel');
 var Table = require('components/core/Table');
 var TextTemplate = require('components/core/TextTemplate');
+var inflateGrades = require('utils/inflateGrades');
 var _checkDate = require('utils/_checkDate');
 var _handleChange = require('utils/_handleChange');
 
@@ -386,18 +387,19 @@ var AdvisorPaperView = React.createClass({
     var totalScore = -1;
     if (topic_2) {
       totalScore =
-        paper.score_t2_1 +
-        paper.score_t2_2 +
-        paper.score_t2_3 +
-        paper.score_t2_4 +
-        paper.score_t2_5;
+        inflateGrades(paper.score_t2_1) +
+        inflateGrades(paper.score_t2_2) +
+        inflateGrades(paper.score_t2_3) +
+        inflateGrades(paper.score_t2_4) +
+        inflateGrades(paper.score_t2_5);
     } else {
       totalScore =
-        paper.score_1 +
-        paper.score_2 +
-        paper.score_3 +
-        paper.score_4 +
-        paper.score_5;
+        inflateGrades(paper.score_1) +
+        inflateGrades(paper.score_2) +
+        inflateGrades(paper.score_3) +
+        inflateGrades(paper.score_4) +
+        inflateGrades(paper.score_5);
+
     }
     return totalScore;
   },
