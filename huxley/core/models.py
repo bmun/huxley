@@ -612,6 +612,46 @@ class CountryPreference(models.Model):
         unique_together = ('country', 'registration')
 
 
+class SecretariatMember(models.Model):
+    # A lot more could be added here but this is a good start
+
+    name = models.CharField(blank=False, default='', max_length=100)
+    committee = models.ForeignKey(Committee, on_delete=models.CASCADE) # TODO(shayna) decide whether this is correct behavior
+    is_head_chair = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.name
+
+class Room(models.Model):
+    building_name = models.CharField(max_length=64)
+
+    '''
+    These should be fields for positive integer values.
+    ONLY provide a default value for number_of_seats. 
+    Google Django model field types for available options.
+    '''
+    room_number = '''Your code here'''
+    number_of_seats = '''Your code here'''
+
+    
+    '''
+    This returns a unique identifier for the model.
+    Have it return a string in the format BuildingName RoomNumber.
+    '''
+    def __str__(self):
+        return '''Your code here'''
+
+    class Meta:
+        db_table = u'room'
+        ordering = ['building_name', 'room_number']
+        unique_together = ('building_name', 'room_number')
+
+
+class RoomComment(models.Model):
+    """Your code here"""
+    pass # Delete this
+
+
 class Delegate(models.Model):
     school = models.ForeignKey(School, on_delete=models.CASCADE, related_name='delegates', null=True)
     assignment = models.ForeignKey(
@@ -691,43 +731,3 @@ class Delegate(models.Model):
         This is defined as a tuple with the relevant field names, i.e. ('name', 'school')
         '''
         unique_together = '''Your code here'''
-
-class SecretariatMember(models.Model):
-    # A lot more could be added here but this is a good start
-
-    name = models.CharField(blank=False, default='', max_length=100)
-    committee = models.ForeignKey(Committee, on_delete=models.CASCADE) # TODO(shayna) decide whether this is correct behavior
-    is_head_chair = models.BooleanField(default=False)
-
-    def __str__(self):
-        return self.name
-
-class Room(models.Model):
-    building_name = models.CharField(max_length=64)
-
-    '''
-    These should be fields for positive integer values.
-    ONLY provide a default value for number_of_seats. 
-    Google Django model field types for available options.
-    '''
-    room_number = '''Your code here'''
-    number_of_seats = '''Your code here'''
-
-    
-    '''
-    This returns a unique identifier for the model.
-    Have it return a string in the format BuildingName RoomNumber.
-    '''
-    def __str__(self):
-        return '''Your code here'''
-
-    class Meta:
-        db_table = u'room'
-        ordering = ['building_name', 'room_number']
-        unique_together = ('building_name', 'room_number')
-
-
-class RoomComment(models.Model):
-    """Your code here"""
-    pass # Delete this
-
