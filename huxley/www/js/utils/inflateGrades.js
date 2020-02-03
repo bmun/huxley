@@ -12,7 +12,7 @@ function inflateGrade(grade, total) {
     if (grade === 0) {
         return 0;
     }
-    return (grade / 2) + (total / 2);
+    return Math.min(grade + (total / 2.6), total);
   }
   
   module.exports = inflateGrade;
