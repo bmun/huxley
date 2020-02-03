@@ -122,23 +122,23 @@ var DelegatePaperView = React.createClass({
     }
   },
 
-  calculateTotalScore: function(paper, topic_2 = false) {
+  calculateTotalScore: function(paper, rubric, topic_2 = false) {
     var totalScore = -1;
     if (topic_2) {
       totalScore =
-      inflateGrades(paper.score_t2_1) +
-      inflateGrades(paper.score_t2_2) +
-      inflateGrades(paper.score_t2_3) +
-      inflateGrades(paper.score_t2_4) +
-      inflateGrades(paper.score_t2_5);
+        inflateGrades(paper.score_t2_1, rubric.grade_t2_value_1) +
+        inflateGrades(paper.score_t2_2, rubric.grade_t2_value_2) +
+        inflateGrades(paper.score_t2_3, rubric.grade_t2_value_3) +
+        inflateGrades(paper.score_t2_4, rubric.grade_t2_value_4) +
+        inflateGrades(paper.score_t2_5, rubric.grade_t2_value_5);
     } else {
       totalScore =
-        inflateGrades(paper.score_1) +
-        inflateGrades(paper.score_2) +
-        inflateGrades(paper.score_3) +
-        inflateGrades(paper.score_4) +
-        inflateGrades(paper.score_5);
-      }
+        inflateGrades(paper.score_1, rubric.grade_value_1) +
+        inflateGrades(paper.score_2, rubric.grade_value_2) +
+        inflateGrades(paper.score_3, rubric.grade_value_3) +
+        inflateGrades(paper.score_4, rubric.grade_value_4) +
+        inflateGrades(paper.score_5, rubric.grade_value_5);
+    }
     return totalScore;
   },
 

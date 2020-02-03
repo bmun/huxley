@@ -6,13 +6,13 @@
  'use strict';
 
  /**
- * Inflates grades by 5/10. 
+ * Inflates grades by 50%. 
  */
-function inflateGrade(grade) {
+function inflateGrade(grade, total) {
     if (grade === 0) {
         return 0;
     }
-    return (grade / 2) + 5;
+    return (grade / 2) + (total / 2);
   }
   
   module.exports = inflateGrade;
