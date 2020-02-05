@@ -51,11 +51,11 @@ class DelegateAdmin(admin.ModelAdmin):
                         assignment.country.name,
                         assignment.registration.school.name, ] = assignment
 
-        school = School.objects.get(name=str(row[3]))
         for row in reader:
             if row:
                 if row[1] == 'Committee':
                     continue
+                school = School.objects.get(name=str(row[3]))
                 assignment = assignments[str(
                     row[1]), str(row[2]), row[3], ]
                 email = str(row[4])
