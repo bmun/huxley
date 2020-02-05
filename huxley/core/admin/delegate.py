@@ -8,7 +8,7 @@ from django.contrib import admin, messages
 from django.urls import reverse
 from django.http import HttpResponse, HttpResponseRedirect
 
-from huxley.core.models import Assignment, Delegate
+from huxley.core.models import Assignment, Delegate, School
 
 
 class DelegateAdmin(admin.ModelAdmin):
@@ -38,7 +38,11 @@ class DelegateAdmin(admin.ModelAdmin):
         return roster
 
     def load(self, request):
-        '''Loads new Assignments.'''
+        '''
+        Loads new Assignments and/or updates assignments.
+        CSV format: Name, Committee, Country, School, Email"
+        '''
+        existing_delegates = Delegate.objects.all()
         delegates = request.FILES
         reader = csv.reader(delegates['csv'].read().decode('utf-8').splitlines())
         assignments = {}
@@ -46,13 +50,20 @@ class DelegateAdmin(admin.ModelAdmin):
             assignments[assignment.committee.name,
                         assignment.country.name,
                         assignment.registration.school.name, ] = assignment
+
         for row in reader:
             if row:
                 if row[1] == 'Committee':
                     continue
+                school = School.objects.get(name=str(row[3]))
                 assignment = assignments[str(
                     row[1]), str(row[2]), row[3], ]
-                d = Delegate.objects.create(name=row[0], assignment=assignment)
+                email = str(row[4])
+                delg = list(Delegate.objects.filter(name=str(row[0]), email=email))
+                if len(delg) == 1:
+                    Delegate.objects.filter(name=str(row[0]), email=email).update(assignment=assignment)
+                else:
+                    Delegate.objects.create(name=row[0], school=school, email=email, assignment=assignment)
 
         return HttpResponseRedirect(reverse('admin:core_delegate_changelist'))
 
