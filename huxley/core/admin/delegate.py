@@ -38,7 +38,11 @@ class DelegateAdmin(admin.ModelAdmin):
         return roster
 
     def load(self, request):
-        '''Loads new Assignments.'''
+        '''
+        Loads new Assignments and/or updates assignments.
+        CSV format: "
+        '''
+        existing_delegates = Delegate.objects.all()
         delegates = request.FILES
         reader = csv.reader(delegates['csv'].read().decode('utf-8').splitlines())
         assignments = {}
@@ -52,7 +56,14 @@ class DelegateAdmin(admin.ModelAdmin):
                     continue
                 assignment = assignments[str(
                     row[1]), str(row[2]), row[3], ]
-                d = Delegate.objects.create(name=row[0], assignment=assignment)
+                email = ""
+                if len(row) > 3:
+                    email = str(row[4])
+                delg = list(Delegate.objects.filter(name=str(row[0]), email=email))
+                if len(delg) == 1:
+                    Delegate.objects.filter(name=str(row[0]), email=email).update(assignment=assignment)
+                else:
+                    Delegate.objects.create(name=row[0], assignment=assignment)
 
         return HttpResponseRedirect(reverse('admin:core_delegate_changelist'))
 
