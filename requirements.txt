@@ -1,7 +1,7 @@
 astroid==2.2.5
 certifi==2019.6.16
 chardet==3.0.4
-Django==2.2.6
+Django==2.2.10
 django-easy-pdf==0.1.1
 djangorestframework==3.10.3
 html5lib==1.0.1
