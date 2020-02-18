@@ -10,7 +10,7 @@ function _checkDate() {
   var date = new Date();
   console.log(date.getMonth());
   return (
-    (date.getDate() >= 15 && date.getMonth() == 1) ||
+    (date.getDate() >= 23 && date.getMonth() == 1) ||
     (date.getDate() <= 31 && date.getMonth() == 2)
   );
 }
