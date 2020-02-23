@@ -4,13 +4,13 @@
  */
 
 /**
- * Checks if the current date falls within the range of February 9th to March 31st
+ * Checks if the current date falls within the range of February 28th to March 31st
  */
 function _checkDate() {
   var date = new Date();
   console.log(date.getMonth());
   return (
-    (date.getDate() >= 23 && date.getMonth() == 1) ||
+    (date.getDate() >= 28 && date.getMonth() == 1) ||
     (date.getDate() <= 31 && date.getMonth() == 2)
   );
 }
