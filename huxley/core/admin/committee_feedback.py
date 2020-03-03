@@ -54,6 +54,8 @@ class CommitteeFeedbackAdmin(admin.ModelAdmin):
             'Chair 10 Name',
             'Chair 10 Rating',
             'Chair 10 Comment',
+            'Perception of Berkeley',
+            'Money Spent'
         ])
 
         for feedback in CommitteeFeedback.objects.all().order_by(
@@ -91,7 +93,9 @@ class CommitteeFeedbackAdmin(admin.ModelAdmin):
                 feedback.chair_9_comment,
                 feedback.chair_10_name,
                 feedback.chair_10_rating,
-                feedback.chair_10_comment
+                feedback.chair_10_comment,
+                feedback.berkeley_perception,
+                feedback.money_spent
             ])
 
         return feedbacks

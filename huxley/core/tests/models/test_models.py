@@ -92,7 +92,8 @@ class CommitteeFeedbackTest(TestCase):
             rating=3,
             chair_1_name='Jake Tibbetts',
             chair_1_comment='He got mad at me for watching Pacific Rim the whole time',
-            chair_1_rating=1, )
+            chair_1_rating=1,
+            berkeley_perception=3)
 
     def test_default_fields(self):
         self.assertFalse(self.committee == None)

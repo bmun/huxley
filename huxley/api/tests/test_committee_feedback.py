@@ -53,7 +53,9 @@ class CommitteeFeedbackDetailCreateTestCase(tests.CreateAPITestCase):
             'chair_9_rating': 0,
             'chair_10_name': "",
             'chair_10_comment': "",
-            'chair_10_rating': 0
+            'chair_10_rating': 0,
+            'berkeley_perception': 0,
+            'money_spent': 0
         }
 
     def test_anonymous_user(self):
@@ -114,6 +116,8 @@ class CommitteeFeedbackDetailCreateTestCase(tests.CreateAPITestCase):
             'chair_10_name': self.params['chair_10_name'],
             'chair_10_comment': self.params['chair_10_comment'],
             'chair_10_rating': self.params['chair_10_rating'],
+            'berkeley_perception': self.params['berkeley_perception'],
+            'money_spent': self.params['money_spent']
         })
         self.user.delegate.refresh_from_db()
         self.assertTrue(self.user.delegate.committee_feedback_submitted)
@@ -181,6 +185,8 @@ class CommitteeFeedbackDetailCreateTestCase(tests.CreateAPITestCase):
             'chair_10_name': self.params['chair_10_name'],
             'chair_10_comment': self.params['chair_10_comment'],
             'chair_10_rating': self.params['chair_10_rating'],
+            'berkeley_perception': self.params['berkeley_perception'],
+            'money_spent': self.params['money_spent']
         })
 
     def test_invalid_data(self):
@@ -229,6 +235,8 @@ class CommitteeFeedbackDetailCreateTestCase(tests.CreateAPITestCase):
             'chair_10_name': "",
             'chair_10_comment': "",
             'chair_10_rating': 0,
+            'berkeley_perception': 2,
+            'money_spent': 110.23
         }
         response = self.get_response(params=self.bad_params)
         bad_fields = ['rating', 'chair_1_rating', 'chair_3_rating']
@@ -274,7 +282,9 @@ class CommitteeFeedbackDetailGetTestCase(tests.RetrieveAPITestCase):
             'chair_9_rating': 0,
             'chair_10_name': "",
             'chair_10_comment': "",
-            'chair_10_rating': 0
+            'chair_10_rating': 0,
+            'berkeley_perception': 2,
+            'money_spent': 110.23
         }
 
         self.params2 = {
@@ -309,7 +319,9 @@ class CommitteeFeedbackDetailGetTestCase(tests.RetrieveAPITestCase):
             'chair_9_rating': 0,
             'chair_10_name': "",
             'chair_10_comment': "",
-            'chair_10_rating': 0
+            'chair_10_rating': 0,
+            'berkeley_perception': 2,
+            'money_spent': 110.23
         }
 
         self.feedback_1 = models.new_committee_feedback(
@@ -345,7 +357,9 @@ class CommitteeFeedbackDetailGetTestCase(tests.RetrieveAPITestCase):
             chair_9_rating=self.params1['chair_9_rating'],
             chair_10_name=self.params1['chair_10_name'],
             chair_10_comment=self.params1['chair_10_comment'],
-            chair_10_rating=self.params1['chair_10_rating'])
+            chair_10_rating=self.params1['chair_10_rating'],
+            berkeley_perception=self.params1['berkeley_perception'],
+            money_spent=self.params1['money_spent'])
 
         self.feedback_2 = models.new_committee_feedback(
             committee=self.committee_2,
@@ -380,7 +394,9 @@ class CommitteeFeedbackDetailGetTestCase(tests.RetrieveAPITestCase):
             chair_9_rating=self.params2['chair_9_rating'],
             chair_10_name=self.params2['chair_10_name'],
             chair_10_comment=self.params2['chair_10_comment'],
-            chair_10_rating=self.params2['chair_10_rating'])
+            chair_10_rating=self.params2['chair_10_rating'],
+            berkeley_perception=self.params2['berkeley_perception'],
+            money_spent=self.params2['money_spent'])
         self.assignment_1 = models.new_assignment(committee=self.committee_1)
 
     def test_anonymous_user(self):
@@ -443,7 +459,9 @@ class CommitteeFeedbackDetailGetTestCase(tests.RetrieveAPITestCase):
             'chair_9_rating': self.feedback_1.chair_9_rating,
             'chair_10_name': self.feedback_1.chair_10_name,
             'chair_10_comment': self.feedback_1.chair_10_comment,
-            'chair_10_rating': self.feedback_1.chair_10_rating
+            'chair_10_rating': self.feedback_1.chair_10_rating,
+            'berkeley_perception': self.feedback_1.berkeley_perception,
+            'money_spent': self.feedback_1.money_spent
         })
         response_2 = self.get_response(self.feedback_2.id)
         self.assertPermissionDenied(response_2)
@@ -497,7 +515,9 @@ class CommitteeFeedbackDetailGetTestCase(tests.RetrieveAPITestCase):
             'chair_9_rating': self.feedback_1.chair_9_rating,
             'chair_10_name': self.feedback_1.chair_10_name,
             'chair_10_comment': self.feedback_1.chair_10_comment,
-            'chair_10_rating': self.feedback_1.chair_10_rating
+            'chair_10_rating': self.feedback_1.chair_10_rating,
+            'berkeley_perception': self.feedback_1.berkeley_perception,
+            'money_spent': self.feedback_1.money_spent
         })
         response_2 = self.get_response(self.feedback_2.id)
         response_2.data.pop('id')
@@ -534,7 +554,9 @@ class CommitteeFeedbackDetailGetTestCase(tests.RetrieveAPITestCase):
             'chair_9_rating': self.feedback_2.chair_9_rating,
             'chair_10_name': self.feedback_2.chair_10_name,
             'chair_10_comment': self.feedback_2.chair_10_comment,
-            'chair_10_rating': self.feedback_2.chair_10_rating
+            'chair_10_rating': self.feedback_2.chair_10_rating,
+            'berkeley_perception': self.feedback_1.berkeley_perception,
+            'money_spent': self.feedback_1.money_spent
         })
 
 
@@ -577,7 +599,9 @@ class CommitteeFeedbackListGetTestCase(tests.ListAPITestCase):
             'chair_9_rating': 0,
             'chair_10_name': "",
             'chair_10_comment': "",
-            'chair_10_rating': 0
+            'chair_10_rating': 0,
+            'berkeley_perception': 1,
+            'money_spent': 0
         }
 
         self.params2 = {
@@ -612,7 +636,9 @@ class CommitteeFeedbackListGetTestCase(tests.ListAPITestCase):
             'chair_9_rating': 0,
             'chair_10_name': "",
             'chair_10_comment': "",
-            'chair_10_rating': 0
+            'chair_10_rating': 0,
+            'berkeley_perception': 1,
+            'money_spent': 0
         }
 
         self.params3 = {
@@ -647,7 +673,9 @@ class CommitteeFeedbackListGetTestCase(tests.ListAPITestCase):
             'chair_9_rating': 0,
             'chair_10_name': "",
             'chair_10_comment': "",
-            'chair_10_rating': 0
+            'chair_10_rating': 0,
+            'berkeley_perception': 1,
+            'money_spent': 0
         }
 
         self.feedback_1 = models.new_committee_feedback(
@@ -683,7 +711,9 @@ class CommitteeFeedbackListGetTestCase(tests.ListAPITestCase):
             chair_9_rating=self.params1['chair_9_rating'],
             chair_10_name=self.params1['chair_10_name'],
             chair_10_comment=self.params1['chair_10_comment'],
-            chair_10_rating=self.params1['chair_10_rating'])
+            chair_10_rating=self.params1['chair_10_rating'],
+            berkeley_perception=self.params1['berkeley_perception'],
+            money_spent=self.params1['money_spent'])
         self.feedback_2 = models.new_committee_feedback(
             committee=self.committee_1,
             comment=self.params2['comment'],
@@ -717,7 +747,9 @@ class CommitteeFeedbackListGetTestCase(tests.ListAPITestCase):
             chair_9_rating=self.params2['chair_9_rating'],
             chair_10_name=self.params2['chair_10_name'],
             chair_10_comment=self.params2['chair_10_comment'],
-            chair_10_rating=self.params2['chair_10_rating'])
+            chair_10_rating=self.params2['chair_10_rating'],
+            berkeley_perception=self.params2['berkeley_perception'],
+            money_spent=self.params2['money_spent'])
         self.feedback_3 = models.new_committee_feedback(
             committee=self.committee_2,
             comment=self.params3['comment'],
@@ -751,7 +783,9 @@ class CommitteeFeedbackListGetTestCase(tests.ListAPITestCase):
             chair_9_rating=self.params3['chair_9_rating'],
             chair_10_name=self.params3['chair_10_name'],
             chair_10_comment=self.params3['chair_10_comment'],
-            chair_10_rating=self.params3['chair_10_rating'])
+            chair_10_rating=self.params3['chair_10_rating'],
+            berkeley_perception=self.params3['berkeley_perception'],
+            money_spent=self.params3['money_spent'])
         self.assignment_1 = models.new_assignment(committee=self.committee_1)
 
     def test_anonymous_user(self):
@@ -816,7 +850,9 @@ class CommitteeFeedbackListGetTestCase(tests.ListAPITestCase):
                 'chair_9_rating': self.feedback_1.chair_9_rating,
                 'chair_10_name': self.feedback_1.chair_10_name,
                 'chair_10_comment': self.feedback_1.chair_10_comment,
-                'chair_10_rating': self.feedback_1.chair_10_rating
+                'chair_10_rating': self.feedback_1.chair_10_rating,
+                'berkeley_perception': self.feedback_1.berkeley_perception,
+                'money_spent': self.feedback_1.money_spent
             }, {
                 'id': self.feedback_2.id,
                 'committee': self.committee_1.id,
@@ -851,7 +887,9 @@ class CommitteeFeedbackListGetTestCase(tests.ListAPITestCase):
                 'chair_9_rating': self.feedback_2.chair_9_rating,
                 'chair_10_name': self.feedback_2.chair_10_name,
                 'chair_10_comment': self.feedback_2.chair_10_comment,
-                'chair_10_rating': self.feedback_2.chair_10_rating
+                'chair_10_rating': self.feedback_2.chair_10_rating,
+                'berkeley_perception': self.feedback_2.berkeley_perception,
+                'money_spent': self.feedback_2.money_spent
             }
         ])
         response_2 = self.get_response(
@@ -910,7 +948,9 @@ class CommitteeFeedbackListGetTestCase(tests.ListAPITestCase):
                 'chair_9_rating': self.feedback_1.chair_9_rating,
                 'chair_10_name': self.feedback_1.chair_10_name,
                 'chair_10_comment': self.feedback_1.chair_10_comment,
-                'chair_10_rating': self.feedback_1.chair_10_rating
+                'chair_10_rating': self.feedback_1.chair_10_rating,
+                'berkeley_perception': self.feedback_1.berkeley_perception,
+                'money_spent': self.feedback_1.money_spent
             }, {
                 'id': self.feedback_2.id,
                 'committee': self.committee_1.id,
@@ -945,7 +985,9 @@ class CommitteeFeedbackListGetTestCase(tests.ListAPITestCase):
                 'chair_9_rating': self.feedback_2.chair_9_rating,
                 'chair_10_name': self.feedback_2.chair_10_name,
                 'chair_10_comment': self.feedback_2.chair_10_comment,
-                'chair_10_rating': self.feedback_2.chair_10_rating
+                'chair_10_rating': self.feedback_2.chair_10_rating,
+                'berkeley_perception': self.feedback_2.berkeley_perception,
+                'money_spent': self.feedback_2.money_spent
             }
         ])
         response_2 = self.get_response(
@@ -984,5 +1026,7 @@ class CommitteeFeedbackListGetTestCase(tests.ListAPITestCase):
             'chair_9_rating': self.feedback_3.chair_9_rating,
             'chair_10_name': self.feedback_3.chair_10_name,
             'chair_10_comment': self.feedback_3.chair_10_comment,
-            'chair_10_rating': self.feedback_3.chair_10_rating
+            'chair_10_rating': self.feedback_3.chair_10_rating,
+            'berkeley_perception': self.feedback_3.berkeley_perception,
+            'money_spent': self.feedback_3.money_spent
         }])
