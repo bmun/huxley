@@ -9,7 +9,7 @@ from django.contrib import admin, messages
 from django.http import HttpResponse, HttpResponseRedirect
 from django.utils import html
 
-from huxley.core.models import Assignment, Committee, Country, School
+from huxley.core.models import Assignment, Committee, Country, School, PositionPaper
 
 
 class AssignmentAdmin(admin.ModelAdmin):
@@ -105,3 +105,14 @@ class AssignmentAdmin(admin.ModelAdmin):
                 name='core_assignment_load',
             ),
         ]
+
+    def delete_model(self, request, obj):
+        '''Deletes Rubric objects when individual committees are deleted'''
+        super().delete_model(request, obj)
+        PositionPaper.objects.filter(assignment = None).delete()
+
+    def delete_queryset(self, request, queryset):
+        '''Deletes Rubric objects when queryset of committees are deleted'''
+        super().delete_queryset(request, queryset)
+        PositionPaper.objects.filter(assignment = None).delete()
+        
