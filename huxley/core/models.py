@@ -134,6 +134,8 @@ class CommitteeFeedback(models.Model):
                (9, 9),
                (10, 10), )
 
+    LIKELY_CHOICES = ((0, 'Blank'), (1, 'No'), (2, 'No change/unsure'), (3, 'Yes'))
+
     committee = models.ForeignKey(Committee, on_delete=models.CASCADE)
     comment = models.TextField(blank=True, default='')
     rating = models.IntegerField(blank=True, default=0, choices=CHOICES)
@@ -180,6 +182,12 @@ class CommitteeFeedback(models.Model):
         blank=True, default=0, choices=CHOICES)
     chair_10_rating = models.IntegerField(
         blank=True, default=0, choices=CHOICES)
+
+
+    berkeley_perception = models.IntegerField(
+        blank=True, default=0, choices=LIKELY_CHOICES)
+    money_spent = models.FloatField(blank=True, default=0)
+
 
     def __str__(self):
         return str(self.committee.name) + " - Comment " + str(self.id)

@@ -16,6 +16,7 @@ const CommitteeFeedbackStore = require('stores/CommitteeFeedbackStore');
 const InnerView = require('components/InnerView');
 const ServerAPI = require('lib/ServerAPI');
 const SecretariatMemberStore = require('stores/SecretariatMemberStore');
+const NumberInput = require('components/NumberInput');
 const TextInput = require('components/core/TextInput');
 const TextTemplate = require('components/core/TextTemplate');
 const User = require('utils/User');
@@ -73,6 +74,8 @@ const DelegateCommitteeFeedbackView = React.createClass({
       chair_10_name: '',
       chair_10_comment: '',
       chair_10_rating: 0,
+      berkeley_perception: 0,
+      money_spent: 0,
       loadingPublish: false,
       feedbackSubmitted:
         delegate.committee_feedback_submitted ||
@@ -131,6 +134,7 @@ const DelegateCommitteeFeedbackView = React.createClass({
       if (this.state.feedbackSubmitted) {
         body = <h3>Thank you for submitting your feedback</h3>;
       } else {
+        const information_fields = this._buildConferenceInputs();
         var head_chair_field;
         var chair_fields = [];
         for (var i = 0; i < this.state.secretariatMembers.length; i++) {
@@ -199,6 +203,7 @@ const DelegateCommitteeFeedbackView = React.createClass({
               </label>
               {head_chair_field}
               {chair_fields}
+              {information_fields}
               <br />
               <br />
               <Button
@@ -275,6 +280,49 @@ const DelegateCommitteeFeedbackView = React.createClass({
     );
   },
 
+  _buildConferenceInputs() {
+    return (
+      <div>
+      <div>
+        <br />
+        <hr />
+        <br />
+        <label>
+          <font size={3}>
+            <b>Did attending BMUN make you more likely to consider attending UC Berkeley?</b>
+          </font>
+          <br></br>
+          <select
+            onChange={_handleChange.bind(this, 'berkeley_perception')}
+            value={this.state['berkeley_perception']}
+            default={0}>
+            <option value={0}>-</option>
+            <option value={1}>No</option>
+            <option value={2}>No change/unsure</option>
+            <option value={3}>Yes</option>
+          </select>
+        </label>
+      </div>
+      <div>
+      <br />
+      <hr />
+      <br />
+      <label>
+        <font size={3}>
+          <b>How much would you estimate you spent over the weekend on food near Berkeley’s campus?</b>
+        </font>
+        <br></br>
+        <NumberInput
+          placeholder="Number of BMUN sessions attended"
+          onChange={_handleChange.bind(this, 'money_spent')}
+          value={this.state['money_spent']}
+        />
+      </label>
+    </div>
+    </div>
+    );
+  },
+
   _handlePublishFeedback(event) {
     this.setState({loadingPublish: true});
     var committee_id = this.state.delegate.assignment.committee.id;
@@ -312,6 +360,8 @@ const DelegateCommitteeFeedbackView = React.createClass({
       chair_10_name: this.state.chair_10_name,
       chair_10_rating: this.state.chair_10_rating,
       chair_10_comment: this.state.chair_10_comment,
+      berkeley_perception: this.state.berkeley_perception,
+      money_spent: this.state.money_spent,
     }).then(this._handleAddFeedbackSuccess, this._handleAddFeedbackFail);
     event.preventDefault();
   },

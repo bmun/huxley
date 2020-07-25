@@ -32,9 +32,9 @@ class DelegateAdminTest(TestCase):
             committee=cm2, country=co2, registration=registration)
 
         f = TestFiles.new_csv([
-            ['Name', 'Committee', 'Country', 'School'],
-            ['John Doe', 'SPD', "Côte d'Ivoire", 'Test School'],
-            ['Jane Doe', 'USS', 'Barbara Boxer', 'Test School'],
+            ['Name', 'Committee', 'Country', 'School', 'Email'],
+            ['John Doe', 'SPD', "Côte d'Ivoire", 'Test School', 'test@bmun.org'],
+            ['Jane Doe', 'USS', 'Barbara Boxer', 'Test School', 'test@bmun.org'],
         ])
 
         with closing(f) as f:

@@ -135,7 +135,9 @@ def new_committee_feedback(**kwargs):
         chair_9_rating=kwargs.pop('chair_9_rating', 0),
         chair_10_name=kwargs.pop('chair_10_name', ""),
         chair_10_comment=kwargs.pop('chair_10_comment', ""),
-        chair_10_rating=kwargs.pop('chair_10_rating', 0), )
+        chair_10_rating=kwargs.pop('chair_10_rating', 0), 
+        berkeley_perception=kwargs.pop('berkeley_perception', 0),
+        money_spent=kwargs.pop('money_spent', 0))
     feedback.save()
     return feedback
 
