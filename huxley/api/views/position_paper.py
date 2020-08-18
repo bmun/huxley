@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD License (see LICENSE).
 
 from datetime import date
+from datetime import timedelta
+from datetime import datetime
 
 from django.db import transaction
 from django.http.response import HttpResponse
@@ -35,7 +37,7 @@ class PositionPaperDetail(generics.RetrieveUpdateAPIView):
         data = {'file': file}
 
         if request.user.is_delegate():
-            data['submission_date'] = date.today()
+            data['submission_date'] = (datetime.now() - timedelta(minutes=10)).date()
         elif request.user.is_chair():
             data = {'graded_file': file}
 
