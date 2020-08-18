@@ -19,6 +19,14 @@ var ConferenceContext = {
     day: React.PropTypes.string,
     year: React.PropTypes.string,
   }),
+  early_paper_deadline: React.PropTypes.shape({
+    month: React.PropTypes.string,
+    day: React.PropTypes.string,
+  }),
+  paper_deadline: React.PropTypes.shape({
+    month: React.PropTypes.string,
+    day: React.PropTypes.string,
+  }),
   external: React.PropTypes.string,
   registration_fee: React.PropTypes.number,
   delegate_fee: React.PropTypes.number,

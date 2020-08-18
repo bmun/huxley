@@ -33,6 +33,14 @@ def index(request):
             'day': conference.end_date.strftime('%d'),
             'year': conference.end_date.strftime('%Y')
         },
+        'early_paper_deadline': {
+            'month': conference.early_paper_deadline.strftime('%B'),
+            'day': conference.early_paper_deadline.strftime('%d')
+        },
+        'paper_deadline': {
+            'month': conference.paper_deadline.strftime('%B'),
+            'day': conference.paper_deadline.strftime('%d')
+        },
         'external': conference.external,
         'registration_fee': int(conference.registration_fee),
         'delegate_fee': int(conference.delegate_fee),
