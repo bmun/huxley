@@ -89,11 +89,11 @@ const DelegateProfileView = React.createClass({
             <td>
               {positionPaperCheck} <b>Turn in Position Paper</b>
               <br />
-              <TextTemplate>
+              <TextTemplate
                 earlyPaperDeadlineMonth={conference.early_paper_deadline['month']}
                 earlyPaperDeadlineDay={conference.early_paper_deadline['day']}
                 paperDeadlineMonth={conference.paper_deadline['month']}
-                paperDeadlineDay={conference.paper_deadline['day']}
+                paperDeadlineDay={conference.paper_deadline['day']} >
                 {DelegateChecklistPositionPaperText}
               </TextTemplate>
             </td>
