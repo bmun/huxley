@@ -212,7 +212,13 @@ const AdvisorProfileView = React.createClass({
             <td>
               <b>{positionPapersTurnedIn} Position Papers Turned In</b>
               <br />
-              <TextTemplate>{AdvisorChecklistPositionPapersText}</TextTemplate>
+              <TextTemplate
+                earlyPaperDeadlineMonth={conference.early_paper_deadline['month']}
+                earlyPaperDeadlineDay={conference.early_paper_deadline['day']}
+                paperDeadlineMonth={conference.paper_deadline['month']}
+                paperDeadlineDay={conference.paper_deadline['day']}>
+                {AdvisorChecklistPositionPapersText}
+              </TextTemplate>
             </td>
           </tr>
           <tr>
