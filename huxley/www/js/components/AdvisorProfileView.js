@@ -219,7 +219,10 @@ const AdvisorProfileView = React.createClass({
             <td>
               <b>{waiversTurnedIn} Waivers Turned In</b>
               <br />
-              <TextTemplate>{AdvisorChecklistWaiversText}</TextTemplate>
+              <TextTemplate
+                conferenceExternal={conference.external}>
+                {AdvisorChecklistWaiversText}
+              </TextTemplate>
             </td>
           </tr>
         </tbody>

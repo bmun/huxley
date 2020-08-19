@@ -102,7 +102,10 @@ const DelegateProfileView = React.createClass({
             <td>
               {waiverCheck} <b>Turn in Waiver Form</b>
               <br />
-              <TextTemplate>{DelegateChecklistWaiverText}</TextTemplate>
+              <TextTemplate 
+                conferenceExternal={conference.external}>
+                {DelegateChecklistWaiverText}
+              </TextTemplate>
             </td>
           </tr>
         </tbody>
