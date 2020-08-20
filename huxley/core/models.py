@@ -25,14 +25,15 @@ class Conference(models.Model):
     reg_open = models.DateField()
     early_reg_close = models.DateField()
     reg_close = models.DateField()
-    early_paper_deadline = models.DateField()
-    paper_deadline = models.DateField()
     min_attendance = models.PositiveSmallIntegerField(default=0)
     max_attendance = models.PositiveSmallIntegerField(default=0)
     open_reg = models.BooleanField(default=True)
     waitlist_reg = models.BooleanField(default=False)
     position_papers_accepted = models.BooleanField(default=False)
+    early_paper_deadline = models.DateField()
+    paper_deadline = models.DateField()
     external = models.CharField(max_length=128)
+    treasurer = models.CharField(max_length=128)
     registration_fee = models.DecimalField(
         max_digits=6, decimal_places=2, default=Decimal('50.00'))
     delegate_fee = models.DecimalField(
