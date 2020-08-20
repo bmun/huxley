@@ -27,6 +27,15 @@ var ConferenceContext = {
     month: React.PropTypes.string,
     day: React.PropTypes.string,
   }),
+  waiver_avail_date: React.PropTypes.shape({
+    month: React.PropTypes.string,
+    day: React.PropTypes.string,
+  }),
+  waiver_deadlines: React.PropTypes.shape({
+    month: React.PropTypes.string,
+    day: React.PropTypes.string,
+  }),
+  waiver_link: React.PropTypes.string,
   external: React.PropTypes.string,
   treasurer: React.PropTypes.string,
   registration_fee: React.PropTypes.number,

@@ -41,6 +41,15 @@ def index(request):
             'month': conference.paper_deadline.strftime('%B'),
             'day': conference.paper_deadline.strftime('%d')
         },
+        'waiver_avail_date': {
+            'month': conference.waiver_avail_date.strftime('%m'),
+            'day': conference.waiver_avail_date.strftime('%d')
+        },
+        'waiver_deadline': {
+            'month': conference.waiver_deadline.strftime('%m'),
+            'day': conference.waiver_deadline.strftime('%d')
+        },
+        'waiver_link': conference.waiver_link,
         'external': conference.external,
         'treasurer': conference.treasurer,
         'registration_fee': int(conference.registration_fee),
