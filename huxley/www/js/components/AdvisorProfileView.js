@@ -190,7 +190,8 @@ const AdvisorProfileView = React.createClass({
               <b>{teamFeePaid} Team Fee Paid</b>
               <br />
               <TextTemplate
-                registrationFee={conference.registration_fee}>
+                registrationFee={conference.registration_fee}
+                conferenceTreasurer={conference.treasurer}>
                 {AdvisorChecklistTeamFeeText}
               </TextTemplate>
             </td>
@@ -200,7 +201,8 @@ const AdvisorProfileView = React.createClass({
               <b>{allFeesPaid} All Fees Paid</b>
               <br />
               <TextTemplate
-                delegateFee={conference.delegate_fee}>
+                delegateFee={conference.delegate_fee}
+                conferenceTreasurer={conference.treasurer}>
                 {AdvisorChecklistDelegateFeeText}
               </TextTemplate>
             </td>

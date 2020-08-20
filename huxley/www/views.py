@@ -42,6 +42,7 @@ def index(request):
             'day': conference.paper_deadline.strftime('%d')
         },
         'external': conference.external,
+        'treasurer': conference.treasurer,
         'registration_fee': int(conference.registration_fee),
         'delegate_fee': int(conference.delegate_fee),
         'registration_open': conference.open_reg,

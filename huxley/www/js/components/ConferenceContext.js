@@ -28,6 +28,7 @@ var ConferenceContext = {
     day: React.PropTypes.string,
   }),
   external: React.PropTypes.string,
+  treasurer: React.PropTypes.string,
   registration_fee: React.PropTypes.number,
   delegate_fee: React.PropTypes.number,
   registration_open: React.PropTypes.bool,
