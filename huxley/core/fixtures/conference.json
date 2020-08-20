@@ -18,7 +18,10 @@
       "external": "Ashwin Srikanth",
       "treasurer": "Vishnu Arul",
       "registration_fee": 55.0,
-      "delegate_fee": 55.0
+      "delegate_fee": 55.0,
+      "waiver_avail_date": "2019-09-30",
+      "waiver_deadline": "2019-09-30",
+      "waiver_link": "2019-09-30"
     }
   }
 ]

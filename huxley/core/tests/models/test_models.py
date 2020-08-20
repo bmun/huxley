@@ -25,7 +25,10 @@ class ConferenceTest(TestCase):
             early_reg_close=date(2013, 1, 10),
             reg_close=date(2013, 2, 28),
             early_paper_deadline=date(2013, 2, 28),
-            paper_deadline=date(2013, 2, 28))
+            paper_deadline=date(2013, 2, 28),
+            waiver_avail_date=date(2013, 2, 28),
+            waiver_deadline=date(2013, 2, 28))
+
 
     def test_default_fields(self):
         """ Tests that fields with default values are correctly set. """
