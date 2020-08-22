@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD License (see LICENSE).
 import json
 
+from datetime import timedelta
+
 from django.urls import reverse
 from django.shortcuts import redirect, render
 from django.template import RequestContext
@@ -10,6 +12,15 @@ from huxley.api.serializers import UserSerializer
 from huxley.core.constants import ContactGender, ContactType, ProgramTypes
 from huxley.core.models import Conference
 
+def makeFullDate(date):
+    return {
+        'month': date.strftime('%B'),
+        'day': date.strftime('%d'),
+        'year': date.strftime('%Y')
+        }
+
+def makeShortDate(date):
+    return date.strftime('%m') + "/" + date.strftime('%d')
 
 def index(request):
     if request.user.is_superuser:
@@ -23,32 +34,23 @@ def index(request):
 
     conference_dict = {
         'session': conference.session,
-        'start_date': {
-            'month': conference.start_date.strftime('%B'),
-            'day': conference.start_date.strftime('%d'),
-            'year': conference.start_date.strftime('%Y')
-        },
-        'end_date': {
-            'month': conference.end_date.strftime('%B'),
-            'day': conference.end_date.strftime('%d'),
-            'year': conference.end_date.strftime('%Y')
-        },
-        'early_paper_deadline': {
-            'month': conference.early_paper_deadline.strftime('%B'),
-            'day': conference.early_paper_deadline.strftime('%d')
-        },
-        'paper_deadline': {
-            'month': conference.paper_deadline.strftime('%B'),
-            'day': conference.paper_deadline.strftime('%d')
-        },
-        'waiver_avail_date': {
-            'month': conference.waiver_avail_date.strftime('%m'),
-            'day': conference.waiver_avail_date.strftime('%d')
-        },
-        'waiver_deadline': {
-            'month': conference.waiver_deadline.strftime('%m'),
-            'day': conference.waiver_deadline.strftime('%d')
-        },
+        'start_date': makeFullDate(conference.start_date),
+        'end_date': makeFullDate(conference.end_date),
+        'reg_open': makeShortDate(conference.reg_open),
+        'round_one_end': makeShortDate(conference.round_one_end),
+        'round_two_start': makeShortDate(conference.round_one_end + timedelta(days=1)),
+        'round_two_end': makeShortDate(conference.round_two_end),
+        'round_three_start': makeShortDate(conference.round_two_end + timedelta(days=1)),
+        'round_three_end': makeShortDate(conference.round_three_end),
+        'round_four_start': makeShortDate(conference.round_three_end + timedelta(days=1)),
+        'reg_close': makeShortDate(conference.reg_close),
+        'round_three_fees_due': makeShortDate(conference.round_three_fees_due),
+        'round_four_fees_due': makeShortDate(conference.round_four_fees_due),
+        'part_refund_deadline': makeShortDate(conference.part_refund_deadline),
+        'early_paper_deadline': makeFullDate(conference.early_paper_deadline),
+        'paper_deadline':  makeFullDate(conference.paper_deadline),
+        'waiver_avail_date': makeShortDate(conference.waiver_avail_date),
+        'waiver_deadline': makeShortDate(conference.waiver_deadline),
         'waiver_link': conference.waiver_link,
         'external': conference.external,
         'treasurer': conference.treasurer,
