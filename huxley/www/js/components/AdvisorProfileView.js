@@ -24,6 +24,7 @@ const TextInput = require('components/core/TextInput');
 const TextTemplate = require('components/core/TextTemplate');
 const User = require('utils/User');
 const _handleChange = require('utils/_handleChange');
+const _advisorTemplate = require('utils/_advisorTemplate');
 
 const AdvisorProfileViewText = require('text/AdvisorProfileViewText.md');
 const AdvisorChecklistAssignmentsFinalizedText = require('text/checklists/AdvisorChecklistAssignmentsFinalizedText.md');
@@ -189,11 +190,19 @@ const AdvisorProfileView = React.createClass({
             <td>
               <b>{teamFeePaid} Team Fee Paid</b>
               <br />
-              <TextTemplate
-                registrationFee={conference.registration_fee}
-                conferenceTreasurer={conference.treasurer}>
-                {AdvisorChecklistTeamFeeText}
-              </TextTemplate>
+                <TextTemplate
+                  registrationFee={conference.registration_fee}
+                  conferenceTreasurer={conference.treasurer}
+                  regOpen={conference.reg_open}
+                  roundOneEnd={conference.round_one_end}
+                  roundTwoStart={conference.round_two_start}
+                  roundTwoEnd={conference.round_two_end}
+                  roundThreeStart={conference.round_three_start}
+                  roundThreeEnd={conference.round_three_end}
+                  roundFourStart={conference.round_four_start}
+                  regClose={conference.reg_close}>
+                  {AdvisorChecklistTeamFeeText}
+                </TextTemplate>
             </td>
           </tr>
           <tr>
