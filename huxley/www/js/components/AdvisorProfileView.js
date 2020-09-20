@@ -189,14 +189,42 @@ const AdvisorProfileView = React.createClass({
             <td>
               <b>{teamFeePaid} Team Fee Paid</b>
               <br />
-              <TextTemplate>{AdvisorChecklistTeamFeeText}</TextTemplate>
+                <TextTemplate
+                  registrationFee={conference.registration_fee}
+                  conferenceTreasurer={conference.treasurer}
+                  regOpen={conference.reg_open}
+                  roundOneEnd={conference.round_one_end}
+                  roundTwoStart={conference.round_two_start}
+                  roundTwoEnd={conference.round_two_end}
+                  roundThreeStart={conference.round_three_start}
+                  roundThreeEnd={conference.round_three_end}
+                  roundFourStart={conference.round_four_start}
+                  regClose={conference.reg_close}>
+                  {AdvisorChecklistTeamFeeText}
+                </TextTemplate>
             </td>
           </tr>
           <tr>
             <td>
               <b>{allFeesPaid} All Fees Paid</b>
               <br />
-              <TextTemplate>{AdvisorChecklistDelegateFeeText}</TextTemplate>
+              <TextTemplate
+                delegateFee={conference.delegate_fee}
+                conferenceTreasurer={conference.treasurer}
+                regOpen={conference.reg_open}
+                roundOneEnd={conference.round_one_end}
+                roundOneFeesDue={conference.round_one_fees_due}
+                roundTwoStart={conference.round_two_start}
+                roundTwoEnd={conference.round_two_end}
+                roundTwoFeesDue={conference.round_two_fees_due}
+                roundThreeStart={conference.round_three_start}
+                roundThreeEnd={conference.round_three_end}
+                roundFourStart={conference.round_four_start}
+                roundThreeFeesDue={conference.round_three_fees_due}
+                regClose={conference.reg_close}
+                roundFourFeesDue={conference.round_four_fees_due}>
+                {AdvisorChecklistDelegateFeeText}
+              </TextTemplate>
             </td>
           </tr>
           <tr>
@@ -212,14 +240,26 @@ const AdvisorProfileView = React.createClass({
             <td>
               <b>{positionPapersTurnedIn} Position Papers Turned In</b>
               <br />
-              <TextTemplate>{AdvisorChecklistPositionPapersText}</TextTemplate>
+              <TextTemplate
+                earlyPaperDeadlineMonth={conference.early_paper_deadline['month']}
+                earlyPaperDeadlineDay={conference.early_paper_deadline['day']}
+                paperDeadlineMonth={conference.paper_deadline['month']}
+                paperDeadlineDay={conference.paper_deadline['day']}>
+                {AdvisorChecklistPositionPapersText}
+              </TextTemplate>
             </td>
           </tr>
           <tr>
             <td>
               <b>{waiversTurnedIn} Waivers Turned In</b>
               <br />
-              <TextTemplate>{AdvisorChecklistWaiversText}</TextTemplate>
+              <TextTemplate
+                conferenceExternal={conference.external}
+                waiverAvail={conference.waiver_avail_date}
+                waiverDeadline={conference.waiver_deadline}
+                waiverLink={conference.waiver_link}>
+                {AdvisorChecklistWaiversText}
+              </TextTemplate>
             </td>
           </tr>
         </tbody>

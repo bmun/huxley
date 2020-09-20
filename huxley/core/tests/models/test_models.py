@@ -22,8 +22,19 @@ class ConferenceTest(TestCase):
             start_date=date(2013, 3, 1),
             end_date=date(2013, 3, 3),
             reg_open=date(2012, 9, 1),
-            early_reg_close=date(2013, 1, 10),
-            reg_close=date(2013, 2, 28))
+            round_one_end=date(2013, 1, 10),
+            round_one_fees_due=date(2013, 2, 10),
+            round_two_end=date(2013, 1, 10),
+            round_two_fees_due=date(2013, 3, 10),
+            round_three_end=date(2013, 1, 10),
+            round_three_fees_due=date(2013, 1, 10),
+            reg_close=date(2013, 1, 10),
+            round_four_fees_due=date(2013, 1, 10),
+            part_refund_deadline=date(2013, 1, 10),
+            early_paper_deadline=date(2013, 2, 28),
+            paper_deadline=date(2013, 2, 28),
+            waiver_avail_date=date(2013, 2, 28),
+            waiver_deadline=date(2013, 2, 28))
 
     def test_default_fields(self):
         """ Tests that fields with default values are correctly set. """

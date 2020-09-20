@@ -89,14 +89,26 @@ const DelegateProfileView = React.createClass({
             <td>
               {positionPaperCheck} <b>Turn in Position Paper</b>
               <br />
-              <TextTemplate>{DelegateChecklistPositionPaperText}</TextTemplate>
+              <TextTemplate
+                earlyPaperDeadlineMonth={conference.early_paper_deadline['month']}
+                earlyPaperDeadlineDay={conference.early_paper_deadline['day']}
+                paperDeadlineMonth={conference.paper_deadline['month']}
+                paperDeadlineDay={conference.paper_deadline['day']} >
+                {DelegateChecklistPositionPaperText}
+              </TextTemplate>
             </td>
           </tr>
           <tr>
             <td>
               {waiverCheck} <b>Turn in Waiver Form</b>
               <br />
-              <TextTemplate>{DelegateChecklistWaiverText}</TextTemplate>
+              <TextTemplate 
+                conferenceExternal={conference.external}
+                waiverAvail={conference.waiver_avail_date}
+                waiverDeadline={conference.waiver_deadline}
+                waiverLink={conference.waiver_link}>
+                {DelegateChecklistWaiverText}
+              </TextTemplate>
             </td>
           </tr>
         </tbody>
