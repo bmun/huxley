@@ -253,10 +253,8 @@ const AdvisorProfileView = React.createClass({
               <br />
               <TextTemplate
                 conferenceExternal={conference.external}
-                waiverAvailMonth={conference.waiver_avail_date['month']}
-                waiverAvailDay={conference.waiver_avail_date['day']}
-                waiverDeadlineMonth={conference.waiver_deadline['month']}
-                waiverDeadlineDay={conference.waiver_deadline['day']}
+                waiverAvail={conference.waiver_avail_date}
+                waiverDeadline={conference.waiver_deadline}
                 waiverLink={conference.waiver_link}>
                 {AdvisorChecklistWaiversText}
               </TextTemplate>
