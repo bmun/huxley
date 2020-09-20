@@ -13,14 +13,23 @@ from huxley.core.constants import ContactGender, ContactType, ProgramTypes
 from huxley.core.models import Conference
 
 def makeFullDate(date):
+    day = date.strftime('%d')
+    if day[0] == "0":
+        day = day[1:]
     return {
         'month': date.strftime('%B'),
-        'day': date.strftime('%d'),
+        'day': day,
         'year': date.strftime('%Y')
         }
 
 def makeShortDate(date):
-    return date.strftime('%m') + "/" + date.strftime('%d')
+    day = date.strftime('%d')
+    month = date.strftime('%m')
+    if day[0] == "0":
+        day = day[1:]
+    if month[0] == "0":
+        month = month[1:]
+    return month + "/" + day
 
 def index(request):
     if request.user.is_superuser:

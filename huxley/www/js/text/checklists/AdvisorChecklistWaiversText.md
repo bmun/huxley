@@ -1,1 +1,1 @@
-We are currently in the process of revising our waiver process and deadlines. More information will be posted in the coming weeks.
+We are currently in the process of revising our waivers and related deadlines. More information will be posted in the coming weeks.
