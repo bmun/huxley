@@ -23,7 +23,7 @@ const Table = require('components/core/Table');
 const TextInput = require('components/core/TextInput');
 const TextTemplate = require('components/core/TextTemplate');
 const User = require('utils/User');
-const _handleChange = require('utils/_handleChange')
+const _handleChange = require('utils/_handleChange');
 
 const AdvisorProfileViewText = require('text/AdvisorProfileViewText.md');
 const AdvisorChecklistAssignmentsFinalizedText = require('text/checklists/AdvisorChecklistAssignmentsFinalizedText.md');
