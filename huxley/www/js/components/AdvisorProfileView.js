@@ -213,13 +213,15 @@ const AdvisorProfileView = React.createClass({
                 conferenceTreasurer={conference.treasurer}
                 regOpen={conference.reg_open}
                 roundOneEnd={conference.round_one_end}
+                roundOneFeesDue={conference.round_one_fees_due}
                 roundTwoStart={conference.round_two_start}
                 roundTwoEnd={conference.round_two_end}
+                roundTwoFeesDue={conference.round_two_fees_due}
                 roundThreeStart={conference.round_three_start}
                 roundThreeEnd={conference.round_three_end}
                 roundFourStart={conference.round_four_start}
-                regClose={conference.reg_close}
                 roundThreeFeesDue={conference.round_three_fees_due}
+                regClose={conference.reg_close}
                 roundFourFeesDue={conference.round_four_fees_due}>
                 {AdvisorChecklistDelegateFeeText}
               </TextTemplate>
