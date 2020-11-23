@@ -3,19 +3,32 @@
     "pk": 1,
     "model": "core.conference",
     "fields": {
-      "session": 68,
+      "session": 69,
       "start_date": "2020-03-06",
       "end_date": "2020-03-08",
       "reg_open": "2019-09-01",
-      "early_reg_close": "2019-09-30",
+      "round_one_end": "2019-09-30",
+      "round_one_fees_due": "2019-10-30",
+      "round_two_end": "2019-09-30",
+      "round_two_fees_due": "2019-11-30",
+      "round_three_end": "2019-09-30",
+      "round_three_fees_due": "2019-09-30",
       "reg_close": "2020-01-20",
+      "round_four_fees_due": "2019-09-30",
+      "part_refund_deadline": "2019-09-30",
+      "early_paper_deadline": "2019-09-30",
+      "paper_deadline": "2020-01-20",
       "min_attendance": 0,
       "max_attendance": 2230,
       "open_reg": true,
       "waitlist_reg": false,
       "external": "Ashwin Srikanth",
+      "treasurer": "Vishnu Arul",
       "registration_fee": 55.0,
-      "delegate_fee": 55.0
+      "delegate_fee": 55.0,
+      "waiver_avail_date": "2019-09-30",
+      "waiver_deadline": "2019-09-30",
+      "waiver_link": "2019-09-30"
     }
   }
 ]

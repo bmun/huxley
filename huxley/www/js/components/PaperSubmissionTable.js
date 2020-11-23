@@ -7,6 +7,7 @@
 
 var Button = require('components/core/Button');
 var NumberInput = require('components/NumberInput');
+var inflateGrades = require('utils/inflateGrades');
 
 var cx = require('classnames');
 var React = require('react');
@@ -106,7 +107,7 @@ var PaperSubmissionTable = React.createClass({
     var paper = this.props.paper;
     var rubric = this.props.rubric;
 
-    var score1 = this.calculateTotalScore(paper);
+    var score1 = this.calculateTotalScore(paper, rubric);
     var maxScore1 = this.calculateMaxScore(rubric);
     var category1 = this.calculateCategory(score1, maxScore1);
 
@@ -137,7 +138,7 @@ var PaperSubmissionTable = React.createClass({
   _renderTopicTwo: function(rubric, paper) {
     var paper = this.props.paper;
     var rubric = this.props.rubric;
-    var score2 = this.calculateTotalScore(paper, true);
+    var score2 = this.calculateTotalScore(paper, rubric, true);
     var maxScore2 = this.calculateMaxScore(rubric, true);
     var category2 = this.calculateCategory(score2, maxScore2);
 
@@ -153,22 +154,22 @@ var PaperSubmissionTable = React.createClass({
     );
   },
 
-  calculateTotalScore: function(paper, topic_2 = false) {
+  calculateTotalScore: function(paper, rubric, topic_2 = false) {
     var totalScore = -1;
     if (topic_2) {
       totalScore =
-        paper.score_t2_1 +
-        paper.score_t2_2 +
-        paper.score_t2_3 +
-        paper.score_t2_4 +
-        paper.score_t2_5;
+        inflateGrades(paper.score_t2_1, rubric.grade_t2_value_1) +
+        inflateGrades(paper.score_t2_2, rubric.grade_t2_value_2) +
+        inflateGrades(paper.score_t2_3, rubric.grade_t2_value_3) +
+        inflateGrades(paper.score_t2_4, rubric.grade_t2_value_4) +
+        inflateGrades(paper.score_t2_5, rubric.grade_t2_value_5);
     } else {
       totalScore =
-        paper.score_1 +
-        paper.score_2 +
-        paper.score_3 +
-        paper.score_4 +
-        paper.score_5;
+        inflateGrades(paper.score_1, rubric.grade_value_1) +
+        inflateGrades(paper.score_2, rubric.grade_value_2) +
+        inflateGrades(paper.score_3, rubric.grade_value_3) +
+        inflateGrades(paper.score_4, rubric.grade_value_4) +
+        inflateGrades(paper.score_5, rubric.grade_value_5);
     }
     return totalScore;
   },

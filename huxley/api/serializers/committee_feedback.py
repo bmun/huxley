@@ -43,4 +43,6 @@ class CommitteeFeedbackSerializer(serializers.ModelSerializer):
                   'chair_7_rating',
                   'chair_8_rating',
                   'chair_9_rating',
-                  'chair_10_rating', )
+                  'chair_10_rating', 
+                  'berkeley_perception',
+                  'money_spent')

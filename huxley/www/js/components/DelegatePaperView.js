@@ -17,6 +17,8 @@ var PositionPaperActions = require('actions/PositionPaperActions');
 var PositionPaperStore = require('stores/PositionPaperStore');
 var TextTemplate = require('components/core/TextTemplate');
 var User = require('utils/User');
+var inflateGrades = require('utils/inflateGrades');
+
 
 var ServerAPI = require('lib/ServerAPI');
 
@@ -120,22 +122,22 @@ var DelegatePaperView = React.createClass({
     }
   },
 
-  calculateTotalScore: function(paper, topic_2 = false) {
+  calculateTotalScore: function(paper, rubric, topic_2 = false) {
     var totalScore = -1;
     if (topic_2) {
       totalScore =
-        paper.score_t2_1 +
-        paper.score_t2_2 +
-        paper.score_t2_3 +
-        paper.score_t2_4 +
-        paper.score_t2_5;
+        inflateGrades(paper.score_t2_1, rubric.grade_t2_value_1) +
+        inflateGrades(paper.score_t2_2, rubric.grade_t2_value_2) +
+        inflateGrades(paper.score_t2_3, rubric.grade_t2_value_3) +
+        inflateGrades(paper.score_t2_4, rubric.grade_t2_value_4) +
+        inflateGrades(paper.score_t2_5, rubric.grade_t2_value_5);
     } else {
       totalScore =
-        paper.score_1 +
-        paper.score_2 +
-        paper.score_3 +
-        paper.score_4 +
-        paper.score_5;
+        inflateGrades(paper.score_1, rubric.grade_value_1) +
+        inflateGrades(paper.score_2, rubric.grade_value_2) +
+        inflateGrades(paper.score_3, rubric.grade_value_3) +
+        inflateGrades(paper.score_4, rubric.grade_value_4) +
+        inflateGrades(paper.score_5, rubric.grade_value_5);
     }
     return totalScore;
   },
