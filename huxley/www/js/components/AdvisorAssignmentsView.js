@@ -148,9 +148,9 @@ var AdvisorAssignmentsView = React.createClass({
                 <th>Delegation Size</th>
                 <th>{finalized ? 'Delegate' : 'Delete Assignments'}</th>
                 <th>{finalized ? 'Delegate' : ''}</th>
-                <th>{/* TODO */}</th> 
-                <th>{/* TODO */}</th> 
-                <th>{/* TODO */}</th>
+                <th>{/* TODO: Update table column names */}</th> 
+                <th>{/* TODO: Update table column names */}</th> 
+                <th>{/* TODO: Update table column names */}</th>
               </tr>
             </thead>
             <tbody>
@@ -204,13 +204,13 @@ var AdvisorAssignmentsView = React.createClass({
               )}
             </td>
             <td>
-              {/* TODO */}
+              {/* TODO: Fill in what the value of the column here should be. */}
             </td>
             <td>
-              {/* TODO */}
+              {/* TODO: Fill in what the value of the column here should be. */}
             </td>
             <td>
-              {/* TODO */}
+              {/* TODO: Fill in what the value of the column here should be. */}
             </td>
           </tr>
         );

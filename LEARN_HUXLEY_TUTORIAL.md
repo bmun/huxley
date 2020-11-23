@@ -83,7 +83,7 @@ There’s a file you have to edit to get your new code to pop up here. Open ```h
  
 #### Step 6
  
-Play around with the admin panel. Add committees and delegates and whatnot, see how you can give them rooms and assign seats.
+Play around with the admin panel. Sign up as an advisor, then add committees and delegates and see how you can give them rooms and assign seats. 
  
 #### Step 7
  
@@ -132,7 +132,13 @@ Before we get started, try "registering" for BMUN (on your local server -- http:
 
 #### Step 1
 
-The very first thing we're going to do is add an extra column to the advisors' assignments table that has delegates' rooms. This is located in `AdvisorAssignmentsView.js`. To change what the advisor sees, we will be modifying the `render` function! We'll be adding three extra columns. Try filling in the `TODO` comments with code that will add delegates' seats on days 1, 2, and 3 to the advisors' tables!
+The very first thing we're going to do is add an extra column to the advisors' assignments table containing delegates' rooms. This is located in `AdvisorAssignmentsView.js`. To change what the advisor sees, we will be modifying the `render` function! We'll be adding three extra columns. Try filling in the `TODO` comments with code that will add delegates' seats on days 1, 2, and 3 to the advisors' tables!
+
+You will want three columns to your table: one for each column.
+
+There are a few things you will need to do here:
+- Update the table column names
+- Update each column values to pull data from the backend
 
 When working with tables, note that the `tr` tag in HTML denotes a row, and the `td` tag denotes a cell within that row. 
 
@@ -142,7 +148,7 @@ Hint: You can get a `committee` object for a given assignment by using `committe
 
 Now, add three columns to `ChairDelegateEmailView.js` so that chairs are able to see where their delegates are seated on each day! In this case, you should be using seat numbers for each delegate.
 
-There are no TODO comments here -- try seeing how the code is similar to the previous file you edited!
+There are no `TODO` comments here -- try seeing how the code is similar to the previous file you edited!
 
 Hint: How does the rest of the code get a specific assignment? What about a delegate? What field holds a delegate's seat number, and what object is it located in?
 
