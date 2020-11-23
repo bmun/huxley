@@ -122,19 +122,19 @@ class Committee(models.Model):
     rubric = models.OneToOneField(Rubric, on_delete=models.SET_NULL, blank=True, null=True)
 
     '''
-    Select the appropriate definition for a room, and delete the others.
+    TODO: Select the appropriate definition for a room, and delete the others.
     '''
-    room_day_one = models.OneToOneField(Room, blank=True, null=True, on_delete=models.SET_NULL)
-    room_day_two = models.OneToOneField(Room, blank=True, null=True, on_delete=models.SET_NULL)
-    room_day_three = models.OneToOneField(Room, blank=True, null=True, on_delete=models.SET_NULL)
+    room_day_one = models.OneToOneField('Room', blank=True, null=True, related_name='room_day_one', on_delete=models.SET_NULL)
+    room_day_two = models.OneToOneField('Room', blank=True, null=True, related_name='room_day_two', on_delete=models.SET_NULL)
+    room_day_three = models.OneToOneField('Room', blank=True, null=True, related_name='room_day_three', on_delete=models.SET_NULL)
 
-    room_day_one = models.ManyToManyField(Room, blank=True, null=True, on_delete=models.SET_NULL)
-    room_day_two = models.ManyToManyField(Room, blank=True, null=True, on_delete=models.SET_NULL)
-    room_day_three = models.ManyToManyField(Room, blank=True, null=True, on_delete=models.SET_NULL)
+    room_day_one = models.ManyToManyField('Room', blank=True, null=True, related_name='room_day_one', on_delete=models.SET_NULL)
+    room_day_two = models.ManyToManyField('Room', blank=True, null=True, related_name='room_day_two', on_delete=models.SET_NULL)
+    room_day_three = models.ManyToManyField('Room', blank=True, null=True, related_name='room_day_three', on_delete=models.SET_NULL)
 
-    room_day_one = models.ForeignKey(Room, blank=True, null=True, on_delete=models.SET_NULL)
-    room_day_two = models.ForeignKey(Room, blank=True, null=True, on_delete=models.SET_NULL)
-    room_day_three = models.ForeignKey(Room, blank=True, null=True, on_delete=models.SET_NULL)
+    room_day_one = models.ForeignKey('Room', blank=True, null=True, related_name='room_day_one', on_delete=models.SET_NULL)
+    room_day_two = models.ForeignKey('Room', blank=True, null=True, related_name='room_day_two', on_delete=models.SET_NULL)
+    room_day_three = models.ForeignKey('Room', blank=True, null=True, related_name='room_day_three', on_delete=models.SET_NULL)
 
     @classmethod
     def create_rubric(cls, **kwargs):
@@ -651,8 +651,8 @@ class Room(models.Model):
     ONLY provide a default value for number_of_seats. 
     Google Django model field types for available options.
     '''
-    room_number = '''Your code here'''
-    number_of_seats = '''Your code here'''
+    room_number = '''TODO: YOUR CODE HERE'''
+    number_of_seats = '''TODO: YOUR CODE HERE'''
 
     
     '''
@@ -660,7 +660,7 @@ class Room(models.Model):
     Have it return a string in the format BuildingName RoomNumber.
     '''
     def __str__(self):
-        return '''Your code here'''
+        return '''TODO: YOUR CODE HERE'''
 
     class Meta:
         db_table = u'room'
@@ -669,7 +669,7 @@ class Room(models.Model):
 
 
 class RoomComment(models.Model):
-    """Your code here"""
+    """TODO: YOUR CODE HERE"""
     pass # Delete this
 
 
@@ -697,7 +697,7 @@ class Delegate(models.Model):
     waiver_submitted = models.BooleanField(default=False)
 
     '''
-    Choose the approrpiate model defintion and delete the remaing lines.
+    TODO: Choose the approrpiate model defintion and delete the remaing lines.
     The default value should represent an unassigned seat.
     There may be more than one valid option.
     '''
@@ -740,7 +740,7 @@ class Delegate(models.Model):
     You want to enforce uniqueness only when the delegate has an assigned seat.
     '''
     def validate_unique(self, exclude=None):
-        if self.seat_number == """Your default value""":
+        if self.seat_number == """TODO: Your default value""":
             exclude = ["seat_number"]
         super(Delegate, self).validate_unique(exclude=exclude)
 
@@ -748,7 +748,7 @@ class Delegate(models.Model):
         db_table = u'delegate'
         ordering = ['school']
         '''
-        Have it be that no two delegates can have the same commitee and seat number.
+        Have it be that no two delegates can have the same assignment and seat number.
         This is defined as a tuple with the relevant field names, i.e. ('name', 'school')
         '''
-        unique_together = '''Your code here'''
+        unique_together = '''TODO: YOUR CODE HERE'''

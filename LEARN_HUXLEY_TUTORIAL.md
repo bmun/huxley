@@ -71,7 +71,7 @@ A ```RoomComment``` must have:
 * A Comment that is a TextField
 * An integer rating that goes from one (the raccoon’s DeCal disrespects your political opinions on the subject) to ten (why I’d hardly believe they keep raccoons here when students aren’t around!)
  
-You will also have to add the Unicode method and the Metaclass; refer to other classes for examples on how to do this.
+You will also have to add the ```__str__``` method and the Metaclass; refer to other classes for examples on how to do this.
  
 #### Step 5
  
@@ -80,6 +80,14 @@ Now that all this code exists, how can we start using it? We’re still far away
 Log in to the admin panel (http://127.0.0.1:8000/admin/) and poke around. Hey, this looks like all the folders and code you were just looking at! You’ll see a lot of models here, but where are yours? Why aren’t they here? Are you telling me you just had me log in and you knew they wouldn’t even be here? What kind of sick freak are you?
  
 There’s a file you have to edit to get your new code to pop up here. Open ```huxley/models/admin/__init__.py``` and fill in the code. Now go back to your web browser and refresh the page. See? There’s your stuff! That’s something you made.
+
+One more thing you'll need to do before you finish and before you can start creating rooms: migrate!
+
+In order to create database tables for your new models and modify ones for the models you modified, you need to run two commands: ```python3 manage.py makemigrations``` and ```python3 manage.py migrate```.
+
+The former will create a list of changes to make to your database in the form of SQL queries, and the latter will update your database.
+
+Now, you should be able to create new rooms!
  
 #### Step 6
  
@@ -93,7 +101,7 @@ Every directory in Huxley has an associated test folder that corresponds to the 
  
 A unit test should verify the smallest possible behavior of your code, hence the name “unit”. The idea is that the unit tests will provide detailed verification of your code, so if something breaks later on you can trace it back to the source.
  
-We’ll start with ```RoomTest```. Go to the bottom of the file and you’ll see the skeleton mostly filled in. Follow the instructions there to finish the rest of it. Hint: for the Unicode method, your answer will look something like ```self.room.field_name + “_” + self.room.field_name```.
+We’ll start with ```RoomTest```. Go to the bottom of the file and you’ll see the skeleton mostly filled in. Follow the instructions there to finish the rest of it. Hint: for the ```__str__``` method, your answer will look something like ```self.room.field_name + “_” + self.room.field_name```.
  
 Now find ```DelegateTest``` and fill in ```test_unique```.
  
@@ -131,8 +139,19 @@ We can use our newly-created rooms to provide information to two of these groups
 Before we get started, try "registering" for BMUN (on your local server -- http://127.0.0.1:8000/ -- not the actual Huxley website) and creating a fake advisor account with some delegates! Also create a fake chair account by going to the admin panel (/admin) and going to "Users". 
 
 #### Step 1
+In order to have data available on the frontend for the second part of this tutorial, you'll first need to create ways for the data to be passed to the frontend! This is done through the Huxley API, which is defined in `huxley/api`. In order to pass our new data data to our frontend, we'll need to create a serializer for each model we've created and modify the serializers for our Committee and Delegate models.
 
-The very first thing we're going to do is add an extra column to the advisors' assignments table containing delegates' rooms. This is located in `AdvisorAssignmentsView.js`. To change what the advisor sees, we will be modifying the `render` function! We'll be adding three extra columns. Try filling in the `TODO` comments with code that will add delegates' seats on days 1, 2, and 3 to the advisors' tables!
+1. To start, we can make a simple change to the Delegate model -- the only field we added there was `seat_number`. Add `'seat_number'` to the `fields` attribute of the `Meta` class of the `DelegateSerializer` class in `api/serializers/delegate.py` (that's a lot of "of"s!).
+
+2. Next, we'll need to change the `CommitteeSerializer` class in `api/serializers/committee.py`. We want to add our `room_day_one`, `room_day_two`, and `room_day_three` attributes the same way we did for the delegate serializer. However, you might notice that these aren't just attributes -- they also refer to other models! By default, the data passed through these will be their ids. In order to pass all of the room data up instead of just their ids, we'll need to pass in a `RoomSerializer` for each `room_day_xxx` field. Mimic at what has been done for `Rubric` in the `CommitteeSerializer` class for each day's room.
+
+3. Let's create our `RoomSerializer`! In `room.py`, update the `RoomSerializer` class to contain a `Meta` class with `fields` that are the attributes you want to pass to the frontend. For reference, you may want to look at `rubric.py`.
+
+**Note: at this point in time, you would ordinarily also need to modify the `test_committee.py` and `test_delegate.py` files, but for time, we'll skip that for now!**
+
+#### Step 2
+
+The very first thing we're going to do in JavaScript is add an extra column to the advisors' assignments table containing delegates' rooms. This is located in `AdvisorAssignmentsView.js`. To change what the advisor sees, we will be modifying the `render` function! We'll be adding three extra columns. Try filling in the `TODO` comments with code that will add delegates' seats on days 1, 2, and 3 to the advisors' tables!
 
 You will want three columns to your table: one for each column.
 
@@ -144,7 +163,9 @@ When working with tables, note that the `tr` tag in HTML denotes a row, and the 
 
 Hint: You can get a `committee` object for a given assignment by using `committees[assignment.committee]`; this will have the same fields as the corresponding committee object in `models.py`.
 
-#### Step 2
+Once you have this code, you can see if your code works by running `npm run build` in a new terminal tab, opening up Huxley, and logging in as an advisor! You may want to run your browser in incognito to make sure any changes load and haven't been cached.
+
+#### Step 3
 
 Now, add three columns to `ChairDelegateEmailView.js` so that chairs are able to see where their delegates are seated on each day! In this case, you should be using seat numbers for each delegate.
 
@@ -152,7 +173,9 @@ There are no `TODO` comments here -- try seeing how the code is similar to the p
 
 Hint: How does the rest of the code get a specific assignment? What about a delegate? What field holds a delegate's seat number, and what object is it located in?
 
-#### Step 3
+Once you have this code, you can see if your code works by running `npm run build` in a new terminal tab, opening up Huxley, and logging in as an chair! You may want to run your browser in incognito to make sure any changes load and haven't been cached.
+
+#### Step 4
 
 Congratulations, you've finished your tutorial! Of course, you have to make sure to test your code -- to do so, run the test server using `python manage.py runserver` and then log into the fake advisor account / fake chair accounts you created! Head's up: you might need to create some fake delegates as well so you can assign them seat numbers.
 

@@ -9,6 +9,7 @@ from huxley.core.models import Committee
 
 class CommitteeSerializer(serializers.ModelSerializer):
     rubric = RubricSerializer(read_only=True)
+    # TODO: YOUR CODE HERE
 
     class Meta:
         model = Committee
@@ -17,4 +18,4 @@ class CommitteeSerializer(serializers.ModelSerializer):
                   'full_name',
                   'delegation_size',
                   'rubric',
-                  'special', )
+                  'special', ) # TODO: YOUR CODE HERE

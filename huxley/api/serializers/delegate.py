@@ -32,7 +32,7 @@ class DelegateSerializer(serializers.ModelSerializer):
                   'session_three',
                   'session_four',
                   'committee_feedback_submitted',
-                  'waiver_submitted', )
+                  'waiver_submitted', ) # TODO: YOUR CODE HERE
 
     def update(self, instance, validated_data):
         if ('assignment' in validated_data and
