@@ -565,6 +565,11 @@ class Assignment(models.Model):
                 Assignment.objects.filter(id__in=deletions).delete()
                 Assignment.objects.bulk_create(additions)
 
+        else:
+            #If the update failed in some way we would like to delete the position paper
+            # objects that were created in the process.
+            PositionPaper.objects.filter(assignment=None).delete()
+
         return failed_assignments
 
     @classmethod
