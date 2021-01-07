@@ -52,11 +52,13 @@ class DelegateSerializer(serializers.ModelSerializer):
                 email=instance.email,
                 last_login=datetime.now())
 
-            send_mail('A new account has been created for {0}!'.format(instance.name),
+            send_mail('BMUN Account Created For {0}'.format(instance.name),
                       'Username: {0}\n'.format(username) \
                       + 'Password: {0}\n'.format(password) \
-                      + 'Please save this information! You will need it for ' \
-                      + 'important information and actions. You can access ' \
+                      + 'Welcome to Berkeley Model United Nations! \n' \
+                      + 'Please save these details to login to your BMUN Huxley account. ' \
+                      + 'You will need it to complete important actions ' \
+                      + 'before, during, and after BMUN. You can access ' \
                       + 'this account at huxley.bmun.org.',
                       'no-reply@bmun.org',
                       [instance.email], fail_silently=False)

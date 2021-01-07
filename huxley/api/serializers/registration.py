@@ -60,7 +60,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
                     send_mail('{0} has finalized its assignments'.format(instance.school),
                       'New information for {0}: \n\n'.format(instance.school) \
                           + 'Assignments have been finalized!',
-                      'tech@bmun.org',
+                      'no-reply@bmun.org',
                       ['info@bmun.org', 'admin@bmun.org'], fail_silently=False)
 
         return super(RegistrationSerializer, self).update(instance, validated_data)
