@@ -331,6 +331,14 @@ class RubricDetailPermission(permissions.BasePermission):
 
         return False
 
+class NotePermission(permissions.BasePermission):
+    '''Accept requests to view Notes when user is not an advisor'''
+    def has_permission(self, request, view):
+        user = request.user
+        if not user.is_advisor():
+            return True
+        return False
+
 
 def user_is_advisor(request, view, school_id):
     user = request.user
