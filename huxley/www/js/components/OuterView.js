@@ -3,18 +3,18 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
-var React = require('react');
+var React = require("react");
 
-require('css/content.less');
+require("css/content.less");
 
 var OuterView = React.createClass({
   propTypes: {
     header: React.PropTypes.element,
   },
 
-  render: function() {
+  render: function () {
     return (
       <div className="content content-outer transparent ie-layout rounded">
         {this.renderHeader()}
@@ -24,7 +24,7 @@ var OuterView = React.createClass({
     );
   },
 
-  renderHeader: function() {
+  renderHeader: function () {
     return this.props.header || <div className="logo-small" />;
   },
 });

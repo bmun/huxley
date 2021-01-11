@@ -3,24 +3,23 @@
 * Use of this source code is governed by a BSD License (see LICENSE).
 +*/
 
-'use strict';
+"use strict";
 
-import React from 'react';
-import PropTypes from 'react-router';
+import React from "react";
+import PropTypes from "react-router";
 
-var AssignmentStore = require('stores/AssignmentStore');
-var CountryStore = require('stores/CountryStore');
-var CurrentUserStore = require('stores/CurrentUserStore');
-var DelegateStore = require('stores/DelegateStore');
-var InnerView = require('components/InnerView');
-var TextTemplate = require('components/core/TextTemplate');
-var User = require('utils/User');
+var AssignmentStore = require("stores/AssignmentStore");
+var CountryStore = require("stores/CountryStore");
+var CurrentUserStore = require("stores/CurrentUserStore");
+var DelegateStore = require("stores/DelegateStore");
+var InnerView = require("components/InnerView");
+var TextTemplate = require("components/core/TextTemplate");
+var User = require("utils/User");
 
-require('css/Table.less');
-var ChairDelegateEmailViewText = require('text/ChairDelegateEmailViewText.md');
+require("css/Table.less");
+var ChairDelegateEmailViewText = require("text/ChairDelegateEmailViewText.md");
 
 class ChairDelegateEmailView extends React.Component {
-
   getInitialState() {
     var user = CurrentUserStore.getCurrentUser();
     var assignments = AssignmentStore.getCommitteeAssignments(user.committee);
@@ -28,9 +27,8 @@ class ChairDelegateEmailView extends React.Component {
     var delegates = DelegateStore.getCommitteeDelegates(user.committee);
 
     if (assignments.length && Object.keys(countries).length) {
-      assignments.sort(
-        (a1, a2) =>
-          countries[a1.country].name < countries[a2.country].name ? -1 : 1,
+      assignments.sort((a1, a2) =>
+        countries[a1.country].name < countries[a2.country].name ? -1 : 1
       );
     }
 
@@ -41,40 +39,38 @@ class ChairDelegateEmailView extends React.Component {
     };
   }
 
-componentWillMount() {
+  componentWillMount() {
     var user = CurrentUserStore.getCurrentUser();
     if (!User.isChair(user)) {
-      this.context.history.pushState(null, '/');
+      this.context.history.pushState(null, "/");
     }
   }
 
-componentDidMount() {
+  componentDidMount() {
     var user = CurrentUserStore.getCurrentUser();
 
     this._delegatesToken = DelegateStore.addListener(() => {
       var delegates = DelegateStore.getCommitteeDelegates(user.committee);
-      this.setState({delegates: delegates});
+      this.setState({ delegates: delegates });
     });
 
     this._assignmentsToken = AssignmentStore.addListener(() => {
       var assignments = AssignmentStore.getCommitteeAssignments(user.committee);
       var countries = this.state.countries;
       if (Object.keys(countries).length) {
-        assignments.sort(
-          (a1, a2) =>
-            countries[a1.country].name < countries[a2.country].name ? -1 : 1,
+        assignments.sort((a1, a2) =>
+          countries[a1.country].name < countries[a2.country].name ? -1 : 1
         );
       }
-      this.setState({assignments: assignments});
+      this.setState({ assignments: assignments });
     });
 
     this._countriesToken = CountryStore.addListener(() => {
       var assignments = this.state.assignments;
       var countries = CountryStore.getCountries();
       if (assignments.length) {
-        assignments.sort(
-          (a1, a2) =>
-            countries[a1.country].name < countries[a2.country].name ? -1 : 1,
+        assignments.sort((a1, a2) =>
+          countries[a1.country].name < countries[a2.country].name ? -1 : 1
         );
       }
       this.setState({
@@ -84,18 +80,16 @@ componentDidMount() {
     });
   }
 
-componentWillUnmount() {
+  componentWillUnmount() {
     this._countriesToken && this._countriesToken.remove();
     this._delegatesToken && this._delegatesToken.remove();
     this._assignmentsToken && this._assignmentsToken.remove();
   }
 
-render() {
+  render() {
     return (
       <InnerView>
-        <TextTemplate>
-          {ChairDelegateEmailViewText}
-        </TextTemplate>
+        <TextTemplate>{ChairDelegateEmailViewText}</TextTemplate>
         <form>
           <div className="table-container">
             <table>
@@ -107,12 +101,13 @@ render() {
               </thead>
             </table>
             <div>
-              <table
-                className="table highlight-cells">
+              <table className="table highlight-cells">
                 <tbody>
-                  {Object.keys(this.state.countries).length > 0
-                    ? this.renderEmailRows()
-                    : <tr />}
+                  {Object.keys(this.state.countries).length > 0 ? (
+                    this.renderEmailRows()
+                  ) : (
+                    <tr />
+                  )}
                 </tbody>
               </table>
             </div>
@@ -122,19 +117,21 @@ render() {
     );
   }
 
-renderEmailRows() {
+  renderEmailRows() {
     var assignments = this.state.assignments;
     var delegates = this.state.delegates;
     var countries = this.state.countries;
-    return delegates.map(delegate => {
+    return delegates.map((delegate) => {
       return (
         <tr key={delegate.id}>
           <td>
-            {countries[assignments.find(a => a.id == delegate.assignment).country].name}
+            {
+              countries[
+                assignments.find((a) => a.id == delegate.assignment).country
+              ].name
+            }
           </td>
-          <td>
-            {delegate.email}
-          </td>
+          <td>{delegate.email}</td>
         </tr>
       );
     });
@@ -143,6 +140,6 @@ renderEmailRows() {
 
 ChairCommitteeFeedbackView.contextTypes = {
   history: PropTypes.history,
-}
+};
 
 module.exports = ChairDelegateEmailView;

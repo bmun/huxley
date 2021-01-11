@@ -3,25 +3,24 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  +*/
 
-'use strict';
+"use strict";
 
-import React from 'react';
+import React from "react";
 
-const ConferenceContext = require('components/ConferenceContext');
-const CurrentUserStore = require('stores/CurrentUserStore');
-const InnerView = require('components/InnerView');
-const TextTemplate = require('components/core/TextTemplate');
-const User = require('utils/User');
+const ConferenceContext = require("components/ConferenceContext");
+const CurrentUserStore = require("stores/CurrentUserStore");
+const InnerView = require("components/InnerView");
+const TextTemplate = require("components/core/TextTemplate");
+const User = require("utils/User");
 
-require('css/Table.less');
-const DelegateProfileViewText = require('text/DelegateProfileViewText.md');
+require("css/Table.less");
+const DelegateProfileViewText = require("text/DelegateProfileViewText.md");
 
-const DelegateChecklistPositionPaperText = require('text/checklists/DelegateChecklistPositionPaperText.md');
-const DelegateChecklistWaiverText = require('text/checklists/DelegateChecklistWaiverText.md');
+const DelegateChecklistPositionPaperText = require("text/checklists/DelegateChecklistPositionPaperText.md");
+const DelegateChecklistWaiverText = require("text/checklists/DelegateChecklistWaiverText.md");
 
 class DelegateProfileView extends React.Component {
-
-getInitialState() {
+  getInitialState() {
     var user = CurrentUserStore.getCurrentUser();
     var delegate = user.delegate;
     return {
@@ -29,14 +28,14 @@ getInitialState() {
     };
   }
 
-componentWillMount() {
+  componentWillMount() {
     var user = CurrentUserStore.getCurrentUser();
     if (!User.isDelegate(user)) {
-      this.context.history.pushState(null, '/');
+      this.context.history.pushState(null, "/");
     }
   }
 
-render() {
+  render() {
     var user = CurrentUserStore.getCurrentUser();
     var delegate = this.state.delegate;
     var assignment = delegate && delegate.assignment;
@@ -53,24 +52,25 @@ render() {
           schoolName={school.name}
           conferenceSession={conference.session}
           committee={committee.full_name}
-          country={country.name}>
+          country={country.name}
+        >
           {DelegateProfileViewText}
         </TextTemplate>
       );
     }
 
-    var positionPaperCheck = '';
+    var positionPaperCheck = "";
     if (assignment && assignment.paper && assignment.paper.file) {
-      positionPaperCheck = '\u2611';
+      positionPaperCheck = "\u2611";
     } else {
-      positionPaperCheck = '\u2610';
+      positionPaperCheck = "\u2610";
     }
 
-    var waiverCheck = '';
+    var waiverCheck = "";
     if (delegate && delegate.waiver_submitted) {
-      waiverCheck = '\u2611';
+      waiverCheck = "\u2611";
     } else {
-      waiverCheck = '\u2610';
+      waiverCheck = "\u2610";
     }
 
     var checklist = (
@@ -86,10 +86,13 @@ render() {
               {positionPaperCheck} <b>Turn in Position Paper</b>
               <br />
               <TextTemplate
-                earlyPaperDeadlineMonth={conference.early_paper_deadline['month']}
-                earlyPaperDeadlineDay={conference.early_paper_deadline['day']}
-                paperDeadlineMonth={conference.paper_deadline['month']}
-                paperDeadlineDay={conference.paper_deadline['day']} >
+                earlyPaperDeadlineMonth={
+                  conference.early_paper_deadline["month"]
+                }
+                earlyPaperDeadlineDay={conference.early_paper_deadline["day"]}
+                paperDeadlineMonth={conference.paper_deadline["month"]}
+                paperDeadlineDay={conference.paper_deadline["day"]}
+              >
                 {DelegateChecklistPositionPaperText}
               </TextTemplate>
             </td>
@@ -98,11 +101,12 @@ render() {
             <td>
               {waiverCheck} <b>Turn in Waiver Form</b>
               <br />
-              <TextTemplate 
+              <TextTemplate
                 conferenceExternal={conference.external}
                 waiverAvail={conference.waiver_avail_date}
                 waiverDeadline={conference.waiver_deadline}
-                waiverLink={conference.waiver_link}>
+                waiverLink={conference.waiver_link}
+              >
                 {DelegateChecklistWaiverText}
               </TextTemplate>
             </td>
@@ -130,7 +134,7 @@ render() {
 
     return (
       <InnerView>
-        <div style={{textAlign: 'center'}}>
+        <div style={{ textAlign: "center" }}>
           <br />
           <h2>We are excited to have you at BMUN this year!</h2>
           <br />
@@ -146,6 +150,6 @@ render() {
 
 DelegateProfileView.contextTypes = {
   conference: React.PropTypes.shape(ConferenceContext),
-}
+};
 
 module.exports = DelegateProfileView;

@@ -3,24 +3,20 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
-var React = require('react');
+import React from "react";
 
-var ConferenceContext = require('components/ConferenceContext');
-var NavLink = require('components/NavLink');
-var OuterView = require('components/OuterView');
-var TextTemplate = require('components/core/TextTemplate');
+var ConferenceContext = require("components/ConferenceContext");
+var NavLink = require("components/NavLink");
+var OuterView = require("components/OuterView");
+var TextTemplate = require("components/core/TextTemplate");
 
-require('css/Letter.less');
-var RegistrationClosedViewText = require('text/RegistrationClosedViewText.md');
+require("css/Letter.less");
+var RegistrationClosedViewText = require("text/RegistrationClosedViewText.md");
 
-var RegistrationClosedView = React.createClass({
-  contextTypes: {
-    conference: React.PropTypes.shape(ConferenceContext),
-  },
-
-  render: function() {
+class RegistrationClosedView extends React.Component {
+  render() {
     var conference = this.context.conference;
     return (
       <OuterView>
@@ -35,7 +31,11 @@ var RegistrationClosedView = React.createClass({
         </NavLink>
       </OuterView>
     );
-  },
-});
+  }
+}
+
+RegistrationClosedView.contextTypes = {
+  conference: React.PropTypes.shape(ConferenceContext),
+};
 
 module.exports = RegistrationClosedView;

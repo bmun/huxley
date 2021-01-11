@@ -3,46 +3,46 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
-var Modal = require('react-modal');
-import React from 'react';
+var Modal = require("react-modal");
+import React from "react";
 
-var _accessSafe = require('utils/_accessSafe');
-var AssignmentStore = require('stores/AssignmentStore');
-var Button = require('components/core/Button');
-var CurrentUserStore = require('stores/CurrentUserStore');
-var DelegateActions = require('actions/DelegateActions');
-var DelegateStore = require('stores/DelegateStore');
-var ConferenceContext = require('components/ConferenceContext');
-var CurrentUserActions = require('actions/CurrentUserActions');
-var InnerView = require('components/InnerView');
-var RegistrationStore = require('stores/RegistrationStore');
-var ServerAPI = require('lib/ServerAPI');
-var StatusLabel = require('components/core/StatusLabel');
-var Table = require('components/core/Table');
-var TextInput = require('components/core/TextInput');
-var TextTemplate = require('components/core/TextTemplate');
-var _checkDate = require('utils/_checkDate');
-var _handleChange = require('utils/_handleChange');
+var _accessSafe = require("utils/_accessSafe");
+var AssignmentStore = require("stores/AssignmentStore");
+var Button = require("components/core/Button");
+var CurrentUserStore = require("stores/CurrentUserStore");
+var DelegateActions = require("actions/DelegateActions");
+var DelegateStore = require("stores/DelegateStore");
+var ConferenceContext = require("components/ConferenceContext");
+var CurrentUserActions = require("actions/CurrentUserActions");
+var InnerView = require("components/InnerView");
+var RegistrationStore = require("stores/RegistrationStore");
+var ServerAPI = require("lib/ServerAPI");
+var StatusLabel = require("components/core/StatusLabel");
+var Table = require("components/core/Table");
+var TextInput = require("components/core/TextInput");
+var TextTemplate = require("components/core/TextTemplate");
+var _checkDate = require("utils/_checkDate");
+var _handleChange = require("utils/_handleChange");
 
-require('css/Modal.less');
-var AdvisorRosterViewText = require('text/AdvisorRosterViewText.md');
-var AdvisorWaitlistText = require('text/AdvisorWaitlistText.md');
+require("css/Modal.less");
+var AdvisorRosterViewText = require("text/AdvisorRosterViewText.md");
+var AdvisorWaitlistText = require("text/AdvisorWaitlistText.md");
 
 class AdvisorRosterView extends React.Component {
   getInitialState() {
     var schoolID = CurrentUserStore.getCurrentUser().school.id;
     var conferenceID = this.context.conference.session;
     var assignments = AssignmentStore.getSchoolAssignments(schoolID).filter(
-      assignment => !assignment.rejected,
+      (assignment) => !assignment.rejected
     );
 
     var assignment_ids = {};
     assignments.map(
-      function(a) {
+      function (a) {
         assignment_ids[a.id] = a;
-      }.bind(this),
+      }.bind(this)
     );
 
     return {
@@ -52,15 +52,15 @@ class AdvisorRosterView extends React.Component {
       assignment_ids: assignment_ids,
       loading: false,
       modal_open: false,
-      modal_name: '',
-      modal_email: '',
+      modal_name: "",
+      modal_email: "",
       modal_onClick: null,
       errors: {},
     };
   }
 
   componentWillMount() {
-    Modal.setAppElement('body');
+    Modal.setAppElement("body");
   }
 
   componentDidMount() {
@@ -81,13 +81,13 @@ class AdvisorRosterView extends React.Component {
     });
     this._assignmentsToken = AssignmentStore.addListener(() => {
       var assignments = AssignmentStore.getSchoolAssignments(schoolID).filter(
-        assignment => !assignment.rejected,
+        (assignment) => !assignment.rejected
       );
       var assignment_ids = {};
       assignments.map(
-        function(a) {
+        function (a) {
           assignment_ids[a.id] = a;
-        }.bind(this),
+        }.bind(this)
       );
       this.setState({
         assignments: assignments,
@@ -106,7 +106,7 @@ class AdvisorRosterView extends React.Component {
     var conference = this.context.conference;
     var registration = this.state.registration;
     var waitlisted =
-      _accessSafe(registration, 'is_waitlisted') == null
+      _accessSafe(registration, "is_waitlisted") == null
         ? null
         : registration.is_waitlisted;
     var disableEdit = _checkDate();
@@ -115,8 +115,9 @@ class AdvisorRosterView extends React.Component {
     ) : (
       <Button
         color="green"
-        onClick={this.openModal.bind(this, '', '', this._handleAddDelegate)}
-        loading={this.state.loading}>
+        onClick={this.openModal.bind(this, "", "", this._handleAddDelegate)}
+        loading={this.state.loading}
+      >
         Add Delegate
       </Button>
     );
@@ -126,7 +127,8 @@ class AdvisorRosterView extends React.Component {
         <InnerView>
           <TextTemplate
             conferenceSession={conference.session}
-            conferenceExternal={conference.external}>
+            conferenceExternal={conference.external}
+          >
             {AdvisorWaitlistText}
           </TextTemplate>
         </InnerView>
@@ -137,7 +139,8 @@ class AdvisorRosterView extends React.Component {
           <TextTemplate>{AdvisorRosterViewText}</TextTemplate>
           <Table
             emptyMessage="You don't have any delegates in your roster."
-            isEmpty={!this.state.delegates.length}>
+            isEmpty={!this.state.delegates.length}
+          >
             <thead>
               <tr>
                 <th>Delegate</th>
@@ -155,30 +158,32 @@ class AdvisorRosterView extends React.Component {
           <Modal
             isOpen={this.state.modal_open}
             className="content content-outer transparent ie-layout rounded"
-            overlayClassName="modal-overlay">
+            overlayClassName="modal-overlay"
+          >
             <form>
               <h3>Enter your delegate's information here</h3>
               <br />
               <TextInput
                 placeholder="Name"
-                onChange={_handleChange.bind(this, 'modal_name')}
+                onChange={_handleChange.bind(this, "modal_name")}
                 defaultValue={this.state.modal_name}
                 value={this.state.modal_name}
               />
-              {this.renderError('name')}
+              {this.renderError("name")}
               <TextInput
                 placeholder="Email"
-                onChange={_handleChange.bind(this, 'modal_email')}
+                onChange={_handleChange.bind(this, "modal_email")}
                 defaultValue={this.state.modal_email}
                 value={this.state.modal_email}
               />
-              {this.renderError('email')}
+              {this.renderError("email")}
               <hr />
               <div>
                 <Button
                   onClick={this.state.modal_onClick}
                   color="green"
-                  loading={this.state.loading}>
+                  loading={this.state.loading}
+                >
                   Save
                 </Button>
                 <Button onClick={this.closeModal} color="red">
@@ -200,7 +205,7 @@ class AdvisorRosterView extends React.Component {
     var disableEdit = _checkDate();
 
     return this.state.delegates.map(
-      function(delegate) {
+      function (delegate) {
         var editButton = disableEdit ? (
           <td />
         ) : (
@@ -212,8 +217,9 @@ class AdvisorRosterView extends React.Component {
                 this,
                 delegate.name,
                 delegate.email,
-                this._handleEditDelegate.bind(this, delegate),
-              )}>
+                this._handleEditDelegate.bind(this, delegate)
+              )}
+            >
               Edit
             </Button>
           </td>
@@ -226,21 +232,22 @@ class AdvisorRosterView extends React.Component {
             <Button
               color="red"
               size="small"
-              onClick={this._handleDeleteDelegate.bind(this, delegate)}>
+              onClick={this._handleDeleteDelegate.bind(this, delegate)}
+            >
               Delete
             </Button>
           </td>
         );
         const waiverCheck =
-          delegate && delegate.waiver_submitted ? '\u2611' : '\u2610';
+          delegate && delegate.waiver_submitted ? "\u2611" : "\u2610";
 
         const positionPaperCheck =
           delegate.assignment &&
           assignment_ids[delegate.assignment] &&
           assignment_ids[delegate.assignment].paper &&
           assignment_ids[delegate.assignment].paper.file
-            ? '\u2611'
-            : '\u2610';
+            ? "\u2611"
+            : "\u2610";
 
         return (
           <tr>
@@ -257,8 +264,9 @@ class AdvisorRosterView extends React.Component {
                   size="small"
                   onClick={this._handleDelegatePasswordChange.bind(
                     this,
-                    delegate,
-                  )}>
+                    delegate
+                  )}
+                >
                   Reset Password
                 </Button>
               ) : (
@@ -267,7 +275,7 @@ class AdvisorRosterView extends React.Component {
             </td>
           </tr>
         );
-      }.bind(this),
+      }.bind(this)
     );
   }
 
@@ -283,7 +291,7 @@ class AdvisorRosterView extends React.Component {
   }
 
   closeModal(event) {
-    this.setState({modal_open: false});
+    this.setState({ modal_open: false });
     event.preventDefault();
   }
 
@@ -299,7 +307,7 @@ class AdvisorRosterView extends React.Component {
 
   _handleDeleteDelegate(delegate) {
     const confirmed = window.confirm(
-      `Are you sure you want to delete this delegate (${delegate.name})?`,
+      `Are you sure you want to delete this delegate (${delegate.name})?`
     );
     if (confirmed) {
       DelegateActions.deleteDelegate(delegate.id, this._handleDeleteError);
@@ -307,20 +315,20 @@ class AdvisorRosterView extends React.Component {
   }
 
   _handleAddDelegate(data) {
-    this.setState({loading: true});
+    this.setState({ loading: true });
     var user = CurrentUserStore.getCurrentUser();
     ServerAPI.createDelegate(
       this.state.modal_name,
       this.state.modal_email,
-      user.school.id,
+      user.school.id
     ).then(this._handleAddDelegateSuccess, this._handleError);
     event.preventDefault();
   }
 
   _handleEditDelegate(delegate) {
     var user = CurrentUserStore.getCurrentUser();
-    this.setState({loading: true});
-    var delta = {name: this.state.modal_name, email: this.state.modal_email};
+    this.setState({ loading: true });
+    var delta = { name: this.state.modal_name, email: this.state.modal_email };
     DelegateActions.updateDelegate(delegate.id, delta, this._handleError);
     event.preventDefault();
   }
@@ -328,7 +336,7 @@ class AdvisorRosterView extends React.Component {
   _handleDelegatePasswordChange(delegate) {
     ServerAPI.resetDelegatePassword(delegate.id).then(
       this._handlePasswordChangeSuccess,
-      this._handlePasswordChangeError,
+      this._handlePasswordChangeError
     );
   }
 
@@ -354,7 +362,7 @@ class AdvisorRosterView extends React.Component {
 
   _handleDeleteError(response) {
     window.alert(
-      `There was an issue processing your request. Please refresh you page and try again.`,
+      `There was an issue processing your request. Please refresh you page and try again.`
     );
   }
 

@@ -3,31 +3,30 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  +*/
 
-'use strict';
+"use strict";
 
-import React from 'react';
-import PropTypes from 'react-router';
+import React from "react";
+import PropTypes from "react-router";
 
-var Button = require('components/core/Button');
-var ConferenceContext = require('components/ConferenceContext');
-var CurrentUserStore = require('stores/CurrentUserStore');
-var InnerView = require('components/InnerView');
-var PaperSubmissionTable = require('components/PaperSubmissionTable');
-var PositionPaperActions = require('actions/PositionPaperActions');
-var PositionPaperStore = require('stores/PositionPaperStore');
-var TextTemplate = require('components/core/TextTemplate');
-var User = require('utils/User');
-var inflateGrades = require('utils/inflateGrades');
+var Button = require("components/core/Button");
+var ConferenceContext = require("components/ConferenceContext");
+var CurrentUserStore = require("stores/CurrentUserStore");
+var InnerView = require("components/InnerView");
+var PaperSubmissionTable = require("components/PaperSubmissionTable");
+var PositionPaperActions = require("actions/PositionPaperActions");
+var PositionPaperStore = require("stores/PositionPaperStore");
+var TextTemplate = require("components/core/TextTemplate");
+var User = require("utils/User");
+var inflateGrades = require("utils/inflateGrades");
 
+var ServerAPI = require("lib/ServerAPI");
 
-var ServerAPI = require('lib/ServerAPI');
-
-require('css/Table.less');
-var DelegatePaperViewText = require('text/DelegatePaperViewText.md');
-var DelegatePaperNoSubmissionViewText = require('text/DelegatePaperNoSubmissionViewText.md');
+require("css/Table.less");
+var DelegatePaperViewText = require("text/DelegatePaperViewText.md");
+var DelegatePaperNoSubmissionViewText = require("text/DelegatePaperNoSubmissionViewText.md");
 
 class DelegatePaperView extends React.Component {
-getInitialState() {
+  getInitialState() {
     var user = CurrentUserStore.getCurrentUser();
     PositionPaperActions.storePositionPaper(user.delegate.assignment.paper);
     var papers = PositionPaperStore.getPapers();
@@ -47,14 +46,14 @@ getInitialState() {
     };
   }
 
-componentWillMount() {
+  componentWillMount() {
     var user = CurrentUserStore.getCurrentUser();
     if (!User.isDelegate(user)) {
-      this.context.history.pushState(null, '/');
+      this.context.history.pushState(null, "/");
     }
   }
 
-componentDidMount() {
+  componentDidMount() {
     this._papersToken = PositionPaperStore.addListener(() => {
       this.setState({
         files: PositionPaperStore.getPositionPaperFiles(),
@@ -64,16 +63,16 @@ componentDidMount() {
     });
   }
 
-componentWillUnmount() {
+  componentWillUnmount() {
     this._papersToken && this._papersToken.remove();
     this._successTimeout && clearTimeout(this._successTimeout);
   }
 
-render() {
+  render() {
     if (this.context.conference.position_papers_accepted) {
       return (
         <InnerView>
-          <div style={{margin: 'auto 20px 20px 20px'}}>
+          <div style={{ margin: "auto 20px 20px 20px" }}>
             <TextTemplate>{DelegatePaperViewText}</TextTemplate>
           </div>
           <form>
@@ -84,7 +83,7 @@ render() {
     } else {
       return (
         <InnerView>
-          <div style={{margin: 'auto 20px 20px 20px'}}>
+          <div style={{ margin: "auto 20px 20px 20px" }}>
             <TextTemplate>{DelegatePaperNoSubmissionViewText}</TextTemplate>
           </div>
         </InnerView>
@@ -92,7 +91,7 @@ render() {
     }
   }
 
-renderRubric() {
+  renderRubric() {
     const user = CurrentUserStore.getCurrentUser();
     const paper = this.state.papers[user.delegate.assignment.paper.id];
     const files = this.state.files;
@@ -114,7 +113,8 @@ renderRubric() {
     } else {
       return <div />;
     }
-  }  calculateTotalScore(paper, rubric, topic_2 = false) {
+  }
+  calculateTotalScore(paper, rubric, topic_2 = false) {
     var totalScore = -1;
     if (topic_2) {
       totalScore =
@@ -132,7 +132,8 @@ renderRubric() {
         inflateGrades(paper.score_5, rubric.grade_value_5);
     }
     return totalScore;
-  }  calculateMaxScore(rubric, topic_2 = false) {
+  }
+  calculateMaxScore(rubric, topic_2 = false) {
     var totalMaxScore = -1;
     if (topic_2) {
       totalMaxScore =
@@ -150,77 +151,77 @@ renderRubric() {
         rubric.grade_value_5;
     }
     return totalMaxScore;
-  }  calculateCategory(value, weight) {
+  }
+  calculateCategory(value, weight) {
     var interval = weight / 5;
     if (value >= interval * 5) {
-      return '5 - Exceeds Expectations';
+      return "5 - Exceeds Expectations";
     } else if (value >= interval * 4) {
-      return '4 - Exceeds Expectations';
+      return "4 - Exceeds Expectations";
     } else if (value >= interval * 3) {
-      return '3 - Meets Expectations';
+      return "3 - Meets Expectations";
     } else if (value >= interval * 2) {
-      return '2 - Attempts to Meet Expectations';
+      return "2 - Attempts to Meet Expectations";
     } else if (value >= interval) {
-      return '1 - Needs Improvement';
+      return "1 - Needs Improvement";
     } else {
-      ('0 - Needs Improvement');
+      ("0 - Needs Improvement");
     }
-  }  calculateScore(category, weight) {
+  }
+  calculateScore(category, weight) {
     var interval = weight / 5;
-    if (category == '5 - Exceeds Expectations') {
+    if (category == "5 - Exceeds Expectations") {
       return interval * 5;
-    } else if (category == '4 - Exceeds Expectations') {
+    } else if (category == "4 - Exceeds Expectations") {
       return interval * 4;
-    } else if (category == '3 - Meets Expectations') {
+    } else if (category == "3 - Meets Expectations") {
       return interval * 3;
-    } else if (category == '2 - Attempts to Meet Expectations') {
+    } else if (category == "2 - Attempts to Meet Expectations") {
       return interval * 2;
-    } else if (category == '1 - Needs Improvement') {
+    } else if (category == "1 - Needs Improvement") {
       return interval;
     } else {
       return 0;
     }
   }
 
-_handleUploadPaper(paperID, event) {
-    this.setState({uploadedFile: event.target.files[0]});
+  _handleUploadPaper(paperID, event) {
+    this.setState({ uploadedFile: event.target.files[0] });
   }
 
-_handleSubmitPaper(paperID, event) {
+  _handleSubmitPaper(paperID, event) {
     var file = this.state.uploadedFile;
     if (
       file != null &&
       window.confirm(
-        `Please make sure this is the file you intend to submit! You have uploaded: ${
-          file.name
-        }.`,
+        `Please make sure this is the file you intend to submit! You have uploaded: ${file.name}.`
       )
     ) {
-      var paper = {...this.state.papers[paperID]};
+      var paper = { ...this.state.papers[paperID] };
       paper.file = file.name;
 
       PositionPaperActions.uploadPaper(
         paper,
         file,
         this._handleSuccess,
-        this._handleError,
+        this._handleError
       );
 
       this.setState({
         uploadedFile: null,
       });
     }
-    this.context.history.pushState(null, '/');
+    this.context.history.pushState(null, "/");
     event.preventDefault();
   }
 
-_handleSuccess(response) {
-    window.alert('Your paper has been successfully uploaded!');
+  _handleSuccess(response) {
+    window.alert("Your paper has been successfully uploaded!");
   }
 
-_handleError(response) {
+  _handleError(response) {
     window.alert(
-      'Something went wrong. Please refresh your page and try again.',
+      "Something went wrong. Please refresh your page and try again."
     );
   }
 }
@@ -228,6 +229,6 @@ _handleError(response) {
 DelegatePaperView.contextTypes = {
   conference: React.PropTypes.shape(ConferenceContext),
   history: PropTypes.history,
-}
+};
 
 module.exports = DelegatePaperView;

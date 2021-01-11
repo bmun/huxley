@@ -3,71 +3,70 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  +*/
 
-'use strict';
+"use strict";
 
-import React from 'react';
-import PropTypes from 'react-router';
+import React from "react";
+import PropTypes from "react-router";
 
-const Button = require('components/core/Button');
-const ConferenceContext = require('components/ConferenceContext');
-const CurrentUserStore = require('stores/CurrentUserStore');
-const CommitteeFeedbackActions = require('actions/CommitteeFeedbackActions');
-const CommitteeFeedbackStore = require('stores/CommitteeFeedbackStore');
-const InnerView = require('components/InnerView');
-const ServerAPI = require('lib/ServerAPI');
-const SecretariatMemberStore = require('stores/SecretariatMemberStore');
-const NumberInput = require('components/NumberInput');
-const TextInput = require('components/core/TextInput');
-const TextTemplate = require('components/core/TextTemplate');
-const User = require('utils/User');
+const Button = require("components/core/Button");
+const ConferenceContext = require("components/ConferenceContext");
+const CurrentUserStore = require("stores/CurrentUserStore");
+const CommitteeFeedbackActions = require("actions/CommitteeFeedbackActions");
+const CommitteeFeedbackStore = require("stores/CommitteeFeedbackStore");
+const InnerView = require("components/InnerView");
+const ServerAPI = require("lib/ServerAPI");
+const SecretariatMemberStore = require("stores/SecretariatMemberStore");
+const NumberInput = require("components/NumberInput");
+const TextInput = require("components/core/TextInput");
+const TextTemplate = require("components/core/TextTemplate");
+const User = require("utils/User");
 
-const _handleChange = require('utils/_handleChange');
+const _handleChange = require("utils/_handleChange");
 
-require('css/Table.less');
-const DelegateCommitteeFeedbackViewText = require('text/DelegateCommitteeFeedbackViewText.md');
+require("css/Table.less");
+const DelegateCommitteeFeedbackViewText = require("text/DelegateCommitteeFeedbackViewText.md");
 
 class DelegateCommitteeFeedbackView extends React.Component {
-
-getInitialState() {
+  getInitialState() {
     var user = CurrentUserStore.getCurrentUser();
     var delegate = user.delegate;
     var secretariatMembers = SecretariatMemberStore.getSecretariatMembers(
-      delegate.assignment.committee.id,
+      delegate.assignment.committee.id
     );
     return {
       delegate: delegate,
       secretariatMembers: secretariatMembers,
-      comment: '',
+      comment: "",
       rating: 0,
-      chair_1_name: '',
-      chair_1_comment: '',
+      chair_1_name: "",
+      chair_1_comment: "",
       chair_1_rating: 0,
-      chair_2_name: '',
-      chair_2_comment: '',
+      chair_2_name: "",
+      chair_2_comment: "",
       chair_2_rating: 0,
-      chair_3_name: '',
-      chair_3_comment: '',
+      chair_3_name: "",
+      chair_3_comment: "",
       chair_3_rating: 0,
-      chair_4_name: '',
-      chair_4_comment: '',
+      chair_4_name: "",
+      chair_4_comment: "",
       chair_4_rating: 0,
-      chair_5_name: '',
-      chair_5_comment: '',
+      chair_5_name: "",
+      chair_5_comment: "",
       chair_5_rating: 0,
-      chair_6_name: '',
-      chair_6_comment: '',
+      chair_6_name: "",
+      chair_6_comment: "",
       chair_6_rating: 0,
-      chair_7_name: '',
-      chair_7_comment: '',
+      chair_7_name: "",
+      chair_7_comment: "",
       chair_7_rating: 0,
-      chair_8_name: '',
-      chair_8_comment: '',
+      chair_8_name: "",
+      chair_8_comment: "",
       chair_8_rating: 0,
-      chair_9_name: '',
-      chair_9_comment: '',
+      chair_9_name: "",
+      chair_9_comment: "",
       chair_9_rating: 0,
-      chair_10_name: '',
-      chair_10_comment: '',
+      chair_10_name: "",
+      chair_10_comment: "",
       chair_10_rating: 0,
       berkeley_perception: 0,
       money_spent: 0,
@@ -79,7 +78,7 @@ getInitialState() {
     };
   }
 
-componentDidMount() {
+  componentDidMount() {
     this._committeeFeedbackToken = CommitteeFeedbackStore.addListener(() => {
       this.setState({
         feedbackSubmitted:
@@ -92,13 +91,13 @@ componentDidMount() {
     this._secretariatMembersToken = SecretariatMemberStore.addListener(() => {
       this.setState({
         secretariatMembers: SecretariatMemberStore.getSecretariatMembers(
-          this.state.delegate.assignment.committee.id,
+          this.state.delegate.assignment.committee.id
         ),
       });
       var newState = {};
       for (var i = 0; i < this.state.secretariatMembers.length; i++) {
         var index = i + 1;
-        newState['chair_' + index + '_name'] = this.state.secretariatMembers[
+        newState["chair_" + index + "_name"] = this.state.secretariatMembers[
           i
         ].name;
       }
@@ -106,19 +105,19 @@ componentDidMount() {
     });
   }
 
-componentWillMount() {
+  componentWillMount() {
     var user = CurrentUserStore.getCurrentUser();
     if (!User.isDelegate(user)) {
-      this.context.history.pushState(null, '/');
+      this.context.history.pushState(null, "/");
     }
   }
 
-componentWillUnmount() {
+  componentWillUnmount() {
     this._committeeFeedbackToken && this._committeeFeedbackToken.remove();
     this._secretariatMembersToken && this._secretariatMembersToken.remove();
   }
 
-render() {
+  render() {
     var user = CurrentUserStore.getCurrentUser();
     var delegate = this.state.delegate;
     var assignment = delegate && delegate.assignment;
@@ -134,22 +133,22 @@ render() {
         var chair_fields = [];
         for (var i = 0; i < this.state.secretariatMembers.length; i++) {
           var index = i + 1;
-          var name_key = 'chair_' + index + '_name';
-          var comment_key = 'chair_' + index + '_comment';
-          var rating_key = 'chair_' + index + '_rating';
+          var name_key = "chair_" + index + "_name";
+          var comment_key = "chair_" + index + "_comment";
+          var rating_key = "chair_" + index + "_rating";
           if (this.state.secretariatMembers[i].is_head_chair) {
             head_chair_field = this._buildFeedbackInputs(
               this.state.secretariatMembers[i],
-              'Head Chair',
-              i + 1,
+              "Head Chair",
+              i + 1
             );
           } else {
             chair_fields.push(
               this._buildFeedbackInputs(
                 this.state.secretariatMembers[i],
-                'Vice Chair',
-                i + 1,
-              ),
+                "Vice Chair",
+                i + 1
+              )
             );
           }
         }
@@ -159,18 +158,19 @@ render() {
             <TextTemplate
               firstName={delegate.name}
               conferenceSession={conference.session}
-              committee={committee.full_name}>
+              committee={committee.full_name}
+            >
               {DelegateCommitteeFeedbackViewText}
             </TextTemplate>
             <form>
               <textarea
                 className="text-input"
-                style={{width: '95%'}}
+                style={{ width: "95%" }}
                 rows="6"
-                onChange={_handleChange.bind(this, 'comment')}
+                onChange={_handleChange.bind(this, "comment")}
                 defaultValue={this.state.feedback}
                 placeholder={
-                  'General Feedback For ' +
+                  "General Feedback For " +
                   this.state.delegate.assignment.committee.name
                 }
               />
@@ -180,9 +180,10 @@ render() {
                   <b>Rate Committee: </b>
                 </font>
                 <select
-                  onChange={_handleChange.bind(this, 'rating')}
-                  value={this.state['rating']}
-                  default={0}>
+                  onChange={_handleChange.bind(this, "rating")}
+                  value={this.state["rating"]}
+                  default={0}
+                >
                   <option value={0}>No Rating</option>
                   <option value={10}>10</option>
                   <option value={9}>9</option>
@@ -205,7 +206,8 @@ render() {
                 color="green"
                 onClick={this._handlePublishFeedback}
                 loading={this.state.loadingPublish}
-                success={this.state.successPublish}>
+                success={this.state.successPublish}
+              >
                 Submit
               </Button>
             </form>
@@ -216,7 +218,7 @@ render() {
 
     return (
       <InnerView>
-        <div style={{textAlign: 'center'}}>
+        <div style={{ textAlign: "center" }}>
           <br />
           <h2>Committee Feedback</h2>
           <br />
@@ -226,10 +228,10 @@ render() {
     );
   }
 
-_buildFeedbackInputs(secretariatMember, title, index) {
-    var name_key = 'chair_' + index + '_name';
-    var comment_key = 'chair_' + index + '_comment';
-    var rating_key = 'chair_' + index + '_rating';
+  _buildFeedbackInputs(secretariatMember, title, index) {
+    var name_key = "chair_" + index + "_name";
+    var comment_key = "chair_" + index + "_comment";
+    var rating_key = "chair_" + index + "_rating";
     return (
       <div key={index}>
         <br />
@@ -243,21 +245,22 @@ _buildFeedbackInputs(secretariatMember, title, index) {
         <br />
         <textarea
           className="text-input"
-          style={{width: '75%'}}
+          style={{ width: "75%" }}
           rows="4"
           onChange={_handleChange.bind(this, comment_key)}
           defaultValue={this.state[comment_key]}
-          placeholder={'Feedback for ' + secretariatMember.name}
+          placeholder={"Feedback for " + secretariatMember.name}
         />
         <br />
         <label>
           <font size={3}>
-            <b>{'Rate ' + secretariatMember.name + ': '}</b>
+            <b>{"Rate " + secretariatMember.name + ": "}</b>
           </font>
           <select
             onChange={_handleChange.bind(this, rating_key)}
             value={this.state[rating_key]}
-            default={0}>
+            default={0}
+          >
             <option value={0}>No Rating</option>
             <option value={10}>10</option>
             <option value={9}>9</option>
@@ -275,51 +278,58 @@ _buildFeedbackInputs(secretariatMember, title, index) {
     );
   }
 
-_buildConferenceInputs() {
+  _buildConferenceInputs() {
     return (
       <div>
-      <div>
-        <br />
-        <hr />
-        <br />
-        <label>
-          <font size={3}>
-            <b>Did attending BMUN make you more likely to consider attending UC Berkeley?</b>
-          </font>
-          <br></br>
-          <select
-            onChange={_handleChange.bind(this, 'berkeley_perception')}
-            value={this.state['berkeley_perception']}
-            default={0}>
-            <option value={0}>-</option>
-            <option value={1}>No</option>
-            <option value={2}>No change/unsure</option>
-            <option value={3}>Yes</option>
-          </select>
-        </label>
+        <div>
+          <br />
+          <hr />
+          <br />
+          <label>
+            <font size={3}>
+              <b>
+                Did attending BMUN make you more likely to consider attending UC
+                Berkeley?
+              </b>
+            </font>
+            <br></br>
+            <select
+              onChange={_handleChange.bind(this, "berkeley_perception")}
+              value={this.state["berkeley_perception"]}
+              default={0}
+            >
+              <option value={0}>-</option>
+              <option value={1}>No</option>
+              <option value={2}>No change/unsure</option>
+              <option value={3}>Yes</option>
+            </select>
+          </label>
+        </div>
+        <div>
+          <br />
+          <hr />
+          <br />
+          <label>
+            <font size={3}>
+              <b>
+                How much would you estimate you spent over the weekend on food
+                near Berkeley’s campus?
+              </b>
+            </font>
+            <br></br>
+            <NumberInput
+              placeholder="Number of BMUN sessions attended"
+              onChange={_handleChange.bind(this, "money_spent")}
+              value={this.state["money_spent"]}
+            />
+          </label>
+        </div>
       </div>
-      <div>
-      <br />
-      <hr />
-      <br />
-      <label>
-        <font size={3}>
-          <b>How much would you estimate you spent over the weekend on food near Berkeley’s campus?</b>
-        </font>
-        <br></br>
-        <NumberInput
-          placeholder="Number of BMUN sessions attended"
-          onChange={_handleChange.bind(this, 'money_spent')}
-          value={this.state['money_spent']}
-        />
-      </label>
-    </div>
-    </div>
     );
   }
 
-_handlePublishFeedback(event) {
-    this.setState({loadingPublish: true});
+  _handlePublishFeedback(event) {
+    this.setState({ loadingPublish: true });
     var committee_id = this.state.delegate.assignment.committee.id;
     ServerAPI.createCommitteeFeedback({
       comment: this.state.comment,
@@ -361,11 +371,11 @@ _handlePublishFeedback(event) {
     event.preventDefault();
   }
 
-_handleAddFeedbackSuccess(response) {
+  _handleAddFeedbackSuccess(response) {
     CommitteeFeedbackActions.addCommitteeFeedback(response);
   }
 
-_handleAddFeedbackFail(response) {
+  _handleAddFeedbackFail(response) {
     this.setState({
       errors: response,
       loading: false,
@@ -376,6 +386,6 @@ _handleAddFeedbackFail(response) {
 DelegateCommitteeFeedbackView.contextTypes = {
   conference: React.PropTypes.shape(ConferenceContext),
   history: PropTypes.history,
-}
+};
 
 module.exports = DelegateCommitteeFeedbackView;

@@ -3,50 +3,50 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
-import React from 'react';
+import React from "react";
 
-var RegistrationPhoneInput = require('components/registration/RegistrationPhoneInput');
-var RegistrationTextInput = require('components/registration/RegistrationTextInput');
-var _accessSafe = require('utils/_accessSafe');
+var RegistrationPhoneInput = require("components/registration/RegistrationPhoneInput");
+var RegistrationTextInput = require("components/registration/RegistrationTextInput");
+var _accessSafe = require("utils/_accessSafe");
 
 class RegistrationSecondaryContact extends React.Component {
   render() {
     var accessHandlers = _accessSafe.bind(this, this.props.handlers);
     var accessSecondary = _accessSafe.bind(
       this,
-      this.props.secondaryContactInformation,
+      this.props.secondaryContactInformation
     );
     var accessErrors = _accessSafe.bind(this, this.props.errors);
     return (
       <div id="secondary_contact">
         <h3>Secondary Contact</h3>
         <p className="instructions">Please make sure to fill out all fields.</p>
-        {this.props.renderContactGenderField('secondary_gender')}
+        {this.props.renderContactGenderField("secondary_gender")}
         <RegistrationTextInput
-          errors={accessErrors('secondary_name')}
+          errors={accessErrors("secondary_name")}
           placeholder="Name"
-          onChange={accessHandlers('secondary_name')}
-          value={accessSecondary('secondary_name')}
+          onChange={accessHandlers("secondary_name")}
+          value={accessSecondary("secondary_name")}
         />
         <RegistrationTextInput
-          errors={accessErrors('secondary_email')}
+          errors={accessErrors("secondary_email")}
           placeholder="Email"
-          onChange={accessHandlers('secondary_email')}
-          value={accessSecondary('secondary_email')}
+          onChange={accessHandlers("secondary_email")}
+          value={accessSecondary("secondary_email")}
         />
         <RegistrationPhoneInput
-          errors={accessErrors('secondary_phone')}
-          onChange={accessHandlers('secondary_phone')}
-          value={accessSecondary('secondary_phone')}
+          errors={accessErrors("secondary_phone")}
+          onChange={accessHandlers("secondary_phone")}
+          value={accessSecondary("secondary_phone")}
           isInternational={this.props.isInternational}
         />
-        {this.props.renderContactTypeField('secondary_type')}
+        {this.props.renderContactTypeField("secondary_type")}
       </div>
     );
   }
-};
+}
 
 RegistrationSecondaryContact.propTypes = {
   handlers: React.PropTypes.object,
@@ -55,6 +55,6 @@ RegistrationSecondaryContact.propTypes = {
   renderContactGenderField: React.PropTypes.func,
   renderContactTypeField: React.PropTypes.func,
   isInternational: React.PropTypes.bool,
-}
+};
 
 module.exports = RegistrationSecondaryContact;

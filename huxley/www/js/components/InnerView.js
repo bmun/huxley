@@ -3,14 +3,14 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
-var React = require('react');
+var React = require("react");
 
-require('css/content.less');
+require("css/content.less");
 
 var InnerView = React.createClass({
-  render: function() {
+  render: function () {
     return (
       <div className="content transparent ie-layout rounded-bottom">
         {this.props.children}

@@ -1,37 +1,36 @@
 /**
  * Copyright (c) 2011-2015 Berkeley Model United Nations. All rights reserved.
  * Use of this source code is governed by a BSD License (see LICENSE).
-*/
+ */
 
-'use strict';
+"use strict";
 
-import React from 'react';
+import React from "react";
 
-var _accessSafe = require('utils/_accessSafe');
-var AssignmentActions = require('actions/AssignmentActions');
-var AssignmentStore = require('stores/AssignmentStore');
-var Button = require('components/core/Button');
-var CommitteeStore = require('stores/CommitteeStore');
-var ConferenceContext = require('components/ConferenceContext');
-var CountryStore = require('stores/CountryStore');
-var CurrentUserStore = require('stores/CurrentUserStore');
-var DelegateStore = require('stores/DelegateStore');
-var InnerView = require('components/InnerView');
-var RegistrationStore = require('stores/RegistrationStore');
-var Table = require('components/core/Table');
-var TextTemplate = require('components/core/TextTemplate');
+var _accessSafe = require("utils/_accessSafe");
+var AssignmentActions = require("actions/AssignmentActions");
+var AssignmentStore = require("stores/AssignmentStore");
+var Button = require("components/core/Button");
+var CommitteeStore = require("stores/CommitteeStore");
+var ConferenceContext = require("components/ConferenceContext");
+var CountryStore = require("stores/CountryStore");
+var CurrentUserStore = require("stores/CurrentUserStore");
+var DelegateStore = require("stores/DelegateStore");
+var InnerView = require("components/InnerView");
+var RegistrationStore = require("stores/RegistrationStore");
+var Table = require("components/core/Table");
+var TextTemplate = require("components/core/TextTemplate");
 
-var AdvisorFeedbackViewText = require('text/AdvisorFeedbackViewText.md');
-var AdvisorWaitlistText = require('text/AdvisorWaitlistText.md');
+var AdvisorFeedbackViewText = require("text/AdvisorFeedbackViewText.md");
+var AdvisorWaitlistText = require("text/AdvisorWaitlistText.md");
 
 class AdvisorFeedbackView extends React.Component {
-
   getInitialState() {
     var schoolID = CurrentUserStore.getCurrentUser().school.id;
     var delegates = DelegateStore.getSchoolDelegates(schoolID);
     var conferenceID = this.context.conference.session;
     var assignments = AssignmentStore.getSchoolAssignments(schoolID).filter(
-      assignment => !assignment.rejected,
+      (assignment) => !assignment.rejected
     );
     var feedback = this.prepareFeedback(delegates);
     return {
@@ -55,17 +54,17 @@ class AdvisorFeedbackView extends React.Component {
     });
 
     this._committeesToken = CommitteeStore.addListener(() => {
-      this.setState({committees: CommitteeStore.getCommittees()});
+      this.setState({ committees: CommitteeStore.getCommittees() });
     });
 
     this._countriesToken = CountryStore.addListener(() => {
-      this.setState({countries: CountryStore.getCountries()});
+      this.setState({ countries: CountryStore.getCountries() });
     });
 
     this._assignmentsToken = AssignmentStore.addListener(() => {
       this.setState({
         assignments: AssignmentStore.getSchoolAssignments(schoolID).filter(
-          assignment => !assignment.rejected,
+          (assignment) => !assignment.rejected
         ),
       });
     });
@@ -91,7 +90,7 @@ class AdvisorFeedbackView extends React.Component {
   render() {
     var registration = this.state.registration;
     var waitlisted =
-      _accessSafe(registration, 'is_waitlisted') == null
+      _accessSafe(registration, "is_waitlisted") == null
         ? null
         : registration.is_waitlisted;
     if (waitlisted) {
@@ -99,7 +98,8 @@ class AdvisorFeedbackView extends React.Component {
         <InnerView>
           <TextTemplate
             conferenceSession={conference.session}
-            conferenceExternal={conference.external}>
+            conferenceExternal={conference.external}
+          >
             {AdvisorWaitlistText}
           </TextTemplate>
         </InnerView>
@@ -110,7 +110,8 @@ class AdvisorFeedbackView extends React.Component {
           <TextTemplate>{AdvisorFeedbackViewText}</TextTemplate>
           <Table
             emptyMessage="You don't have any delegate feedback."
-            isEmpty={!Object.keys(this.state.feedback).length}>
+            isEmpty={!Object.keys(this.state.feedback).length}
+          >
             <thead>
               <tr>
                 <th>Committee</th>
@@ -134,7 +135,7 @@ class AdvisorFeedbackView extends React.Component {
     var committees = this.state.committees;
     var countries = this.state.countries;
     var feedback = this.state.feedback;
-    return assignments.map(assignment => {
+    return assignments.map((assignment) => {
       var delegates = feedback[assignment.id];
       if (delegates == null) {
         return;
@@ -178,7 +179,7 @@ class AdvisorFeedbackView extends React.Component {
           <td>
             <textarea
               className="text-input"
-              style={{width: '95%'}}
+              style={{ width: "95%" }}
               defaultValue={delegates.published_summary}
               disabled
             />
@@ -211,6 +212,6 @@ class AdvisorFeedbackView extends React.Component {
 AdvisorFeedbackView.contextTypes = {
   conference: React.PropTypes.shape(ConferenceContext),
   history: ReactRouter.PropTypes.history,
-}
+};
 
 module.exports = AdvisorFeedbackView;

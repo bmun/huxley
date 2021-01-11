@@ -3,35 +3,37 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
-var React = require('react');
-var ReactRouter = require('react-router');
+import React from "react";
+import PropTypes from "react-router";
 
-var OuterView = require('components/OuterView');
-var User = require('utils/User');
+var OuterView = require("components/OuterView");
+var User = require("utils/User");
 
-var RedirectView = React.createClass({
-  mixins: [ReactRouter.History],
-
-  componentDidMount: function() {
-    var {user} = this.props;
+class RedirectView extends React.Component {
+  componentDidMount() {
+    var { user } = this.props;
     if (User.isAnonymous(user)) {
-      this.history.pushState(null, '/login');
+      this.history.pushState(null, "/login");
     } else if (User.isAdvisor(user)) {
-      this.history.pushState(null, '/advisor/profile');
+      this.history.pushState(null, "/advisor/profile");
     } else if (User.isChair(user)) {
-      this.history.pushState(null, '/chair/attendance');
+      this.history.pushState(null, "/chair/attendance");
     } else if (User.isDelegate(user)) {
-      this.history.pushState(null, '/delegate/profile');
+      this.history.pushState(null, "/delegate/profile");
     }
-  },
+  }
 
-  render: function() {
+  render() {
     // TODO: make this the same component as the loading indicator... when the
     // loading indicator is actually built.
     return <OuterView />;
-  },
-});
+  }
+}
+
+RedirectView.contextTypes = {
+  history: PropTypes.history,
+};
 
 module.exports = RedirectView;

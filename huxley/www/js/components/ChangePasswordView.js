@@ -3,43 +3,44 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
-import cx from 'classnames';
-import React from 'react';
+import cx from "classnames";
+import React from "react";
 
-var Button = require('components/core/Button');
-var ServerAPI = require('lib/ServerAPI');
-var StatusLabel = require('components/core/StatusLabel');
+var Button = require("components/core/Button");
+var ServerAPI = require("lib/ServerAPI");
+var StatusLabel = require("components/core/StatusLabel");
 
-require('css/ChangePasswordView.less');
+require("css/ChangePasswordView.less");
 
 class ChangePasswordView extends React.Component {
-getInitialState() {
+  getInitialState() {
     return {
-      message: '',
+      message: "",
       success: false,
       loading: false,
-      currentPassword: '',
-      newPassword: '',
-      newPassword2: '',
+      currentPassword: "",
+      newPassword: "",
+      newPassword2: "",
     };
   }
 
-componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps) {
     this.setState(this.getInitialState());
   }
 
-render() {
+  render() {
     return (
       <div
         className={cx({
-          'change-password': true,
-          'rounded-bottom': true,
+          "change-password": true,
+          "rounded-bottom": true,
           transparent: true,
           visible: this.props.isVisible,
         })}
-        onClick={this._handleDropdownClick}>
+        onClick={this._handleDropdownClick}
+      >
         <form onSubmit={this._handleSubmit}>
           <input
             type="password"
@@ -66,7 +67,8 @@ render() {
             type="submit"
             color="green"
             size="small"
-            loading={this.state.loading}>
+            loading={this.state.loading}
+          >
             Change Password
           </Button>
         </form>
@@ -75,64 +77,65 @@ render() {
     );
   }
 
-renderMessage() {
+  renderMessage() {
     if (!this.state.message) {
       return null;
     }
 
     return (
-      <StatusLabel status={this.state.success ? 'success' : 'error'}>
+      <StatusLabel status={this.state.success ? "success" : "error"}>
         {this.state.message}
       </StatusLabel>
     );
-  }  onSuccess() {
+  }
+  onSuccess() {
     setTimeout(this.props.onSuccess, 750);
   }
 
-_handleCurrentPasswordChange(event) {
-    this.setState({currentPassword: event.target.value});
+  _handleCurrentPasswordChange(event) {
+    this.setState({ currentPassword: event.target.value });
   }
 
-_handleNewPasswordChange(event) {
-    this.setState({newPassword: event.target.value});
+  _handleNewPasswordChange(event) {
+    this.setState({ newPassword: event.target.value });
   }
 
-_handleNewPassword2Change(event) {
-    this.setState({newPassword2: event.target.value});
+  _handleNewPassword2Change(event) {
+    this.setState({ newPassword2: event.target.value });
   }
 
-_handleSubmit(event) {
+  _handleSubmit(event) {
     if (this.state.newPassword != this.state.newPassword2) {
       this.setState({
-        message: 'Please enter the same password again',
+        message: "Please enter the same password again",
         success: false,
       });
     } else {
-      this.setState({loading: true});
-      const {currentPassword, newPassword} = this.state;
+      this.setState({ loading: true });
+      const { currentPassword, newPassword } = this.state;
       ServerAPI.changePassword(currentPassword, newPassword).then(
         this._handleSuccess,
-        this._handleError,
+        this._handleError
       );
       event.preventDefault();
     }
   }
 
-_handleSuccess(response) {
+  _handleSuccess(response) {
     this.setState(
       {
         loading: false,
         success: true,
-        message: 'Password changed!',
-        currentPassword: '',
-        newPassword: '',
-        newPassword2: '',
+        message: "Password changed!",
+        currentPassword: "",
+        newPassword: "",
+        newPassword2: "",
       },
-      this.onSuccess,
+      this.onSuccess
     );
   }
 
-_handleError(response) {
+  _handleError(response) {
     this.setState({
       loading: false,
       message: response.detail,
@@ -140,7 +143,7 @@ _handleError(response) {
     });
   }
 
-_handleDropdownClick(e) {
+  _handleDropdownClick(e) {
     this.props.onClick && this.props.onClick(e);
   }
 }

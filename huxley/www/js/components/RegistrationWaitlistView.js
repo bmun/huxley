@@ -3,17 +3,17 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
-import React from 'react';
+import React from "react";
 
-var ConferenceContext = require('components/ConferenceContext');
-var NavLink = require('components/NavLink');
-var OuterView = require('components/OuterView');
-var TextTemplate = require('components/core/TextTemplate');
+var ConferenceContext = require("components/ConferenceContext");
+var NavLink = require("components/NavLink");
+var OuterView = require("components/OuterView");
+var TextTemplate = require("components/core/TextTemplate");
 
-require('css/Letter.less');
-var RegistrationWaitlistViewText = require('text/RegistrationWaitlistViewText.md');
+require("css/Letter.less");
+var RegistrationWaitlistViewText = require("text/RegistrationWaitlistViewText.md");
 
 class RegistrationWaitlistView extends React.Component {
   render() {
@@ -32,10 +32,10 @@ class RegistrationWaitlistView extends React.Component {
       </OuterView>
     );
   }
-};
+}
 
 RegistrationWaitlistView.contextTypes = {
   conference: React.PropTypes.shape(ConferenceContext),
-}
+};
 
 module.exports = RegistrationWaitlistView;

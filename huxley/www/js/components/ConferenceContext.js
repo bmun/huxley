@@ -3,9 +3,9 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
-import React from 'react';
+import React from "react";
 
 var ConferenceContext = {
   session: React.PropTypes.number,

@@ -3,12 +3,12 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
-import {React} from 'react';
+import { React } from "react";
 
-var RegistrationTextInput = require('components/registration/RegistrationTextInput');
-var _accessSafe = require('utils/_accessSafe');
+var RegistrationTextInput = require("components/registration/RegistrationTextInput");
+var _accessSafe = require("utils/_accessSafe");
 
 class RegistrationAccountInformation extends React.Component {
   shouldComponentUpdate(nextProps, nextState) {
@@ -37,45 +37,45 @@ class RegistrationAccountInformation extends React.Component {
       <div id="account_information">
         <h3>Account Information</h3>
         <RegistrationTextInput
-          errors={accessErrors('first_name')}
+          errors={accessErrors("first_name")}
           placeholder="First Name"
-          onChange={accessHandlers('first_name')}
-          value={accessAccount('first_name')}
+          onChange={accessHandlers("first_name")}
+          value={accessAccount("first_name")}
         />
         <RegistrationTextInput
-          errors={accessErrors('last_name')}
+          errors={accessErrors("last_name")}
           placeholder="Last Name"
-          onChange={accessHandlers('last_name')}
-          value={accessAccount('last_name')}
+          onChange={accessHandlers("last_name")}
+          value={accessAccount("last_name")}
         />
         <RegistrationTextInput
-          errors={accessErrors('username')}
+          errors={accessErrors("username")}
           placeholder="Username"
-          onChange={accessHandlers('username')}
-          value={accessAccount('username')}
+          onChange={accessHandlers("username")}
+          value={accessAccount("username")}
         />
         <RegistrationTextInput
-          errors={accessErrors('password')}
+          errors={accessErrors("password")}
           type="password"
           placeholder="Password"
-          value={accessAccount('password')}
-          onChange={accessHandlers('password')}
+          value={accessAccount("password")}
+          onChange={accessHandlers("password")}
           onBlur={this.props.blur}
           onFocus={this.props.focus}
         />
         <RegistrationTextInput
-          errors={accessErrors('password_confirm')}
+          errors={accessErrors("password_confirm")}
           type="password"
           placeholder="Password (confirm)"
-          value={accessAccount('password_confirm')}
-          onChange={accessHandlers('password_confirm')}
+          value={accessAccount("password_confirm")}
+          onChange={accessHandlers("password_confirm")}
           onBlur={this.props.blur}
           onFocus={this.props.focus}
         />
       </div>
     );
   }
-};
+}
 
 RegistrationAccountInformation.propTypes = {
   handlers: React.PropTypes.object,
@@ -83,6 +83,6 @@ RegistrationAccountInformation.propTypes = {
   accountInformation: React.PropTypes.object,
   blur: React.PropTypes.func,
   focus: React.PropTypes.func,
-}
+};
 
 module.exports = RegistrationAccountInformation;

@@ -3,50 +3,50 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
-import React from 'react';
+import React from "react";
 
-var RegistrationPhoneInput = require('components/registration/RegistrationPhoneInput');
-var RegistrationTextInput = require('components/registration/RegistrationTextInput');
-var _accessSafe = require('utils/_accessSafe');
+var RegistrationPhoneInput = require("components/registration/RegistrationPhoneInput");
+var RegistrationTextInput = require("components/registration/RegistrationTextInput");
+var _accessSafe = require("utils/_accessSafe");
 
 class RegistrationPrimaryContact extends React.Component {
   render() {
     var accessHandlers = _accessSafe.bind(this, this.props.handlers);
     var accessPrimary = _accessSafe.bind(
       this,
-      this.props.primaryContactInformation,
+      this.props.primaryContactInformation
     );
     var accessErrors = _accessSafe.bind(this, this.props.errors);
     return (
       <div id="primary_contact">
         <h3>Primary Contact</h3>
         <p className="instructions">Please make sure to fill out all fields.</p>
-        {this.props.renderContactGenderField('primary_gender')}
+        {this.props.renderContactGenderField("primary_gender")}
         <RegistrationTextInput
-          errors={accessErrors('primary_name')}
+          errors={accessErrors("primary_name")}
           placeholder="Name"
-          onChange={accessHandlers('primary_name')}
-          value={accessPrimary('primary_name')}
+          onChange={accessHandlers("primary_name")}
+          value={accessPrimary("primary_name")}
         />
         <RegistrationTextInput
-          errors={accessErrors('primary_email')}
+          errors={accessErrors("primary_email")}
           placeholder="Email"
-          onChange={accessHandlers('primary_email')}
-          value={accessPrimary('primary_email')}
+          onChange={accessHandlers("primary_email")}
+          value={accessPrimary("primary_email")}
         />
         <RegistrationPhoneInput
-          errors={accessErrors('primary_phone')}
-          onChange={accessHandlers('primary_phone')}
-          value={accessPrimary('primary_phone')}
+          errors={accessErrors("primary_phone")}
+          onChange={accessHandlers("primary_phone")}
+          value={accessPrimary("primary_phone")}
           isInternational={this.props.isInternational}
         />
-        {this.props.renderContactTypeField('primary_type')}
+        {this.props.renderContactTypeField("primary_type")}
       </div>
     );
   }
-};
+}
 
 RegistrationPrimaryContact.propTypes = {
   handlers: React.PropTypes.object,
@@ -55,6 +55,6 @@ RegistrationPrimaryContact.propTypes = {
   renderContactGenderField: React.PropTypes.func,
   renderContactTypeField: React.PropTypes.func,
   isInternational: React.PropTypes.bool,
-}
+};
 
 module.exports = RegistrationPrimaryContact;

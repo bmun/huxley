@@ -3,9 +3,9 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
-import React from 'react';
+import React from "react";
 
 class RegistrationComments extends React.Component {
   shouldComponentUpdate(nextProps, nextState) {
@@ -30,11 +30,11 @@ class RegistrationComments extends React.Component {
       </div>
     );
   }
-};
+}
 
 RegistrationComments.propTypes = {
   handler: React.PropTypes.func,
   value: React.PropTypes.string,
-}
+};
 
 module.exports = RegistrationComments;

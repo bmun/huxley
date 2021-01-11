@@ -3,25 +3,23 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
-import {React} from 'react';
-import PropTypes from 'react-router';
+import { React } from "react";
+import PropTypes from "react-router";
 
-var NavTab = require('components/NavTab');
-var PermissionDeniedView = require('components/PermissionDeniedView');
-var Shaker = require('components/Shaker');
-var TopBar = require('components/TopBar');
-var User = require('utils/User');
+var NavTab = require("components/NavTab");
+var PermissionDeniedView = require("components/PermissionDeniedView");
+var Shaker = require("components/Shaker");
+var TopBar = require("components/TopBar");
+var User = require("utils/User");
 
-require('css/NavBar.less');
+require("css/NavBar.less");
 
 class AdvisorView extends React.Component {
-  
-
   componentDidMount() {
     if (User.isAnonymous(this.props.user)) {
-      this.context.history.pushState(null, '/login');
+      this.context.history.pushState(null, "/login");
     }
   }
 
@@ -52,6 +50,6 @@ class AdvisorView extends React.Component {
 
 AdvisorView.contextTypes = {
   history: PropTypes.history,
-}
+};
 
 module.exports = AdvisorView;

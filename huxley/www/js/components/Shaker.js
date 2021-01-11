@@ -3,13 +3,13 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
-import React from 'react';
-import ReactDOM from 'react-dom';
-import cx from 'classnames';
+import React from "react";
+import ReactDOM from "react-dom";
+import cx from "classnames";
 
-require('css/Shaker.less');
+require("css/Shaker.less");
 
 class Shaker extends React.Component {
   getChildContext() {
@@ -20,7 +20,7 @@ class Shaker extends React.Component {
 
   render() {
     return (
-      <div className={cx('shaker', this.props.className)}>
+      <div className={cx("shaker", this.props.className)}>
         {this.props.children}
       </div>
     );
@@ -30,17 +30,17 @@ class Shaker extends React.Component {
     const element = ReactDOM.findDOMNode(this);
     if (element) {
       this._timeout && clearTimeout(this._timeout);
-      element.classList.remove('shake');
-      element.classList.add('shake');
+      element.classList.remove("shake");
+      element.classList.add("shake");
       this._timeout = setTimeout(() => {
-        element.classList.remove('shake');
+        element.classList.remove("shake");
       }, 301);
     }
   }
-};
+}
 
 Shaker.childContextTypes = {
   shake: React.PropTypes.func,
-}
+};
 
 module.exports = Shaker;

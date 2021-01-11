@@ -3,13 +3,13 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
-import React from 'react';
+import React from "react";
 
-var ProgramTypes = require('constants/ProgramTypes');
-var NumberInput = require('components/NumberInput');
-var _accessSafe = require('utils/_accessSafe');
+var ProgramTypes = require("constants/ProgramTypes");
+var NumberInput = require("components/NumberInput");
+var _accessSafe = require("utils/_accessSafe");
 
 class RegistrationProgramInformation extends React.Component {
   shouldComponentUpdate(nextProps, nextState) {
@@ -48,7 +48,7 @@ class RegistrationProgramInformation extends React.Component {
                 checked={this.props.programType == ProgramTypes.CLUB}
                 value={ProgramTypes.CLUB}
                 onChange={this.props.handleProgramTypeChange}
-              />{' '}
+              />{" "}
               Club
             </label>
           </li>
@@ -59,7 +59,7 @@ class RegistrationProgramInformation extends React.Component {
                 value={ProgramTypes.CLASS}
                 checked={this.props.programType == ProgramTypes.CLASS}
                 onChange={this.props.handleProgramTypeChange}
-              />{' '}
+              />{" "}
               Class
             </label>
           </li>
@@ -74,46 +74,46 @@ class RegistrationProgramInformation extends React.Component {
         </p>
         <NumberInput
           placeholder="Number of BMUN sessions attended"
-          onChange={accessHandlers('times_attended')}
-          value={accessProgram('times_attended')}
+          onChange={accessHandlers("times_attended")}
+          value={accessProgram("times_attended")}
         />
-        {accessErrors('times_attended')}
+        {accessErrors("times_attended")}
         <NumberInput
           placeholder="Tentative Number of Beginner Delegates"
-          onChange={accessHandlers('num_beginner_delegates')}
-          value={accessProgram('num_beginner_delegates')}
+          onChange={accessHandlers("num_beginner_delegates")}
+          value={accessProgram("num_beginner_delegates")}
         />
         <label className="hint">
           Beginner: Attended 0-3 conferences, not very familiar with Model
           United Nations.
         </label>
-        {accessErrors('num_beginner_delegates')}
+        {accessErrors("num_beginner_delegates")}
         <NumberInput
           placeholder="Tentative Number of Intermediate Delegates"
-          onChange={accessHandlers('num_intermediate_delegates')}
-          value={accessProgram('num_intermediate_delegates')}
+          onChange={accessHandlers("num_intermediate_delegates")}
+          value={accessProgram("num_intermediate_delegates")}
         />
         <label className="hint">
           Intermediate: Attended 4-7 conferences, little to no practice in
           advanced committees.
         </label>
-        {accessErrors('num_intermediate_delegates')}
+        {accessErrors("num_intermediate_delegates")}
         <NumberInput
           placeholder="Tentative Number of Advanced Delegates"
-          onChange={accessHandlers('num_advanced_delegates')}
-          value={accessProgram('num_advanced_delegates')}
+          onChange={accessHandlers("num_advanced_delegates")}
+          value={accessProgram("num_advanced_delegates")}
         />
         <label className="hint">
           Advanced: Attended more than seven conferences, has participated in
           many diverse committees.
         </label>
-        {accessErrors('num_advanced_delegates')}
+        {accessErrors("num_advanced_delegates")}
         <p className="instructions">
-          Tentative Total Number of Delegates:{' '}
+          Tentative Total Number of Delegates:{" "}
           {this._handleDelegateSum(
-            accessProgram('num_beginner_delegates'),
-            accessProgram('num_intermediate_delegates'),
-            accessProgram('num_advanced_delegates'),
+            accessProgram("num_beginner_delegates"),
+            accessProgram("num_intermediate_delegates"),
+            accessProgram("num_advanced_delegates")
           )}
         </p>
       </div>
@@ -133,7 +133,7 @@ class RegistrationProgramInformation extends React.Component {
     }
     return sum;
   }
-};
+}
 
 RegistrationProgramInformation.propTypes = {
   handlers: React.PropTypes.object,
@@ -141,6 +141,6 @@ RegistrationProgramInformation.propTypes = {
   programInformation: React.PropTypes.object,
   handleProgramTypeChange: React.PropTypes.func,
   programType: React.PropTypes.oneOf([ProgramTypes.CLUB, ProgramTypes.CLASS]),
-}
+};
 
 module.exports = RegistrationProgramInformation;

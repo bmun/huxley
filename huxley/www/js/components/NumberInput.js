@@ -3,10 +3,10 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
-var React = require('react');
-var TextInput = require('components/core/TextInput');
+var React = require("react");
+var TextInput = require("components/core/TextInput");
 
 var NumberInput = React.createClass({
   propTypes: {
@@ -15,7 +15,7 @@ var NumberInput = React.createClass({
     placeholder: React.PropTypes.string,
   },
 
-  render: function() {
+  render: function () {
     return (
       <TextInput
         {...this.props}
@@ -25,8 +25,8 @@ var NumberInput = React.createClass({
     );
   },
 
-  _handleChange: function(value) {
-    this.props.onChange && this.props.onChange(value.replace(/[^\d]/, ''));
+  _handleChange: function (value) {
+    this.props.onChange && this.props.onChange(value.replace(/[^\d]/, ""));
   },
 });
 

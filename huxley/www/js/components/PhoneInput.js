@@ -3,31 +3,25 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
-var React = require('react');
-var TextInput = require('components/core/TextInput');
+import React from "react";
 
-var formatPhone = require('utils/formatPhone');
+var TextInput = require("components/core/TextInput");
+var formatPhone = require("utils/formatPhone");
 
-var PhoneInput = React.createClass({
-  propTypes: {
-    onChange: React.PropTypes.func,
-    value: React.PropTypes.string,
-    isInternational: React.PropTypes.bool.isRequired,
-  },
-
-  componentDidUpdate: function(prevProps, prevState) {
+class PhoneInput extends React.Component {
+  componentDidUpdate(prevProps, prevState) {
     if (prevProps.isInternational !== this.props.isInternational) {
       var number = this._formatValue(
         this.props.value,
-        this.props.isInternational,
+        this.props.isInternational
       );
       this.props.onChange && this.props.onChange(number);
     }
-  },
+  }
 
-  render: function() {
+  render() {
     return (
       <TextInput
         {...this.props}
@@ -36,19 +30,25 @@ var PhoneInput = React.createClass({
         onChange={this._handleChange}
       />
     );
-  },
+  }
 
-  _handleChange: function(value) {
+  _handleChange(value) {
     var number = this._formatValue(value, this.props.isInternational);
     this.props.onChange && this.props.onChange(number);
-  },
+  }
 
-  _formatValue: function(value, isInternational) {
-    var value = value || '';
+  _formatValue(value, isInternational) {
+    var value = value || "";
     return isInternational
-      ? value.replace(/[^0-9+\(\)\-\s]/, '')
+      ? value.replace(/[^0-9+\(\)\-\s]/, "")
       : formatPhone(value);
-  },
-});
+  }
+}
+
+PhoneInput.propTypes = {
+  onChange: React.PropTypes.func,
+  value: React.PropTypes.string,
+  isInternational: React.PropTypes.bool.isRequired,
+};
 
 module.exports = PhoneInput;

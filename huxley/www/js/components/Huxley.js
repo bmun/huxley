@@ -3,24 +3,24 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
-var React = require('react');
-var ReactRouter = require('react-router');
+var React = require("react");
+var ReactRouter = require("react-router");
 
-var AdvisorView = require('components/AdvisorView');
-var ChairView = require('components/ChairView');
-var DelegateView = require('components/DelegateView');
-var ConferenceContext = require('components/ConferenceContext');
-var CurrentUserStore = require('stores/CurrentUserStore');
-var Shaker = require('components/Shaker');
-var SupportLink = require('components/SupportLink');
-var User = require('utils/User');
+var AdvisorView = require("components/AdvisorView");
+var ChairView = require("components/ChairView");
+var DelegateView = require("components/DelegateView");
+var ConferenceContext = require("components/ConferenceContext");
+var CurrentUserStore = require("stores/CurrentUserStore");
+var Shaker = require("components/Shaker");
+var SupportLink = require("components/SupportLink");
+var User = require("utils/User");
 
-require('css/base.less');
-require('css/Banner.less');
-require('css/JSWarning.less');
-require('css/IEWarning.less');
+require("css/base.less");
+require("css/Banner.less");
+require("css/JSWarning.less");
+require("css/IEWarning.less");
 
 var Huxley = React.createClass({
   mixins: [ReactRouter.History],
@@ -29,35 +29,35 @@ var Huxley = React.createClass({
     conference: React.PropTypes.shape(ConferenceContext),
   },
 
-  getChildContext: function() {
+  getChildContext: function () {
     var conference = global.conference;
     return {
       conference: conference,
     };
   },
 
-  componentWillMount: function() {
+  componentWillMount: function () {
     CurrentUserStore.addListener(() => {
       var user = CurrentUserStore.getCurrentUser();
       if (User.isAnonymous(user)) {
-        this.history.pushState(null, '/login');
+        this.history.pushState(null, "/login");
       } else if (User.isAdvisor(user)) {
-        this.history.pushState(null, '/advisor/profile');
+        this.history.pushState(null, "/advisor/profile");
       } else if (User.isChair(user)) {
-        this.history.pushState(null, '/chair/attendance');
+        this.history.pushState(null, "/chair/attendance");
       } else if (User.isDelegate(user)) {
-        this.history.pushState(null, '/delegate/profile');
+        this.history.pushState(null, "/delegate/profile");
       }
     });
   },
 
-  render: function() {
+  render: function () {
     var user = CurrentUserStore.getCurrentUser();
     if (User.isAnonymous(user)) {
       return (
         <div>
           <Shaker>
-            {React.cloneElement(this.props.children, {user: user})}
+            {React.cloneElement(this.props.children, { user: user })}
           </Shaker>
           <SupportLink />
         </div>
@@ -66,7 +66,7 @@ var Huxley = React.createClass({
       return (
         <div>
           <AdvisorView user={user}>
-            {React.cloneElement(this.props.children, {user: user})}
+            {React.cloneElement(this.props.children, { user: user })}
           </AdvisorView>
           <SupportLink />
         </div>
@@ -75,7 +75,7 @@ var Huxley = React.createClass({
       return (
         <div>
           <ChairView user={user}>
-            {React.cloneElement(this.props.children, {user: user})}
+            {React.cloneElement(this.props.children, { user: user })}
           </ChairView>
           <SupportLink />
         </div>
@@ -84,7 +84,7 @@ var Huxley = React.createClass({
       return (
         <div>
           <DelegateView user={user}>
-            {React.cloneElement(this.props.children, {user: user})}
+            {React.cloneElement(this.props.children, { user: user })}
           </DelegateView>
           <SupportLink />
         </div>

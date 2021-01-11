@@ -3,15 +3,15 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
-import React from 'react';
-import cx from 'classnames';
+import React from "react";
+import cx from "classnames";
 
-var ChangePasswordView = require('components/ChangePasswordView');
-var LogoutButton = require('components/LogoutButton');
+var ChangePasswordView = require("components/ChangePasswordView");
+var LogoutButton = require("components/LogoutButton");
 
-require('css/TopBar.less');
+require("css/TopBar.less");
 
 class TopBar extends React.Components {
   getInitialState() {
@@ -21,15 +21,15 @@ class TopBar extends React.Components {
   }
 
   componentDidMount() {
-    document.addEventListener('click', this._hideDropdown);
+    document.addEventListener("click", this._hideDropdown);
   }
 
   componentWillUnmount() {
-    document.removeEventListener('click', this._hideDropdown);
+    document.removeEventListener("click", this._hideDropdown);
   }
 
   render() {
-    var {user} = this.props;
+    var { user } = this.props;
 
     return (
       <div>
@@ -42,11 +42,12 @@ class TopBar extends React.Components {
               <li>
                 <a
                   className={cx({
-                    'change-password-link': true,
+                    "change-password-link": true,
                     active: this.state.changePasswordVisible,
                   })}
                   href="#"
-                  onClick={this._handleChangePasswordClick}>
+                  onClick={this._handleChangePasswordClick}
+                >
                   Change Password
                 </a>
               </li>
@@ -83,7 +84,7 @@ class TopBar extends React.Components {
   }
 
   _hideDropdown() {
-    this.setState({changePasswordVisible: false});
+    this.setState({ changePasswordVisible: false });
   }
 
   _stopPropagation(e) {
@@ -93,6 +94,6 @@ class TopBar extends React.Components {
     var ne = e.nativeEvent;
     ne.stopImmediatePropagation && ne.stopImmediatePropagation();
   }
-};
+}
 
 module.exports = TopBar;

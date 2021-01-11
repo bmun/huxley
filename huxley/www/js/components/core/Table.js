@@ -3,33 +3,26 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
-import {React} from 'react';
+import { React } from "react";
 
-require('css/Table.less');
+require("css/Table.less");
 
 class Table extends React.Component {
   render() {
-    const {emptyMessage, isEmpty, children} = this.props;
+    const { emptyMessage, isEmpty, children } = this.props;
     return (
       <div className="table-container">
-        <table>
-          {this.props.children}
-        </table>
-        {isEmpty
-          ? <div className="empty help-text">
-              {emptyMessage}
-            </div>
-          : null}
+        <table>{this.props.children}</table>
+        {isEmpty ? <div className="empty help-text">{emptyMessage}</div> : null}
       </div>
     );
   }
-};
+}
 
-Table.propTypes = {
+(Table.propTypes = {
   emptyMessage: React.PropTypes.string.isRequired,
   isEmpty: React.PropTypes.bool.isRequired,
-},
-
-module.exports = Table;
+}),
+  (module.exports = Table);

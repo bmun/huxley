@@ -3,17 +3,17 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
-import React from 'react';
+import React from "react";
 
-var ConferenceContext = require('components/ConferenceContext');
-var NavLink = require('components/NavLink');
-var OuterView = require('components/OuterView');
-var TextTemplate = require('components/core/TextTemplate');
+var ConferenceContext = require("components/ConferenceContext");
+var NavLink = require("components/NavLink");
+var OuterView = require("components/OuterView");
+var TextTemplate = require("components/core/TextTemplate");
 
-require('css/Letter.less');
-var RegistrationSuccessViewText = require('text/RegistrationSuccessViewText.md');
+require("css/Letter.less");
+var RegistrationSuccessViewText = require("text/RegistrationSuccessViewText.md");
 
 class RegistrationSuccessView extends React.Component {
   render() {
@@ -25,7 +25,8 @@ class RegistrationSuccessView extends React.Component {
             conferenceSession={conference.session}
             conferenceRegistrationFee={conference.registration_fee}
             conferenceDelegateFee={conference.delegate_fee}
-            conferenceExternal={conference.external}>
+            conferenceExternal={conference.external}
+          >
             {RegistrationSuccessViewText}
           </TextTemplate>
         </div>
@@ -36,10 +37,10 @@ class RegistrationSuccessView extends React.Component {
       </OuterView>
     );
   }
-};
+}
 
 RegistrationSuccessView.contextTypes = {
   conference: React.PropTypes.shape(ConferenceContext),
-}
+};
 
 module.exports = RegistrationSuccessView;
