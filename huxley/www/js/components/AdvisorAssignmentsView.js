@@ -6,7 +6,6 @@
 'use strict';
 
 var React = require('react');
-var ReactRouter = require('react-router');
 
 var _accessSafe = require('utils/_accessSafe');
 var AssignmentActions = require('actions/AssignmentActions');
@@ -31,14 +30,9 @@ var TextTemplate = require('components/core/TextTemplate');
 var AdvisorAssignmentsViewText = require('text/AdvisorAssignmentsViewText.md');
 var AdvisorWaitlistText = require('text/AdvisorWaitlistText.md');
 
-var AdvisorAssignmentsView = React.createClass({
-  mixins: [ReactRouter.History],
+class AdvisorAssignmentsView extends React.Component {
 
-  contextTypes: {
-    conference: React.PropTypes.shape(ConferenceContext),
-  },
-
-  getInitialState: function() {
+  getInitialState() {
     var schoolID = CurrentUserStore.getCurrentUser().school.id;
     var delegates = DelegateStore.getSchoolDelegates(schoolID);
     var assigned = this.prepareAssignedDelegates(delegates);
@@ -55,9 +49,9 @@ var AdvisorAssignmentsView = React.createClass({
       success: false,
       registration: RegistrationStore.getRegistration(schoolID, conferenceID),
     };
-  },
+  }
 
-  componentDidMount: function() {
+  componentDidMount() {
     var schoolID = CurrentUserStore.getCurrentUser().school.id;
     var conferenceID = this.context.conference.session;
 
@@ -92,18 +86,18 @@ var AdvisorAssignmentsView = React.createClass({
         registration: RegistrationStore.getRegistration(schoolID, conferenceID),
       });
     });
-  },
+  }
 
-  componentWillUnmount: function() {
+  componentWillUnmount() {
     this._successTimout && clearTimeout(this._successTimeout);
     this._committeesToken && this._committeesToken.remove();
     this._countriesToken && this._countriesToken.remove();
     this._delegatesToken && this._delegatesToken.remove();
     this._assignmentsToken && this._assignmentsToken.remove();
     this._registrationToken && this._registrationToken.remove();
-  },
+  }
 
-  render: function() {
+  render() {
     var registration = this.state.registration;
     var waitlisted =
       _accessSafe(registration, 'is_waitlisted') == null
@@ -164,9 +158,9 @@ var AdvisorAssignmentsView = React.createClass({
         </InnerView>
       );
     }
-  },
+  }
 
-  renderAssignmentRows: function() {
+  renderAssignmentRows() {
     var committees = this.state.committees;
     var countries = this.state.countries;
     var finalized =
@@ -204,7 +198,7 @@ var AdvisorAssignmentsView = React.createClass({
         );
       }.bind(this),
     );
-  },
+  }
 
   /*
     To make it easier to assign and unassign delegates to assignments we maintain
@@ -213,7 +207,7 @@ var AdvisorAssignmentsView = React.createClass({
     to be assigned to it. This way we can easily manage the relationship from
     assignment to delegates via this object.
   */
-  prepareAssignedDelegates: function(delegates) {
+  prepareAssignedDelegates(delegates) {
     var assigned = {};
     for (var i = 0; i < delegates.length; i++) {
       if (delegates[i].assignment) {
@@ -228,9 +222,9 @@ var AdvisorAssignmentsView = React.createClass({
     }
 
     return assigned;
-  },
+  }
 
-  renderDelegateDropdown: function(assignment, slot) {
+  renderDelegateDropdown(assignment, slot) {
     var selectedDelegateID =
       assignment.id in this.state.assigned
         ? this.state.assigned[assignment.id][slot]
@@ -249,9 +243,9 @@ var AdvisorAssignmentsView = React.createClass({
         disabled={disableView}
       />
     );
-  },
+  }
 
-  _handleDelegateAssignment: function(assignmentId, slot, event) {
+  _handleDelegateAssignment(assignmentId, slot, event) {
     var delegates = this.state.delegates;
     var assigned = this.state.assigned;
     var newDelegateId = event.target.value,
@@ -281,9 +275,9 @@ var AdvisorAssignmentsView = React.createClass({
       delegates: delegates,
       assigned: assigned,
     });
-  },
+  }
 
-  _handleFinalize: function(event) {
+  _handleFinalize(event) {
     var confirm = window.confirm(
       'By pressing okay you are committing to the financial responsibility of each assignment. Are you sure you want to finalize assignments?',
     );
@@ -296,9 +290,9 @@ var AdvisorAssignmentsView = React.createClass({
         this._handleError,
       );
     }
-  },
+  }
 
-  _handleAssignmentDelete: function(assignment) {
+  _handleAssignmentDelete(assignment) {
     var confirm = window.confirm(
       'Are you sure you want to delete this assignment?',
     );
@@ -311,9 +305,9 @@ var AdvisorAssignmentsView = React.createClass({
         this._handleError,
       );
     }
-  },
+  }
 
-  _handleSave: function(event) {
+  _handleSave(event) {
     this._successTimout && clearTimeout(this._successTimeout);
     this.setState({loading: true});
     var school = CurrentUserStore.getCurrentUser().school;
@@ -323,9 +317,9 @@ var AdvisorAssignmentsView = React.createClass({
       this._handleSuccess,
       this._handleError,
     );
-  },
+  }
 
-  _handleSuccess: function(response) {
+  _handleSuccess(response) {
     this.setState({
       loading: false,
       success: true,
@@ -335,14 +329,18 @@ var AdvisorAssignmentsView = React.createClass({
       () => this.setState({success: false}),
       2000,
     );
-  },
+  }
 
-  _handleError: function(response) {
+  _handleError(response) {
     this.setState({loading: false});
     window.alert(
       'Something went wrong. Please refresh your page and try again.',
     );
-  },
-});
+  }
+}
+
+AdvisorAssignmentsView.contextTypes = {
+  conference: React.PropTypes.shape(ConferenceContext),
+};
 
 module.exports = AdvisorAssignmentsView;

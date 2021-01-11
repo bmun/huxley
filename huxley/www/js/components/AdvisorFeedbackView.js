@@ -25,14 +25,9 @@ var TextTemplate = require('components/core/TextTemplate');
 var AdvisorFeedbackViewText = require('text/AdvisorFeedbackViewText.md');
 var AdvisorWaitlistText = require('text/AdvisorWaitlistText.md');
 
-var AdvisorFeedbackView = React.createClass({
-  mixins: [ReactRouter.History],
+class AdvisorFeedbackView extends React.Component {
 
-  contextTypes: {
-    conference: React.PropTypes.shape(ConferenceContext),
-  },
-
-  getInitialState: function() {
+  getInitialState() {
     var schoolID = CurrentUserStore.getCurrentUser().school.id;
     var delegates = DelegateStore.getSchoolDelegates(schoolID);
     var conferenceID = this.context.conference.session;
@@ -49,9 +44,9 @@ var AdvisorFeedbackView = React.createClass({
       delegates: delegates,
       loading: false,
     };
-  },
+  }
 
-  componentDidMount: function() {
+  componentDidMount() {
     var schoolID = CurrentUserStore.getCurrentUser().school.id;
     var conferenceID = this.context.conference.session;
     this._registrationToken = RegistrationStore.addListener(() => {
@@ -84,17 +79,17 @@ var AdvisorFeedbackView = React.createClass({
         feedback: feedback,
       });
     });
-  },
+  }
 
-  componentWillUnmount: function() {
+  componentWillUnmount() {
     this._registrationToken && this._registrationToken.remove();
     this._committeesToken && this._committeesToken.remove();
     this._countriesToken && this._countriesToken.remove();
     this._delegatesToken && this._delegatesToken.remove();
     this._assignmentsToken && this._assignmentsToken.remove();
-  },
+  }
 
-  render: function() {
+  render() {
     var registration = this.state.registration;
     var waitlisted =
       _accessSafe(registration, 'is_waitlisted') == null
@@ -133,9 +128,9 @@ var AdvisorFeedbackView = React.createClass({
         </InnerView>
       );
     }
-  },
+  }
 
-  renderAssignmentRows: function() {
+  renderAssignmentRows() {
     var assignments = this.state.assignments;
     var committees = this.state.committees;
     var countries = this.state.countries;
@@ -192,7 +187,7 @@ var AdvisorFeedbackView = React.createClass({
         </tr>
       );
     });
-  },
+  }
 
   /*
 
@@ -203,7 +198,7 @@ var AdvisorFeedbackView = React.createClass({
     country name instead of delegate name.
   */
 
-  prepareFeedback: function(delegates) {
+  prepareFeedback(delegates) {
     var feedback = {};
     for (var delegate of delegates) {
       if (delegate.assignment) {
@@ -211,7 +206,12 @@ var AdvisorFeedbackView = React.createClass({
       }
     }
     return feedback;
-  },
-});
+  }
+}
+
+AdvisorFeedbackView.contextTypes = {
+  conference: React.PropTypes.shape(ConferenceContext),
+  history: ReactRouter.PropTypes.history,
+}
 
 module.exports = AdvisorFeedbackView;

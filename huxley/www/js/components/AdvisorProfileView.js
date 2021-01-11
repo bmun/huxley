@@ -33,7 +33,7 @@ const AdvisorChecklistTeamFeeText = require('text/checklists/AdvisorChecklistTea
 const AdvisorChecklistWaiversText = require('text/checklists/AdvisorChecklistWaiversText.md');
 const AdvisorWaitlistText = require('text/AdvisorWaitlistText.md');
 
-const AdvisorProfileView = React.createClass({
+class AdvisorProfileView extends React.Component {
   // #489
   // The below code was commented out due to
   // https://github.com/reactjs/react-router/blob/master/upgrade-guides/v1.0.0.md#routehandler
@@ -42,12 +42,7 @@ const AdvisorProfileView = React.createClass({
   //   user: React.PropTypes.object.isRequired
   // },
 
-  contextTypes: {
-    conference: React.PropTypes.shape(ConferenceContext),
-    shake: React.PropTypes.func,
-  },
-
-  getInitialState: function() {
+  getInitialState() {
     var user = this.props.user;
     var school = User.getSchool(user);
     var conferenceID = this.context.conference.session;
@@ -71,9 +66,9 @@ const AdvisorProfileView = React.createClass({
       delegates: DelegateStore.getSchoolDelegates(school.id),
       assignments: AssignmentStore.getSchoolAssignments(school.id),
     };
-  },
+  }
 
-  componentDidMount: function() {
+  componentDidMount() {
     var schoolID = User.getSchool(this.props.user).id;
     var conferenceID = this.context.conference.session;
     this._registrationToken = RegistrationStore.addListener(() => {
@@ -91,16 +86,16 @@ const AdvisorProfileView = React.createClass({
         assignments: AssignmentStore.getSchoolAssignments(schoolID),
       });
     });
-  },
+  }
 
-  componentWillUnmount: function() {
+  componentWillUnmount() {
     this._successTimout && clearTimeout(this._successTimeout);
     this._registrationToken && this._registrationToken.remove();
     this._delegatesToken && this._delegatesToken.remove();
     this._assignmentsToken && this._assignmentsToken.remove();
-  },
+  }
 
-  render: function() {
+  render() {
     var conference = this.context.conference;
     var user = this.props.user;
     var school = User.getSchool(user);
@@ -525,9 +520,9 @@ const AdvisorProfileView = React.createClass({
         </form>
       </InnerView>
     );
-  },
+  }
 
-  renderError: function(field) {
+  renderError(field) {
     if (this.state.errors[field]) {
       return (
         <StatusLabel status="error">{this.state.errors[field]}</StatusLabel>
@@ -543,9 +538,9 @@ const AdvisorProfileView = React.createClass({
     }
 
     return null;
-  },
+  }
 
-  _handleSubmit: function(event) {
+  _handleSubmit(event) {
     this._successTimout && clearTimeout(this._successTimeout);
     this.setState({loading: true});
     var user = this.props.user;
@@ -570,9 +565,9 @@ const AdvisorProfileView = React.createClass({
       this._handleError,
     );
     event.preventDefault();
-  },
+  }
 
-  _handleSuccess: function(response) {
+  _handleSuccess(response) {
     this.setState({
       errors: {},
       loading: false,
@@ -583,9 +578,9 @@ const AdvisorProfileView = React.createClass({
       () => this.setState({success: false}),
       2000,
     );
-  },
+  }
 
-  _handleError: function(response) {
+  _handleError(response) {
     if (!response) {
       return;
     }
@@ -599,6 +594,12 @@ const AdvisorProfileView = React.createClass({
         this.context.shake && this.context.shake();
       },
     );
-  },
-});
+  }
+}
+
+AdvisorProfileView.contextTypes = {
+  conference: React.PropTypes.shape(ConferenceContext),
+  shake: React.PropTypes.func,
+};
+
 module.exports = AdvisorProfileView;
