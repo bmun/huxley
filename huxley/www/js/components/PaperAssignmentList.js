@@ -7,20 +7,7 @@
 
 var Button = require("components/core/Button");
 
-<<<<<<< HEAD
-var React = require("react");
-
-var PaperAssignmentList = React.createClass({
-  propTypes: {
-    onChange: React.PropTypes.func,
-    assignments: React.PropTypes.array,
-    papers: React.PropTypes.object,
-    rubric: React.PropTypes.object,
-    countries: React.PropTypes.object,
-  },
-=======
 import React from "react";
->>>>>>> 6a6c5f85d0f9eb211f9f4386f72086cbace5df4e
 
 class PaperAssignmentList extends React.Component {
   render() {
@@ -101,14 +88,8 @@ class PaperAssignmentList extends React.Component {
         <tbody>{rows}</tbody>
       </table>
     );
-<<<<<<< HEAD
-  },
-
-  calculateTotalScore: function (paper, topic_2 = false) {
-=======
   }
   calculateTotalScore(paper, topic_2 = false) {
->>>>>>> 6a6c5f85d0f9eb211f9f4386f72086cbace5df4e
     var totalScore = -1;
     if (topic_2) {
       totalScore =
@@ -126,14 +107,8 @@ class PaperAssignmentList extends React.Component {
         paper.score_5;
     }
     return totalScore;
-<<<<<<< HEAD
-  },
-
-  calculateMaxScore: function (rubric, topic_2 = false) {
-=======
   }
   calculateMaxScore(rubric, topic_2 = false) {
->>>>>>> 6a6c5f85d0f9eb211f9f4386f72086cbace5df4e
     var totalMaxScore = -1;
     if (topic_2) {
       totalMaxScore =
@@ -151,14 +126,8 @@ class PaperAssignmentList extends React.Component {
         rubric.grade_value_5;
     }
     return totalMaxScore;
-<<<<<<< HEAD
-  },
-
-  calculateCategory: function (value, weight) {
-=======
   }
   calculateCategory(value, weight) {
->>>>>>> 6a6c5f85d0f9eb211f9f4386f72086cbace5df4e
     var interval = weight / 5;
     if (value >= interval * 5) {
       return "5 - Exceeds Expectations";
@@ -173,14 +142,8 @@ class PaperAssignmentList extends React.Component {
     } else {
       ("0 - Needs Improvement");
     }
-<<<<<<< HEAD
-  },
-
-  calculateScore: function (category, weight) {
-=======
   }
   calculateScore(category, weight) {
->>>>>>> 6a6c5f85d0f9eb211f9f4386f72086cbace5df4e
     var interval = weight / 5;
     if (category == "5 - Exceeds Expectations") {
       return interval * 5;
@@ -197,11 +160,7 @@ class PaperAssignmentList extends React.Component {
     }
   }
 
-<<<<<<< HEAD
-  _handleChange: function (assignmentID, event) {
-=======
   _handleChange(assignmentID, event) {
->>>>>>> 6a6c5f85d0f9eb211f9f4386f72086cbace5df4e
     this.props.onChange && this.props.onChange(assignmentID, event);
   }
 }
