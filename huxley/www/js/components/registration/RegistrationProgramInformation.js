@@ -5,22 +5,14 @@
 
 'use strict';
 
-var React = require('react');
+import React from 'react';
 
 var ProgramTypes = require('constants/ProgramTypes');
 var NumberInput = require('components/NumberInput');
 var _accessSafe = require('utils/_accessSafe');
 
-const RegistrationProgramInformation = React.createClass({
-  propTypes: {
-    handlers: React.PropTypes.object,
-    errors: React.PropTypes.object,
-    programInformation: React.PropTypes.object,
-    handleProgramTypeChange: React.PropTypes.func,
-    programType: React.PropTypes.oneOf([ProgramTypes.CLUB, ProgramTypes.CLASS]),
-  },
-
-  shouldComponentUpdate: function(nextProps, nextState) {
+class RegistrationProgramInformation extends React.Component {
+  shouldComponentUpdate(nextProps, nextState) {
     for (let key in this.props.programInformation) {
       if (
         this.props.programInformation[key] !== nextProps.programInformation[key]
@@ -36,9 +28,9 @@ const RegistrationProgramInformation = React.createClass({
     }
 
     return this.props.programType !== nextProps.programType;
-  },
+  }
 
-  render: function() {
+  render() {
     var accessHandlers = _accessSafe.bind(this, this.props.handlers);
     var accessErrors = _accessSafe.bind(this, this.props.errors);
     var accessProgram = _accessSafe.bind(this, this.props.programInformation);
@@ -126,9 +118,9 @@ const RegistrationProgramInformation = React.createClass({
         </p>
       </div>
     );
-  },
+  }
 
-  _handleDelegateSum: function(beginner, intermediate, advanced) {
+  _handleDelegateSum(beginner, intermediate, advanced) {
     var sum = 0;
     if (beginner) {
       sum += parseInt(beginner, 10) || 0;
@@ -140,7 +132,15 @@ const RegistrationProgramInformation = React.createClass({
       sum += parseInt(advanced, 10) || 0;
     }
     return sum;
-  },
-});
+  }
+};
+
+RegistrationProgramInformation.propTypes = {
+  handlers: React.PropTypes.object,
+  errors: React.PropTypes.object,
+  programInformation: React.PropTypes.object,
+  handleProgramTypeChange: React.PropTypes.func,
+  programType: React.PropTypes.oneOf([ProgramTypes.CLUB, ProgramTypes.CLASS]),
+}
 
 module.exports = RegistrationProgramInformation;

@@ -5,23 +5,18 @@
 
 'use strict';
 
-var React = require('react');
-var ReactDOM = require('react-dom');
-
-var cx = require('classnames');
+import React from 'react';
+import ReactDOM from 'react-dom';
+import cx from 'classnames';
 
 require('css/Shaker.less');
 
-var Shaker = React.createClass({
-  childContextTypes: {
-    shake: React.PropTypes.func,
-  },
-
+class Shaker extends React.Component {
   getChildContext() {
     return {
       shake: this.shake,
     };
-  },
+  }
 
   render() {
     return (
@@ -29,7 +24,7 @@ var Shaker = React.createClass({
         {this.props.children}
       </div>
     );
-  },
+  }
 
   shake() {
     const element = ReactDOM.findDOMNode(this);
@@ -41,7 +36,11 @@ var Shaker = React.createClass({
         element.classList.remove('shake');
       }, 301);
     }
-  },
-});
+  }
+};
+
+Shaker.childContextTypes = {
+  shake: React.PropTypes.func,
+}
 
 module.exports = Shaker;

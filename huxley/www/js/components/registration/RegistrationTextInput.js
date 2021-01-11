@@ -5,20 +5,12 @@
 
 'use strict';
 
-var React = require('react');
+import React from 'react';
 
 var TextInput = require('components/core/TextInput');
 var StatusLabel = require('components/core/StatusLabel');
 
-const RegistrationTextInput = React.createClass({
-  propTypes: {
-    errors: React.PropTypes.arrayOf(React.PropTypes.string),
-    onChange: React.PropTypes.func,
-    placeholder: React.PropTypes.string,
-    value: React.PropTypes.string,
-    type: React.PropTypes.oneOf(['text', 'password']),
-  },
-
+class RegistrationTextInput extends React.Component {
   render() {
     const {errors, ...inputProps} = this.props;
     return (
@@ -32,7 +24,15 @@ const RegistrationTextInput = React.createClass({
           )}
       </div>
     );
-  },
-});
+  }
+};
+
+RegistrationTextInput.propTypes = {
+  errors: React.PropTypes.arrayOf(React.PropTypes.string),
+  onChange: React.PropTypes.func,
+  placeholder: React.PropTypes.string,
+  value: React.PropTypes.string,
+  type: React.PropTypes.oneOf(['text', 'password']),
+}
 
 module.exports = RegistrationTextInput;

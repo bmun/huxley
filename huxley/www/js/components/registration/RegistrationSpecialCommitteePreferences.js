@@ -5,20 +5,13 @@
 
 'use strict';
 
-var React = require('react');
+import React from 'react';
 
 var NumberInput = require('components/NumberInput');
 var _accessSafe = require('utils/_accessSafe');
 
-const RegistrationSpecialCommitteePreferences = React.createClass({
-  propTypes: {
-    handlers: React.PropTypes.object,
-    errors: React.PropTypes.object,
-    specialCommitteePrefValues: React.PropTypes.object,
-    renderCommittees: React.PropTypes.func,
-  },
-
-  render: function() {
+class RegistrationSpecialCommitteePreferences extends React.Component {
+  render() {
     var accessHandlers = _accessSafe.bind(this, this.props.handlers);
     var accessErrors = _accessSafe.bind(this, this.props.errors);
     var accessValues = _accessSafe.bind(
@@ -52,7 +45,14 @@ const RegistrationSpecialCommitteePreferences = React.createClass({
         {accessErrors('num_chinese_speaking_delegates')}
       </div>
     );
-  },
-});
+  }
+};
+
+RegistrationSpecialCommitteePreferences.propTypes = {
+  handlers: React.PropTypes.object,
+  errors: React.PropTypes.object,
+  specialCommitteePrefValues: React.PropTypes.object,
+  renderCommittees: React.PropTypes.func,
+}
 
 module.exports = RegistrationSpecialCommitteePreferences;

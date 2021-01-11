@@ -5,17 +5,11 @@
 
 'use strict';
 
-const React = require('react');
-const cx = require('classnames');
+import {React} from 'react';
 
 require('css/Table.less');
 
-const Table = React.createClass({
-  propTypes: {
-    emptyMessage: React.PropTypes.string.isRequired,
-    isEmpty: React.PropTypes.bool.isRequired,
-  },
-
+class Table extends React.Component {
   render() {
     const {emptyMessage, isEmpty, children} = this.props;
     return (
@@ -30,7 +24,12 @@ const Table = React.createClass({
           : null}
       </div>
     );
-  },
-});
+  }
+};
+
+Table.propTypes = {
+  emptyMessage: React.PropTypes.string.isRequired,
+  isEmpty: React.PropTypes.bool.isRequired,
+},
 
 module.exports = Table;

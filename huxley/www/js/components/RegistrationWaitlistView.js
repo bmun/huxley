@@ -5,7 +5,7 @@
 
 'use strict';
 
-var React = require('react');
+import React from 'react';
 
 var ConferenceContext = require('components/ConferenceContext');
 var NavLink = require('components/NavLink');
@@ -15,12 +15,8 @@ var TextTemplate = require('components/core/TextTemplate');
 require('css/Letter.less');
 var RegistrationWaitlistViewText = require('text/RegistrationWaitlistViewText.md');
 
-var RegistrationWaitlistView = React.createClass({
-  contextTypes: {
-    conference: React.PropTypes.shape(ConferenceContext),
-  },
-
-  render: function() {
+class RegistrationWaitlistView extends React.Component {
+  render() {
     var conference = this.context.conference;
     return (
       <OuterView>
@@ -35,7 +31,11 @@ var RegistrationWaitlistView = React.createClass({
         </NavLink>
       </OuterView>
     );
-  },
-});
+  }
+};
+
+RegistrationWaitlistView.contextTypes = {
+  conference: React.PropTypes.shape(ConferenceContext),
+}
 
 module.exports = RegistrationWaitlistView;

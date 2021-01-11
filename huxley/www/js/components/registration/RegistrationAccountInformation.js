@@ -5,21 +5,13 @@
 
 'use strict';
 
-var React = require('react');
+import {React} from 'react';
 
 var RegistrationTextInput = require('components/registration/RegistrationTextInput');
 var _accessSafe = require('utils/_accessSafe');
 
-const RegistrationAccountInformation = React.createClass({
-  propTypes: {
-    handlers: React.PropTypes.object,
-    errors: React.PropTypes.object,
-    accountInformation: React.PropTypes.object,
-    blur: React.PropTypes.func,
-    focus: React.PropTypes.func,
-  },
-
-  shouldComponentUpdate: function(nextProps, nextState) {
+class RegistrationAccountInformation extends React.Component {
+  shouldComponentUpdate(nextProps, nextState) {
     for (let key in this.props.accountInformation) {
       if (
         this.props.accountInformation[key] !== nextProps.accountInformation[key]
@@ -35,9 +27,9 @@ const RegistrationAccountInformation = React.createClass({
     }
 
     return false;
-  },
+  }
 
-  render: function() {
+  render() {
     var accessErrors = _accessSafe.bind(this, this.props.errors);
     var accessHandlers = _accessSafe.bind(this, this.props.handlers);
     var accessAccount = _accessSafe.bind(this, this.props.accountInformation);
@@ -82,7 +74,15 @@ const RegistrationAccountInformation = React.createClass({
         />
       </div>
     );
-  },
-});
+  }
+};
+
+RegistrationAccountInformation.propTypes = {
+  handlers: React.PropTypes.object,
+  errors: React.PropTypes.object,
+  accountInformation: React.PropTypes.object,
+  blur: React.PropTypes.func,
+  focus: React.PropTypes.func,
+}
 
 module.exports = RegistrationAccountInformation;

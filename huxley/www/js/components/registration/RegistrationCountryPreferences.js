@@ -5,14 +5,10 @@
 
 'use strict';
 
-var React = require('react');
+import React from 'react';
 
-const RegistrationCountryPreferences = React.createClass({
-  propTypes: {
-    renderCountryDropdown: React.PropTypes.func,
-  },
-
-  render: function() {
+class RegistrationCountryPreferences extends React.Component {
+  render() {
     return (
       <div id="country_preferences">
         <h3>Country Preferences</h3>
@@ -38,7 +34,11 @@ const RegistrationCountryPreferences = React.createClass({
         </ul>
       </div>
     );
-  },
-});
+  }
+};
+
+RegistrationCountryPreferences.propTypes = {
+  renderCountryDropdown: React.PropTypes.func,
+},
 
 module.exports = RegistrationCountryPreferences;

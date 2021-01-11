@@ -5,21 +5,13 @@
 
 'use strict';
 
-var React = require('react');
+import React from 'react';
 
 var RegistrationTextInput = require('components/registration/RegistrationTextInput');
 var _accessSafe = require('utils/_accessSafe');
 
-const RegistrationSchoolInformation = React.createClass({
-  propTypes: {
-    handlers: React.PropTypes.object,
-    errors: React.PropTypes.object,
-    schoolInformation: React.PropTypes.object,
-    handleInternationalChange: React.PropTypes.func,
-    schoolInternational: React.PropTypes.bool,
-  },
-
-  shouldComponentUpdate: function(nextProps, nextState) {
+class RegistrationSchoolInformation extends React.Component {
+  shouldComponentUpdate(nextProps, nextState) {
     for (let key in this.props.schoolInformation) {
       if (
         this.props.schoolInformation[key] !== nextProps.schoolInformation[key]
@@ -35,9 +27,9 @@ const RegistrationSchoolInformation = React.createClass({
     }
 
     return this.props.schoolInternational !== nextProps.schoolInternational;
-  },
+  }
 
-  render: function() {
+  render() {
     var accessErrors = _accessSafe.bind(this, this.props.errors);
     var accessHandlers = _accessSafe.bind(this, this.props.handlers);
     var accessSchool = _accessSafe.bind(this, this.props.schoolInformation);
@@ -109,7 +101,15 @@ const RegistrationSchoolInformation = React.createClass({
         />
       </div>
     );
-  },
-});
+  }
+};
+
+RegistrationSchoolInformation.propTypes = {
+  handlers: React.PropTypes.object,
+  errors: React.PropTypes.object,
+  schoolInformation: React.PropTypes.object,
+  handleInternationalChange: React.PropTypes.func,
+  schoolInternational: React.PropTypes.bool,
+}
 
 module.exports = RegistrationSchoolInformation;

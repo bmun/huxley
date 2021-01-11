@@ -5,30 +5,30 @@
 
 'use strict';
 
-var cx = require('classnames');
-var React = require('react');
+import React from 'react';
+import cx from 'classnames';
 
 var ChangePasswordView = require('components/ChangePasswordView');
 var LogoutButton = require('components/LogoutButton');
 
 require('css/TopBar.less');
 
-var TopBar = React.createClass({
-  getInitialState: function() {
+class TopBar extends React.Components {
+  getInitialState() {
     return {
       changePasswordVisible: false,
     };
-  },
+  }
 
-  componentDidMount: function() {
+  componentDidMount() {
     document.addEventListener('click', this._hideDropdown);
-  },
+  }
 
-  componentWillUnmount: function() {
+  componentWillUnmount() {
     document.removeEventListener('click', this._hideDropdown);
-  },
+  }
 
-  render: function() {
+  render() {
     var {user} = this.props;
 
     return (
@@ -68,31 +68,31 @@ var TopBar = React.createClass({
         />
       </div>
     );
-  },
+  }
 
-  _handleChangePasswordClick: function(e) {
+  _handleChangePasswordClick(e) {
     e.preventDefault();
     this._stopPropagation(e);
     this.setState({
       changePasswordVisible: !this.state.changePasswordVisible,
     });
-  },
+  }
 
-  _handleDropdownClick: function(e) {
+  _handleDropdownClick(e) {
     this._stopPropagation(e);
-  },
+  }
 
-  _hideDropdown: function() {
+  _hideDropdown() {
     this.setState({changePasswordVisible: false});
-  },
+  }
 
-  _stopPropagation: function(e) {
+  _stopPropagation(e) {
     e.stopPropagation();
 
     // TODO: display a warning if stopImmediatePropagation isn't supported.
     var ne = e.nativeEvent;
     ne.stopImmediatePropagation && ne.stopImmediatePropagation();
-  },
-});
+  }
+};
 
 module.exports = TopBar;

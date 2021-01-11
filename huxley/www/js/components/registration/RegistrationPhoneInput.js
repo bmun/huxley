@@ -5,19 +5,12 @@
 
 'use strict';
 
-var React = require('react');
+import React from 'react';
 
 var PhoneInput = require('components/PhoneInput');
 var StatusLabel = require('components/core/StatusLabel');
 
-const RegistrationPhoneInput = React.createClass({
-  propTypes: {
-    errors: React.PropTypes.arrayOf(React.PropTypes.string),
-    onChange: React.PropTypes.func,
-    placeholder: React.PropTypes.string,
-    value: React.PropTypes.string,
-  },
-
+class RegistrationPhoneInput extends React.Component {
   render() {
     const {errors, ...inputProps} = this.props;
     return (
@@ -31,7 +24,14 @@ const RegistrationPhoneInput = React.createClass({
           )}
       </div>
     );
-  },
-});
+  }
+};
+
+RegistrationPhoneInput.propTypes = {
+  errors: React.PropTypes.arrayOf(React.PropTypes.string),
+  onChange: React.PropTypes.func,
+  placeholder: React.PropTypes.string,
+  value: React.PropTypes.string,
+}
 
 module.exports = RegistrationPhoneInput;

@@ -5,9 +5,8 @@
 
 'use strict';
 
-var cx = require('classnames');
-var React = require('react');
-var ReactRouter = require('react-router');
+import React from 'react';
+import PropTypes from 'react-router';
 
 var Button = require('components/core/Button');
 var CommitteeStore = require('stores/CommitteeStore');
@@ -38,13 +37,6 @@ require('css/RegistrationView.less');
 var USA = 'United States of America';
 
 var RegistrationView = React.createClass({
-  mixins: [ReactRouter.History],
-
-  contextTypes: {
-    conference: React.PropTypes.shape(ConferenceContext),
-    shake: React.PropTypes.func,
-  },
-
   getInitialState: function() {
     return {
       errors: {},
@@ -567,9 +559,9 @@ var RegistrationView = React.createClass({
 
   _handleSuccess: function(response) {
     if (response.registration.is_waitlisted) {
-      this.history.pushState(null, '/register/waitlist');
+      this.contextTypes.history.pushState(null, '/register/waitlist');
     } else {
-      this.history.pushState(null, '/register/success');
+      this.contextTypes.history.pushState(null, '/register/success');
     }
   },
 
@@ -589,5 +581,11 @@ var RegistrationView = React.createClass({
     );
   },
 });
+
+RegistrationView.contextTypes = {
+  conference: React.PropTypes.shape(ConferenceContext),
+  shake: React.PropTypes.func,
+  history = PropTypes.history
+}
 
 module.exports = RegistrationView;

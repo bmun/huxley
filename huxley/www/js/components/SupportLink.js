@@ -5,13 +5,12 @@
 
 'use strict';
 
-var cx = require('classnames');
-var React = require('react');
+import React from 'react';
 
 require('css/SupportLink.less');
 
-var SupportLink = React.createClass({
-  render: function() {
+class SupportLink extends React.Component {
+  render() {
     return (
       <div className="link-wrapper">
         <span className="grey-text">Having Issues?</span>
@@ -26,7 +25,7 @@ var SupportLink = React.createClass({
         </span>
       </div>
     );
-  },
-});
+  }
+};
 
 module.exports = SupportLink;

@@ -5,23 +5,14 @@
 
 'use strict';
 
-var React = require('react');
+import React from 'react';
 
 var RegistrationPhoneInput = require('components/registration/RegistrationPhoneInput');
 var RegistrationTextInput = require('components/registration/RegistrationTextInput');
 var _accessSafe = require('utils/_accessSafe');
 
-const RegistrationSecondaryContact = React.createClass({
-  propTypes: {
-    handlers: React.PropTypes.object,
-    secondaryContactInformation: React.PropTypes.object,
-    errors: React.PropTypes.object,
-    renderContactGenderField: React.PropTypes.func,
-    renderContactTypeField: React.PropTypes.func,
-    isInternational: React.PropTypes.bool,
-  },
-
-  render: function() {
+class RegistrationSecondaryContact extends React.Component {
+  render() {
     var accessHandlers = _accessSafe.bind(this, this.props.handlers);
     var accessSecondary = _accessSafe.bind(
       this,
@@ -54,7 +45,16 @@ const RegistrationSecondaryContact = React.createClass({
         {this.props.renderContactTypeField('secondary_type')}
       </div>
     );
-  },
-});
+  }
+};
+
+RegistrationSecondaryContact.propTypes = {
+  handlers: React.PropTypes.object,
+  secondaryContactInformation: React.PropTypes.object,
+  errors: React.PropTypes.object,
+  renderContactGenderField: React.PropTypes.func,
+  renderContactTypeField: React.PropTypes.func,
+  isInternational: React.PropTypes.bool,
+}
 
 module.exports = RegistrationSecondaryContact;

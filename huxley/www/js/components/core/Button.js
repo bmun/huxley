@@ -5,31 +5,14 @@
 
 'use strict';
 
-var cx = require('classnames');
-var React = require('react');
-var ReactRouter = require('react-router');
+import cx from 'classnames';
+import {React} from 'react';
+import ReactRouter from 'react-router';
 
 require('css/Button.less');
 
-var Button = React.createClass({
-  propTypes: {
-    color: React.PropTypes.oneOf(['blue', 'green', 'yellow', 'red']),
-    href: React.PropTypes.string,
-    loading: React.PropTypes.bool,
-    size: React.PropTypes.oneOf(['small', 'medium', 'large']),
-    success: React.PropTypes.bool,
-  },
-
-  getDefaultProps: function() {
-    return {
-      color: 'blue',
-      loading: false,
-      size: 'medium',
-      success: false,
-    };
-  },
-
-  render: function() {
+class Button extends React.Component {
+  render() {
     var ButtonComponent = this.props.href ? ReactRouter.Link : 'button';
 
     return (
@@ -54,7 +37,17 @@ var Button = React.createClass({
         </span>
       </ButtonComponent>
     );
-  },
-});
+  }
+};
+
+Button.propTypes = {
+  color: React.PropTypes.oneOf(['blue', 'green', 'yellow', 'red']),
+  href: React.PropTypes.string,
+  loading: React.PropTypes.bool,
+  size: React.PropTypes.oneOf(['small', 'medium', 'large']),
+  success: React.PropTypes.bool,
+}
+
+
 
 module.exports = Button;

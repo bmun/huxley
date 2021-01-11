@@ -5,7 +5,7 @@
 
 'use strict';
 
-const React = require('react');
+import {React} from 'react';
 
 const entityMap = {
   '&': '&amp;',
@@ -18,10 +18,10 @@ const entityMap = {
   '=': '&#x3D;',
 };
 
-const TextTemplate = React.createClass({
+class TextTemplate extends React.Component {
   render() {
     return <div dangerouslySetInnerHTML={this.createMarkup()} />;
-  },
+  }
 
   createMarkup() {
     var text = this.props.children;
@@ -30,15 +30,15 @@ const TextTemplate = React.createClass({
       const value = this.escapeHtml(this.props[variable]);
       text = text.replace(regex, value);
     }
-
+    
     return {__html: text};
-  },
+  }
 
   escapeHtml(string) {
     return String(string).replace(/[&<>"'`=\/]/g, function(s) {
       return entityMap[s];
     });
-  },
-});
+  }
+};
 
 module.exports = TextTemplate;

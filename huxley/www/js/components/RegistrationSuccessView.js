@@ -5,7 +5,7 @@
 
 'use strict';
 
-var React = require('react');
+import React from 'react';
 
 var ConferenceContext = require('components/ConferenceContext');
 var NavLink = require('components/NavLink');
@@ -15,12 +15,8 @@ var TextTemplate = require('components/core/TextTemplate');
 require('css/Letter.less');
 var RegistrationSuccessViewText = require('text/RegistrationSuccessViewText.md');
 
-var RegistrationSuccessView = React.createClass({
-  contextTypes: {
-    conference: React.PropTypes.shape(ConferenceContext),
-  },
-
-  render: function() {
+class RegistrationSuccessView extends React.Component {
+  render() {
     var conference = this.context.conference;
     return (
       <OuterView>
@@ -39,7 +35,11 @@ var RegistrationSuccessView = React.createClass({
         </NavLink>
       </OuterView>
     );
-  },
-});
+  }
+};
+
+RegistrationSuccessView.contextTypes = {
+  conference: React.PropTypes.shape(ConferenceContext),
+}
 
 module.exports = RegistrationSuccessView;
