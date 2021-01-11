@@ -5,6 +5,7 @@
 
 "use strict";
 
+<<<<<<< HEAD
 var React = require("react");
 var ReactRouter = require("react-router");
 
@@ -12,6 +13,14 @@ var OuterView = require("components/OuterView");
 
 var NotFoundView = React.createClass({
   render: function () {
+=======
+import React from "react";
+
+var OuterView = require("components/OuterView");
+
+class NotFoundView extends React.Component {
+  render() {
+>>>>>>> 6a6c5f85d0f9eb211f9f4386f72086cbace5df4e
     return (
       <OuterView>
         <h1>Page Not Found</h1>
@@ -21,7 +30,7 @@ var NotFoundView = React.createClass({
         </p>
       </OuterView>
     );
-  },
-});
+  }
+}
 
 module.exports = NotFoundView;

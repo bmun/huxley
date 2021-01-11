@@ -25,7 +25,7 @@ var inflateGrades = require("utils/inflateGrades");
 var _checkDate = require("utils/_checkDate");
 var _handleChange = require("utils/_handleChange");
 
-const cx = require("classnames");
+import cx from "classnames";
 var AdvisorPaperViewText = require("text/AdvisorPaperViewText.md");
 var AdvisorWaitlistText = require("text/AdvisorWaitlistText.md");
 

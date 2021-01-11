@@ -6,11 +6,15 @@
 "use strict";
 
 const Button = require("components/core/Button");
+<<<<<<< HEAD
 const NumberInput = require("components/NumberInput");
+=======
+>>>>>>> 6a6c5f85d0f9eb211f9f4386f72086cbace5df4e
 const TextTemplate = require("components/core/TextTemplate");
 
 const PaperGradeText = require("text/PaperGradeText.md");
 
+<<<<<<< HEAD
 const cx = require("classnames");
 const React = require("react");
 
@@ -30,7 +34,12 @@ const PaperGradeTable = React.createClass({
     loading: React.PropTypes.bool,
     success: React.PropTypes.bool,
   },
+=======
+import cx from "classnames";
+import React from "react";
+>>>>>>> 6a6c5f85d0f9eb211f9f4386f72086cbace5df4e
 
+class PaperGradeTable extends React.Component {
   render() {
     const rubric = this.props.rubric;
     const paper = this.props.paper;
@@ -198,9 +207,13 @@ const PaperGradeTable = React.createClass({
         {buttons}
       </div>
     );
-  },
+  }
 
+<<<<<<< HEAD
   _renderTopicTwo: function (rubric, paper) {
+=======
+  _renderTopicTwo(rubric, paper) {
+>>>>>>> 6a6c5f85d0f9eb211f9f4386f72086cbace5df4e
     return (
       <tbody>
         <tr>
@@ -263,9 +276,14 @@ const PaperGradeTable = React.createClass({
         </tr>
       </tbody>
     );
+<<<<<<< HEAD
   },
 
   calculateCategory: function (value, weight) {
+=======
+  }
+  calculateCategory(value, weight) {
+>>>>>>> 6a6c5f85d0f9eb211f9f4386f72086cbace5df4e
     var interval = weight / 5;
     if (value >= interval * 5) {
       return "5 - Exceeds Expectations";
@@ -280,9 +298,14 @@ const PaperGradeTable = React.createClass({
     } else {
       ("0 - Missing Section");
     }
+<<<<<<< HEAD
   },
 
   calculateScore: function (category, weight) {
+=======
+  }
+  calculateScore(category, weight) {
+>>>>>>> 6a6c5f85d0f9eb211f9f4386f72086cbace5df4e
     var interval = weight / 5;
     if (category == "5 - Exceeds Expectations") {
       return interval * 5;
@@ -297,9 +320,13 @@ const PaperGradeTable = React.createClass({
     } else {
       return 0;
     }
-  },
+  }
 
+<<<<<<< HEAD
   renderDropdown: function (name, score, max_score) {
+=======
+  renderDropdown(name, score, max_score) {
+>>>>>>> 6a6c5f85d0f9eb211f9f4386f72086cbace5df4e
     var interval = this.calculateCategory(score, max_score);
     return (
       <select
@@ -335,34 +362,74 @@ const PaperGradeTable = React.createClass({
         </option>
       </select>
     );
-  },
+  }
 
+<<<<<<< HEAD
   _handleDropdownChange: function (field, max_score, event) {
+=======
+  _handleDropdownChange(field, max_score, event) {
+>>>>>>> 6a6c5f85d0f9eb211f9f4386f72086cbace5df4e
     var new_score = this.calculateScore(event.target.value, max_score);
     this.props.onChange &&
       this.props.onChange(field, this.props.paper.id, new_score);
-  },
+  }
 
+<<<<<<< HEAD
   _handleChange: function (field, event) {
+=======
+  _handleChange(field, event) {
+>>>>>>> 6a6c5f85d0f9eb211f9f4386f72086cbace5df4e
     this.props.onChange &&
       this.props.onChange(field, this.props.paper.id, event);
-  },
+  }
 
+<<<<<<< HEAD
   _handleUnset: function (event) {
+=======
+  _handleUnset(event) {
+>>>>>>> 6a6c5f85d0f9eb211f9f4386f72086cbace5df4e
     this.props.onUnset && this.props.onUnset(event);
-  },
+  }
 
+<<<<<<< HEAD
   _handleSave: function (event) {
+=======
+  _handleSave(event) {
+>>>>>>> 6a6c5f85d0f9eb211f9f4386f72086cbace5df4e
     this.props.onSave && this.props.onSave(this.props.paper.id, event);
-  },
+  }
 
+<<<<<<< HEAD
   _handleUpload: function (event) {
+=======
+  _handleUpload(event) {
+>>>>>>> 6a6c5f85d0f9eb211f9f4386f72086cbace5df4e
     this.props.onUpload && this.props.onUpload(this.props.paper.id, event);
-  },
+  }
 
+<<<<<<< HEAD
   _handleSubmit: function (event) {
+=======
+  _handleSubmit(event) {
+>>>>>>> 6a6c5f85d0f9eb211f9f4386f72086cbace5df4e
     this.props.onSubmit && this.props.onSubmit(this.props.paper.id, event);
-  },
-});
+  }
+}
+
+PaperGradeTable.propTypes = {
+  onChange: React.PropTypes.func,
+  onDownload: React.PropTypes.func,
+  onUnset: React.PropTypes.func,
+  onSave: React.PropTypes.func,
+  onUpload: React.PropTypes.func,
+  onSubmit: React.PropTypes.func,
+  rubric: React.PropTypes.object,
+  paper: React.PropTypes.object,
+  files: React.PropTypes.object,
+  graded_files: React.PropTypes.object,
+  countryName: React.PropTypes.string,
+  loading: React.PropTypes.bool,
+  success: React.PropTypes.bool,
+};
 
 module.exports = PaperGradeTable;

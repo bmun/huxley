@@ -5,8 +5,8 @@
 
 "use strict";
 
-var React = require("react");
-var ReactRouter = require("react-router");
+import React from "react";
+import PropTypes from "react-router";
 
 var Button = require("components/core/Button");
 var NavLink = require("components/NavLink");
@@ -19,22 +19,16 @@ var TextTemplate = require("components/core/TextTemplate");
 require("css/LoginForm.less");
 var ForgotPasswordViewText = require("text/ForgotPasswordViewText.md");
 
-var ForgotPasswordView = React.createClass({
-  mixins: [ReactRouter.History],
-
-  contextTypes: {
-    shake: React.PropTypes.func,
-  },
-
-  getInitialState: function () {
+class ForgotPasswordView extends React.Component {
+  getInitialState() {
     return {
       username: "",
       error: false,
       loading: false,
     };
-  },
+  }
 
-  render: function () {
+  render() {
     return (
       <OuterView>
         <TextTemplate>{ForgotPasswordViewText}</TextTemplate>
@@ -61,9 +55,9 @@ var ForgotPasswordView = React.createClass({
         </form>
       </OuterView>
     );
-  },
+  }
 
-  renderError: function () {
+  renderError() {
     if (this.state.error) {
       return (
         <StatusLabel status="error">
@@ -71,26 +65,26 @@ var ForgotPasswordView = React.createClass({
         </StatusLabel>
       );
     }
-  },
+  }
 
-  _handleUsernameChange: function (username) {
+  _handleUsernameChange(username) {
     this.setState({ username });
-  },
+  }
 
-  _handleSubmit: function (event) {
+  _handleSubmit(event) {
     this.setState({ loading: true });
     ServerAPI.resetPassword(this.state.username).then(
       this._handleSuccess,
       this._handleError
     );
     event.preventDefault();
-  },
+  }
 
-  _handleSuccess: function (response) {
-    this.history.pushState(null, "/password/reset");
-  },
+  _handleSuccess(response) {
+    this.context.history.pushState(null, "/password/reset");
+  }
 
-  _handleError: function (response) {
+  _handleError(response) {
     if (!response.detail) {
       return;
     }
@@ -104,7 +98,12 @@ var ForgotPasswordView = React.createClass({
         this.context.shake && this.context.shake();
       }
     );
-  },
-});
+  }
+}
+
+ForgotPasswordView.contextTypes = {
+  shake: React.PropTypes.func,
+  history: PropTypes.history,
+};
 
 module.exports = ForgotPasswordView;

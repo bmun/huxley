@@ -5,6 +5,7 @@
 
 "use strict";
 
+<<<<<<< HEAD
 var React = require("react");
 
 require("css/content.less");
@@ -15,6 +16,14 @@ var OuterView = React.createClass({
   },
 
   render: function () {
+=======
+import React from "react";
+
+require("css/content.less");
+
+class OuterView extends React.Component {
+  render() {
+>>>>>>> 6a6c5f85d0f9eb211f9f4386f72086cbace5df4e
     return (
       <div className="content content-outer transparent ie-layout rounded">
         {this.renderHeader()}
@@ -22,11 +31,19 @@ var OuterView = React.createClass({
         {this.props.children}
       </div>
     );
-  },
+  }
 
+<<<<<<< HEAD
   renderHeader: function () {
+=======
+  renderHeader() {
+>>>>>>> 6a6c5f85d0f9eb211f9f4386f72086cbace5df4e
     return this.props.header || <div className="logo-small" />;
-  },
-});
+  }
+}
+
+OuterView.propTypes = {
+  header: React.PropTypes.element,
+};
 
 module.exports = OuterView;

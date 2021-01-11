@@ -5,8 +5,13 @@
 
 "use strict";
 
+<<<<<<< HEAD
 var React = require("react");
 var ReactRouter = require("react-router");
+=======
+import React from "react";
+import PropTypes from "react-router";
+>>>>>>> 6a6c5f85d0f9eb211f9f4386f72086cbace5df4e
 
 var AdvisorView = require("components/AdvisorView");
 var ChairView = require("components/ChairView");
@@ -22,6 +27,7 @@ require("css/Banner.less");
 require("css/JSWarning.less");
 require("css/IEWarning.less");
 
+<<<<<<< HEAD
 var Huxley = React.createClass({
   mixins: [ReactRouter.History],
 
@@ -30,12 +36,17 @@ var Huxley = React.createClass({
   },
 
   getChildContext: function () {
+=======
+class Huxley extends React.Component {
+  getChildContext() {
+>>>>>>> 6a6c5f85d0f9eb211f9f4386f72086cbace5df4e
     var conference = global.conference;
     return {
       conference: conference,
     };
-  },
+  }
 
+<<<<<<< HEAD
   componentWillMount: function () {
     CurrentUserStore.addListener(() => {
       var user = CurrentUserStore.getCurrentUser();
@@ -47,11 +58,28 @@ var Huxley = React.createClass({
         this.history.pushState(null, "/chair/attendance");
       } else if (User.isDelegate(user)) {
         this.history.pushState(null, "/delegate/profile");
+=======
+  componentWillMount() {
+    CurrentUserStore.addListener(() => {
+      var user = CurrentUserStore.getCurrentUser();
+      if (User.isAnonymous(user)) {
+        this.context.history.pushState(null, "/login");
+      } else if (User.isAdvisor(user)) {
+        this.context.history.pushState(null, "/advisor/profile");
+      } else if (User.isChair(user)) {
+        this.context.history.pushState(null, "/chair/attendance");
+      } else if (User.isDelegate(user)) {
+        this.context.history.pushState(null, "/delegate/profile");
+>>>>>>> 6a6c5f85d0f9eb211f9f4386f72086cbace5df4e
       }
     });
-  },
+  }
 
+<<<<<<< HEAD
   render: function () {
+=======
+  render() {
+>>>>>>> 6a6c5f85d0f9eb211f9f4386f72086cbace5df4e
     var user = CurrentUserStore.getCurrentUser();
     if (User.isAnonymous(user)) {
       return (
@@ -90,7 +118,15 @@ var Huxley = React.createClass({
         </div>
       );
     }
-  },
-});
+  }
+}
+
+Huxley.childContextTypes = {
+  conference: React.PropTypes.shape(ConferenceContext),
+};
+
+Huxley.contextTypes = {
+  history: PropTypes.history,
+};
 
 module.exports = Huxley;
