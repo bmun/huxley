@@ -699,12 +699,13 @@ class Note(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
+        committee, sender, recipient = "", "", ""
         if self.is_chair == 0:
             committee = str(self.sender.committee)
             sender = str(self.sender.country)
             recipient = str(self.recipient.country)
 
-        else if self.is_chair == 1:
+        elif self.is_chair == 1:
             committee = str(self.recipient.committee)
             sender = 'Chair'
             recipient = str(self.recipient.country)
@@ -715,7 +716,7 @@ class Note(models.Model):
             recipient = 'Chair'
             
 
-        return committee + ": " sender + ' -> ' + recipient + ' - ' + self.id
+        return committee + ": " + sender + ' -> ' + recipient + ' - ' + self.id
 
     class Meta:
         db_table = u'note'

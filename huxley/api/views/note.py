@@ -19,20 +19,25 @@ class NoteList(generics.ListCreateAPIView):
     def get_queryset(self):
         queryset = Note.objects.all()
         query_params = self.request.GET
-        sender = query_params.get('sender', None)
-        recipient = query_params.get('recipient', None)
+        sender_id = query_params.get('sender_id', None)
+        recipient_id = query_params.get('recipient_id', None)
+        chair = query_params.get('chair', None)
 
         committee_id = query_params.get('committee_id', None)
         if committee_id:
-            queryset = queryset.filter(sender__committee_id=committee_id) | 
-                        queryset.filter(recipient__committee_id=committee_id)
+            queryset = queryset.filter(sender__committee_id=committee_id) | queryset.filter(
+                recipient__committee_id=committee_id)
 
 
-        if sender and recipient:
-            queryset = queryset.filter(sender_id = sender).filter(recipient_id = recipient) | 
-                        queryset.filter(sender_id = recipient).filter(recipient_id = sender)
+        if sender_id and recipient_id:
+            queryset = queryset.filter(sender_id = sender_id).filter(recipient_id = recipient_id) | queryset.filter(
+                sender_id = recipient_id).filter(recipient_id = sender_id)
 
-                    
+        if sender_id and chair:
+            queryset = queryset.filter(sender_id = sender_id).filter(is_chair = 2) | queryset.filter(
+                is_chair = 1).filter(recipient_id = sender_id)
+
+        
         return queryset
 
 

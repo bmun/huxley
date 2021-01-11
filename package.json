@@ -18,7 +18,8 @@
   },
   "scripts": {
     "test": "jest",
-    "build": "./node_modules/.bin/webpack --progress --watch"
+    "build": "./node_modules/.bin/webpack --progress --watch",
+    "flow": "flow"
   },
   "jest": {
     "scriptPreprocessor": "<rootDir>/node_modules/babel-jest",
@@ -41,6 +42,9 @@
   },
   "private": true,
   "devDependencies": {
+    "@babel/cli": "^7.12.10",
+    "@babel/core": "^7.12.10",
+    "@babel/preset-flow": "^7.12.1",
     "babel-core": "^6.13.2",
     "babel-jest": "^14.1.0",
     "babel-loader": "^7.0.0",
@@ -53,6 +57,7 @@
     "core-js": "^2.4.1",
     "css-loader": "^0.28.0",
     "extract-text-webpack-plugin": "^2.1.0",
+    "flow-bin": "^0.142.0",
     "html-loader": "^0.4.5",
     "jest-cli": "~14.1.0",
     "less": "^2.7.2",
@@ -67,7 +72,8 @@
     "presets": [
       "es2015",
       "es2017",
-      "react"
+      "react",
+      "@babel/preset-flow"
     ],
     "plugins": [
       "transform-object-rest-spread"

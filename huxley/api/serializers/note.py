@@ -8,5 +8,5 @@ from huxley.core.models import Note
 
 class NoteSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Rubric
+        model = Note
         fields = ('id', 'is_chair', 'sender', 'recipient', 'msg', 'timestamp')
