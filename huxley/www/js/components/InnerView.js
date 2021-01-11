@@ -3,20 +3,20 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
-var React = require('react');
+import React from "react";
 
-require('css/content.less');
+require("css/content.less");
 
-var InnerView = React.createClass({
-  render: function() {
+class InnerView extends React.Component {
+  render() {
     return (
       <div className="content transparent ie-layout rounded-bottom">
         {this.props.children}
       </div>
     );
-  },
-});
+  }
+}
 
 module.exports = InnerView;

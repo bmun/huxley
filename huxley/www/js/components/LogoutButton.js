@@ -3,41 +3,42 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
-var React = require('react');
+import React from "react";
 
-var Button = require('components/core/Button');
-var CurrentUserActions = require('actions/CurrentUserActions');
-var ServerAPI = require('lib/ServerAPI');
+var Button = require("components/core/Button");
+var CurrentUserActions = require("actions/CurrentUserActions");
+var ServerAPI = require("lib/ServerAPI");
 
-var LogoutButton = React.createClass({
-  getInitialState: function() {
+class LogoutButton extends React.Component {
+  getInitialState() {
     return {
       loggingOut: false,
     };
-  },
+  }
 
-  render: function() {
+  render() {
     return (
       <Button
         color="blue"
         size="small"
         loading={this.state.loggingOut}
-        onClick={this._handleLogout}>
+        onClick={this._handleLogout}
+      >
         Log Out
       </Button>
     );
-  },
+  }
 
-  _handleLogout: function(e) {
-    this.setState({loggingOut: true});
+  _handleLogout(e) {
+    this.setState({ loggingOut: true });
     ServerAPI.logout().then(this._handleLogoutSuccess);
-  },
+  }
 
-  _handleLogoutSuccess: function(responseJSON) {
+  _handleLogoutSuccess(responseJSON) {
     CurrentUserActions.logout();
-  },
-});
+  }
+}
 
 module.exports = LogoutButton;

@@ -3,34 +3,33 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
-import React from 'react';
+import React from "react";
 
-var _accessSafe = require('utils/_accessSafe');
-var AssignmentStore = require('stores/AssignmentStore');
-var Button = require('components/core/Button');
-var CommitteeStore = require('stores/CommitteeStore');
-var CountryStore = require('stores/CountryStore');
-var CurrentUserStore = require('stores/CurrentUserStore');
-var ConferenceContext = require('components/ConferenceContext');
-var InnerView = require('components/InnerView');
-var PositionPaperStore = require('stores/PositionPaperStore');
-var RubricStore = require('stores/RubricStore');
-var ServerAPI = require('lib/ServerAPI');
-var StatusLabel = require('components/core/StatusLabel');
-var Table = require('components/core/Table');
-var TextTemplate = require('components/core/TextTemplate');
-var inflateGrades = require('utils/inflateGrades');
-var _checkDate = require('utils/_checkDate');
-var _handleChange = require('utils/_handleChange');
+var _accessSafe = require("utils/_accessSafe");
+var AssignmentStore = require("stores/AssignmentStore");
+var Button = require("components/core/Button");
+var CommitteeStore = require("stores/CommitteeStore");
+var CountryStore = require("stores/CountryStore");
+var CurrentUserStore = require("stores/CurrentUserStore");
+var ConferenceContext = require("components/ConferenceContext");
+var InnerView = require("components/InnerView");
+var PositionPaperStore = require("stores/PositionPaperStore");
+var RubricStore = require("stores/RubricStore");
+var ServerAPI = require("lib/ServerAPI");
+var StatusLabel = require("components/core/StatusLabel");
+var Table = require("components/core/Table");
+var TextTemplate = require("components/core/TextTemplate");
+var inflateGrades = require("utils/inflateGrades");
+var _checkDate = require("utils/_checkDate");
+var _handleChange = require("utils/_handleChange");
 
-const cx = require('classnames');
-var AdvisorPaperViewText = require('text/AdvisorPaperViewText.md');
-var AdvisorWaitlistText = require('text/AdvisorWaitlistText.md');
+import cx from "classnames";
+var AdvisorPaperViewText = require("text/AdvisorPaperViewText.md");
+var AdvisorWaitlistText = require("text/AdvisorWaitlistText.md");
 
 class AdvisorPaperView extends React.Component {
-
   getInitialState() {
     var schoolID = CurrentUserStore.getCurrentUser().school.id;
     var conferenceID = this.context.conference.session;
@@ -42,7 +41,7 @@ class AdvisorPaperView extends React.Component {
       graded_files: PositionPaperStore.getGradedPositionPaperFiles(),
       rubric: RubricStore.getRubric,
       loading: false,
-      errors: {}
+      errors: {},
     };
   }
 
@@ -61,13 +60,13 @@ class AdvisorPaperView extends React.Component {
     });
     this._assignmentsToken = AssignmentStore.addListener(() => {
       var assignments = AssignmentStore.getSchoolAssignments(schoolID).filter(
-        assignment => !assignment.rejected,
+        (assignment) => !assignment.rejected
       );
       var assignment_ids = {};
       assignments.map(
-        function(a) {
+        function (a) {
           assignment_ids[a.id] = a;
-        }.bind(this),
+        }.bind(this)
       );
       this.setState({
         assignments: assignments,
@@ -100,7 +99,7 @@ class AdvisorPaperView extends React.Component {
     var conference = this.context.conference;
     var registration = this.state.registration;
     var waitlisted =
-      _accessSafe(registration, 'is_waitlisted') == null
+      _accessSafe(registration, "is_waitlisted") == null
         ? null
         : registration.is_waitlisted;
     var disableEdit = _checkDate();
@@ -110,7 +109,8 @@ class AdvisorPaperView extends React.Component {
         <InnerView>
           <TextTemplate
             conferenceSession={conference.session}
-            conferenceExternal={conference.external}>
+            conferenceExternal={conference.external}
+          >
             {AdvisorWaitlistText}
           </TextTemplate>
         </InnerView>
@@ -134,7 +134,7 @@ class AdvisorPaperView extends React.Component {
     var graded_files = this.state.graded_files;
     var get_rubric = this.state.rubric;
     this.state.assignments.map(
-      function(a) {
+      function (a) {
         var current_committee = cm[a.committee] ? cm[a.committee].name : null;
         if (current_committee) {
           committees[current_committee] =
@@ -142,16 +142,16 @@ class AdvisorPaperView extends React.Component {
               ? [a]
               : committees[current_committee].concat([a]);
         }
-      }.bind(this),
+      }.bind(this)
     );
 
     return Object.keys(committees).map(
-      function(c) {
+      function (c) {
         var countryAssignments = committees[c];
         var committee = cm[countryAssignments[0].committee];
         var rubric = committee.rubric;
 
-        var rows = rubric.use_topic_2 ? '2' : '1';
+        var rows = rubric.use_topic_2 ? "2" : "1";
         var rubric_row_1 = (
           <tr>
             <td rowSpan={rows}>Rubric</td>
@@ -184,7 +184,8 @@ class AdvisorPaperView extends React.Component {
             <h4>{committee.name}</h4>
             <Table
               emptyMessage="You don't have any assignments."
-              isEmpty={!assignments.length}>
+              isEmpty={!assignments.length}
+            >
               <thead>
                 <tr>
                   <th width="13%">Assignment</th>
@@ -206,12 +207,12 @@ class AdvisorPaperView extends React.Component {
                 rubric,
                 files,
                 graded_files,
-                rubric.use_topic_2,
+                rubric.use_topic_2
               )}
             </Table>
           </div>
         );
-      }.bind(this),
+      }.bind(this)
     );
   }
 
@@ -220,10 +221,10 @@ class AdvisorPaperView extends React.Component {
     rubric,
     files,
     graded_files,
-    topic_2,
+    topic_2
   ) {
     return countryAssignments.map(
-      function(assignment) {
+      function (assignment) {
         var paper =
           assignment.paper && assignment.paper.file ? assignment.paper : null;
         var originalFile = paper
@@ -243,20 +244,21 @@ class AdvisorPaperView extends React.Component {
           graded_files[assignment.paper.id]
             ? window.URL.createObjectURL(graded_files[assignment.paper.id])
             : null;
-        var names = paper ? paper.file.split('/') : null;
+        var names = paper ? paper.file.split("/") : null;
         var graded = assignment.paper.graded;
         var fileName = names ? names[names.length - 1] : null;
-        var gradedFileName = fileName ? 'graded_' + fileName : null;
+        var gradedFileName = fileName ? "graded_" + fileName : null;
         var downloadPaper = paper ? (
           <a
             className={cx({
               button: true,
-              'button-small': true,
-              'button-green': true,
-              'rounded-small': true,
+              "button-small": true,
+              "button-green": true,
+              "rounded-small": true,
             })}
             href={originalHrefData}
-            download={fileName}>
+            download={fileName}
+          >
             &#10515;
           </a>
         ) : null;
@@ -265,12 +267,13 @@ class AdvisorPaperView extends React.Component {
             <a
               className={cx({
                 button: true,
-                'button-small': true,
-                'button-blpaperue': true,
-                'rounded-small': true,
+                "button-small": true,
+                "button-blpaperue": true,
+                "rounded-small": true,
               })}
               href={gradedHrefData}
-              download={gradedFileName}>
+              download={gradedFileName}
+            >
               &#10515;
             </a>
           ) : null;
@@ -294,23 +297,23 @@ class AdvisorPaperView extends React.Component {
 
           var shown1 = this.calculateCategory(
             paper.score_1,
-            rubric.grade_value_1,
+            rubric.grade_value_1
           );
           var shown2 = this.calculateCategory(
             paper.score_2,
-            rubric.grade_value_2,
+            rubric.grade_value_2
           );
           var shown3 = this.calculateCategory(
             paper.score_3,
-            rubric.grade_value_3,
+            rubric.grade_value_3
           );
           var shown4 = this.calculateCategory(
             paper.score_4,
-            rubric.grade_value_4,
+            rubric.grade_value_4
           );
           var shown5 = this.calculateCategory(
             paper.score_5,
-            rubric.grade_value_5,
+            rubric.grade_value_5
           );
 
           var score2 = this.calculateTotalScore(paper, rubric, true);
@@ -319,27 +322,27 @@ class AdvisorPaperView extends React.Component {
 
           var shown1_t2 = this.calculateCategory(
             paper.score_t2_1,
-            rubric.grade_t2_value_1,
+            rubric.grade_t2_value_1
           );
           var shown2_t2 = this.calculateCategory(
             paper.score_t2_2,
-            rubric.grade_t2_value_2,
+            rubric.grade_t2_value_2
           );
           var shown3_t2 = this.calculateCategory(
             paper.score_t2_3,
-            rubric.grade_t2_value_3,
+            rubric.grade_t2_value_3
           );
           var shown4_t2 = this.calculateCategory(
             paper.score_t2_4,
-            rubric.grade_t2_value_4,
+            rubric.grade_t2_value_4
           );
           var shown5_t2 = this.calculateCategory(
             paper.score_t2_5,
-            rubric.grade_t2_value_5,
+            rubric.grade_t2_value_5
           );
         }
 
-        var rows = topic_2 ? '2' : '1';
+        var rows = topic_2 ? "2" : "1";
         var topic_1_row = (
           <tr>
             <td rowSpan={rows}>
@@ -373,7 +376,7 @@ class AdvisorPaperView extends React.Component {
             {topic_2_row}
           </tbody>
         );
-      }.bind(this),
+      }.bind(this)
     );
   }
 
@@ -420,31 +423,31 @@ class AdvisorPaperView extends React.Component {
   calculateCategory(value, weight) {
     var interval = weight / 5;
     if (value >= interval * 5) {
-      return '5 - Exceeds Expectations';
+      return "5 - Exceeds Expectations";
     } else if (value >= interval * 4) {
-      return '4 - Exceeds Expectations';
+      return "4 - Exceeds Expectations";
     } else if (value >= interval * 3) {
-      return '3 - Meets Expectations';
+      return "3 - Meets Expectations";
     } else if (value >= interval * 2) {
-      return '2 - Attempts to Meet Expectations';
+      return "2 - Attempts to Meet Expectations";
     } else if (value >= interval) {
-      return '1 - Needs Improvement';
+      return "1 - Needs Improvement";
     } else {
-      ('0 - Needs Improvement');
+      ("0 - Needs Improvement");
     }
   }
 
   calculateScore(category, weight) {
     var interval = weight / 5;
-    if (category == '5 - Exceeds Expectations') {
+    if (category == "5 - Exceeds Expectations") {
       return interval * 5;
-    } else if (category == '4 - Exceeds Expectations') {
+    } else if (category == "4 - Exceeds Expectations") {
       return interval * 4;
-    } else if (category == '3 - Meets Expectations') {
+    } else if (category == "3 - Meets Expectations") {
       return interval * 3;
-    } else if (category == '2 - Attempts to Meet Expectations') {
+    } else if (category == "2 - Attempts to Meet Expectations") {
       return interval * 2;
-    } else if (category == '1 - Needs Improvement') {
+    } else if (category == "1 - Needs Improvement") {
       return interval;
     } else {
       return 0;

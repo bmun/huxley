@@ -3,12 +3,12 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
-import React from 'react';
+import React from "react";
 
 class CountrySelect extends React.Component {
-shouldComponentUpdate(nextProps, nextState) {
+  shouldComponentUpdate(nextProps, nextState) {
     for (var i = 0; i < this.props.countryPreferences.length; i++) {
       if (
         this.props.countryPreferences[i] !== nextProps.countryPreferences[i]
@@ -22,29 +22,30 @@ shouldComponentUpdate(nextProps, nextState) {
     );
   }
 
-render() {
+  render() {
     return (
       <select
         onChange={this.props.onChange}
-        value={this.props.selectedCountryID}>
+        value={this.props.selectedCountryID}
+      >
         <option value="0">No Preference</option>
         {this.renderCommitteeOptions()}
       </select>
     );
   }
 
-renderCommitteeOptions() {
+  renderCommitteeOptions() {
     return this.props.countries.map(
-      function(country) {
+      function (country) {
         if (!country.special) {
-          var index = this.props.countryPreferences.indexOf('' + country.id);
+          var index = this.props.countryPreferences.indexOf("" + country.id);
           return (
             <option key={country.id} value={country.id} disabled={index >= 0}>
               {country.name}
             </option>
           );
         }
-      }.bind(this),
+      }.bind(this)
     );
   }
 }
@@ -54,6 +55,6 @@ CountrySelect.propTypes = {
   countries: React.PropTypes.array,
   selectedCountryID: React.PropTypes.number,
   countryPreferences: React.PropTypes.array,
-}
+};
 
 module.exports = CountrySelect;

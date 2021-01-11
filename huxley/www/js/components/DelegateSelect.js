@@ -3,30 +3,31 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
-import React from 'react';
+import React from "react";
 
 class DelegateSelect extends React.Component {
-
-render() {
+  render() {
     return (
       <select
         onChange={this.props.onChange}
         value={this.props.selectedDelegateID}
-        disabled={this.props.disabled}>
+        disabled={this.props.disabled}
+      >
         <option value="0">None</option>
         {this.renderDelegateOptions()}
       </select>
     );
   }
 
-renderDelegateOptions() {
-    return this.props.delegates.map(delegate => (
+  renderDelegateOptions() {
+    return this.props.delegates.map((delegate) => (
       <option
         key={delegate.id}
         value={delegate.id}
-        disabled={delegate.assignment}>
+        disabled={delegate.assignment}
+      >
         {delegate.name}
       </option>
     ));
@@ -38,6 +39,6 @@ DelegateSelect.propTypes = {
   delegates: React.PropTypes.array,
   selectedDelegateID: React.PropTypes.number,
   disabled: React.PropTypes.bool,
-}
+};
 
 module.exports = DelegateSelect;

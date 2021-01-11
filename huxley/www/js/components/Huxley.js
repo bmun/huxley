@@ -3,61 +3,55 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
-var React = require('react');
-var ReactRouter = require('react-router');
+import React from "react";
+import PropTypes from "react-router";
 
-var AdvisorView = require('components/AdvisorView');
-var ChairView = require('components/ChairView');
-var DelegateView = require('components/DelegateView');
-var ConferenceContext = require('components/ConferenceContext');
-var CurrentUserStore = require('stores/CurrentUserStore');
-var Shaker = require('components/Shaker');
-var SupportLink = require('components/SupportLink');
-var User = require('utils/User');
+var AdvisorView = require("components/AdvisorView");
+var ChairView = require("components/ChairView");
+var DelegateView = require("components/DelegateView");
+var ConferenceContext = require("components/ConferenceContext");
+var CurrentUserStore = require("stores/CurrentUserStore");
+var Shaker = require("components/Shaker");
+var SupportLink = require("components/SupportLink");
+var User = require("utils/User");
 
-require('css/base.less');
-require('css/Banner.less');
-require('css/JSWarning.less');
-require('css/IEWarning.less');
+require("css/base.less");
+require("css/Banner.less");
+require("css/JSWarning.less");
+require("css/IEWarning.less");
 
-var Huxley = React.createClass({
-  mixins: [ReactRouter.History],
-
-  childContextTypes: {
-    conference: React.PropTypes.shape(ConferenceContext),
-  },
-
-  getChildContext: function() {
+class Huxley extends React.Component {
+  getChildContext() {
     var conference = global.conference;
     return {
       conference: conference,
     };
-  },
+  }
 
-  componentWillMount: function() {
+  componentWillMount() {
     CurrentUserStore.addListener(() => {
       var user = CurrentUserStore.getCurrentUser();
       if (User.isAnonymous(user)) {
-        this.history.pushState(null, '/login');
+        this.context.history.pushState(null, "/login");
       } else if (User.isAdvisor(user)) {
-        this.history.pushState(null, '/advisor/profile');
+        this.context.history.pushState(null, "/advisor/profile");
       } else if (User.isChair(user)) {
-        this.history.pushState(null, '/chair/attendance');
+        this.context.history.pushState(null, "/chair/attendance");
       } else if (User.isDelegate(user)) {
-        this.history.pushState(null, '/delegate/profile');
+        this.context.history.pushState(null, "/delegate/profile");
       }
     });
-  },
+  }
 
-  render: function() {
+  render() {
     var user = CurrentUserStore.getCurrentUser();
     if (User.isAnonymous(user)) {
       return (
         <div>
           <Shaker>
-            {React.cloneElement(this.props.children, {user: user})}
+            {React.cloneElement(this.props.children, { user: user })}
           </Shaker>
           <SupportLink />
         </div>
@@ -66,7 +60,7 @@ var Huxley = React.createClass({
       return (
         <div>
           <AdvisorView user={user}>
-            {React.cloneElement(this.props.children, {user: user})}
+            {React.cloneElement(this.props.children, { user: user })}
           </AdvisorView>
           <SupportLink />
         </div>
@@ -75,7 +69,7 @@ var Huxley = React.createClass({
       return (
         <div>
           <ChairView user={user}>
-            {React.cloneElement(this.props.children, {user: user})}
+            {React.cloneElement(this.props.children, { user: user })}
           </ChairView>
           <SupportLink />
         </div>
@@ -84,13 +78,21 @@ var Huxley = React.createClass({
       return (
         <div>
           <DelegateView user={user}>
-            {React.cloneElement(this.props.children, {user: user})}
+            {React.cloneElement(this.props.children, { user: user })}
           </DelegateView>
           <SupportLink />
         </div>
       );
     }
-  },
-});
+  }
+}
+
+Huxley.childContextTypes = {
+  conference: React.PropTypes.shape(ConferenceContext),
+};
+
+Huxley.contextTypes = {
+  history: PropTypes.history,
+};
 
 module.exports = Huxley;

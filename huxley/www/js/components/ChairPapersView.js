@@ -3,32 +3,31 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  +*/
 
-'use strict';
+"use strict";
 
-import {React} from 'react';
-import PropTypes from 'react-router';
+import { React } from "react";
+import PropTypes from "react-router";
 
-var Button = require('components/core/Button');
-var AssignmentStore = require('stores/AssignmentStore');
-var CommitteeStore = require('stores/CommitteeStore');
-var CountryStore = require('stores/CountryStore');
-var CurrentUserStore = require('stores/CurrentUserStore');
-var InnerView = require('components/InnerView');
-var PaperAssignmentList = require('components/PaperAssignmentList');
-var PaperGradeTable = require('components/PaperGradeTable');
-var PositionPaperActions = require('actions/PositionPaperActions');
-var PositionPaperStore = require('stores/PositionPaperStore');
-var RubricStore = require('stores/RubricStore');
-var TextTemplate = require('components/core/TextTemplate');
-var User = require('utils/User');
+var Button = require("components/core/Button");
+var AssignmentStore = require("stores/AssignmentStore");
+var CommitteeStore = require("stores/CommitteeStore");
+var CountryStore = require("stores/CountryStore");
+var CurrentUserStore = require("stores/CurrentUserStore");
+var InnerView = require("components/InnerView");
+var PaperAssignmentList = require("components/PaperAssignmentList");
+var PaperGradeTable = require("components/PaperGradeTable");
+var PositionPaperActions = require("actions/PositionPaperActions");
+var PositionPaperStore = require("stores/PositionPaperStore");
+var RubricStore = require("stores/RubricStore");
+var TextTemplate = require("components/core/TextTemplate");
+var User = require("utils/User");
 
-var ServerAPI = require('lib/ServerAPI');
+var ServerAPI = require("lib/ServerAPI");
 
-require('css/Table.less');
-var ChairPapersViewText = require('text/ChairPapersViewText.md');
+require("css/Table.less");
+var ChairPapersViewText = require("text/ChairPapersViewText.md");
 
 class ChairPapersView extends React.Component {
-  
   getInitialState() {
     var user = CurrentUserStore.getCurrentUser();
     var assignments = AssignmentStore.getCommitteeAssignments(user.committee);
@@ -39,9 +38,8 @@ class ChairPapersView extends React.Component {
     var graded_files = PositionPaperStore.getGradedPositionPaperFiles();
 
     if (assignments.length && Object.keys(countries).length) {
-      assignments.sort(
-        (a1, a2) =>
-          countries[a1.country].name < countries[a2.country].name ? -1 : 1,
+      assignments.sort((a1, a2) =>
+        countries[a1.country].name < countries[a2.country].name ? -1 : 1
       );
     }
 
@@ -69,7 +67,7 @@ class ChairPapersView extends React.Component {
   componentWillMount() {
     var user = CurrentUserStore.getCurrentUser();
     if (!User.isChair(user)) {
-      this.context.history.pushState(null, '/');
+      this.context.history.pushState(null, "/");
     }
   }
 
@@ -80,9 +78,8 @@ class ChairPapersView extends React.Component {
       var assignments = AssignmentStore.getCommitteeAssignments(user.committee);
       var countries = this.state.countries;
       if (Object.keys(countries).length) {
-        assignments.sort(
-          (a1, a2) =>
-            countries[a1.country].name < countries[a2.country].name ? -1 : 1,
+        assignments.sort((a1, a2) =>
+          countries[a1.country].name < countries[a2.country].name ? -1 : 1
         );
       }
 
@@ -95,9 +92,8 @@ class ChairPapersView extends React.Component {
       var assignments = this.state.assignments;
       var countries = CountryStore.getCountries();
       if (assignments.length) {
-        assignments.sort(
-          (a1, a2) =>
-            countries[a1.country].name < countries[a2.country].name ? -1 : 1,
+        assignments.sort((a1, a2) =>
+          countries[a1.country].name < countries[a2.country].name ? -1 : 1
         );
       }
       this.setState({
@@ -217,7 +213,7 @@ class ChairPapersView extends React.Component {
   }
 
   _handleScoreChange(field, paperID, event) {
-    const paper = {...this.state.papers[paperID], [field]: Number(event)};
+    const paper = { ...this.state.papers[paperID], [field]: Number(event) };
     PositionPaperActions.storePositionPaper(paper);
   }
 
@@ -230,8 +226,8 @@ class ChairPapersView extends React.Component {
 
   _handleAssignmentSelect(assignmentID, event) {
     var assignments = this.state.assignments;
-    var a = assignments.find(a => a.id == assignmentID);
-    this.setState({current_assignment: a});
+    var a = assignments.find((a) => a.id == assignmentID);
+    this.setState({ current_assignment: a });
     if (a.paper.file != null) {
       PositionPaperActions.fetchPositionPaperFile(a.paper.id);
     }
@@ -239,7 +235,7 @@ class ChairPapersView extends React.Component {
   }
 
   _handleUploadPaper(paperID, event) {
-    this.setState({uploadedFile: event.target.files[0]});
+    this.setState({ uploadedFile: event.target.files[0] });
     event.preventDefault();
   }
 
@@ -248,20 +244,18 @@ class ChairPapersView extends React.Component {
     if (
       file != null &&
       window.confirm(
-        `Please make sure this is the file you intend to submit! You have uploaded: ${
-          file.name
-        }.`,
+        `Please make sure this is the file you intend to submit! You have uploaded: ${file.name}.`
       )
     ) {
       var files = this.state.files;
-      var paper = {...this.state.papers[paperID]};
+      var paper = { ...this.state.papers[paperID] };
       paper.graded_file = file.name;
 
       PositionPaperActions.uploadGradedPaper(
         paper,
         file,
         this._handleSuccess,
-        this._handleError,
+        this._handleError
       );
 
       PositionPaperActions.storePositionPaper(paper);
@@ -276,19 +270,19 @@ class ChairPapersView extends React.Component {
   }
 
   _handleSavePaper(paperID, event) {
-    this.setState({loading: true});
+    this.setState({ loading: true });
     this._successTimout && clearTimeout(this._successTimeout);
     var committee = CurrentUserStore.getCurrentUser().committee;
-    var paper = {...this.state.papers[paperID]};
-    if (paper['graded_file']) {
-      delete paper['graded_file'];
+    var paper = { ...this.state.papers[paperID] };
+    if (paper["graded_file"]) {
+      delete paper["graded_file"];
     }
-    paper['graded'] = true;
-    delete paper['file'];
+    paper["graded"] = true;
+    delete paper["file"];
     PositionPaperActions.updatePositionPaper(
       paper,
       this._handleSuccess,
-      this._handleError,
+      this._handleError
     );
     event.preventDefault();
     this._handleSubmitPaper(paperID, event);
@@ -301,22 +295,21 @@ class ChairPapersView extends React.Component {
     });
 
     this._successTimeout = setTimeout(
-      () => this.setState({success: false}),
-      2000,
+      () => this.setState({ success: false }),
+      2000
     );
   }
 
   _handleError(response) {
-    this.setState({loading: false});
+    this.setState({ loading: false });
     window.alert(
-      'Something went wrong. Please refresh your page and try again.',
+      "Something went wrong. Please refresh your page and try again."
     );
   }
 }
 
 ChairPapersView.contextTypes = {
   history: PropTypes.history,
-
-}
+};
 
 module.exports = ChairPapersView;
