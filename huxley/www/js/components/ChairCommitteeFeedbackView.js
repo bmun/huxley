@@ -5,8 +5,8 @@
 
 'use strict';
 
-var React = require('react');
-var ReactRouter = require('react-router');
+import React from 'react';
+import PropTypes from 'react-router';
 
 var CommitteeFeedbackStore = require('stores/CommitteeFeedbackStore');
 var CurrentUserStore = require('stores/CurrentUserStore');
@@ -17,16 +17,16 @@ var User = require('utils/User');
 require('css/Table.less');
 var ChairCommitteeFeedbackViewText = require('text/ChairCommitteeFeedbackViewText.md');
 
-var ChairCommitteeFeedbackView = React.createClass({
-  mixins: [ReactRouter.History],
+class ChairCommitteeFeedbackView extends React.Component {
+  
 
   getInitialState() {
     var committeeID = CurrentUserStore.getCurrentUser().committee;
     return {
       feedback: CommitteeFeedbackStore.getCommitteeFeedback(committeeID),
     };
-  },
-
+  }  
+  
   componentDidMount() {
     this._committeeFeedbackToken = CommitteeFeedbackStore.addListener(() => {
       var committeeID = CurrentUserStore.getCurrentUser().committee;
@@ -34,19 +34,19 @@ var ChairCommitteeFeedbackView = React.createClass({
         feedback: CommitteeFeedbackStore.getCommitteeFeedback(committeeID),
       });
     });
-  },
-
+  }  
+  
   componentWillMount() {
     var user = CurrentUserStore.getCurrentUser();
     if (!User.isChair(user)) {
-      this.history.pushState(null, '/');
+      this.context.history.pushState(null, '/');
     }
-  },
-
+  }  
+  
   componentsWillUnmount() {
     this._committeeFeedbackToken && this._committeeFeedbackToken.remove();
-  },
-
+  }  
+  
   render() {
     return (
       <InnerView>
@@ -68,8 +68,8 @@ var ChairCommitteeFeedbackView = React.createClass({
         {this.mapFeedbackToTable()}
       </InnerView>
     );
-  },
-
+  }  
+  
   mapFeedbackToTable() {
     var data = {};
     for (var singleFeedback of this.state.feedback) {
@@ -120,8 +120,8 @@ var ChairCommitteeFeedbackView = React.createClass({
       }
     }
     return tables;
-  },
-
+  }  
+  
   renderFeedbackRows(obj) {
     return obj.map(function(singleFeedback) {
       return (
@@ -133,7 +133,11 @@ var ChairCommitteeFeedbackView = React.createClass({
         </tr>
       );
     });
-  },
-});
+  }
+}
+
+ChairCommitteeFeedbackView.contextTypes = {
+  history: PropTypes.history,
+}
 
 module.exports = ChairCommitteeFeedbackView;

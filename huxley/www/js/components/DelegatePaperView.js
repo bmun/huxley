@@ -5,8 +5,8 @@
 
 'use strict';
 
-var React = require('react');
-var ReactRouter = require('react-router');
+import React from 'react';
+import PropTypes from 'react-router';
 
 var Button = require('components/core/Button');
 var ConferenceContext = require('components/ConferenceContext');
@@ -26,14 +26,8 @@ require('css/Table.less');
 var DelegatePaperViewText = require('text/DelegatePaperViewText.md');
 var DelegatePaperNoSubmissionViewText = require('text/DelegatePaperNoSubmissionViewText.md');
 
-var DelegatePaperView = React.createClass({
-  mixins: [ReactRouter.History],
-
-  contextTypes: {
-    conference: React.PropTypes.shape(ConferenceContext),
-  },
-
-  getInitialState() {
+class DelegatePaperView extends React.Component {
+getInitialState() {
     var user = CurrentUserStore.getCurrentUser();
     PositionPaperActions.storePositionPaper(user.delegate.assignment.paper);
     var papers = PositionPaperStore.getPapers();
@@ -51,16 +45,16 @@ var DelegatePaperView = React.createClass({
       graded_files: graded_files,
       errors: {},
     };
-  },
+  }
 
-  componentWillMount() {
+componentWillMount() {
     var user = CurrentUserStore.getCurrentUser();
     if (!User.isDelegate(user)) {
-      this.history.pushState(null, '/');
+      this.context.history.pushState(null, '/');
     }
-  },
+  }
 
-  componentDidMount() {
+componentDidMount() {
     this._papersToken = PositionPaperStore.addListener(() => {
       this.setState({
         files: PositionPaperStore.getPositionPaperFiles(),
@@ -68,14 +62,14 @@ var DelegatePaperView = React.createClass({
         graded_files: PositionPaperStore.getGradedPositionPaperFiles(),
       });
     });
-  },
+  }
 
-  componentWillUnmount() {
+componentWillUnmount() {
     this._papersToken && this._papersToken.remove();
     this._successTimeout && clearTimeout(this._successTimeout);
-  },
+  }
 
-  render() {
+render() {
     if (this.context.conference.position_papers_accepted) {
       return (
         <InnerView>
@@ -96,9 +90,9 @@ var DelegatePaperView = React.createClass({
         </InnerView>
       );
     }
-  },
+  }
 
-  renderRubric() {
+renderRubric() {
     const user = CurrentUserStore.getCurrentUser();
     const paper = this.state.papers[user.delegate.assignment.paper.id];
     const files = this.state.files;
@@ -120,9 +114,7 @@ var DelegatePaperView = React.createClass({
     } else {
       return <div />;
     }
-  },
-
-  calculateTotalScore: function(paper, rubric, topic_2 = false) {
+  }  calculateTotalScore(paper, rubric, topic_2 = false) {
     var totalScore = -1;
     if (topic_2) {
       totalScore =
@@ -140,9 +132,7 @@ var DelegatePaperView = React.createClass({
         inflateGrades(paper.score_5, rubric.grade_value_5);
     }
     return totalScore;
-  },
-
-  calculateMaxScore: function(rubric, topic_2 = false) {
+  }  calculateMaxScore(rubric, topic_2 = false) {
     var totalMaxScore = -1;
     if (topic_2) {
       totalMaxScore =
@@ -160,9 +150,7 @@ var DelegatePaperView = React.createClass({
         rubric.grade_value_5;
     }
     return totalMaxScore;
-  },
-
-  calculateCategory: function(value, weight) {
+  }  calculateCategory(value, weight) {
     var interval = weight / 5;
     if (value >= interval * 5) {
       return '5 - Exceeds Expectations';
@@ -177,9 +165,7 @@ var DelegatePaperView = React.createClass({
     } else {
       ('0 - Needs Improvement');
     }
-  },
-
-  calculateScore: function(category, weight) {
+  }  calculateScore(category, weight) {
     var interval = weight / 5;
     if (category == '5 - Exceeds Expectations') {
       return interval * 5;
@@ -194,13 +180,13 @@ var DelegatePaperView = React.createClass({
     } else {
       return 0;
     }
-  },
+  }
 
-  _handleUploadPaper(paperID, event) {
+_handleUploadPaper(paperID, event) {
     this.setState({uploadedFile: event.target.files[0]});
-  },
+  }
 
-  _handleSubmitPaper(paperID, event) {
+_handleSubmitPaper(paperID, event) {
     var file = this.state.uploadedFile;
     if (
       file != null &&
@@ -224,19 +210,24 @@ var DelegatePaperView = React.createClass({
         uploadedFile: null,
       });
     }
-    this.history.pushState(null, '/');
+    this.context.history.pushState(null, '/');
     event.preventDefault();
-  },
+  }
 
-  _handleSuccess: function(response) {
+_handleSuccess(response) {
     window.alert('Your paper has been successfully uploaded!');
-  },
+  }
 
-  _handleError: function(response) {
+_handleError(response) {
     window.alert(
       'Something went wrong. Please refresh your page and try again.',
     );
-  },
-});
+  }
+}
+
+DelegatePaperView.contextTypes = {
+  conference: React.PropTypes.shape(ConferenceContext),
+  history: PropTypes.history,
+}
 
 module.exports = DelegatePaperView;

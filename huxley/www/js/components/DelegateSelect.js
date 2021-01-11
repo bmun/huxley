@@ -5,17 +5,11 @@
 
 'use strict';
 
-var React = require('react');
+import React from 'react';
 
-var DelegateSelect = React.createClass({
-  propTypes: {
-    onChange: React.PropTypes.func,
-    delegates: React.PropTypes.array,
-    selectedDelegateID: React.PropTypes.number,
-    disabled: React.PropTypes.bool,
-  },
+class DelegateSelect extends React.Component {
 
-  render: function() {
+render() {
     return (
       <select
         onChange={this.props.onChange}
@@ -25,9 +19,9 @@ var DelegateSelect = React.createClass({
         {this.renderDelegateOptions()}
       </select>
     );
-  },
+  }
 
-  renderDelegateOptions: function() {
+renderDelegateOptions() {
     return this.props.delegates.map(delegate => (
       <option
         key={delegate.id}
@@ -36,7 +30,14 @@ var DelegateSelect = React.createClass({
         {delegate.name}
       </option>
     ));
-  },
-});
+  }
+}
+
+DelegateSelect.propTypes = {
+  onChange: React.PropTypes.func,
+  delegates: React.PropTypes.array,
+  selectedDelegateID: React.PropTypes.number,
+  disabled: React.PropTypes.bool,
+}
 
 module.exports = DelegateSelect;

@@ -5,17 +5,10 @@
 
 'use strict';
 
-var React = require('react');
+import React from 'react';
 
-var CountrySelect = React.createClass({
-  propTypes: {
-    onChange: React.PropTypes.func,
-    countries: React.PropTypes.array,
-    selectedCountryID: React.PropTypes.number,
-    countryPreferences: React.PropTypes.array,
-  },
-
-  shouldComponentUpdate: function(nextProps, nextState) {
+class CountrySelect extends React.Component {
+shouldComponentUpdate(nextProps, nextState) {
     for (var i = 0; i < this.props.countryPreferences.length; i++) {
       if (
         this.props.countryPreferences[i] !== nextProps.countryPreferences[i]
@@ -27,9 +20,9 @@ var CountrySelect = React.createClass({
       nextProps.selectedCountryID !== this.props.selectedCountryID ||
       nextProps.countries.length !== this.props.countries.length
     );
-  },
+  }
 
-  render: function() {
+render() {
     return (
       <select
         onChange={this.props.onChange}
@@ -38,9 +31,9 @@ var CountrySelect = React.createClass({
         {this.renderCommitteeOptions()}
       </select>
     );
-  },
+  }
 
-  renderCommitteeOptions: function() {
+renderCommitteeOptions() {
     return this.props.countries.map(
       function(country) {
         if (!country.special) {
@@ -53,7 +46,14 @@ var CountrySelect = React.createClass({
         }
       }.bind(this),
     );
-  },
-});
+  }
+}
+
+CountrySelect.propTypes = {
+  onChange: React.PropTypes.func,
+  countries: React.PropTypes.array,
+  selectedCountryID: React.PropTypes.number,
+  countryPreferences: React.PropTypes.array,
+}
 
 module.exports = CountrySelect;

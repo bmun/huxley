@@ -5,8 +5,8 @@
 
 'use strict';
 
-var React = require('react');
-var ReactRouter = require('react-router');
+import React from 'react';
+import PropTypes from 'react-router';
 
 var AssignmentStore = require('stores/AssignmentStore');
 var CountryStore = require('stores/CountryStore');
@@ -19,8 +19,7 @@ var User = require('utils/User');
 require('css/Table.less');
 var ChairDelegateEmailViewText = require('text/ChairDelegateEmailViewText.md');
 
-var ChairDelegateEmailView = React.createClass({
-  mixins: [ReactRouter.History],
+class ChairDelegateEmailView extends React.Component {
 
   getInitialState() {
     var user = CurrentUserStore.getCurrentUser();
@@ -40,16 +39,16 @@ var ChairDelegateEmailView = React.createClass({
       countries: countries,
       delegates: delegates,
     };
-  },
+  }
 
-  componentWillMount() {
+componentWillMount() {
     var user = CurrentUserStore.getCurrentUser();
     if (!User.isChair(user)) {
-      this.history.pushState(null, '/');
+      this.context.history.pushState(null, '/');
     }
-  },
+  }
 
-  componentDidMount() {
+componentDidMount() {
     var user = CurrentUserStore.getCurrentUser();
 
     this._delegatesToken = DelegateStore.addListener(() => {
@@ -83,15 +82,15 @@ var ChairDelegateEmailView = React.createClass({
         countries: countries,
       });
     });
-  },
+  }
 
-  componentWillUnmount() {
+componentWillUnmount() {
     this._countriesToken && this._countriesToken.remove();
     this._delegatesToken && this._delegatesToken.remove();
     this._assignmentsToken && this._assignmentsToken.remove();
-  },
+  }
 
-  render() {
+render() {
     return (
       <InnerView>
         <TextTemplate>
@@ -121,9 +120,9 @@ var ChairDelegateEmailView = React.createClass({
         </form>
       </InnerView>
     );
-  },
+  }
 
-  renderEmailRows() {
+renderEmailRows() {
     var assignments = this.state.assignments;
     var delegates = this.state.delegates;
     var countries = this.state.countries;
@@ -139,7 +138,11 @@ var ChairDelegateEmailView = React.createClass({
         </tr>
       );
     });
-  },
-});
+  }
+}
+
+ChairCommitteeFeedbackView.contextTypes = {
+  history: PropTypes.history,
+}
 
 module.exports = ChairDelegateEmailView;

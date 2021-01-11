@@ -5,8 +5,7 @@
 
 'use strict';
 
-var React = require('react');
-var ReactRouter = require('react-router');
+import React from 'react';
 
 var _accessSafe = require('utils/_accessSafe');
 var AssignmentStore = require('stores/AssignmentStore');
@@ -30,14 +29,9 @@ const cx = require('classnames');
 var AdvisorPaperViewText = require('text/AdvisorPaperViewText.md');
 var AdvisorWaitlistText = require('text/AdvisorWaitlistText.md');
 
-var AdvisorPaperView = React.createClass({
-  mixins: [ReactRouter.History],
+class AdvisorPaperView extends React.Component {
 
-  contextTypes: {
-    conference: React.PropTypes.shape(ConferenceContext),
-  },
-
-  getInitialState: function() {
+  getInitialState() {
     var schoolID = CurrentUserStore.getCurrentUser().school.id;
     var conferenceID = this.context.conference.session;
     return {
@@ -48,11 +42,11 @@ var AdvisorPaperView = React.createClass({
       graded_files: PositionPaperStore.getGradedPositionPaperFiles(),
       rubric: RubricStore.getRubric,
       loading: false,
-      errors: {},
+      errors: {}
     };
-  },
+  }
 
-  componentDidMount: function() {
+  componentDidMount() {
     var schoolID = CurrentUserStore.getCurrentUser().school.id;
     var conferenceID = this.context.conference.session;
     this._committeesToken = CommitteeStore.addListener(() => {
@@ -91,18 +85,18 @@ var AdvisorPaperView = React.createClass({
         rubric: RubricStore.getRubric,
       });
     });
-  },
+  }
 
-  componentWillUnmount: function() {
+  componentWillUnmount() {
     this._registrationToken && this._registrationToken.remove();
     this._rubricsToken && this._rubricsToken.remove();
     this._papersToken && this._papersToken.remove();
     this._countriesToken && this._countriesToken.remove();
     this._committeesToken && this._committeesToken.remove();
     this._assignmentsToken && this._assignmentsToken.remove();
-  },
+  }
 
-  render: function() {
+  render() {
     var conference = this.context.conference;
     var registration = this.state.registration;
     var waitlisted =
@@ -129,9 +123,9 @@ var AdvisorPaperView = React.createClass({
         </InnerView>
       );
     }
-  },
+  }
 
-  renderPaperTables: function() {
+  renderPaperTables() {
     var committees = {};
     var cm = this.state.committees;
     var countries = this.state.countries;
@@ -219,9 +213,9 @@ var AdvisorPaperView = React.createClass({
         );
       }.bind(this),
     );
-  },
+  }
 
-  renderCommitteeRows: function(
+  renderCommitteeRows(
     countryAssignments,
     rubric,
     files,
@@ -381,9 +375,9 @@ var AdvisorPaperView = React.createClass({
         );
       }.bind(this),
     );
-  },
+  }
 
-  calculateTotalScore: function(paper, rubric, topic_2 = false) {
+  calculateTotalScore(paper, rubric, topic_2 = false) {
     var totalScore = -1;
     if (topic_2) {
       totalScore =
@@ -401,9 +395,9 @@ var AdvisorPaperView = React.createClass({
         inflateGrades(paper.score_5, rubric.grade_value_5);
     }
     return totalScore;
-  },
+  }
 
-  calculateMaxScore: function(rubric, topic_2 = false) {
+  calculateMaxScore(rubric, topic_2 = false) {
     var totalMaxScore = -1;
     if (topic_2) {
       totalMaxScore =
@@ -421,9 +415,9 @@ var AdvisorPaperView = React.createClass({
         rubric.grade_value_5;
     }
     return totalMaxScore;
-  },
+  }
 
-  calculateCategory: function(value, weight) {
+  calculateCategory(value, weight) {
     var interval = weight / 5;
     if (value >= interval * 5) {
       return '5 - Exceeds Expectations';
@@ -438,9 +432,9 @@ var AdvisorPaperView = React.createClass({
     } else {
       ('0 - Needs Improvement');
     }
-  },
+  }
 
-  calculateScore: function(category, weight) {
+  calculateScore(category, weight) {
     var interval = weight / 5;
     if (category == '5 - Exceeds Expectations') {
       return interval * 5;
@@ -455,9 +449,9 @@ var AdvisorPaperView = React.createClass({
     } else {
       return 0;
     }
-  },
+  }
 
-  renderError: function(field) {
+  renderError(field) {
     if (this.state.errors[field]) {
       return (
         <StatusLabel status="error">{this.state.errors[field]}</StatusLabel>
@@ -465,14 +459,18 @@ var AdvisorPaperView = React.createClass({
     }
 
     return null;
-  },
+  }
 
-  _handleError: function(response) {
+  _handleError(response) {
     this.setState({
       errors: response,
       loading: false,
     });
-  },
-});
+  }
+}
+
+AdvisorPaperView.contextTypes = {
+  conference: React.PropTypes.shape(ConferenceContext),
+};
 
 module.exports = AdvisorPaperView;

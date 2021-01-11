@@ -5,8 +5,7 @@
 
 'use strict';
 
-const React = require('react');
-const ReactRouter = require('react-router');
+import React from 'react';
 
 const ConferenceContext = require('components/ConferenceContext');
 const CurrentUserStore = require('stores/CurrentUserStore');
@@ -20,27 +19,24 @@ const DelegateProfileViewText = require('text/DelegateProfileViewText.md');
 const DelegateChecklistPositionPaperText = require('text/checklists/DelegateChecklistPositionPaperText.md');
 const DelegateChecklistWaiverText = require('text/checklists/DelegateChecklistWaiverText.md');
 
-const DelegateProfileView = React.createClass({
-  contextTypes: {
-    conference: React.PropTypes.shape(ConferenceContext),
-  },
+class DelegateProfileView extends React.Component {
 
-  getInitialState() {
+getInitialState() {
     var user = CurrentUserStore.getCurrentUser();
     var delegate = user.delegate;
     return {
       delegate: delegate,
     };
-  },
+  }
 
-  componentWillMount() {
+componentWillMount() {
     var user = CurrentUserStore.getCurrentUser();
     if (!User.isDelegate(user)) {
-      this.history.pushState(null, '/');
+      this.context.history.pushState(null, '/');
     }
-  },
+  }
 
-  render() {
+render() {
     var user = CurrentUserStore.getCurrentUser();
     var delegate = this.state.delegate;
     var assignment = delegate && delegate.assignment;
@@ -145,7 +141,11 @@ const DelegateProfileView = React.createClass({
         {summary}
       </InnerView>
     );
-  },
-});
+  }
+}
+
+DelegateProfileView.contextTypes = {
+  conference: React.PropTypes.shape(ConferenceContext),
+}
 
 module.exports = DelegateProfileView;

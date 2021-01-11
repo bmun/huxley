@@ -5,8 +5,8 @@
 
 'use strict';
 
-var React = require('react');
-var ReactRouter = require('react-router');
+import {React} from 'react';
+import PropTypes from 'react-router';
 
 var NavTab = require('components/NavTab');
 var PermissionDeniedView = require('components/PermissionDeniedView');
@@ -16,16 +16,16 @@ var User = require('utils/User');
 
 require('css/NavBar.less');
 
-var AdvisorView = React.createClass({
-  mixins: [ReactRouter.History],
+class AdvisorView extends React.Component {
+  
 
-  componentDidMount: function() {
+  componentDidMount() {
     if (User.isAnonymous(this.props.user)) {
-      this.history.pushState(null, '/login');
+      this.context.history.pushState(null, '/login');
     }
-  },
+  }
 
-  render: function() {
+  render() {
     var content = User.isAdvisor(this.props.user) ? (
       this.props.children
     ) : (
@@ -47,7 +47,11 @@ var AdvisorView = React.createClass({
         </Shaker>
       </div>
     );
-  },
-});
+  }
+}
+
+AdvisorView.contextTypes = {
+  history: PropTypes.history,
+}
 
 module.exports = AdvisorView;

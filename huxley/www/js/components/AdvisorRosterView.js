@@ -6,8 +6,7 @@
 'use strict';
 
 var Modal = require('react-modal');
-var React = require('react');
-var ReactRouter = require('react-router');
+import React from 'react';
 
 var _accessSafe = require('utils/_accessSafe');
 var AssignmentStore = require('stores/AssignmentStore');
@@ -31,14 +30,8 @@ require('css/Modal.less');
 var AdvisorRosterViewText = require('text/AdvisorRosterViewText.md');
 var AdvisorWaitlistText = require('text/AdvisorWaitlistText.md');
 
-var AdvisorRosterView = React.createClass({
-  mixins: [ReactRouter.History],
-
-  contextTypes: {
-    conference: React.PropTypes.shape(ConferenceContext),
-  },
-
-  getInitialState: function() {
+class AdvisorRosterView extends React.Component {
+  getInitialState() {
     var schoolID = CurrentUserStore.getCurrentUser().school.id;
     var conferenceID = this.context.conference.session;
     var assignments = AssignmentStore.getSchoolAssignments(schoolID).filter(
@@ -64,13 +57,13 @@ var AdvisorRosterView = React.createClass({
       modal_onClick: null,
       errors: {},
     };
-  },
+  }
 
-  componentWillMount: function() {
+  componentWillMount() {
     Modal.setAppElement('body');
-  },
+  }
 
-  componentDidMount: function() {
+  componentDidMount() {
     var schoolID = CurrentUserStore.getCurrentUser().school.id;
     var conferenceID = this.context.conference.session;
     this._registrationToken = RegistrationStore.addListener(() => {
@@ -101,15 +94,15 @@ var AdvisorRosterView = React.createClass({
         assignment_ids: assignment_ids,
       });
     });
-  },
+  }
 
-  componentWillUnmount: function() {
+  componentWillUnmount() {
     this._registrationToken && this._registrationToken.remove();
     this._delegatesToken && this._delegatesToken.remove();
     this._assignmentsToken && this._assignmentsToken.remove();
-  },
+  }
 
-  render: function() {
+  render() {
     var conference = this.context.conference;
     var registration = this.state.registration;
     var waitlisted =
@@ -197,9 +190,9 @@ var AdvisorRosterView = React.createClass({
         </InnerView>
       );
     }
-  },
+  }
 
-  renderRosterRows: function() {
+  renderRosterRows() {
     var committees = this.state.committees;
     var countries = this.state.countries;
     var assignments = this.state.assignments;
@@ -276,9 +269,9 @@ var AdvisorRosterView = React.createClass({
         );
       }.bind(this),
     );
-  },
+  }
 
-  openModal: function(name, email, fn, event) {
+  openModal(name, email, fn, event) {
     this.setState({
       modal_open: true,
       modal_name: name,
@@ -287,14 +280,14 @@ var AdvisorRosterView = React.createClass({
       errors: {},
     });
     event.preventDefault();
-  },
+  }
 
-  closeModal: function(event) {
+  closeModal(event) {
     this.setState({modal_open: false});
     event.preventDefault();
-  },
+  }
 
-  renderError: function(field) {
+  renderError(field) {
     if (this.state.errors[field]) {
       return (
         <StatusLabel status="error">{this.state.errors[field]}</StatusLabel>
@@ -302,18 +295,18 @@ var AdvisorRosterView = React.createClass({
     }
 
     return null;
-  },
+  }
 
-  _handleDeleteDelegate: function(delegate) {
+  _handleDeleteDelegate(delegate) {
     const confirmed = window.confirm(
       `Are you sure you want to delete this delegate (${delegate.name})?`,
     );
     if (confirmed) {
       DelegateActions.deleteDelegate(delegate.id, this._handleDeleteError);
     }
-  },
+  }
 
-  _handleAddDelegate: function(data) {
+  _handleAddDelegate(data) {
     this.setState({loading: true});
     var user = CurrentUserStore.getCurrentUser();
     ServerAPI.createDelegate(
@@ -322,56 +315,60 @@ var AdvisorRosterView = React.createClass({
       user.school.id,
     ).then(this._handleAddDelegateSuccess, this._handleError);
     event.preventDefault();
-  },
+  }
 
-  _handleEditDelegate: function(delegate) {
+  _handleEditDelegate(delegate) {
     var user = CurrentUserStore.getCurrentUser();
     this.setState({loading: true});
     var delta = {name: this.state.modal_name, email: this.state.modal_email};
     DelegateActions.updateDelegate(delegate.id, delta, this._handleError);
     event.preventDefault();
-  },
+  }
 
-  _handleDelegatePasswordChange: function(delegate) {
+  _handleDelegatePasswordChange(delegate) {
     ServerAPI.resetDelegatePassword(delegate.id).then(
       this._handlePasswordChangeSuccess,
       this._handlePasswordChangeError,
     );
-  },
+  }
 
-  _handleAddDelegateSuccess: function(response) {
+  _handleAddDelegateSuccess(response) {
     DelegateActions.addDelegate(response);
     this.setState({
       loading: false,
       modal_open: false,
     });
-  },
+  }
 
-  _handlePasswordChangeSuccess: function(response) {
+  _handlePasswordChangeSuccess(response) {
     this.setState({
       loading: false,
       modal_open: false,
     });
     window.alert(`Password successfully reset.`);
-  },
+  }
 
-  _handlePasswordChangeError: function(response) {
+  _handlePasswordChangeError(response) {
     window.alert(`The passowrd could not be reset.`);
-  },
+  }
 
-  _handleDeleteError: function(response) {
+  _handleDeleteError(response) {
     window.alert(
       `There was an issue processing your request. Please refresh you page and try again.`,
     );
-  },
+  }
 
-  _handleError: function(response) {
+  _handleError(response) {
     this.setState({
       errors: response,
       loading: false,
       modal_open: true,
     });
-  },
-});
+  }
+}
+
+AdvisorRosterView.contextTypes = {
+  conference: React.PropTypes.shape(ConferenceContext),
+};
 
 module.exports = AdvisorRosterView;

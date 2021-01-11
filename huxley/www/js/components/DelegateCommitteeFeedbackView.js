@@ -5,8 +5,8 @@
 
 'use strict';
 
-const React = require('react');
-const ReactRouter = require('react-router');
+import React from 'react';
+import PropTypes from 'react-router';
 
 const Button = require('components/core/Button');
 const ConferenceContext = require('components/ConferenceContext');
@@ -26,14 +26,9 @@ const _handleChange = require('utils/_handleChange');
 require('css/Table.less');
 const DelegateCommitteeFeedbackViewText = require('text/DelegateCommitteeFeedbackViewText.md');
 
-const DelegateCommitteeFeedbackView = React.createClass({
-  mixins: [ReactRouter.History],
+class DelegateCommitteeFeedbackView extends React.Component {
 
-  contextTypes: {
-    conference: React.PropTypes.shape(ConferenceContext),
-  },
-
-  getInitialState() {
+getInitialState() {
     var user = CurrentUserStore.getCurrentUser();
     var delegate = user.delegate;
     var secretariatMembers = SecretariatMemberStore.getSecretariatMembers(
@@ -82,9 +77,9 @@ const DelegateCommitteeFeedbackView = React.createClass({
         CommitteeFeedbackStore.feedbackSubmitted(),
       errors: {},
     };
-  },
+  }
 
-  componentDidMount() {
+componentDidMount() {
     this._committeeFeedbackToken = CommitteeFeedbackStore.addListener(() => {
       this.setState({
         feedbackSubmitted:
@@ -109,21 +104,21 @@ const DelegateCommitteeFeedbackView = React.createClass({
       }
       this.setState(newState);
     });
-  },
+  }
 
-  componentWillMount() {
+componentWillMount() {
     var user = CurrentUserStore.getCurrentUser();
     if (!User.isDelegate(user)) {
-      this.history.pushState(null, '/');
+      this.context.history.pushState(null, '/');
     }
-  },
+  }
 
-  componentWillUnmount() {
+componentWillUnmount() {
     this._committeeFeedbackToken && this._committeeFeedbackToken.remove();
     this._secretariatMembersToken && this._secretariatMembersToken.remove();
-  },
+  }
 
-  render() {
+render() {
     var user = CurrentUserStore.getCurrentUser();
     var delegate = this.state.delegate;
     var assignment = delegate && delegate.assignment;
@@ -229,9 +224,9 @@ const DelegateCommitteeFeedbackView = React.createClass({
         {body}
       </InnerView>
     );
-  },
+  }
 
-  _buildFeedbackInputs(secretariatMember, title, index) {
+_buildFeedbackInputs(secretariatMember, title, index) {
     var name_key = 'chair_' + index + '_name';
     var comment_key = 'chair_' + index + '_comment';
     var rating_key = 'chair_' + index + '_rating';
@@ -278,9 +273,9 @@ const DelegateCommitteeFeedbackView = React.createClass({
         </label>
       </div>
     );
-  },
+  }
 
-  _buildConferenceInputs() {
+_buildConferenceInputs() {
     return (
       <div>
       <div>
@@ -321,9 +316,9 @@ const DelegateCommitteeFeedbackView = React.createClass({
     </div>
     </div>
     );
-  },
+  }
 
-  _handlePublishFeedback(event) {
+_handlePublishFeedback(event) {
     this.setState({loadingPublish: true});
     var committee_id = this.state.delegate.assignment.committee.id;
     ServerAPI.createCommitteeFeedback({
@@ -364,18 +359,23 @@ const DelegateCommitteeFeedbackView = React.createClass({
       money_spent: this.state.money_spent,
     }).then(this._handleAddFeedbackSuccess, this._handleAddFeedbackFail);
     event.preventDefault();
-  },
+  }
 
-  _handleAddFeedbackSuccess(response) {
+_handleAddFeedbackSuccess(response) {
     CommitteeFeedbackActions.addCommitteeFeedback(response);
-  },
+  }
 
-  _handleAddFeedbackFail(response) {
+_handleAddFeedbackFail(response) {
     this.setState({
       errors: response,
       loading: false,
     });
-  },
-});
+  }
+}
+
+DelegateCommitteeFeedbackView.contextTypes = {
+  conference: React.PropTypes.shape(ConferenceContext),
+  history: PropTypes.history,
+}
 
 module.exports = DelegateCommitteeFeedbackView;

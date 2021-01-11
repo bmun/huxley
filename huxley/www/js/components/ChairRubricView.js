@@ -5,8 +5,7 @@
 
 'use strict';
 
-const React = require('react');
-const ReactRouter = require('react-router');
+import React from 'react';
 
 const Button = require('components/core/Button');
 const CommitteeStore = require('stores/CommitteeStore');
@@ -22,7 +21,7 @@ const User = require('utils/User');
 require('css/Table.less');
 const ChairRubricText = require('text/ChairRubricViewText.md');
 
-const ChairRubricView = React.createClass({
+class ChairRubricView extends React.Component {
   getInitialState() {
     var user = CurrentUserStore.getCurrentUser();
     var committees = CommitteeStore.getCommittees();
@@ -37,15 +36,15 @@ const ChairRubricView = React.createClass({
       committees: committees,
       rubric: rubric,
     };
-  },
-
+  }  
+  
   componentWillMount() {
     var user = CurrentUserStore.getCurrentUser();
     if (!User.isChair(user)) {
-      this.history.pushState(null, '/');
+      this.context.history.pushState(null, '/');
     }
-  },
-
+  }  
+  
   componentDidMount() {
     this._committeesToken = CommitteeStore.addListener(() => {
       var user = CurrentUserStore.getCurrentUser();
@@ -63,13 +62,13 @@ const ChairRubricView = React.createClass({
         this.setState({rubric: RubricStore.getRubric(committee.rubric.id)});
       }
     });
-  },
-
+  }  
+  
   componentWillUnmount() {
     this._rubricToken && this._rubricToken.remove();
     this._successTimeout && clearTimeout(this._successTimeout);
-  },
-
+  }  
+  
   render() {
     var rubric = this.state.rubric;
     if (rubric == null) {
@@ -262,9 +261,9 @@ const ChairRubricView = React.createClass({
         </form>
       </InnerView>
     );
-  },
+  }
 
-  _renderTopicTwo(rubric) {
+_renderTopicTwo(rubric) {
     return (
       <table>
         <thead>
@@ -362,9 +361,9 @@ const ChairRubricView = React.createClass({
         </tbody>
       </table>
     );
-  },
+  }
 
-  _handleChange(field, event) {
+_handleChange(field, event) {
     var rubric = this.state.rubric;
     if (field == 'use_topic_2') {
       event = !rubric.use_topic_2;
@@ -375,9 +374,9 @@ const ChairRubricView = React.createClass({
         [field]: event,
       },
     });
-  },
+  }
 
-  _handleValueChange(field, event) {
+_handleValueChange(field, event) {
     var rubric = this.state.rubric;
     this.setState({
       rubric: {
@@ -385,17 +384,17 @@ const ChairRubricView = React.createClass({
         [field]: Number(event),
       },
     });
-  },
+  }
 
-  _handleSaveRubric(event) {
+_handleSaveRubric(event) {
     this.setState({loading: true});
     this._successTimout && clearTimeout(this._successTimeout);
     var rubric = {...this.state.rubric};
     RubricActions.updateRubric(rubric, this._handleSuccess, this._handleError);
     event.preventDefault();
-  },
+  }
 
-  _handleSuccess: function(response) {
+_handleSuccess(response) {
     this.setState({
       loading: false,
       success: true,
@@ -405,14 +404,14 @@ const ChairRubricView = React.createClass({
       () => this.setState({success: false}),
       2000,
     );
-  },
+  }
 
-  _handleError: function(response) {
+_handleError(response) {
     this.setState({loading: false});
     window.alert(
       'Something went wrong. Please refresh your page and try again.',
     );
-  },
-});
+  }
+}
 
 module.exports = ChairRubricView;
