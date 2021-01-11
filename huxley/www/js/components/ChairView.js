@@ -5,7 +5,7 @@
 
 'use strict';
 
-var React = require('react');
+import React from 'react';
 
 var NavTab = require('components/NavTab');
 var Shaker = require('components/Shaker');
@@ -13,7 +13,7 @@ var TopBar = require('components/TopBar');
 
 require('css/NavBar.less');
 
-var ChairView = React.createClass({
+class ChairView extends React.Component {
   render() {
     return (
       <div>
@@ -31,7 +31,7 @@ var ChairView = React.createClass({
         </Shaker>
       </div>
     );
-  },
-});
+  }
+}
 
 module.exports = ChairView;

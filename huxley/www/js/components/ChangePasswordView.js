@@ -5,8 +5,8 @@
 
 'use strict';
 
-var cx = require('classnames');
-var React = require('react');
+import cx from 'classnames';
+import React from 'react';
 
 var Button = require('components/core/Button');
 var ServerAPI = require('lib/ServerAPI');
@@ -14,14 +14,8 @@ var StatusLabel = require('components/core/StatusLabel');
 
 require('css/ChangePasswordView.less');
 
-var ChangePasswordView = React.createClass({
-  propTypes: {
-    isVisible: React.PropTypes.bool.isRequired,
-    onClick: React.PropTypes.func,
-    onSuccess: React.PropTypes.func.isRequired,
-  },
-
-  getInitialState: function() {
+class ChangePasswordView extends React.Component {
+getInitialState() {
     return {
       message: '',
       success: false,
@@ -30,13 +24,13 @@ var ChangePasswordView = React.createClass({
       newPassword: '',
       newPassword2: '',
     };
-  },
+  }
 
-  componentWillReceiveProps: function(nextProps) {
+componentWillReceiveProps(nextProps) {
     this.setState(this.getInitialState());
-  },
+  }
 
-  render: function() {
+render() {
     return (
       <div
         className={cx({
@@ -79,9 +73,9 @@ var ChangePasswordView = React.createClass({
         {this.renderMessage()}
       </div>
     );
-  },
+  }
 
-  renderMessage: function() {
+renderMessage() {
     if (!this.state.message) {
       return null;
     }
@@ -91,25 +85,23 @@ var ChangePasswordView = React.createClass({
         {this.state.message}
       </StatusLabel>
     );
-  },
-
-  onSuccess: function() {
+  }  onSuccess() {
     setTimeout(this.props.onSuccess, 750);
-  },
+  }
 
-  _handleCurrentPasswordChange: function(event) {
+_handleCurrentPasswordChange(event) {
     this.setState({currentPassword: event.target.value});
-  },
+  }
 
-  _handleNewPasswordChange: function(event) {
+_handleNewPasswordChange(event) {
     this.setState({newPassword: event.target.value});
-  },
+  }
 
-  _handleNewPassword2Change: function(event) {
+_handleNewPassword2Change(event) {
     this.setState({newPassword2: event.target.value});
-  },
+  }
 
-  _handleSubmit: function(event) {
+_handleSubmit(event) {
     if (this.state.newPassword != this.state.newPassword2) {
       this.setState({
         message: 'Please enter the same password again',
@@ -124,9 +116,9 @@ var ChangePasswordView = React.createClass({
       );
       event.preventDefault();
     }
-  },
+  }
 
-  _handleSuccess: function(response) {
+_handleSuccess(response) {
     this.setState(
       {
         loading: false,
@@ -138,19 +130,25 @@ var ChangePasswordView = React.createClass({
       },
       this.onSuccess,
     );
-  },
+  }
 
-  _handleError: function(response) {
+_handleError(response) {
     this.setState({
       loading: false,
       message: response.detail,
       success: false,
     });
-  },
+  }
 
-  _handleDropdownClick: function(e) {
+_handleDropdownClick(e) {
     this.props.onClick && this.props.onClick(e);
-  },
-});
+  }
+}
+
+ChangePasswordView.propTypes = {
+  isVisible: React.PropTypes.bool.isRequired,
+  onClick: React.PropTypes.func,
+  onSuccess: React.PropTypes.func.isRequired,
+};
 
 module.exports = ChangePasswordView;

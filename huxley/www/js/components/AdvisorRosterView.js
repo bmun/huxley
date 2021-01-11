@@ -6,8 +6,7 @@
 'use strict';
 
 var Modal = require('react-modal');
-var React = require('react');
-var ReactRouter = require('react-router');
+import React from 'react';
 
 var _accessSafe = require('utils/_accessSafe');
 var AssignmentStore = require('stores/AssignmentStore');

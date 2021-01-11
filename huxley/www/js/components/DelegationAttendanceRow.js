@@ -5,17 +5,11 @@
 
 'use strict';
 
-var React = require('react');
+import React from 'react';
 
-var DelegationAttendanceRow = React.createClass({
-  propTypes: {
-    onChange: React.PropTypes.func,
-    countryName: React.PropTypes.string,
-    assignmentID: React.PropTypes.number,
-    attendance: React.PropTypes.object,
-  },
+class DelegationAttendanceRow extends React.Component {
 
-  shouldComponentUpdate(nextProps, nextState) {
+shouldComponentUpdate(nextProps, nextState) {
     for (var field in this.props.attendance) {
       if (this.props.attendance[field] !== nextProps.attendance[field]) {
         return true;
@@ -25,9 +19,9 @@ var DelegationAttendanceRow = React.createClass({
       this.props.countryName !== nextProps.countryName ||
       this.props.assignmentID !== nextProps.assignmentID
     );
-  },
+  }
 
-  render() {
+render() {
     return (
       <tr>
         <td>
@@ -85,12 +79,19 @@ var DelegationAttendanceRow = React.createClass({
         </td>
       </tr>
     );
-  },
+  }
 
-  _handleChange: function(field, event) {
+_handleChange(field, event) {
     this.props.onChange &&
       this.props.onChange(field, this.props.assignmentID, event);
-  },
-});
+  }
+}
+
+DelegationAttendanceRow.propTypes = {
+  onChange: React.PropTypes.func,
+  countryName: React.PropTypes.string,
+  assignmentID: React.PropTypes.number,
+  attendance: React.PropTypes.object,
+}
 
 module.exports = DelegationAttendanceRow;

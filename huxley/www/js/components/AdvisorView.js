@@ -21,7 +21,7 @@ class AdvisorView extends React.Component {
 
   componentDidMount() {
     if (User.isAnonymous(this.props.user)) {
-      this.history.pushState(null, '/login');
+      this.context.history.pushState(null, '/login');
     }
   }
 

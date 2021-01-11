@@ -5,7 +5,7 @@
 
 'use strict';
 
-var React = require('react');
+import React from 'react';
 
 var _accessSafe = require('utils/_accessSafe');
 var AssignmentActions = require('actions/AssignmentActions');

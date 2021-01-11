@@ -5,7 +5,7 @@
 
 'use strict';
 
-const React = require('react');
+import React from 'react';
 
 var _accessSafe = require('utils/_accessSafe');
 const AssignmentStore = require('stores/AssignmentStore');

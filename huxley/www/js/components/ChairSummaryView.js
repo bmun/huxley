@@ -5,8 +5,8 @@
 
 'use strict';
 
-var React = require('react');
-var ReactRouter = require('react-router');
+import React from 'react';
+import PropTypes from 'react-router';
 
 var Button = require('components/core/Button');
 var AssignmentStore = require('stores/AssignmentStore');
@@ -21,9 +21,7 @@ var User = require('utils/User');
 require('css/Table.less');
 var ChairSummaryViewText = require('text/ChairSummaryViewText.md');
 
-var ChairSummaryView = React.createClass({
-  mixins: [ReactRouter.History],
-
+class ChairSummaryView extends React.Component {
   getInitialState() {
     var user = CurrentUserStore.getCurrentUser();
     var assignments = AssignmentStore.getCommitteeAssignments(user.committee);
@@ -51,16 +49,16 @@ var ChairSummaryView = React.createClass({
       delegates: delegates,
       summaries: summaries,
     };
-  },
+  }
 
-  componentWillMount() {
+componentWillMount() {
     var user = CurrentUserStore.getCurrentUser();
     if (!User.isChair(user)) {
-      this.history.pushState(null, '/');
+      this.context.history.pushState(null, '/');
     }
-  },
+  }
 
-  componentDidMount() {
+componentDidMount() {
     var user = CurrentUserStore.getCurrentUser();
 
     this._delegatesToken = DelegateStore.addListener(() => {
@@ -102,9 +100,9 @@ var ChairSummaryView = React.createClass({
         countries: countries,
       });
     });
-  },
+  }
 
-  componentWillUnmount() {
+componentWillUnmount() {
     this._successTimoutSave && clearTimeout(this._successTimeoutSave);
     this._successTimoutPublish && clearTimeout(this._successTimeoutPublish);
     this._countriesToken && this._countriesToken.remove();
@@ -112,9 +110,9 @@ var ChairSummaryView = React.createClass({
     this._assignmentsToken && this._assignmentsToken.remove();
     this._successTimeoutSave && clearTimeout(this._successTimeoutSave);
     this._successTimeoutPublish && clearTimeout(this._successTimeoutPublish);
-  },
+  }
 
-  render() {
+render() {
     return (
       <InnerView>
         <TextTemplate>
@@ -159,9 +157,9 @@ var ChairSummaryView = React.createClass({
         </form>
       </InnerView>
     );
-  },
+  }
 
-  renderSummaryRows() {
+renderSummaryRows() {
     var assignments = this.state.assignments;
     var summaries = this.state.summaries;
     var assignmentIDs = Object.keys(summaries);
@@ -187,9 +185,9 @@ var ChairSummaryView = React.createClass({
         </tr>
       );
     });
-  },
+  }
 
-  _handleSummaryChange(assignment, event) {
+_handleSummaryChange(assignment, event) {
     var summaries = this.state.summaries;
     this.setState({
       summaries: {
@@ -197,9 +195,9 @@ var ChairSummaryView = React.createClass({
         [assignment.id]: event.target.value,
       },
     });
-  },
+  }
 
-  _handleSaveSummaries(event) {
+_handleSaveSummaries(event) {
     this._successTimoutSave && clearTimeout(this._successTimeoutSave);
     this.setState({loadingSave: true});
     var committee = CurrentUserStore.getCurrentUser().committee;
@@ -219,9 +217,9 @@ var ChairSummaryView = React.createClass({
       this._handleErrorSave,
     );
     event.preventDefault();
-  },
+  }
 
-  _handlePublishSummaries(event) {
+_handlePublishSummaries(event) {
     var confirm = window.confirm(
       'By pressing ok, you are allowing advisors ' +
         'to read the summaries that you have written ' +
@@ -256,9 +254,9 @@ var ChairSummaryView = React.createClass({
       );
       event.preventDefault();
     }
-  },
+  }
 
-  _handleSuccessSave: function(response) {
+_handleSuccessSave(response) {
     this.setState({
       loadingSave: false,
       successSave: true,
@@ -268,16 +266,16 @@ var ChairSummaryView = React.createClass({
       () => this.setState({successSave: false}),
       2000,
     );
-  },
+  }
 
-  _handleErrorSave: function(response) {
+_handleErrorSave(response) {
     this.setState({loadingSave: false});
     window.alert(
       'Something went wrong. Please refresh your page and try again.',
     );
-  },
+  }
 
-  _handleSuccessPublish: function(response) {
+_handleSuccessPublish(response) {
     this.setState({
       loadingPublish: false,
       successPublish: true,
@@ -287,14 +285,18 @@ var ChairSummaryView = React.createClass({
       () => this.setState({successPublish: false}),
       2000,
     );
-  },
+  }
 
-  _handleErrorPublish: function(response) {
+_handleErrorPublish(response) {
     this.setState({loadingPublish: false});
     window.alert(
       'Something went wrong. Please refresh your page and try again.',
     );
-  },
-});
+  }
+}
+
+ChairSummaryView.contextTypes = {
+  history: PropTypes.history,
+}
 
 module.exports = ChairSummaryView;

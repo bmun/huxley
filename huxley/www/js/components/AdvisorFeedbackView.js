@@ -5,8 +5,7 @@
 
 'use strict';
 
-var React = require('react');
-var ReactRouter = require('react-router');
+import React from 'react';
 
 var _accessSafe = require('utils/_accessSafe');
 var AssignmentActions = require('actions/AssignmentActions');

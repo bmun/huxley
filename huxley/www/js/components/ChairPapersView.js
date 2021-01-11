@@ -5,8 +5,8 @@
 
 'use strict';
 
-var React = require('react');
-var ReactRouter = require('react-router');
+import {React} from 'react';
+import PropTypes from 'react-router';
 
 var Button = require('components/core/Button');
 var AssignmentStore = require('stores/AssignmentStore');
@@ -27,9 +27,8 @@ var ServerAPI = require('lib/ServerAPI');
 require('css/Table.less');
 var ChairPapersViewText = require('text/ChairPapersViewText.md');
 
-var ChairPapersView = React.createClass({
-  mixins: [ReactRouter.History],
-
+class ChairPapersView extends React.Component {
+  
   getInitialState() {
     var user = CurrentUserStore.getCurrentUser();
     var assignments = AssignmentStore.getCommitteeAssignments(user.committee);
@@ -65,14 +64,14 @@ var ChairPapersView = React.createClass({
       graded_files: graded_files,
       errors: {},
     };
-  },
+  }
 
   componentWillMount() {
     var user = CurrentUserStore.getCurrentUser();
     if (!User.isChair(user)) {
-      this.history.pushState(null, '/');
+      this.context.history.pushState(null, '/');
     }
-  },
+  }
 
   componentDidMount() {
     var user = CurrentUserStore.getCurrentUser();
@@ -132,7 +131,7 @@ var ChairPapersView = React.createClass({
         });
       }
     });
-  },
+  }
 
   componentWillUnmount() {
     this._countriesToken && this._countriesToken.remove();
@@ -141,7 +140,7 @@ var ChairPapersView = React.createClass({
     this._papersToken && this._papersToken.remove();
     this._rubricToken && this._rubricToken.remove();
     this._successTimeout && clearTimeout(this._successTimeout);
-  },
+  }
 
   render() {
     if (this.state.current_assignment == null) {
@@ -162,7 +161,7 @@ var ChairPapersView = React.createClass({
         </InnerView>
       );
     }
-  },
+  }
 
   renderRubric() {
     var user = CurrentUserStore.getCurrentUser();
@@ -194,7 +193,7 @@ var ChairPapersView = React.createClass({
     } else {
       return <div />;
     }
-  },
+  }
 
   renderAssignmentList() {
     const assignments = this.state.assignments;
@@ -215,19 +214,19 @@ var ChairPapersView = React.createClass({
     } else {
       return <div />;
     }
-  },
+  }
 
   _handleScoreChange(field, paperID, event) {
     const paper = {...this.state.papers[paperID], [field]: Number(event)};
     PositionPaperActions.storePositionPaper(paper);
-  },
+  }
 
   _handleUnsetAssignment(event) {
     this.setState({
       current_assignment: null,
       uploadedFile: null,
     });
-  },
+  }
 
   _handleAssignmentSelect(assignmentID, event) {
     var assignments = this.state.assignments;
@@ -237,12 +236,12 @@ var ChairPapersView = React.createClass({
       PositionPaperActions.fetchPositionPaperFile(a.paper.id);
     }
     event.preventDefault();
-  },
+  }
 
   _handleUploadPaper(paperID, event) {
     this.setState({uploadedFile: event.target.files[0]});
     event.preventDefault();
-  },
+  }
 
   _handleSubmitPaper(paperID, event) {
     var file = this.state.uploadedFile;
@@ -274,7 +273,7 @@ var ChairPapersView = React.createClass({
       });
     }
     event.preventDefault();
-  },
+  }
 
   _handleSavePaper(paperID, event) {
     this.setState({loading: true});
@@ -293,9 +292,9 @@ var ChairPapersView = React.createClass({
     );
     event.preventDefault();
     this._handleSubmitPaper(paperID, event);
-  },
+  }
 
-  _handleSuccess: function(response) {
+  _handleSuccess(response) {
     this.setState({
       loading: false,
       success: true,
@@ -305,14 +304,19 @@ var ChairPapersView = React.createClass({
       () => this.setState({success: false}),
       2000,
     );
-  },
+  }
 
-  _handleError: function(response) {
+  _handleError(response) {
     this.setState({loading: false});
     window.alert(
       'Something went wrong. Please refresh your page and try again.',
     );
-  },
-});
+  }
+}
+
+ChairPapersView.contextTypes = {
+  history: PropTypes.history,
+
+}
 
 module.exports = ChairPapersView;
