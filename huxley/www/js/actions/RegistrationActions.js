@@ -26,4 +26,4 @@ var RegistrationActions = {
   },
 };
 
-export default RegistrationActions;
+export {RegistrationActions};

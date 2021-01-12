@@ -6,7 +6,7 @@
 'use strict';
 
 import ActionConstants from 'constants/ActionConstants';
-import AssignmentActions from 'actions/AssignmentActions';
+import {AssignmentActions} from 'actions/AssignmentActions';
 import CurrentUserStore from 'stores/CurrentUserStore';
 import {Dispatcher} from 'dispatcher/Dispatcher';
 import ServerAPI from 'lib/ServerAPI';

@@ -17,4 +17,4 @@ var SecretariatMemberActions = {
   },
 };
 
-export default SecretariatMemberActions;
+export {SecretariatMemberActions};

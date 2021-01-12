@@ -12,7 +12,7 @@ import history from "utils/history";
 const Button = require("components/core/Button");
 const {ConferenceContext} = require("components/ConferenceContext");
 const CurrentUserStore = require("stores/CurrentUserStore");
-const CommitteeFeedbackActions = require("actions/CommitteeFeedbackActions");
+const {CommitteeFeedbackActions} = require("actions/CommitteeFeedbackActions");
 const CommitteeFeedbackStore = require("stores/CommitteeFeedbackStore");
 const {InnerView} = require("components/InnerView");
 const ServerAPI = require("lib/ServerAPI");

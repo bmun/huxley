@@ -6,7 +6,7 @@
 'use strict';
 
 import ActionConstants from 'constants/ActionConstants';
-import CommitteeFeedbackActions from 'actions/CommitteeFeedbackActions';
+import {CommitteeFeedbackActions} from 'actions/CommitteeFeedbackActions';
 import {Dispatcher} from 'dispatcher/Dispatcher';
 import ServerAPI from 'lib/ServerAPI';
 import {Store} from'flux/utils';

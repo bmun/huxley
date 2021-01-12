@@ -26,4 +26,4 @@ var AssignmentActions = {
   },
 };
 
-export default AssignmentActions;
+export {AssignmentActions};

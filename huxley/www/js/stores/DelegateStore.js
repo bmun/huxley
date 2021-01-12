@@ -7,7 +7,7 @@
 
 import ActionConstants from 'constants/ActionConstants';
 import CurrentUserStore from 'stores/CurrentUserStore';
-import DelegateActions from 'actions/DelegateActions';
+import {DelegateActions} from 'actions/DelegateActions';
 import {Dispatcher} from 'dispatcher/Dispatcher';
 import ServerAPI from 'lib/ServerAPI';
 import {Store} from'flux/utils';

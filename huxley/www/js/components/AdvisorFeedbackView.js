@@ -9,7 +9,7 @@ import React from "react";
 import PropTypes from "prop-types";
 
 var _accessSafe = require("utils/_accessSafe");
-var AssignmentActions = require("actions/AssignmentActions");
+var {AssignmentActions} = require("actions/AssignmentActions");
 var AssignmentStore = require("stores/AssignmentStore");
 var Button = require("components/core/Button");
 var CommitteeStore = require("stores/CommitteeStore");
