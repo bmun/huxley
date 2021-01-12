@@ -6,6 +6,7 @@
 "use strict";
 
 import React from "react";
+import history from "utils/history";
 
 const ConferenceContext = require("components/ConferenceContext");
 const CurrentUserStore = require("stores/CurrentUserStore");
@@ -31,7 +32,7 @@ class DelegateProfileView extends React.Component {
   componentWillMount() {
     var user = CurrentUserStore.getCurrentUser();
     if (!User.isDelegate(user)) {
-      this.context.history.pushState(null, "/");
+      history.pushState(null, "/");
     }
   }
 

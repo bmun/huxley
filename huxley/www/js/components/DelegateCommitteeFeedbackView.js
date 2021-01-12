@@ -6,7 +6,7 @@
 "use strict";
 
 import React from "react";
-import PropTypes from "react-router";
+import history from "utils/history";
 
 const Button = require("components/core/Button");
 const ConferenceContext = require("components/ConferenceContext");
@@ -108,7 +108,7 @@ class DelegateCommitteeFeedbackView extends React.Component {
   componentWillMount() {
     var user = CurrentUserStore.getCurrentUser();
     if (!User.isDelegate(user)) {
-      this.context.history.pushState(null, "/");
+      history.pushState(null, "/");
     }
   }
 
@@ -383,9 +383,8 @@ class DelegateCommitteeFeedbackView extends React.Component {
   }
 }
 
-DelegateCommitteeFeedbackView.contextTypes = {
+tteeFeedbackView.contextTypes = {
   conference: React.PropTypes.shape(ConferenceContext),
-  history: PropTypes.history,
 };
 
 module.exports = DelegateCommitteeFeedbackView;

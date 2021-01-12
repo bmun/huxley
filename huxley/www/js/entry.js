@@ -8,7 +8,8 @@
 require('core-js/es6');
 require('core-js/es7');
 
-var React = require('react');
+import React from 'react';
+import history from "utils/history";
 var ReactDOM = require('react-dom');
 var ReactRouter = require('react-router');
 
@@ -84,7 +85,7 @@ var routes = (
 
 window.addEventListener('DOMContentLoaded', () => {
   ReactDOM.render(
-    <Router>{routes}</Router>,
+    <Router history={history}>{routes}</Router>,
     document.getElementById('huxley-app'),
   );
 });

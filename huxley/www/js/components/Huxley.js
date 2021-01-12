@@ -6,7 +6,7 @@
 "use strict";
 
 import React from "react";
-import PropTypes from "react-router";
+import history from "utils/history";
 
 var AdvisorView = require("components/AdvisorView");
 var ChairView = require("components/ChairView");
@@ -34,13 +34,13 @@ class Huxley extends React.Component {
     CurrentUserStore.addListener(() => {
       var user = CurrentUserStore.getCurrentUser();
       if (User.isAnonymous(user)) {
-        this.context.history.pushState(null, "/login");
+        history.pushState(null, "/login");
       } else if (User.isAdvisor(user)) {
-        this.context.history.pushState(null, "/advisor/profile");
+        history.pushState(null, "/advisor/profile");
       } else if (User.isChair(user)) {
-        this.context.history.pushState(null, "/chair/attendance");
+        history.pushState(null, "/chair/attendance");
       } else if (User.isDelegate(user)) {
-        this.context.history.pushState(null, "/delegate/profile");
+        history.pushState(null, "/delegate/profile");
       }
     });
   }
@@ -89,10 +89,6 @@ class Huxley extends React.Component {
 
 Huxley.childContextTypes = {
   conference: React.PropTypes.shape(ConferenceContext),
-};
-
-Huxley.contextTypes = {
-  history: PropTypes.history,
 };
 
 module.exports = Huxley;

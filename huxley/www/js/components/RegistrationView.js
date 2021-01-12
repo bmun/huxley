@@ -588,7 +588,6 @@ var RegistrationView = React.createClass({
 RegistrationView.contextTypes = {
   conference: React.PropTypes.shape(ConferenceContext),
   shake: React.PropTypes.func,
-  history: PropTypes.history,
 };
 
 module.exports = RegistrationView;

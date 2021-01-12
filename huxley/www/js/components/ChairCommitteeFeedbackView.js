@@ -6,7 +6,7 @@
 "use strict";
 
 import React from "react";
-import PropTypes from "react-router";
+import history from "utils/history";
 
 var CommitteeFeedbackStore = require("stores/CommitteeFeedbackStore");
 var CurrentUserStore = require("stores/CurrentUserStore");
@@ -37,7 +37,7 @@ class ChairCommitteeFeedbackView extends React.Component {
   componentWillMount() {
     var user = CurrentUserStore.getCurrentUser();
     if (!User.isChair(user)) {
-      this.context.history.pushState(null, "/");
+      history.pushState(null, "/");
     }
   }
 
@@ -135,9 +135,5 @@ class ChairCommitteeFeedbackView extends React.Component {
     });
   }
 }
-
-ChairCommitteeFeedbackView.contextTypes = {
-  history: PropTypes.history,
-};
 
 module.exports = ChairCommitteeFeedbackView;

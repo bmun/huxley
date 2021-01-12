@@ -6,7 +6,7 @@
 "use strict";
 
 import { React } from "react";
-import PropTypes from "react-router";
+import history from "utils/history";
 
 var NavTab = require("components/NavTab");
 var PermissionDeniedView = require("components/PermissionDeniedView");
@@ -19,7 +19,7 @@ require("css/NavBar.less");
 class AdvisorView extends React.Component {
   componentDidMount() {
     if (User.isAnonymous(this.props.user)) {
-      this.context.history.pushState(null, "/login");
+      history.pushState(null, "/login");
     }
   }
 
@@ -47,9 +47,5 @@ class AdvisorView extends React.Component {
     );
   }
 }
-
-AdvisorView.contextTypes = {
-  history: PropTypes.history,
-};
 
 module.exports = AdvisorView;

@@ -6,7 +6,7 @@
 "use strict";
 
 import React from "react";
-import PropTypes from "react-router";
+import history from "utils/history";
 
 var Button = require("components/core/Button");
 var ConferenceContext = require("components/ConferenceContext");
@@ -49,7 +49,7 @@ class DelegatePaperView extends React.Component {
   componentWillMount() {
     var user = CurrentUserStore.getCurrentUser();
     if (!User.isDelegate(user)) {
-      this.context.history.pushState(null, "/");
+      history.pushState(null, "/");
     }
   }
 
@@ -211,7 +211,7 @@ class DelegatePaperView extends React.Component {
         uploadedFile: null,
       });
     }
-    this.context.history.pushState(null, "/");
+    history.pushState(null, "/");
     event.preventDefault();
   }
 
@@ -228,7 +228,6 @@ class DelegatePaperView extends React.Component {
 
 DelegatePaperView.contextTypes = {
   conference: React.PropTypes.shape(ConferenceContext),
-  history: PropTypes.history,
 };
 
 module.exports = DelegatePaperView;

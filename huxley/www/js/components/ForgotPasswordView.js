@@ -6,7 +6,7 @@
 "use strict";
 
 import React from "react";
-import PropTypes from "react-router";
+import history from "utils/history";
 
 var Button = require("components/core/Button");
 var NavLink = require("components/NavLink");
@@ -81,7 +81,7 @@ class ForgotPasswordView extends React.Component {
   }
 
   _handleSuccess(response) {
-    this.context.history.pushState(null, "/password/reset");
+    history.pushState(null, "/password/reset");
   }
 
   _handleError(response) {
@@ -103,7 +103,7 @@ class ForgotPasswordView extends React.Component {
 
 ForgotPasswordView.contextTypes = {
   shake: React.PropTypes.func,
-  history: PropTypes.history,
 };
+
 
 module.exports = ForgotPasswordView;

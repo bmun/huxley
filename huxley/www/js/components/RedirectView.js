@@ -6,7 +6,7 @@
 "use strict";
 
 import React from "react";
-import PropTypes from "react-router";
+import history from "utils/history";
 
 var OuterView = require("components/OuterView");
 var User = require("utils/User");
@@ -31,9 +31,5 @@ class RedirectView extends React.Component {
     return <OuterView />;
   }
 }
-
-RedirectView.contextTypes = {
-  history: PropTypes.history,
-};
 
 module.exports = RedirectView;

@@ -6,6 +6,7 @@
 "use strict";
 
 import React from "react";
+import history from "utils/history";
 
 const Button = require("components/core/Button");
 const CommitteeStore = require("stores/CommitteeStore");
@@ -41,7 +42,7 @@ class ChairRubricView extends React.Component {
   componentWillMount() {
     var user = CurrentUserStore.getCurrentUser();
     if (!User.isChair(user)) {
-      this.context.history.pushState(null, "/");
+      history.pushState(null, "/");
     }
   }
 

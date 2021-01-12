@@ -7,7 +7,7 @@
 
 import cx from "classnames";
 import React from "react";
-import PropTypes from "react-router";
+import history from "utils/history";
 
 var Button = require("components/core/Button");
 var ConferenceContext = require("components/ConferenceContext");
@@ -39,7 +39,7 @@ class LoginView extends React.Component {
       return;
     }
     if (User.isAdvisor(user)) {
-      this.context.history.pushState(null, "/advisor/profile");
+      history.pushState(null, "/advisor/profile");
     }
   }
 
@@ -145,7 +145,6 @@ class LoginView extends React.Component {
 LoginView.contextTypes = {
   conference: React.PropTypes.shape(ConferenceContext),
   shake: React.PropTypes.func,
-  history: PropTypes.history,
 };
 
 module.exports = LoginView;

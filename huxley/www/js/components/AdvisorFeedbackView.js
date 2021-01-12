@@ -211,7 +211,6 @@ class AdvisorFeedbackView extends React.Component {
 
 AdvisorFeedbackView.contextTypes = {
   conference: React.PropTypes.shape(ConferenceContext),
-  history: ReactRouter.PropTypes.history,
 };
 
 module.exports = AdvisorFeedbackView;

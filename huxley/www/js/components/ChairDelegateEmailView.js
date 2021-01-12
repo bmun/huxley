@@ -6,7 +6,7 @@
 "use strict";
 
 import React from "react";
-import PropTypes from "react-router";
+import history from "utils/history";
 
 var AssignmentStore = require("stores/AssignmentStore");
 var CountryStore = require("stores/CountryStore");
@@ -42,7 +42,7 @@ class ChairDelegateEmailView extends React.Component {
   componentWillMount() {
     var user = CurrentUserStore.getCurrentUser();
     if (!User.isChair(user)) {
-      this.context.history.pushState(null, "/");
+      history.pushState(null, "/");
     }
   }
 
@@ -137,9 +137,5 @@ class ChairDelegateEmailView extends React.Component {
     });
   }
 }
-
-ChairCommitteeFeedbackView.contextTypes = {
-  history: PropTypes.history,
-};
 
 module.exports = ChairDelegateEmailView;

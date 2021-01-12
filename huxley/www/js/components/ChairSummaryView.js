@@ -6,7 +6,7 @@
 "use strict";
 
 import React from "react";
-import PropTypes from "react-router";
+import history from "utils/history";
 
 var Button = require("components/core/Button");
 var AssignmentStore = require("stores/AssignmentStore");
@@ -53,7 +53,7 @@ class ChairSummaryView extends React.Component {
   componentWillMount() {
     var user = CurrentUserStore.getCurrentUser();
     if (!User.isChair(user)) {
-      this.context.history.pushState(null, "/");
+      history.pushState(null, "/");
     }
   }
 
@@ -292,9 +292,5 @@ class ChairSummaryView extends React.Component {
     );
   }
 }
-
-ChairSummaryView.contextTypes = {
-  history: PropTypes.history,
-};
 
 module.exports = ChairSummaryView;
