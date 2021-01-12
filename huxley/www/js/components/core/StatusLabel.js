@@ -5,8 +5,9 @@
 
 "use strict";
 
-import { React } from "react";
+import React from "react";
 import cx from "classnames";
+import PropTypes from "prop-types";
 
 require("css/StatusLabel.less");
 
@@ -27,7 +28,7 @@ class StatusLabel extends React.Component {
 }
 
 StatusLabel.propTypes = {
-  status: React.PropTypes.oneOf(["success", "error"]).isRequired,
+  status: PropTypes.oneOf(["success", "error"]).isRequired,
 };
 
-module.exports = StatusLabel;
+

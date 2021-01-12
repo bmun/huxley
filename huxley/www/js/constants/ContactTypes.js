@@ -5,7 +5,7 @@
 
 'use strict';
 
-var invariant = require('fbjs/lib/invariant');
+import invariant from 'invariant';
 
 invariant(
   global.ContactTypes !== undefined,
@@ -15,4 +15,4 @@ invariant(
 var ContactTypes = global.ContactTypes;
 delete global.ContactTypes;
 
-module.exports = ContactTypes;
+export default ContactTypes;

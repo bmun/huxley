@@ -5,8 +5,8 @@
 
 'use strict';
 
-var ActionConstants = require('constants/ActionConstants');
-var Dispatcher = require('dispatcher/Dispatcher');
+import ActionConstants from 'constants/ActionConstants';
+import {Dispatcher} from 'dispatcher/Dispatcher';
 
 var CommitteeFeedbackActions = {
   addCommitteeFeedback(feedback) {
@@ -24,4 +24,4 @@ var CommitteeFeedbackActions = {
   },
 };
 
-module.exports = CommitteeFeedbackActions;
+export default CommitteeFeedbackActions;

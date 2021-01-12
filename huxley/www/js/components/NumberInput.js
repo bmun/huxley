@@ -6,6 +6,7 @@
 "use strict";
 
 import React from "react";
+import PropTypes from "prop-types";
 var TextInput = require("components/core/TextInput");
 
 class NumberInput extends React.Component {
@@ -25,9 +26,9 @@ class NumberInput extends React.Component {
 }
 
 NumberInput.propTypes = {
-  onChange: React.PropTypes.func,
-  value: React.PropTypes.string,
-  placeholder: React.PropTypes.string,
+  onChange: PropTypes.func,
+  value: PropTypes.string,
+  placeholder: PropTypes.string,
 };
 
-module.exports = NumberInput;
+

@@ -5,7 +5,7 @@
 
 "use strict";
 
-import { React } from "react";
+import React from "react";
 import history from "utils/history";
 
 var Button = require("components/core/Button");
@@ -308,4 +308,4 @@ class ChairPapersView extends React.Component {
   }
 }
 
-module.exports = ChairPapersView;
+

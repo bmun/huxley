@@ -6,10 +6,11 @@
 "use strict";
 
 import React from "react";
+import PropTypes from "prop-types";
 import history from "utils/history";
 
 var Button = require("components/core/Button");
-var ConferenceContext = require("components/ConferenceContext");
+var {ConferenceContext} = require("components/ConferenceContext");
 var CurrentUserStore = require("stores/CurrentUserStore");
 var InnerView = require("components/InnerView");
 var PaperSubmissionTable = require("components/PaperSubmissionTable");
@@ -227,7 +228,7 @@ class DelegatePaperView extends React.Component {
 }
 
 DelegatePaperView.contextTypes = {
-  conference: React.PropTypes.shape(ConferenceContext),
+  conference: PropTypes.shape(ConferenceContext),
 };
 
-module.exports = DelegatePaperView;
+

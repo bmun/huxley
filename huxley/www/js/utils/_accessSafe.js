@@ -10,4 +10,4 @@ var _accessSafe = function(obj, key) {
   return obj && obj[key];
 };
 
-module.exports = _accessSafe;
+export default _accessSafe;

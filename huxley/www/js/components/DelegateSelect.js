@@ -6,6 +6,7 @@
 "use strict";
 
 import React from "react";
+import PropTypes from "prop-types";
 
 class DelegateSelect extends React.Component {
   render() {
@@ -35,10 +36,10 @@ class DelegateSelect extends React.Component {
 }
 
 DelegateSelect.propTypes = {
-  onChange: React.PropTypes.func,
-  delegates: React.PropTypes.array,
-  selectedDelegateID: React.PropTypes.number,
-  disabled: React.PropTypes.bool,
+  onChange: PropTypes.func,
+  delegates: PropTypes.array,
+  selectedDelegateID: PropTypes.number,
+  disabled: PropTypes.bool,
 };
 
-module.exports = DelegateSelect;
+

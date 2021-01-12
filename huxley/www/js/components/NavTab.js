@@ -5,8 +5,9 @@
 
 "use strict";
 
-var Link = require("react-router").Link;
+import {Link} from 'react-router-dom';
 import React from "react";
+import PropTypes from "prop-types";
 
 class NavTab extends React.Component {
   render() {
@@ -19,7 +20,7 @@ class NavTab extends React.Component {
 }
 
 NavTab.propTypes = {
-  href: React.PropTypes.string.isRequired,
+  href: PropTypes.string.isRequired,
 };
 
-module.exports = NavTab;
+

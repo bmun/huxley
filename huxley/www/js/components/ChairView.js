@@ -34,4 +34,4 @@ class ChairView extends React.Component {
   }
 }
 
-module.exports = ChairView;
+

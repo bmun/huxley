@@ -5,11 +5,11 @@
 
 'use strict';
 
-var ActionConstants = require('constants/ActionConstants');
-var CommitteeFeedbackActions = require('actions/CommitteeFeedbackActions');
-var Dispatcher = require('dispatcher/Dispatcher');
-var ServerAPI = require('lib/ServerAPI');
-var {Store} = require('flux/utils');
+import ActionConstants from 'constants/ActionConstants';
+import CommitteeFeedbackActions from 'actions/CommitteeFeedbackActions';
+import {Dispatcher} from 'dispatcher/Dispatcher';
+import ServerAPI from 'lib/ServerAPI';
+import {Store} from'flux/utils';
 
 var _committeeFeedbacks = {};
 var _committeeFeedbacksFetched = false;
@@ -52,4 +52,4 @@ class CommitteeFeedbackStore extends Store {
   }
 }
 
-module.exports = new CommitteeFeedbackStore(Dispatcher);
+export default new CommitteeFeedbackStore(Dispatcher);

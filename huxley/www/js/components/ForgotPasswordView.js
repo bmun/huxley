@@ -6,6 +6,7 @@
 "use strict";
 
 import React from "react";
+import PropTypes from "prop-types";
 import history from "utils/history";
 
 var Button = require("components/core/Button");
@@ -102,8 +103,8 @@ class ForgotPasswordView extends React.Component {
 }
 
 ForgotPasswordView.contextTypes = {
-  shake: React.PropTypes.func,
+  shake: PropTypes.func,
 };
 
 
-module.exports = ForgotPasswordView;
+

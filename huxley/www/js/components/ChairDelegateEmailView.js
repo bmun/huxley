@@ -138,4 +138,4 @@ class ChairDelegateEmailView extends React.Component {
   }
 }
 
-module.exports = ChairDelegateEmailView;
+

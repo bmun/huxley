@@ -9,6 +9,7 @@ var inflateGrades = require("utils/inflateGrades");
 
 import cx from "classnames";
 import React from "react";
+import PropTypes from "prop-types";
 
 class PaperSubmissionTable extends React.Component {
   render() {
@@ -229,12 +230,12 @@ class PaperSubmissionTable extends React.Component {
 }
 
 PaperSubmissionTable.propTypes = {
-  onUpload: React.PropTypes.func,
-  onSubmit: React.PropTypes.func,
-  rubric: React.PropTypes.object,
-  paper: React.PropTypes.object,
-  files: React.PropTypes.object,
-  graded_files: React.PropTypes.object,
+  onUpload: PropTypes.func,
+  onSubmit: PropTypes.func,
+  rubric: PropTypes.object,
+  paper: PropTypes.object,
+  files: PropTypes.object,
+  graded_files: PropTypes.object,
 };
 
-module.exports = PaperSubmissionTable;
+

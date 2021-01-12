@@ -5,7 +5,7 @@
 
 'use strict';
 
-var invariant = require('fbjs/lib/invariant');
+import invariant from 'invariant';
 
 invariant(
   global.GenderConstants !== undefined,
@@ -15,4 +15,4 @@ invariant(
 var GenderConstants = global.GenderConstants;
 delete global.GenderConstants;
 
-module.exports = GenderConstants;
+export default GenderConstants;

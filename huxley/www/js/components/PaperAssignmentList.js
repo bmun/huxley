@@ -8,6 +8,7 @@
 var Button = require("components/core/Button");
 
 import React from "react";
+import PropTypes from "prop-types";
 
 class PaperAssignmentList extends React.Component {
   render() {
@@ -166,11 +167,11 @@ class PaperAssignmentList extends React.Component {
 }
 
 PaperAssignmentList.propTypes = {
-  onChange: React.PropTypes.func,
-  assignments: React.PropTypes.array,
-  papers: React.PropTypes.object,
-  rubric: React.PropTypes.object,
-  countries: React.PropTypes.object,
+  onChange: PropTypes.func,
+  assignments: PropTypes.array,
+  papers: PropTypes.object,
+  rubric: PropTypes.object,
+  countries: PropTypes.object,
 };
 
-module.exports = PaperAssignmentList;
+

@@ -5,51 +5,51 @@
 
 "use strict";
 
-import React from "react";
+import PropTypes from "prop-types";
 
-var ConferenceContext = {
-  session: React.PropTypes.number,
-  start_date: React.PropTypes.shape({
-    month: React.PropTypes.string,
-    day: React.PropTypes.string,
-    year: React.PropTypes.string,
+let ConferenceContext = {
+  session: PropTypes.number,
+  start_date: PropTypes.shape({
+    month: PropTypes.string,
+    day: PropTypes.string,
+    year: PropTypes.string,
   }),
-  end_date: React.PropTypes.shape({
-    month: React.PropTypes.string,
-    day: React.PropTypes.string,
-    year: React.PropTypes.string,
+  end_date: PropTypes.shape({
+    month: PropTypes.string,
+    day: PropTypes.string,
+    year: PropTypes.string,
   }),
-  reg_open: React.PropTypes.string,
-  round_one_end: React.PropTypes.string,
-  round_two_fees_due: React.PropTypes.string,
-  round_two_start: React.PropTypes.string,
-  round_two_end: React.PropTypes.string,
-  round_two_fees_due: React.PropTypes.string,
-  round_three_start: React.PropTypes.string,
-  round_three_end: React.PropTypes.string,
-  round_four_start: React.PropTypes.string,
-  round_three_fees_due: React.PropTypes.string,
-  reg_close: React.PropTypes.string,
-  round_four_fees_due: React.PropTypes.string,
-  part_refund_deadline: React.PropTypes.string,
-  early_paper_deadline: React.PropTypes.shape({
-    month: React.PropTypes.string,
-    day: React.PropTypes.string,
+  reg_open: PropTypes.string,
+  round_one_end: PropTypes.string,
+  round_two_fees_due: PropTypes.string,
+  round_two_start: PropTypes.string,
+  round_two_end: PropTypes.string,
+  round_two_fees_due: PropTypes.string,
+  round_three_start: PropTypes.string,
+  round_three_end: PropTypes.string,
+  round_four_start: PropTypes.string,
+  round_three_fees_due: PropTypes.string,
+  reg_close: PropTypes.string,
+  round_four_fees_due: PropTypes.string,
+  part_refund_deadline: PropTypes.string,
+  early_paper_deadline: PropTypes.shape({
+    month: PropTypes.string,
+    day: PropTypes.string,
   }),
-  paper_deadline: React.PropTypes.shape({
-    month: React.PropTypes.string,
-    day: React.PropTypes.string,
+  paper_deadline: PropTypes.shape({
+    month: PropTypes.string,
+    day: PropTypes.string,
   }),
-  waiver_avail_date: React.PropTypes.string,
-  waiver_deadlines: React.PropTypes.string,
-  waiver_link: React.PropTypes.string,
-  external: React.PropTypes.string,
-  treasurer: React.PropTypes.string,
-  registration_fee: React.PropTypes.number,
-  delegate_fee: React.PropTypes.number,
-  registration_open: React.PropTypes.bool,
-  registration_waitlist: React.PropTypes.bool,
-  position_papers_accepted: React.PropTypes.bool,
+  waiver_avail_date: PropTypes.string,
+  waiver_deadlines: PropTypes.string,
+  waiver_link: PropTypes.string,
+  external: PropTypes.string,
+  treasurer: PropTypes.string,
+  registration_fee: PropTypes.number,
+  delegate_fee: PropTypes.number,
+  registration_open: PropTypes.bool,
+  registration_waitlist: PropTypes.bool,
+  position_papers_accepted: PropTypes.bool,
 };
 
-module.exports = ConferenceContext;
+export {ConferenceContext};

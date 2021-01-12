@@ -5,12 +5,12 @@
 
 'use strict';
 
-var ActionConstants = require('constants/ActionConstants');
-var AssignmentActions = require('actions/AssignmentActions');
-var CurrentUserStore = require('stores/CurrentUserStore');
-var Dispatcher = require('dispatcher/Dispatcher');
-var ServerAPI = require('lib/ServerAPI');
-var {Store} = require('flux/utils');
+import ActionConstants from 'constants/ActionConstants';
+import AssignmentActions from 'actions/AssignmentActions';
+import CurrentUserStore from 'stores/CurrentUserStore';
+import {Dispatcher} from 'dispatcher/Dispatcher';
+import ServerAPI from 'lib/ServerAPI';
+import {Store} from'flux/utils';
 
 var _assignments = {};
 var _assignmentsFetched = false;
@@ -80,4 +80,4 @@ class AssignmentStore extends Store {
   }
 }
 
-module.exports = new AssignmentStore(Dispatcher);
+export default new AssignmentStore(Dispatcher);

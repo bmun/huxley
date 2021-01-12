@@ -6,6 +6,7 @@
 "use strict";
 
 import React from "react";
+import PropTypes from "prop-types";
 import history from "utils/history";
 
 const Button = require("components/core/Button");
@@ -416,4 +417,4 @@ class ChairRubricView extends React.Component {
   }
 }
 
-module.exports = ChairRubricView;
+

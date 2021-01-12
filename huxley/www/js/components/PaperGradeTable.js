@@ -12,6 +12,7 @@ const PaperGradeText = require("text/PaperGradeText.md");
 
 import cx from "classnames";
 import React from "react";
+import PropTypes from "prop-types";
 
 class PaperGradeTable extends React.Component {
   render() {
@@ -347,19 +348,19 @@ class PaperGradeTable extends React.Component {
 }
 
 PaperGradeTable.propTypes = {
-  onChange: React.PropTypes.func,
-  onDownload: React.PropTypes.func,
-  onUnset: React.PropTypes.func,
-  onSave: React.PropTypes.func,
-  onUpload: React.PropTypes.func,
-  onSubmit: React.PropTypes.func,
-  rubric: React.PropTypes.object,
-  paper: React.PropTypes.object,
-  files: React.PropTypes.object,
-  graded_files: React.PropTypes.object,
-  countryName: React.PropTypes.string,
-  loading: React.PropTypes.bool,
-  success: React.PropTypes.bool,
+  onChange: PropTypes.func,
+  onDownload: PropTypes.func,
+  onUnset: PropTypes.func,
+  onSave: PropTypes.func,
+  onUpload: PropTypes.func,
+  onSubmit: PropTypes.func,
+  rubric: PropTypes.object,
+  paper: PropTypes.object,
+  files: PropTypes.object,
+  graded_files: PropTypes.object,
+  countryName: PropTypes.string,
+  loading: PropTypes.bool,
+  success: PropTypes.bool,
 };
 
-module.exports = PaperGradeTable;
+

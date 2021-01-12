@@ -15,5 +15,5 @@ function inflateGrade(grade, total) {
     return Math.min(grade + (total / 2.6), total);
   }
   
-  module.exports = inflateGrade;
+  export default inflateGrade;
   

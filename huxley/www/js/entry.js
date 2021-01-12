@@ -5,15 +5,13 @@
 
 'use strict';
 
-require('core-js/es6');
-require('core-js/es7');
-
-import React from 'react';
+import 'core-js';
+import React from "react";
 import history from "utils/history";
+import {Router, Route} from 'react-router-dom';
 var ReactDOM = require('react-dom');
-var ReactRouter = require('react-router');
 
-var CurrentUserActions = require('actions/CurrentUserActions');
+var {CurrentUserActions} = require('actions/CurrentUserActions');
 var Huxley = require('components/Huxley');
 var AdvisorAssignmentsView = require('components/AdvisorAssignmentsView');
 var AdvisorFeedbackView = require('components/AdvisorFeedbackView');
@@ -30,7 +28,7 @@ var DelegateCommitteeFeedbackView = require('components/DelegateCommitteeFeedbac
 var DelegatePaperView = require('components/DelegatePaperView');
 var DelegateProfileView = require('components/DelegateProfileView');
 var ForgotPasswordView = require('components/ForgotPasswordView');
-var LoginView = require('components/LoginView');
+var {LoginView} = require('components/LoginView');
 var NotFoundView = require('components/NotFoundView');
 var PasswordResetSuccessView = require('components/PasswordResetSuccessView');
 var RedirectView = require('components/RedirectView');
@@ -38,10 +36,6 @@ var RegistrationView = require('components/RegistrationView');
 var RegistrationClosedView = require('components/RegistrationClosedView');
 var RegistrationSuccessView = require('components/RegistrationSuccessView');
 var RegistrationWaitlistView = require('components/RegistrationWaitlistView');
-
-var IndexRoute = ReactRouter.IndexRoute;
-var Router = ReactRouter.Router;
-var Route = ReactRouter.Route;
 
 var routes = (
   <Route path="/" component={Huxley}>
@@ -78,7 +72,7 @@ var routes = (
     />
     <Route path="/delegate/profile" component={DelegateProfileView} />
     <Route path="/delegate/paper" component={DelegatePaperView} />
-    <IndexRoute component={RedirectView} />
+    <Route exact path="/" component={RedirectView} />
     <Route path="*" component={NotFoundView} />
   </Route>
 );

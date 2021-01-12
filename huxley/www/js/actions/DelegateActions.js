@@ -5,8 +5,8 @@
 
 'use strict';
 
-var ActionConstants = require('constants/ActionConstants');
-var Dispatcher = require('dispatcher/Dispatcher');
+import ActionConstants from 'constants/ActionConstants';
+import {Dispatcher} from 'dispatcher/Dispatcher';
 
 var DelegateActions = {
   deleteDelegate(delegateID, onError) {
@@ -61,4 +61,4 @@ var DelegateActions = {
   },
 };
 
-module.exports = DelegateActions;
+export default DelegateActions;

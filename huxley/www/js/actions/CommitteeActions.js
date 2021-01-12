@@ -5,8 +5,8 @@
 
 'use strict';
 
-var ActionConstants = require('constants/ActionConstants');
-var Dispatcher = require('dispatcher/Dispatcher');
+import ActionConstants from 'constants/ActionConstants';
+import {Dispatcher} from 'dispatcher/Dispatcher';
 
 var CommitteeActions = {
   committeesFetched(committees) {
@@ -17,4 +17,4 @@ var CommitteeActions = {
   },
 };
 
-module.exports = CommitteeActions;
+export default CommitteeActions;

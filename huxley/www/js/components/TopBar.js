@@ -13,7 +13,7 @@ var LogoutButton = require("components/LogoutButton");
 
 require("css/TopBar.less");
 
-class TopBar extends React.Components {
+class TopBar extends React.Component {
   getInitialState() {
     return {
       changePasswordVisible: false,
@@ -96,4 +96,4 @@ class TopBar extends React.Components {
   }
 }
 
-module.exports = TopBar;
+

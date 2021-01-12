@@ -6,6 +6,7 @@
 "use strict";
 
 import React from "react";
+import PropTypes from "prop-types";
 import ReactDOM from "react-dom";
 import cx from "classnames";
 
@@ -40,7 +41,7 @@ class Shaker extends React.Component {
 }
 
 Shaker.childContextTypes = {
-  shake: React.PropTypes.func,
+  shake: PropTypes.func,
 };
 
-module.exports = Shaker;
+

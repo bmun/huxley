@@ -6,6 +6,7 @@
 "use strict";
 
 import React from "react";
+import PropTypes from "prop-types";
 
 var _accessSafe = require("utils/_accessSafe");
 var AssignmentStore = require("stores/AssignmentStore");
@@ -13,7 +14,7 @@ var Button = require("components/core/Button");
 var CommitteeStore = require("stores/CommitteeStore");
 var CountryStore = require("stores/CountryStore");
 var CurrentUserStore = require("stores/CurrentUserStore");
-var ConferenceContext = require("components/ConferenceContext");
+var {ConferenceContext} = require("components/ConferenceContext");
 var InnerView = require("components/InnerView");
 var PositionPaperStore = require("stores/PositionPaperStore");
 var RubricStore = require("stores/RubricStore");
@@ -473,7 +474,7 @@ class AdvisorPaperView extends React.Component {
 }
 
 AdvisorPaperView.contextTypes = {
-  conference: React.PropTypes.shape(ConferenceContext),
+  conference: PropTypes.shape(ConferenceContext),
 };
 
-module.exports = AdvisorPaperView;
+

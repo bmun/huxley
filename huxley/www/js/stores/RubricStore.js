@@ -5,11 +5,11 @@
 
 'use strict';
 
-var ActionConstants = require('constants/ActionConstants');
-var RubricActions = require('actions/RubricActions');
-var Dispatcher = require('dispatcher/Dispatcher');
-var ServerAPI = require('lib/ServerAPI');
-var {Store} = require('flux/utils');
+import ActionConstants from 'constants/ActionConstants';
+import RubricActions from 'actions/RubricActions';
+import {Dispatcher} from 'dispatcher/Dispatcher';
+import ServerAPI from 'lib/ServerAPI';
+import {Store} from'flux/utils';
 
 var _rubrics = {};
 
@@ -47,4 +47,4 @@ class RubricStore extends Store {
   }
 }
 
-module.exports = new RubricStore(Dispatcher);
+export default new RubricStore(Dispatcher);

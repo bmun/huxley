@@ -28,4 +28,4 @@ class SupportLink extends React.Component {
   }
 }
 
-module.exports = SupportLink;
+

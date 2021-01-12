@@ -13,4 +13,4 @@ function _handleChange(fieldName, event) {
   });
 }
 
-module.exports = _handleChange;
+export default _handleChange;

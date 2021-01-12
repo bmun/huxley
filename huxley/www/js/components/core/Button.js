@@ -6,14 +6,15 @@
 "use strict";
 
 import cx from "classnames";
-import { React } from "react";
-import ReactRouter from "react-router";
+import React from "react";
+import {Link} from "react-router-dom";
+import PropTypes from "prop-types";
 
 require("css/Button.less");
 
 class Button extends React.Component {
   render() {
-    var ButtonComponent = this.props.href ? ReactRouter.Link : "button";
+    var ButtonComponent = this.props.href ? Link : "button";
 
     return (
       <ButtonComponent
@@ -40,11 +41,11 @@ class Button extends React.Component {
 }
 
 Button.propTypes = {
-  color: React.PropTypes.oneOf(["blue", "green", "yellow", "red"]),
-  href: React.PropTypes.string,
-  loading: React.PropTypes.bool,
-  size: React.PropTypes.oneOf(["small", "medium", "large"]),
-  success: React.PropTypes.bool,
+  color: PropTypes.oneOf(["blue", "green", "yellow", "red"]),
+  href: PropTypes.string,
+  loading: PropTypes.bool,
+  size: PropTypes.oneOf(["small", "medium", "large"]),
+  success: PropTypes.bool,
 };
 
-module.exports = Button;
+

@@ -5,10 +5,10 @@
 
 'use strict';
 
-var ActionConstants = require('constants/ActionConstants');
-var Dispatcher = require('dispatcher/Dispatcher');
+import ActionConstants from 'constants/ActionConstants';
+import {Dispatcher} from 'dispatcher/Dispatcher';
 
-var CurrentUserActions = {
+const CurrentUserActions = {
   bootstrap() {
     Dispatcher.dispatch({
       actionType: ActionConstants.BOOTSTRAP,
@@ -48,4 +48,4 @@ var CurrentUserActions = {
   },
 };
 
-module.exports = CurrentUserActions;
+export {CurrentUserActions};

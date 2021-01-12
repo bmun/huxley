@@ -259,4 +259,4 @@ const _patch = _ajax.bind(null, 'PATCH');
 const _put = _ajax.bind(null, 'PUT');
 const _post = _ajax.bind(null, 'POST');
 
-module.exports = ServerAPI;
+export default ServerAPI;

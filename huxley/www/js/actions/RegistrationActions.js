@@ -5,8 +5,8 @@
 
 'use strict';
 
-var ActionConstants = require('constants/ActionConstants');
-var Dispatcher = require('dispatcher/Dispatcher');
+import ActionConstants from 'constants/ActionConstants';
+import {Dispatcher} from 'dispatcher/Dispatcher';
 
 var RegistrationActions = {
   registrationFetched(registration) {
@@ -26,4 +26,4 @@ var RegistrationActions = {
   },
 };
 
-module.exports = RegistrationActions;
+export default RegistrationActions;

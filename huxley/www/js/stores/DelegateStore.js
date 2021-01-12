@@ -5,12 +5,12 @@
 
 'use strict';
 
-var ActionConstants = require('constants/ActionConstants');
-var CurrentUserStore = require('stores/CurrentUserStore');
-var DelegateActions = require('actions/DelegateActions');
-var Dispatcher = require('dispatcher/Dispatcher');
-var ServerAPI = require('lib/ServerAPI');
-var {Store} = require('flux/utils');
+import ActionConstants from 'constants/ActionConstants';
+import CurrentUserStore from 'stores/CurrentUserStore';
+import DelegateActions from 'actions/DelegateActions';
+import {Dispatcher} from 'dispatcher/Dispatcher';
+import ServerAPI from 'lib/ServerAPI';
+import {Store} from'flux/utils';
 
 var _delegates = {};
 var _delegatesFetched = false;
@@ -125,4 +125,4 @@ class DelegateStore extends Store {
   }
 }
 
-module.exports = new DelegateStore(Dispatcher);
+export default new DelegateStore(Dispatcher);

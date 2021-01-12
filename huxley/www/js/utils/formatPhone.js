@@ -119,4 +119,4 @@ function _tokenize(input) {
     .split('');
 }
 
-module.exports = formatPhone;
+export default formatPhone;

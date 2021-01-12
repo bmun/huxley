@@ -5,13 +5,13 @@
 
 "use strict";
 
-import cx from "classnames";
 import React from "react";
+import PropTypes from "prop-types";
 import history from "utils/history";
 
 var Button = require("components/core/Button");
-var ConferenceContext = require("components/ConferenceContext");
-var CurrentUserActions = require("actions/CurrentUserActions");
+var {ConferenceContext} = require("components/ConferenceContext");
+var {CurrentUserActions} = require("actions/CurrentUserActions");
 var NavLink = require("components/NavLink");
 var OuterView = require("components/OuterView");
 var ServerAPI = require("lib/ServerAPI");
@@ -143,8 +143,8 @@ class LoginView extends React.Component {
 }
 
 LoginView.contextTypes = {
-  conference: React.PropTypes.shape(ConferenceContext),
-  shake: React.PropTypes.func,
+  conference: PropTypes.shape(ConferenceContext),
+  shake: PropTypes.func,
 };
+export {LoginView};
 
-module.exports = LoginView;

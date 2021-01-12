@@ -293,4 +293,4 @@ class ChairSummaryView extends React.Component {
   }
 }
 
-module.exports = ChairSummaryView;
+

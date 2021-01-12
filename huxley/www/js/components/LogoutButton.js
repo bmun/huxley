@@ -8,7 +8,7 @@
 import React from "react";
 
 var Button = require("components/core/Button");
-var CurrentUserActions = require("actions/CurrentUserActions");
+var {CurrentUserActions} = require("actions/CurrentUserActions");
 var ServerAPI = require("lib/ServerAPI");
 
 class LogoutButton extends React.Component {
@@ -41,4 +41,4 @@ class LogoutButton extends React.Component {
   }
 }
 
-module.exports = LogoutButton;
+
