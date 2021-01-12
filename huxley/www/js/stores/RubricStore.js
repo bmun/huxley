@@ -47,4 +47,5 @@ class RubricStore extends Store {
   }
 }
 
-export default new RubricStore(Dispatcher);
+const rubricStore = new RubricStore(Dispatcher);
+export {rubricStore as RubricStore};

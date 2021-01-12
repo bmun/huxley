@@ -7,7 +7,7 @@
 
 import React from "react";
 
-var Button = require("components/core/Button");
+var {Button} = require("components/core/Button");
 var {CurrentUserActions} = require("actions/CurrentUserActions");
 var ServerAPI = require("lib/ServerAPI");
 

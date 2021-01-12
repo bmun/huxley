@@ -10,16 +10,16 @@ import PropTypes from "prop-types";
 import history from "utils/history";
 
 
-const Button = require("components/core/Button");
+const {Button} = require("components/core/Button");
 const {ConferenceContext} = require("components/ConferenceContext");
-const CurrentUserStore = require("stores/CurrentUserStore");
+const {CurrentUserStore} = require("stores/CurrentUserStore");
 const CommitteeFeedbackActions = require("actions/CommitteeFeedbackActions");
-const CommitteeFeedbackStore = require("stores/CommitteeFeedbackStore");
+const {CommitteeFeedbackStore} = require("stores/CommitteeFeedbackStore");
 const InnerView = require("components/InnerView");
 const ServerAPI = require("lib/ServerAPI");
-const SecretariatMemberStore = require("stores/SecretariatMemberStore");
+const {SecretariatMemberStore} = require("stores/SecretariatMemberStore");
 const NumberInput = require("components/NumberInput");
-const TextTemplate = require("components/core/TextTemplate");
+const {TextTemplate} = require("components/core/TextTemplate");
 const User = require("utils/User");
 
 const _handleChange = require("utils/_handleChange");

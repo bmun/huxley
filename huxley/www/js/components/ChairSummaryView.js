@@ -8,14 +8,14 @@
 import React from "react";
 import history from "utils/history";
 
-var Button = require("components/core/Button");
-var AssignmentStore = require("stores/AssignmentStore");
-var CountryStore = require("stores/CountryStore");
-var CurrentUserStore = require("stores/CurrentUserStore");
+var {Button} = require("components/core/Button");
+var {AssignmentStore} = require("stores/AssignmentStore");
+var {CountryStore} = require("stores/CountryStore");
+var {CurrentUserStore} = require("stores/CurrentUserStore");
 var DelegateActions = require("actions/DelegateActions");
-var DelegateStore = require("stores/DelegateStore");
+var {DelegateStore} = require("stores/DelegateStore");
 var InnerView = require("components/InnerView");
-var TextTemplate = require("components/core/TextTemplate");
+var {TextTemplate} = require("components/core/TextTemplate");
 var User = require("utils/User");
 
 require("css/Table.less");

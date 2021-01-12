@@ -8,8 +8,8 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-var RegistrationPhoneInput = require("components/registration/RegistrationPhoneInput");
-var RegistrationTextInput = require("components/registration/RegistrationTextInput");
+var {RegistrationPhoneInput} = require("components/registration/RegistrationPhoneInput");
+var {RegistrationTextInput} = require("components/registration/RegistrationTextInput");
 var _accessSafe = require("utils/_accessSafe");
 
 class RegistrationPrimaryContact extends React.Component {
@@ -58,4 +58,4 @@ RegistrationPrimaryContact.propTypes = {
   isInternational: PropTypes.bool,
 };
 
-
+export {RegistrationPrimaryContact};

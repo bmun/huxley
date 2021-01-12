@@ -8,7 +8,7 @@
 import React from "react";
 
 
-var RegistrationTextInput = require("components/registration/RegistrationTextInput");
+var {RegistrationTextInput} = require("components/registration/RegistrationTextInput");
 var _accessSafe = require("utils/_accessSafe");
 
 class RegistrationAccountInformation extends React.Component {
@@ -86,4 +86,4 @@ RegistrationAccountInformation.propTypes = {
   focus: PropTypes.func,
 };
 
-
+export {RegistrationAccountInformation};

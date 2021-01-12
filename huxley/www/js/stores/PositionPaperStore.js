@@ -136,4 +136,5 @@ class PositionPaperStore extends Store {
   }
 }
 
-export default new PositionPaperStore(Dispatcher);
+const positionPaperStore = new PositionPaperStore(Dispatcher);
+export {positionPaperStore as PositionPaperStore};

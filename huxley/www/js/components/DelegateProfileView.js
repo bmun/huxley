@@ -11,9 +11,9 @@ import history from "utils/history";
 
 
 const {ConferenceContext} = require("components/ConferenceContext");
-const CurrentUserStore = require("stores/CurrentUserStore");
+const {CurrentUserStore} = require("stores/CurrentUserStore");
 const InnerView = require("components/InnerView");
-const TextTemplate = require("components/core/TextTemplate");
+const {TextTemplate} = require("components/core/TextTemplate");
 const User = require("utils/User");
 
 require("css/Table.less");

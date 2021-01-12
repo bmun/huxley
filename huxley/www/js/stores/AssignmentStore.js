@@ -80,4 +80,5 @@ class AssignmentStore extends Store {
   }
 }
 
-export default new AssignmentStore(Dispatcher);
+const assignmentStore = new AssignmentStore(Dispatcher);
+export {assignmentStore as AssignmentStore};

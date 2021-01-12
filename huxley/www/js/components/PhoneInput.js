@@ -8,7 +8,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-var TextInput = require("components/core/TextInput");
+var {TextInput} = require("components/core/TextInput");
 var formatPhone = require("utils/formatPhone");
 
 class PhoneInput extends React.Component {

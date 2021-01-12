@@ -52,4 +52,5 @@ class CommitteeStore extends Store {
   }
 }
 
-export default new CommitteeStore(Dispatcher);
+const committeeStore = new CommitteeStore(Dispatcher);
+export {committeeStore as CommitteeStore};

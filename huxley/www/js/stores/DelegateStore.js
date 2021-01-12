@@ -125,4 +125,5 @@ class DelegateStore extends Store {
   }
 }
 
-export default new DelegateStore(Dispatcher);
+const delegateStore = new DelegateStore(Dispatcher);
+export {delegateStore as DelegateStore};

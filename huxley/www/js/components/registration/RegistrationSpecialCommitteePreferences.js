@@ -57,4 +57,4 @@ RegistrationSpecialCommitteePreferences.propTypes = {
   renderCommittees: PropTypes.func,
 };
 
-
+export {RegistrationSpecialCommitteePreferences};

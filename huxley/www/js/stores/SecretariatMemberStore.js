@@ -42,4 +42,5 @@ class SecretariatMemberStore extends Store {
   }
 }
 
-export default new SecretariatMemberStore(Dispatcher);
+const secretariatMemberStore = new SecretariatMemberStore(Dispatcher);
+export {secretariatMemberStore as SecretariatMemberStore};

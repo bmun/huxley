@@ -7,7 +7,7 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-var TextInput = require("components/core/TextInput");
+var {TextInput} = require("components/core/TextInput");
 
 
 class NumberInput extends React.Component {

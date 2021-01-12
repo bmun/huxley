@@ -48,4 +48,4 @@ Button.propTypes = {
   success: PropTypes.bool,
 };
 
-
+export {Button};

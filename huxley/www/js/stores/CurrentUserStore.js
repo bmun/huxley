@@ -104,4 +104,5 @@ class CurrentUserStore extends Store {
   }
 }
 
-export default new CurrentUserStore(Dispatcher);
+const currentUserStore = new CurrentUserStore(Dispatcher);
+export {currentUserStore as CurrentUserStore};

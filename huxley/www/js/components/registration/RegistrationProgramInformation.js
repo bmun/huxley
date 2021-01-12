@@ -144,4 +144,4 @@ RegistrationProgramInformation.propTypes = {
   programType: PropTypes.oneOf([ProgramTypes.CLUB, ProgramTypes.CLASS]),
 };
 
-
+export {RegistrationProgramInformation};

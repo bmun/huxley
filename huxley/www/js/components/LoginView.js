@@ -10,15 +10,15 @@ import PropTypes from "prop-types";
 import history from "utils/history";
 
 
-var Button = require("components/core/Button");
+var {Button} = require("components/core/Button");
 var {ConferenceContext} = require("components/ConferenceContext");
 var {CurrentUserActions} = require("actions/CurrentUserActions");
 var NavLink = require("components/NavLink");
 var OuterView = require("components/OuterView");
 var ServerAPI = require("lib/ServerAPI");
-var StatusLabel = require("components/core/StatusLabel");
-var TextInput = require("components/core/TextInput");
-var TextTemplate = require("components/core/TextTemplate");
+var {StatusLabel} = require("components/core/StatusLabel");
+var {TextInput} = require("components/core/TextInput");
+var {TextTemplate} = require("components/core/TextTemplate");
 var User = require("utils/User");
 
 require("css/LoginForm.less");
