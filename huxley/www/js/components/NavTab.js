@@ -23,4 +23,4 @@ NavTab.propTypes = {
   href: PropTypes.string.isRequired,
 };
 
-
+export {NavTab};

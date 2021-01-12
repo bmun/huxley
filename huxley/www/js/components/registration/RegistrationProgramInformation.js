@@ -9,7 +9,7 @@ import React from "react";
 import PropTypes from "prop-types";
 
 var ProgramTypes = require("constants/ProgramTypes");
-var NumberInput = require("components/NumberInput");
+var {NumberInput} = require("components/NumberInput");
 var _accessSafe = require("utils/_accessSafe");
 
 class RegistrationProgramInformation extends React.Component {

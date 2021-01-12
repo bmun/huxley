@@ -174,4 +174,4 @@ PaperAssignmentList.propTypes = {
   countries: PropTypes.object,
 };
 
-
+export {PaperAssignmentList};

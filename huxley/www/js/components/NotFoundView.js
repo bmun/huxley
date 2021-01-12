@@ -7,7 +7,7 @@
 
 import React from "react";
 
-var OuterView = require("components/OuterView");
+var {OuterView} = require("components/OuterView");
 
 class NotFoundView extends React.Component {
   render() {
@@ -23,4 +23,4 @@ class NotFoundView extends React.Component {
   }
 }
 
-
+export {NotFoundView};

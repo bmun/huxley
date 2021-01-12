@@ -17,7 +17,7 @@ var {ConferenceContext} = require("components/ConferenceContext");
 var CountryStore = require("stores/CountryStore");
 var CurrentUserStore = require("stores/CurrentUserStore");
 var DelegateStore = require("stores/DelegateStore");
-var InnerView = require("components/InnerView");
+var {InnerView} = require("components/InnerView");
 var RegistrationStore = require("stores/RegistrationStore");
 var Table = require("components/core/Table");
 var TextTemplate = require("components/core/TextTemplate");
@@ -214,4 +214,4 @@ AdvisorFeedbackView.contextTypes = {
   conference: PropTypes.shape(ConferenceContext),
 };
 
-
+export {AdvisorFeedbackView};

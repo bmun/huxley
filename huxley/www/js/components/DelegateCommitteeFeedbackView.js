@@ -14,10 +14,10 @@ const {ConferenceContext} = require("components/ConferenceContext");
 const CurrentUserStore = require("stores/CurrentUserStore");
 const CommitteeFeedbackActions = require("actions/CommitteeFeedbackActions");
 const CommitteeFeedbackStore = require("stores/CommitteeFeedbackStore");
-const InnerView = require("components/InnerView");
+const {InnerView} = require("components/InnerView");
 const ServerAPI = require("lib/ServerAPI");
 const SecretariatMemberStore = require("stores/SecretariatMemberStore");
-const NumberInput = require("components/NumberInput");
+const {NumberInput} = require("components/NumberInput");
 const TextTemplate = require("components/core/TextTemplate");
 const User = require("utils/User");
 
@@ -387,3 +387,4 @@ DelegateCommitteeFeedbackView.contextTypes = {
   conference: PropTypes.shape(ConferenceContext),
 };
 
+export {DelegateCommitteeFeedbackView};

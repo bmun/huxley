@@ -7,8 +7,8 @@
 
 import React from "react";
 
-var NavLink = require("components/NavLink");
-var OuterView = require("components/OuterView");
+var {NavLink} = require("components/NavLink");
+var {OuterView} = require("components/OuterView");
 var TextTemplate = require("components/core/TextTemplate");
 
 var PasswordResetSuccessViewText = require("text/PasswordResetSuccessViewText.md");
@@ -26,4 +26,4 @@ class PasswordResetSuccessView extends React.Component {
   }
 }
 
-
+export {PasswordResetSuccessView};

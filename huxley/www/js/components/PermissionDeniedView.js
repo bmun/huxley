@@ -21,4 +21,4 @@ class PermissionDeniedView extends React.Component {
   }
 }
 
-
+export {PermissionDeniedView};

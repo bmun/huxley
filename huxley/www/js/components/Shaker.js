@@ -44,4 +44,4 @@ Shaker.childContextTypes = {
   shake: PropTypes.func,
 };
 
-
+export {Shaker};

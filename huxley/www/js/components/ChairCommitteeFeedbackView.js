@@ -10,7 +10,7 @@ import history from "utils/history";
 
 var CommitteeFeedbackStore = require("stores/CommitteeFeedbackStore");
 var CurrentUserStore = require("stores/CurrentUserStore");
-var InnerView = require("components/InnerView");
+var {InnerView} = require("components/InnerView");
 var TextTemplate = require("components/core/TextTemplate");
 var User = require("utils/User");
 
@@ -136,4 +136,4 @@ class ChairCommitteeFeedbackView extends React.Component {
   }
 }
 
-
+export {ChairCommitteeFeedbackView};

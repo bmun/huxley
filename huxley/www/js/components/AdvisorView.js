@@ -8,10 +8,10 @@
 import React from "react";
 import history from "utils/history";
 
-var NavTab = require("components/NavTab");
-var PermissionDeniedView = require("components/PermissionDeniedView");
-var Shaker = require("components/Shaker");
-var TopBar = require("components/TopBar");
+var {NavTab} = require("components/NavTab");
+var {PermissionDeniedView} = require("components/PermissionDeniedView");
+var {Shaker} = require("components/Shaker");
+var {TopBar} = require("components/TopBar");
 var User = require("utils/User");
 
 require("css/NavBar.less");
@@ -48,4 +48,4 @@ class AdvisorView extends React.Component {
   }
 }
 
-
+export {AdvisorView};

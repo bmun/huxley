@@ -12,8 +12,8 @@ import history from "utils/history";
 var Button = require("components/core/Button");
 var {ConferenceContext} = require("components/ConferenceContext");
 var CurrentUserStore = require("stores/CurrentUserStore");
-var InnerView = require("components/InnerView");
-var PaperSubmissionTable = require("components/PaperSubmissionTable");
+var {InnerView} = require("components/InnerView");
+var {PaperSubmissionTable} = require("components/PaperSubmissionTable");
 var PositionPaperActions = require("actions/PositionPaperActions");
 var PositionPaperStore = require("stores/PositionPaperStore");
 var TextTemplate = require("components/core/TextTemplate");
@@ -231,4 +231,4 @@ DelegatePaperView.contextTypes = {
   conference: PropTypes.shape(ConferenceContext),
 };
 
-
+export {DelegatePaperView};

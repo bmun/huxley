@@ -17,7 +17,7 @@ var DelegateActions = require("actions/DelegateActions");
 var DelegateStore = require("stores/DelegateStore");
 var {ConferenceContext} = require("components/ConferenceContext");
 var {CurrentUserActions} = require("actions/CurrentUserActions");
-var InnerView = require("components/InnerView");
+var {InnerView} = require("components/InnerView");
 var RegistrationStore = require("stores/RegistrationStore");
 var ServerAPI = require("lib/ServerAPI");
 var StatusLabel = require("components/core/StatusLabel");
@@ -380,4 +380,4 @@ AdvisorRosterView.contextTypes = {
   conference: PropTypes.shape(ConferenceContext),
 };
 
-
+export {AdvisorRosterView};

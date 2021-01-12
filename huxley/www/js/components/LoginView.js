@@ -12,8 +12,8 @@ import history from "utils/history";
 var Button = require("components/core/Button");
 var {ConferenceContext} = require("components/ConferenceContext");
 var {CurrentUserActions} = require("actions/CurrentUserActions");
-var NavLink = require("components/NavLink");
-var OuterView = require("components/OuterView");
+var {NavLink} = require("components/NavLink");
+var {OuterView} = require("components/OuterView");
 var ServerAPI = require("lib/ServerAPI");
 var StatusLabel = require("components/core/StatusLabel");
 var TextInput = require("components/core/TextInput");
@@ -146,5 +146,5 @@ LoginView.contextTypes = {
   conference: PropTypes.shape(ConferenceContext),
   shake: PropTypes.func,
 };
-export {LoginView};
 
+export {LoginView};

@@ -11,7 +11,7 @@ import history from "utils/history";
 
 const {ConferenceContext} = require("components/ConferenceContext");
 const CurrentUserStore = require("stores/CurrentUserStore");
-const InnerView = require("components/InnerView");
+const {InnerView} = require("components/InnerView");
 const TextTemplate = require("components/core/TextTemplate");
 const User = require("utils/User");
 
@@ -154,4 +154,4 @@ DelegateProfileView.contextTypes = {
   conference: PropTypes.shape(ConferenceContext),
 };
 
-
+export {DelegateProfileView};

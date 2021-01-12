@@ -31,4 +31,4 @@ NumberInput.propTypes = {
   placeholder: PropTypes.string,
 };
 
-
+export {NumberInput};

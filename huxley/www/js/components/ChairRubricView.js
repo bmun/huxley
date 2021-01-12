@@ -12,8 +12,8 @@ import history from "utils/history";
 const Button = require("components/core/Button");
 const CommitteeStore = require("stores/CommitteeStore");
 const CurrentUserStore = require("stores/CurrentUserStore");
-const InnerView = require("components/InnerView");
-const NumberInput = require("components/NumberInput");
+const {InnerView} = require("components/InnerView");
+const {NumberInput} = require("components/NumberInput");
 const RubricActions = require("actions/RubricActions");
 const RubricStore = require("stores/RubricStore");
 const TextInput = require("components/core/TextInput");
@@ -417,4 +417,4 @@ class ChairRubricView extends React.Component {
   }
 }
 
-
+export {ChairRubricView};

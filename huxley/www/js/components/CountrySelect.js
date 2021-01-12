@@ -58,4 +58,4 @@ CountrySelect.propTypes = {
   countryPreferences: PropTypes.array,
 };
 
-
+export {CountrySelect};

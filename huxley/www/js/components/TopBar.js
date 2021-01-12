@@ -8,8 +8,8 @@
 import React from "react";
 import cx from "classnames";
 
-var ChangePasswordView = require("components/ChangePasswordView");
-var LogoutButton = require("components/LogoutButton");
+var {ChangePasswordView} = require("components/ChangePasswordView");
+var {LogoutButton} = require("components/LogoutButton");
 
 require("css/TopBar.less");
 
@@ -96,4 +96,4 @@ class TopBar extends React.Component {
   }
 }
 
-
+export {TopBar};

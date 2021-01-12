@@ -15,7 +15,7 @@ var CommitteeStore = require("stores/CommitteeStore");
 var CountryStore = require("stores/CountryStore");
 var CurrentUserStore = require("stores/CurrentUserStore");
 var {ConferenceContext} = require("components/ConferenceContext");
-var InnerView = require("components/InnerView");
+var {InnerView} = require("components/InnerView");
 var PositionPaperStore = require("stores/PositionPaperStore");
 var RubricStore = require("stores/RubricStore");
 var ServerAPI = require("lib/ServerAPI");
@@ -477,4 +477,4 @@ AdvisorPaperView.contextTypes = {
   conference: PropTypes.shape(ConferenceContext),
 };
 
-
+export {AdvisorPaperView};

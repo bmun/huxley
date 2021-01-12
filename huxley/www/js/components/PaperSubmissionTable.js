@@ -238,4 +238,4 @@ PaperSubmissionTable.propTypes = {
   graded_files: PropTypes.object,
 };
 
-
+export {PaperSubmissionTable};

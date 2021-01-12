@@ -19,9 +19,9 @@ var CountryStore = require("stores/CountryStore");
 var CurrentUserStore = require("stores/CurrentUserStore");
 var {CurrentUserActions} = require("actions/CurrentUserActions");
 var DelegateActions = require("actions/DelegateActions");
-var DelegateSelect = require("components/DelegateSelect");
+var {DelegateSelect} = require("components/DelegateSelect");
 var DelegateStore = require("stores/DelegateStore");
-var InnerView = require("components/InnerView");
+var {InnerView} = require("components/InnerView");
 var RegistrationActions = require("actions/RegistrationActions");
 var RegistrationStore = require("stores/RegistrationStore");
 var ServerAPI = require("lib/ServerAPI");
@@ -347,4 +347,4 @@ AdvisorAssignmentsView.contextTypes = {
   conference: PropTypes.shape(ConferenceContext),
 };
 
-
+export {AdvisorAssignmentsView};
