@@ -11,7 +11,7 @@ var TYPE_DELEGATE = 3;
 
 var User = {
   isAnonymous(user) {
-    return !user.id;
+    return user ? !user.id : true;
   },
 
   isAdvisor(user) {

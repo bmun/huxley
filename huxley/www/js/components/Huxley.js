@@ -7,13 +7,13 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import history from "utils/history";
+import {history} from "utils/history";
 
 var {AdvisorView} = require("components/AdvisorView");
 var {ChairView} = require("components/ChairView");
 var {DelegateView} = require("components/DelegateView");
 var {ConferenceContext} = require("components/ConferenceContext");
-var CurrentUserStore = require("stores/CurrentUserStore");
+var {CurrentUserStore} = require("stores/CurrentUserStore");
 var {Shaker} = require("components/Shaker");
 var {SupportLink} = require("components/SupportLink");
 var {User} = require("utils/User");
@@ -24,24 +24,17 @@ require("css/JSWarning.less");
 require("css/IEWarning.less");
 
 class Huxley extends React.Component {
-  getChildContext() {
-    var conference = global.conference;
-    return {
-      conference: conference,
-    };
-  }
-
   componentWillMount() {
     CurrentUserStore.addListener(() => {
       var user = CurrentUserStore.getCurrentUser();
       if (User.isAnonymous(user)) {
-        history.pushState(null, "/login");
+        history.redirect("/login");
       } else if (User.isAdvisor(user)) {
-        history.pushState(null, "/advisor/profile");
+        history.redirect("/advisor/profile");
       } else if (User.isChair(user)) {
-        history.pushState(null, "/chair/attendance");
+        history.redirect("/chair/attendance");
       } else if (User.isDelegate(user)) {
-        history.pushState(null, "/delegate/profile");
+        history.redirect("/delegate/profile");
       }
     });
   }
@@ -87,9 +80,5 @@ class Huxley extends React.Component {
     }
   }
 }
-
-Huxley.childContextTypes = {
-  conference: PropTypes.shape(ConferenceContext),
-};
 
 export {Huxley};

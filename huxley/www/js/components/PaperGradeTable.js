@@ -5,8 +5,8 @@
 
 "use strict";
 
-const Button = require("components/core/Button");
-const TextTemplate = require("components/core/TextTemplate");
+const {Button} = require("components/core/Button");
+const {TextTemplate} = require("components/core/TextTemplate");
 
 const PaperGradeText = require("text/PaperGradeText.md");
 

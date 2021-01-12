@@ -17,7 +17,7 @@ describe('CurrentUserStore', function() {
 
   beforeEach(function() {
     ActionConstants = require('constants/ActionConstants');
-    CurrentUserStore = require('stores/CurrentUserStore');
+    {CurrentUserStore} = require('stores/CurrentUserStore');
     Dispatcher = require('dispatcher/Dispatcher');
     ServerAPI = require('lib/ServerAPI');
 

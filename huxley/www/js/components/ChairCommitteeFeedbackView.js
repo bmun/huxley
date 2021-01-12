@@ -6,21 +6,22 @@
 "use strict";
 
 import React from "react";
-import history from "utils/history";
+import {history} from "utils/history";
 
-var CommitteeFeedbackStore = require("stores/CommitteeFeedbackStore");
-var CurrentUserStore = require("stores/CurrentUserStore");
+var {CommitteeFeedbackStore} = require("stores/CommitteeFeedbackStore");
+var {CurrentUserStore} = require("stores/CurrentUserStore");
 var {InnerView} = require("components/InnerView");
-var TextTemplate = require("components/core/TextTemplate");
+var {TextTemplate} = require("components/core/TextTemplate");
 var {User} = require("utils/User");
 
 require("css/Table.less");
 var ChairCommitteeFeedbackViewText = require("text/ChairCommitteeFeedbackViewText.md");
 
 class ChairCommitteeFeedbackView extends React.Component {
-  getInitialState() {
+  constructor(props) {
+    super(props);
     var committeeID = CurrentUserStore.getCurrentUser().committee;
-    return {
+    this.state = {
       feedback: CommitteeFeedbackStore.getCommitteeFeedback(committeeID),
     };
   }
@@ -37,7 +38,7 @@ class ChairCommitteeFeedbackView extends React.Component {
   componentWillMount() {
     var user = CurrentUserStore.getCurrentUser();
     if (!User.isChair(user)) {
-      history.pushState(null, "/");
+      history.redirect("/");
     }
   }
 

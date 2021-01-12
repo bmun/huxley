@@ -6,7 +6,7 @@
 'use strict';
 
 import ActionConstants from 'constants/ActionConstants';
-import CurrentUserStore from 'stores/CurrentUserStore';
+import {CurrentUserStore} from 'stores/CurrentUserStore';
 import {DelegateActions} from 'actions/DelegateActions';
 import {Dispatcher} from 'dispatcher/Dispatcher';
 import {ServerAPI} from 'lib/ServerAPI';
@@ -125,4 +125,5 @@ class DelegateStore extends Store {
   }
 }
 
-export default new DelegateStore(Dispatcher);
+const delegateStore = new DelegateStore(Dispatcher);
+export {delegateStore as DelegateStore};

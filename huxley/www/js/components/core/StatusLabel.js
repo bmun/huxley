@@ -31,4 +31,4 @@ StatusLabel.propTypes = {
   status: PropTypes.oneOf(["success", "error"]).isRequired,
 };
 
-
+export {StatusLabel};

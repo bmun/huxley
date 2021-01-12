@@ -6,7 +6,7 @@
 'use strict';
 
 import ActionConstants from 'constants/ActionConstants';
-import CurrentUserStore from 'stores/CurrentUserStore';
+import {CurrentUserStore} from 'stores/CurrentUserStore';
 import {PositionPaperActions} from 'actions/PositionPaperActions';
 import {Dispatcher} from 'dispatcher/Dispatcher';
 import {ServerAPI} from 'lib/ServerAPI';
@@ -136,4 +136,5 @@ class PositionPaperStore extends Store {
   }
 }
 
-export default new PositionPaperStore(Dispatcher);
+const positionPaperStore = new PositionPaperStore(Dispatcher);
+export {positionPaperStore as PositionPaperStore};

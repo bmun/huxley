@@ -10,20 +10,20 @@ import React from "react";
 import PropTypes from "prop-types";
 
 var _accessSafe = require("utils/_accessSafe");
-var AssignmentStore = require("stores/AssignmentStore");
-var Button = require("components/core/Button");
-var CurrentUserStore = require("stores/CurrentUserStore");
+var {AssignmentStore} = require("stores/AssignmentStore");
+var {Button} = require("components/core/Button");
+var {CurrentUserStore} = require("stores/CurrentUserStore");
 var DelegateActions = require("actions/DelegateActions");
-var DelegateStore = require("stores/DelegateStore");
+var {DelegateStore} = require("stores/DelegateStore");
 var {ConferenceContext} = require("components/ConferenceContext");
 var {CurrentUserActions} = require("actions/CurrentUserActions");
 var {InnerView} = require("components/InnerView");
-var RegistrationStore = require("stores/RegistrationStore");
+var {RegistrationStore} = require("stores/RegistrationStore");
 var {ServerAPI} = require("lib/ServerAPI");
-var StatusLabel = require("components/core/StatusLabel");
-var Table = require("components/core/Table");
-var TextInput = require("components/core/TextInput");
-var TextTemplate = require("components/core/TextTemplate");
+var {StatusLabel} = require("components/core/StatusLabel");
+var {Table} = require("components/core/Table");
+var {TextInput} = require("components/core/TextInput");
+var {TextTemplate} = require("components/core/TextTemplate");
 var _checkDate = require("utils/_checkDate");
 var _handleChange = require("utils/_handleChange");
 
@@ -32,9 +32,10 @@ var AdvisorRosterViewText = require("text/AdvisorRosterViewText.md");
 var AdvisorWaitlistText = require("text/AdvisorWaitlistText.md");
 
 class AdvisorRosterView extends React.Component {
-  getInitialState() {
+  constructor(props) {
+    super(props);
     var schoolID = CurrentUserStore.getCurrentUser().school.id;
-    var conferenceID = this.context.conference.session;
+    var conferenceID = conference.session;
     var assignments = AssignmentStore.getSchoolAssignments(schoolID).filter(
       (assignment) => !assignment.rejected
     );
@@ -46,7 +47,7 @@ class AdvisorRosterView extends React.Component {
       }.bind(this)
     );
 
-    return {
+    this.state = {
       delegates: DelegateStore.getSchoolDelegates(schoolID),
       registration: RegistrationStore.getRegistration(schoolID, conferenceID),
       assignments: assignments,
@@ -66,7 +67,7 @@ class AdvisorRosterView extends React.Component {
 
   componentDidMount() {
     var schoolID = CurrentUserStore.getCurrentUser().school.id;
-    var conferenceID = this.context.conference.session;
+    var conferenceID = conference.session;
     this._registrationToken = RegistrationStore.addListener(() => {
       this.setState({
         registration: RegistrationStore.getRegistration(schoolID, conferenceID),
@@ -104,7 +105,7 @@ class AdvisorRosterView extends React.Component {
   }
 
   render() {
-    var conference = this.context.conference;
+    var conference = conference;
     var registration = this.state.registration;
     var waitlisted =
       _accessSafe(registration, "is_waitlisted") == null
@@ -375,9 +376,5 @@ class AdvisorRosterView extends React.Component {
     });
   }
 }
-
-AdvisorRosterView.contextTypes = {
-  conference: PropTypes.shape(ConferenceContext),
-};
 
 export {AdvisorRosterView};

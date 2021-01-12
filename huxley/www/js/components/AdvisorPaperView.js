@@ -9,19 +9,19 @@ import React from "react";
 import PropTypes from "prop-types";
 
 var _accessSafe = require("utils/_accessSafe");
-var AssignmentStore = require("stores/AssignmentStore");
-var Button = require("components/core/Button");
-var CommitteeStore = require("stores/CommitteeStore");
-var CountryStore = require("stores/CountryStore");
-var CurrentUserStore = require("stores/CurrentUserStore");
+var {AssignmentStore} = require("stores/AssignmentStore");
+var {Button} = require("components/core/Button");
+var {CommitteeStore} = require("stores/CommitteeStore");
+var {CountryStore} = require("stores/CountryStore");
+var {CurrentUserStore} = require("stores/CurrentUserStore");
 var {ConferenceContext} = require("components/ConferenceContext");
 var {InnerView} = require("components/InnerView");
-var PositionPaperStore = require("stores/PositionPaperStore");
-var RubricStore = require("stores/RubricStore");
-var {ServerAPI} = require("lib/ServerAPI");
-var StatusLabel = require("components/core/StatusLabel");
-var Table = require("components/core/Table");
-var TextTemplate = require("components/core/TextTemplate");
+var {PositionPaperStore} = require("stores/PositionPaperStore");
+var {RubricStore} = require("stores/RubricStore");
+var ServerAPI = require("lib/ServerAPI");
+var {StatusLabel} = require("components/core/StatusLabel");
+var {Table} = require("components/core/Table");
+var {TextTemplate} = require("components/core/TextTemplate");
 var {inflateGrades} = require("utils/inflateGrades");
 var _checkDate = require("utils/_checkDate");
 var _handleChange = require("utils/_handleChange");
@@ -31,10 +31,11 @@ var AdvisorPaperViewText = require("text/AdvisorPaperViewText.md");
 var AdvisorWaitlistText = require("text/AdvisorWaitlistText.md");
 
 class AdvisorPaperView extends React.Component {
-  getInitialState() {
+  constructor(props) {
+    super(props);
     var schoolID = CurrentUserStore.getCurrentUser().school.id;
-    var conferenceID = this.context.conference.session;
-    return {
+    var conferenceID = conference.session;
+    this.state = {
       assignments: AssignmentStore.getSchoolAssignments(schoolID),
       committees: CommitteeStore.getCommittees(),
       countries: CountryStore.getCountries(),
@@ -48,7 +49,7 @@ class AdvisorPaperView extends React.Component {
 
   componentDidMount() {
     var schoolID = CurrentUserStore.getCurrentUser().school.id;
-    var conferenceID = this.context.conference.session;
+    var conferenceID = conference.session;
     this._committeesToken = CommitteeStore.addListener(() => {
       this.setState({
         committees: CommitteeStore.getCommittees(),
@@ -97,7 +98,7 @@ class AdvisorPaperView extends React.Component {
   }
 
   render() {
-    var conference = this.context.conference;
+    var conference = conference;
     var registration = this.state.registration;
     var waitlisted =
       _accessSafe(registration, "is_waitlisted") == null
@@ -472,9 +473,5 @@ class AdvisorPaperView extends React.Component {
     });
   }
 }
-
-AdvisorPaperView.contextTypes = {
-  conference: PropTypes.shape(ConferenceContext),
-};
 
 export {AdvisorPaperView};

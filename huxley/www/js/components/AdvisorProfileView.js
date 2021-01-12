@@ -9,20 +9,20 @@ import React from "react";
 import PropTypes from "prop-types";
 
 var _accessSafe = require("utils/_accessSafe");
-const AssignmentStore = require("stores/AssignmentStore");
-const Button = require("components/core/Button");
+const {AssignmentStore} = require("stores/AssignmentStore");
+const {Button} = require("components/core/Button");
 const {InnerView} = require("components/InnerView");
 const {LogoutButton} = require("components/LogoutButton");
 const {ConferenceContext} = require("components/ConferenceContext");
 const {CurrentUserActions} = require("actions/CurrentUserActions");
-const DelegateStore = require("stores/DelegateStore");
+const {DelegateStore} = require("stores/DelegateStore");
 const {PhoneInput} = require("components/PhoneInput");
-const ProgramTypes = require("constants/ProgramTypes");
-const RegistrationStore = require("stores/RegistrationStore");
-const StatusLabel = require("components/core/StatusLabel");
-const Table = require("components/core/Table");
-const TextInput = require("components/core/TextInput");
-const TextTemplate = require("components/core/TextTemplate");
+const {ProgramTypes} = require("constants/ProgramTypes");
+const {RegistrationStore} = require("stores/RegistrationStore");
+const {StatusLabel} = require("components/core/StatusLabel");
+const {Table} = require("components/core/Table");
+const {TextInput} = require("components/core/TextInput");
+const {TextTemplate} = require("components/core/TextTemplate");
 const {User} = require("utils/User");
 const _handleChange = require("utils/_handleChange");
 
@@ -43,11 +43,12 @@ class AdvisorProfileView extends React.Component {
   //   user: PropTypes.object.isRequired
   // },
 
-  getInitialState() {
+  constructor(props) {
+    super(props);
     var user = this.props.user;
     var school = User.getSchool(user);
-    var conferenceID = this.context.conference.session;
-    return {
+    var conferenceID = conference.session;
+    this.state = {
       errors: {},
       first_name: user.first_name,
       last_name: user.last_name,
@@ -71,7 +72,7 @@ class AdvisorProfileView extends React.Component {
 
   componentDidMount() {
     var schoolID = User.getSchool(this.props.user).id;
-    var conferenceID = this.context.conference.session;
+    var conferenceID = conference.session;
     this._registrationToken = RegistrationStore.addListener(() => {
       this.setState({
         registration: RegistrationStore.getRegistration(schoolID, conferenceID),
@@ -97,7 +98,7 @@ class AdvisorProfileView extends React.Component {
   }
 
   render() {
-    var conference = this.context.conference;
+    var conference = conference;
     var user = this.props.user;
     var school = User.getSchool(user);
     var registration = this.state.registration;
@@ -608,7 +609,6 @@ class AdvisorProfileView extends React.Component {
 }
 
 AdvisorProfileView.contextTypes = {
-  conference: PropTypes.shape(ConferenceContext),
   shake: PropTypes.func,
 };
 

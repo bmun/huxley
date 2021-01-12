@@ -7,16 +7,17 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import history from "utils/history";
+import {history} from "utils/history";
 
-var Button = require("components/core/Button");
+
+var {Button} = require("components/core/Button");
 var {ConferenceContext} = require("components/ConferenceContext");
-var CurrentUserStore = require("stores/CurrentUserStore");
+var {CurrentUserStore} = require("stores/CurrentUserStore");
 var {InnerView} = require("components/InnerView");
 var {PaperSubmissionTable} = require("components/PaperSubmissionTable");
 var {PositionPaperActions} = require("actions/PositionPaperActions");
-var PositionPaperStore = require("stores/PositionPaperStore");
-var TextTemplate = require("components/core/TextTemplate");
+var {PositionPaperStore} = require("stores/PositionPaperStore");
+var {TextTemplate} = require("components/core/TextTemplate");
 var {User} = require("utils/User");
 var {inflateGrades} = require("utils/inflateGrades");
 
@@ -27,7 +28,8 @@ var DelegatePaperViewText = require("text/DelegatePaperViewText.md");
 var DelegatePaperNoSubmissionViewText = require("text/DelegatePaperNoSubmissionViewText.md");
 
 class DelegatePaperView extends React.Component {
-  getInitialState() {
+  constructor(props) {
+    super(props);
     var user = CurrentUserStore.getCurrentUser();
     PositionPaperActions.storePositionPaper(user.delegate.assignment.paper);
     var papers = PositionPaperStore.getPapers();
@@ -38,7 +40,7 @@ class DelegatePaperView extends React.Component {
     var files = PositionPaperStore.getPositionPaperFiles();
     var graded_files = PositionPaperStore.getGradedPositionPaperFiles();
 
-    return {
+    this.state = {
       papers: papers,
       uploadedFile: null,
       files: files,
@@ -50,7 +52,7 @@ class DelegatePaperView extends React.Component {
   componentWillMount() {
     var user = CurrentUserStore.getCurrentUser();
     if (!User.isDelegate(user)) {
-      history.pushState(null, "/");
+      history.redirect("/");
     }
   }
 
@@ -70,7 +72,7 @@ class DelegatePaperView extends React.Component {
   }
 
   render() {
-    if (this.context.conference.position_papers_accepted) {
+    if (conference.position_papers_accepted) {
       return (
         <InnerView>
           <div style={{ margin: "auto 20px 20px 20px" }}>
@@ -212,7 +214,7 @@ class DelegatePaperView extends React.Component {
         uploadedFile: null,
       });
     }
-    history.pushState(null, "/");
+    history.redirect("/");
     event.preventDefault();
   }
 
@@ -226,9 +228,5 @@ class DelegatePaperView extends React.Component {
     );
   }
 }
-
-DelegatePaperView.contextTypes = {
-  conference: PropTypes.shape(ConferenceContext),
-};
 
 export {DelegatePaperView};

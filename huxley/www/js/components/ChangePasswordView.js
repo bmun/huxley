@@ -9,26 +9,28 @@ import cx from "classnames";
 import React from "react";
 import PropTypes from "prop-types";
 
-var Button = require("components/core/Button");
+var {Button} = require("components/core/Button");
 var {ServerAPI} = require("lib/ServerAPI");
-var StatusLabel = require("components/core/StatusLabel");
+var {StatusLabel} = require("components/core/StatusLabel");
 
 require("css/ChangePasswordView.less");
 
+const initialState = {
+  message: "",
+  success: false,
+  loading: false,
+  currentPassword: "",
+  newPassword: "",
+  newPassword2: "",
+};
 class ChangePasswordView extends React.Component {
-  getInitialState() {
-    return {
-      message: "",
-      success: false,
-      loading: false,
-      currentPassword: "",
-      newPassword: "",
-      newPassword2: "",
-    };
+  constructor(props) {
+    super(props);
+    this.state = initialState;
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setState(this.getInitialState());
+    this.setState(initialState);
   }
 
   render() {

@@ -5,7 +5,7 @@
 
 "use strict";
 
-var Button = require("components/core/Button");
+var {Button} = require("components/core/Button");
 
 import React from "react";
 import PropTypes from "prop-types";

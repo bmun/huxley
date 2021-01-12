@@ -7,22 +7,24 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import history from "utils/history";
+import {history} from "utils/history";
 
-var Button = require("components/core/Button");
+
+var {Button} = require("components/core/Button");
 var {NavLink} = require("components/NavLink");
 var {OuterView} = require("components/OuterView");
 var {ServerAPI} = require("lib/ServerAPI");
-var StatusLabel = require("components/core/StatusLabel");
-var TextInput = require("components/core/TextInput");
-var TextTemplate = require("components/core/TextTemplate");
+var {StatusLabel} = require("components/core/StatusLabel");
+var {TextInput} = require("components/core/TextInput");
+var {TextTemplate} = require("components/core/TextTemplate");
 
 require("css/LoginForm.less");
 var ForgotPasswordViewText = require("text/ForgotPasswordViewText.md");
 
 class ForgotPasswordView extends React.Component {
-  getInitialState() {
-    return {
+  constructor(props) {
+    super(props);
+    this.state = {
       username: "",
       error: false,
       loading: false,
@@ -82,7 +84,7 @@ class ForgotPasswordView extends React.Component {
   }
 
   _handleSuccess(response) {
-    history.pushState(null, "/password/reset");
+    history.redirect("/password/reset");
   }
 
   _handleError(response) {

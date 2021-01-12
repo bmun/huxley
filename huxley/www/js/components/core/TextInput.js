@@ -42,4 +42,4 @@ TextInput.propTypes = {
   type: PropTypes.oneOf(["text", "password"]),
 };
 
-
+export {TextInput};

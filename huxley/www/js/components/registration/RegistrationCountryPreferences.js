@@ -43,4 +43,4 @@ RegistrationCountryPreferences.propTypes = {
   renderCountryDropdown: PropTypes.func,
 };
 
-
+export {RegistrationCountryPreferences};

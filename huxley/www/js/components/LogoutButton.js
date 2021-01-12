@@ -7,13 +7,14 @@
 
 import React from "react";
 
-var Button = require("components/core/Button");
+var {Button} = require("components/core/Button");
 var {CurrentUserActions} = require("actions/CurrentUserActions");
 var {ServerAPI} = require("lib/ServerAPI");
 
 class LogoutButton extends React.Component {
-  getInitialState() {
-    return {
+  constructor(props) {
+    super(props);
+    this.state = {
       loggingOut: false,
     };
   }

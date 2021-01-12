@@ -7,18 +7,19 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import history from "utils/history";
+import {history} from "utils/history";
 
-const Button = require("components/core/Button");
+
+const {Button} = require("components/core/Button");
 const {ConferenceContext} = require("components/ConferenceContext");
-const CurrentUserStore = require("stores/CurrentUserStore");
+const {CurrentUserStore} = require("stores/CurrentUserStore");
 const {CommitteeFeedbackActions} = require("actions/CommitteeFeedbackActions");
-const CommitteeFeedbackStore = require("stores/CommitteeFeedbackStore");
+const {CommitteeFeedbackStore} = require("stores/CommitteeFeedbackStore");
 const {InnerView} = require("components/InnerView");
 const {ServerAPI} = require("lib/ServerAPI");
-const SecretariatMemberStore = require("stores/SecretariatMemberStore");
+const {SecretariatMemberStore} = require("stores/SecretariatMemberStore");
 const {NumberInput} = require("components/NumberInput");
-const TextTemplate = require("components/core/TextTemplate");
+const {TextTemplate} = require("components/core/TextTemplate");
 const {User} = require("utils/User");
 
 const _handleChange = require("utils/_handleChange");
@@ -27,13 +28,14 @@ require("css/Table.less");
 const DelegateCommitteeFeedbackViewText = require("text/DelegateCommitteeFeedbackViewText.md");
 
 class DelegateCommitteeFeedbackView extends React.Component {
-  getInitialState() {
+  constructor(props) {
+    super(props);
     var user = CurrentUserStore.getCurrentUser();
     var delegate = user.delegate;
     var secretariatMembers = SecretariatMemberStore.getSecretariatMembers(
       delegate.assignment.committee.id
     );
-    return {
+    this.state = {
       delegate: delegate,
       secretariatMembers: secretariatMembers,
       comment: "",
@@ -108,7 +110,7 @@ class DelegateCommitteeFeedbackView extends React.Component {
   componentWillMount() {
     var user = CurrentUserStore.getCurrentUser();
     if (!User.isDelegate(user)) {
-      history.pushState(null, "/");
+      history.redirect("/");
     }
   }
 
@@ -382,9 +384,5 @@ class DelegateCommitteeFeedbackView extends React.Component {
     });
   }
 }
-
-DelegateCommitteeFeedbackView.contextTypes = {
-  conference: PropTypes.shape(ConferenceContext),
-};
 
 export {DelegateCommitteeFeedbackView};

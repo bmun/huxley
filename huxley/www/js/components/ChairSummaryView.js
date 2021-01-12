@@ -6,23 +6,24 @@
 "use strict";
 
 import React from "react";
-import history from "utils/history";
+import {history} from "utils/history";
 
-var Button = require("components/core/Button");
-var AssignmentStore = require("stores/AssignmentStore");
-var CountryStore = require("stores/CountryStore");
-var CurrentUserStore = require("stores/CurrentUserStore");
+var {Button} = require("components/core/Button");
+var {AssignmentStore} = require("stores/AssignmentStore");
+var {CountryStore} = require("stores/CountryStore");
+var {CurrentUserStore} = require("stores/CurrentUserStore");
 var DelegateActions = require("actions/DelegateActions");
-var DelegateStore = require("stores/DelegateStore");
+var {DelegateStore} = require("stores/DelegateStore");
 var {InnerView} = require("components/InnerView");
-var TextTemplate = require("components/core/TextTemplate");
+var {TextTemplate} = require("components/core/TextTemplate");
 var {User} = require("utils/User");
 
 require("css/Table.less");
 var ChairSummaryViewText = require("text/ChairSummaryViewText.md");
 
 class ChairSummaryView extends React.Component {
-  getInitialState() {
+  constructor(props) {
+    super(props);
     var user = CurrentUserStore.getCurrentUser();
     var assignments = AssignmentStore.getCommitteeAssignments(user.committee);
     var countries = CountryStore.getCountries();
@@ -38,7 +39,7 @@ class ChairSummaryView extends React.Component {
       );
     }
 
-    return {
+    this.state = {
       assignments: assignments,
       countries: countries,
       loadingSave: false,
@@ -53,7 +54,7 @@ class ChairSummaryView extends React.Component {
   componentWillMount() {
     var user = CurrentUserStore.getCurrentUser();
     if (!User.isChair(user)) {
-      history.pushState(null, "/");
+      history.redirect("/");
     }
   }
 

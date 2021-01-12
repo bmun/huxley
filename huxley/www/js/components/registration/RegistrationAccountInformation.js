@@ -6,9 +6,9 @@
 "use strict";
 
 import React from "react";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 
-var RegistrationTextInput = require("components/registration/RegistrationTextInput");
+var {RegistrationTextInput} = require("components/registration/RegistrationTextInput");
 var _accessSafe = require("utils/_accessSafe");
 
 class RegistrationAccountInformation extends React.Component {
@@ -86,4 +86,4 @@ RegistrationAccountInformation.propTypes = {
   focus: PropTypes.func,
 };
 
-
+export {RegistrationAccountInformation};

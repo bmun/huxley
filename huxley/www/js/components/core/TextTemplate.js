@@ -41,4 +41,4 @@ class TextTemplate extends React.Component {
   }
 }
 
-
+export {TextTemplate};

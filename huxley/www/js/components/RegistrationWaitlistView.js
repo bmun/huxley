@@ -11,14 +11,13 @@ import PropTypes from "prop-types";
 var {ConferenceContext} = require("components/ConferenceContext");
 var {NavLink} = require("components/NavLink");
 var {OuterView} = require("components/OuterView");
-var TextTemplate = require("components/core/TextTemplate");
+var {TextTemplate} = require("components/core/TextTemplate");
 
 require("css/Letter.less");
 var RegistrationWaitlistViewText = require("text/RegistrationWaitlistViewText.md");
 
 class RegistrationWaitlistView extends React.Component {
   render() {
-    var conference = this.context.conference;
     return (
       <OuterView>
         <div class="letter">
@@ -34,9 +33,5 @@ class RegistrationWaitlistView extends React.Component {
     );
   }
 }
-
-RegistrationWaitlistView.contextTypes = {
-  conference: PropTypes.shape(ConferenceContext),
-};
 
 export {RegistrationWaitlistView};

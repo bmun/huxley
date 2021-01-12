@@ -9,32 +9,31 @@ import React from "react";
 import PropTypes from "prop-types";
 
 var _accessSafe = require("utils/_accessSafe");
-var {AssignmentActions} = require("actions/AssignmentActions");
-var AssignmentStore = require("stores/AssignmentStore");
-var Button = require("components/core/Button");
-var CommitteeStore = require("stores/CommitteeStore");
+var {AssignmentStore} = require("stores/AssignmentStore");
+var {CommitteeStore} = require("stores/CommitteeStore");
 var {ConferenceContext} = require("components/ConferenceContext");
-var CountryStore = require("stores/CountryStore");
-var CurrentUserStore = require("stores/CurrentUserStore");
-var DelegateStore = require("stores/DelegateStore");
+var {CountryStore} = require("stores/CountryStore");
+var {CurrentUserStore} = require("stores/CurrentUserStore");
+var {DelegateStore} = require("stores/DelegateStore");
 var {InnerView} = require("components/InnerView");
-var RegistrationStore = require("stores/RegistrationStore");
-var Table = require("components/core/Table");
-var TextTemplate = require("components/core/TextTemplate");
+var {RegistrationStore} = require("stores/RegistrationStore");
+var {Table} = require("components/core/Table");
+var {TextTemplate} = require("components/core/TextTemplate");
 
 var AdvisorFeedbackViewText = require("text/AdvisorFeedbackViewText.md");
 var AdvisorWaitlistText = require("text/AdvisorWaitlistText.md");
 
 class AdvisorFeedbackView extends React.Component {
-  getInitialState() {
+  constructor(props) {
+    super(props);
     var schoolID = CurrentUserStore.getCurrentUser().school.id;
     var delegates = DelegateStore.getSchoolDelegates(schoolID);
-    var conferenceID = this.context.conference.session;
+    var conferenceID = conference.session;
     var assignments = AssignmentStore.getSchoolAssignments(schoolID).filter(
       (assignment) => !assignment.rejected
     );
     var feedback = this.prepareFeedback(delegates);
-    return {
+    this.state = {
       registration: RegistrationStore.getRegistration(schoolID, conferenceID),
       feedback: feedback,
       assignments: assignments,
@@ -47,7 +46,7 @@ class AdvisorFeedbackView extends React.Component {
 
   componentDidMount() {
     var schoolID = CurrentUserStore.getCurrentUser().school.id;
-    var conferenceID = this.context.conference.session;
+    var conferenceID = conference.session;
     this._registrationToken = RegistrationStore.addListener(() => {
       this.setState({
         registration: RegistrationStore.getRegistration(schoolID, conferenceID),
@@ -209,9 +208,5 @@ class AdvisorFeedbackView extends React.Component {
     return feedback;
   }
 }
-
-AdvisorFeedbackView.contextTypes = {
-  conference: PropTypes.shape(ConferenceContext),
-};
 
 export {AdvisorFeedbackView};

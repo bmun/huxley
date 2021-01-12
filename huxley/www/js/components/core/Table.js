@@ -6,7 +6,7 @@
 "use strict";
 
 import React from "react";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 
 require("css/Table.less");
 
@@ -27,4 +27,4 @@ Table.propTypes = {
   isEmpty: PropTypes.bool.isRequired,
 };
 
-
+export {Table};

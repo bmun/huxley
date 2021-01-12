@@ -10,6 +10,7 @@ import PropTypes from "prop-types";
 import ReactDOM from "react-dom";
 import cx from "classnames";
 
+
 require("css/Shaker.less");
 
 class Shaker extends React.Component {

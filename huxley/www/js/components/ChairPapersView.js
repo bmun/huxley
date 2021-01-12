@@ -6,20 +6,20 @@
 "use strict";
 
 import React from "react";
-import history from "utils/history";
+import {history} from "utils/history";
 
-var Button = require("components/core/Button");
-var AssignmentStore = require("stores/AssignmentStore");
-var CommitteeStore = require("stores/CommitteeStore");
-var CountryStore = require("stores/CountryStore");
-var CurrentUserStore = require("stores/CurrentUserStore");
+var {Button} = require("components/core/Button");
+var {AssignmentStore} = require("stores/AssignmentStore");
+var {CommitteeStore} = require("stores/CommitteeStore");
+var {CountryStore} = require("stores/CountryStore");
+var {CurrentUserStore} = require("stores/CurrentUserStore");
 var {InnerView} = require("components/InnerView");
 var {PaperAssignmentList} = require("components/PaperAssignmentList");
 var {PaperGradeTable} = require("components/PaperGradeTable");
 var {PositionPaperActions} = require("actions/PositionPaperActions");
-var PositionPaperStore = require("stores/PositionPaperStore");
-var RubricStore = require("stores/RubricStore");
-var TextTemplate = require("components/core/TextTemplate");
+var {PositionPaperStore} = require("stores/PositionPaperStore");
+var {RubricStore} = require("stores/RubricStore");
+var {TextTemplate} = require("components/core/TextTemplate");
 var {User} = require("utils/User");
 
 var {ServerAPI} = require("lib/ServerAPI");
@@ -28,7 +28,8 @@ require("css/Table.less");
 var ChairPapersViewText = require("text/ChairPapersViewText.md");
 
 class ChairPapersView extends React.Component {
-  getInitialState() {
+  constructor(props) {
+    super(props);
     var user = CurrentUserStore.getCurrentUser();
     var assignments = AssignmentStore.getCommitteeAssignments(user.committee);
     var countries = CountryStore.getCountries();
@@ -48,7 +49,7 @@ class ChairPapersView extends React.Component {
       rubric = RubricStore.getRubric(committees[user.committee].rubric.id);
     }
 
-    return {
+    this.state = {
       loading: false,
       success: false,
       assignments: assignments,
@@ -67,7 +68,7 @@ class ChairPapersView extends React.Component {
   componentWillMount() {
     var user = CurrentUserStore.getCurrentUser();
     if (!User.isChair(user)) {
-      history.pushState(null, "/");
+      history.redirect("/");
     }
   }
 

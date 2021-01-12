@@ -7,25 +7,28 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import history from "utils/history";
+import {history} from "utils/history";
 
-var Button = require("components/core/Button");
+
+var {Button} = require("components/core/Button");
+// var {ConferenceContext} = require("components/Huxley");
 var {ConferenceContext} = require("components/ConferenceContext");
 var {CurrentUserActions} = require("actions/CurrentUserActions");
 var {NavLink} = require("components/NavLink");
 var {OuterView} = require("components/OuterView");
 var {ServerAPI} = require("lib/ServerAPI");
-var StatusLabel = require("components/core/StatusLabel");
-var TextInput = require("components/core/TextInput");
-var TextTemplate = require("components/core/TextTemplate");
+var {StatusLabel} = require("components/core/StatusLabel");
+var {TextInput} = require("components/core/TextInput");
+var {TextTemplate} = require("components/core/TextTemplate");
 var {User} = require("utils/User");
 
 require("css/LoginForm.less");
 var LoginViewText = require("text/LoginViewText.md");
 
 class LoginView extends React.Component {
-  getInitialState() {
-    return {
+  constructor(props) {
+    super(props);
+    this.state = {
       error: null,
       username: "",
       password: "",
@@ -39,7 +42,7 @@ class LoginView extends React.Component {
       return;
     }
     if (User.isAdvisor(user)) {
-      history.pushState(null, "/advisor/profile");
+      history.redirect("/advisor/profile");
     }
   }
 
@@ -80,7 +83,6 @@ class LoginView extends React.Component {
   }
 
   renderHeader() {
-    var conference = this.context.conference;
     return (
       <div className="logo">
         <hr />
@@ -143,7 +145,6 @@ class LoginView extends React.Component {
 }
 
 LoginView.contextTypes = {
-  conference: PropTypes.shape(ConferenceContext),
   shake: PropTypes.func,
 };
 

@@ -6,7 +6,7 @@
 "use strict";
 
 import React from "react";
-import history from "utils/history";
+import {history} from "utils/history";
 
 var {OuterView} = require("components/OuterView");
 var {User} = require("utils/User");
@@ -15,13 +15,13 @@ class RedirectView extends React.Component {
   componentDidMount() {
     var { user } = this.props;
     if (User.isAnonymous(user)) {
-      history.pushState(null, "/login");
+      history.redirect("/login");
     } else if (User.isAdvisor(user)) {
-      history.pushState(null, "/advisor/profile");
+      history.redirect("/advisor/profile");
     } else if (User.isChair(user)) {
-      history.pushState(null, "/chair/attendance");
+      history.redirect("/chair/attendance");
     } else if (User.isDelegate(user)) {
-      history.pushState(null, "/delegate/profile");
+      history.redirect("/delegate/profile");
     }
   }
 

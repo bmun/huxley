@@ -10,34 +10,35 @@ import PropTypes from "prop-types";
 
 var _accessSafe = require("utils/_accessSafe");
 var {AssignmentActions} = require("actions/AssignmentActions");
-var AssignmentStore = require("stores/AssignmentStore");
-var Button = require("components/core/Button");
+var {AssignmentStore} = require("stores/AssignmentStore");
+var {Button} = require("components/core/Button");
 var _checkDate = require("utils/_checkDate");
-var CommitteeStore = require("stores/CommitteeStore");
+var {CommitteeStore} = require("stores/CommitteeStore");
 var {ConferenceContext} = require("components/ConferenceContext");
-var CountryStore = require("stores/CountryStore");
-var CurrentUserStore = require("stores/CurrentUserStore");
+var {CountryStore} = require("stores/CountryStore");
+var {CurrentUserStore} = require("stores/CurrentUserStore");
 var {CurrentUserActions} = require("actions/CurrentUserActions");
 var {DelegateActions} = require("actions/DelegateActions");
 var {DelegateSelect} = require("components/DelegateSelect");
-var DelegateStore = require("stores/DelegateStore");
+var {DelegateStore} = require("stores/DelegateStore");
 var {InnerView} = require("components/InnerView");
 var {RegistrationActions} = require("actions/RegistrationActions");
-var RegistrationStore = require("stores/RegistrationStore");
+var {RegistrationStore} = require("stores/RegistrationStore");
 var {ServerAPI} = require("lib/ServerAPI");
-var Table = require("components/core/Table");
-var TextTemplate = require("components/core/TextTemplate");
+var {Table} = require("components/core/Table");
+var {TextTemplate} = require("components/core/TextTemplate");
 
 var AdvisorAssignmentsViewText = require("text/AdvisorAssignmentsViewText.md");
 var AdvisorWaitlistText = require("text/AdvisorWaitlistText.md");
 
 class AdvisorAssignmentsView extends React.Component {
-  getInitialState() {
+  constructor(props) {
+    super(props);
     var schoolID = CurrentUserStore.getCurrentUser().school.id;
     var delegates = DelegateStore.getSchoolDelegates(schoolID);
     var assigned = this.prepareAssignedDelegates(delegates);
-    var conferenceID = this.context.conference.session;
-    return {
+    var conferenceID = conference.session;
+    this.state = {
       assigned: assigned,
       assignments: AssignmentStore.getSchoolAssignments(schoolID).filter(
         (assignment) => !assignment.rejected
@@ -53,7 +54,7 @@ class AdvisorAssignmentsView extends React.Component {
 
   componentDidMount() {
     var schoolID = CurrentUserStore.getCurrentUser().school.id;
-    var conferenceID = this.context.conference.session;
+    var conferenceID = conference.session;
 
     this._committeesToken = CommitteeStore.addListener(() => {
       this.setState({ committees: CommitteeStore.getCommittees() });
@@ -108,7 +109,7 @@ class AdvisorAssignmentsView extends React.Component {
         ? false
         : this.state.registration.assignments_finalized;
     var committees = this.state.committees;
-    var conference = this.context.conference;
+    var conference = conference;
     var countries = this.state.countries;
     var shouldRenderAssignments =
       Object.keys(committees).length > 0 &&
@@ -342,9 +343,5 @@ class AdvisorAssignmentsView extends React.Component {
     );
   }
 }
-
-AdvisorAssignmentsView.contextTypes = {
-  conference: PropTypes.shape(ConferenceContext),
-};
 
 export {AdvisorAssignmentsView};

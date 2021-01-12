@@ -8,8 +8,8 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-var TextInput = require("components/core/TextInput");
-var StatusLabel = require("components/core/StatusLabel");
+var {TextInput} = require("components/core/TextInput");
+var {StatusLabel} = require("components/core/StatusLabel");
 
 class RegistrationTextInput extends React.Component {
   render() {
@@ -34,4 +34,4 @@ RegistrationTextInput.propTypes = {
   type: PropTypes.oneOf(["text", "password"]),
 };
 
-
+export {RegistrationTextInput};

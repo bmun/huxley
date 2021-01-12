@@ -7,12 +7,13 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import history from "utils/history";
+import {history} from "utils/history";
+
 
 const {ConferenceContext} = require("components/ConferenceContext");
-const CurrentUserStore = require("stores/CurrentUserStore");
+const {CurrentUserStore} = require("stores/CurrentUserStore");
 const {InnerView} = require("components/InnerView");
-const TextTemplate = require("components/core/TextTemplate");
+const {TextTemplate} = require("components/core/TextTemplate");
 const {User} = require("utils/User");
 
 require("css/Table.less");
@@ -22,10 +23,11 @@ const DelegateChecklistPositionPaperText = require("text/checklists/DelegateChec
 const DelegateChecklistWaiverText = require("text/checklists/DelegateChecklistWaiverText.md");
 
 class DelegateProfileView extends React.Component {
-  getInitialState() {
+  constructor(props) {
+    super(props);
     var user = CurrentUserStore.getCurrentUser();
     var delegate = user.delegate;
-    return {
+    this.state = {
       delegate: delegate,
     };
   }
@@ -33,7 +35,7 @@ class DelegateProfileView extends React.Component {
   componentWillMount() {
     var user = CurrentUserStore.getCurrentUser();
     if (!User.isDelegate(user)) {
-      history.pushState(null, "/");
+      history.redirect("/");
     }
   }
 
@@ -149,9 +151,5 @@ class DelegateProfileView extends React.Component {
     );
   }
 }
-
-DelegateProfileView.contextTypes = {
-  conference: PropTypes.shape(ConferenceContext),
-};
 
 export {DelegateProfileView};

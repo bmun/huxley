@@ -7,30 +7,30 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import history from "utils/history";
+import {history} from "utils/history";
 
-var Button = require("components/core/Button");
-var CommitteeStore = require("stores/CommitteeStore");
+var {Button} = require("components/core/Button");
+var {CommitteeStore} = require("stores/CommitteeStore");
 var ContactTypes = require("constants/ContactTypes");
 var {ConferenceContext} = require("components/ConferenceContext");
 var {CountrySelect} = require("components/CountrySelect");
-var CountryStore = require("stores/CountryStore");
+var {CountryStore} = require("stores/CountryStore");
 var GenderConstants = require("constants/GenderConstants");
 var {NavLink} = require("components/NavLink");
 var {OuterView} = require("components/OuterView");
 var ProgramTypes = require("constants/ProgramTypes");
-var RegistrationAccountInformation = require("components/registration/RegistrationAccountInformation");
-var RegistrationComments = require("components/registration/RegistrationComments");
-var RegistrationCountryPreferences = require("components/registration/RegistrationCountryPreferences");
-var RegistrationPrimaryContact = require("components/registration/RegistrationPrimaryContact");
-var RegistrationProgramInformation = require("components/registration/RegistrationProgramInformation");
-var RegistrationSchoolInformation = require("components/registration/RegistrationSchoolInformation");
-var RegistrationSecondaryContact = require("components/registration/RegistrationSecondaryContact");
-var RegistrationSpecialCommitteePreferences = require("components/registration/RegistrationSpecialCommitteePreferences");
+var {RegistrationAccountInformation} = require("components/registration/RegistrationAccountInformation");
+var {RegistrationComments} = require("components/registration/RegistrationComments");
+var {RegistrationCountryPreferences} = require("components/registration/RegistrationCountryPreferences");
+var {RegistrationPrimaryContact} = require("components/registration/RegistrationPrimaryContact");
+var {RegistrationProgramInformation} = require("components/registration/RegistrationProgramInformation");
+var {RegistrationSchoolInformation} = require("components/registration/RegistrationSchoolInformation");
+var {RegistrationSecondaryContact} = require("components/registration/RegistrationSecondaryContact");
+var {RegistrationSpecialCommitteePreferences} = require("components/registration/RegistrationSpecialCommitteePreferences");
 var RegistrationViewText = require("text/RegistrationViewText.md");
 var {ServerAPI} = require("lib/ServerAPI");
-var StatusLabel = require("components/core/StatusLabel");
-var TextTemplate = require("components/core/TextTemplate");
+var {StatusLabel} = require("components/core/StatusLabel");
+var {TextTemplate} = require("components/core/TextTemplate");
 var _handleChange = require("utils/_handleChange");
 
 require("css/RegistrationView.less");
@@ -38,8 +38,9 @@ require("css/RegistrationView.less");
 var USA = "United States of America";
 
 class RegistrationView extends React.Component {
-  getInitialState() {
-    return {
+  constructor(props) {
+    super(props);
+    this.state = {
       errors: {},
       countries: Object.values(CountryStore.getCountries()),
       committees: Object.values(CommitteeStore.getSpecialCommittees()),
@@ -107,7 +108,6 @@ class RegistrationView extends React.Component {
   }
 
   render() {
-    var conference = this.context.conference;
     return (
       <OuterView>
         <form id="registration" onSubmit={this._handleSubmit}>
@@ -534,7 +534,7 @@ class RegistrationView extends React.Component {
         }
       },
       registration: {
-        conference: this.context.conference.session,
+        conference: conference,
         num_beginner_delegates: this.state.num_beginner_delegates,
         num_intermediate_delegates: this.state.num_intermediate_delegates,
         num_advanced_delegates: this.state.num_advanced_delegates,
@@ -563,9 +563,9 @@ class RegistrationView extends React.Component {
 
   _handleSuccess(response) {
     if (response.registration.is_waitlisted) {
-      history.pushState(null, "/register/waitlist");
+      history.redirect("/register/waitlist");
     } else {
-      history.pushState(null, "/register/success");
+      history.redirect("/register/success");
     }
   }
 
@@ -587,7 +587,6 @@ class RegistrationView extends React.Component {
 }
 
 RegistrationView.contextTypes = {
-  conference: PropTypes.shape(ConferenceContext),
   shake: PropTypes.func,
 };
 

@@ -21,7 +21,7 @@ describe('RegistrationStore', () => {
   beforeEach(function() {
     ActionConstants = require('constants/ActionConstants');
     Dispatcher = require('dispatcher/Dispatcher');
-    RegistrationStore = require('stores/RegistrationStore');
+    {RegistrationStore} = require('stores/RegistrationStore');
     ServerAPI = require('lib/ServerAPI');
 
     registerCallback = function(action) {

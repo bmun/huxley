@@ -41,4 +41,5 @@ class CountryStore extends Store {
   }
 }
 
-export default new CountryStore(Dispatcher);
+const countryStore = new CountryStore(Dispatcher);
+export {countryStore as CountryStore};

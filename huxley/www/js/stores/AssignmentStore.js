@@ -7,7 +7,7 @@
 
 import ActionConstants from 'constants/ActionConstants';
 import {AssignmentActions} from 'actions/AssignmentActions';
-import CurrentUserStore from 'stores/CurrentUserStore';
+import {CurrentUserStore} from 'stores/CurrentUserStore';
 import {Dispatcher} from 'dispatcher/Dispatcher';
 import {ServerAPI} from 'lib/ServerAPI';
 import {Store} from'flux/utils';
@@ -80,4 +80,5 @@ class AssignmentStore extends Store {
   }
 }
 
-export default new AssignmentStore(Dispatcher);
+const assignmentStore = new AssignmentStore(Dispatcher);
+export {assignmentStore as AssignmentStore};

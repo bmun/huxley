@@ -6,7 +6,7 @@
 "use strict";
 
 import React from "react";
-import history from "utils/history";
+import {history} from "utils/history";
 
 var {NavTab} = require("components/NavTab");
 var {PermissionDeniedView} = require("components/PermissionDeniedView");
@@ -19,7 +19,7 @@ require("css/NavBar.less");
 class AdvisorView extends React.Component {
   componentDidMount() {
     if (User.isAnonymous(this.props.user)) {
-      history.pushState(null, "/login");
+      history.redirect("/login");
     }
   }
 

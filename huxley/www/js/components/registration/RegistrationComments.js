@@ -38,4 +38,4 @@ RegistrationComments.propTypes = {
   value: PropTypes.string,
 };
 
-
+export {RegistrationComments};

@@ -6,7 +6,7 @@
 'use strict';
 
 import ActionConstants from 'constants/ActionConstants';
-import CurrentUserStore from 'stores/CurrentUserStore';
+import {CurrentUserStore} from 'stores/CurrentUserStore';
 import {Dispatcher} from 'dispatcher/Dispatcher';
 import {RegistrationActions} from 'actions/RegistrationActions';
 import {ServerAPI} from 'lib/ServerAPI';
@@ -65,4 +65,5 @@ class RegistrationStore extends Store {
   }
 }
 
-export default new RegistrationStore(Dispatcher);
+const registrationStore = new RegistrationStore(Dispatcher);
+export {registrationStore as RegistrationStore};
