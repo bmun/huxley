@@ -6,7 +6,7 @@
 "use strict";
 
 import React from "react";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 
 class CountrySelect extends React.Component {
   shouldComponentUpdate(nextProps, nextState) {
@@ -58,4 +58,4 @@ CountrySelect.propTypes = {
   countryPreferences: PropTypes.array,
 };
 
-module.exports = CountrySelect;
+

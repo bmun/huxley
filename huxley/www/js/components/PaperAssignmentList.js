@@ -8,7 +8,7 @@
 var Button = require("components/core/Button");
 
 import React from "react";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 
 class PaperAssignmentList extends React.Component {
   render() {
@@ -174,4 +174,4 @@ PaperAssignmentList.propTypes = {
   countries: PropTypes.object,
 };
 
-module.exports = PaperAssignmentList;
+

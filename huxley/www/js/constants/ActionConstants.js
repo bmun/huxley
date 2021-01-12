@@ -5,7 +5,7 @@
 
 'use strict';
 
-module.exports = {
+export default {
   BOOTSTRAP: 'BOOTSTRAP',
   LOGIN: 'LOGIN',
   LOGOUT: 'LOGOUT',

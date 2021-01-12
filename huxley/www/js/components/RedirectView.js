@@ -15,13 +15,13 @@ class RedirectView extends React.Component {
   componentDidMount() {
     var { user } = this.props;
     if (User.isAnonymous(user)) {
-      this.history.pushState(null, "/login");
+      history.pushState(null, "/login");
     } else if (User.isAdvisor(user)) {
-      this.history.pushState(null, "/advisor/profile");
+      history.pushState(null, "/advisor/profile");
     } else if (User.isChair(user)) {
-      this.history.pushState(null, "/chair/attendance");
+      history.pushState(null, "/chair/attendance");
     } else if (User.isDelegate(user)) {
-      this.history.pushState(null, "/delegate/profile");
+      history.pushState(null, "/delegate/profile");
     }
   }
 
@@ -32,4 +32,4 @@ class RedirectView extends React.Component {
   }
 }
 
-module.exports = RedirectView;
+

@@ -6,7 +6,7 @@
 "use strict";
 
 import React from "react";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 
 class DelegateSelect extends React.Component {
   render() {
@@ -42,4 +42,4 @@ DelegateSelect.propTypes = {
   disabled: PropTypes.bool,
 };
 
-module.exports = DelegateSelect;
+

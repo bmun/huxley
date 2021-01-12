@@ -136,4 +136,4 @@ class ChairCommitteeFeedbackView extends React.Component {
   }
 }
 
-module.exports = ChairCommitteeFeedbackView;
+

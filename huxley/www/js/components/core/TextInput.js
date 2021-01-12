@@ -5,9 +5,9 @@
 
 "use strict";
 
-import { React } from "react";
+import React from "react";
 import cx from "classnames";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 
 require("css/TextInput.less");
 
@@ -42,4 +42,4 @@ TextInput.propTypes = {
   type: PropTypes.oneOf(["text", "password"]),
 };
 
-module.exports = TextInput;
+

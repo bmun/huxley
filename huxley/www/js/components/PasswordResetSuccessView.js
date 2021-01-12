@@ -26,4 +26,4 @@ class PasswordResetSuccessView extends React.Component {
   }
 }
 
-module.exports = PasswordResetSuccessView;
+

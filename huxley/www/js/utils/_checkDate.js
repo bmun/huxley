@@ -8,11 +8,11 @@
  */
 function _checkDate() {
   var date = new Date();
-  console.log(date.getMonth());
+
   return (
     (date.getDate() >= 28 && date.getMonth() == 1) ||
     (date.getDate() <= 31 && date.getMonth() == 2)
   );
 }
 
-module.exports = _checkDate;
+export default _checkDate;

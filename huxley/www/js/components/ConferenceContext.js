@@ -5,10 +5,9 @@
 
 "use strict";
 
-import React from "react";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 
-var ConferenceContext = {
+let ConferenceContext = {
   session: PropTypes.number,
   start_date: PropTypes.shape({
     month: PropTypes.string,
@@ -53,4 +52,4 @@ var ConferenceContext = {
   position_papers_accepted: PropTypes.bool,
 };
 
-module.exports = ConferenceContext;
+export {ConferenceContext};

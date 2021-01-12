@@ -6,7 +6,7 @@
 "use strict";
 
 import React from "react";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 
 var RegistrationPhoneInput = require("components/registration/RegistrationPhoneInput");
 var RegistrationTextInput = require("components/registration/RegistrationTextInput");
@@ -58,4 +58,4 @@ RegistrationPrimaryContact.propTypes = {
   isInternational: PropTypes.bool,
 };
 
-module.exports = RegistrationPrimaryContact;
+

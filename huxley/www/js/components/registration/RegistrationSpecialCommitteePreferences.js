@@ -6,7 +6,7 @@
 "use strict";
 
 import React from "react";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 
 var NumberInput = require("components/NumberInput");
 var _accessSafe = require("utils/_accessSafe");
@@ -57,4 +57,4 @@ RegistrationSpecialCommitteePreferences.propTypes = {
   renderCommittees: PropTypes.func,
 };
 
-module.exports = RegistrationSpecialCommitteePreferences;
+

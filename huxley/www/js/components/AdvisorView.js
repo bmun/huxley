@@ -5,7 +5,7 @@
 
 "use strict";
 
-import { React } from "react";
+import React from "react";
 import history from "utils/history";
 
 var NavTab = require("components/NavTab");
@@ -48,4 +48,4 @@ class AdvisorView extends React.Component {
   }
 }
 
-module.exports = AdvisorView;
+

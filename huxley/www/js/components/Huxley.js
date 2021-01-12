@@ -6,13 +6,14 @@
 "use strict";
 
 import React from "react";
+import PropTypes from "prop-types";
 import history from "utils/history";
-import PropTypes from 'prop-types';
+
 
 var AdvisorView = require("components/AdvisorView");
 var ChairView = require("components/ChairView");
 var DelegateView = require("components/DelegateView");
-var ConferenceContext = require("components/ConferenceContext");
+var {ConferenceContext} = require("components/ConferenceContext");
 var CurrentUserStore = require("stores/CurrentUserStore");
 var Shaker = require("components/Shaker");
 var SupportLink = require("components/SupportLink");
@@ -92,4 +93,4 @@ Huxley.childContextTypes = {
   conference: PropTypes.shape(ConferenceContext),
 };
 
-module.exports = Huxley;
+

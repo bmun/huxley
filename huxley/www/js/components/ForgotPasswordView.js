@@ -6,8 +6,9 @@
 "use strict";
 
 import React from "react";
+import PropTypes from "prop-types";
 import history from "utils/history";
-import PropTypes from 'prop-types';
+
 
 var Button = require("components/core/Button");
 var NavLink = require("components/NavLink");
@@ -107,4 +108,4 @@ ForgotPasswordView.contextTypes = {
 };
 
 
-module.exports = ForgotPasswordView;
+

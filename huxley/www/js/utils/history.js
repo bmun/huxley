@@ -3,5 +3,5 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-import createBrowserHistory from 'history/lib/createBrowserHistory'
+import {createBrowserHistory} from 'history';
 export default createBrowserHistory();

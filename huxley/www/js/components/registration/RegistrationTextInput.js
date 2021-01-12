@@ -6,7 +6,7 @@
 "use strict";
 
 import React from "react";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 
 var TextInput = require("components/core/TextInput");
 var StatusLabel = require("components/core/StatusLabel");
@@ -34,4 +34,4 @@ RegistrationTextInput.propTypes = {
   type: PropTypes.oneOf(["text", "password"]),
 };
 
-module.exports = RegistrationTextInput;
+

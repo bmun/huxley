@@ -6,10 +6,11 @@
 "use strict";
 
 import React from "react";
+import PropTypes from "prop-types";
 import history from "utils/history";
-import PropTypes from 'prop-types';
 
-const ConferenceContext = require("components/ConferenceContext");
+
+const {ConferenceContext} = require("components/ConferenceContext");
 const CurrentUserStore = require("stores/CurrentUserStore");
 const InnerView = require("components/InnerView");
 const TextTemplate = require("components/core/TextTemplate");
@@ -154,4 +155,4 @@ DelegateProfileView.contextTypes = {
   conference: PropTypes.shape(ConferenceContext),
 };
 
-module.exports = DelegateProfileView;
+

@@ -5,8 +5,8 @@
 
 "use strict";
 
-import { React } from "react";
-import PropTypes from 'prop-types';
+import React from "react";
+
 
 var RegistrationTextInput = require("components/registration/RegistrationTextInput");
 var _accessSafe = require("utils/_accessSafe");
@@ -86,4 +86,4 @@ RegistrationAccountInformation.propTypes = {
   focus: PropTypes.func,
 };
 
-module.exports = RegistrationAccountInformation;
+

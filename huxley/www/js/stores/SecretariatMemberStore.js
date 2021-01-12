@@ -5,11 +5,11 @@
 
 'use strict';
 
-var ActionConstants = require('constants/ActionConstants');
-var SecretariatMemberActions = require('actions/SecretariatMemberActions');
-var Dispatcher = require('dispatcher/Dispatcher');
-var ServerAPI = require('lib/ServerAPI');
-var {Store} = require('flux/utils');
+import ActionConstants from 'constants/ActionConstants';
+import SecretariatMemberActions from 'actions/SecretariatMemberActions';
+import {Dispatcher} from 'dispatcher/Dispatcher';
+import ServerAPI from 'lib/ServerAPI';
+import {Store} from'flux/utils';
 
 var _secretariatMembers = {};
 var _secretariatMembersFetched = false;
@@ -42,4 +42,4 @@ class SecretariatMemberStore extends Store {
   }
 }
 
-module.exports = new SecretariatMemberStore(Dispatcher);
+export default new SecretariatMemberStore(Dispatcher);

@@ -5,7 +5,7 @@
 
 "use strict";
 
-import { React } from "react";
+import React from "react";
 
 const entityMap = {
   "&": "&amp;",
@@ -41,4 +41,4 @@ class TextTemplate extends React.Component {
   }
 }
 
-module.exports = TextTemplate;
+

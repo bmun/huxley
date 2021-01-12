@@ -7,7 +7,7 @@
 
 var Modal = require("react-modal");
 import React from "react";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 
 var _accessSafe = require("utils/_accessSafe");
 var AssignmentStore = require("stores/AssignmentStore");
@@ -15,8 +15,8 @@ var Button = require("components/core/Button");
 var CurrentUserStore = require("stores/CurrentUserStore");
 var DelegateActions = require("actions/DelegateActions");
 var DelegateStore = require("stores/DelegateStore");
-var ConferenceContext = require("components/ConferenceContext");
-var CurrentUserActions = require("actions/CurrentUserActions");
+var {ConferenceContext} = require("components/ConferenceContext");
+var {CurrentUserActions} = require("actions/CurrentUserActions");
 var InnerView = require("components/InnerView");
 var RegistrationStore = require("stores/RegistrationStore");
 var ServerAPI = require("lib/ServerAPI");
@@ -380,4 +380,4 @@ AdvisorRosterView.contextTypes = {
   conference: PropTypes.shape(ConferenceContext),
 };
 
-module.exports = AdvisorRosterView;
+

@@ -23,4 +23,4 @@ class NotFoundView extends React.Component {
   }
 }
 
-module.exports = NotFoundView;
+

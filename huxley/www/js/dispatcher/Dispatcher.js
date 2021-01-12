@@ -5,6 +5,8 @@
 
 'use strict';
 
-var {Dispatcher} = require('flux');
+import {Dispatcher} from 'flux';
 
-module.exports = new Dispatcher();
+const dispatcher = new Dispatcher();
+
+export {dispatcher as Dispatcher};

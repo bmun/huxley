@@ -5,12 +5,12 @@
 
 'use strict';
 
-var ActionConstants = require('constants/ActionConstants');
-var CurrentUserStore = require('stores/CurrentUserStore');
-var Dispatcher = require('dispatcher/Dispatcher');
-var RegistrationActions = require('actions/RegistrationActions');
-var ServerAPI = require('lib/ServerAPI');
-var {Store} = require('flux/utils');
+import ActionConstants from 'constants/ActionConstants';
+import CurrentUserStore from 'stores/CurrentUserStore';
+import {Dispatcher} from 'dispatcher/Dispatcher';
+import RegistrationActions from 'actions/RegistrationActions';
+import ServerAPI from 'lib/ServerAPI';
+import {Store} from'flux/utils';
 
 var _registration = null;
 var _previousUserID = -1;
@@ -65,4 +65,4 @@ class RegistrationStore extends Store {
   }
 }
 
-module.exports = new RegistrationStore(Dispatcher);
+export default new RegistrationStore(Dispatcher);

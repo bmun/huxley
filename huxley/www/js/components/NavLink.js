@@ -6,9 +6,9 @@
 "use strict";
 
 import cx from "classnames";
-var Link = require("react-router").Link;
+import {Link} from 'react-router-dom';
 import React from "react";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 
 require("css/NavLink.less");
 
@@ -33,4 +33,4 @@ NavLink.propTypes = {
   direction: PropTypes.oneOf(["left", "right"]).isRequired,
   href: PropTypes.string.isRequired,
 };
-module.exports = NavLink;
+

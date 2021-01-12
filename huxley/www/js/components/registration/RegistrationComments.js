@@ -6,7 +6,7 @@
 "use strict";
 
 import React from "react";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 
 class RegistrationComments extends React.Component {
   shouldComponentUpdate(nextProps, nextState) {
@@ -38,4 +38,4 @@ RegistrationComments.propTypes = {
   value: PropTypes.string,
 };
 
-module.exports = RegistrationComments;
+

@@ -5,12 +5,12 @@
 
 'use strict';
 
-var ActionConstants = require('constants/ActionConstants');
-var Dispatcher = require('dispatcher/Dispatcher');
-var ServerAPI = require('lib/ServerAPI');
-var {Store} = require('flux/utils');
+import ActionConstants from 'constants/ActionConstants';
+import {Dispatcher} from 'dispatcher/Dispatcher';
+import ServerAPI from 'lib/ServerAPI';
+import {Store} from'flux/utils';
 
-var invariant = require('fbjs/lib/invariant');
+import invariant from 'invariant';
 
 class CurrentUserStore extends Store {
   constructor(dispatcher) {
@@ -104,4 +104,4 @@ class CurrentUserStore extends Store {
   }
 }
 
-module.exports = new CurrentUserStore(Dispatcher);
+export default new CurrentUserStore(Dispatcher);

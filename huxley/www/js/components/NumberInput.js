@@ -6,8 +6,9 @@
 "use strict";
 
 import React from "react";
+import PropTypes from "prop-types";
 var TextInput = require("components/core/TextInput");
-import PropTypes from 'prop-types';
+
 
 class NumberInput extends React.Component {
   render() {
@@ -31,4 +32,4 @@ NumberInput.propTypes = {
   placeholder: PropTypes.string,
 };
 
-module.exports = NumberInput;
+

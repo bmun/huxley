@@ -6,11 +6,12 @@
 "use strict";
 
 import React from "react";
+import PropTypes from "prop-types";
 import history from "utils/history";
-import PropTypes from 'prop-types';
+
 
 const Button = require("components/core/Button");
-const ConferenceContext = require("components/ConferenceContext");
+const {ConferenceContext} = require("components/ConferenceContext");
 const CurrentUserStore = require("stores/CurrentUserStore");
 const CommitteeFeedbackActions = require("actions/CommitteeFeedbackActions");
 const CommitteeFeedbackStore = require("stores/CommitteeFeedbackStore");
@@ -18,7 +19,6 @@ const InnerView = require("components/InnerView");
 const ServerAPI = require("lib/ServerAPI");
 const SecretariatMemberStore = require("stores/SecretariatMemberStore");
 const NumberInput = require("components/NumberInput");
-const TextInput = require("components/core/TextInput");
 const TextTemplate = require("components/core/TextTemplate");
 const User = require("utils/User");
 
@@ -384,8 +384,7 @@ class DelegateCommitteeFeedbackView extends React.Component {
   }
 }
 
-tteeFeedbackView.contextTypes = {
+DelegateCommitteeFeedbackView.contextTypes = {
   conference: PropTypes.shape(ConferenceContext),
 };
 
-module.exports = DelegateCommitteeFeedbackView;

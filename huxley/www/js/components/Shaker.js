@@ -6,9 +6,10 @@
 "use strict";
 
 import React from "react";
+import PropTypes from "prop-types";
 import ReactDOM from "react-dom";
 import cx from "classnames";
-import PropTypes from 'prop-types';
+
 
 require("css/Shaker.less");
 
@@ -44,4 +45,4 @@ Shaker.childContextTypes = {
   shake: PropTypes.func,
 };
 
-module.exports = Shaker;
+

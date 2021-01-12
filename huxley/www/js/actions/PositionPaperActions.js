@@ -5,8 +5,8 @@
 
 'use strict';
 
-var ActionConstants = require('constants/ActionConstants');
-var Dispatcher = require('dispatcher/Dispatcher');
+import ActionConstants from 'constants/ActionConstants';
+import {Dispatcher} from 'dispatcher/Dispatcher';
 
 var PositionPaperActions = {
   fetchPositionPaperFile(paperID) {
@@ -69,4 +69,4 @@ var PositionPaperActions = {
   },
 };
 
-module.exports = PositionPaperActions;
+export default PositionPaperActions;

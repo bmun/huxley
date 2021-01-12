@@ -6,7 +6,7 @@
 "use strict";
 
 import React from "react";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 
 var _accessSafe = require("utils/_accessSafe");
 var AssignmentActions = require("actions/AssignmentActions");
@@ -14,10 +14,10 @@ var AssignmentStore = require("stores/AssignmentStore");
 var Button = require("components/core/Button");
 var _checkDate = require("utils/_checkDate");
 var CommitteeStore = require("stores/CommitteeStore");
-var ConferenceContext = require("components/ConferenceContext");
+var {ConferenceContext} = require("components/ConferenceContext");
 var CountryStore = require("stores/CountryStore");
 var CurrentUserStore = require("stores/CurrentUserStore");
-var CurrentUserActions = require("actions/CurrentUserActions");
+var {CurrentUserActions} = require("actions/CurrentUserActions");
 var DelegateActions = require("actions/DelegateActions");
 var DelegateSelect = require("components/DelegateSelect");
 var DelegateStore = require("stores/DelegateStore");
@@ -347,4 +347,4 @@ AdvisorAssignmentsView.contextTypes = {
   conference: PropTypes.shape(ConferenceContext),
 };
 
-module.exports = AdvisorAssignmentsView;
+

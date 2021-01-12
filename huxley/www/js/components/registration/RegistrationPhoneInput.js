@@ -6,7 +6,7 @@
 "use strict";
 
 import React from "react";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 
 var PhoneInput = require("components/PhoneInput");
 var StatusLabel = require("components/core/StatusLabel");
@@ -33,4 +33,4 @@ RegistrationPhoneInput.propTypes = {
   value: PropTypes.string,
 };
 
-module.exports = RegistrationPhoneInput;
+

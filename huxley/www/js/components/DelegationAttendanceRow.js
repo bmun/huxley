@@ -6,7 +6,7 @@
 "use strict";
 
 import React from "react";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 
 class DelegationAttendanceRow extends React.Component {
   shouldComponentUpdate(nextProps, nextState) {
@@ -92,4 +92,4 @@ DelegationAttendanceRow.propTypes = {
   attendance: PropTypes.object,
 };
 
-module.exports = DelegationAttendanceRow;
+

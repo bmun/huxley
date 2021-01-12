@@ -5,12 +5,12 @@
 
 'use strict';
 
-var ActionConstants = require('constants/ActionConstants');
-var CurrentUserStore = require('stores/CurrentUserStore');
-var PositionPaperActions = require('actions/PositionPaperActions');
-var Dispatcher = require('dispatcher/Dispatcher');
-var ServerAPI = require('lib/ServerAPI');
-var {Store} = require('flux/utils');
+import ActionConstants from 'constants/ActionConstants';
+import CurrentUserStore from 'stores/CurrentUserStore';
+import PositionPaperActions from 'actions/PositionPaperActions';
+import {Dispatcher} from 'dispatcher/Dispatcher';
+import ServerAPI from 'lib/ServerAPI';
+import {Store} from'flux/utils';
 
 var _graded = {};
 var _files = {};
@@ -136,4 +136,4 @@ class PositionPaperStore extends Store {
   }
 }
 
-module.exports = new PositionPaperStore(Dispatcher);
+export default new PositionPaperStore(Dispatcher);

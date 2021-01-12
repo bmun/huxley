@@ -33,4 +33,4 @@ class DelegateView extends React.Component {
   }
 }
 
-module.exports = DelegateView;
+

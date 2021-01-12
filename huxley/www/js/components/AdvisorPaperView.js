@@ -6,7 +6,7 @@
 "use strict";
 
 import React from "react";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 
 var _accessSafe = require("utils/_accessSafe");
 var AssignmentStore = require("stores/AssignmentStore");
@@ -14,7 +14,7 @@ var Button = require("components/core/Button");
 var CommitteeStore = require("stores/CommitteeStore");
 var CountryStore = require("stores/CountryStore");
 var CurrentUserStore = require("stores/CurrentUserStore");
-var ConferenceContext = require("components/ConferenceContext");
+var {ConferenceContext} = require("components/ConferenceContext");
 var InnerView = require("components/InnerView");
 var PositionPaperStore = require("stores/PositionPaperStore");
 var RubricStore = require("stores/RubricStore");
@@ -477,4 +477,4 @@ AdvisorPaperView.contextTypes = {
   conference: PropTypes.shape(ConferenceContext),
 };
 
-module.exports = AdvisorPaperView;
+

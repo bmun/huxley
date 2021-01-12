@@ -6,15 +6,15 @@
 "use strict";
 
 import cx from "classnames";
-import { React } from "react";
-import ReactRouter from "react-router";
-import PropTypes from 'prop-types';
+import React from "react";
+import {Link} from "react-router-dom";
+import PropTypes from "prop-types";
 
 require("css/Button.less");
 
 class Button extends React.Component {
   render() {
-    var ButtonComponent = this.props.href ? ReactRouter.Link : "button";
+    var ButtonComponent = this.props.href ? Link : "button";
 
     return (
       <ButtonComponent
@@ -48,4 +48,4 @@ Button.propTypes = {
   success: PropTypes.bool,
 };
 
-module.exports = Button;
+

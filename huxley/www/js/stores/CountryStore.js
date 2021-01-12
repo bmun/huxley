@@ -5,11 +5,11 @@
 
 'use strict';
 
-var ActionConstants = require('constants/ActionConstants');
-var CountryActions = require('actions/CountryActions');
-var Dispatcher = require('dispatcher/Dispatcher');
-var ServerAPI = require('lib/ServerAPI');
-var {Store} = require('flux/utils');
+import ActionConstants from 'constants/ActionConstants';
+import CountryActions from 'actions/CountryActions';
+import {Dispatcher} from 'dispatcher/Dispatcher';
+import ServerAPI from 'lib/ServerAPI';
+import {Store} from'flux/utils';
 
 var _countries = {};
 
@@ -41,4 +41,4 @@ class CountryStore extends Store {
   }
 }
 
-module.exports = new CountryStore(Dispatcher);
+export default new CountryStore(Dispatcher);

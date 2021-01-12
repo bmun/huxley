@@ -5,8 +5,8 @@
 
 'use strict';
 
-var ActionConstants = require('constants/ActionConstants');
-var Dispatcher = require('dispatcher/Dispatcher');
+import ActionConstants from 'constants/ActionConstants';
+import {Dispatcher} from 'dispatcher/Dispatcher';
 
 var RubricActions = {
   updateRubric(rubric, onSuccess, onError) {
@@ -26,4 +26,4 @@ var RubricActions = {
   },
 };
 
-module.exports = RubricActions;
+export default RubricActions;

@@ -6,13 +6,13 @@
 "use strict";
 
 import React from "react";
+import PropTypes from "prop-types";
 import history from "utils/history";
-import PropTypes from 'prop-types';
 
 var Button = require("components/core/Button");
 var CommitteeStore = require("stores/CommitteeStore");
 var ContactTypes = require("constants/ContactTypes");
-var ConferenceContext = require("components/ConferenceContext");
+var {ConferenceContext} = require("components/ConferenceContext");
 var CountrySelect = require("components/CountrySelect");
 var CountryStore = require("stores/CountryStore");
 var GenderConstants = require("constants/GenderConstants");
@@ -37,8 +37,8 @@ require("css/RegistrationView.less");
 
 var USA = "United States of America";
 
-var RegistrationView = React.createClass({
-  getInitialState: function () {
+class RegistrationView extends React.Component {
+  getInitialState() {
     return {
       errors: {},
       countries: Object.values(CountryStore.getCountries()),
@@ -87,9 +87,9 @@ var RegistrationView = React.createClass({
       loading: false,
       passwordValidating: false,
     };
-  },
+  }
 
-  componentDidMount: function () {
+  componentDidMount() {
     this._committeesToken = CommitteeStore.addListener(() => {
       this.setState({
         committees: Object.values(CommitteeStore.getSpecialCommittees()),
@@ -99,14 +99,14 @@ var RegistrationView = React.createClass({
     this._countriesToken = CountryStore.addListener(() => {
       this.setState({ countries: Object.values(CountryStore.getCountries()) });
     });
-  },
+  }
 
-  componentWillUnmount: function () {
+  componentWillUnmount() {
     this._committeesToken && this._committeesToken.remove();
     this._countriesToken && this._countriesToken.remove();
-  },
+  }
 
-  render: function () {
+  render() {
     var conference = this.context.conference;
     return (
       <OuterView>
@@ -308,9 +308,9 @@ var RegistrationView = React.createClass({
         </form>
       </OuterView>
     );
-  },
+  }
 
-  renderCountryDropdown: function (labelNum, fieldName) {
+  renderCountryDropdown(labelNum, fieldName) {
     return (
       <li>
         <label>{labelNum}</label>
@@ -333,9 +333,9 @@ var RegistrationView = React.createClass({
         />
       </li>
     );
-  },
+  }
 
-  renderCommittees: function () {
+  renderCommittees() {
     return this.state.committees.map(function (committee) {
       return (
         <li>
@@ -354,9 +354,9 @@ var RegistrationView = React.createClass({
         </li>
       );
     }, this);
-  },
+  }
 
-  renderContactGenderField: function (name) {
+  renderContactGenderField(name) {
     return (
       <select
         className="contact-select reg-field"
@@ -380,9 +380,9 @@ var RegistrationView = React.createClass({
         </option>
       </select>
     );
-  },
+  }
 
-  renderContactTypeField: function (name) {
+  renderContactTypeField(name) {
     return (
       <select
         className="contact-select reg-field"
@@ -397,9 +397,9 @@ var RegistrationView = React.createClass({
         </option>
       </select>
     );
-  },
+  }
 
-  renderError: function (field) {
+  renderError(field) {
     if (this.state.errors[field]) {
       return (
         <StatusLabel status="error">{this.state.errors[field]}</StatusLabel>
@@ -407,7 +407,7 @@ var RegistrationView = React.createClass({
     }
 
     return null;
-  },
+  }
 
   _getPasswordConfirmError() {
     if (
@@ -416,9 +416,9 @@ var RegistrationView = React.createClass({
     ) {
       return ["Please enter the same password again."];
     }
-  },
+  }
 
-  renderSchoolError: function (field) {
+  renderSchoolError(field) {
     if (this.state.errors.school && this.state.errors.school[field]) {
       return (
         <StatusLabel status="error">
@@ -428,15 +428,15 @@ var RegistrationView = React.createClass({
     }
 
     return null;
-  },
+  }
 
   _getSchoolErrors(field) {
     if (this.state.errors.school) {
       return this.state.errors.school[field];
     }
-  },
+  }
 
-  _handleDelegateSum: function () {
+  _handleDelegateSum() {
     var sum = 0;
     if (this.state.num_beginner_delegates) {
       sum += parseInt(this.state.num_beginner_delegates, 10) || 0;
@@ -448,21 +448,21 @@ var RegistrationView = React.createClass({
       sum += parseInt(this.state.num_advanced_delegates, 10) || 0;
     }
     return sum;
-  },
+  }
 
-  _handlePasswordBlur: function () {
+  _handlePasswordBlur() {
     this.setState({ passwordValidating: true });
-  },
+  }
 
-  _handlePasswordFocus: function () {
+  _handlePasswordFocus() {
     this.setState({ passwordValidating: false });
-  },
+  }
 
-  _handleProgramTypeChange: function (event) {
+  _handleProgramTypeChange(event) {
     this.setState({ program_type: parseInt(event.target.value) });
-  },
+  }
 
-  _handleCommitteePreferenceChange: function (committee) {
+  _handleCommitteePreferenceChange(committee) {
     var index = this.state.committee_prefs.indexOf(committee.id);
     if (index < 0) {
       this.setState({
@@ -475,33 +475,33 @@ var RegistrationView = React.createClass({
         }),
       });
     }
-  },
+  }
 
-  _handleInternationalChange: function (event) {
+  _handleInternationalChange(event) {
     this.setState({ school_international: !!event.target.value });
-  },
+  }
 
-  _handlePrimaryPhoneChange: function (number) {
+  _handlePrimaryPhoneChange(number) {
     this.setState({ primary_phone: number });
-  },
+  }
 
-  _handleSecondaryPhoneChange: function (number) {
+  _handleSecondaryPhoneChange(number) {
     this.setState({ secondary_phone: number });
-  },
+  }
 
-  _handlePasswordChange: function (password) {
+  _handlePasswordChange(password) {
     this.setState({ password });
-  },
+  }
 
-  _handlePasswordConfirmChange: function (password2) {
+  _handlePasswordConfirmChange(password2) {
     this.setState({ password2 });
-  },
+  }
 
-  _getSchoolCountry: function () {
+  _getSchoolCountry() {
     return this.state.school_international ? this.state.school_country : USA;
-  },
+  }
 
-  _handleSubmit: function (event) {
+  _handleSubmit(event) {
     this.setState({ loading: true });
     ServerAPI.register({
       user: {
@@ -531,7 +531,7 @@ var RegistrationView = React.createClass({
           secondary_email: this.state.secondary_email.trim(),
           secondary_phone: this.state.secondary_phone.trim(),
           secondary_type: this.state.secondary_type,
-        },
+        }
       },
       registration: {
         conference: this.context.conference.session,
@@ -559,17 +559,17 @@ var RegistrationView = React.createClass({
       },
     }).then(this._handleSuccess, this._handleError);
     event.preventDefault();
-  },
+  }
 
-  _handleSuccess: function (response) {
+  _handleSuccess(response) {
     if (response.registration.is_waitlisted) {
       history.pushState(null, "/register/waitlist");
     } else {
       history.pushState(null, "/register/success");
     }
-  },
+  }
 
-  _handleError: function (response) {
+  _handleError(response) {
     if (!response) {
       return;
     }
@@ -583,12 +583,12 @@ var RegistrationView = React.createClass({
         this.context.shake && this.context.shake();
       }
     );
-  },
-});
+  }
+}
 
 RegistrationView.contextTypes = {
   conference: PropTypes.shape(ConferenceContext),
   shake: PropTypes.func,
 };
 
-module.exports = RegistrationView;
+

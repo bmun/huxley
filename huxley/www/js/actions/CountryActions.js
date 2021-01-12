@@ -5,8 +5,8 @@
 
 'use strict';
 
-var ActionConstants = require('constants/ActionConstants');
-var Dispatcher = require('dispatcher/Dispatcher');
+import ActionConstants from 'constants/ActionConstants';
+import {Dispatcher} from 'dispatcher/Dispatcher';
 
 var CountryActions = {
   countriesFetched(countries) {
@@ -17,4 +17,4 @@ var CountryActions = {
   },
 };
 
-module.exports = CountryActions;
+export default CountryActions;

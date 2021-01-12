@@ -5,7 +5,7 @@
 
 'use strict';
 
-var invariant = require('fbjs/lib/invariant');
+import invariant from 'invariant';
 
 invariant(
   global.ProgramTypes !== undefined,
@@ -15,4 +15,4 @@ invariant(
 var ProgramTypes = global.ProgramTypes;
 delete global.ProgramTypes;
 
-module.exports = ProgramTypes;
+export default ProgramTypes;
