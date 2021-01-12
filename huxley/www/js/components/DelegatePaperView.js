@@ -218,11 +218,11 @@ class DelegatePaperView extends React.Component {
     event.preventDefault();
   }
 
-  _handleSuccess(response) {
+  _handleSuccess = (response) => {
     window.alert("Your paper has been successfully uploaded!");
   }
 
-  _handleError(response) {
+  _handleError = (response) => {
     window.alert(
       "Something went wrong. Please refresh your page and try again."
     );

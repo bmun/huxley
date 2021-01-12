@@ -390,7 +390,7 @@ class ChairRubricView extends React.Component {
     });
   }
 
-  _handleSaveRubric(event) {
+  _handleSaveRubric= (event) => {
     this.setState({ loading: true });
     this._successTimout && clearTimeout(this._successTimeout);
     var rubric = { ...this.state.rubric };
@@ -398,7 +398,7 @@ class ChairRubricView extends React.Component {
     event.preventDefault();
   }
 
-  _handleSuccess(response) {
+  _handleSuccess = (response) => {
     this.setState({
       loading: false,
       success: true,
@@ -410,7 +410,7 @@ class ChairRubricView extends React.Component {
     );
   }
 
-  _handleError(response) {
+  _handleError = (response) => {
     this.setState({ loading: false });
     window.alert(
       "Something went wrong. Please refresh your page and try again."

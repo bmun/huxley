@@ -282,7 +282,7 @@ class AdvisorAssignmentsView extends React.Component {
     });
   }
 
-  _handleFinalize(event) {
+  _handleFinalize = (event) => {
     var confirm = window.confirm(
       "By pressing okay you are committing to the financial responsibility of each assignment. Are you sure you want to finalize assignments?"
     );
@@ -312,7 +312,7 @@ class AdvisorAssignmentsView extends React.Component {
     }
   }
 
-  _handleSave(event) {
+  _handleSave = (event) => {
     this._successTimout && clearTimeout(this._successTimeout);
     this.setState({ loading: true });
     var school = CurrentUserStore.getCurrentUser().school;
@@ -324,7 +324,7 @@ class AdvisorAssignmentsView extends React.Component {
     );
   }
 
-  _handleSuccess(response) {
+  _handleSuccess = (response) => {
     this.setState({
       loading: false,
       success: true,
@@ -336,7 +336,7 @@ class AdvisorAssignmentsView extends React.Component {
     );
   }
 
-  _handleError(response) {
+  _handleError = (response) => {
     this.setState({ loading: false });
     window.alert(
       "Something went wrong. Please refresh your page and try again."

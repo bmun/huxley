@@ -28,7 +28,7 @@ class TextInput extends React.Component {
       />
     );
   }
-  _handleChange(event) {
+  _handleChange = (event) => {
     this.props.onChange && this.props.onChange(event.target.value);
   }
 }

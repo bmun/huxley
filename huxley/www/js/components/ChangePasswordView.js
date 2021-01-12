@@ -95,19 +95,19 @@ class ChangePasswordView extends React.Component {
     setTimeout(this.props.onSuccess, 750);
   }
 
-  _handleCurrentPasswordChange(event) {
+  _handleCurrentPasswordChange = (event) => {
     this.setState({ currentPassword: event.target.value });
   }
 
-  _handleNewPasswordChange(event) {
+  _handleNewPasswordChange = (event) => {
     this.setState({ newPassword: event.target.value });
   }
 
-  _handleNewPassword2Change(event) {
+  _handleNewPassword2Change = (event) => {
     this.setState({ newPassword2: event.target.value });
   }
 
-  _handleSubmit(event) {
+  _handleSubmit= (event) => {
     if (this.state.newPassword != this.state.newPassword2) {
       this.setState({
         message: "Please enter the same password again",
@@ -124,7 +124,7 @@ class ChangePasswordView extends React.Component {
     }
   }
 
-  _handleSuccess(response) {
+  _handleSuccess = (response) => {
     this.setState(
       {
         loading: false,
@@ -138,7 +138,7 @@ class ChangePasswordView extends React.Component {
     );
   }
 
-  _handleError(response) {
+  _handleError = (response) => {
     this.setState({
       loading: false,
       message: response.detail,

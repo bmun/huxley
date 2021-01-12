@@ -330,7 +330,7 @@ class DelegateCommitteeFeedbackView extends React.Component {
     );
   }
 
-  _handlePublishFeedback(event) {
+  _handlePublishFeedback= (event) => {
     this.setState({ loadingPublish: true });
     var committee_id = this.state.delegate.assignment.committee.id;
     ServerAPI.createCommitteeFeedback({
@@ -373,11 +373,11 @@ class DelegateCommitteeFeedbackView extends React.Component {
     event.preventDefault();
   }
 
-  _handleAddFeedbackSuccess(response) {
+  _handleAddFeedbackSuccess = (response) => {
     CommitteeFeedbackActions.addCommitteeFeedback(response);
   }
 
-  _handleAddFeedbackFail(response) {
+  _handleAddFeedbackFail = (response) => {
     this.setState({
       errors: response,
       loading: false,

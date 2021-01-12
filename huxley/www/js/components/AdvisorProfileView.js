@@ -551,7 +551,7 @@ class AdvisorProfileView extends React.Component {
     return null;
   }
 
-  _handleSubmit(event) {
+  _handleSubmit= (event) => {
     this._successTimout && clearTimeout(this._successTimeout);
     this.setState({ loading: true });
     var user = this.props.user;
@@ -578,7 +578,7 @@ class AdvisorProfileView extends React.Component {
     event.preventDefault();
   }
 
-  _handleSuccess(response) {
+  _handleSuccess = (response) => {
     this.setState({
       errors: {},
       loading: false,
@@ -591,7 +591,7 @@ class AdvisorProfileView extends React.Component {
     );
   }
 
-  _handleError(response) {
+  _handleError = (response) => {
     if (!response) {
       return;
     }

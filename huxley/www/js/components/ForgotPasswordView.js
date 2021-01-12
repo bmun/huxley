@@ -70,11 +70,11 @@ class ForgotPasswordView extends React.Component {
     }
   }
 
-  _handleUsernameChange(username) {
+  _handleUsernameChange = (username) => {
     this.setState({ username });
   }
 
-  _handleSubmit(event) {
+  _handleSubmit= (event) => {
     this.setState({ loading: true });
     ServerAPI.resetPassword(this.state.username).then(
       this._handleSuccess,
@@ -83,11 +83,11 @@ class ForgotPasswordView extends React.Component {
     event.preventDefault();
   }
 
-  _handleSuccess(response) {
+  _handleSuccess = (response) => {
     history.redirect("/password/reset");
   }
 
-  _handleError(response) {
+  _handleError = (response) => {
     if (!response.detail) {
       return;
     }

@@ -458,7 +458,7 @@ class RegistrationView extends React.Component {
     this.setState({ passwordValidating: false });
   }
 
-  _handleProgramTypeChange(event) {
+  _handleProgramTypeChange = (event) => {
     this.setState({ program_type: parseInt(event.target.value) });
   }
 
@@ -477,7 +477,7 @@ class RegistrationView extends React.Component {
     }
   }
 
-  _handleInternationalChange(event) {
+  _handleInternationalChange = (event) => {
     this.setState({ school_international: !!event.target.value });
   }
 
@@ -489,7 +489,7 @@ class RegistrationView extends React.Component {
     this.setState({ secondary_phone: number });
   }
 
-  _handlePasswordChange(password) {
+  _handlePasswordChange = (password) => {
     this.setState({ password });
   }
 
@@ -501,7 +501,7 @@ class RegistrationView extends React.Component {
     return this.state.school_international ? this.state.school_country : USA;
   }
 
-  _handleSubmit(event) {
+  _handleSubmit= (event) => {
     this.setState({ loading: true });
     ServerAPI.register({
       user: {
@@ -561,7 +561,7 @@ class RegistrationView extends React.Component {
     event.preventDefault();
   }
 
-  _handleSuccess(response) {
+  _handleSuccess = (response) => {
     if (response.registration.is_waitlisted) {
       history.redirect("/register/waitlist");
     } else {
@@ -569,7 +569,7 @@ class RegistrationView extends React.Component {
     }
   }
 
-  _handleError(response) {
+  _handleError = (response) => {
     if (!response) {
       return;
     }

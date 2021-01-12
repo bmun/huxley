@@ -190,7 +190,7 @@ class ChairAttendanceView extends React.Component {
     });
   }
 
-  _handleSaveAttendance(event) {
+  _handleSaveAttendance = (event) => {
     this._successTimout && clearTimeout(this._successTimeout);
     this.setState({ loading: true });
     var committee = CurrentUserStore.getCurrentUser().committee;
@@ -225,7 +225,7 @@ class ChairAttendanceView extends React.Component {
     event.preventDefault();
   }
 
-  _handleSuccess(response) {
+  _handleSuccess = (response) => {
     this.setState({
       loading: false,
       success: true,
@@ -237,7 +237,7 @@ class ChairAttendanceView extends React.Component {
     );
   }
 
-  _handleError(response) {
+  _handleError = (response) => {
     this.setState({ loading: false });
     window.alert(
       "Something went wrong. Please refresh your page and try again."

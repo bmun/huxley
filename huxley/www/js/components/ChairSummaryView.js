@@ -196,7 +196,7 @@ class ChairSummaryView extends React.Component {
     });
   }
 
-  _handleSaveSummaries(event) {
+  _handleSaveSummaries= (event) => {
     this._successTimoutSave && clearTimeout(this._successTimeoutSave);
     this.setState({ loadingSave: true });
     var committee = CurrentUserStore.getCurrentUser().committee;
@@ -218,7 +218,7 @@ class ChairSummaryView extends React.Component {
     event.preventDefault();
   }
 
-  _handlePublishSummaries(event) {
+  _handlePublishSummaries= (event) => {
     var confirm = window.confirm(
       "By pressing ok, you are allowing advisors " +
         "to read the summaries that you have written " +
@@ -255,7 +255,7 @@ class ChairSummaryView extends React.Component {
     }
   }
 
-  _handleSuccessSave(response) {
+  _handleSuccessSave = (response) => {
     this.setState({
       loadingSave: false,
       successSave: true,
@@ -267,14 +267,14 @@ class ChairSummaryView extends React.Component {
     );
   }
 
-  _handleErrorSave(response) {
+  _handleErrorSave = (response) => {
     this.setState({ loadingSave: false });
     window.alert(
       "Something went wrong. Please refresh your page and try again."
     );
   }
 
-  _handleSuccessPublish(response) {
+  _handleSuccessPublish = (response) => {
     this.setState({
       loadingPublish: false,
       successPublish: true,
@@ -286,7 +286,7 @@ class ChairSummaryView extends React.Component {
     );
   }
 
-  _handleErrorPublish(response) {
+  _handleErrorPublish = (response) => {
     this.setState({ loadingPublish: false });
     window.alert(
       "Something went wrong. Please refresh your page and try again."

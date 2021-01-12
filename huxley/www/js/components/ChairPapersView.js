@@ -218,7 +218,7 @@ class ChairPapersView extends React.Component {
     PositionPaperActions.storePositionPaper(paper);
   }
 
-  _handleUnsetAssignment(event) {
+  _handleUnsetAssignment= (event) => {
     this.setState({
       current_assignment: null,
       uploadedFile: null,
@@ -289,7 +289,7 @@ class ChairPapersView extends React.Component {
     this._handleSubmitPaper(paperID, event);
   }
 
-  _handleSuccess(response) {
+  _handleSuccess = (response) => {
     this.setState({
       loading: false,
       success: true,
@@ -301,7 +301,7 @@ class ChairPapersView extends React.Component {
     );
   }
 
-  _handleError(response) {
+  _handleError = (response) => {
     this.setState({ loading: false });
     window.alert(
       "Something went wrong. Please refresh your page and try again."

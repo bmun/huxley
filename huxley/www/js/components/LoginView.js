@@ -106,15 +106,15 @@ class LoginView extends React.Component {
     return null;
   }
 
-  _handlePasswordChange(password) {
+  _handlePasswordChange = (password) => {
     this.setState({ password });
   }
 
-  _handleUsernameChange(username) {
+  _handleUsernameChange = (username) => {
     this.setState({ username });
   }
 
-  _handleSubmit(event) {
+  _handleSubmit= (event) => {
     this.setState({ loading: true });
     ServerAPI.login(this.state.username, this.state.password).then(
       this._handleSuccess,

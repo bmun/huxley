@@ -466,7 +466,7 @@ class AdvisorPaperView extends React.Component {
     return null;
   }
 
-  _handleError(response) {
+  _handleError = (response) => {
     this.setState({
       errors: response,
       loading: false,

@@ -330,19 +330,19 @@ class PaperGradeTable extends React.Component {
       this.props.onChange(field, this.props.paper.id, event);
   }
 
-  _handleUnset(event) {
+  _handleUnset= (event) => {
     this.props.onUnset && this.props.onUnset(event);
   }
 
-  _handleSave(event) {
+  _handleSave = (event) => {
     this.props.onSave && this.props.onSave(this.props.paper.id, event);
   }
 
-  _handleUpload(event) {
+  _handleUpload= (event) => {
     this.props.onUpload && this.props.onUpload(this.props.paper.id, event);
   }
 
-  _handleSubmit(event) {
+  _handleSubmit= (event) => {
     this.props.onSubmit && this.props.onSubmit(this.props.paper.id, event);
   }
 }

@@ -292,7 +292,7 @@ class AdvisorRosterView extends React.Component {
     event.preventDefault();
   }
 
-  closeModal(event) {
+  closeModal= (event) => {
     this.setState({ modal_open: false });
     event.preventDefault();
   }
@@ -342,7 +342,7 @@ class AdvisorRosterView extends React.Component {
     );
   }
 
-  _handleAddDelegateSuccess(response) {
+  _handleAddDelegateSuccess = (response) => {
     DelegateActions.addDelegate(response);
     this.setState({
       loading: false,
@@ -350,7 +350,7 @@ class AdvisorRosterView extends React.Component {
     });
   }
 
-  _handlePasswordChangeSuccess(response) {
+  _handlePasswordChangeSuccess = (response) => {
     this.setState({
       loading: false,
       modal_open: false,
@@ -358,17 +358,17 @@ class AdvisorRosterView extends React.Component {
     window.alert(`Password successfully reset.`);
   }
 
-  _handlePasswordChangeError(response) {
+  _handlePasswordChangeError = (response) => {
     window.alert(`The passowrd could not be reset.`);
   }
 
-  _handleDeleteError(response) {
+  _handleDeleteError = (response) => {
     window.alert(
       `There was an issue processing your request. Please refresh you page and try again.`
     );
   }
 
-  _handleError(response) {
+  _handleError = (response) => {
     this.setState({
       errors: response,
       loading: false,

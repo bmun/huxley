@@ -220,11 +220,11 @@ class PaperSubmissionTable extends React.Component {
     }
   }
 
-  _handleUpload(event) {
+  _handleUpload= (event) => {
     this.props.onUpload && this.props.onUpload(this.props.paper.id, event);
   }
 
-  _handleSubmit(event) {
+  _handleSubmit= (event) => {
     this.props.onSubmit && this.props.onSubmit(this.props.paper.id, event);
   }
 }
