@@ -69,4 +69,4 @@ var PositionPaperActions = {
   },
 };
 
-export default PositionPaperActions;
+export {PositionPaperActions};

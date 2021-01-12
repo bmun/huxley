@@ -11,13 +11,13 @@ import PropTypes from "prop-types";
 var _accessSafe = require("utils/_accessSafe");
 const {AssignmentStore} = require("stores/AssignmentStore");
 const {Button} = require("components/core/Button");
-const InnerView = require("components/InnerView");
-const Logout{Button} = require("components/LogoutButton");
+const {InnerView} = require("components/InnerView");
+const {LogoutButton} = require("components/LogoutButton");
 const {ConferenceContext} = require("components/ConferenceContext");
 const {CurrentUserActions} = require("actions/CurrentUserActions");
 const {DelegateStore} = require("stores/DelegateStore");
-const PhoneInput = require("components/PhoneInput");
-const ProgramTypes = require("constants/ProgramTypes");
+const {PhoneInput} = require("components/PhoneInput");
+const {ProgramTypes} = require("constants/ProgramTypes");
 const {RegistrationStore} = require("stores/RegistrationStore");
 const {StatusLabel} = require("components/core/StatusLabel");
 const {Table} = require("components/core/Table");
@@ -612,4 +612,4 @@ AdvisorProfileView.contextTypes = {
   shake: PropTypes.func,
 };
 
-
+export {AdvisorProfileView};

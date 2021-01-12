@@ -34,3 +34,4 @@ NavLink.propTypes = {
   href: PropTypes.string.isRequired,
 };
 
+export {NavLink};

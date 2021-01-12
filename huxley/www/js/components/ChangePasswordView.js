@@ -155,4 +155,4 @@ ChangePasswordView.propTypes = {
   onSuccess: PropTypes.func.isRequired,
 };
 
-
+export {ChangePasswordView};

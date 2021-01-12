@@ -24,4 +24,4 @@ var CommitteeFeedbackActions = {
   },
 };
 
-export default CommitteeFeedbackActions;
+export {CommitteeFeedbackActions};

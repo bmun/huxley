@@ -13,11 +13,11 @@ var {Button} = require("components/core/Button");
 var {CommitteeStore} = require("stores/CommitteeStore");
 var ContactTypes = require("constants/ContactTypes");
 var {ConferenceContext} = require("components/ConferenceContext");
-var CountrySelect = require("components/CountrySelect");
+var {CountrySelect} = require("components/CountrySelect");
 var {CountryStore} = require("stores/CountryStore");
 var GenderConstants = require("constants/GenderConstants");
-var NavLink = require("components/NavLink");
-var OuterView = require("components/OuterView");
+var {NavLink} = require("components/NavLink");
+var {OuterView} = require("components/OuterView");
 var ProgramTypes = require("constants/ProgramTypes");
 var {RegistrationAccountInformation} = require("components/registration/RegistrationAccountInformation");
 var {RegistrationComments} = require("components/registration/RegistrationComments");
@@ -591,4 +591,4 @@ RegistrationView.contextTypes = {
   shake: PropTypes.func,
 };
 
-
+export {RegistrationView};

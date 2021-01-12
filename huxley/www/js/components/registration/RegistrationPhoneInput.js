@@ -8,7 +8,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-var PhoneInput = require("components/PhoneInput");
+var {PhoneInput} = require("components/PhoneInput");
 var {StatusLabel} = require("components/core/StatusLabel");
 
 class RegistrationPhoneInput extends React.Component {

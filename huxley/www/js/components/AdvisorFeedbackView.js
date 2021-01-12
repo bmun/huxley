@@ -9,15 +9,13 @@ import React from "react";
 import PropTypes from "prop-types";
 
 var _accessSafe = require("utils/_accessSafe");
-var AssignmentActions = require("actions/AssignmentActions");
 var {AssignmentStore} = require("stores/AssignmentStore");
-var {Button} = require("components/core/Button");
 var {CommitteeStore} = require("stores/CommitteeStore");
 var {ConferenceContext} = require("components/ConferenceContext");
 var {CountryStore} = require("stores/CountryStore");
 var {CurrentUserStore} = require("stores/CurrentUserStore");
 var {DelegateStore} = require("stores/DelegateStore");
-var InnerView = require("components/InnerView");
+var {InnerView} = require("components/InnerView");
 var {RegistrationStore} = require("stores/RegistrationStore");
 var {Table} = require("components/core/Table");
 var {TextTemplate} = require("components/core/TextTemplate");
@@ -214,4 +212,4 @@ AdvisorFeedbackView.contextTypes = {
   conference: PropTypes.shape(ConferenceContext),
 };
 
-
+export {AdvisorFeedbackView};

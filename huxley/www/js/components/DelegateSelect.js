@@ -42,4 +42,4 @@ DelegateSelect.propTypes = {
   disabled: PropTypes.bool,
 };
 
-
+export {DelegateSelect};

@@ -17,4 +17,4 @@ var CountryActions = {
   },
 };
 
-export default CountryActions;
+export {CountryActions};

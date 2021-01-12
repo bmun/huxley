@@ -61,4 +61,4 @@ var DelegateActions = {
   },
 };
 
-export default DelegateActions;
+export {DelegateActions};

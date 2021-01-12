@@ -30,4 +30,4 @@ OuterView.propTypes = {
   header: PropTypes.element,
 };
 
-
+export {OuterView};

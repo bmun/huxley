@@ -26,4 +26,4 @@ var RubricActions = {
   },
 };
 
-export default RubricActions;
+export {RubricActions};

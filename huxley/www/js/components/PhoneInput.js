@@ -52,4 +52,4 @@ PhoneInput.propTypes = {
   isInternational: PropTypes.bool.isRequired,
 };
 
-
+export {PhoneInput};

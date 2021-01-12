@@ -363,4 +363,4 @@ PaperGradeTable.propTypes = {
   success: PropTypes.bool,
 };
 
-
+export {PaperGradeTable};

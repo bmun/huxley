@@ -9,7 +9,7 @@ import React from "react";
 import PropTypes from "prop-types";
 
 var _accessSafe = require("utils/_accessSafe");
-var AssignmentActions = require("actions/AssignmentActions");
+var {AssignmentActions} = require("actions/AssignmentActions");
 var {AssignmentStore} = require("stores/AssignmentStore");
 var {Button} = require("components/core/Button");
 var _checkDate = require("utils/_checkDate");
@@ -18,12 +18,12 @@ var {ConferenceContext} = require("components/ConferenceContext");
 var {CountryStore} = require("stores/CountryStore");
 var {CurrentUserStore} = require("stores/CurrentUserStore");
 var {CurrentUserActions} = require("actions/CurrentUserActions");
-var DelegateActions = require("actions/DelegateActions");
-var DelegateSelect = require("components/DelegateSelect");
+var {DelegateActions} = require("actions/DelegateActions");
+var {DelegateSelect} = require("components/DelegateSelect");
 var {DelegateStore} = require("stores/DelegateStore");
-var InnerView = require("components/InnerView");
-var RegistrationActions = require("actions/RegistrationActions");
-var {RegistrationStore} = require("stores/RegistrationStore");
+var {InnerView} = require("components/InnerView");
+var {RegistrationActions} = require("actions/RegistrationActions");
+var RegistrationStore = require("stores/RegistrationStore");
 var ServerAPI = require("lib/ServerAPI");
 var {Table} = require("components/core/Table");
 var {TextTemplate} = require("components/core/TextTemplate");
@@ -347,4 +347,4 @@ AdvisorAssignmentsView.contextTypes = {
   conference: PropTypes.shape(ConferenceContext),
 };
 
-
+export {AdvisorAssignmentsView};

@@ -14,7 +14,7 @@ var {CountryStore} = require("stores/CountryStore");
 var {CurrentUserStore} = require("stores/CurrentUserStore");
 var DelegateActions = require("actions/DelegateActions");
 var {DelegateStore} = require("stores/DelegateStore");
-var InnerView = require("components/InnerView");
+var {InnerView} = require("components/InnerView");
 var {TextTemplate} = require("components/core/TextTemplate");
 var User = require("utils/User");
 
@@ -293,4 +293,4 @@ class ChairSummaryView extends React.Component {
   }
 }
 
-
+export {ChairSummaryView};

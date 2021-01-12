@@ -13,10 +13,10 @@ var {AssignmentStore} = require("stores/AssignmentStore");
 var {CommitteeStore} = require("stores/CommitteeStore");
 var {CountryStore} = require("stores/CountryStore");
 var {CurrentUserStore} = require("stores/CurrentUserStore");
-var InnerView = require("components/InnerView");
-var PaperAssignmentList = require("components/PaperAssignmentList");
-var PaperGradeTable = require("components/PaperGradeTable");
-var PositionPaperActions = require("actions/PositionPaperActions");
+var {InnerView} = require("components/InnerView");
+var {PaperAssignmentList} = require("components/PaperAssignmentList");
+var {PaperGradeTable} = require("components/PaperGradeTable");
+var {PositionPaperActions} = require("actions/PositionPaperActions");
 var {PositionPaperStore} = require("stores/PositionPaperStore");
 var {RubricStore} = require("stores/RubricStore");
 var {TextTemplate} = require("components/core/TextTemplate");
@@ -308,4 +308,4 @@ class ChairPapersView extends React.Component {
   }
 }
 
-
+export {ChairPapersView};

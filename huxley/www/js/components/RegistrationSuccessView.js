@@ -9,8 +9,8 @@ import React from "react";
 import PropTypes from "prop-types";
 
 var {ConferenceContext} = require("components/ConferenceContext");
-var NavLink = require("components/NavLink");
-var OuterView = require("components/OuterView");
+var {NavLink} = require("components/NavLink");
+var {OuterView} = require("components/OuterView");
 var {TextTemplate} = require("components/core/TextTemplate");
 
 require("css/Letter.less");
@@ -44,4 +44,4 @@ RegistrationSuccessView.contextTypes = {
   conference: PropTypes.shape(ConferenceContext),
 };
 
-
+export {RegistrationSuccessView};

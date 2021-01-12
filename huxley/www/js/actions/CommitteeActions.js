@@ -17,4 +17,4 @@ var CommitteeActions = {
   },
 };
 
-export default CommitteeActions;
+export {CommitteeActions};
