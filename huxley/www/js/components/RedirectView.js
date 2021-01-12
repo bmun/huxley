@@ -9,7 +9,7 @@ import React from "react";
 import history from "utils/history";
 
 var {OuterView} = require("components/OuterView");
-var User = require("utils/User");
+var {User} = require("utils/User");
 
 class RedirectView extends React.Component {
   componentDidMount() {

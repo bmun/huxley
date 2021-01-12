@@ -18,7 +18,7 @@ const {RubricActions} = require("actions/RubricActions");
 const RubricStore = require("stores/RubricStore");
 const TextInput = require("components/core/TextInput");
 const TextTemplate = require("components/core/TextTemplate");
-const User = require("utils/User");
+const {User} = require("utils/User");
 
 require("css/Table.less");
 const ChairRubricText = require("text/ChairRubricViewText.md");

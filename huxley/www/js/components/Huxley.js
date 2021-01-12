@@ -16,7 +16,7 @@ var {ConferenceContext} = require("components/ConferenceContext");
 var CurrentUserStore = require("stores/CurrentUserStore");
 var {Shaker} = require("components/Shaker");
 var {SupportLink} = require("components/SupportLink");
-var User = require("utils/User");
+var {User} = require("utils/User");
 
 require("css/base.less");
 require("css/Banner.less");

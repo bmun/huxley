@@ -12,7 +12,7 @@ var {NavTab} = require("components/NavTab");
 var {PermissionDeniedView} = require("components/PermissionDeniedView");
 var {Shaker} = require("components/Shaker");
 var {TopBar} = require("components/TopBar");
-var User = require("utils/User");
+var {User} = require("utils/User");
 
 require("css/NavBar.less");
 

@@ -15,11 +15,11 @@ const CurrentUserStore = require("stores/CurrentUserStore");
 const {CommitteeFeedbackActions} = require("actions/CommitteeFeedbackActions");
 const CommitteeFeedbackStore = require("stores/CommitteeFeedbackStore");
 const {InnerView} = require("components/InnerView");
-const ServerAPI = require("lib/ServerAPI");
+const {ServerAPI} = require("lib/ServerAPI");
 const SecretariatMemberStore = require("stores/SecretariatMemberStore");
 const {NumberInput} = require("components/NumberInput");
 const TextTemplate = require("components/core/TextTemplate");
-const User = require("utils/User");
+const {User} = require("utils/User");
 
 const _handleChange = require("utils/_handleChange");
 

@@ -18,11 +18,11 @@ var {ConferenceContext} = require("components/ConferenceContext");
 var {InnerView} = require("components/InnerView");
 var PositionPaperStore = require("stores/PositionPaperStore");
 var RubricStore = require("stores/RubricStore");
-var ServerAPI = require("lib/ServerAPI");
+var {ServerAPI} = require("lib/ServerAPI");
 var StatusLabel = require("components/core/StatusLabel");
 var Table = require("components/core/Table");
 var TextTemplate = require("components/core/TextTemplate");
-var inflateGrades = require("utils/inflateGrades");
+var {inflateGrades} = require("utils/inflateGrades");
 var _checkDate = require("utils/_checkDate");
 var _handleChange = require("utils/_handleChange");
 

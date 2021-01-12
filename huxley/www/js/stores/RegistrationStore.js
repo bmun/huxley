@@ -9,7 +9,7 @@ import ActionConstants from 'constants/ActionConstants';
 import CurrentUserStore from 'stores/CurrentUserStore';
 import {Dispatcher} from 'dispatcher/Dispatcher';
 import {RegistrationActions} from 'actions/RegistrationActions';
-import ServerAPI from 'lib/ServerAPI';
+import {ServerAPI} from 'lib/ServerAPI';
 import {Store} from'flux/utils';
 
 var _registration = null;

@@ -14,7 +14,7 @@ var CurrentUserStore = require("stores/CurrentUserStore");
 var DelegateStore = require("stores/DelegateStore");
 var {InnerView} = require("components/InnerView");
 var TextTemplate = require("components/core/TextTemplate");
-var User = require("utils/User");
+var {User} = require("utils/User");
 
 require("css/Table.less");
 var ChairDelegateEmailViewText = require("text/ChairDelegateEmailViewText.md");

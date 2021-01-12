@@ -12,7 +12,7 @@ import history from "utils/history";
 var Button = require("components/core/Button");
 var {NavLink} = require("components/NavLink");
 var {OuterView} = require("components/OuterView");
-var ServerAPI = require("lib/ServerAPI");
+var {ServerAPI} = require("lib/ServerAPI");
 var StatusLabel = require("components/core/StatusLabel");
 var TextInput = require("components/core/TextInput");
 var TextTemplate = require("components/core/TextTemplate");

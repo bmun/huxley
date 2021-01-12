@@ -8,12 +8,12 @@
  /**
  * Inflates grades by 50%. 
  */
-function inflateGrade(grade, total) {
+function inflateGrades(grade, total) {
     if (grade === 0) {
         return 0;
     }
     return Math.min(grade + (total / 2.6), total);
-  }
+}
   
-  export default inflateGrade;
+export {inflateGrades};
   

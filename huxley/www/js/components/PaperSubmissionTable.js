@@ -5,7 +5,7 @@
 
 "use strict";
 
-var inflateGrades = require("utils/inflateGrades");
+var {inflateGrades} = require("utils/inflateGrades");
 
 import cx from "classnames";
 import React from "react";

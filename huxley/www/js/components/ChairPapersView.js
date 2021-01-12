@@ -20,9 +20,9 @@ var {PositionPaperActions} = require("actions/PositionPaperActions");
 var PositionPaperStore = require("stores/PositionPaperStore");
 var RubricStore = require("stores/RubricStore");
 var TextTemplate = require("components/core/TextTemplate");
-var User = require("utils/User");
+var {User} = require("utils/User");
 
-var ServerAPI = require("lib/ServerAPI");
+var {ServerAPI} = require("lib/ServerAPI");
 
 require("css/Table.less");
 var ChairPapersViewText = require("text/ChairPapersViewText.md");

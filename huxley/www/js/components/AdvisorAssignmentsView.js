@@ -24,7 +24,7 @@ var DelegateStore = require("stores/DelegateStore");
 var {InnerView} = require("components/InnerView");
 var {RegistrationActions} = require("actions/RegistrationActions");
 var RegistrationStore = require("stores/RegistrationStore");
-var ServerAPI = require("lib/ServerAPI");
+var {ServerAPI} = require("lib/ServerAPI");
 var Table = require("components/core/Table");
 var TextTemplate = require("components/core/TextTemplate");
 

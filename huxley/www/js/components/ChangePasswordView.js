@@ -10,7 +10,7 @@ import React from "react";
 import PropTypes from "prop-types";
 
 var Button = require("components/core/Button");
-var ServerAPI = require("lib/ServerAPI");
+var {ServerAPI} = require("lib/ServerAPI");
 var StatusLabel = require("components/core/StatusLabel");
 
 require("css/ChangePasswordView.less");

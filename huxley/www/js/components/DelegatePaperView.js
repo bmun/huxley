@@ -17,10 +17,10 @@ var {PaperSubmissionTable} = require("components/PaperSubmissionTable");
 var {PositionPaperActions} = require("actions/PositionPaperActions");
 var PositionPaperStore = require("stores/PositionPaperStore");
 var TextTemplate = require("components/core/TextTemplate");
-var User = require("utils/User");
-var inflateGrades = require("utils/inflateGrades");
+var {User} = require("utils/User");
+var {inflateGrades} = require("utils/inflateGrades");
 
-var ServerAPI = require("lib/ServerAPI");
+var {ServerAPI} = require("lib/ServerAPI");
 
 require("css/Table.less");
 var DelegatePaperViewText = require("text/DelegatePaperViewText.md");
