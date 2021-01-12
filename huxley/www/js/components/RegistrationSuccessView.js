@@ -6,6 +6,7 @@
 "use strict";
 
 import React from "react";
+import PropTypes from 'prop-types';
 
 var ConferenceContext = require("components/ConferenceContext");
 var NavLink = require("components/NavLink");
@@ -40,7 +41,7 @@ class RegistrationSuccessView extends React.Component {
 }
 
 RegistrationSuccessView.contextTypes = {
-  conference: React.PropTypes.shape(ConferenceContext),
+  conference: PropTypes.shape(ConferenceContext),
 };
 
 module.exports = RegistrationSuccessView;

@@ -6,6 +6,7 @@
 "use strict";
 
 import React from "react";
+import PropTypes from 'prop-types';
 
 class RegistrationComments extends React.Component {
   shouldComponentUpdate(nextProps, nextState) {
@@ -33,8 +34,8 @@ class RegistrationComments extends React.Component {
 }
 
 RegistrationComments.propTypes = {
-  handler: React.PropTypes.func,
-  value: React.PropTypes.string,
+  handler: PropTypes.func,
+  value: PropTypes.string,
 };
 
 module.exports = RegistrationComments;

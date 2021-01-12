@@ -7,6 +7,7 @@
 
 import React from "react";
 import history from "utils/history";
+import PropTypes from 'prop-types';
 
 const ConferenceContext = require("components/ConferenceContext");
 const CurrentUserStore = require("stores/CurrentUserStore");
@@ -150,7 +151,7 @@ class DelegateProfileView extends React.Component {
 }
 
 DelegateProfileView.contextTypes = {
-  conference: React.PropTypes.shape(ConferenceContext),
+  conference: PropTypes.shape(ConferenceContext),
 };
 
 module.exports = DelegateProfileView;

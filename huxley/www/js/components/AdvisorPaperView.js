@@ -6,6 +6,7 @@
 "use strict";
 
 import React from "react";
+import PropTypes from 'prop-types';
 
 var _accessSafe = require("utils/_accessSafe");
 var AssignmentStore = require("stores/AssignmentStore");
@@ -473,7 +474,7 @@ class AdvisorPaperView extends React.Component {
 }
 
 AdvisorPaperView.contextTypes = {
-  conference: React.PropTypes.shape(ConferenceContext),
+  conference: PropTypes.shape(ConferenceContext),
 };
 
 module.exports = AdvisorPaperView;

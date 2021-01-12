@@ -6,6 +6,7 @@
 "use strict";
 
 import React from "react";
+import PropTypes from 'prop-types';
 
 var TextInput = require("components/core/TextInput");
 var formatPhone = require("utils/formatPhone");
@@ -46,9 +47,9 @@ class PhoneInput extends React.Component {
 }
 
 PhoneInput.propTypes = {
-  onChange: React.PropTypes.func,
-  value: React.PropTypes.string,
-  isInternational: React.PropTypes.bool.isRequired,
+  onChange: PropTypes.func,
+  value: PropTypes.string,
+  isInternational: PropTypes.bool.isRequired,
 };
 
 module.exports = PhoneInput;

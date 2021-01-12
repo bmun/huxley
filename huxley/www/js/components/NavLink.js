@@ -8,6 +8,7 @@
 import cx from "classnames";
 var Link = require("react-router").Link;
 import React from "react";
+import PropTypes from 'prop-types';
 
 require("css/NavLink.less");
 
@@ -29,7 +30,7 @@ class NavLink extends React.Component {
 }
 
 NavLink.propTypes = {
-  direction: React.PropTypes.oneOf(["left", "right"]).isRequired,
-  href: React.PropTypes.string.isRequired,
+  direction: PropTypes.oneOf(["left", "right"]).isRequired,
+  href: PropTypes.string.isRequired,
 };
 module.exports = NavLink;

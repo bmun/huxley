@@ -7,6 +7,7 @@
 
 import React from "react";
 import history from "utils/history";
+import PropTypes from 'prop-types';
 
 var Button = require("components/core/Button");
 var ConferenceContext = require("components/ConferenceContext");
@@ -227,7 +228,7 @@ class DelegatePaperView extends React.Component {
 }
 
 DelegatePaperView.contextTypes = {
-  conference: React.PropTypes.shape(ConferenceContext),
+  conference: PropTypes.shape(ConferenceContext),
 };
 
 module.exports = DelegatePaperView;

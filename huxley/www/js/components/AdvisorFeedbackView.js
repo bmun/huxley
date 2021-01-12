@@ -6,6 +6,7 @@
 "use strict";
 
 import React from "react";
+import PropTypes from 'prop-types';
 
 var _accessSafe = require("utils/_accessSafe");
 var AssignmentActions = require("actions/AssignmentActions");
@@ -210,7 +211,7 @@ class AdvisorFeedbackView extends React.Component {
 }
 
 AdvisorFeedbackView.contextTypes = {
-  conference: React.PropTypes.shape(ConferenceContext),
+  conference: PropTypes.shape(ConferenceContext),
 };
 
 module.exports = AdvisorFeedbackView;

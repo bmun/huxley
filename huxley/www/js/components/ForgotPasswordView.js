@@ -7,6 +7,7 @@
 
 import React from "react";
 import history from "utils/history";
+import PropTypes from 'prop-types';
 
 var Button = require("components/core/Button");
 var NavLink = require("components/NavLink");
@@ -102,7 +103,7 @@ class ForgotPasswordView extends React.Component {
 }
 
 ForgotPasswordView.contextTypes = {
-  shake: React.PropTypes.func,
+  shake: PropTypes.func,
 };
 
 

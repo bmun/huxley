@@ -6,7 +6,8 @@
 "use strict";
 
 import React from "react";
-import PropTypes from "react-router";
+import history from "utils/history";
+import PropTypes from 'prop-types';
 
 var Button = require("components/core/Button");
 var CommitteeStore = require("stores/CommitteeStore");
@@ -562,9 +563,9 @@ var RegistrationView = React.createClass({
 
   _handleSuccess: function (response) {
     if (response.registration.is_waitlisted) {
-      this.contextTypes.history.pushState(null, "/register/waitlist");
+      history.pushState(null, "/register/waitlist");
     } else {
-      this.contextTypes.history.pushState(null, "/register/success");
+      history.pushState(null, "/register/success");
     }
   },
 
@@ -586,8 +587,8 @@ var RegistrationView = React.createClass({
 });
 
 RegistrationView.contextTypes = {
-  conference: React.PropTypes.shape(ConferenceContext),
-  shake: React.PropTypes.func,
+  conference: PropTypes.shape(ConferenceContext),
+  shake: PropTypes.func,
 };
 
 module.exports = RegistrationView;

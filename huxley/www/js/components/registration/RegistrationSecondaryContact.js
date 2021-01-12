@@ -6,6 +6,7 @@
 "use strict";
 
 import React from "react";
+import PropTypes from 'prop-types';
 
 var RegistrationPhoneInput = require("components/registration/RegistrationPhoneInput");
 var RegistrationTextInput = require("components/registration/RegistrationTextInput");
@@ -49,12 +50,12 @@ class RegistrationSecondaryContact extends React.Component {
 }
 
 RegistrationSecondaryContact.propTypes = {
-  handlers: React.PropTypes.object,
-  secondaryContactInformation: React.PropTypes.object,
-  errors: React.PropTypes.object,
-  renderContactGenderField: React.PropTypes.func,
-  renderContactTypeField: React.PropTypes.func,
-  isInternational: React.PropTypes.bool,
+  handlers: PropTypes.object,
+  secondaryContactInformation: PropTypes.object,
+  errors: PropTypes.object,
+  renderContactGenderField: PropTypes.func,
+  renderContactTypeField: PropTypes.func,
+  isInternational: PropTypes.bool,
 };
 
 module.exports = RegistrationSecondaryContact;

@@ -6,6 +6,7 @@
 "use strict";
 
 import React from "react";
+import PropTypes from 'prop-types';
 
 var _accessSafe = require("utils/_accessSafe");
 const AssignmentStore = require("stores/AssignmentStore");
@@ -39,7 +40,7 @@ class AdvisorProfileView extends React.Component {
   // https://github.com/reactjs/react-router/blob/master/upgrade-guides/v1.0.0.md#routehandler
   // see the last section. I am wary to remove for fear that we won't validate
   // propTypes: {
-  //   user: React.PropTypes.object.isRequired
+  //   user: PropTypes.object.isRequired
   // },
 
   getInitialState() {
@@ -607,8 +608,8 @@ class AdvisorProfileView extends React.Component {
 }
 
 AdvisorProfileView.contextTypes = {
-  conference: React.PropTypes.shape(ConferenceContext),
-  shake: React.PropTypes.func,
+  conference: PropTypes.shape(ConferenceContext),
+  shake: PropTypes.func,
 };
 
 module.exports = AdvisorProfileView;

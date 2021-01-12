@@ -6,6 +6,7 @@
 "use strict";
 
 import React from "react";
+import PropTypes from 'prop-types';
 
 class RegistrationCountryPreferences extends React.Component {
   render() {
@@ -39,6 +40,6 @@ class RegistrationCountryPreferences extends React.Component {
 }
 
 (RegistrationCountryPreferences.propTypes = {
-  renderCountryDropdown: React.PropTypes.func,
+  renderCountryDropdown: PropTypes.func,
 }),
   (module.exports = RegistrationCountryPreferences);

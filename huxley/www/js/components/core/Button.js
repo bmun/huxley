@@ -8,6 +8,7 @@
 import cx from "classnames";
 import { React } from "react";
 import ReactRouter from "react-router";
+import PropTypes from 'prop-types';
 
 require("css/Button.less");
 
@@ -40,11 +41,11 @@ class Button extends React.Component {
 }
 
 Button.propTypes = {
-  color: React.PropTypes.oneOf(["blue", "green", "yellow", "red"]),
-  href: React.PropTypes.string,
-  loading: React.PropTypes.bool,
-  size: React.PropTypes.oneOf(["small", "medium", "large"]),
-  success: React.PropTypes.bool,
+  color: PropTypes.oneOf(["blue", "green", "yellow", "red"]),
+  href: PropTypes.string,
+  loading: PropTypes.bool,
+  size: PropTypes.oneOf(["small", "medium", "large"]),
+  success: PropTypes.bool,
 };
 
 module.exports = Button;

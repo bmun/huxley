@@ -6,6 +6,7 @@
 "use strict";
 
 import React from "react";
+import PropTypes from 'prop-types';
 
 var NumberInput = require("components/NumberInput");
 var _accessSafe = require("utils/_accessSafe");
@@ -50,10 +51,10 @@ class RegistrationSpecialCommitteePreferences extends React.Component {
 }
 
 RegistrationSpecialCommitteePreferences.propTypes = {
-  handlers: React.PropTypes.object,
-  errors: React.PropTypes.object,
-  specialCommitteePrefValues: React.PropTypes.object,
-  renderCommittees: React.PropTypes.func,
+  handlers: PropTypes.object,
+  errors: PropTypes.object,
+  specialCommitteePrefValues: PropTypes.object,
+  renderCommittees: PropTypes.func,
 };
 
 module.exports = RegistrationSpecialCommitteePreferences;

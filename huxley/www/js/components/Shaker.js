@@ -8,6 +8,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import cx from "classnames";
+import PropTypes from 'prop-types';
 
 require("css/Shaker.less");
 
@@ -40,7 +41,7 @@ class Shaker extends React.Component {
 }
 
 Shaker.childContextTypes = {
-  shake: React.PropTypes.func,
+  shake: PropTypes.func,
 };
 
 module.exports = Shaker;

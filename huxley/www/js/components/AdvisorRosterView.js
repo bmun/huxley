@@ -7,6 +7,7 @@
 
 var Modal = require("react-modal");
 import React from "react";
+import PropTypes from 'prop-types';
 
 var _accessSafe = require("utils/_accessSafe");
 var AssignmentStore = require("stores/AssignmentStore");
@@ -376,7 +377,7 @@ class AdvisorRosterView extends React.Component {
 }
 
 AdvisorRosterView.contextTypes = {
-  conference: React.PropTypes.shape(ConferenceContext),
+  conference: PropTypes.shape(ConferenceContext),
 };
 
 module.exports = AdvisorRosterView;

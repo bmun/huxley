@@ -6,6 +6,7 @@
 "use strict";
 
 import React from "react";
+import PropTypes from 'prop-types';
 
 var TextInput = require("components/core/TextInput");
 var StatusLabel = require("components/core/StatusLabel");
@@ -26,11 +27,11 @@ class RegistrationTextInput extends React.Component {
 }
 
 RegistrationTextInput.propTypes = {
-  errors: React.PropTypes.arrayOf(React.PropTypes.string),
-  onChange: React.PropTypes.func,
-  placeholder: React.PropTypes.string,
-  value: React.PropTypes.string,
-  type: React.PropTypes.oneOf(["text", "password"]),
+  errors: PropTypes.arrayOf(PropTypes.string),
+  onChange: PropTypes.func,
+  placeholder: PropTypes.string,
+  value: PropTypes.string,
+  type: PropTypes.oneOf(["text", "password"]),
 };
 
 module.exports = RegistrationTextInput;

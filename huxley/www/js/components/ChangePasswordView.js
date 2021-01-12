@@ -7,6 +7,7 @@
 
 import cx from "classnames";
 import React from "react";
+import PropTypes from 'prop-types';
 
 var Button = require("components/core/Button");
 var ServerAPI = require("lib/ServerAPI");
@@ -149,9 +150,9 @@ class ChangePasswordView extends React.Component {
 }
 
 ChangePasswordView.propTypes = {
-  isVisible: React.PropTypes.bool.isRequired,
-  onClick: React.PropTypes.func,
-  onSuccess: React.PropTypes.func.isRequired,
+  isVisible: PropTypes.bool.isRequired,
+  onClick: PropTypes.func,
+  onSuccess: PropTypes.func.isRequired,
 };
 
 module.exports = ChangePasswordView;

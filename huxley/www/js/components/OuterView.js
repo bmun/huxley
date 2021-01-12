@@ -6,6 +6,7 @@
 "use strict";
 
 import React from "react";
+import PropTypes from 'prop-types';
 
 require("css/content.less");
 
@@ -26,7 +27,7 @@ class OuterView extends React.Component {
 }
 
 OuterView.propTypes = {
-  header: React.PropTypes.element,
+  header: PropTypes.element,
 };
 
 module.exports = OuterView;

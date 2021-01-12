@@ -7,6 +7,7 @@
 
 import React from "react";
 import history from "utils/history";
+import PropTypes from 'prop-types';
 
 var AdvisorView = require("components/AdvisorView");
 var ChairView = require("components/ChairView");
@@ -88,7 +89,7 @@ class Huxley extends React.Component {
 }
 
 Huxley.childContextTypes = {
-  conference: React.PropTypes.shape(ConferenceContext),
+  conference: PropTypes.shape(ConferenceContext),
 };
 
 module.exports = Huxley;

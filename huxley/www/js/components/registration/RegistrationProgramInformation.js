@@ -6,6 +6,7 @@
 "use strict";
 
 import React from "react";
+import PropTypes from 'prop-types';
 
 var ProgramTypes = require("constants/ProgramTypes");
 var NumberInput = require("components/NumberInput");
@@ -136,11 +137,11 @@ class RegistrationProgramInformation extends React.Component {
 }
 
 RegistrationProgramInformation.propTypes = {
-  handlers: React.PropTypes.object,
-  errors: React.PropTypes.object,
-  programInformation: React.PropTypes.object,
-  handleProgramTypeChange: React.PropTypes.func,
-  programType: React.PropTypes.oneOf([ProgramTypes.CLUB, ProgramTypes.CLASS]),
+  handlers: PropTypes.object,
+  errors: PropTypes.object,
+  programInformation: PropTypes.object,
+  handleProgramTypeChange: PropTypes.func,
+  programType: PropTypes.oneOf([ProgramTypes.CLUB, ProgramTypes.CLASS]),
 };
 
 module.exports = RegistrationProgramInformation;

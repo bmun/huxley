@@ -7,6 +7,7 @@
 
 import { React } from "react";
 import cx from "classnames";
+import PropTypes from 'prop-types';
 
 require("css/TextInput.less");
 
@@ -33,12 +34,12 @@ class TextInput extends React.Component {
 }
 
 TextInput.propTypes = {
-  defaultValue: React.PropTypes.string,
-  isControlled: React.PropTypes.bool,
-  onChange: React.PropTypes.func,
-  placeholder: React.PropTypes.string,
-  value: React.PropTypes.string,
-  type: React.PropTypes.oneOf(["text", "password"]),
+  defaultValue: PropTypes.string,
+  isControlled: PropTypes.bool,
+  onChange: PropTypes.func,
+  placeholder: PropTypes.string,
+  value: PropTypes.string,
+  type: PropTypes.oneOf(["text", "password"]),
 };
 
 module.exports = TextInput;
