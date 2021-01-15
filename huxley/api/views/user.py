@@ -53,6 +53,10 @@ class CurrentUser(generics.GenericAPIView):
 
     def post(self, request, *args, **kwargs):
         '''Log in a new user.'''
+        print('post request')
+        print(request.user)
+        print(request.data)
+        print(request.user.is_authenticated)
         if request.user.is_authenticated:
             raise PermissionDenied('Another user is currently logged in.')
 

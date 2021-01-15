@@ -20,6 +20,7 @@ class CurrentUserStore extends Store {
   }
 
   getCurrentUser() {
+    console.log(this.currentUser);
     this._assertBootstrapped();
     return this._currentUser;
   }

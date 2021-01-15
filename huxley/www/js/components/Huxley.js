@@ -27,6 +27,7 @@ class Huxley extends React.Component {
   componentWillMount() {
     CurrentUserStore.addListener(() => {
       var user = CurrentUserStore.getCurrentUser();
+      console.log(user);
       if (User.isAnonymous(user)) {
         history.redirect("/login");
       } else if (User.isAdvisor(user)) {

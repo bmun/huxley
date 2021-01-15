@@ -114,7 +114,7 @@ class LoginView extends React.Component {
     this.setState({ username });
   }
 
-  _handleSubmit= (event) => {
+  _handleSubmit = (event) => {
     this.setState({ loading: true });
     ServerAPI.login(this.state.username, this.state.password).then(
       this._handleSuccess,
@@ -123,11 +123,12 @@ class LoginView extends React.Component {
     event.preventDefault();
   }
 
-  _handleSuccess(responseJSON) {
+  _handleSuccess = (responseJSON) => {
+    console.log(responseJSON);
     CurrentUserActions.login(responseJSON);
   }
 
-  _handleError(responseJSON) {
+  _handleError = (responseJSON) => {
     if (!responseJSON.detail) {
       return;
     }

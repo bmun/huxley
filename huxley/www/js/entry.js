@@ -8,7 +8,7 @@
 import 'core-js';
 import React from "react";
 import {BrowserHistory} from "utils/BrowserHistory";
-import {Router, Route} from 'react-router-dom';
+import {Router, Route, Switch} from 'react-router-dom';
 var ReactDOM = require('react-dom');
 
 var {CurrentUserActions} = require('actions/CurrentUserActions');
@@ -38,7 +38,8 @@ var {RegistrationSuccessView} = require('components/RegistrationSuccessView');
 var {RegistrationWaitlistView} = require('components/RegistrationWaitlistView');
 
 var routes = (
-  <Route path="/" component={Huxley}>
+  <Route path="/" component={Huxley}> 
+  <Switch>
     <Route path="/login" component={LoginView} />
     <Route path="/password" component={ForgotPasswordView} />
     <Route path="/password/reset" component={PasswordResetSuccessView} />
@@ -73,7 +74,8 @@ var routes = (
     <Route path="/delegate/profile" component={DelegateProfileView} />
     <Route path="/delegate/paper" component={DelegatePaperView} />
     <Route exact path="/" component={RedirectView} />
-    <Route path="*" component={NotFoundView} />
+    <Route component={NotFoundView} />
+  </Switch>
   </Route>
 );
 
