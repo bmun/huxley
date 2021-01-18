@@ -22,10 +22,10 @@ class RegistrationSuccessView extends React.Component {
       <OuterView>
         <div class="letter">
           <TextTemplate
-            conferenceSession={conference.session}
-            conferenceRegistrationFee={conference.registration_fee}
-            conferenceDelegateFee={conference.delegate_fee}
-            conferenceExternal={conference.external}
+            conferenceSession={global.conference.session}
+            conferenceRegistrationFee={global.conference.registration_fee}
+            conferenceDelegateFee={global.conference.delegate_fee}
+            conferenceExternal={global.conference.external}
           >
             {RegistrationSuccessViewText}
           </TextTemplate>

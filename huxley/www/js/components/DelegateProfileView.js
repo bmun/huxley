@@ -54,7 +54,7 @@ class DelegateProfileView extends React.Component {
         <TextTemplate
           firstName={delegate.name}
           schoolName={school.name}
-          conferenceSession={conference.session}
+          conferenceSession={global.conference.session}
           committee={committee.full_name}
           country={country.name}
         >
@@ -91,11 +91,11 @@ class DelegateProfileView extends React.Component {
               <br />
               <TextTemplate
                 earlyPaperDeadlineMonth={
-                  conference.early_paper_deadline["month"]
+                  global.conference.early_paper_deadline["month"]
                 }
-                earlyPaperDeadlineDay={conference.early_paper_deadline["day"]}
-                paperDeadlineMonth={conference.paper_deadline["month"]}
-                paperDeadlineDay={conference.paper_deadline["day"]}
+                earlyPaperDeadlineDay={global.conference.early_paper_deadline["day"]}
+                paperDeadlineMonth={global.conference.paper_deadline["month"]}
+                paperDeadlineDay={global.conference.paper_deadline["day"]}
               >
                 {DelegateChecklistPositionPaperText}
               </TextTemplate>
@@ -106,10 +106,10 @@ class DelegateProfileView extends React.Component {
               {waiverCheck} <b>Turn in Waiver Form</b>
               <br />
               <TextTemplate
-                conferenceExternal={conference.external}
-                waiverAvail={conference.waiver_avail_date}
-                waiverDeadline={conference.waiver_deadline}
-                waiverLink={conference.waiver_link}
+                conferenceExternal={global.conference.external}
+                waiverAvail={global.conference.waiver_avail_date}
+                waiverDeadline={global.conference.waiver_deadline}
+                waiverLink={global.conference.waiver_link}
               >
                 {DelegateChecklistWaiverText}
               </TextTemplate>

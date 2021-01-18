@@ -28,7 +28,7 @@ class AdvisorFeedbackView extends React.Component {
     super(props);
     var schoolID = CurrentUserStore.getCurrentUser().school.id;
     var delegates = DelegateStore.getSchoolDelegates(schoolID);
-    var conferenceID = conference.session;
+    var conferenceID = global.conference.session;
     var assignments = AssignmentStore.getSchoolAssignments(schoolID).filter(
       (assignment) => !assignment.rejected
     );
@@ -46,7 +46,7 @@ class AdvisorFeedbackView extends React.Component {
 
   componentDidMount() {
     var schoolID = CurrentUserStore.getCurrentUser().school.id;
-    var conferenceID = conference.session;
+    var conferenceID = global.conference.session;
     this._registrationToken = RegistrationStore.addListener(() => {
       this.setState({
         registration: RegistrationStore.getRegistration(schoolID, conferenceID),
@@ -97,8 +97,8 @@ class AdvisorFeedbackView extends React.Component {
       return (
         <InnerView>
           <TextTemplate
-            conferenceSession={conference.session}
-            conferenceExternal={conference.external}
+            conferenceSession={global.conference.session}
+            conferenceExternal={global.conference.external}
           >
             {AdvisorWaitlistText}
           </TextTemplate>

@@ -14,6 +14,7 @@ var {Button} = require("components/core/Button");
 // var {ConferenceContext} = require("components/Huxley");
 var {ConferenceContext} = require("components/ConferenceContext");
 var {CurrentUserActions} = require("actions/CurrentUserActions");
+var {CurrentUserStore} = require("stores/CurrentUserStore");
 var {NavLink} = require("components/NavLink");
 var {OuterView} = require("components/OuterView");
 var {ServerAPI} = require("lib/ServerAPI");
@@ -37,7 +38,7 @@ class LoginView extends React.Component {
   }
 
   UNSAFE_componentWillMount() {
-    var { user } = this.props;
+    var user = CurrentUserStore.getCurrentUser();
     if (User.isAnonymous(user)) {
       return;
     }
@@ -69,7 +70,7 @@ class LoginView extends React.Component {
             <Button color="blue" loading={this.state.loading} type="submit">
               Log In
             </Button>
-            <Button color="green" href="/register">
+            <Button loading={false} color="green" href="/register">
               Register for BMUN
             </Button>
           </div>
@@ -87,10 +88,10 @@ class LoginView extends React.Component {
       <div className="logo">
         <hr />
         <TextTemplate
-          conferenceStartMonth={conference.start_date["month"]}
-          conferenceStartDay={conference.start_date["day"]}
-          conferenceEndDay={conference.end_date["day"]}
-          conferenceStartYear={conference.start_date["year"]}
+          conferenceStartMonth={global.conference.start_date["month"]}
+          conferenceStartDay={global.conference.start_date["day"]}
+          conferenceEndDay={global.conference.end_date["day"]}
+          conferenceStartYear={global.conference.start_date["year"]}
         >
           {LoginViewText}
         </TextTemplate>

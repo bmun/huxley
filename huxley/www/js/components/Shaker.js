@@ -28,7 +28,7 @@ class Shaker extends React.Component {
     );
   }
 
-  shake() {
+  shake = () => {
     const element = ReactDOM.findDOMNode(this);
     if (element) {
       this._timeout && clearTimeout(this._timeout);

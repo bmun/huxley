@@ -112,7 +112,7 @@ class RegistrationView extends React.Component {
       <OuterView>
         <form id="registration" onSubmit={this._handleSubmit}>
           <div>
-            <TextTemplate conferenceSession={conference.session}>
+            <TextTemplate conferenceSession={global.conference.session}>
               {RegistrationViewText}
             </TextTemplate>
             <NavLink direction="left" href="/login">
@@ -310,7 +310,7 @@ class RegistrationView extends React.Component {
     );
   }
 
-  renderCountryDropdown(labelNum, fieldName) {
+  renderCountryDropdown = (labelNum, fieldName) => {
     return (
       <li>
         <label>{labelNum}</label>
@@ -335,7 +335,7 @@ class RegistrationView extends React.Component {
     );
   }
 
-  renderCommittees() {
+  renderCommittees = () => {
     return this.state.committees.map(function (committee) {
       return (
         <li>
@@ -356,7 +356,7 @@ class RegistrationView extends React.Component {
     }, this);
   }
 
-  renderContactGenderField(name) {
+  renderContactGenderField = (name) => {
     return (
       <select
         className="contact-select reg-field"
@@ -382,7 +382,7 @@ class RegistrationView extends React.Component {
     );
   }
 
-  renderContactTypeField(name) {
+  renderContactTypeField = (name) => {
     return (
       <select
         className="contact-select reg-field"
@@ -399,7 +399,7 @@ class RegistrationView extends React.Component {
     );
   }
 
-  renderError(field) {
+  renderError = (field) => {
     if (this.state.errors[field]) {
       return (
         <StatusLabel status="error">{this.state.errors[field]}</StatusLabel>
@@ -409,7 +409,7 @@ class RegistrationView extends React.Component {
     return null;
   }
 
-  _getPasswordConfirmError() {
+  _getPasswordConfirmError = () => {
     if (
       this.state.passwordValidating &&
       this.state.password !== this.state.password2
@@ -418,7 +418,7 @@ class RegistrationView extends React.Component {
     }
   }
 
-  renderSchoolError(field) {
+  renderSchoolError = (field) => {
     if (this.state.errors.school && this.state.errors.school[field]) {
       return (
         <StatusLabel status="error">
@@ -430,13 +430,13 @@ class RegistrationView extends React.Component {
     return null;
   }
 
-  _getSchoolErrors(field) {
+  _getSchoolErrors = (field) => {
     if (this.state.errors.school) {
       return this.state.errors.school[field];
     }
   }
 
-  _handleDelegateSum() {
+  _handleDelegateSum = () => {
     var sum = 0;
     if (this.state.num_beginner_delegates) {
       sum += parseInt(this.state.num_beginner_delegates, 10) || 0;
@@ -450,11 +450,11 @@ class RegistrationView extends React.Component {
     return sum;
   }
 
-  _handlePasswordBlur() {
+  _handlePasswordBlur = () => {
     this.setState({ passwordValidating: true });
   }
 
-  _handlePasswordFocus() {
+  _handlePasswordFocus = () =>{
     this.setState({ passwordValidating: false });
   }
 
@@ -462,7 +462,7 @@ class RegistrationView extends React.Component {
     this.setState({ program_type: parseInt(event.target.value) });
   }
 
-  _handleCommitteePreferenceChange(committee) {
+  _handleCommitteePreferenceChange = (committee) => {
     var index = this.state.committee_prefs.indexOf(committee.id);
     if (index < 0) {
       this.setState({
@@ -481,11 +481,11 @@ class RegistrationView extends React.Component {
     this.setState({ school_international: !!event.target.value });
   }
 
-  _handlePrimaryPhoneChange(number) {
+  _handlePrimaryPhoneChange = (number) => {
     this.setState({ primary_phone: number });
   }
 
-  _handleSecondaryPhoneChange(number) {
+  _handleSecondaryPhoneChange = (number) => {
     this.setState({ secondary_phone: number });
   }
 
@@ -493,15 +493,15 @@ class RegistrationView extends React.Component {
     this.setState({ password });
   }
 
-  _handlePasswordConfirmChange(password2) {
+  _handlePasswordConfirmChange = (password2) => {
     this.setState({ password2 });
   }
 
-  _getSchoolCountry() {
+  _getSchoolCountry = () => {
     return this.state.school_international ? this.state.school_country : USA;
   }
 
-  _handleSubmit= (event) => {
+  _handleSubmit = (event) => {
     this.setState({ loading: true });
     ServerAPI.register({
       user: {

@@ -34,7 +34,7 @@ class AdvisorPaperView extends React.Component {
   constructor(props) {
     super(props);
     var schoolID = CurrentUserStore.getCurrentUser().school.id;
-    var conferenceID = conference.session;
+    var conferenceID = global.conference.session;
     this.state = {
       assignments: AssignmentStore.getSchoolAssignments(schoolID),
       committees: CommitteeStore.getCommittees(),
@@ -49,7 +49,7 @@ class AdvisorPaperView extends React.Component {
 
   componentDidMount() {
     var schoolID = CurrentUserStore.getCurrentUser().school.id;
-    var conferenceID = conference.session;
+    var conferenceID = global.conference.session;
     this._committeesToken = CommitteeStore.addListener(() => {
       this.setState({
         committees: CommitteeStore.getCommittees(),
@@ -98,7 +98,7 @@ class AdvisorPaperView extends React.Component {
   }
 
   render() {
-    var conference = conference;
+    var conference = global.conference;
     var registration = this.state.registration;
     var waitlisted =
       _accessSafe(registration, "is_waitlisted") == null
@@ -110,8 +110,8 @@ class AdvisorPaperView extends React.Component {
       return (
         <InnerView>
           <TextTemplate
-            conferenceSession={conference.session}
-            conferenceExternal={conference.external}
+            conferenceSession={global.conference.session}
+            conferenceExternal={global.conference.external}
           >
             {AdvisorWaitlistText}
           </TextTemplate>

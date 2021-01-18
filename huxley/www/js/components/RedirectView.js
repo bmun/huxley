@@ -8,12 +8,13 @@
 import React from "react";
 import {history} from "utils/history";
 
+var {CurrentUserStore} = require("stores/CurrentUserStore");
 var {OuterView} = require("components/OuterView");
 var {User} = require("utils/User");
 
 class RedirectView extends React.Component {
   componentDidMount() {
-    var { user } = this.props;
+    var user = CurrentUserStore.getCurrentUser();
     if (User.isAnonymous(user)) {
       history.redirect("/login");
     } else if (User.isAdvisor(user)) {

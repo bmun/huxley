@@ -37,7 +37,7 @@ class AdvisorAssignmentsView extends React.Component {
     var schoolID = CurrentUserStore.getCurrentUser().school.id;
     var delegates = DelegateStore.getSchoolDelegates(schoolID);
     var assigned = this.prepareAssignedDelegates(delegates);
-    var conferenceID = conference.session;
+    var conferenceID = global.conference.session;
     this.state = {
       assigned: assigned,
       assignments: AssignmentStore.getSchoolAssignments(schoolID).filter(
@@ -54,7 +54,7 @@ class AdvisorAssignmentsView extends React.Component {
 
   componentDidMount() {
     var schoolID = CurrentUserStore.getCurrentUser().school.id;
-    var conferenceID = conference.session;
+    var conferenceID = global.conference.session;
 
     this._committeesToken = CommitteeStore.addListener(() => {
       this.setState({ committees: CommitteeStore.getCommittees() });
@@ -109,7 +109,7 @@ class AdvisorAssignmentsView extends React.Component {
         ? false
         : this.state.registration.assignments_finalized;
     var committees = this.state.committees;
-    var conference = conference;
+    var conference = global.conference;
     var countries = this.state.countries;
     var shouldRenderAssignments =
       Object.keys(committees).length > 0 &&
@@ -121,8 +121,8 @@ class AdvisorAssignmentsView extends React.Component {
       return (
         <InnerView>
           <TextTemplate
-            conferenceSession={conference.session}
-            conferenceExternal={conference.external}
+            conferenceSession={global.conference.session}
+            conferenceExternal={global.conference.external}
           >
             {AdvisorWaitlistText}
           </TextTemplate>
@@ -131,7 +131,7 @@ class AdvisorAssignmentsView extends React.Component {
     } else {
       return (
         <InnerView>
-          <TextTemplate conferenceSession={conference.session}>
+          <TextTemplate conferenceSession={global.conference.session}>
             {AdvisorAssignmentsViewText}
           </TextTemplate>
           <Table

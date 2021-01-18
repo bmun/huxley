@@ -159,7 +159,7 @@ class DelegateCommitteeFeedbackView extends React.Component {
           <div>
             <TextTemplate
               firstName={delegate.name}
-              conferenceSession={conference.session}
+              conferenceSession={global.conference.session}
               committee={committee.full_name}
             >
               {DelegateCommitteeFeedbackViewText}

@@ -21,7 +21,7 @@ class RegistrationClosedView extends React.Component {
     return (
       <OuterView>
         <div className="letter">
-          <TextTemplate conferenceSession={conference.session}>
+          <TextTemplate conferenceSession={global.conference.session}>
             {RegistrationClosedViewText}
           </TextTemplate>
         </div>

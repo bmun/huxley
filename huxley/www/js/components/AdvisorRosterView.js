@@ -35,7 +35,7 @@ class AdvisorRosterView extends React.Component {
   constructor(props) {
     super(props);
     var schoolID = CurrentUserStore.getCurrentUser().school.id;
-    var conferenceID = conference.session;
+    var conferenceID = global.conference.session;
     var assignments = AssignmentStore.getSchoolAssignments(schoolID).filter(
       (assignment) => !assignment.rejected
     );
@@ -67,7 +67,7 @@ class AdvisorRosterView extends React.Component {
 
   componentDidMount() {
     var schoolID = CurrentUserStore.getCurrentUser().school.id;
-    var conferenceID = conference.session;
+    var conferenceID = global.conference.session;
     this._registrationToken = RegistrationStore.addListener(() => {
       this.setState({
         registration: RegistrationStore.getRegistration(schoolID, conferenceID),
@@ -105,7 +105,7 @@ class AdvisorRosterView extends React.Component {
   }
 
   render() {
-    var conference = conference;
+    var conference = global.conference;
     var registration = this.state.registration;
     var waitlisted =
       _accessSafe(registration, "is_waitlisted") == null
@@ -128,8 +128,8 @@ class AdvisorRosterView extends React.Component {
       return (
         <InnerView>
           <TextTemplate
-            conferenceSession={conference.session}
-            conferenceExternal={conference.external}
+            conferenceSession={global.conference.session}
+            conferenceExternal={global.conference.external}
           >
             {AdvisorWaitlistText}
           </TextTemplate>

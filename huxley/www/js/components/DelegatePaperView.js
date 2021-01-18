@@ -72,7 +72,7 @@ class DelegatePaperView extends React.Component {
   }
 
   render() {
-    if (conference.position_papers_accepted) {
+    if (global.conference.position_papers_accepted) {
       return (
         <InnerView>
           <div style={{ margin: "auto 20px 20px 20px" }}>

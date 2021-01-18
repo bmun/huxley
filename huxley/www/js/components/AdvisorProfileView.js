@@ -100,7 +100,7 @@ class AdvisorProfileView extends React.Component {
   }
 
   render() {
-    var conference = conference;
+    var conference = global.conference;
     var user = this.user;
     var school = User.getSchool(user);
     var registration = this.state.registration;

@@ -72,7 +72,7 @@ class TopBar extends React.Component {
     );
   }
 
-  _handleChangePasswordClick(e) {
+  _handleChangePasswordClick = (e) => {
     e.preventDefault();
     this._stopPropagation(e);
     this.setState({
@@ -80,15 +80,15 @@ class TopBar extends React.Component {
     });
   }
 
-  _handleDropdownClick(e) {
+  _handleDropdownClick = (e) => {
     this._stopPropagation(e);
   }
 
-  _hideDropdown() {
+  _hideDropdown = () => {
     this.setState({ changePasswordVisible: false });
   }
 
-  _stopPropagation(e) {
+  _stopPropagation = (e) => {
     e.stopPropagation();
 
     // TODO: display a warning if stopImmediatePropagation isn't supported.

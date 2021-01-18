@@ -21,7 +21,7 @@ class RegistrationWaitlistView extends React.Component {
     return (
       <OuterView>
         <div class="letter">
-          <TextTemplate conferenceSession={conference.session}>
+          <TextTemplate conferenceSession={global.conference.session}>
             {RegistrationWaitlistViewText}
           </TextTemplate>
         </div>
