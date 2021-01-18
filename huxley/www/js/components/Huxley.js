@@ -6,9 +6,8 @@
 "use strict";
 
 import React from "react";
-import PropTypes from "prop-types";
 import {history} from "utils/history";
-import {Router, Route, Switch, useLocation} from 'react-router-dom';
+import {Route, Switch} from 'react-router-dom';
 
 var {AdvisorAssignmentsView} = require('components/AdvisorAssignmentsView');
 var {AdvisorFeedbackView} = require('components/AdvisorFeedbackView');

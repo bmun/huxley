@@ -29,7 +29,7 @@ class RedirectView extends React.Component {
   render() {
     // TODO: make this the same component as the loading indicator... when the
     // loading indicator is actually built.
-    return <OuterView />;
+    return <div/>;
   }
 }
 

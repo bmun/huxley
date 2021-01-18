@@ -32,12 +32,12 @@ class LogoutButton extends React.Component {
     );
   }
 
-  _handleLogout(e) {
+  _handleLogout = (e) => {
     this.setState({ loggingOut: true });
     ServerAPI.logout().then(this._handleLogoutSuccess);
   }
 
-  _handleLogoutSuccess(responseJSON) {
+  _handleLogoutSuccess = (responseJSON) => {
     CurrentUserActions.logout();
   }
 }
