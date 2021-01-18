@@ -8,8 +8,8 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-var {TextInput} = require("components/core/TextInput");
-var {formatPhone} = require("utils/formatPhone");
+var { TextInput } = require("components/core/TextInput");
+var { formatPhone } = require("utils/formatPhone");
 
 class PhoneInput extends React.Component {
   componentDidUpdate(prevProps, prevState) {
@@ -33,10 +33,10 @@ class PhoneInput extends React.Component {
     );
   }
 
-  _handleChange(value) {
+  _handleChange = (value) => {
     var number = this._formatValue(value, this.props.isInternational);
     this.props.onChange && this.props.onChange(number);
-  }
+  };
 
   _formatValue(value, isInternational) {
     var value = value || "";
@@ -52,4 +52,4 @@ PhoneInput.propTypes = {
   isInternational: PropTypes.bool.isRequired,
 };
 
-export {PhoneInput};
+export { PhoneInput };

@@ -7,7 +7,7 @@
 
 import React from "react";
 
-var {TextTemplate} = require("components/core/TextTemplate");
+var { TextTemplate } = require("components/core/TextTemplate");
 
 var PermissionDeniedViewText = require("text/PermissionDeniedViewText.md");
 
@@ -21,4 +21,4 @@ class PermissionDeniedView extends React.Component {
   }
 }
 
-export {PermissionDeniedView};
+export { PermissionDeniedView };

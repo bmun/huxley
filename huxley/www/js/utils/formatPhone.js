@@ -3,7 +3,7 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
 /**
  * Given an input string, output a string in the format (NNN) NNN-NNNN xNNNNN.
@@ -27,7 +27,7 @@ function formatPhone(rawInput) {
     shouldTransition && ++slot;
   }
 
-  return accumulator.join('');
+  return accumulator.join("");
 }
 
 /**
@@ -78,7 +78,7 @@ function _getTransitionFunction(slot) {
  * Always transition.
  */
 function _singleToken(token) {
-  return function(accumulator, input) {
+  return function (accumulator, input) {
     if (input[0] === token) {
       input.shift();
     }
@@ -87,11 +87,11 @@ function _singleToken(token) {
   };
 }
 
-var _leftParen = _singleToken('(');
-var _rightParen = _singleToken(')');
-var _dash = _singleToken('-');
-var _space = _singleToken(' ');
-var _x = _singleToken('x');
+var _leftParen = _singleToken("(");
+var _rightParen = _singleToken(")");
+var _dash = _singleToken("-");
+var _space = _singleToken(" ");
+var _x = _singleToken("x");
 
 /**
  * Push the next token onto the output only if it's a digit.
@@ -114,9 +114,9 @@ function _digit(accumulator, input) {
  */
 function _tokenize(input) {
   return input
-    .replace(/[^\d\s\(\)\-x]+/, '')
-    .replace(/^[\s\-\)x]+/, '')
-    .split('');
+    .replace(/[^\d\s\(\)\-x]+/, "")
+    .replace(/^[\s\-\)x]+/, "")
+    .split("");
 }
 
-export {formatPhone};
+export { formatPhone };

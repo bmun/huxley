@@ -21,13 +21,13 @@ class OuterView extends React.Component {
     );
   }
 
-  renderHeader() {
+  renderHeader = () => {
     return this.props.header || <div className="logo-small" />;
-  }
+  };
 }
 
 OuterView.propTypes = {
   header: PropTypes.element,
 };
 
-export {OuterView};
+export { OuterView };

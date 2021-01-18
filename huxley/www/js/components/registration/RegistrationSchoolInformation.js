@@ -8,8 +8,10 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-var {RegistrationTextInput} = require("components/registration/RegistrationTextInput");
-var {_accessSafe} = require("utils/_accessSafe");
+var {
+  RegistrationTextInput,
+} = require("components/registration/RegistrationTextInput");
+var { _accessSafe } = require("utils/_accessSafe");
 
 class RegistrationSchoolInformation extends React.Component {
   shouldComponentUpdate(nextProps, nextState) {
@@ -113,4 +115,4 @@ RegistrationSchoolInformation.propTypes = {
   schoolInternational: PropTypes.bool,
 };
 
-export {RegistrationSchoolInformation};
+export { RegistrationSchoolInformation };

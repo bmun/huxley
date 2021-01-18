@@ -3,13 +3,13 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
-import ActionConstants from 'constants/ActionConstants';
-import {CountryActions} from 'actions/CountryActions';
-import {Dispatcher} from 'dispatcher/Dispatcher';
-import {ServerAPI} from 'lib/ServerAPI';
-import {Store} from'flux/utils';
+import ActionConstants from "constants/ActionConstants";
+import { CountryActions } from "actions/CountryActions";
+import { Dispatcher } from "dispatcher/Dispatcher";
+import { ServerAPI } from "lib/ServerAPI";
+import { Store } from "flux/utils";
 
 var _countries = {};
 
@@ -19,7 +19,7 @@ class CountryStore extends Store {
       return _countries;
     }
 
-    ServerAPI.getCountries().then(value => {
+    ServerAPI.getCountries().then((value) => {
       CountryActions.countriesFetched(value);
     });
 
@@ -42,4 +42,4 @@ class CountryStore extends Store {
 }
 
 const countryStore = new CountryStore(Dispatcher);
-export {countryStore as CountryStore};
+export { countryStore as CountryStore };

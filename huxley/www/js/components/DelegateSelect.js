@@ -22,7 +22,7 @@ class DelegateSelect extends React.Component {
     );
   }
 
-  renderDelegateOptions() {
+  renderDelegateOptions = () => {
     return this.props.delegates.map((delegate) => (
       <option
         key={delegate.id}
@@ -32,7 +32,7 @@ class DelegateSelect extends React.Component {
         {delegate.name}
       </option>
     ));
-  }
+  };
 }
 
 DelegateSelect.propTypes = {
@@ -42,4 +42,4 @@ DelegateSelect.propTypes = {
   disabled: PropTypes.bool,
 };
 
-export {DelegateSelect};
+export { DelegateSelect };

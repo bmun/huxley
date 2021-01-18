@@ -7,7 +7,7 @@
 
 import cx from "classnames";
 import React from "react";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 
 require("css/Button.less");
@@ -48,4 +48,4 @@ Button.propTypes = {
   success: PropTypes.bool,
 };
 
-export {Button};
+export { Button };

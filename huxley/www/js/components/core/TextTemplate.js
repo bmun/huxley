@@ -23,7 +23,7 @@ class TextTemplate extends React.Component {
     return <div dangerouslySetInnerHTML={this.createMarkup()} />;
   }
 
-  createMarkup() {
+  createMarkup = () => {
     var text = this.props.children;
     for (const variable of Object.keys(this.props)) {
       const regex = new RegExp("{{ " + variable + " }}", "g");
@@ -32,13 +32,13 @@ class TextTemplate extends React.Component {
     }
 
     return { __html: text };
-  }
+  };
 
-  escapeHtml(string) {
+  escapeHtml = (string) => {
     return String(string).replace(/[&<>"'`=\/]/g, function (s) {
       return entityMap[s];
     });
-  }
+  };
 }
 
-export {TextTemplate};
+export { TextTemplate };

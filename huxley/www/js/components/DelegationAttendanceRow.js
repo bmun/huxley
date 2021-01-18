@@ -92,4 +92,4 @@ DelegationAttendanceRow.propTypes = {
   attendance: PropTypes.object,
 };
 
-export {DelegationAttendanceRow};
+export { DelegationAttendanceRow };

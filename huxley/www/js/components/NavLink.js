@@ -6,7 +6,7 @@
 "use strict";
 
 import cx from "classnames";
-import {Link} from 'react-router-dom';
+import { Link } from "react-router-dom";
 import React from "react";
 import PropTypes from "prop-types";
 
@@ -34,4 +34,4 @@ NavLink.propTypes = {
   href: PropTypes.string.isRequired,
 };
 
-export {NavLink};
+export { NavLink };

@@ -52,4 +52,4 @@ let ConferenceContext = {
   position_papers_accepted: PropTypes.bool,
 };
 
-export {ConferenceContext};
+export { ConferenceContext };

@@ -8,6 +8,6 @@
  */
 function _accessSafe(obj, key) {
   return obj && obj[key];
-};
+}
 
-export {_accessSafe};
+export { _accessSafe };

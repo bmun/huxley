@@ -19,4 +19,4 @@ class InnerView extends React.Component {
   }
 }
 
-export {InnerView};
+export { InnerView };

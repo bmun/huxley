@@ -6,18 +6,18 @@
 "use strict";
 
 import React from "react";
-import {history} from "utils/history";
+import { history } from "utils/history";
 
-var {Button} = require("components/core/Button");
-var {AssignmentStore} = require("stores/AssignmentStore");
-var {CountryStore} = require("stores/CountryStore");
-var {CurrentUserStore} = require("stores/CurrentUserStore");
-var {DelegateActions} = require("actions/DelegateActions");
-var {DelegationAttendanceRow} = require("components/DelegationAttendanceRow");
-var {DelegateStore} = require("stores/DelegateStore");
-var {InnerView} = require("components/InnerView");
-var {TextTemplate} = require("components/core/TextTemplate");
-var {User} = require("utils/User");
+var { Button } = require("components/core/Button");
+var { AssignmentStore } = require("stores/AssignmentStore");
+var { CountryStore } = require("stores/CountryStore");
+var { CurrentUserStore } = require("stores/CurrentUserStore");
+var { DelegateActions } = require("actions/DelegateActions");
+var { DelegationAttendanceRow } = require("components/DelegationAttendanceRow");
+var { DelegateStore } = require("stores/DelegateStore");
+var { InnerView } = require("components/InnerView");
+var { TextTemplate } = require("components/core/TextTemplate");
+var { User } = require("utils/User");
 
 require("css/Table.less");
 var ChairAttendanceViewText = require("text/ChairAttendanceViewText.md");
@@ -142,7 +142,7 @@ class ChairAttendanceView extends React.Component {
     );
   }
 
-  renderAttendanceRows() {
+  renderAttendanceRows = () => {
     var assignments = this.state.assignments;
     var attendance = this.state.attendance;
     var assignmentIDs = Object.keys(attendance);
@@ -163,9 +163,9 @@ class ChairAttendanceView extends React.Component {
         attendance={attendance[assignment.id]}
       />
     ));
-  }
+  };
 
-  _mapAttendance(delegates) {
+  _mapAttendance = (delegates) => {
     var attendance = {};
     for (var delegate of delegates) {
       attendance[delegate.assignment] = {
@@ -177,9 +177,9 @@ class ChairAttendanceView extends React.Component {
       };
     }
     return attendance;
-  }
+  };
 
-  _handleAttendanceChange(field, assignmentID, event) {
+  _handleAttendanceChange = (field, assignmentID, event) => {
     var attendanceMap = this.state.attendance;
     var oldAttendance = attendanceMap[assignmentID];
     this.setState({
@@ -188,7 +188,7 @@ class ChairAttendanceView extends React.Component {
         [assignmentID]: { ...oldAttendance, [field]: !oldAttendance[field] },
       },
     });
-  }
+  };
 
   _handleSaveAttendance = (event) => {
     this._successTimout && clearTimeout(this._successTimeout);
@@ -223,7 +223,7 @@ class ChairAttendanceView extends React.Component {
       this._handleError
     );
     event.preventDefault();
-  }
+  };
 
   _handleSuccess = (response) => {
     this.setState({
@@ -235,14 +235,14 @@ class ChairAttendanceView extends React.Component {
       () => this.setState({ success: false }),
       2000
     );
-  }
+  };
 
   _handleError = (response) => {
     this.setState({ loading: false });
     window.alert(
       "Something went wrong. Please refresh your page and try again."
     );
-  }
+  };
 }
 
-export {ChairAttendanceView};
+export { ChairAttendanceView };

@@ -3,10 +3,10 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
-import ActionConstants from 'constants/ActionConstants';
-import {Dispatcher} from 'dispatcher/Dispatcher';
+import ActionConstants from "constants/ActionConstants";
+import { Dispatcher } from "dispatcher/Dispatcher";
 
 var CountryActions = {
   countriesFetched(countries) {
@@ -17,4 +17,4 @@ var CountryActions = {
   },
 };
 
-export {CountryActions};
+export { CountryActions };

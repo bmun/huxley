@@ -15,4 +15,4 @@ function _checkDate() {
   );
 }
 
-export {_checkDate};
+export { _checkDate };

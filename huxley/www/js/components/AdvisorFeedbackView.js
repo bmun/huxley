@@ -8,17 +8,17 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-var {_accessSafe} = require("utils/_accessSafe");
-var {AssignmentStore} = require("stores/AssignmentStore");
-var {CommitteeStore} = require("stores/CommitteeStore");
-var {ConferenceContext} = require("components/ConferenceContext");
-var {CountryStore} = require("stores/CountryStore");
-var {CurrentUserStore} = require("stores/CurrentUserStore");
-var {DelegateStore} = require("stores/DelegateStore");
-var {InnerView} = require("components/InnerView");
-var {RegistrationStore} = require("stores/RegistrationStore");
-var {Table} = require("components/core/Table");
-var {TextTemplate} = require("components/core/TextTemplate");
+var { _accessSafe } = require("utils/_accessSafe");
+var { AssignmentStore } = require("stores/AssignmentStore");
+var { CommitteeStore } = require("stores/CommitteeStore");
+var { ConferenceContext } = require("components/ConferenceContext");
+var { CountryStore } = require("stores/CountryStore");
+var { CurrentUserStore } = require("stores/CurrentUserStore");
+var { DelegateStore } = require("stores/DelegateStore");
+var { InnerView } = require("components/InnerView");
+var { RegistrationStore } = require("stores/RegistrationStore");
+var { Table } = require("components/core/Table");
+var { TextTemplate } = require("components/core/TextTemplate");
 
 var AdvisorFeedbackViewText = require("text/AdvisorFeedbackViewText.md");
 var AdvisorWaitlistText = require("text/AdvisorWaitlistText.md");
@@ -130,7 +130,7 @@ class AdvisorFeedbackView extends React.Component {
     }
   }
 
-  renderAssignmentRows() {
+  renderAssignmentRows = () => {
     var assignments = this.state.assignments;
     var committees = this.state.committees;
     var countries = this.state.countries;
@@ -187,7 +187,7 @@ class AdvisorFeedbackView extends React.Component {
         </tr>
       );
     });
-  }
+  };
 
   /*
 
@@ -198,7 +198,7 @@ class AdvisorFeedbackView extends React.Component {
     country name instead of delegate name.
   */
 
-  prepareFeedback(delegates) {
+  prepareFeedback = (delegates) => {
     var feedback = {};
     for (var delegate of delegates) {
       if (delegate.assignment) {
@@ -206,7 +206,7 @@ class AdvisorFeedbackView extends React.Component {
       }
     }
     return feedback;
-  }
+  };
 }
 
-export {AdvisorFeedbackView};
+export { AdvisorFeedbackView };

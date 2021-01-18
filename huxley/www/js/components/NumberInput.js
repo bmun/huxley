@@ -7,8 +7,7 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-var {TextInput} = require("components/core/TextInput");
-
+var { TextInput } = require("components/core/TextInput");
 
 class NumberInput extends React.Component {
   render() {
@@ -21,9 +20,9 @@ class NumberInput extends React.Component {
     );
   }
 
-  _handleChange(value) {
+  _handleChange = (value) => {
     this.props.onChange && this.props.onChange(value.replace(/[^\d]/, ""));
-  }
+  };
 }
 
 NumberInput.propTypes = {
@@ -32,4 +31,4 @@ NumberInput.propTypes = {
   placeholder: PropTypes.string,
 };
 
-export {NumberInput};
+export { NumberInput };

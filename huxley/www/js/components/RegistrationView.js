@@ -7,31 +7,47 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {history} from "utils/history";
+import { history } from "utils/history";
 
-var {Button} = require("components/core/Button");
-var {CommitteeStore} = require("stores/CommitteeStore");
+var { Button } = require("components/core/Button");
+var { CommitteeStore } = require("stores/CommitteeStore");
 var ContactTypes = require("constants/ContactTypes");
-var {ConferenceContext} = require("components/ConferenceContext");
-var {CountrySelect} = require("components/CountrySelect");
-var {CountryStore} = require("stores/CountryStore");
+var { ConferenceContext } = require("components/ConferenceContext");
+var { CountrySelect } = require("components/CountrySelect");
+var { CountryStore } = require("stores/CountryStore");
 var GenderConstants = require("constants/GenderConstants");
-var {NavLink} = require("components/NavLink");
-var {OuterView} = require("components/OuterView");
+var { NavLink } = require("components/NavLink");
+var { OuterView } = require("components/OuterView");
 var ProgramTypes = require("constants/ProgramTypes");
-var {RegistrationAccountInformation} = require("components/registration/RegistrationAccountInformation");
-var {RegistrationComments} = require("components/registration/RegistrationComments");
-var {RegistrationCountryPreferences} = require("components/registration/RegistrationCountryPreferences");
-var {RegistrationPrimaryContact} = require("components/registration/RegistrationPrimaryContact");
-var {RegistrationProgramInformation} = require("components/registration/RegistrationProgramInformation");
-var {RegistrationSchoolInformation} = require("components/registration/RegistrationSchoolInformation");
-var {RegistrationSecondaryContact} = require("components/registration/RegistrationSecondaryContact");
-var {RegistrationSpecialCommitteePreferences} = require("components/registration/RegistrationSpecialCommitteePreferences");
+var {
+  RegistrationAccountInformation,
+} = require("components/registration/RegistrationAccountInformation");
+var {
+  RegistrationComments,
+} = require("components/registration/RegistrationComments");
+var {
+  RegistrationCountryPreferences,
+} = require("components/registration/RegistrationCountryPreferences");
+var {
+  RegistrationPrimaryContact,
+} = require("components/registration/RegistrationPrimaryContact");
+var {
+  RegistrationProgramInformation,
+} = require("components/registration/RegistrationProgramInformation");
+var {
+  RegistrationSchoolInformation,
+} = require("components/registration/RegistrationSchoolInformation");
+var {
+  RegistrationSecondaryContact,
+} = require("components/registration/RegistrationSecondaryContact");
+var {
+  RegistrationSpecialCommitteePreferences,
+} = require("components/registration/RegistrationSpecialCommitteePreferences");
 var RegistrationViewText = require("text/RegistrationViewText.md");
-var {ServerAPI} = require("lib/ServerAPI");
-var {StatusLabel} = require("components/core/StatusLabel");
-var {TextTemplate} = require("components/core/TextTemplate");
-var {_handleChange} = require("utils/_handleChange");
+var { ServerAPI } = require("lib/ServerAPI");
+var { StatusLabel } = require("components/core/StatusLabel");
+var { TextTemplate } = require("components/core/TextTemplate");
+var { _handleChange } = require("utils/_handleChange");
 
 require("css/RegistrationView.less");
 
@@ -333,7 +349,7 @@ class RegistrationView extends React.Component {
         />
       </li>
     );
-  }
+  };
 
   renderCommittees = () => {
     return this.state.committees.map(function (committee) {
@@ -354,7 +370,7 @@ class RegistrationView extends React.Component {
         </li>
       );
     }, this);
-  }
+  };
 
   renderContactGenderField = (name) => {
     return (
@@ -380,7 +396,7 @@ class RegistrationView extends React.Component {
         </option>
       </select>
     );
-  }
+  };
 
   renderContactTypeField = (name) => {
     return (
@@ -397,7 +413,7 @@ class RegistrationView extends React.Component {
         </option>
       </select>
     );
-  }
+  };
 
   renderError = (field) => {
     if (this.state.errors[field]) {
@@ -407,7 +423,7 @@ class RegistrationView extends React.Component {
     }
 
     return null;
-  }
+  };
 
   _getPasswordConfirmError = () => {
     if (
@@ -416,7 +432,7 @@ class RegistrationView extends React.Component {
     ) {
       return ["Please enter the same password again."];
     }
-  }
+  };
 
   renderSchoolError = (field) => {
     if (this.state.errors.school && this.state.errors.school[field]) {
@@ -428,13 +444,13 @@ class RegistrationView extends React.Component {
     }
 
     return null;
-  }
+  };
 
   _getSchoolErrors = (field) => {
     if (this.state.errors.school) {
       return this.state.errors.school[field];
     }
-  }
+  };
 
   _handleDelegateSum = () => {
     var sum = 0;
@@ -448,19 +464,19 @@ class RegistrationView extends React.Component {
       sum += parseInt(this.state.num_advanced_delegates, 10) || 0;
     }
     return sum;
-  }
+  };
 
   _handlePasswordBlur = () => {
     this.setState({ passwordValidating: true });
-  }
+  };
 
-  _handlePasswordFocus = () =>{
+  _handlePasswordFocus = () => {
     this.setState({ passwordValidating: false });
-  }
+  };
 
   _handleProgramTypeChange = (event) => {
     this.setState({ program_type: parseInt(event.target.value) });
-  }
+  };
 
   _handleCommitteePreferenceChange = (committee) => {
     var index = this.state.committee_prefs.indexOf(committee.id);
@@ -475,31 +491,31 @@ class RegistrationView extends React.Component {
         }),
       });
     }
-  }
+  };
 
   _handleInternationalChange = (event) => {
     this.setState({ school_international: !!event.target.value });
-  }
+  };
 
   _handlePrimaryPhoneChange = (number) => {
     this.setState({ primary_phone: number });
-  }
+  };
 
   _handleSecondaryPhoneChange = (number) => {
     this.setState({ secondary_phone: number });
-  }
+  };
 
   _handlePasswordChange = (password) => {
     this.setState({ password });
-  }
+  };
 
   _handlePasswordConfirmChange = (password2) => {
     this.setState({ password2 });
-  }
+  };
 
   _getSchoolCountry = () => {
     return this.state.school_international ? this.state.school_country : USA;
-  }
+  };
 
   _handleSubmit = (event) => {
     this.setState({ loading: true });
@@ -531,7 +547,7 @@ class RegistrationView extends React.Component {
           secondary_email: this.state.secondary_email.trim(),
           secondary_phone: this.state.secondary_phone.trim(),
           secondary_type: this.state.secondary_type,
-        }
+        },
       },
       registration: {
         conference: conference,
@@ -559,7 +575,7 @@ class RegistrationView extends React.Component {
       },
     }).then(this._handleSuccess, this._handleError);
     event.preventDefault();
-  }
+  };
 
   _handleSuccess = (response) => {
     if (response.registration.is_waitlisted) {
@@ -567,7 +583,7 @@ class RegistrationView extends React.Component {
     } else {
       history.redirect("/register/success");
     }
-  }
+  };
 
   _handleError = (response) => {
     if (!response) {
@@ -583,11 +599,11 @@ class RegistrationView extends React.Component {
         this.context.shake && this.context.shake();
       }
     );
-  }
+  };
 }
 
 RegistrationView.contextTypes = {
   shake: PropTypes.func,
 };
 
-export {RegistrationView};
+export { RegistrationView };

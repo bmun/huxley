@@ -3,10 +3,10 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
-import ActionConstants from 'constants/ActionConstants';
-import {Dispatcher} from 'dispatcher/Dispatcher';
+import ActionConstants from "constants/ActionConstants";
+import { Dispatcher } from "dispatcher/Dispatcher";
 
 var DelegateActions = {
   deleteDelegate(delegateID, onError) {
@@ -61,4 +61,4 @@ var DelegateActions = {
   },
 };
 
-export {DelegateActions};
+export { DelegateActions };

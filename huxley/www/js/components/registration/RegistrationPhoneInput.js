@@ -8,8 +8,8 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-var {PhoneInput} = require("components/PhoneInput");
-var {StatusLabel} = require("components/core/StatusLabel");
+var { PhoneInput } = require("components/PhoneInput");
+var { StatusLabel } = require("components/core/StatusLabel");
 
 class RegistrationPhoneInput extends React.Component {
   render() {
@@ -33,4 +33,4 @@ RegistrationPhoneInput.propTypes = {
   value: PropTypes.string,
 };
 
-export {RegistrationPhoneInput};
+export { RegistrationPhoneInput };

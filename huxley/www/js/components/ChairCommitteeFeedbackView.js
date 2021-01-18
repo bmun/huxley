@@ -6,13 +6,13 @@
 "use strict";
 
 import React from "react";
-import {history} from "utils/history";
+import { history } from "utils/history";
 
-var {CommitteeFeedbackStore} = require("stores/CommitteeFeedbackStore");
-var {CurrentUserStore} = require("stores/CurrentUserStore");
-var {InnerView} = require("components/InnerView");
-var {TextTemplate} = require("components/core/TextTemplate");
-var {User} = require("utils/User");
+var { CommitteeFeedbackStore } = require("stores/CommitteeFeedbackStore");
+var { CurrentUserStore } = require("stores/CurrentUserStore");
+var { InnerView } = require("components/InnerView");
+var { TextTemplate } = require("components/core/TextTemplate");
+var { User } = require("utils/User");
 
 require("css/Table.less");
 var ChairCommitteeFeedbackViewText = require("text/ChairCommitteeFeedbackViewText.md");
@@ -70,7 +70,7 @@ class ChairCommitteeFeedbackView extends React.Component {
     );
   }
 
-  mapFeedbackToTable() {
+  mapFeedbackToTable = () => {
     var data = {};
     for (var singleFeedback of this.state.feedback) {
       for (var i = 1; i <= 10; i++) {
@@ -121,9 +121,9 @@ class ChairCommitteeFeedbackView extends React.Component {
       }
     }
     return tables;
-  }
+  };
 
-  renderFeedbackRows(obj) {
+  renderFeedbackRows = (obj) => {
     return obj.map(function (singleFeedback) {
       return (
         <tr>
@@ -134,7 +134,7 @@ class ChairCommitteeFeedbackView extends React.Component {
         </tr>
       );
     });
-  }
+  };
 }
 
-export {ChairCommitteeFeedbackView};
+export { ChairCommitteeFeedbackView };

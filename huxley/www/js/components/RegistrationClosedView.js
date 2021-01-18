@@ -8,10 +8,10 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-var {ConferenceContext} = require("components/ConferenceContext");
-var {NavLink} = require("components/NavLink");
-var {OuterView} = require("components/OuterView");
-var {TextTemplate} = require("components/core/TextTemplate");
+var { ConferenceContext } = require("components/ConferenceContext");
+var { NavLink } = require("components/NavLink");
+var { OuterView } = require("components/OuterView");
+var { TextTemplate } = require("components/core/TextTemplate");
 
 require("css/Letter.less");
 var RegistrationClosedViewText = require("text/RegistrationClosedViewText.md");
@@ -34,4 +34,4 @@ class RegistrationClosedView extends React.Component {
   }
 }
 
-export {RegistrationClosedView};
+export { RegistrationClosedView };

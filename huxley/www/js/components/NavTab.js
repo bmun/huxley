@@ -5,7 +5,7 @@
 
 "use strict";
 
-import {Link} from 'react-router-dom';
+import { Link } from "react-router-dom";
 import React from "react";
 import PropTypes from "prop-types";
 
@@ -23,4 +23,4 @@ NavTab.propTypes = {
   href: PropTypes.string.isRequired,
 };
 
-export {NavTab};
+export { NavTab };

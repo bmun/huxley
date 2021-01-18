@@ -7,21 +7,20 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {history} from "utils/history";
+import { history } from "utils/history";
 
-
-var {Button} = require("components/core/Button");
+var { Button } = require("components/core/Button");
 // var {ConferenceContext} = require("components/Huxley");
-var {ConferenceContext} = require("components/ConferenceContext");
-var {CurrentUserActions} = require("actions/CurrentUserActions");
-var {CurrentUserStore} = require("stores/CurrentUserStore");
-var {NavLink} = require("components/NavLink");
-var {OuterView} = require("components/OuterView");
-var {ServerAPI} = require("lib/ServerAPI");
-var {StatusLabel} = require("components/core/StatusLabel");
-var {TextInput} = require("components/core/TextInput");
-var {TextTemplate} = require("components/core/TextTemplate");
-var {User} = require("utils/User");
+var { ConferenceContext } = require("components/ConferenceContext");
+var { CurrentUserActions } = require("actions/CurrentUserActions");
+var { CurrentUserStore } = require("stores/CurrentUserStore");
+var { NavLink } = require("components/NavLink");
+var { OuterView } = require("components/OuterView");
+var { ServerAPI } = require("lib/ServerAPI");
+var { StatusLabel } = require("components/core/StatusLabel");
+var { TextInput } = require("components/core/TextInput");
+var { TextTemplate } = require("components/core/TextTemplate");
+var { User } = require("utils/User");
 
 require("css/LoginForm.less");
 var LoginViewText = require("text/LoginViewText.md");
@@ -99,21 +98,21 @@ class LoginView extends React.Component {
     );
   }
 
-  renderError() {
+  renderError = () => {
     if (this.state.error) {
       return <StatusLabel status="error">{this.state.error}</StatusLabel>;
     }
 
     return null;
-  }
+  };
 
   _handlePasswordChange = (password) => {
     this.setState({ password });
-  }
+  };
 
   _handleUsernameChange = (username) => {
     this.setState({ username });
-  }
+  };
 
   _handleSubmit = (event) => {
     this.setState({ loading: true });
@@ -122,12 +121,12 @@ class LoginView extends React.Component {
       this._handleError
     );
     event.preventDefault();
-  }
+  };
 
   _handleSuccess = (responseJSON) => {
     console.log(responseJSON);
     CurrentUserActions.login(responseJSON);
-  }
+  };
 
   _handleError = (responseJSON) => {
     if (!responseJSON.detail) {
@@ -143,11 +142,11 @@ class LoginView extends React.Component {
         this.context.shake && this.context.shake();
       }
     );
-  }
+  };
 }
 
 LoginView.contextTypes = {
   shake: PropTypes.func,
 };
 
-export {LoginView};
+export { LoginView };

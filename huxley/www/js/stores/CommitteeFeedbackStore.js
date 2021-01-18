@@ -3,13 +3,13 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
-import ActionConstants from 'constants/ActionConstants';
-import {CommitteeFeedbackActions} from 'actions/CommitteeFeedbackActions';
-import {Dispatcher} from 'dispatcher/Dispatcher';
-import {ServerAPI} from 'lib/ServerAPI';
-import {Store} from'flux/utils';
+import ActionConstants from "constants/ActionConstants";
+import { CommitteeFeedbackActions } from "actions/CommitteeFeedbackActions";
+import { Dispatcher } from "dispatcher/Dispatcher";
+import { ServerAPI } from "lib/ServerAPI";
+import { Store } from "flux/utils";
 
 var _committeeFeedbacks = {};
 var _committeeFeedbacksFetched = false;
@@ -19,13 +19,13 @@ class CommitteeFeedbackStore extends Store {
   getCommitteeFeedback(committeeID) {
     var feedbackIDs = Object.keys(_committeeFeedbacks);
     if (!_committeeFeedbacksFetched) {
-      ServerAPI.getCommitteeFeedback(committeeID).then(value => {
+      ServerAPI.getCommitteeFeedback(committeeID).then((value) => {
         CommitteeFeedbackActions.committeeFeedbackFetched(value);
       });
       return [];
     }
 
-    return feedbackIDs.map(id => _committeeFeedbacks[id]);
+    return feedbackIDs.map((id) => _committeeFeedbacks[id]);
   }
 
   feedbackSubmitted() {
@@ -53,4 +53,4 @@ class CommitteeFeedbackStore extends Store {
 }
 
 const committeeFeedbackStore = new CommitteeFeedbackStore(Dispatcher);
-export {committeeFeedbackStore as CommitteeFeedbackStore};
+export { committeeFeedbackStore as CommitteeFeedbackStore };

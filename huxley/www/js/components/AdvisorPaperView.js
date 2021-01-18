@@ -5,28 +5,22 @@
 
 "use strict";
 
-import React from "react";
-import PropTypes from "prop-types";
-
-var {_accessSafe} = require("utils/_accessSafe");
-var {AssignmentStore} = require("stores/AssignmentStore");
-var {Button} = require("components/core/Button");
-var {CommitteeStore} = require("stores/CommitteeStore");
-var {CountryStore} = require("stores/CountryStore");
-var {CurrentUserStore} = require("stores/CurrentUserStore");
-var {ConferenceContext} = require("components/ConferenceContext");
-var {InnerView} = require("components/InnerView");
-var {PositionPaperStore} = require("stores/PositionPaperStore");
-var {RubricStore} = require("stores/RubricStore");
-var ServerAPI = require("lib/ServerAPI");
-var {StatusLabel} = require("components/core/StatusLabel");
-var {Table} = require("components/core/Table");
-var {TextTemplate} = require("components/core/TextTemplate");
-var {inflateGrades} = require("utils/inflateGrades");
-var {_checkDate} = require("utils/_checkDate");
-var {_handleChange} = require("utils/_handleChange");
-
 import cx from "classnames";
+import React from "react";
+
+var { _accessSafe } = require("utils/_accessSafe");
+var { AssignmentStore } = require("stores/AssignmentStore");
+var { CommitteeStore } = require("stores/CommitteeStore");
+var { CountryStore } = require("stores/CountryStore");
+var { CurrentUserStore } = require("stores/CurrentUserStore");
+var { InnerView } = require("components/InnerView");
+var { PositionPaperStore } = require("stores/PositionPaperStore");
+var { RubricStore } = require("stores/RubricStore");
+var { StatusLabel } = require("components/core/StatusLabel");
+var { Table } = require("components/core/Table");
+var { TextTemplate } = require("components/core/TextTemplate");
+var { inflateGrades } = require("utils/inflateGrades");
+
 var AdvisorPaperViewText = require("text/AdvisorPaperViewText.md");
 var AdvisorWaitlistText = require("text/AdvisorWaitlistText.md");
 
@@ -104,7 +98,6 @@ class AdvisorPaperView extends React.Component {
       _accessSafe(registration, "is_waitlisted") == null
         ? null
         : registration.is_waitlisted;
-    var disableEdit = _checkDate();
 
     if (waitlisted) {
       return (
@@ -127,7 +120,7 @@ class AdvisorPaperView extends React.Component {
     }
   }
 
-  renderPaperTables() {
+  renderPaperTables = () => {
     var committees = {};
     var cm = this.state.committees;
     var countries = this.state.countries;
@@ -216,7 +209,7 @@ class AdvisorPaperView extends React.Component {
         );
       }.bind(this)
     );
-  }
+  };
 
   renderCommitteeRows(
     countryAssignments,
@@ -456,7 +449,7 @@ class AdvisorPaperView extends React.Component {
     }
   }
 
-  renderError(field) {
+  renderError = (field) => {
     if (this.state.errors[field]) {
       return (
         <StatusLabel status="error">{this.state.errors[field]}</StatusLabel>
@@ -464,14 +457,14 @@ class AdvisorPaperView extends React.Component {
     }
 
     return null;
-  }
+  };
 
   _handleError = (response) => {
     this.setState({
       errors: response,
       loading: false,
     });
-  }
+  };
 }
 
-export {AdvisorPaperView};
+export { AdvisorPaperView };

@@ -13,4 +13,4 @@ function _handleChange(fieldName, event) {
   });
 }
 
-export {_handleChange};
+export { _handleChange };

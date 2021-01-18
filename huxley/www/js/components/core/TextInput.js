@@ -30,7 +30,7 @@ class TextInput extends React.Component {
   }
   _handleChange = (event) => {
     this.props.onChange && this.props.onChange(event.target.value);
-  }
+  };
 }
 
 TextInput.propTypes = {
@@ -42,4 +42,4 @@ TextInput.propTypes = {
   type: PropTypes.oneOf(["text", "password"]),
 };
 
-export {TextInput};
+export { TextInput };

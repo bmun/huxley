@@ -3,14 +3,14 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
-import ActionConstants from 'constants/ActionConstants';
-import {CurrentUserStore} from 'stores/CurrentUserStore';
-import {Dispatcher} from 'dispatcher/Dispatcher';
-import {RegistrationActions} from 'actions/RegistrationActions';
-import {ServerAPI} from 'lib/ServerAPI';
-import {Store} from'flux/utils';
+import ActionConstants from "constants/ActionConstants";
+import { CurrentUserStore } from "stores/CurrentUserStore";
+import { Dispatcher } from "dispatcher/Dispatcher";
+import { RegistrationActions } from "actions/RegistrationActions";
+import { ServerAPI } from "lib/ServerAPI";
+import { Store } from "flux/utils";
 
 var _registration = null;
 var _previousUserID = -1;
@@ -25,7 +25,7 @@ class RegistrationStore extends Store {
       return _registration;
     }
 
-    ServerAPI.getRegistration(schoolID, conferenceID).then(value => {
+    ServerAPI.getRegistration(schoolID, conferenceID).then((value) => {
       RegistrationActions.registrationFetched(value[0]);
     });
 
@@ -33,7 +33,7 @@ class RegistrationStore extends Store {
   }
 
   updateRegistration(registrationID, delta, onError) {
-    const registration = {..._registration, ...delta};
+    const registration = { ..._registration, ...delta };
     ServerAPI.updateRegistration(registrationID, registration).catch(onError);
     _registration = registration;
   }
@@ -47,7 +47,7 @@ class RegistrationStore extends Store {
         this.updateRegistration(
           action.registrationID,
           action.delta,
-          action.onError,
+          action.onError
         );
         break;
       case ActionConstants.LOGIN:
@@ -66,4 +66,4 @@ class RegistrationStore extends Store {
 }
 
 const registrationStore = new RegistrationStore(Dispatcher);
-export {registrationStore as RegistrationStore};
+export { registrationStore as RegistrationStore };

@@ -8,25 +8,25 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-var {_accessSafe} = require("utils/_accessSafe");
-var {AssignmentActions} = require("actions/AssignmentActions");
-var {AssignmentStore} = require("stores/AssignmentStore");
-var {Button} = require("components/core/Button");
-var {_checkDate} = require("utils/_checkDate");
-var {CommitteeStore} = require("stores/CommitteeStore");
-var {ConferenceContext} = require("components/ConferenceContext");
-var {CountryStore} = require("stores/CountryStore");
-var {CurrentUserStore} = require("stores/CurrentUserStore");
-var {CurrentUserActions} = require("actions/CurrentUserActions");
-var {DelegateActions} = require("actions/DelegateActions");
-var {DelegateSelect} = require("components/DelegateSelect");
-var {DelegateStore} = require("stores/DelegateStore");
-var {InnerView} = require("components/InnerView");
-var {RegistrationActions} = require("actions/RegistrationActions");
-var {RegistrationStore} = require("stores/RegistrationStore");
-var {ServerAPI} = require("lib/ServerAPI");
-var {Table} = require("components/core/Table");
-var {TextTemplate} = require("components/core/TextTemplate");
+var { _accessSafe } = require("utils/_accessSafe");
+var { AssignmentActions } = require("actions/AssignmentActions");
+var { AssignmentStore } = require("stores/AssignmentStore");
+var { Button } = require("components/core/Button");
+var { _checkDate } = require("utils/_checkDate");
+var { CommitteeStore } = require("stores/CommitteeStore");
+var { ConferenceContext } = require("components/ConferenceContext");
+var { CountryStore } = require("stores/CountryStore");
+var { CurrentUserStore } = require("stores/CurrentUserStore");
+var { CurrentUserActions } = require("actions/CurrentUserActions");
+var { DelegateActions } = require("actions/DelegateActions");
+var { DelegateSelect } = require("components/DelegateSelect");
+var { DelegateStore } = require("stores/DelegateStore");
+var { InnerView } = require("components/InnerView");
+var { RegistrationActions } = require("actions/RegistrationActions");
+var { RegistrationStore } = require("stores/RegistrationStore");
+var { ServerAPI } = require("lib/ServerAPI");
+var { Table } = require("components/core/Table");
+var { TextTemplate } = require("components/core/TextTemplate");
 
 var AdvisorAssignmentsViewText = require("text/AdvisorAssignmentsViewText.md");
 var AdvisorWaitlistText = require("text/AdvisorWaitlistText.md");
@@ -164,7 +164,7 @@ class AdvisorAssignmentsView extends React.Component {
     }
   }
 
-  renderAssignmentRows() {
+  renderAssignmentRows = () => {
     var committees = this.state.committees;
     var countries = this.state.countries;
     var finalized =
@@ -203,7 +203,7 @@ class AdvisorAssignmentsView extends React.Component {
         );
       }.bind(this)
     );
-  }
+  };
 
   /*
     To make it easier to assign and unassign delegates to assignments we maintain
@@ -212,7 +212,7 @@ class AdvisorAssignmentsView extends React.Component {
     to be assigned to it. This way we can easily manage the relationship from
     assignment to delegates via this object.
   */
-  prepareAssignedDelegates(delegates) {
+  prepareAssignedDelegates = (delegates) => {
     var assigned = {};
     for (var i = 0; i < delegates.length; i++) {
       if (delegates[i].assignment) {
@@ -227,9 +227,9 @@ class AdvisorAssignmentsView extends React.Component {
     }
 
     return assigned;
-  }
+  };
 
-  renderDelegateDropdown(assignment, slot) {
+  renderDelegateDropdown = (assignment, slot) => {
     var selectedDelegateID =
       assignment.id in this.state.assigned
         ? this.state.assigned[assignment.id][slot]
@@ -248,9 +248,9 @@ class AdvisorAssignmentsView extends React.Component {
         disabled={disableView}
       />
     );
-  }
+  };
 
-  _handleDelegateAssignment(assignmentId, slot, event) {
+  _handleDelegateAssignment = (assignmentId, slot, event) => {
     var delegates = this.state.delegates;
     var assigned = this.state.assigned;
     var newDelegateId = event.target.value,
@@ -280,7 +280,7 @@ class AdvisorAssignmentsView extends React.Component {
       delegates: delegates,
       assigned: assigned,
     });
-  }
+  };
 
   _handleFinalize = (event) => {
     var confirm = window.confirm(
@@ -295,9 +295,9 @@ class AdvisorAssignmentsView extends React.Component {
         this._handleError
       );
     }
-  }
+  };
 
-  _handleAssignmentDelete(assignment) {
+  _handleAssignmentDelete = (assignment) => {
     var confirm = window.confirm(
       "Are you sure you want to delete this assignment?"
     );
@@ -310,7 +310,7 @@ class AdvisorAssignmentsView extends React.Component {
         this._handleError
       );
     }
-  }
+  };
 
   _handleSave = (event) => {
     this._successTimout && clearTimeout(this._successTimeout);
@@ -322,7 +322,7 @@ class AdvisorAssignmentsView extends React.Component {
       this._handleSuccess,
       this._handleError
     );
-  }
+  };
 
   _handleSuccess = (response) => {
     this.setState({
@@ -334,14 +334,14 @@ class AdvisorAssignmentsView extends React.Component {
       () => this.setState({ success: false }),
       2000
     );
-  }
+  };
 
   _handleError = (response) => {
     this.setState({ loading: false });
     window.alert(
       "Something went wrong. Please refresh your page and try again."
     );
-  }
+  };
 }
 
-export {AdvisorAssignmentsView};
+export { AdvisorAssignmentsView };

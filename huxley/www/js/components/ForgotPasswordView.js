@@ -7,16 +7,15 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {history} from "utils/history";
+import { history } from "utils/history";
 
-
-var {Button} = require("components/core/Button");
-var {NavLink} = require("components/NavLink");
-var {OuterView} = require("components/OuterView");
-var {ServerAPI} = require("lib/ServerAPI");
-var {StatusLabel} = require("components/core/StatusLabel");
-var {TextInput} = require("components/core/TextInput");
-var {TextTemplate} = require("components/core/TextTemplate");
+var { Button } = require("components/core/Button");
+var { NavLink } = require("components/NavLink");
+var { OuterView } = require("components/OuterView");
+var { ServerAPI } = require("lib/ServerAPI");
+var { StatusLabel } = require("components/core/StatusLabel");
+var { TextInput } = require("components/core/TextInput");
+var { TextTemplate } = require("components/core/TextTemplate");
 
 require("css/LoginForm.less");
 var ForgotPasswordViewText = require("text/ForgotPasswordViewText.md");
@@ -60,7 +59,7 @@ class ForgotPasswordView extends React.Component {
     );
   }
 
-  renderError() {
+  renderError = () => {
     if (this.state.error) {
       return (
         <StatusLabel status="error">
@@ -68,24 +67,24 @@ class ForgotPasswordView extends React.Component {
         </StatusLabel>
       );
     }
-  }
+  };
 
   _handleUsernameChange = (username) => {
     this.setState({ username });
-  }
+  };
 
-  _handleSubmit= (event) => {
+  _handleSubmit = (event) => {
     this.setState({ loading: true });
     ServerAPI.resetPassword(this.state.username).then(
       this._handleSuccess,
       this._handleError
     );
     event.preventDefault();
-  }
+  };
 
   _handleSuccess = (response) => {
     history.redirect("/password/reset");
-  }
+  };
 
   _handleError = (response) => {
     if (!response.detail) {
@@ -101,11 +100,11 @@ class ForgotPasswordView extends React.Component {
         this.context.shake && this.context.shake();
       }
     );
-  }
+  };
 }
 
 ForgotPasswordView.contextTypes = {
   shake: PropTypes.func,
 };
 
-export {ForgotPasswordView};
+export { ForgotPasswordView };

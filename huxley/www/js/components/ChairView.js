@@ -7,9 +7,9 @@
 
 import React from "react";
 
-var {NavTab} = require("components/NavTab");
-var {Shaker} = require("components/Shaker");
-var {TopBar} = require("components/TopBar");
+var { NavTab } = require("components/NavTab");
+var { Shaker } = require("components/Shaker");
+var { TopBar } = require("components/TopBar");
 
 require("css/NavBar.less");
 
@@ -34,4 +34,4 @@ class ChairView extends React.Component {
   }
 }
 
-export {ChairView};
+export { ChairView };

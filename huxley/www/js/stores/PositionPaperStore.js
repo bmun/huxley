@@ -3,14 +3,14 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
-import ActionConstants from 'constants/ActionConstants';
-import {CurrentUserStore} from 'stores/CurrentUserStore';
-import {PositionPaperActions} from 'actions/PositionPaperActions';
-import {Dispatcher} from 'dispatcher/Dispatcher';
-import {ServerAPI} from 'lib/ServerAPI';
-import {Store} from'flux/utils';
+import ActionConstants from "constants/ActionConstants";
+import { CurrentUserStore } from "stores/CurrentUserStore";
+import { PositionPaperActions } from "actions/PositionPaperActions";
+import { Dispatcher } from "dispatcher/Dispatcher";
+import { ServerAPI } from "lib/ServerAPI";
+import { Store } from "flux/utils";
 
 var _graded = {};
 var _files = {};
@@ -22,7 +22,7 @@ class PositionPaperStore extends Store {
     if (paperID in _files) {
       return _files[paperID];
     } else {
-      ServerAPI.getPositionPaperFile(paperID).then(value => {
+      ServerAPI.getPositionPaperFile(paperID).then((value) => {
         PositionPaperActions.positionPaperFileFetched(value, paperID);
       });
 
@@ -34,7 +34,7 @@ class PositionPaperStore extends Store {
     if (paperID in _graded) {
       return _graded[paperID];
     } else {
-      ServerAPI.getGradedPositionPaperFile(paperID).then(value => {
+      ServerAPI.getGradedPositionPaperFile(paperID).then((value) => {
         PositionPaperActions.gradedPositionPaperFileFetched(value, paperID);
       });
       return null;
@@ -86,7 +86,7 @@ class PositionPaperStore extends Store {
         this.updatePositionPaper(
           action.paper,
           action.onSuccess,
-          action.onError,
+          action.onError
         );
         break;
       case ActionConstants.UPLOAD_PAPER:
@@ -98,7 +98,7 @@ class PositionPaperStore extends Store {
           action.paper,
           action.file,
           action.onSuccess,
-          action.onError,
+          action.onError
         );
         break;
       case ActionConstants.UPLOAD_GRADED_PAPER:
@@ -110,7 +110,7 @@ class PositionPaperStore extends Store {
           action.paper,
           action.graded_file,
           action.onSuccess,
-          action.onError,
+          action.onError
         );
         break;
       case ActionConstants.STORE_PAPER:
@@ -137,4 +137,4 @@ class PositionPaperStore extends Store {
 }
 
 const positionPaperStore = new PositionPaperStore(Dispatcher);
-export {positionPaperStore as PositionPaperStore};
+export { positionPaperStore as PositionPaperStore };

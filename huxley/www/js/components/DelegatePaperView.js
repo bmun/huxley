@@ -7,21 +7,20 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {history} from "utils/history";
+import { history } from "utils/history";
 
+var { Button } = require("components/core/Button");
+var { ConferenceContext } = require("components/ConferenceContext");
+var { CurrentUserStore } = require("stores/CurrentUserStore");
+var { InnerView } = require("components/InnerView");
+var { PaperSubmissionTable } = require("components/PaperSubmissionTable");
+var { PositionPaperActions } = require("actions/PositionPaperActions");
+var { PositionPaperStore } = require("stores/PositionPaperStore");
+var { TextTemplate } = require("components/core/TextTemplate");
+var { User } = require("utils/User");
+var { inflateGrades } = require("utils/inflateGrades");
 
-var {Button} = require("components/core/Button");
-var {ConferenceContext} = require("components/ConferenceContext");
-var {CurrentUserStore} = require("stores/CurrentUserStore");
-var {InnerView} = require("components/InnerView");
-var {PaperSubmissionTable} = require("components/PaperSubmissionTable");
-var {PositionPaperActions} = require("actions/PositionPaperActions");
-var {PositionPaperStore} = require("stores/PositionPaperStore");
-var {TextTemplate} = require("components/core/TextTemplate");
-var {User} = require("utils/User");
-var {inflateGrades} = require("utils/inflateGrades");
-
-var {ServerAPI} = require("lib/ServerAPI");
+var { ServerAPI } = require("lib/ServerAPI");
 
 require("css/Table.less");
 var DelegatePaperViewText = require("text/DelegatePaperViewText.md");
@@ -94,7 +93,7 @@ class DelegatePaperView extends React.Component {
     }
   }
 
-  renderRubric() {
+  renderRubric = () => {
     const user = CurrentUserStore.getCurrentUser();
     const paper = this.state.papers[user.delegate.assignment.paper.id];
     const files = this.state.files;
@@ -116,7 +115,7 @@ class DelegatePaperView extends React.Component {
     } else {
       return <div />;
     }
-  }
+  };
   calculateTotalScore(paper, rubric, topic_2 = false) {
     var totalScore = -1;
     if (topic_2) {
@@ -220,13 +219,13 @@ class DelegatePaperView extends React.Component {
 
   _handleSuccess = (response) => {
     window.alert("Your paper has been successfully uploaded!");
-  }
+  };
 
   _handleError = (response) => {
     window.alert(
       "Something went wrong. Please refresh your page and try again."
     );
-  }
+  };
 }
 
-export {DelegatePaperView};
+export { DelegatePaperView };

@@ -3,10 +3,10 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
-import ActionConstants from 'constants/ActionConstants';
-import {Dispatcher} from 'dispatcher/Dispatcher';
+import ActionConstants from "constants/ActionConstants";
+import { Dispatcher } from "dispatcher/Dispatcher";
 
 var CommitteeFeedbackActions = {
   addCommitteeFeedback(feedback) {
@@ -24,4 +24,4 @@ var CommitteeFeedbackActions = {
   },
 };
 
-export {CommitteeFeedbackActions};
+export { CommitteeFeedbackActions };

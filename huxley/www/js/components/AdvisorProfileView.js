@@ -8,24 +8,24 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-var {_accessSafe} = require("utils/_accessSafe");
-const {AssignmentStore} = require("stores/AssignmentStore");
-const {Button} = require("components/core/Button");
-const {InnerView} = require("components/InnerView");
-const {LogoutButton} = require("components/LogoutButton");
-const {ConferenceContext} = require("components/ConferenceContext");
-const {CurrentUserActions} = require("actions/CurrentUserActions");
-const {CurrentUserStore} = require("stores/CurrentUserStore");
-const {DelegateStore} = require("stores/DelegateStore");
-const {PhoneInput} = require("components/PhoneInput");
-const {ProgramTypes} = require("constants/ProgramTypes");
-const {RegistrationStore} = require("stores/RegistrationStore");
-const {StatusLabel} = require("components/core/StatusLabel");
-const {Table} = require("components/core/Table");
-const {TextInput} = require("components/core/TextInput");
-const {TextTemplate} = require("components/core/TextTemplate");
-const {User} = require("utils/User");
-const {_handleChange} = require("utils/_handleChange");
+var { _accessSafe } = require("utils/_accessSafe");
+const { AssignmentStore } = require("stores/AssignmentStore");
+const { Button } = require("components/core/Button");
+const { InnerView } = require("components/InnerView");
+const { LogoutButton } = require("components/LogoutButton");
+const { ConferenceContext } = require("components/ConferenceContext");
+const { CurrentUserActions } = require("actions/CurrentUserActions");
+const { CurrentUserStore } = require("stores/CurrentUserStore");
+const { DelegateStore } = require("stores/DelegateStore");
+const { PhoneInput } = require("components/PhoneInput");
+const { ProgramTypes } = require("constants/ProgramTypes");
+const { RegistrationStore } = require("stores/RegistrationStore");
+const { StatusLabel } = require("components/core/StatusLabel");
+const { Table } = require("components/core/Table");
+const { TextInput } = require("components/core/TextInput");
+const { TextTemplate } = require("components/core/TextTemplate");
+const { User } = require("utils/User");
+const { _handleChange } = require("utils/_handleChange");
 
 const AdvisorProfileViewText = require("text/AdvisorProfileViewText.md");
 const AdvisorChecklistAssignmentsFinalizedText = require("text/checklists/AdvisorChecklistAssignmentsFinalizedText.md");
@@ -245,7 +245,9 @@ class AdvisorProfileView extends React.Component {
                 earlyPaperDeadlineMonth={
                   global.conference.early_paper_deadline["month"]
                 }
-                earlyPaperDeadlineDay={global.conference.early_paper_deadline["day"]}
+                earlyPaperDeadlineDay={
+                  global.conference.early_paper_deadline["day"]
+                }
                 paperDeadlineMonth={global.conference.paper_deadline["month"]}
                 paperDeadlineDay={global.conference.paper_deadline["day"]}
               >
@@ -551,7 +553,7 @@ class AdvisorProfileView extends React.Component {
     }
 
     return null;
-  }
+  };
 
   _handleSubmit = (event) => {
     this._successTimout && clearTimeout(this._successTimeout);
@@ -578,7 +580,7 @@ class AdvisorProfileView extends React.Component {
       this._handleError
     );
     event.preventDefault();
-  }
+  };
 
   _handleSuccess = (response) => {
     this.setState({
@@ -591,7 +593,7 @@ class AdvisorProfileView extends React.Component {
       () => this.setState({ success: false }),
       2000
     );
-  }
+  };
 
   _handleError = (response) => {
     if (!response) {
@@ -607,11 +609,11 @@ class AdvisorProfileView extends React.Component {
         this.context.shake && this.context.shake();
       }
     );
-  }
+  };
 }
 
 AdvisorProfileView.contextTypes = {
   shake: PropTypes.func,
 };
 
-export {AdvisorProfileView};
+export { AdvisorProfileView };

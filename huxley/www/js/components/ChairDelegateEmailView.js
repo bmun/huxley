@@ -6,15 +6,15 @@
 "use strict";
 
 import React from "react";
-import {history} from "utils/history";
+import { history } from "utils/history";
 
-var {AssignmentStore} = require("stores/AssignmentStore");
-var {CountryStore} = require("stores/CountryStore");
-var {CurrentUserStore} = require("stores/CurrentUserStore");
-var {DelegateStore} = require("stores/DelegateStore");
-var {InnerView} = require("components/InnerView");
-var {TextTemplate} = require("components/core/TextTemplate");
-var {User} = require("utils/User");
+var { AssignmentStore } = require("stores/AssignmentStore");
+var { CountryStore } = require("stores/CountryStore");
+var { CurrentUserStore } = require("stores/CurrentUserStore");
+var { DelegateStore } = require("stores/DelegateStore");
+var { InnerView } = require("components/InnerView");
+var { TextTemplate } = require("components/core/TextTemplate");
+var { User } = require("utils/User");
 
 require("css/Table.less");
 var ChairDelegateEmailViewText = require("text/ChairDelegateEmailViewText.md");
@@ -118,7 +118,7 @@ class ChairDelegateEmailView extends React.Component {
     );
   }
 
-  renderEmailRows() {
+  renderEmailRows = () => {
     var assignments = this.state.assignments;
     var delegates = this.state.delegates;
     var countries = this.state.countries;
@@ -136,7 +136,7 @@ class ChairDelegateEmailView extends React.Component {
         </tr>
       );
     });
-  }
+  };
 }
 
-export {ChairDelegateEmailView};
+export { ChairDelegateEmailView };

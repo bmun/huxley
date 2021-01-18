@@ -10,7 +10,6 @@ import PropTypes from "prop-types";
 import ReactDOM from "react-dom";
 import cx from "classnames";
 
-
 require("css/Shaker.less");
 
 class Shaker extends React.Component {
@@ -38,11 +37,11 @@ class Shaker extends React.Component {
         element.classList.remove("shake");
       }, 301);
     }
-  }
+  };
 }
 
 Shaker.childContextTypes = {
   shake: PropTypes.func,
 };
 
-export {Shaker};
+export { Shaker };

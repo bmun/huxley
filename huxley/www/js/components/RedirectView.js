@@ -6,11 +6,11 @@
 "use strict";
 
 import React from "react";
-import {history} from "utils/history";
+import { history } from "utils/history";
 
-var {CurrentUserStore} = require("stores/CurrentUserStore");
-var {OuterView} = require("components/OuterView");
-var {User} = require("utils/User");
+var { CurrentUserStore } = require("stores/CurrentUserStore");
+var { OuterView } = require("components/OuterView");
+var { User } = require("utils/User");
 
 class RedirectView extends React.Component {
   componentDidMount() {
@@ -29,8 +29,8 @@ class RedirectView extends React.Component {
   render() {
     // TODO: make this the same component as the loading indicator... when the
     // loading indicator is actually built.
-    return <div/>;
+    return <div />;
   }
 }
 
-export {RedirectView};
+export { RedirectView };

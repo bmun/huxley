@@ -7,14 +7,13 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {history} from "utils/history";
+import { history } from "utils/history";
 
-
-const {ConferenceContext} = require("components/ConferenceContext");
-const {CurrentUserStore} = require("stores/CurrentUserStore");
-const {InnerView} = require("components/InnerView");
-const {TextTemplate} = require("components/core/TextTemplate");
-const {User} = require("utils/User");
+const { ConferenceContext } = require("components/ConferenceContext");
+const { CurrentUserStore } = require("stores/CurrentUserStore");
+const { InnerView } = require("components/InnerView");
+const { TextTemplate } = require("components/core/TextTemplate");
+const { User } = require("utils/User");
 
 require("css/Table.less");
 const DelegateProfileViewText = require("text/DelegateProfileViewText.md");
@@ -93,7 +92,9 @@ class DelegateProfileView extends React.Component {
                 earlyPaperDeadlineMonth={
                   global.conference.early_paper_deadline["month"]
                 }
-                earlyPaperDeadlineDay={global.conference.early_paper_deadline["day"]}
+                earlyPaperDeadlineDay={
+                  global.conference.early_paper_deadline["day"]
+                }
                 paperDeadlineMonth={global.conference.paper_deadline["month"]}
                 paperDeadlineDay={global.conference.paper_deadline["day"]}
               >
@@ -152,4 +153,4 @@ class DelegateProfileView extends React.Component {
   }
 }
 
-export {DelegateProfileView};
+export { DelegateProfileView };

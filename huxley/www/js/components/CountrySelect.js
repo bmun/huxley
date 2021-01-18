@@ -35,7 +35,7 @@ class CountrySelect extends React.Component {
     );
   }
 
-  renderCommitteeOptions() {
+  renderCommitteeOptions = () => {
     return this.props.countries.map(
       function (country) {
         if (!country.special) {
@@ -48,7 +48,7 @@ class CountrySelect extends React.Component {
         }
       }.bind(this)
     );
-  }
+  };
 }
 
 CountrySelect.propTypes = {
@@ -58,4 +58,4 @@ CountrySelect.propTypes = {
   countryPreferences: PropTypes.array,
 };
 
-export {CountrySelect};
+export { CountrySelect };

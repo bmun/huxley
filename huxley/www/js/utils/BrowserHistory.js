@@ -3,7 +3,7 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-import {createBrowserHistory} from 'history';
+import { createBrowserHistory } from "history";
 
 const BrowserHistory = createBrowserHistory();
-export {BrowserHistory};
+export { BrowserHistory };

@@ -3,13 +3,13 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
-import invariant from 'invariant';
+import invariant from "invariant";
 
 invariant(
   global.GenderConstants !== undefined,
-  'global.GenderConstants must be defined.',
+  "global.GenderConstants must be defined."
 );
 
 var GenderConstants = global.GenderConstants;

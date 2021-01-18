@@ -9,8 +9,8 @@ import React from "react";
 import PropTypes from "prop-types";
 
 var ProgramTypes = require("constants/ProgramTypes");
-var {NumberInput} = require("components/NumberInput");
-var {_accessSafe} = require("utils/_accessSafe");
+var { NumberInput } = require("components/NumberInput");
+var { _accessSafe } = require("utils/_accessSafe");
 
 class RegistrationProgramInformation extends React.Component {
   shouldComponentUpdate(nextProps, nextState) {
@@ -144,4 +144,4 @@ RegistrationProgramInformation.propTypes = {
   programType: PropTypes.oneOf([ProgramTypes.CLUB, ProgramTypes.CLASS]),
 };
 
-export {RegistrationProgramInformation};
+export { RegistrationProgramInformation };

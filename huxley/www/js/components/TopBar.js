@@ -8,8 +8,8 @@
 import React from "react";
 import cx from "classnames";
 
-var {ChangePasswordView} = require("components/ChangePasswordView");
-var {LogoutButton} = require("components/LogoutButton");
+var { ChangePasswordView } = require("components/ChangePasswordView");
+var { LogoutButton } = require("components/LogoutButton");
 
 require("css/TopBar.less");
 
@@ -78,15 +78,15 @@ class TopBar extends React.Component {
     this.setState({
       changePasswordVisible: !this.state.changePasswordVisible,
     });
-  }
+  };
 
   _handleDropdownClick = (e) => {
     this._stopPropagation(e);
-  }
+  };
 
   _hideDropdown = () => {
     this.setState({ changePasswordVisible: false });
-  }
+  };
 
   _stopPropagation = (e) => {
     e.stopPropagation();
@@ -94,7 +94,7 @@ class TopBar extends React.Component {
     // TODO: display a warning if stopImmediatePropagation isn't supported.
     var ne = e.nativeEvent;
     ne.stopImmediatePropagation && ne.stopImmediatePropagation();
-  }
+  };
 }
 
-export {TopBar};
+export { TopBar };

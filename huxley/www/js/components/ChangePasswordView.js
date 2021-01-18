@@ -9,9 +9,9 @@ import cx from "classnames";
 import React from "react";
 import PropTypes from "prop-types";
 
-var {Button} = require("components/core/Button");
-var {ServerAPI} = require("lib/ServerAPI");
-var {StatusLabel} = require("components/core/StatusLabel");
+var { Button } = require("components/core/Button");
+var { ServerAPI } = require("lib/ServerAPI");
+var { StatusLabel } = require("components/core/StatusLabel");
 
 require("css/ChangePasswordView.less");
 
@@ -80,7 +80,7 @@ class ChangePasswordView extends React.Component {
     );
   }
 
-  renderMessage() {
+  renderMessage = () => {
     if (!this.state.message) {
       return null;
     }
@@ -90,24 +90,24 @@ class ChangePasswordView extends React.Component {
         {this.state.message}
       </StatusLabel>
     );
-  }
-  onSuccess() {
+  };
+  onSuccess = () => {
     setTimeout(this.props.onSuccess, 750);
-  }
+  };
 
   _handleCurrentPasswordChange = (event) => {
     this.setState({ currentPassword: event.target.value });
-  }
+  };
 
   _handleNewPasswordChange = (event) => {
     this.setState({ newPassword: event.target.value });
-  }
+  };
 
   _handleNewPassword2Change = (event) => {
     this.setState({ newPassword2: event.target.value });
-  }
+  };
 
-  _handleSubmit= (event) => {
+  _handleSubmit = (event) => {
     if (this.state.newPassword != this.state.newPassword2) {
       this.setState({
         message: "Please enter the same password again",
@@ -122,7 +122,7 @@ class ChangePasswordView extends React.Component {
       );
       event.preventDefault();
     }
-  }
+  };
 
   _handleSuccess = (response) => {
     this.setState(
@@ -136,7 +136,7 @@ class ChangePasswordView extends React.Component {
       },
       this.onSuccess
     );
-  }
+  };
 
   _handleError = (response) => {
     this.setState({
@@ -144,11 +144,11 @@ class ChangePasswordView extends React.Component {
       message: response.detail,
       success: false,
     });
-  }
+  };
 
-  _handleDropdownClick(e) {
+  _handleDropdownClick = (e) => {
     this.props.onClick && this.props.onClick(e);
-  }
+  };
 }
 
 ChangePasswordView.propTypes = {
@@ -157,4 +157,4 @@ ChangePasswordView.propTypes = {
   onSuccess: PropTypes.func.isRequired,
 };
 
-export {ChangePasswordView};
+export { ChangePasswordView };

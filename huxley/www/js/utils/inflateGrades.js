@@ -3,17 +3,16 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
- 'use strict';
+"use strict";
 
- /**
- * Inflates grades by 50%. 
+/**
+ * Inflates grades by 50%.
  */
 function inflateGrades(grade, total) {
-    if (grade === 0) {
-        return 0;
-    }
-    return Math.min(grade + (total / 2.6), total);
+  if (grade === 0) {
+    return 0;
+  }
+  return Math.min(grade + total / 2.6, total);
 }
-  
-export {inflateGrades};
-  
+
+export { inflateGrades };

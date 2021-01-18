@@ -27,4 +27,4 @@ Table.propTypes = {
   isEmpty: PropTypes.bool.isRequired,
 };
 
-export {Table};
+export { Table };

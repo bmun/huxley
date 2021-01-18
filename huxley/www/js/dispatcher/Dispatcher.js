@@ -3,10 +3,10 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
-import {Dispatcher} from 'flux';
+import { Dispatcher } from "flux";
 
 const dispatcher = new Dispatcher();
 
-export {dispatcher as Dispatcher};
+export { dispatcher as Dispatcher };

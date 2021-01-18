@@ -7,18 +7,18 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {history} from "utils/history";
+import { history } from "utils/history";
 
-const {Button} = require("components/core/Button");
-const {CommitteeStore} = require("stores/CommitteeStore");
-const {CurrentUserStore} = require("stores/CurrentUserStore");
-const {InnerView} = require("components/InnerView");
-const {NumberInput} = require("components/NumberInput");
-const {RubricActions} = require("actions/RubricActions");
-const {RubricStore} = require("stores/RubricStore");
-const {TextInput} = require("components/core/TextInput");
-const {TextTemplate} = require("components/core/TextTemplate");
-const {User} = require("utils/User");
+const { Button } = require("components/core/Button");
+const { CommitteeStore } = require("stores/CommitteeStore");
+const { CurrentUserStore } = require("stores/CurrentUserStore");
+const { InnerView } = require("components/InnerView");
+const { NumberInput } = require("components/NumberInput");
+const { RubricActions } = require("actions/RubricActions");
+const { RubricStore } = require("stores/RubricStore");
+const { TextInput } = require("components/core/TextInput");
+const { TextTemplate } = require("components/core/TextTemplate");
+const { User } = require("utils/User");
 
 require("css/Table.less");
 const ChairRubricText = require("text/ChairRubricViewText.md");
@@ -267,7 +267,7 @@ class ChairRubricView extends React.Component {
     );
   }
 
-  _renderTopicTwo(rubric) {
+  _renderTopicTwo = (rubric) => {
     return (
       <table>
         <thead>
@@ -365,7 +365,7 @@ class ChairRubricView extends React.Component {
         </tbody>
       </table>
     );
-  }
+  };
 
   _handleChange(field, event) {
     var rubric = this.state.rubric;
@@ -390,13 +390,13 @@ class ChairRubricView extends React.Component {
     });
   }
 
-  _handleSaveRubric= (event) => {
+  _handleSaveRubric = (event) => {
     this.setState({ loading: true });
     this._successTimout && clearTimeout(this._successTimeout);
     var rubric = { ...this.state.rubric };
     RubricActions.updateRubric(rubric, this._handleSuccess, this._handleError);
     event.preventDefault();
-  }
+  };
 
   _handleSuccess = (response) => {
     this.setState({
@@ -408,14 +408,14 @@ class ChairRubricView extends React.Component {
       () => this.setState({ success: false }),
       2000
     );
-  }
+  };
 
   _handleError = (response) => {
     this.setState({ loading: false });
     window.alert(
       "Something went wrong. Please refresh your page and try again."
     );
-  }
+  };
 }
 
-export {ChairRubricView};
+export { ChairRubricView };

@@ -7,22 +7,23 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {history} from "utils/history";
+import { history } from "utils/history";
 
+const { Button } = require("components/core/Button");
+const { ConferenceContext } = require("components/ConferenceContext");
+const { CurrentUserStore } = require("stores/CurrentUserStore");
+const {
+  CommitteeFeedbackActions,
+} = require("actions/CommitteeFeedbackActions");
+const { CommitteeFeedbackStore } = require("stores/CommitteeFeedbackStore");
+const { InnerView } = require("components/InnerView");
+const { ServerAPI } = require("lib/ServerAPI");
+const { SecretariatMemberStore } = require("stores/SecretariatMemberStore");
+const { NumberInput } = require("components/NumberInput");
+const { TextTemplate } = require("components/core/TextTemplate");
+const { User } = require("utils/User");
 
-const {Button} = require("components/core/Button");
-const {ConferenceContext} = require("components/ConferenceContext");
-const {CurrentUserStore} = require("stores/CurrentUserStore");
-const {CommitteeFeedbackActions} = require("actions/CommitteeFeedbackActions");
-const {CommitteeFeedbackStore} = require("stores/CommitteeFeedbackStore");
-const {InnerView} = require("components/InnerView");
-const {ServerAPI} = require("lib/ServerAPI");
-const {SecretariatMemberStore} = require("stores/SecretariatMemberStore");
-const {NumberInput} = require("components/NumberInput");
-const {TextTemplate} = require("components/core/TextTemplate");
-const {User} = require("utils/User");
-
-const {_handleChange} = require("utils/_handleChange");
+const { _handleChange } = require("utils/_handleChange");
 
 require("css/Table.less");
 const DelegateCommitteeFeedbackViewText = require("text/DelegateCommitteeFeedbackViewText.md");
@@ -280,7 +281,7 @@ class DelegateCommitteeFeedbackView extends React.Component {
     );
   }
 
-  _buildConferenceInputs() {
+  _buildConferenceInputs = () => {
     return (
       <div>
         <div>
@@ -328,9 +329,9 @@ class DelegateCommitteeFeedbackView extends React.Component {
         </div>
       </div>
     );
-  }
+  };
 
-  _handlePublishFeedback= (event) => {
+  _handlePublishFeedback = (event) => {
     this.setState({ loadingPublish: true });
     var committee_id = this.state.delegate.assignment.committee.id;
     ServerAPI.createCommitteeFeedback({
@@ -371,18 +372,18 @@ class DelegateCommitteeFeedbackView extends React.Component {
       money_spent: this.state.money_spent,
     }).then(this._handleAddFeedbackSuccess, this._handleAddFeedbackFail);
     event.preventDefault();
-  }
+  };
 
   _handleAddFeedbackSuccess = (response) => {
     CommitteeFeedbackActions.addCommitteeFeedback(response);
-  }
+  };
 
   _handleAddFeedbackFail = (response) => {
     this.setState({
       errors: response,
       loading: false,
     });
-  }
+  };
 }
 
-export {DelegateCommitteeFeedbackView};
+export { DelegateCommitteeFeedbackView };

@@ -8,10 +8,10 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-var {ConferenceContext} = require("components/ConferenceContext");
-var {NavLink} = require("components/NavLink");
-var {OuterView} = require("components/OuterView");
-var {TextTemplate} = require("components/core/TextTemplate");
+var { ConferenceContext } = require("components/ConferenceContext");
+var { NavLink } = require("components/NavLink");
+var { OuterView } = require("components/OuterView");
+var { TextTemplate } = require("components/core/TextTemplate");
 
 require("css/Letter.less");
 var RegistrationSuccessViewText = require("text/RegistrationSuccessViewText.md");
@@ -39,4 +39,4 @@ class RegistrationSuccessView extends React.Component {
   }
 }
 
-export {RegistrationSuccessView};
+export { RegistrationSuccessView };

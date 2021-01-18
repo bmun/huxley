@@ -7,25 +7,22 @@
 
 var Modal = require("react-modal");
 import React from "react";
-import PropTypes from "prop-types";
 
-var {_accessSafe} = require("utils/_accessSafe");
-var {AssignmentStore} = require("stores/AssignmentStore");
-var {Button} = require("components/core/Button");
-var {CurrentUserStore} = require("stores/CurrentUserStore");
-var DelegateActions = require("actions/DelegateActions");
-var {DelegateStore} = require("stores/DelegateStore");
-var {ConferenceContext} = require("components/ConferenceContext");
-var {CurrentUserActions} = require("actions/CurrentUserActions");
-var {InnerView} = require("components/InnerView");
-var {RegistrationStore} = require("stores/RegistrationStore");
-var {ServerAPI} = require("lib/ServerAPI");
-var {StatusLabel} = require("components/core/StatusLabel");
-var {Table} = require("components/core/Table");
-var {TextInput} = require("components/core/TextInput");
-var {TextTemplate} = require("components/core/TextTemplate");
-var {_checkDate} = require("utils/_checkDate");
-var {_handleChange} = require("utils/_handleChange");
+var { _accessSafe } = require("utils/_accessSafe");
+var { AssignmentStore } = require("stores/AssignmentStore");
+var { Button } = require("components/core/Button");
+var { CurrentUserStore } = require("stores/CurrentUserStore");
+var { DelegateActions } = require("actions/DelegateActions");
+var { DelegateStore } = require("stores/DelegateStore");
+var { InnerView } = require("components/InnerView");
+var { RegistrationStore } = require("stores/RegistrationStore");
+var { ServerAPI } = require("lib/ServerAPI");
+var { StatusLabel } = require("components/core/StatusLabel");
+var { Table } = require("components/core/Table");
+var { TextInput } = require("components/core/TextInput");
+var { TextTemplate } = require("components/core/TextTemplate");
+var { _checkDate } = require("utils/_checkDate");
+var { _handleChange } = require("utils/_handleChange");
 
 require("css/Modal.less");
 var AdvisorRosterViewText = require("text/AdvisorRosterViewText.md");
@@ -105,7 +102,6 @@ class AdvisorRosterView extends React.Component {
   }
 
   render() {
-    var conference = global.conference;
     var registration = this.state.registration;
     var waitlisted =
       _accessSafe(registration, "is_waitlisted") == null
@@ -199,10 +195,7 @@ class AdvisorRosterView extends React.Component {
     }
   }
 
-  renderRosterRows() {
-    var committees = this.state.committees;
-    var countries = this.state.countries;
-    var assignments = this.state.assignments;
+  renderRosterRows = () => {
     var assignment_ids = this.state.assignment_ids;
     var disableEdit = _checkDate();
 
@@ -279,7 +272,7 @@ class AdvisorRosterView extends React.Component {
         );
       }.bind(this)
     );
-  }
+  };
 
   openModal(name, email, fn, event) {
     this.setState({
@@ -292,12 +285,12 @@ class AdvisorRosterView extends React.Component {
     event.preventDefault();
   }
 
-  closeModal= (event) => {
+  closeModal = (event) => {
     this.setState({ modal_open: false });
     event.preventDefault();
-  }
+  };
 
-  renderError(field) {
+  renderError = (field) => {
     if (this.state.errors[field]) {
       return (
         <StatusLabel status="error">{this.state.errors[field]}</StatusLabel>
@@ -305,18 +298,18 @@ class AdvisorRosterView extends React.Component {
     }
 
     return null;
-  }
+  };
 
-  _handleDeleteDelegate(delegate) {
+  _handleDeleteDelegate = (delegate) => {
     const confirmed = window.confirm(
       `Are you sure you want to delete this delegate (${delegate.name})?`
     );
     if (confirmed) {
       DelegateActions.deleteDelegate(delegate.id, this._handleDeleteError);
     }
-  }
+  };
 
-  _handleAddDelegate(data) {
+  _handleAddDelegate = () => {
     this.setState({ loading: true });
     var user = CurrentUserStore.getCurrentUser();
     ServerAPI.createDelegate(
@@ -325,22 +318,21 @@ class AdvisorRosterView extends React.Component {
       user.school.id
     ).then(this._handleAddDelegateSuccess, this._handleError);
     event.preventDefault();
-  }
+  };
 
-  _handleEditDelegate(delegate) {
-    var user = CurrentUserStore.getCurrentUser();
+  _handleEditDelegate = (delegate) => {
     this.setState({ loading: true });
     var delta = { name: this.state.modal_name, email: this.state.modal_email };
     DelegateActions.updateDelegate(delegate.id, delta, this._handleError);
     event.preventDefault();
-  }
+  };
 
-  _handleDelegatePasswordChange(delegate) {
+  _handleDelegatePasswordChange = (delegate) => {
     ServerAPI.resetDelegatePassword(delegate.id).then(
       this._handlePasswordChangeSuccess,
       this._handlePasswordChangeError
     );
-  }
+  };
 
   _handleAddDelegateSuccess = (response) => {
     DelegateActions.addDelegate(response);
@@ -348,25 +340,25 @@ class AdvisorRosterView extends React.Component {
       loading: false,
       modal_open: false,
     });
-  }
+  };
 
-  _handlePasswordChangeSuccess = (response) => {
+  _handlePasswordChangeSuccess = () => {
     this.setState({
       loading: false,
       modal_open: false,
     });
     window.alert(`Password successfully reset.`);
-  }
+  };
 
-  _handlePasswordChangeError = (response) => {
+  _handlePasswordChangeError = () => {
     window.alert(`The passowrd could not be reset.`);
-  }
+  };
 
-  _handleDeleteError = (response) => {
+  _handleDeleteError = () => {
     window.alert(
       `There was an issue processing your request. Please refresh you page and try again.`
     );
-  }
+  };
 
   _handleError = (response) => {
     this.setState({
@@ -374,7 +366,7 @@ class AdvisorRosterView extends React.Component {
       loading: false,
       modal_open: true,
     });
-  }
+  };
 }
 
-export {AdvisorRosterView};
+export { AdvisorRosterView };

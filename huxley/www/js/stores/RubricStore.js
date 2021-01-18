@@ -3,13 +3,13 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
-import ActionConstants from 'constants/ActionConstants';
-import {RubricActions} from 'actions/RubricActions';
-import {Dispatcher} from 'dispatcher/Dispatcher';
-import {ServerAPI} from 'lib/ServerAPI';
-import {Store} from'flux/utils';
+import ActionConstants from "constants/ActionConstants";
+import { RubricActions } from "actions/RubricActions";
+import { Dispatcher } from "dispatcher/Dispatcher";
+import { ServerAPI } from "lib/ServerAPI";
+import { Store } from "flux/utils";
 
 var _rubrics = {};
 
@@ -18,7 +18,7 @@ class RubricStore extends Store {
     if (rubricID in _rubrics) {
       return _rubrics[rubricID];
     } else {
-      ServerAPI.getRubric(rubricID).then(value => {
+      ServerAPI.getRubric(rubricID).then((value) => {
         RubricActions.rubricFetched(value);
       });
 
@@ -48,4 +48,4 @@ class RubricStore extends Store {
 }
 
 const rubricStore = new RubricStore(Dispatcher);
-export {rubricStore as RubricStore};
+export { rubricStore as RubricStore };

@@ -6,17 +6,17 @@
 "use strict";
 
 import React from "react";
-import {history} from "utils/history";
+import { history } from "utils/history";
 
-var {Button} = require("components/core/Button");
-var {AssignmentStore} = require("stores/AssignmentStore");
-var {CountryStore} = require("stores/CountryStore");
-var {CurrentUserStore} = require("stores/CurrentUserStore");
-var DelegateActions = require("actions/DelegateActions");
-var {DelegateStore} = require("stores/DelegateStore");
-var {InnerView} = require("components/InnerView");
-var {TextTemplate} = require("components/core/TextTemplate");
-var {User} = require("utils/User");
+var { Button } = require("components/core/Button");
+var { AssignmentStore } = require("stores/AssignmentStore");
+var { CountryStore } = require("stores/CountryStore");
+var { CurrentUserStore } = require("stores/CurrentUserStore");
+var { DelegateActions } = require("actions/DelegateActions");
+var { DelegateStore } = require("stores/DelegateStore");
+var { InnerView } = require("components/InnerView");
+var { TextTemplate } = require("components/core/TextTemplate");
+var { User } = require("utils/User");
 
 require("css/Table.less");
 var ChairSummaryViewText = require("text/ChairSummaryViewText.md");
@@ -160,7 +160,7 @@ class ChairSummaryView extends React.Component {
     );
   }
 
-  renderSummaryRows() {
+  renderSummaryRows = () => {
     var assignments = this.state.assignments;
     var summaries = this.state.summaries;
     var assignmentIDs = Object.keys(summaries);
@@ -184,7 +184,7 @@ class ChairSummaryView extends React.Component {
         </tr>
       );
     });
-  }
+  };
 
   _handleSummaryChange(assignment, event) {
     var summaries = this.state.summaries;
@@ -196,7 +196,7 @@ class ChairSummaryView extends React.Component {
     });
   }
 
-  _handleSaveSummaries= (event) => {
+  _handleSaveSummaries = (event) => {
     this._successTimoutSave && clearTimeout(this._successTimeoutSave);
     this.setState({ loadingSave: true });
     var committee = CurrentUserStore.getCurrentUser().committee;
@@ -216,9 +216,9 @@ class ChairSummaryView extends React.Component {
       this._handleErrorSave
     );
     event.preventDefault();
-  }
+  };
 
-  _handlePublishSummaries= (event) => {
+  _handlePublishSummaries = (event) => {
     var confirm = window.confirm(
       "By pressing ok, you are allowing advisors " +
         "to read the summaries that you have written " +
@@ -253,7 +253,7 @@ class ChairSummaryView extends React.Component {
       );
       event.preventDefault();
     }
-  }
+  };
 
   _handleSuccessSave = (response) => {
     this.setState({
@@ -265,14 +265,14 @@ class ChairSummaryView extends React.Component {
       () => this.setState({ successSave: false }),
       2000
     );
-  }
+  };
 
   _handleErrorSave = (response) => {
     this.setState({ loadingSave: false });
     window.alert(
       "Something went wrong. Please refresh your page and try again."
     );
-  }
+  };
 
   _handleSuccessPublish = (response) => {
     this.setState({
@@ -284,14 +284,14 @@ class ChairSummaryView extends React.Component {
       () => this.setState({ successPublish: false }),
       2000
     );
-  }
+  };
 
   _handleErrorPublish = (response) => {
     this.setState({ loadingPublish: false });
     window.alert(
       "Something went wrong. Please refresh your page and try again."
     );
-  }
+  };
 }
 
-export {ChairSummaryView};
+export { ChairSummaryView };
