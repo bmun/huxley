@@ -8,7 +8,7 @@
 import 'core-js';
 import React from "react";
 import {BrowserHistory} from "utils/BrowserHistory";
-import {Router, BrowserRouter, Route, Switch} from 'react-router-dom';
+import {BrowserRouter, Route, Switch} from 'react-router-dom';
 var ReactDOM = require('react-dom');
 
 var {CurrentUserActions} = require('actions/CurrentUserActions');
