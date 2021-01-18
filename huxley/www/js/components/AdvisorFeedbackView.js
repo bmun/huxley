@@ -8,7 +8,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-var _accessSafe = require("utils/_accessSafe");
+var {_accessSafe} = require("utils/_accessSafe");
 var {AssignmentStore} = require("stores/AssignmentStore");
 var {CommitteeStore} = require("stores/CommitteeStore");
 var {ConferenceContext} = require("components/ConferenceContext");

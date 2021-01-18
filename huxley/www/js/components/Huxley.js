@@ -24,7 +24,7 @@ require("css/JSWarning.less");
 require("css/IEWarning.less");
 
 class Huxley extends React.Component {
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     CurrentUserStore.addListener(() => {
       var user = CurrentUserStore.getCurrentUser();
       console.log(user);

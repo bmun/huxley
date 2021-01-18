@@ -36,7 +36,7 @@ class LoginView extends React.Component {
     };
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     var { user } = this.props;
     if (User.isAnonymous(user)) {
       return;

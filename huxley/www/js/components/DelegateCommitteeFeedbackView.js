@@ -22,7 +22,7 @@ const {NumberInput} = require("components/NumberInput");
 const {TextTemplate} = require("components/core/TextTemplate");
 const {User} = require("utils/User");
 
-const _handleChange = require("utils/_handleChange");
+const {_handleChange} = require("utils/_handleChange");
 
 require("css/Table.less");
 const DelegateCommitteeFeedbackViewText = require("text/DelegateCommitteeFeedbackViewText.md");
@@ -107,7 +107,7 @@ class DelegateCommitteeFeedbackView extends React.Component {
     });
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     var user = CurrentUserStore.getCurrentUser();
     if (!User.isDelegate(user)) {
       history.redirect("/");

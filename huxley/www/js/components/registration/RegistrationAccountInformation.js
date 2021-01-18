@@ -9,7 +9,7 @@ import React from "react";
 import PropTypes from "prop-types";
 
 var {RegistrationTextInput} = require("components/registration/RegistrationTextInput");
-var _accessSafe = require("utils/_accessSafe");
+var {_accessSafe} = require("utils/_accessSafe");
 
 class RegistrationAccountInformation extends React.Component {
   shouldComponentUpdate(nextProps, nextState) {

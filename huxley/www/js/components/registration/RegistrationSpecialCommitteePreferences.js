@@ -9,7 +9,7 @@ import React from "react";
 import PropTypes from "prop-types";
 
 var {NumberInput} = require("components/NumberInput");
-var _accessSafe = require("utils/_accessSafe");
+var {_accessSafe} = require("utils/_accessSafe");
 
 class RegistrationSpecialCommitteePreferences extends React.Component {
   render() {

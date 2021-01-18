@@ -9,7 +9,7 @@ var Modal = require("react-modal");
 import React from "react";
 import PropTypes from "prop-types";
 
-var _accessSafe = require("utils/_accessSafe");
+var {_accessSafe} = require("utils/_accessSafe");
 var {AssignmentStore} = require("stores/AssignmentStore");
 var {Button} = require("components/core/Button");
 var {CurrentUserStore} = require("stores/CurrentUserStore");
@@ -24,8 +24,8 @@ var {StatusLabel} = require("components/core/StatusLabel");
 var {Table} = require("components/core/Table");
 var {TextInput} = require("components/core/TextInput");
 var {TextTemplate} = require("components/core/TextTemplate");
-var _checkDate = require("utils/_checkDate");
-var _handleChange = require("utils/_handleChange");
+var {_checkDate} = require("utils/_checkDate");
+var {_handleChange} = require("utils/_handleChange");
 
 require("css/Modal.less");
 var AdvisorRosterViewText = require("text/AdvisorRosterViewText.md");
@@ -61,7 +61,7 @@ class AdvisorRosterView extends React.Component {
     };
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     Modal.setAppElement("body");
   }
 

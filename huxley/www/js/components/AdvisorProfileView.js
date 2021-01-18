@@ -8,13 +8,14 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-var _accessSafe = require("utils/_accessSafe");
+var {_accessSafe} = require("utils/_accessSafe");
 const {AssignmentStore} = require("stores/AssignmentStore");
 const {Button} = require("components/core/Button");
 const {InnerView} = require("components/InnerView");
 const {LogoutButton} = require("components/LogoutButton");
 const {ConferenceContext} = require("components/ConferenceContext");
 const {CurrentUserActions} = require("actions/CurrentUserActions");
+const {CurrentUserStore} = require("stores/CurrentUserStore");
 const {DelegateStore} = require("stores/DelegateStore");
 const {PhoneInput} = require("components/PhoneInput");
 const {ProgramTypes} = require("constants/ProgramTypes");
@@ -24,7 +25,7 @@ const {Table} = require("components/core/Table");
 const {TextInput} = require("components/core/TextInput");
 const {TextTemplate} = require("components/core/TextTemplate");
 const {User} = require("utils/User");
-const _handleChange = require("utils/_handleChange");
+const {_handleChange} = require("utils/_handleChange");
 
 const AdvisorProfileViewText = require("text/AdvisorProfileViewText.md");
 const AdvisorChecklistAssignmentsFinalizedText = require("text/checklists/AdvisorChecklistAssignmentsFinalizedText.md");
@@ -45,9 +46,9 @@ class AdvisorProfileView extends React.Component {
 
   constructor(props) {
     super(props);
-    var user = this.props.user;
+    var user = CurrentUserStore.getCurrentUser();
     var school = User.getSchool(user);
-    var conferenceID = conference.session;
+    var conferenceID = global.conference.session;
     this.state = {
       errors: {},
       first_name: user.first_name,
@@ -68,11 +69,12 @@ class AdvisorProfileView extends React.Component {
       delegates: DelegateStore.getSchoolDelegates(school.id),
       assignments: AssignmentStore.getSchoolAssignments(school.id),
     };
+    this.user = user;
   }
 
   componentDidMount() {
-    var schoolID = User.getSchool(this.props.user).id;
-    var conferenceID = conference.session;
+    var schoolID = User.getSchool(this.user).id;
+    var conferenceID = global.conference.session;
     this._registrationToken = RegistrationStore.addListener(() => {
       this.setState({
         registration: RegistrationStore.getRegistration(schoolID, conferenceID),
@@ -99,7 +101,7 @@ class AdvisorProfileView extends React.Component {
 
   render() {
     var conference = conference;
-    var user = this.props.user;
+    var user = this.user;
     var school = User.getSchool(user);
     var registration = this.state.registration;
     var delegates = this.state.delegates;
@@ -187,16 +189,16 @@ class AdvisorProfileView extends React.Component {
               <b>{teamFeePaid} Team Fee Paid</b>
               <br />
               <TextTemplate
-                registrationFee={conference.registration_fee}
-                conferenceTreasurer={conference.treasurer}
-                regOpen={conference.reg_open}
-                roundOneEnd={conference.round_one_end}
-                roundTwoStart={conference.round_two_start}
-                roundTwoEnd={conference.round_two_end}
-                roundThreeStart={conference.round_three_start}
-                roundThreeEnd={conference.round_three_end}
-                roundFourStart={conference.round_four_start}
-                regClose={conference.reg_close}
+                registrationFee={global.conference.registration_fee}
+                conferenceTreasurer={global.conference.treasurer}
+                regOpen={global.conference.reg_open}
+                roundOneEnd={global.conference.round_one_end}
+                roundTwoStart={global.conference.round_two_start}
+                roundTwoEnd={global.conference.round_two_end}
+                roundThreeStart={global.conference.round_three_start}
+                roundThreeEnd={global.conference.round_three_end}
+                roundFourStart={global.conference.round_four_start}
+                regClose={global.conference.reg_close}
               >
                 {AdvisorChecklistTeamFeeText}
               </TextTemplate>
@@ -207,20 +209,20 @@ class AdvisorProfileView extends React.Component {
               <b>{allFeesPaid} All Fees Paid</b>
               <br />
               <TextTemplate
-                delegateFee={conference.delegate_fee}
-                conferenceTreasurer={conference.treasurer}
-                regOpen={conference.reg_open}
-                roundOneEnd={conference.round_one_end}
-                roundOneFeesDue={conference.round_one_fees_due}
-                roundTwoStart={conference.round_two_start}
-                roundTwoEnd={conference.round_two_end}
-                roundTwoFeesDue={conference.round_two_fees_due}
-                roundThreeStart={conference.round_three_start}
-                roundThreeEnd={conference.round_three_end}
-                roundFourStart={conference.round_four_start}
-                roundThreeFeesDue={conference.round_three_fees_due}
-                regClose={conference.reg_close}
-                roundFourFeesDue={conference.round_four_fees_due}
+                delegateFee={global.conference.delegate_fee}
+                conferenceTreasurer={global.conference.treasurer}
+                regOpen={global.conference.reg_open}
+                roundOneEnd={global.conference.round_one_end}
+                roundOneFeesDue={global.conference.round_one_fees_due}
+                roundTwoStart={global.conference.round_two_start}
+                roundTwoEnd={global.conference.round_two_end}
+                roundTwoFeesDue={global.conference.round_two_fees_due}
+                roundThreeStart={global.conference.round_three_start}
+                roundThreeEnd={global.conference.round_three_end}
+                roundFourStart={global.conference.round_four_start}
+                roundThreeFeesDue={global.conference.round_three_fees_due}
+                regClose={global.conference.reg_close}
+                roundFourFeesDue={global.conference.round_four_fees_due}
               >
                 {AdvisorChecklistDelegateFeeText}
               </TextTemplate>
@@ -241,11 +243,11 @@ class AdvisorProfileView extends React.Component {
               <br />
               <TextTemplate
                 earlyPaperDeadlineMonth={
-                  conference.early_paper_deadline["month"]
+                  global.conference.early_paper_deadline["month"]
                 }
-                earlyPaperDeadlineDay={conference.early_paper_deadline["day"]}
-                paperDeadlineMonth={conference.paper_deadline["month"]}
-                paperDeadlineDay={conference.paper_deadline["day"]}
+                earlyPaperDeadlineDay={global.conference.early_paper_deadline["day"]}
+                paperDeadlineMonth={global.conference.paper_deadline["month"]}
+                paperDeadlineDay={global.conference.paper_deadline["day"]}
               >
                 {AdvisorChecklistPositionPapersText}
               </TextTemplate>
@@ -256,10 +258,10 @@ class AdvisorProfileView extends React.Component {
               <b>{waiversTurnedIn} Waivers Turned In</b>
               <br />
               <TextTemplate
-                conferenceExternal={conference.external}
-                waiverAvail={conference.waiver_avail_date}
-                waiverDeadline={conference.waiver_deadline}
-                waiverLink={conference.waiver_link}
+                conferenceExternal={global.conference.external}
+                waiverAvail={global.conference.waiver_avail_date}
+                waiverDeadline={global.conference.waiver_deadline}
+                waiverLink={global.conference.waiver_link}
               >
                 {AdvisorChecklistWaiversText}
               </TextTemplate>
@@ -278,8 +280,8 @@ class AdvisorProfileView extends React.Component {
     if (waitlisted) {
       header = (
         <TextTemplate
-          conferenceSession={conference.session}
-          conferenceExternal={conference.external}
+          conferenceSession={global.conference.session}
+          conferenceExternal={global.conference.external}
         >
           {AdvisorWaitlistText}
         </TextTemplate>
@@ -289,8 +291,8 @@ class AdvisorProfileView extends React.Component {
         <TextTemplate
           firstName={user.first_name}
           schoolName={school.name}
-          conferenceSession={conference.session}
-          conferenceExternal={conference.external}
+          conferenceSession={global.conference.session}
+          conferenceExternal={global.conference.external}
         >
           {AdvisorProfileViewText}
         </TextTemplate>
@@ -533,7 +535,7 @@ class AdvisorProfileView extends React.Component {
     );
   }
 
-  renderError(field) {
+  renderError = (field) => {
     if (this.state.errors[field]) {
       return (
         <StatusLabel status="error">{this.state.errors[field]}</StatusLabel>
@@ -551,10 +553,10 @@ class AdvisorProfileView extends React.Component {
     return null;
   }
 
-  _handleSubmit= (event) => {
+  _handleSubmit = (event) => {
     this._successTimout && clearTimeout(this._successTimeout);
     this.setState({ loading: true });
-    var user = this.props.user;
+    var user = this.user;
     CurrentUserActions.updateUser(
       user.id,
       {

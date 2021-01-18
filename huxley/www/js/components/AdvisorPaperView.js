@@ -8,7 +8,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-var _accessSafe = require("utils/_accessSafe");
+var {_accessSafe} = require("utils/_accessSafe");
 var {AssignmentStore} = require("stores/AssignmentStore");
 var {Button} = require("components/core/Button");
 var {CommitteeStore} = require("stores/CommitteeStore");
@@ -23,8 +23,8 @@ var {StatusLabel} = require("components/core/StatusLabel");
 var {Table} = require("components/core/Table");
 var {TextTemplate} = require("components/core/TextTemplate");
 var {inflateGrades} = require("utils/inflateGrades");
-var _checkDate = require("utils/_checkDate");
-var _handleChange = require("utils/_handleChange");
+var {_checkDate} = require("utils/_checkDate");
+var {_handleChange} = require("utils/_handleChange");
 
 import cx from "classnames";
 var AdvisorPaperViewText = require("text/AdvisorPaperViewText.md");

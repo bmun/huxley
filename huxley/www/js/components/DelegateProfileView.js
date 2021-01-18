@@ -32,7 +32,7 @@ class DelegateProfileView extends React.Component {
     };
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     var user = CurrentUserStore.getCurrentUser();
     if (!User.isDelegate(user)) {
       history.redirect("/");

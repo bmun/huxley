@@ -31,7 +31,7 @@ var RegistrationViewText = require("text/RegistrationViewText.md");
 var {ServerAPI} = require("lib/ServerAPI");
 var {StatusLabel} = require("components/core/StatusLabel");
 var {TextTemplate} = require("components/core/TextTemplate");
-var _handleChange = require("utils/_handleChange");
+var {_handleChange} = require("utils/_handleChange");
 
 require("css/RegistrationView.less");
 

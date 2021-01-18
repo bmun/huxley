@@ -54,12 +54,14 @@ class CurrentUserStore extends Store {
   }
 
   __onDispatch(action) {
+    console.log(action);
     switch (action.actionType) {
       case ActionConstants.BOOTSTRAP:
         this._bootstrap();
         break;
       case ActionConstants.LOGIN:
         this._currentUser = action.user;
+        console.log(this._currentUser);
         break;
       case ActionConstants.LOGOUT:
         this._currentUser = {};
@@ -106,4 +108,5 @@ class CurrentUserStore extends Store {
 }
 
 const currentUserStore = new CurrentUserStore(Dispatcher);
+console.log(currentUserStore);
 export {currentUserStore as CurrentUserStore};

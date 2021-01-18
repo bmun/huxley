@@ -10,7 +10,7 @@ import PropTypes from "prop-types";
 
 var {RegistrationPhoneInput} = require("components/registration/RegistrationPhoneInput");
 var {RegistrationTextInput} = require("components/registration/RegistrationTextInput");
-var _accessSafe = require("utils/_accessSafe");
+var {_accessSafe} = require("utils/_accessSafe");
 
 class RegistrationPrimaryContact extends React.Component {
   render() {
