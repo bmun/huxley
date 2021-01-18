@@ -6,24 +6,20 @@
 "use strict";
 
 import React from "react";
-import PropTypes from "prop-types";
 import ReactDOM from "react-dom";
 import cx from "classnames";
 
 require("css/Shaker.less");
 
+const ShakerContext = React.createContext(() => null);
 class Shaker extends React.Component {
-  getChildContext() {
-    return {
-      shake: this.shake,
-    };
-  }
-
   render() {
     return (
-      <div className={cx("shaker", this.props.className)}>
-        {this.props.children}
-      </div>
+      <ShakerContext.Provider value={this.shake}>
+        <div className={cx("shaker", this.props.className)}>
+          {this.props.children}
+        </div>
+      </ShakerContext.Provider>
     );
   }
 
@@ -40,8 +36,4 @@ class Shaker extends React.Component {
   };
 }
 
-Shaker.childContextTypes = {
-  shake: PropTypes.func,
-};
-
-export { Shaker };
+export { Shaker, ShakerContext };

@@ -57,7 +57,6 @@ class Huxley extends React.Component {
   UNSAFE_componentWillMount() {
     CurrentUserStore.addListener(() => {
       var user = CurrentUserStore.getCurrentUser();
-      console.log(user);
       if (User.isAnonymous(user)) {
         history.redirect("/login");
       } else if (User.isAdvisor(user)) {
@@ -70,14 +69,8 @@ class Huxley extends React.Component {
     });
   }
 
-  componentWillReceiveProps(nextProps) {
-    console.log(nextProps.location);
-  }
-
   render() {
     var user = CurrentUserStore.getCurrentUser();
-    console.log(user);
-    console.log(this.props.location);
     if (User.isAnonymous(user)) {
       return (
         <div>

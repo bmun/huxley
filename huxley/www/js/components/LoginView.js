@@ -6,26 +6,26 @@
 "use strict";
 
 import React from "react";
-import PropTypes from "prop-types";
 import { history } from "utils/history";
 
-var { Button } = require("components/core/Button");
-// var {ConferenceContext} = require("components/Huxley");
-var { ConferenceContext } = require("components/ConferenceContext");
-var { CurrentUserActions } = require("actions/CurrentUserActions");
-var { CurrentUserStore } = require("stores/CurrentUserStore");
-var { NavLink } = require("components/NavLink");
-var { OuterView } = require("components/OuterView");
-var { ServerAPI } = require("lib/ServerAPI");
-var { StatusLabel } = require("components/core/StatusLabel");
-var { TextInput } = require("components/core/TextInput");
-var { TextTemplate } = require("components/core/TextTemplate");
-var { User } = require("utils/User");
+const { Button } = require("components/core/Button");
+const { CurrentUserActions } = require("actions/CurrentUserActions");
+const { CurrentUserStore } = require("stores/CurrentUserStore");
+const { NavLink } = require("components/NavLink");
+const { OuterView } = require("components/OuterView");
+const { ServerAPI } = require("lib/ServerAPI");
+const { ShakerContext } = require('components/Shaker');
+const { StatusLabel } = require("components/core/StatusLabel");
+const { TextInput } = require("components/core/TextInput");
+const { TextTemplate } = require("components/core/TextTemplate");
+const { User } = require("utils/User");
 
 require("css/LoginForm.less");
 var LoginViewText = require("text/LoginViewText.md");
 
 class LoginView extends React.Component {
+  static contextType = ShakerContext;
+
   constructor(props) {
     super(props);
     this.state = {
@@ -124,7 +124,6 @@ class LoginView extends React.Component {
   };
 
   _handleSuccess = (responseJSON) => {
-    console.log(responseJSON);
     CurrentUserActions.login(responseJSON);
   };
 
@@ -139,14 +138,10 @@ class LoginView extends React.Component {
         loading: false,
       },
       () => {
-        this.context.shake && this.context.shake();
+        this.context && this.context();
       }
     );
   };
 }
-
-LoginView.contextTypes = {
-  shake: PropTypes.func,
-};
 
 export { LoginView };

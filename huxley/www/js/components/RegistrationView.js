@@ -6,54 +6,55 @@
 "use strict";
 
 import React from "react";
-import PropTypes from "prop-types";
 import { history } from "utils/history";
 
-var { Button } = require("components/core/Button");
-var { CommitteeStore } = require("stores/CommitteeStore");
-var ContactTypes = require("constants/ContactTypes");
-var { ConferenceContext } = require("components/ConferenceContext");
-var { CountrySelect } = require("components/CountrySelect");
-var { CountryStore } = require("stores/CountryStore");
-var GenderConstants = require("constants/GenderConstants");
-var { NavLink } = require("components/NavLink");
-var { OuterView } = require("components/OuterView");
-var ProgramTypes = require("constants/ProgramTypes");
-var {
+const { Button } = require("components/core/Button");
+const { CommitteeStore } = require("stores/CommitteeStore");
+const ContactTypes = require("constants/ContactTypes");
+const { CountrySelect } = require("components/CountrySelect");
+const { CountryStore } = require("stores/CountryStore");
+const GenderConstants = require("constants/GenderConstants");
+const { NavLink } = require("components/NavLink");
+const { OuterView } = require("components/OuterView");
+const ProgramTypes = require("constants/ProgramTypes");
+const {
   RegistrationAccountInformation,
 } = require("components/registration/RegistrationAccountInformation");
-var {
+const {
   RegistrationComments,
 } = require("components/registration/RegistrationComments");
-var {
+const {
   RegistrationCountryPreferences,
 } = require("components/registration/RegistrationCountryPreferences");
-var {
+const {
   RegistrationPrimaryContact,
 } = require("components/registration/RegistrationPrimaryContact");
-var {
+const {
   RegistrationProgramInformation,
 } = require("components/registration/RegistrationProgramInformation");
-var {
+const {
   RegistrationSchoolInformation,
 } = require("components/registration/RegistrationSchoolInformation");
-var {
+const {
   RegistrationSecondaryContact,
 } = require("components/registration/RegistrationSecondaryContact");
-var {
+const {
   RegistrationSpecialCommitteePreferences,
 } = require("components/registration/RegistrationSpecialCommitteePreferences");
-var RegistrationViewText = require("text/RegistrationViewText.md");
-var { ServerAPI } = require("lib/ServerAPI");
-var { StatusLabel } = require("components/core/StatusLabel");
-var { TextTemplate } = require("components/core/TextTemplate");
-var { _handleChange } = require("utils/_handleChange");
+const RegistrationViewText = require("text/RegistrationViewText.md");
+const { ServerAPI } = require("lib/ServerAPI");
+const { ShakerContext } = require('components/Shaker');
+const { StatusLabel } = require("components/core/StatusLabel");
+const { TextTemplate } = require("components/core/TextTemplate");
+const { _handleChange } = require("utils/_handleChange");
 
 require("css/RegistrationView.less");
 
-var USA = "United States of America";
+const USA = "United States of America";
 
 class RegistrationView extends React.Component {
+  static contextType = ShakerContext;
+  
   constructor(props) {
     super(props);
     this.state = {
@@ -596,14 +597,10 @@ class RegistrationView extends React.Component {
         loading: false,
       },
       () => {
-        this.context.shake && this.context.shake();
+        this.context && this.context();
       }
     );
   };
 }
-
-RegistrationView.contextTypes = {
-  shake: PropTypes.func,
-};
 
 export { RegistrationView };

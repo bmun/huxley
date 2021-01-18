@@ -6,20 +6,18 @@
 "use strict";
 
 import React from "react";
-import PropTypes from "prop-types";
+import { Shaker } from "./Shaker";
 
 var { _accessSafe } = require("utils/_accessSafe");
 const { AssignmentStore } = require("stores/AssignmentStore");
 const { Button } = require("components/core/Button");
 const { InnerView } = require("components/InnerView");
-const { LogoutButton } = require("components/LogoutButton");
-const { ConferenceContext } = require("components/ConferenceContext");
 const { CurrentUserActions } = require("actions/CurrentUserActions");
 const { CurrentUserStore } = require("stores/CurrentUserStore");
 const { DelegateStore } = require("stores/DelegateStore");
 const { PhoneInput } = require("components/PhoneInput");
-const { ProgramTypes } = require("constants/ProgramTypes");
 const { RegistrationStore } = require("stores/RegistrationStore");
+const { ShakerContext } = require('components/Shaker');
 const { StatusLabel } = require("components/core/StatusLabel");
 const { Table } = require("components/core/Table");
 const { TextInput } = require("components/core/TextInput");
@@ -43,7 +41,8 @@ class AdvisorProfileView extends React.Component {
   // propTypes: {
   //   user: PropTypes.object.isRequired
   // },
-
+  static contextType = ShakerContext;
+  
   constructor(props) {
     super(props);
     var user = CurrentUserStore.getCurrentUser();
@@ -606,14 +605,10 @@ class AdvisorProfileView extends React.Component {
         loading: false,
       },
       () => {
-        this.context.shake && this.context.shake();
+        this.context && this.context();
       }
     );
   };
 }
-
-AdvisorProfileView.contextTypes = {
-  shake: PropTypes.func,
-};
 
 export { AdvisorProfileView };

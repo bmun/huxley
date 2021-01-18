@@ -6,21 +6,23 @@
 "use strict";
 
 import React from "react";
-import PropTypes from "prop-types";
 import { history } from "utils/history";
 
-var { Button } = require("components/core/Button");
-var { NavLink } = require("components/NavLink");
-var { OuterView } = require("components/OuterView");
-var { ServerAPI } = require("lib/ServerAPI");
-var { StatusLabel } = require("components/core/StatusLabel");
-var { TextInput } = require("components/core/TextInput");
-var { TextTemplate } = require("components/core/TextTemplate");
+const { Button } = require("components/core/Button");
+const { NavLink } = require("components/NavLink");
+const { OuterView } = require("components/OuterView");
+const { ServerAPI } = require("lib/ServerAPI");
+const { ShakerContext } = require('components/Shaker');
+const { StatusLabel } = require("components/core/StatusLabel");
+const { TextInput } = require("components/core/TextInput");
+const { TextTemplate } = require("components/core/TextTemplate");
 
 require("css/LoginForm.less");
 var ForgotPasswordViewText = require("text/ForgotPasswordViewText.md");
 
 class ForgotPasswordView extends React.Component {
+  static contextType = ShakerContext;
+  
   constructor(props) {
     super(props);
     this.state = {
@@ -97,14 +99,10 @@ class ForgotPasswordView extends React.Component {
         loading: false,
       },
       () => {
-        this.context.shake && this.context.shake();
+        this.context && this.context();
       }
     );
   };
 }
-
-ForgotPasswordView.contextTypes = {
-  shake: PropTypes.func,
-};
 
 export { ForgotPasswordView };

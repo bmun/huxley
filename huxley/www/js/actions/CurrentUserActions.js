@@ -16,7 +16,6 @@ const CurrentUserActions = {
   },
 
   login(user) {
-    console.log(user);
     Dispatcher.dispatch({
       actionType: ActionConstants.LOGIN,
       user: user,
