@@ -116,7 +116,7 @@ class DelegatePaperView extends React.Component {
       return <div />;
     }
   };
-  calculateTotalScore(paper, rubric, topic_2 = false) {
+  calculateTotalScore = (paper, rubric, topic_2 = false) => {
     var totalScore = -1;
     if (topic_2) {
       totalScore =
@@ -135,7 +135,7 @@ class DelegatePaperView extends React.Component {
     }
     return totalScore;
   }
-  calculateMaxScore(rubric, topic_2 = false) {
+  calculateMaxScore = (rubric, topic_2 = false) => {
     var totalMaxScore = -1;
     if (topic_2) {
       totalMaxScore =
@@ -154,7 +154,7 @@ class DelegatePaperView extends React.Component {
     }
     return totalMaxScore;
   }
-  calculateCategory(value, weight) {
+  calculateCategory = (value, weight) => {
     var interval = weight / 5;
     if (value >= interval * 5) {
       return "5 - Exceeds Expectations";
@@ -170,7 +170,7 @@ class DelegatePaperView extends React.Component {
       ("0 - Needs Improvement");
     }
   }
-  calculateScore(category, weight) {
+  calculateScore = (category, weight) => {
     var interval = weight / 5;
     if (category == "5 - Exceeds Expectations") {
       return interval * 5;
@@ -187,11 +187,11 @@ class DelegatePaperView extends React.Component {
     }
   }
 
-  _handleUploadPaper(paperID, event) {
+  _handleUploadPaper = (paperID, event) => {
     this.setState({ uploadedFile: event.target.files[0] });
   }
 
-  _handleSubmitPaper(paperID, event) {
+  _handleSubmitPaper = (paperID, event) => {
     var file = this.state.uploadedFile;
     if (
       file != null &&

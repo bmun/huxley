@@ -129,7 +129,7 @@ class DelegateCommitteeFeedbackView extends React.Component {
 
     if (assignment && committee) {
       if (this.state.feedbackSubmitted) {
-        body = <h3>Thank you for submitting your feedback</h3>;
+        body = <h3>Thank you for submitting your feedback.</h3>;
       } else {
         const information_fields = this._buildConferenceInputs();
         var head_chair_field;
