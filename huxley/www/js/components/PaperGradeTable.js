@@ -184,7 +184,7 @@ class PaperGradeTable extends React.Component {
     );
   }
 
-  _renderTopicTwo(rubric, paper) {
+  _renderTopicTwo = (rubric, paper) => {
     return (
       <tbody>
         <tr>
@@ -248,7 +248,7 @@ class PaperGradeTable extends React.Component {
       </tbody>
     );
   }
-  calculateCategory(value, weight) {
+  calculateCategory = (value, weight) => {
     var interval = weight / 5;
     if (value >= interval * 5) {
       return "5 - Exceeds Expectations";
@@ -264,7 +264,7 @@ class PaperGradeTable extends React.Component {
       ("0 - Missing Section");
     }
   }
-  calculateScore(category, weight) {
+  calculateScore = (category, weight) => {
     var interval = weight / 5;
     if (category == "5 - Exceeds Expectations") {
       return interval * 5;
@@ -281,7 +281,7 @@ class PaperGradeTable extends React.Component {
     }
   }
 
-  renderDropdown(name, score, max_score) {
+  renderDropdown = (name, score, max_score) => {
     var interval = this.calculateCategory(score, max_score);
     return (
       <select
@@ -319,13 +319,13 @@ class PaperGradeTable extends React.Component {
     );
   }
 
-  _handleDropdownChange(field, max_score, event) {
+  _handleDropdownChange = (field, max_score, event) => {
     var new_score = this.calculateScore(event.target.value, max_score);
     this.props.onChange &&
       this.props.onChange(field, this.props.paper.id, new_score);
   }
 
-  _handleChange(field, event) {
+  _handleChange = (field, event) => {
     this.props.onChange &&
       this.props.onChange(field, this.props.paper.id, event);
   }

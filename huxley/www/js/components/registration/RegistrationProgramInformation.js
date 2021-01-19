@@ -121,7 +121,7 @@ class RegistrationProgramInformation extends React.Component {
     );
   }
 
-  _handleDelegateSum(beginner, intermediate, advanced) {
+  _handleDelegateSum = (beginner, intermediate, advanced) => {
     var sum = 0;
     if (beginner) {
       sum += parseInt(beginner, 10) || 0;

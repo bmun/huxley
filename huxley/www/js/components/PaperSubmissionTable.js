@@ -127,7 +127,7 @@ class PaperSubmissionTable extends React.Component {
     );
   }
 
-  _renderTopicTwo(rubric, paper) {
+  _renderTopicTwo = (rubric, paper) => {
     var paper = this.props.paper;
     var rubric = this.props.rubric;
     var score2 = this.calculateTotalScore(paper, rubric, true);
@@ -186,7 +186,7 @@ class PaperSubmissionTable extends React.Component {
     return totalMaxScore;
   }
 
-  calculateCategory(value, weight) {
+  calculateCategory = (value, weight) => {
     var interval = weight / 5;
     if (value >= interval * 5) {
       return "5 - Exceeds Expectations";
@@ -203,7 +203,7 @@ class PaperSubmissionTable extends React.Component {
     }
   }
 
-  calculateScore(category, weight) {
+  calculateScore = (category, weight) => {
     var interval = weight / 5;
     if (category == "5 - Exceeds Expectations") {
       return interval * 5;

@@ -186,7 +186,7 @@ class ChairSummaryView extends React.Component {
     });
   };
 
-  _handleSummaryChange(assignment, event) {
+  _handleSummaryChange = (assignment, event) => {
     var summaries = this.state.summaries;
     this.setState({
       summaries: {

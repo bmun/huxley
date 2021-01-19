@@ -213,7 +213,7 @@ class ChairPapersView extends React.Component {
     }
   };
 
-  _handleScoreChange(field, paperID, event) {
+  _handleScoreChange = (field, paperID, event) => {
     const paper = { ...this.state.papers[paperID], [field]: Number(event) };
     PositionPaperActions.storePositionPaper(paper);
   }
@@ -225,7 +225,7 @@ class ChairPapersView extends React.Component {
     });
   };
 
-  _handleAssignmentSelect(assignmentID, event) {
+  _handleAssignmentSelect = (assignmentID, event) => {
     var assignments = this.state.assignments;
     var a = assignments.find((a) => a.id == assignmentID);
     this.setState({ current_assignment: a });
@@ -235,12 +235,12 @@ class ChairPapersView extends React.Component {
     event.preventDefault();
   }
 
-  _handleUploadPaper(paperID, event) {
+  _handleUploadPaper = (paperID, event) => {
     this.setState({ uploadedFile: event.target.files[0] });
     event.preventDefault();
   }
 
-  _handleSubmitPaper(paperID, event) {
+  _handleSubmitPaper = (paperID, event) => {
     var file = this.state.uploadedFile;
     if (
       file != null &&
@@ -270,7 +270,7 @@ class ChairPapersView extends React.Component {
     event.preventDefault();
   }
 
-  _handleSavePaper(paperID, event) {
+  _handleSavePaper = (paperID, event) => {
     this.setState({ loading: true });
     this._successTimout && clearTimeout(this._successTimeout);
     var committee = CurrentUserStore.getCurrentUser().committee;
