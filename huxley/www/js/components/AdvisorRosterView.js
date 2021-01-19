@@ -274,7 +274,7 @@ class AdvisorRosterView extends React.Component {
     );
   };
 
-  openModal(name, email, fn, event) {
+  openModal = (name, email, fn, event) => {
     this.setState({
       modal_open: true,
       modal_name: name,

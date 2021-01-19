@@ -79,7 +79,7 @@ class DelegationAttendanceRow extends React.Component {
     );
   }
 
-  _handleChange(field, event) {
+  _handleChange = (field, event) => {
     this.props.onChange &&
       this.props.onChange(field, this.props.assignmentID, event);
   }

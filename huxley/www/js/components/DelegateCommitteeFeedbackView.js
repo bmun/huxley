@@ -231,7 +231,7 @@ class DelegateCommitteeFeedbackView extends React.Component {
     );
   }
 
-  _buildFeedbackInputs(secretariatMember, title, index) {
+  _buildFeedbackInputs = (secretariatMember, title, index) => {
     var name_key = "chair_" + index + "_name";
     var comment_key = "chair_" + index + "_comment";
     var rating_key = "chair_" + index + "_rating";

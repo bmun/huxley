@@ -211,13 +211,13 @@ class AdvisorPaperView extends React.Component {
     );
   };
 
-  renderCommitteeRows(
+  renderCommitteeRows = (
     countryAssignments,
     rubric,
     files,
     graded_files,
     topic_2
-  ) {
+  ) => {
     return countryAssignments.map(
       function (assignment) {
         var paper =
@@ -375,7 +375,7 @@ class AdvisorPaperView extends React.Component {
     );
   }
 
-  calculateTotalScore(paper, rubric, topic_2 = false) {
+  calculateTotalScore = (paper, rubric, topic_2 = false) => {
     var totalScore = -1;
     if (topic_2) {
       totalScore =
@@ -395,7 +395,7 @@ class AdvisorPaperView extends React.Component {
     return totalScore;
   }
 
-  calculateMaxScore(rubric, topic_2 = false) {
+  calculateMaxScore = (rubric, topic_2 = false) => {
     var totalMaxScore = -1;
     if (topic_2) {
       totalMaxScore =
@@ -415,7 +415,7 @@ class AdvisorPaperView extends React.Component {
     return totalMaxScore;
   }
 
-  calculateCategory(value, weight) {
+  calculateCategory = (value, weight) => {
     var interval = weight / 5;
     if (value >= interval * 5) {
       return "5 - Exceeds Expectations";
@@ -432,7 +432,7 @@ class AdvisorPaperView extends React.Component {
     }
   }
 
-  calculateScore(category, weight) {
+  calculateScore = (category, weight) => {
     var interval = weight / 5;
     if (category == "5 - Exceeds Expectations") {
       return interval * 5;

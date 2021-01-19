@@ -38,7 +38,7 @@ class PhoneInput extends React.Component {
     this.props.onChange && this.props.onChange(number);
   };
 
-  _formatValue(value, isInternational) {
+  _formatValue = (value, isInternational) => {
     var value = value || "";
     return isInternational
       ? value.replace(/[^0-9+\(\)\-\s]/, "")

@@ -367,7 +367,7 @@ class ChairRubricView extends React.Component {
     );
   };
 
-  _handleChange(field, event) {
+  _handleChange = (field, event) => {
     var rubric = this.state.rubric;
     if (field == "use_topic_2") {
       event = !rubric.use_topic_2;
@@ -380,7 +380,7 @@ class ChairRubricView extends React.Component {
     });
   }
 
-  _handleValueChange(field, event) {
+  _handleValueChange = (field, event) => {
     var rubric = this.state.rubric;
     this.setState({
       rubric: {

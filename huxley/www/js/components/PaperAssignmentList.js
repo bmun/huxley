@@ -128,7 +128,7 @@ class PaperAssignmentList extends React.Component {
     }
     return totalMaxScore;
   }
-  calculateCategory(value, weight) {
+  calculateCategory = (value, weight) => {
     var interval = weight / 5;
     if (value >= interval * 5) {
       return "5 - Exceeds Expectations";
@@ -144,7 +144,7 @@ class PaperAssignmentList extends React.Component {
       ("0 - Needs Improvement");
     }
   }
-  calculateScore(category, weight) {
+  calculateScore = (category, weight) => {
     var interval = weight / 5;
     if (category == "5 - Exceeds Expectations") {
       return interval * 5;
@@ -161,7 +161,7 @@ class PaperAssignmentList extends React.Component {
     }
   }
 
-  _handleChange(assignmentID, event) {
+  _handleChange = (assignmentID, event) => {
     this.props.onChange && this.props.onChange(assignmentID, event);
   }
 }

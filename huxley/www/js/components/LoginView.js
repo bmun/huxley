@@ -82,7 +82,7 @@ class LoginView extends React.Component {
     );
   }
 
-  renderHeader() {
+  renderHeader = () => {
     return (
       <div className="logo">
         <hr />
