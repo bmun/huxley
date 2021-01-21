@@ -15,4 +15,4 @@ invariant(
 var ProgramTypes = global.ProgramTypes;
 delete global.ProgramTypes;
 
-export default ProgramTypes;
+export { ProgramTypes };

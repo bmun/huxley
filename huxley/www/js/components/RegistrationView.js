@@ -10,13 +10,13 @@ import { history } from "utils/history";
 
 const { Button } = require("components/core/Button");
 const { CommitteeStore } = require("stores/CommitteeStore");
-const ContactTypes = require("constants/ContactTypes");
+const { ContactTypes } = require("constants/ContactTypes");
 const { CountrySelect } = require("components/CountrySelect");
 const { CountryStore } = require("stores/CountryStore");
-const GenderConstants = require("constants/GenderConstants");
+const { GenderConstants } = require("constants/GenderConstants");
 const { NavLink } = require("components/NavLink");
 const { OuterView } = require("components/OuterView");
-const ProgramTypes = require("constants/ProgramTypes");
+const { ProgramTypes } = require("constants/ProgramTypes");
 const {
   RegistrationAccountInformation,
 } = require("components/registration/RegistrationAccountInformation");

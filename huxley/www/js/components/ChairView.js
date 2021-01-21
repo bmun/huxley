@@ -25,7 +25,7 @@ class ChairView extends React.Component {
             <NavTab href="/chair/attendance">Attendance</NavTab>
             <NavTab href="/chair/summary">Summaries</NavTab>
             <NavTab href="/chair/committee_feedback">Committee Feedback</NavTab>
-            <NavTab href="chair/delegate_emails">Delegate Emails</NavTab>
+            <NavTab href="/chair/delegate_emails">Delegate Emails</NavTab>
           </div>
           {this.props.children}
         </Shaker>

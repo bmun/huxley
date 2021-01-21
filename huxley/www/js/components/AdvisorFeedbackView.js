@@ -137,7 +137,7 @@ class AdvisorFeedbackView extends React.Component {
     var feedback = this.state.feedback;
     return assignments.map((assignment) => {
       var delegates = feedback[assignment.id];
-      if (delegates == null) {
+      if (delegates == null || committees[assignment.committee] === undefined || countries[assignment.country] === undefined) {
         return;
       }
       return (

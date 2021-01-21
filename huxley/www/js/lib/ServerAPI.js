@@ -162,12 +162,12 @@ var ServerAPI = {
   },
 
   updatePositionPaper(paper) {
-    return _patch(`api/papers/${paper.id}`, paper);
+    return _patch(`/api/papers/${paper.id}`, paper);
   },
 
   uploadPositionPaper(paper, file) {
     return _post(
-      `api/papers/${paper.id}`,
+      `/api/papers/${paper.id}`,
       { file: file },
       "multipart/form-data"
     );
@@ -175,18 +175,18 @@ var ServerAPI = {
 
   uploadGradedPositionPaper(paper, file) {
     return _post(
-      `api/papers/${paper.id}`,
+      `/api/papers/${paper.id}`,
       { graded_file: file },
       "multipart/form-data"
     );
   },
 
   getRubric(rubricID) {
-    return _get(`api/rubrics/${rubricID}`);
+    return _get(`/api/rubrics/${rubricID}`);
   },
 
   updateRubric(rubric) {
-    return _patch(`api/rubrics/${rubric.id}`, rubric);
+    return _patch(`/api/rubrics/${rubric.id}`, rubric);
   },
 };
 

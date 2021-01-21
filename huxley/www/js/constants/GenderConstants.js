@@ -15,4 +15,4 @@ invariant(
 var GenderConstants = global.GenderConstants;
 delete global.GenderConstants;
 
-export default GenderConstants;
+export { GenderConstants };

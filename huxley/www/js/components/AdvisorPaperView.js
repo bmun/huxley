@@ -285,7 +285,7 @@ class AdvisorPaperView extends React.Component {
         var shown3_t2 = null;
         var shown4_t2 = null;
         var shown5_t2 = null;
-        if (paper != null) {
+        if (paper != null && this.state.countries[assignment.country] != undefined) {
           var score1 = this.calculateTotalScore(paper, rubric);
           var maxScore1 = this.calculateMaxScore(rubric);
           var category1 = this.calculateCategory(score1, maxScore1);
@@ -341,7 +341,7 @@ class AdvisorPaperView extends React.Component {
         var topic_1_row = (
           <tr>
             <td rowSpan={rows}>
-              {this.state.countries[assignment.country].name}
+              {this.state.countries[assignment.country] ? this.state.countries[assignment.country].name: ''}
             </td>
             <td rowSpan={rows}>{downloadPaper}</td>
             <td rowSpan={rows}>{gradedPaper}</td>

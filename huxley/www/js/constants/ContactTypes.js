@@ -15,4 +15,4 @@ invariant(
 var ContactTypes = global.ContactTypes;
 delete global.ContactTypes;
 
-export default ContactTypes;
+export { ContactTypes };

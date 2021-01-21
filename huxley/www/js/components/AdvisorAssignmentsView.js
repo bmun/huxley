@@ -175,9 +175,9 @@ class AdvisorAssignmentsView extends React.Component {
       function (assignment) {
         return (
           <tr>
-            <td>{committees[assignment.committee].name}</td>
-            <td>{countries[assignment.country].name}</td>
-            <td>{committees[assignment.committee].delegation_size}</td>
+            <td>{committees[assignment.committee] ? committees[assignment.committee].name : ''}</td>
+            <td>{countries[assignment.country] ? countries[assignment.country].name : ''}</td>
+            <td>{committees[assignment.committee] ? committees[assignment.committee].delegation_size : ''}</td>
             <td>
               {finalized ? (
                 this.renderDelegateDropdown(assignment, 0)
