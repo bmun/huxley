@@ -3,6 +3,8 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
+ //@flow
+
 "use strict";
 
 import React from "react";
@@ -16,7 +18,16 @@ require("css/TextInput.less");
  * Controlled inputs cannot preserve cursor position upon rendering.
  * See issue #519.
  */
-class TextInput extends React.Component {
+
+type TextInputProps = {
+  defaultValue: string, 
+  isControlled: ?bool,
+  onChange: (any) => any,
+  placeholder: string,
+  value: string,
+  type: "text" | "password"
+}
+class TextInput extends React.Component<TextInputProps> {
   render() {
     return (
       <input
@@ -32,14 +43,5 @@ class TextInput extends React.Component {
     this.props.onChange && this.props.onChange(event.target.value);
   };
 }
-
-TextInput.propTypes = {
-  defaultValue: PropTypes.string,
-  isControlled: PropTypes.bool,
-  onChange: PropTypes.func,
-  placeholder: PropTypes.string,
-  value: PropTypes.string,
-  type: PropTypes.oneOf(["text", "password"]),
-};
 
 export { TextInput };

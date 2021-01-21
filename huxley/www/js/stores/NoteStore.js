@@ -5,12 +5,12 @@
 
 'use strict';
 
-var ActionConstants = require('constants/ActionConstants');
-var CurrentUserStore = require('stores/CurrentUserStore');
-var NoteActions = require('actions/NoteActions');
-var Dispatcher = require('dispatcher/Dispatcher');
-var ServerAPI = require('lib/ServerAPI');
-var {Store} = require('flux/utils');
+import ActionConstants from 'constants/ActionConstants';
+import { CurrentUserStore } from "stores/CurrentUserStore";
+import { NoteActions } from "actions/NoteActions";
+import { Dispatcher } from "dispatcher/Dispatcher";
+import { ServerAPI } from "lib/ServerAPI";
+import { Store } from "flux/utils";
 
 var _notes = {};
 var _notesFetched = false;
@@ -20,9 +20,9 @@ class NoteStore extends Store {
   getCommitteeNotes(committeeID) {
     var noteIDs = Object.keys(_notes);
     if (!_notesFetched) {
-      ServerAPI.getNotesByCommitteee(committeeID).then(value => {
-        NoteActions.notesFetched(value);
-      });
+      ServerAPI.getNotesByCommitteee(committeeID).then(value => 
+        NoteActions.notesFetched(value)
+      );
 
       return [];
     }
@@ -34,13 +34,13 @@ class NoteStore extends Store {
     var noteIDs = Object.keys(_notes);
     if (!_notesFetched) {
         if (chair) {
-            ServerAPI.geteNotesByConversationWithChair(senderID).then(value => {
-                NoteActions.notesFetched(value);
-            });
+            ServerAPI.getNotesByConversationWithChair(senderID).then(value => 
+                NoteActions.notesFetched(value)
+            );
         } else {
-            ServerAPI.getNotesByConversation(senderID, recipientID).then(value => {
-                NoteActions.notesFetched(value);
-            });
+            ServerAPI.getNotesByConversation(senderID, recipientID).then(value => 
+                NoteActions.notesFetched(value)
+            );
         }
 
       return [];
@@ -51,17 +51,21 @@ class NoteStore extends Store {
 
   addNote(note) {
     _notes[note.id] = note;
+    ServerAPI.createNote(note.is_chair, note.sender, note.recipient, note.msg);
   }
 
   __onDispatch(action) {
+    console.log(action.actionType);
     switch (action.actionType) {
       case ActionConstants.ADD_NOTE:
+        console.log('action constant was add note');
         this.addNote(action.note);
         break;
       case ActionConstants.NOTES_FETCHED:
         for (const note of action.notes) {
           _notes[note.id] = note;
         }
+        console.log(_notes);
         _notesFetched = true;
         break;
       default:
@@ -72,4 +76,5 @@ class NoteStore extends Store {
   }
 }
 
-module.exports = new NoteStore(Dispatcher);
+const noteStore = new NoteStore(Dispatcher);
+export { noteStore as NoteStore };

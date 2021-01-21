@@ -5,37 +5,52 @@
 
  'use strict';
 
- var React = require('react');
- var ReactRouter = require('react-router');
+ import React from "react";
+import { history } from "utils/history";
  
- var Button = require('components/core/Button');
- var ConferenceContext = require('components/ConferenceContext');
- var CurrentUserStore = require('stores/CurrentUserStore');
- var InnerView = require('components/InnerView');
- var TextTemplate = require('components/core/TextTemplate');
- var User = require('utils/User');
- var NoteMessageBox = require('components/NoteMessageBox')
+ var {Button} = require('components/core/Button');
+ var {CurrentUserStore} = require('stores/CurrentUserStore');
+ var {InnerView} = require('components/InnerView');
+ var {TextTemplate} = require('components/core/TextTemplate');
+ var {User} = require('utils/User');
+ var {NoteMessageBox} = require('components/NoteMessageBox')
+ const {NoteStore} = require('stores/NoteStore');
  
  
- var ServerAPI = require('lib/ServerAPI');
+ var {ServerAPI} = require('lib/ServerAPI');
   
- var DelegateNoteView = React.createClass({
-   mixins: [ReactRouter.History],
+ class DelegateNoteView extends React.Component {
+  constructor(props) {
+    super(props);
+    const user = CurrentUserStore.getCurrentUser();
+    const user_assignment = user.delegate.assignment;
+    const conversation = NoteStore.getConversationNotes(user_assignment.id, null, true);
+
+    this.state = {
+      conversation: conversation,
+      assignment: user_assignment
+    };
+  }
+
  
-   contextTypes: {
-     conference: React.PropTypes.shape(ConferenceContext),
-   },
- 
-//    getInitialState() {
-     
-//    },
- 
-   componentWillMount() {
+   UNSAFE_componentWillMount() {
      var user = CurrentUserStore.getCurrentUser();
      if (!User.isDelegate(user)) {
-       this.history.pushState(null, '/');
+       history.redirect("/");
      }
-   },
+   }
+
+   componentDidMount() {
+    this._conversationToken = NoteStore.addListener(() => {
+      this.setState({
+        conversation: NoteStore.getConversationNotes(this.state.assignment.id, null, true),
+      });
+    });
+  }
+
+  componentWillUnmount() {
+    this._conversationToken && this._conversationToken.remove();
+  }
  
 //    componentDidMount() {
      
@@ -45,11 +60,11 @@
 //    },
  
    render() {
-     return <InnerView> <NoteMessageBox/> </InnerView>;
-   },
+     return <InnerView> <NoteMessageBox conversation = {this.state.conversation} user_assignment = {this.state.assignment}/> </InnerView>;
+   }
  
    
- });
+ };
  
- module.exports = DelegateNoteView;
+ export { DelegateNoteView };
  

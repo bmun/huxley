@@ -190,19 +190,20 @@ var ServerAPI = {
   },
 
   createNote(is_chair, sender, recipient, msg) {
-    return _post('api/note', {is_chair, sender, school, recipient, msg})
+    return _post('/api/note', {is_chair, sender, school, recipient, msg})
   },
 
   getNotesByCommittee(committee_id) {
-    return _get('api/notes', {committee_id})
+    return _get('/api/notes', {committee_id})
   },
 
   getNotesByConversation(sender_id, recipient_id)  {
-    return _get('api/notes', {sender_id, recipient_id})
+    return _get('/api/notes', {sender_id, recipient_id})
   },
 
   getNotesByConversationWithChair(sender_id) {
-    return _get('api/notes', {sender_id, chair:true})
+    _get('/api/notes', {sender_id, chair:true}).then(a => console.log(a));
+    return _get('/api/notes', {sender_id, chair:true});
   },
 
 };

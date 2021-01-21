@@ -7,12 +7,13 @@
 
 'use strict';
 
-const Button = require('components/core/Button');
-const TextTemplate = require('components/core/TextTemplate');
+import React from "react";
+
+const {Button} = require('components/core/Button');
+const {TextTemplate} = require('components/core/TextTemplate');
+const {NoteStore} = require('stores/NoteStore');
 
 
-const cx = require('classnames');
-const React = require('react');
 type NoteMessageBoxProps = {
     conversation: Array<any>,
     user_assignment: number
@@ -21,17 +22,18 @@ type NoteMessageBoxProps = {
 class NoteMessageBox extends React.Component<NoteMessageBoxProps> {
 
   render(): any {
+    console.log(this.props.conversation);
     return this.props.conversation.map(note => (note.sender === this.props.user_assignment) ? this.renderSent(note.msg) : this.renderReceived(note.msg));
   }
 
-  renderReceived(msg: string): any {
+  renderReceived = (msg: string) : any => {
     return <div className='received'>{msg}</div>;
   }
 
-  renderSent(msg: string): any {
+  renderSent = (msg: string): any => {
     return <div className='sent'>{msg}</div>;
   }
 
 }
 
-module.exports = NoteMessageBox;
+export {NoteMessageBox};

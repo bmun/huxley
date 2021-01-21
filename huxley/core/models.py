@@ -716,7 +716,7 @@ class Note(models.Model):
             recipient = 'Chair'
             
 
-        return committee + ": " + sender + ' -> ' + recipient + ' - ' + self.id
+        return committee + ": " + sender + ' -> ' + recipient + ' - ' + str(self.id)
 
     class Meta:
         db_table = u'note'

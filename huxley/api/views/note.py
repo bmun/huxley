@@ -37,7 +37,6 @@ class NoteList(generics.ListCreateAPIView):
             queryset = queryset.filter(sender_id = sender_id).filter(is_chair = 2) | queryset.filter(
                 is_chair = 1).filter(recipient_id = sender_id)
 
-        
         return queryset
 
 

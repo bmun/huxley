@@ -30,6 +30,7 @@ var {
 } = require("components/DelegateCommitteeFeedbackView");
 var { DelegatePaperView } = require("components/DelegatePaperView");
 var { DelegateProfileView } = require("components/DelegateProfileView");
+var { DelegateNoteView } = require("components/DelegateNoteView")
 var { DelegateView } = require("components/DelegateView");
 var { ForgotPasswordView } = require("components/ForgotPasswordView");
 var { LoginView } = require("components/LoginView");
@@ -189,6 +190,9 @@ class Huxley extends React.Component {
               </Route>
               <Route path="/delegate/paper">
                 <DelegatePaperView />
+              </Route>
+              <Route path="/delegate/notes">
+                <DelegateNoteView />
               </Route>
               <Route exact path="/">
                 <RedirectView />
