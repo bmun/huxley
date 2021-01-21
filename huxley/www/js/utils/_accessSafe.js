@@ -6,8 +6,8 @@
 /**
  * General purpose safe object accessing function
  */
-var _accessSafe = function(obj, key) {
+function _accessSafe(obj, key) {
   return obj && obj[key];
-};
+}
 
-module.exports = _accessSafe;
+export { _accessSafe };

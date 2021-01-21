@@ -20,7 +20,7 @@ describe('CommitteeStore', () => {
 
   beforeEach(() => {
     ActionConstants = require('constants/ActionConstants');
-    CommitteeStore = require('stores/CommitteeStore');
+    {CommitteeStore} = require('stores/CommitteeStore');
     Dispatcher = require('dispatcher/Dispatcher');
     ServerAPI = require('lib/ServerAPI');
 

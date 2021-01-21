@@ -3,49 +3,47 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
-var cx = require('classnames');
-var React = require('react');
+import cx from "classnames";
+import React from "react";
+import PropTypes from "prop-types";
 
-var Button = require('components/core/Button');
-var ServerAPI = require('lib/ServerAPI');
-var StatusLabel = require('components/core/StatusLabel');
+var { Button } = require("components/core/Button");
+var { ServerAPI } = require("lib/ServerAPI");
+var { StatusLabel } = require("components/core/StatusLabel");
 
-require('css/ChangePasswordView.less');
+require("css/ChangePasswordView.less");
 
-var ChangePasswordView = React.createClass({
-  propTypes: {
-    isVisible: React.PropTypes.bool.isRequired,
-    onClick: React.PropTypes.func,
-    onSuccess: React.PropTypes.func.isRequired,
-  },
+const initialState = {
+  message: "",
+  success: false,
+  loading: false,
+  currentPassword: "",
+  newPassword: "",
+  newPassword2: "",
+};
+class ChangePasswordView extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = initialState;
+  }
 
-  getInitialState: function() {
-    return {
-      message: '',
-      success: false,
-      loading: false,
-      currentPassword: '',
-      newPassword: '',
-      newPassword2: '',
-    };
-  },
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    this.setState(initialState);
+  }
 
-  componentWillReceiveProps: function(nextProps) {
-    this.setState(this.getInitialState());
-  },
-
-  render: function() {
+  render() {
     return (
       <div
         className={cx({
-          'change-password': true,
-          'rounded-bottom': true,
+          "change-password": true,
+          "rounded-bottom": true,
           transparent: true,
           visible: this.props.isVisible,
         })}
-        onClick={this._handleDropdownClick}>
+        onClick={this._handleDropdownClick}
+      >
         <form onSubmit={this._handleSubmit}>
           <input
             type="password"
@@ -72,85 +70,91 @@ var ChangePasswordView = React.createClass({
             type="submit"
             color="green"
             size="small"
-            loading={this.state.loading}>
+            loading={this.state.loading}
+          >
             Change Password
           </Button>
         </form>
         {this.renderMessage()}
       </div>
     );
-  },
+  }
 
-  renderMessage: function() {
+  renderMessage = () => {
     if (!this.state.message) {
       return null;
     }
 
     return (
-      <StatusLabel status={this.state.success ? 'success' : 'error'}>
+      <StatusLabel status={this.state.success ? "success" : "error"}>
         {this.state.message}
       </StatusLabel>
     );
-  },
-
-  onSuccess: function() {
+  };
+  onSuccess = () => {
     setTimeout(this.props.onSuccess, 750);
-  },
+  };
 
-  _handleCurrentPasswordChange: function(event) {
-    this.setState({currentPassword: event.target.value});
-  },
+  _handleCurrentPasswordChange = (event) => {
+    this.setState({ currentPassword: event.target.value });
+  };
 
-  _handleNewPasswordChange: function(event) {
-    this.setState({newPassword: event.target.value});
-  },
+  _handleNewPasswordChange = (event) => {
+    this.setState({ newPassword: event.target.value });
+  };
 
-  _handleNewPassword2Change: function(event) {
-    this.setState({newPassword2: event.target.value});
-  },
+  _handleNewPassword2Change = (event) => {
+    this.setState({ newPassword2: event.target.value });
+  };
 
-  _handleSubmit: function(event) {
+  _handleSubmit = (event) => {
     if (this.state.newPassword != this.state.newPassword2) {
       this.setState({
-        message: 'Please enter the same password again',
+        message: "Please enter the same password again",
         success: false,
       });
     } else {
-      this.setState({loading: true});
-      const {currentPassword, newPassword} = this.state;
+      this.setState({ loading: true });
+      const { currentPassword, newPassword } = this.state;
       ServerAPI.changePassword(currentPassword, newPassword).then(
         this._handleSuccess,
-        this._handleError,
+        this._handleError
       );
       event.preventDefault();
     }
-  },
+  };
 
-  _handleSuccess: function(response) {
+  _handleSuccess = (response) => {
     this.setState(
       {
         loading: false,
         success: true,
-        message: 'Password changed!',
-        currentPassword: '',
-        newPassword: '',
-        newPassword2: '',
+        message: "Password changed!",
+        currentPassword: "",
+        newPassword: "",
+        newPassword2: "",
       },
-      this.onSuccess,
+      this.onSuccess
     );
-  },
+  };
 
-  _handleError: function(response) {
+  _handleError = (response) => {
     this.setState({
       loading: false,
       message: response.detail,
       success: false,
     });
-  },
+  };
 
-  _handleDropdownClick: function(e) {
+  _handleDropdownClick = (e) => {
     this.props.onClick && this.props.onClick(e);
-  },
-});
+  };
+}
 
-module.exports = ChangePasswordView;
+ChangePasswordView.propTypes = {
+  isVisible: PropTypes.bool.isRequired,
+  onClick: PropTypes.func,
+  onSuccess: PropTypes.func.isRequired,
+};
+
+export { ChangePasswordView };

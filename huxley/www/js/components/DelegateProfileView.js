@@ -3,42 +3,40 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  +*/
 
-'use strict';
+"use strict";
 
-const React = require('react');
-const ReactRouter = require('react-router');
+import React from "react";
+import PropTypes from "prop-types";
+import { history } from "utils/history";
 
-const ConferenceContext = require('components/ConferenceContext');
-const CurrentUserStore = require('stores/CurrentUserStore');
-const InnerView = require('components/InnerView');
-const TextTemplate = require('components/core/TextTemplate');
-const User = require('utils/User');
+const { ConferenceContext } = require("components/ConferenceContext");
+const { CurrentUserStore } = require("stores/CurrentUserStore");
+const { InnerView } = require("components/InnerView");
+const { TextTemplate } = require("components/core/TextTemplate");
+const { User } = require("utils/User");
 
-require('css/Table.less');
-const DelegateProfileViewText = require('text/DelegateProfileViewText.md');
+require("css/Table.less");
+const DelegateProfileViewText = require("text/DelegateProfileViewText.md");
 
-const DelegateChecklistPositionPaperText = require('text/checklists/DelegateChecklistPositionPaperText.md');
-const DelegateChecklistWaiverText = require('text/checklists/DelegateChecklistWaiverText.md');
+const DelegateChecklistPositionPaperText = require("text/checklists/DelegateChecklistPositionPaperText.md");
+const DelegateChecklistWaiverText = require("text/checklists/DelegateChecklistWaiverText.md");
 
-const DelegateProfileView = React.createClass({
-  contextTypes: {
-    conference: React.PropTypes.shape(ConferenceContext),
-  },
-
-  getInitialState() {
+class DelegateProfileView extends React.Component {
+  constructor(props) {
+    super(props);
     var user = CurrentUserStore.getCurrentUser();
     var delegate = user.delegate;
-    return {
+    this.state = {
       delegate: delegate,
     };
-  },
+  }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     var user = CurrentUserStore.getCurrentUser();
     if (!User.isDelegate(user)) {
-      this.history.pushState(null, '/');
+      history.redirect("/");
     }
-  },
+  }
 
   render() {
     var user = CurrentUserStore.getCurrentUser();
@@ -55,26 +53,27 @@ const DelegateProfileView = React.createClass({
         <TextTemplate
           firstName={delegate.name}
           schoolName={school.name}
-          conferenceSession={conference.session}
+          conferenceSession={global.conference.session}
           committee={committee.full_name}
-          country={country.name}>
+          country={country.name}
+        >
           {DelegateProfileViewText}
         </TextTemplate>
       );
     }
 
-    var positionPaperCheck = '';
+    var positionPaperCheck = "";
     if (assignment && assignment.paper && assignment.paper.file) {
-      positionPaperCheck = '\u2611';
+      positionPaperCheck = "\u2611";
     } else {
-      positionPaperCheck = '\u2610';
+      positionPaperCheck = "\u2610";
     }
 
-    var waiverCheck = '';
+    var waiverCheck = "";
     if (delegate && delegate.waiver_submitted) {
-      waiverCheck = '\u2611';
+      waiverCheck = "\u2611";
     } else {
-      waiverCheck = '\u2610';
+      waiverCheck = "\u2610";
     }
 
     var checklist = (
@@ -90,10 +89,15 @@ const DelegateProfileView = React.createClass({
               {positionPaperCheck} <b>Turn in Position Paper</b>
               <br />
               <TextTemplate
-                earlyPaperDeadlineMonth={conference.early_paper_deadline['month']}
-                earlyPaperDeadlineDay={conference.early_paper_deadline['day']}
-                paperDeadlineMonth={conference.paper_deadline['month']}
-                paperDeadlineDay={conference.paper_deadline['day']} >
+                earlyPaperDeadlineMonth={
+                  global.conference.early_paper_deadline["month"]
+                }
+                earlyPaperDeadlineDay={
+                  global.conference.early_paper_deadline["day"]
+                }
+                paperDeadlineMonth={global.conference.paper_deadline["month"]}
+                paperDeadlineDay={global.conference.paper_deadline["day"]}
+              >
                 {DelegateChecklistPositionPaperText}
               </TextTemplate>
             </td>
@@ -102,11 +106,12 @@ const DelegateProfileView = React.createClass({
             <td>
               {waiverCheck} <b>Turn in Waiver Form</b>
               <br />
-              <TextTemplate 
-                conferenceExternal={conference.external}
-                waiverAvail={conference.waiver_avail_date}
-                waiverDeadline={conference.waiver_deadline}
-                waiverLink={conference.waiver_link}>
+              <TextTemplate
+                conferenceExternal={global.conference.external}
+                waiverAvail={global.conference.waiver_avail_date}
+                waiverDeadline={global.conference.waiver_deadline}
+                waiverLink={global.conference.waiver_link}
+              >
                 {DelegateChecklistWaiverText}
               </TextTemplate>
             </td>
@@ -134,7 +139,7 @@ const DelegateProfileView = React.createClass({
 
     return (
       <InnerView>
-        <div style={{textAlign: 'center'}}>
+        <div style={{ textAlign: "center" }}>
           <br />
           <h2>We are excited to have you at BMUN this year!</h2>
           <br />
@@ -145,7 +150,7 @@ const DelegateProfileView = React.createClass({
         {summary}
       </InnerView>
     );
-  },
-});
+  }
+}
 
-module.exports = DelegateProfileView;
+export { DelegateProfileView };

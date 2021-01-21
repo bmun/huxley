@@ -3,29 +3,25 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
-var React = require('react');
+import React from "react";
+import PropTypes from "prop-types";
 
-var ConferenceContext = require('components/ConferenceContext');
-var NavLink = require('components/NavLink');
-var OuterView = require('components/OuterView');
-var TextTemplate = require('components/core/TextTemplate');
+var { ConferenceContext } = require("components/ConferenceContext");
+var { NavLink } = require("components/NavLink");
+var { OuterView } = require("components/OuterView");
+var { TextTemplate } = require("components/core/TextTemplate");
 
-require('css/Letter.less');
-var RegistrationClosedViewText = require('text/RegistrationClosedViewText.md');
+require("css/Letter.less");
+var RegistrationClosedViewText = require("text/RegistrationClosedViewText.md");
 
-var RegistrationClosedView = React.createClass({
-  contextTypes: {
-    conference: React.PropTypes.shape(ConferenceContext),
-  },
-
-  render: function() {
-    var conference = this.context.conference;
+class RegistrationClosedView extends React.Component {
+  render() {
     return (
       <OuterView>
         <div className="letter">
-          <TextTemplate conferenceSession={conference.session}>
+          <TextTemplate conferenceSession={global.conference.session}>
             {RegistrationClosedViewText}
           </TextTemplate>
         </div>
@@ -35,7 +31,7 @@ var RegistrationClosedView = React.createClass({
         </NavLink>
       </OuterView>
     );
-  },
-});
+  }
+}
 
-module.exports = RegistrationClosedView;
+export { RegistrationClosedView };

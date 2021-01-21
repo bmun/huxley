@@ -3,29 +3,27 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
-var React = require('react');
+import React from "react";
 
-var NavLink = require('components/NavLink');
-var OuterView = require('components/OuterView');
-var TextTemplate = require('components/core/TextTemplate');
+var { NavLink } = require("components/NavLink");
+var { OuterView } = require("components/OuterView");
+var { TextTemplate } = require("components/core/TextTemplate");
 
-var PasswordResetSuccessViewText = require('text/PasswordResetSuccessViewText.md');
+var PasswordResetSuccessViewText = require("text/PasswordResetSuccessViewText.md");
 
-var PasswordResetSuccessView = React.createClass({
-  render: function() {
+class PasswordResetSuccessView extends React.Component {
+  render() {
     return (
       <OuterView>
-        <TextTemplate>
-          {PasswordResetSuccessViewText}
-        </TextTemplate>
+        <TextTemplate>{PasswordResetSuccessViewText}</TextTemplate>
         <NavLink direction="left" href="/login">
           Back to Login
         </NavLink>
       </OuterView>
     );
-  },
-});
+  }
+}
 
-module.exports = PasswordResetSuccessView;
+export { PasswordResetSuccessView };

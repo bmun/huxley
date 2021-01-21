@@ -20,7 +20,7 @@ describe('DelegateStore', () => {
 
   beforeEach(() => {
     ActionConstants = require('constants/ActionConstants');
-    DelegateStore = require('stores/DelegateStore');
+    {DelegateStore} = require('stores/DelegateStore');
     Dispatcher = require('dispatcher/Dispatcher');
     ServerAPI = require('lib/ServerAPI');
 

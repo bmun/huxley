@@ -3,11 +3,10 @@ python:
     - "3.6"
 install:
     - pip install -r requirements.txt
-    - nvm install 6.4
-    - nvm use 6.4
+    - nvm install 12.19.0
+    - nvm use 12.19.0
     - npm install
 before_script:
     - python manage.py migrate
 script:
     - python manage.py test
-    - npm test

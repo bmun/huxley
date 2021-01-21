@@ -3,61 +3,110 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
-var React = require('react');
-var ReactRouter = require('react-router');
+import React from "react";
+import { Route, Switch } from "react-router-dom";
+import { history } from "utils/history";
 
-var AdvisorView = require('components/AdvisorView');
-var ChairView = require('components/ChairView');
-var DelegateView = require('components/DelegateView');
-var ConferenceContext = require('components/ConferenceContext');
-var CurrentUserStore = require('stores/CurrentUserStore');
-var Shaker = require('components/Shaker');
-var SupportLink = require('components/SupportLink');
-var User = require('utils/User');
+var { AdvisorAssignmentsView } = require("components/AdvisorAssignmentsView");
+var { AdvisorFeedbackView } = require("components/AdvisorFeedbackView");
+var { AdvisorPaperView } = require("components/AdvisorPaperView");
+var { AdvisorProfileView } = require("components/AdvisorProfileView");
+var { AdvisorView } = require("components/AdvisorView");
+var { AdvisorRosterView } = require("components/AdvisorRosterView");
+var { ChairAttendanceView } = require("components/ChairAttendanceView");
+var {
+  ChairCommitteeFeedbackView,
+} = require("components/ChairCommitteeFeedbackView");
+var { ChairDelegateEmailView } = require("components/ChairDelegateEmailView");
+var { ChairPapersView } = require("components/ChairPapersView");
+var { ChairRubricView } = require("components/ChairRubricView");
+var { ChairSummaryView } = require("components/ChairSummaryView");
+var { ChairView } = require("components/ChairView");
+var { CurrentUserStore } = require("stores/CurrentUserStore");
+var {
+  DelegateCommitteeFeedbackView,
+} = require("components/DelegateCommitteeFeedbackView");
+var { DelegatePaperView } = require("components/DelegatePaperView");
+var { DelegateProfileView } = require("components/DelegateProfileView");
+var { DelegateView } = require("components/DelegateView");
+var { ForgotPasswordView } = require("components/ForgotPasswordView");
+var { LoginView } = require("components/LoginView");
+var { NotFoundView } = require("components/NotFoundView");
+var {
+  PasswordResetSuccessView,
+} = require("components/PasswordResetSuccessView");
+var { RedirectView } = require("components/RedirectView");
+var { RegistrationView } = require("components/RegistrationView");
+var { RegistrationClosedView } = require("components/RegistrationClosedView");
+var { RegistrationSuccessView } = require("components/RegistrationSuccessView");
+var {
+  RegistrationWaitlistView,
+} = require("components/RegistrationWaitlistView");
+var { Shaker } = require("components/Shaker");
+var { SupportLink } = require("components/SupportLink");
+var { User } = require("utils/User");
 
-require('css/base.less');
-require('css/Banner.less');
-require('css/JSWarning.less');
-require('css/IEWarning.less');
+require("css/base.less");
+require("css/Banner.less");
+require("css/JSWarning.less");
+require("css/IEWarning.less");
 
-var Huxley = React.createClass({
-  mixins: [ReactRouter.History],
-
-  childContextTypes: {
-    conference: React.PropTypes.shape(ConferenceContext),
-  },
-
-  getChildContext: function() {
-    var conference = global.conference;
-    return {
-      conference: conference,
-    };
-  },
-
-  componentWillMount: function() {
+class Huxley extends React.Component {
+  UNSAFE_componentWillMount() {
     CurrentUserStore.addListener(() => {
       var user = CurrentUserStore.getCurrentUser();
       if (User.isAnonymous(user)) {
-        this.history.pushState(null, '/login');
+        history.redirect("/login");
       } else if (User.isAdvisor(user)) {
-        this.history.pushState(null, '/advisor/profile');
+        history.redirect("/advisor/profile");
       } else if (User.isChair(user)) {
-        this.history.pushState(null, '/chair/attendance');
+        history.redirect("/chair/attendance");
       } else if (User.isDelegate(user)) {
-        this.history.pushState(null, '/delegate/profile');
+        history.redirect("/delegate/profile");
       }
     });
-  },
+  }
 
-  render: function() {
+  render() {
     var user = CurrentUserStore.getCurrentUser();
     if (User.isAnonymous(user)) {
       return (
         <div>
           <Shaker>
-            {React.cloneElement(this.props.children, {user: user})}
+            <Switch>
+              <Route path="/login">
+                <LoginView />
+              </Route>
+              <Route path="/password">
+                <ForgotPasswordView />
+              </Route>
+              <Route path="/password/reset">
+                <PasswordResetSuccessView />
+              </Route>
+              {global.conference.registration_open ? (
+                <Route path="/register">
+                  <RegistrationView />
+                </Route>
+              ) : (
+                <Route path="/register">
+                  <RegistrationClosedView />
+                </Route>
+              )}
+              <Route path="/register/success">
+                <RegistrationSuccessView />
+              </Route>
+              <Route path="/register/waitlist">
+                <RegistrationWaitlistView />
+              </Route>
+              <Route exact path="/">
+                <RedirectView />
+              </Route>
+              <Route>
+                <NotFoundView />
+              </Route>
+            </Switch>
           </Shaker>
           <SupportLink />
         </div>
@@ -66,7 +115,29 @@ var Huxley = React.createClass({
       return (
         <div>
           <AdvisorView user={user}>
-            {React.cloneElement(this.props.children, {user: user})}
+            <Switch>
+              <Route path="/advisor/profile">
+                <AdvisorProfileView />
+              </Route>
+              <Route path="/advisor/assignments">
+                <AdvisorAssignmentsView />
+              </Route>
+              <Route path="/advisor/feedback">
+                <AdvisorFeedbackView />
+              </Route>
+              <Route path="/advisor/roster">
+                <AdvisorRosterView />
+              </Route>
+              <Route path="/advisor/papers">
+                <AdvisorPaperView />
+              </Route>
+              <Route exact path="/">
+                <RedirectView />
+              </Route>
+              <Route>
+                <NotFoundView />
+              </Route>
+            </Switch>
           </AdvisorView>
           <SupportLink />
         </div>
@@ -75,7 +146,32 @@ var Huxley = React.createClass({
       return (
         <div>
           <ChairView user={user}>
-            {React.cloneElement(this.props.children, {user: user})}
+            <Switch>
+              <Route path="/chair/attendance">
+                <ChairAttendanceView />
+              </Route>
+              <Route path="/chair/papers">
+                <ChairPapersView />
+              </Route>
+              <Route path="/chair/rubric">
+                <ChairRubricView />
+              </Route>
+              <Route path="/chair/delegate_emails">
+                <ChairDelegateEmailView />
+              </Route>
+              <Route path="/chair/committee_feedback">
+                <ChairCommitteeFeedbackView />
+              </Route>
+              <Route path="/chair/summary">
+                <ChairSummaryView />
+              </Route>
+              <Route exact path="/">
+                <RedirectView />
+              </Route>
+              <Route>
+                <NotFoundView />
+              </Route>
+            </Switch>
           </ChairView>
           <SupportLink />
         </div>
@@ -84,13 +180,29 @@ var Huxley = React.createClass({
       return (
         <div>
           <DelegateView user={user}>
-            {React.cloneElement(this.props.children, {user: user})}
+            <Switch>
+              <Route path="/delegate/committee_feedback">
+                <DelegateCommitteeFeedbackView />
+              </Route>
+              <Route path="/delegate/profile">
+                <DelegateProfileView />
+              </Route>
+              <Route path="/delegate/paper">
+                <DelegatePaperView />
+              </Route>
+              <Route exact path="/">
+                <RedirectView />
+              </Route>
+              <Route>
+                <NotFoundView />
+              </Route>
+            </Switch>
           </DelegateView>
           <SupportLink />
         </div>
       );
     }
-  },
-});
+  }
+}
 
-module.exports = Huxley;
+export { Huxley };

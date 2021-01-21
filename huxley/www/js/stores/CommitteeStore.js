@@ -3,13 +3,13 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
-var ActionConstants = require('constants/ActionConstants');
-var CommitteeActions = require('actions/CommitteeActions');
-var Dispatcher = require('dispatcher/Dispatcher');
-var ServerAPI = require('lib/ServerAPI');
-var {Store} = require('flux/utils');
+import ActionConstants from "constants/ActionConstants";
+import { CommitteeActions } from "actions/CommitteeActions";
+import { Dispatcher } from "dispatcher/Dispatcher";
+import { ServerAPI } from "lib/ServerAPI";
+import { Store } from "flux/utils";
 
 var _committees = {};
 
@@ -19,7 +19,7 @@ class CommitteeStore extends Store {
       return _committees;
     }
 
-    ServerAPI.getCommittees().then(value => {
+    ServerAPI.getCommittees().then((value) => {
       CommitteeActions.committeesFetched(value);
     });
 
@@ -28,7 +28,7 @@ class CommitteeStore extends Store {
 
   getSpecialCommittees() {
     var specialCommitteesArray = Object.values(this.getCommittees()).filter(
-      committee => committee.special,
+      (committee) => committee.special
     );
     var specialCommittees = {};
     for (const committee of specialCommitteesArray) {
@@ -52,4 +52,5 @@ class CommitteeStore extends Store {
   }
 }
 
-module.exports = new CommitteeStore(Dispatcher);
+const committeeStore = new CommitteeStore(Dispatcher);
+export { committeeStore as CommitteeStore };

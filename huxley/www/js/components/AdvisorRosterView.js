@@ -3,76 +3,68 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
-var Modal = require('react-modal');
-var React = require('react');
-var ReactRouter = require('react-router');
+var Modal = require("react-modal");
+import React from "react";
 
-var _accessSafe = require('utils/_accessSafe');
-var AssignmentStore = require('stores/AssignmentStore');
-var Button = require('components/core/Button');
-var CurrentUserStore = require('stores/CurrentUserStore');
-var DelegateActions = require('actions/DelegateActions');
-var DelegateStore = require('stores/DelegateStore');
-var ConferenceContext = require('components/ConferenceContext');
-var CurrentUserActions = require('actions/CurrentUserActions');
-var InnerView = require('components/InnerView');
-var RegistrationStore = require('stores/RegistrationStore');
-var ServerAPI = require('lib/ServerAPI');
-var StatusLabel = require('components/core/StatusLabel');
-var Table = require('components/core/Table');
-var TextInput = require('components/core/TextInput');
-var TextTemplate = require('components/core/TextTemplate');
-var _checkDate = require('utils/_checkDate');
-var _handleChange = require('utils/_handleChange');
+var { _accessSafe } = require("utils/_accessSafe");
+var { AssignmentStore } = require("stores/AssignmentStore");
+var { Button } = require("components/core/Button");
+var { CurrentUserStore } = require("stores/CurrentUserStore");
+var { DelegateActions } = require("actions/DelegateActions");
+var { DelegateStore } = require("stores/DelegateStore");
+var { InnerView } = require("components/InnerView");
+var { RegistrationStore } = require("stores/RegistrationStore");
+var { ServerAPI } = require("lib/ServerAPI");
+var { StatusLabel } = require("components/core/StatusLabel");
+var { Table } = require("components/core/Table");
+var { TextInput } = require("components/core/TextInput");
+var { TextTemplate } = require("components/core/TextTemplate");
+var { _checkDate } = require("utils/_checkDate");
+var { _handleChange } = require("utils/_handleChange");
 
-require('css/Modal.less');
-var AdvisorRosterViewText = require('text/AdvisorRosterViewText.md');
-var AdvisorWaitlistText = require('text/AdvisorWaitlistText.md');
+require("css/Modal.less");
+var AdvisorRosterViewText = require("text/AdvisorRosterViewText.md");
+var AdvisorWaitlistText = require("text/AdvisorWaitlistText.md");
 
-var AdvisorRosterView = React.createClass({
-  mixins: [ReactRouter.History],
-
-  contextTypes: {
-    conference: React.PropTypes.shape(ConferenceContext),
-  },
-
-  getInitialState: function() {
+class AdvisorRosterView extends React.Component {
+  constructor(props) {
+    super(props);
     var schoolID = CurrentUserStore.getCurrentUser().school.id;
-    var conferenceID = this.context.conference.session;
+    var conferenceID = global.conference.session;
     var assignments = AssignmentStore.getSchoolAssignments(schoolID).filter(
-      assignment => !assignment.rejected,
+      (assignment) => !assignment.rejected
     );
 
     var assignment_ids = {};
     assignments.map(
-      function(a) {
+      function (a) {
         assignment_ids[a.id] = a;
-      }.bind(this),
+      }.bind(this)
     );
 
-    return {
+    this.state = {
       delegates: DelegateStore.getSchoolDelegates(schoolID),
       registration: RegistrationStore.getRegistration(schoolID, conferenceID),
       assignments: assignments,
       assignment_ids: assignment_ids,
       loading: false,
       modal_open: false,
-      modal_name: '',
-      modal_email: '',
+      modal_name: "",
+      modal_email: "",
       modal_onClick: null,
       errors: {},
     };
-  },
+  }
 
-  componentWillMount: function() {
-    Modal.setAppElement('body');
-  },
+  UNSAFE_componentWillMount() {
+    Modal.setAppElement("body");
+  }
 
-  componentDidMount: function() {
+  componentDidMount() {
     var schoolID = CurrentUserStore.getCurrentUser().school.id;
-    var conferenceID = this.context.conference.session;
+    var conferenceID = global.conference.session;
     this._registrationToken = RegistrationStore.addListener(() => {
       this.setState({
         registration: RegistrationStore.getRegistration(schoolID, conferenceID),
@@ -88,32 +80,31 @@ var AdvisorRosterView = React.createClass({
     });
     this._assignmentsToken = AssignmentStore.addListener(() => {
       var assignments = AssignmentStore.getSchoolAssignments(schoolID).filter(
-        assignment => !assignment.rejected,
+        (assignment) => !assignment.rejected
       );
       var assignment_ids = {};
       assignments.map(
-        function(a) {
+        function (a) {
           assignment_ids[a.id] = a;
-        }.bind(this),
+        }.bind(this)
       );
       this.setState({
         assignments: assignments,
         assignment_ids: assignment_ids,
       });
     });
-  },
+  }
 
-  componentWillUnmount: function() {
+  componentWillUnmount() {
     this._registrationToken && this._registrationToken.remove();
     this._delegatesToken && this._delegatesToken.remove();
     this._assignmentsToken && this._assignmentsToken.remove();
-  },
+  }
 
-  render: function() {
-    var conference = this.context.conference;
+  render() {
     var registration = this.state.registration;
     var waitlisted =
-      _accessSafe(registration, 'is_waitlisted') == null
+      _accessSafe(registration, "is_waitlisted") == null
         ? null
         : registration.is_waitlisted;
     var disableEdit = _checkDate();
@@ -122,8 +113,9 @@ var AdvisorRosterView = React.createClass({
     ) : (
       <Button
         color="green"
-        onClick={this.openModal.bind(this, '', '', this._handleAddDelegate)}
-        loading={this.state.loading}>
+        onClick={this.openModal.bind(this, "", "", this._handleAddDelegate)}
+        loading={this.state.loading}
+      >
         Add Delegate
       </Button>
     );
@@ -132,8 +124,9 @@ var AdvisorRosterView = React.createClass({
       return (
         <InnerView>
           <TextTemplate
-            conferenceSession={conference.session}
-            conferenceExternal={conference.external}>
+            conferenceSession={global.conference.session}
+            conferenceExternal={global.conference.external}
+          >
             {AdvisorWaitlistText}
           </TextTemplate>
         </InnerView>
@@ -144,7 +137,8 @@ var AdvisorRosterView = React.createClass({
           <TextTemplate>{AdvisorRosterViewText}</TextTemplate>
           <Table
             emptyMessage="You don't have any delegates in your roster."
-            isEmpty={!this.state.delegates.length}>
+            isEmpty={!this.state.delegates.length}
+          >
             <thead>
               <tr>
                 <th>Delegate</th>
@@ -162,30 +156,32 @@ var AdvisorRosterView = React.createClass({
           <Modal
             isOpen={this.state.modal_open}
             className="content content-outer transparent ie-layout rounded"
-            overlayClassName="modal-overlay">
+            overlayClassName="modal-overlay"
+          >
             <form>
               <h3>Enter your delegate's information here</h3>
               <br />
               <TextInput
                 placeholder="Name"
-                onChange={_handleChange.bind(this, 'modal_name')}
+                onChange={_handleChange.bind(this, "modal_name")}
                 defaultValue={this.state.modal_name}
                 value={this.state.modal_name}
               />
-              {this.renderError('name')}
+              {this.renderError("name")}
               <TextInput
                 placeholder="Email"
-                onChange={_handleChange.bind(this, 'modal_email')}
+                onChange={_handleChange.bind(this, "modal_email")}
                 defaultValue={this.state.modal_email}
                 value={this.state.modal_email}
               />
-              {this.renderError('email')}
+              {this.renderError("email")}
               <hr />
               <div>
                 <Button
                   onClick={this.state.modal_onClick}
                   color="green"
-                  loading={this.state.loading}>
+                  loading={this.state.loading}
+                >
                   Save
                 </Button>
                 <Button onClick={this.closeModal} color="red">
@@ -197,17 +193,14 @@ var AdvisorRosterView = React.createClass({
         </InnerView>
       );
     }
-  },
+  }
 
-  renderRosterRows: function() {
-    var committees = this.state.committees;
-    var countries = this.state.countries;
-    var assignments = this.state.assignments;
+  renderRosterRows = () => {
     var assignment_ids = this.state.assignment_ids;
     var disableEdit = _checkDate();
 
     return this.state.delegates.map(
-      function(delegate) {
+      function (delegate) {
         var editButton = disableEdit ? (
           <td />
         ) : (
@@ -219,8 +212,9 @@ var AdvisorRosterView = React.createClass({
                 this,
                 delegate.name,
                 delegate.email,
-                this._handleEditDelegate.bind(this, delegate),
-              )}>
+                this._handleEditDelegate.bind(this, delegate)
+              )}
+            >
               Edit
             </Button>
           </td>
@@ -233,21 +227,22 @@ var AdvisorRosterView = React.createClass({
             <Button
               color="red"
               size="small"
-              onClick={this._handleDeleteDelegate.bind(this, delegate)}>
+              onClick={this._handleDeleteDelegate.bind(this, delegate)}
+            >
               Delete
             </Button>
           </td>
         );
         const waiverCheck =
-          delegate && delegate.waiver_submitted ? '\u2611' : '\u2610';
+          delegate && delegate.waiver_submitted ? "\u2611" : "\u2610";
 
         const positionPaperCheck =
           delegate.assignment &&
           assignment_ids[delegate.assignment] &&
           assignment_ids[delegate.assignment].paper &&
           assignment_ids[delegate.assignment].paper.file
-            ? '\u2611'
-            : '\u2610';
+            ? "\u2611"
+            : "\u2610";
 
         return (
           <tr>
@@ -264,8 +259,9 @@ var AdvisorRosterView = React.createClass({
                   size="small"
                   onClick={this._handleDelegatePasswordChange.bind(
                     this,
-                    delegate,
-                  )}>
+                    delegate
+                  )}
+                >
                   Reset Password
                 </Button>
               ) : (
@@ -274,11 +270,11 @@ var AdvisorRosterView = React.createClass({
             </td>
           </tr>
         );
-      }.bind(this),
+      }.bind(this)
     );
-  },
+  };
 
-  openModal: function(name, email, fn, event) {
+  openModal = (name, email, fn, event) => {
     this.setState({
       modal_open: true,
       modal_name: name,
@@ -287,14 +283,14 @@ var AdvisorRosterView = React.createClass({
       errors: {},
     });
     event.preventDefault();
-  },
+  }
 
-  closeModal: function(event) {
-    this.setState({modal_open: false});
+  closeModal = (event) => {
+    this.setState({ modal_open: false });
     event.preventDefault();
-  },
+  };
 
-  renderError: function(field) {
+  renderError = (field) => {
     if (this.state.errors[field]) {
       return (
         <StatusLabel status="error">{this.state.errors[field]}</StatusLabel>
@@ -302,76 +298,75 @@ var AdvisorRosterView = React.createClass({
     }
 
     return null;
-  },
+  };
 
-  _handleDeleteDelegate: function(delegate) {
+  _handleDeleteDelegate = (delegate) => {
     const confirmed = window.confirm(
-      `Are you sure you want to delete this delegate (${delegate.name})?`,
+      `Are you sure you want to delete this delegate (${delegate.name})?`
     );
     if (confirmed) {
       DelegateActions.deleteDelegate(delegate.id, this._handleDeleteError);
     }
-  },
+  };
 
-  _handleAddDelegate: function(data) {
-    this.setState({loading: true});
+  _handleAddDelegate = () => {
+    this.setState({ loading: true });
     var user = CurrentUserStore.getCurrentUser();
     ServerAPI.createDelegate(
       this.state.modal_name,
       this.state.modal_email,
-      user.school.id,
+      user.school.id
     ).then(this._handleAddDelegateSuccess, this._handleError);
     event.preventDefault();
-  },
+  };
 
-  _handleEditDelegate: function(delegate) {
-    var user = CurrentUserStore.getCurrentUser();
-    this.setState({loading: true});
-    var delta = {name: this.state.modal_name, email: this.state.modal_email};
+  _handleEditDelegate = (delegate) => {
+    this.setState({ loading: true });
+    var delta = { name: this.state.modal_name, email: this.state.modal_email };
     DelegateActions.updateDelegate(delegate.id, delta, this._handleError);
     event.preventDefault();
-  },
+  };
 
-  _handleDelegatePasswordChange: function(delegate) {
+  _handleDelegatePasswordChange = (delegate) => {
     ServerAPI.resetDelegatePassword(delegate.id).then(
       this._handlePasswordChangeSuccess,
-      this._handlePasswordChangeError,
+      this._handlePasswordChangeError
     );
-  },
+  };
 
-  _handleAddDelegateSuccess: function(response) {
+  _handleAddDelegateSuccess = (response) => {
     DelegateActions.addDelegate(response);
     this.setState({
       loading: false,
       modal_open: false,
     });
-  },
+  };
 
-  _handlePasswordChangeSuccess: function(response) {
+  _handlePasswordChangeSuccess = () => {
     this.setState({
       loading: false,
       modal_open: false,
     });
     window.alert(`Password successfully reset.`);
-  },
+  };
 
-  _handlePasswordChangeError: function(response) {
+  _handlePasswordChangeError = () => {
     window.alert(`The passowrd could not be reset.`);
-  },
+  };
 
-  _handleDeleteError: function(response) {
+  _handleDeleteError = () => {
     window.alert(
-      `There was an issue processing your request. Please refresh you page and try again.`,
+      `There was an issue processing your request. Please refresh your page and try again.`
     );
-  },
+  };
 
-  _handleError: function(response) {
+  _handleError = (response) => {
     this.setState({
       errors: response,
       loading: false,
       modal_open: true,
     });
-  },
-});
+  };
+}
 
-module.exports = AdvisorRosterView;
+export { AdvisorRosterView };

@@ -3,14 +3,14 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
-var ActionConstants = require('constants/ActionConstants');
-var Dispatcher = require('dispatcher/Dispatcher');
-var ServerAPI = require('lib/ServerAPI');
-var {Store} = require('flux/utils');
+import ActionConstants from "constants/ActionConstants";
+import { Dispatcher } from "dispatcher/Dispatcher";
+import { ServerAPI } from "lib/ServerAPI";
+import { Store } from "flux/utils";
 
-var invariant = require('fbjs/lib/invariant');
+import invariant from "invariant";
 
 class CurrentUserStore extends Store {
   constructor(dispatcher) {
@@ -34,7 +34,7 @@ class CurrentUserStore extends Store {
     const user = this._currentUser;
     this._currentUser = {
       ...user,
-      school: {...user.school, ...delta},
+      school: { ...user.school, ...delta },
     };
   }
 
@@ -48,7 +48,7 @@ class CurrentUserStore extends Store {
     };
     this._currentUser = {
       ...user,
-      school: {...user.school, ...delta.school},
+      school: { ...user.school, ...delta.school },
     };
   }
 
@@ -71,7 +71,7 @@ class CurrentUserStore extends Store {
           action.userID,
           action.delta,
           action.onSuccess,
-          action.onError,
+          action.onError
         );
         break;
       default:
@@ -84,11 +84,11 @@ class CurrentUserStore extends Store {
   _bootstrap() {
     invariant(
       !this._isBootstrapped,
-      'CurrentUserStore can only be bootstrapped once.',
+      "CurrentUserStore can only be bootstrapped once."
     );
     invariant(
       global.currentUser !== undefined,
-      'currentUser must be defined to bootstrap CurrentUserStore.',
+      "currentUser must be defined to bootstrap CurrentUserStore."
     );
 
     this._currentUser = global.currentUser;
@@ -99,9 +99,10 @@ class CurrentUserStore extends Store {
   _assertBootstrapped() {
     invariant(
       this._isBootstrapped,
-      'CurrentUserStore must be bootstrapped before being used.',
+      "CurrentUserStore must be bootstrapped before being used."
     );
   }
 }
 
-module.exports = new CurrentUserStore(Dispatcher);
+const currentUserStore = new CurrentUserStore(Dispatcher);
+export { currentUserStore as CurrentUserStore };

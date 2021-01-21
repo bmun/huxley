@@ -3,24 +3,22 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
-var React = require('react');
+import React from "react";
 
-var TextTemplate = require('components/core/TextTemplate');
+var { TextTemplate } = require("components/core/TextTemplate");
 
-var PermissionDeniedViewText = require('text/PermissionDeniedViewText.md');
+var PermissionDeniedViewText = require("text/PermissionDeniedViewText.md");
 
-var PermissionDeniedView = React.createClass({
-  render: function() {
+class PermissionDeniedView extends React.Component {
+  render() {
     return (
       <div>
-        <TextTemplate>
-          {PermissionDeniedViewText}
-        </TextTemplate>
+        <TextTemplate>{PermissionDeniedViewText}</TextTemplate>
       </div>
     );
-  },
-});
+  }
+}
 
-module.exports = PermissionDeniedView;
+export { PermissionDeniedView };

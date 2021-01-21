@@ -181,7 +181,7 @@ var TodoApp = React.createClass({
     }
 });
 
-module.exports = TodoApp;
+export default TodoApp;
 ```
 
 Then in www.html change the line `<p>Hello, world!</p>` to `<div id="main"></div>`

@@ -3,14 +3,14 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
-var ActionConstants = require('constants/ActionConstants');
-var AssignmentActions = require('actions/AssignmentActions');
-var CurrentUserStore = require('stores/CurrentUserStore');
-var Dispatcher = require('dispatcher/Dispatcher');
-var ServerAPI = require('lib/ServerAPI');
-var {Store} = require('flux/utils');
+import ActionConstants from "constants/ActionConstants";
+import { AssignmentActions } from "actions/AssignmentActions";
+import { CurrentUserStore } from "stores/CurrentUserStore";
+import { Dispatcher } from "dispatcher/Dispatcher";
+import { ServerAPI } from "lib/ServerAPI";
+import { Store } from "flux/utils";
 
 var _assignments = {};
 var _assignmentsFetched = false;
@@ -20,31 +20,31 @@ class AssignmentStore extends Store {
   getSchoolAssignments(schoolID) {
     var assignmentIDs = Object.keys(_assignments);
     if (!_assignmentsFetched) {
-      ServerAPI.getAssignments(schoolID).then(value => {
+      ServerAPI.getAssignments(schoolID).then((value) => {
         AssignmentActions.assignmentsFetched(value);
       });
 
       return [];
     }
 
-    return assignmentIDs.map(id => _assignments[id]);
+    return assignmentIDs.map((id) => _assignments[id]);
   }
 
   getCommitteeAssignments(committeeID) {
     var assignmentIDs = Object.keys(_assignments);
     if (!_assignmentsFetched) {
-      ServerAPI.getCommitteeAssignments(committeeID).then(value => {
+      ServerAPI.getCommitteeAssignments(committeeID).then((value) => {
         AssignmentActions.assignmentsFetched(value);
       });
 
       return [];
     }
 
-    return assignmentIDs.map(id => _assignments[id]);
+    return assignmentIDs.map((id) => _assignments[id]);
   }
 
   updateAssignment(assignmentID, delta, onError) {
-    const assignment = {..._assignments[assignmentID], ...delta};
+    const assignment = { ..._assignments[assignmentID], ...delta };
     ServerAPI.updateAssignment(assignmentID, assignment).catch(onError);
     _assignments[assignmentID] = assignment;
   }
@@ -61,7 +61,7 @@ class AssignmentStore extends Store {
         this.updateAssignment(
           action.assignmentID,
           action.delta,
-          action.onError,
+          action.onError
         );
         break;
       case ActionConstants.LOGIN:
@@ -80,4 +80,5 @@ class AssignmentStore extends Store {
   }
 }
 
-module.exports = new AssignmentStore(Dispatcher);
+const assignmentStore = new AssignmentStore(Dispatcher);
+export { assignmentStore as AssignmentStore };

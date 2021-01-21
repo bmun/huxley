@@ -18,7 +18,7 @@ describe('CountryStore', () => {
 
   beforeEach(() => {
     ActionConstants = require('constants/ActionConstants');
-    CountryStore = require('stores/CountryStore');
+    {CountryStore} = require('stores/CountryStore');
     Dispatcher = require('dispatcher/Dispatcher');
     ServerAPI = require('lib/ServerAPI');
 

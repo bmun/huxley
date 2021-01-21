@@ -3,27 +3,29 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  +*/
 
-'use strict';
+"use strict";
 
-const React = require('react');
-const ReactRouter = require('react-router');
+import React from "react";
+import PropTypes from "prop-types";
+import { history } from "utils/history";
 
-const Button = require('components/core/Button');
-const CommitteeStore = require('stores/CommitteeStore');
-const CurrentUserStore = require('stores/CurrentUserStore');
-const InnerView = require('components/InnerView');
-const NumberInput = require('components/NumberInput');
-const RubricActions = require('actions/RubricActions');
-const RubricStore = require('stores/RubricStore');
-const TextInput = require('components/core/TextInput');
-const TextTemplate = require('components/core/TextTemplate');
-const User = require('utils/User');
+const { Button } = require("components/core/Button");
+const { CommitteeStore } = require("stores/CommitteeStore");
+const { CurrentUserStore } = require("stores/CurrentUserStore");
+const { InnerView } = require("components/InnerView");
+const { NumberInput } = require("components/NumberInput");
+const { RubricActions } = require("actions/RubricActions");
+const { RubricStore } = require("stores/RubricStore");
+const { TextInput } = require("components/core/TextInput");
+const { TextTemplate } = require("components/core/TextTemplate");
+const { User } = require("utils/User");
 
-require('css/Table.less');
-const ChairRubricText = require('text/ChairRubricViewText.md');
+require("css/Table.less");
+const ChairRubricText = require("text/ChairRubricViewText.md");
 
-const ChairRubricView = React.createClass({
-  getInitialState() {
+class ChairRubricView extends React.Component {
+  constructor(props) {
+    super(props);
     var user = CurrentUserStore.getCurrentUser();
     var committees = CommitteeStore.getCommittees();
     var rubric = null;
@@ -31,27 +33,27 @@ const ChairRubricView = React.createClass({
       var committee = committees[user.committee];
       rubric = RubricStore.getRubric(committee.rubric.id);
     }
-    return {
+    this.state = {
       loading: false,
       success: false,
       committees: committees,
       rubric: rubric,
     };
-  },
+  }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     var user = CurrentUserStore.getCurrentUser();
     if (!User.isChair(user)) {
-      this.history.pushState(null, '/');
+      history.redirect("/");
     }
-  },
+  }
 
   componentDidMount() {
     this._committeesToken = CommitteeStore.addListener(() => {
       var user = CurrentUserStore.getCurrentUser();
       var committees = CommitteeStore.getCommittees();
       var committee = committees[user.committee];
-      this.setState({committees: committees});
+      this.setState({ committees: committees });
       RubricStore.getRubric(committee.rubric.id);
     });
 
@@ -60,15 +62,15 @@ const ChairRubricView = React.createClass({
       var user = CurrentUserStore.getCurrentUser();
       if (user.committee in committees) {
         var committee = committees[user.committee];
-        this.setState({rubric: RubricStore.getRubric(committee.rubric.id)});
+        this.setState({ rubric: RubricStore.getRubric(committee.rubric.id) });
       }
     });
-  },
+  }
 
   componentWillUnmount() {
     this._rubricToken && this._rubricToken.remove();
     this._successTimeout && clearTimeout(this._successTimeout);
-  },
+  }
 
   render() {
     var rubric = this.state.rubric;
@@ -96,7 +98,7 @@ const ChairRubricView = React.createClass({
             <td>
               <TextInput
                 defaultValue={rubric.topic_two}
-                onChange={this._handleChange.bind(this, 'topic_two')}
+                onChange={this._handleChange.bind(this, "topic_two")}
               />
             </td>
           </tr>
@@ -124,7 +126,7 @@ const ChairRubricView = React.createClass({
                     className="choice"
                     type="checkbox"
                     checked={rubric.use_topic_2}
-                    onChange={this._handleChange.bind(this, 'use_topic_2')}
+                    onChange={this._handleChange.bind(this, "use_topic_2")}
                   />
                 </td>
               </tr>
@@ -140,7 +142,7 @@ const ChairRubricView = React.createClass({
                 <td>
                   <TextInput
                     defaultValue={rubric.topic_one}
-                    onChange={this._handleChange.bind(this, 'topic_one')}
+                    onChange={this._handleChange.bind(this, "topic_one")}
                   />
                 </td>
               </tr>
@@ -163,15 +165,15 @@ const ChairRubricView = React.createClass({
                 <td>
                   <TextInput
                     defaultValue={rubric.grade_category_1}
-                    onChange={this._handleChange.bind(this, 'grade_category_1')}
+                    onChange={this._handleChange.bind(this, "grade_category_1")}
                   />
                 </td>
                 <td>
                   <NumberInput
-                    defaultValue={'' + rubric.grade_value_1}
+                    defaultValue={"" + rubric.grade_value_1}
                     onChange={this._handleValueChange.bind(
                       this,
-                      'grade_value_1',
+                      "grade_value_1"
                     )}
                   />
                 </td>
@@ -180,15 +182,15 @@ const ChairRubricView = React.createClass({
                 <td>
                   <TextInput
                     defaultValue={rubric.grade_category_2}
-                    onChange={this._handleChange.bind(this, 'grade_category_2')}
+                    onChange={this._handleChange.bind(this, "grade_category_2")}
                   />
                 </td>
                 <td>
                   <NumberInput
-                    defaultValue={'' + rubric.grade_value_2}
+                    defaultValue={"" + rubric.grade_value_2}
                     onChange={this._handleValueChange.bind(
                       this,
-                      'grade_value_2',
+                      "grade_value_2"
                     )}
                   />
                 </td>
@@ -197,15 +199,15 @@ const ChairRubricView = React.createClass({
                 <td>
                   <TextInput
                     defaultValue={rubric.grade_category_3}
-                    onChange={this._handleChange.bind(this, 'grade_category_3')}
+                    onChange={this._handleChange.bind(this, "grade_category_3")}
                   />
                 </td>
                 <td>
                   <NumberInput
-                    defaultValue={'' + rubric.grade_value_3}
+                    defaultValue={"" + rubric.grade_value_3}
                     onChange={this._handleValueChange.bind(
                       this,
-                      'grade_value_3',
+                      "grade_value_3"
                     )}
                   />
                 </td>
@@ -214,15 +216,15 @@ const ChairRubricView = React.createClass({
                 <td>
                   <TextInput
                     defaultValue={rubric.grade_category_4}
-                    onChange={this._handleChange.bind(this, 'grade_category_4')}
+                    onChange={this._handleChange.bind(this, "grade_category_4")}
                   />
                 </td>
                 <td>
                   <NumberInput
-                    defaultValue={'' + rubric.grade_value_4}
+                    defaultValue={"" + rubric.grade_value_4}
                     onChange={this._handleValueChange.bind(
                       this,
-                      'grade_value_4',
+                      "grade_value_4"
                     )}
                   />
                 </td>
@@ -231,15 +233,15 @@ const ChairRubricView = React.createClass({
                 <td>
                   <TextInput
                     defaultValue={rubric.grade_category_5}
-                    onChange={this._handleChange.bind(this, 'grade_category_5')}
+                    onChange={this._handleChange.bind(this, "grade_category_5")}
                   />
                 </td>
                 <td>
                   <NumberInput
-                    defaultValue={'' + rubric.grade_value_5}
+                    defaultValue={"" + rubric.grade_value_5}
                     onChange={this._handleValueChange.bind(
                       this,
-                      'grade_value_5',
+                      "grade_value_5"
                     )}
                   />
                 </td>
@@ -256,15 +258,16 @@ const ChairRubricView = React.createClass({
           <Button
             onClick={this._handleSaveRubric}
             loading={this.state.loading}
-            success={this.state.success}>
+            success={this.state.success}
+          >
             Save
           </Button>
         </form>
       </InnerView>
     );
-  },
+  }
 
-  _renderTopicTwo(rubric) {
+  _renderTopicTwo = (rubric) => {
     return (
       <table>
         <thead>
@@ -278,15 +281,15 @@ const ChairRubricView = React.createClass({
             <td>
               <TextInput
                 defaultValue={rubric.grade_t2_category_1}
-                onChange={this._handleChange.bind(this, 'grade_t2_category_1')}
+                onChange={this._handleChange.bind(this, "grade_t2_category_1")}
               />
             </td>
             <td>
               <NumberInput
-                defaultValue={'' + rubric.grade_t2_value_1}
+                defaultValue={"" + rubric.grade_t2_value_1}
                 onChange={this._handleValueChange.bind(
                   this,
-                  'grade_t2_value_1',
+                  "grade_t2_value_1"
                 )}
               />
             </td>
@@ -295,15 +298,15 @@ const ChairRubricView = React.createClass({
             <td>
               <TextInput
                 defaultValue={rubric.grade_t2_category_2}
-                onChange={this._handleChange.bind(this, 'grade_t2_category_2')}
+                onChange={this._handleChange.bind(this, "grade_t2_category_2")}
               />
             </td>
             <td>
               <NumberInput
-                defaultValue={'' + rubric.grade_t2_value_2}
+                defaultValue={"" + rubric.grade_t2_value_2}
                 onChange={this._handleValueChange.bind(
                   this,
-                  'grade_t2_value_2',
+                  "grade_t2_value_2"
                 )}
               />
             </td>
@@ -312,15 +315,15 @@ const ChairRubricView = React.createClass({
             <td>
               <TextInput
                 defaultValue={rubric.grade_t2_category_3}
-                onChange={this._handleChange.bind(this, 'grade_t2_category_3')}
+                onChange={this._handleChange.bind(this, "grade_t2_category_3")}
               />
             </td>
             <td>
               <NumberInput
-                defaultValue={'' + rubric.grade_t2_value_3}
+                defaultValue={"" + rubric.grade_t2_value_3}
                 onChange={this._handleValueChange.bind(
                   this,
-                  'grade_t2_value_3',
+                  "grade_t2_value_3"
                 )}
               />
             </td>
@@ -329,15 +332,15 @@ const ChairRubricView = React.createClass({
             <td>
               <TextInput
                 defaultValue={rubric.grade_t2_category_4}
-                onChange={this._handleChange.bind(this, 'grade_t2_category_4')}
+                onChange={this._handleChange.bind(this, "grade_t2_category_4")}
               />
             </td>
             <td>
               <NumberInput
-                defaultValue={'' + rubric.grade_t2_value_4}
+                defaultValue={"" + rubric.grade_t2_value_4}
                 onChange={this._handleValueChange.bind(
                   this,
-                  'grade_t2_value_4',
+                  "grade_t2_value_4"
                 )}
               />
             </td>
@@ -346,15 +349,15 @@ const ChairRubricView = React.createClass({
             <td>
               <TextInput
                 defaultValue={rubric.grade_t2_category_5}
-                onChange={this._handleChange.bind(this, 'grade_t2_category_5')}
+                onChange={this._handleChange.bind(this, "grade_t2_category_5")}
               />
             </td>
             <td>
               <NumberInput
-                defaultValue={'' + rubric.grade_t2_value_5}
+                defaultValue={"" + rubric.grade_t2_value_5}
                 onChange={this._handleValueChange.bind(
                   this,
-                  'grade_t2_value_5',
+                  "grade_t2_value_5"
                 )}
               />
             </td>
@@ -362,11 +365,11 @@ const ChairRubricView = React.createClass({
         </tbody>
       </table>
     );
-  },
+  };
 
-  _handleChange(field, event) {
+  _handleChange = (field, event) => {
     var rubric = this.state.rubric;
-    if (field == 'use_topic_2') {
+    if (field == "use_topic_2") {
       event = !rubric.use_topic_2;
     }
     this.setState({
@@ -375,9 +378,9 @@ const ChairRubricView = React.createClass({
         [field]: event,
       },
     });
-  },
+  }
 
-  _handleValueChange(field, event) {
+  _handleValueChange = (field, event) => {
     var rubric = this.state.rubric;
     this.setState({
       rubric: {
@@ -385,34 +388,34 @@ const ChairRubricView = React.createClass({
         [field]: Number(event),
       },
     });
-  },
+  }
 
-  _handleSaveRubric(event) {
-    this.setState({loading: true});
+  _handleSaveRubric = (event) => {
+    this.setState({ loading: true });
     this._successTimout && clearTimeout(this._successTimeout);
-    var rubric = {...this.state.rubric};
+    var rubric = { ...this.state.rubric };
     RubricActions.updateRubric(rubric, this._handleSuccess, this._handleError);
     event.preventDefault();
-  },
+  };
 
-  _handleSuccess: function(response) {
+  _handleSuccess = (response) => {
     this.setState({
       loading: false,
       success: true,
     });
 
     this._successTimeout = setTimeout(
-      () => this.setState({success: false}),
-      2000,
+      () => this.setState({ success: false }),
+      2000
     );
-  },
+  };
 
-  _handleError: function(response) {
-    this.setState({loading: false});
+  _handleError = (response) => {
+    this.setState({ loading: false });
     window.alert(
-      'Something went wrong. Please refresh your page and try again.',
+      "Something went wrong. Please refresh your page and try again."
     );
-  },
-});
+  };
+}
 
-module.exports = ChairRubricView;
+export { ChairRubricView };
