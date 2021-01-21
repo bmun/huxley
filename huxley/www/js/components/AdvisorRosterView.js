@@ -356,7 +356,7 @@ class AdvisorRosterView extends React.Component {
 
   _handleDeleteError = () => {
     window.alert(
-      `There was an issue processing your request. Please refresh you page and try again.`
+      `There was an issue processing your request. Please refresh your page and try again.`
     );
   };
 

@@ -44,7 +44,7 @@ class DelegateStore extends Store {
   }
 
   deleteDelegate(delegateID, onError) {
-    ServerAPI.deleteDelegate(delegateID).catch(onError);
+    ServerAPI.deleteDelegate(delegateID).then(serverOK => serverOK ?? onError()).catch(onError);
     delete _delegates[delegateID];
   }
 

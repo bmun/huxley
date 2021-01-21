@@ -233,8 +233,12 @@ function _ajax(method, uri, data, content_type) {
     }
   }
 
-  if (content_type == "application/json") {
-    return fetch(uri, params).then((response) =>
+  if (content_type == "application/json" && method == 'DELETE') {
+    return fetch(uri, params).then((response) => {
+      return response.ok;
+    });
+  } else if (content_type == "application/json") {
+    return fetch(uri, params).then((response) => 
       response.ok
         ? response.json()
         : response.json().then((json) => Promise.reject(json))
