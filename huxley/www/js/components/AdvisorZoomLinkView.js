@@ -1,0 +1,98 @@
+/**
+* Copyright (c) 2011-2017 Berkeley Model United Nations. All rights reserved.
+* Use of this source code is governed by a BSD License (see LICENSE).
++*/
+
+"use strict";
+
+import React from "react";
+import { history } from "utils/history";
+
+var { AssignmentStore } = require("stores/AssignmentStore");
+var { CountryStore } = require("stores/CountryStore");
+var { CommitteeStore } = require("stores/CommitteeStore");
+var { CurrentUserStore } = require("stores/CurrentUserStore");
+var { DelegateStore } = require("stores/DelegateStore");
+var { InnerView } = require("components/InnerView");
+var { TextTemplate } = require("components/core/TextTemplate");
+var { User } = require("utils/User");
+
+require("css/Table.less");
+var ChairDelegateEmailViewText = require("text/ChairDelegateEmailViewText.md");
+
+class AdvisorZoomLinkView extends React.Component {
+  constructor(props) {
+    super(props);
+    var committees = Object.values(CommitteeStore.getCommittees());
+
+    this.state = {
+      committees: committees,
+    };
+  }
+
+  UNSAFE_componentWillMount() {
+    var user = CurrentUserStore.getCurrentUser();
+    if (!User.isAdvisor(user)) {
+      history.redirect("/");
+    }
+  }
+
+  componentDidMount() {
+    this._committeesToken = CommitteeStore.addListener(() => {
+      var committees = Object.values(CommitteeStore.getCommittees());
+      this.setState({ committees : committees });
+    });
+
+  }
+
+  componentWillUnmount() {
+    this._committeesToken && this._committeesToken.remove();
+  }
+
+  render() {
+    return (
+      <InnerView>
+        <h2>Zoom Links</h2>
+        <form>
+          <div className="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Committee</th>
+                  <th style={{textAlign:"right"}}>Zoom Link</th>
+                </tr>
+              </thead>
+            </table>
+            <div>
+              <table className="table highlight-cells">
+                <tbody>
+                  {Object.keys(this.state.committees).length > 0 ? (
+                    this.renderCommitteeRows()
+                  ) : (
+                    <tr />
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </form>
+      </InnerView>
+    );
+  }
+
+  renderCommitteeRows = () => {
+    var committees = this.state.committees;
+    console.log(this.state.committees);
+    console.log(typeof(this.state.committees));
+    return committees.map((committee) => {
+      return (
+        <tr key={committee.id}>
+          <td>{committee.full_name} ({committee.name})</td>
+          <td style={{textAlign:"right"}}><a href={committee.zoom_link}>Join Call</a></td>
+        </tr>
+      );
+    });
+  };
+}
+
+export { AdvisorZoomLinkView };

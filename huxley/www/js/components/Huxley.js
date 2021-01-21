@@ -15,6 +15,7 @@ var { AdvisorPaperView } = require("components/AdvisorPaperView");
 var { AdvisorProfileView } = require("components/AdvisorProfileView");
 var { AdvisorView } = require("components/AdvisorView");
 var { AdvisorRosterView } = require("components/AdvisorRosterView");
+var { AdvisorZoomLinkView } = require("components/AdvisorZoomLinkView");
 var { ChairAttendanceView } = require("components/ChairAttendanceView");
 var {
   ChairCommitteeFeedbackView,
@@ -130,6 +131,9 @@ class Huxley extends React.Component {
               </Route>
               <Route path="/advisor/papers">
                 <AdvisorPaperView />
+              </Route>
+              <Route path="/advisor/zoom-links">
+                <AdvisorZoomLinkView />
               </Route>
               <Route exact path="/">
                 <RedirectView />
