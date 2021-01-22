@@ -9,6 +9,7 @@ import React from "react";
 import { history } from "utils/history";
 
 var { AssignmentStore } = require("stores/AssignmentStore");
+const { Button } = require("components/core/Button");
 var { CountryStore } = require("stores/CountryStore");
 var { CommitteeStore } = require("stores/CommitteeStore");
 var { CurrentUserStore } = require("stores/CurrentUserStore");
@@ -88,7 +89,15 @@ class AdvisorZoomLinkView extends React.Component {
       return (
         <tr key={committee.id}>
           <td>{committee.full_name} ({committee.name})</td>
-          <td style={{textAlign:"right"}}><a href={committee.zoom_link}>Join Call</a></td>
+          <td style={{textAlign:"right"}}>
+          <Button
+            color="blue"
+            size="small"
+            onClick={() => window.open(committee.zoom_link, "_blank")}
+          >
+            Join Call
+          </Button>
+          </td>
         </tr>
       );
     });
