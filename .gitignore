@@ -40,3 +40,5 @@ test_position_paper.doc
 
 env/
 .vscode/
+
+huxley/service.json

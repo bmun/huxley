@@ -131,3 +131,8 @@ USE_I18N = False
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 STATIC_ROOT = '%s/static/' % HUXLEY_ROOT
 STATIC_URL = '/static/'
+
+# Google Sheets integration
+SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
+SERVICE_ACCOUNT_FILE = 'huxley/service.json'
+SHEET_ID = None

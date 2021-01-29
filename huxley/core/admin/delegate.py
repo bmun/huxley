@@ -3,10 +3,14 @@
 
 import csv
 
+from django.conf import settings
 from django.conf.urls import url
 from django.contrib import admin, messages
 from django.urls import reverse
 from django.http import HttpResponse, HttpResponseRedirect
+
+from googleapiclient.discovery import build
+from google.oauth2 import service_account
 
 from huxley.core.models import Assignment, Delegate, School
 
@@ -132,6 +136,41 @@ class DelegateAdmin(admin.ModelAdmin):
             writer.writerow(row)
 
         return waiver_input_response
+    
+    def sheets(self, request):
+        if settings.SHEET_ID:
+            SHEET_RANGE = 'Delegates!A1:J'
+            # Store credentials
+            creds = service_account.Credentials.from_service_account_file(
+                settings.SERVICE_ACCOUNT_FILE, scopes=settings.SCOPES)
+
+            data = []
+
+            header = [
+                'Name', 'School', 'Committee', 'Country', 'Email', 'Waiver?',
+                'Session One', 'Session Two', 'Session Three', 'Session Four'
+            ]
+
+            data.append(header)
+
+            ordering = 'assignment__registration__school__name'
+            for delegate in Delegate.objects.all().order_by(ordering):
+                data.append([
+                    str(delegate), str(delegate.school), str(delegate.committee),
+                    str(delegate.country), str(delegate.email), delegate.waiver_submitted,
+                    delegate.session_one, delegate.session_two,
+                    delegate.session_three, delegate.session_four
+                ])
+            body = {
+                'values': data,
+            }
+            service = build('sheets', 'v4', credentials=creds)
+            response = service.spreadsheets().values().update(
+                spreadsheetId=settings.SHEET_ID, range=SHEET_RANGE,
+                valueInputOption='USER_ENTERED', body=body).execute()
+            
+        return HttpResponseRedirect(reverse('admin:core_delegate_changelist'))
+
 
     def get_urls(self):
         return super(DelegateAdmin, self).get_urls() + [
@@ -144,4 +183,7 @@ class DelegateAdmin(admin.ModelAdmin):
             url(r'confirm_waivers',
                 self.admin_site.admin_view(self.confirm_waivers),
                 name='core_delegate_confirm_waivers', ),
+            url(r'sheets',
+                self.admin_site.admin_view(self.sheets),
+                name='core_delegate_sheets', ),
         ]
