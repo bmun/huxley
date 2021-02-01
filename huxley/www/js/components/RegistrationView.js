@@ -551,7 +551,7 @@ class RegistrationView extends React.Component {
         },
       },
       registration: {
-        conference: conference,
+        conference: global.conference.session,
         num_beginner_delegates: this.state.num_beginner_delegates,
         num_intermediate_delegates: this.state.num_intermediate_delegates,
         num_advanced_delegates: this.state.num_advanced_delegates,
@@ -579,6 +579,7 @@ class RegistrationView extends React.Component {
   };
 
   _handleSuccess = (response) => {
+    console.log('success');
     if (response.registration.is_waitlisted) {
       history.redirect("/register/waitlist");
     } else {

@@ -86,6 +86,12 @@ class Huxley extends React.Component {
               <Route path="/password/reset">
                 <PasswordResetSuccessView />
               </Route>
+              <Route path="/register/success">
+                <RegistrationSuccessView />
+              </Route>
+              <Route path="/register/waitlist">
+                <RegistrationWaitlistView />
+              </Route>
               {global.conference.registration_open ? (
                 <Route path="/register">
                   <RegistrationView />
@@ -95,12 +101,6 @@ class Huxley extends React.Component {
                   <RegistrationClosedView />
                 </Route>
               )}
-              <Route path="/register/success">
-                <RegistrationSuccessView />
-              </Route>
-              <Route path="/register/waitlist">
-                <RegistrationWaitlistView />
-              </Route>
               <Route exact path="/">
                 <RedirectView />
               </Route>
