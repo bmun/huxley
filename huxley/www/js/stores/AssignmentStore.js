@@ -31,6 +31,7 @@ class AssignmentStore extends Store {
   }
 
   getCommitteeAssignments(committeeID) {
+    console.log(_assignmentsFetched);
     var assignmentIDs = Object.keys(_assignments);
     if (!_assignmentsFetched) {
       ServerAPI.getCommitteeAssignments(committeeID).then((value) => {

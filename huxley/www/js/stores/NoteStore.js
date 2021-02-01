@@ -51,7 +51,6 @@ class NoteStore extends Store {
 
   addNote(note) {
     _notes[note.id] = note;
-    ServerAPI.createNote(note.is_chair, note.sender, note.recipient, note.msg);
   }
 
   __onDispatch(action) {

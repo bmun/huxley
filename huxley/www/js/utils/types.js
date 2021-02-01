@@ -6,5 +6,11 @@
  //@flow
 
  type Note = {
-
+    sender_id: ?number, 
+    recipient_id: ?number, 
+    is_chair: number, 
+    msg: string, 
+    timestamp?: number
  }
+
+ export type {Note}

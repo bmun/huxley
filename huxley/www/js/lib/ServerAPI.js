@@ -190,7 +190,7 @@ var ServerAPI = {
   },
 
   createNote(is_chair, sender, recipient, msg) {
-    return _post('/api/note', {is_chair, sender, school, recipient, msg})
+    return _post('/api/note', {is_chair, sender, recipient, msg})
   },
 
   getNotesByCommittee(committee_id) {

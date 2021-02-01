@@ -120,7 +120,8 @@ class AssignmentDetailPermission(permissions.BasePermission):
         return (
             user_is_advisor(request, view, assignment.registration.school_id)
             or user_is_chair(request, view, assignment.committee_id) or
-            user_is_delegate(request, view, assignment_id, 'assignment'))
+            user_is_delegate(request, view, assignment_id, 'assignment') or
+            user_is_in_committee(request, view, assignment.committee_id))
 
 
 class AssignmentListPermission(permissions.BasePermission):
@@ -132,7 +133,8 @@ class AssignmentListPermission(permissions.BasePermission):
             school_id = request.query_params.get('school_id', -1)
             committee_id = request.query_params.get('committee_id', -1)
             return (user_is_chair(request, view, committee_id) or
-                    user_is_advisor(request, view, school_id))
+                    user_is_advisor(request, view, school_id) or
+                    user_is_in_committee(request, view, committee_id))
 
         return False
 
@@ -363,3 +365,9 @@ def user_is_delegate(request, view, target_id, field=None):
         return getattr(user.delegate, field + '_id', -1) == int(target_id)
 
     return user.delegate_id == int(target_id)
+
+def user_is_in_committee(request, view, committee_id):
+    user = request.user
+    if not user.is_authenticated or not user.is_delegate():
+        return False
+    return user.delegate.assignment.committee_id == int(committee_id)
