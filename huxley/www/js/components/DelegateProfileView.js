@@ -9,6 +9,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { history } from "utils/history";
 
+const { Button } = require("components/core/Button");
 const { ConferenceContext } = require("components/ConferenceContext");
 const { CurrentUserStore } = require("stores/CurrentUserStore");
 const { InnerView } = require("components/InnerView");
@@ -20,6 +21,8 @@ const DelegateProfileViewText = require("text/DelegateProfileViewText.md");
 
 const DelegateChecklistPositionPaperText = require("text/checklists/DelegateChecklistPositionPaperText.md");
 const DelegateChecklistWaiverText = require("text/checklists/DelegateChecklistWaiverText.md");
+const DelegateProfileNoZoomViewText = require("text/DelegateProfileNoZoomViewText.md");
+const DelegateProfileZoomViewText = require("text/DelegateProfileZoomViewText.md");
 
 class DelegateProfileView extends React.Component {
   constructor(props) {
@@ -47,6 +50,7 @@ class DelegateProfileView extends React.Component {
     var school = delegate && delegate.school;
     var summary = <div />;
     var text = <div />;
+    var zoomLinkText = <div />;
 
     if (assignment && school && committee && country) {
       text = (
@@ -120,6 +124,36 @@ class DelegateProfileView extends React.Component {
       </table>
     );
 
+    if (committee) { 
+      if (delegate && delegate.waiver_submitted) {
+        zoomLinkText = (
+                  <div>
+                    <th>Committee Zoom Link</th>
+                    <br />
+                    <Button
+                      color="blue"
+                      size="small"
+                      onClick={() => window.open(committee.zoom_link, "_blank")}
+                    >
+                      Click here to join committee!
+                    </Button>
+                  </div>
+                  );
+      } else {
+        zoomLinkText = (
+                  <div>
+                    <th>Committee Zoom Link</th>
+                    <b />
+                    <TextTemplate
+                      opiLink = {committee.zoom_link}
+                    >
+                      {DelegateProfileNoZoomViewText}
+                    </TextTemplate>
+                  </div>
+                  );
+      }    
+    }
+
     if (delegate.published_summary) {
       summary = (
         <table>
@@ -147,6 +181,7 @@ class DelegateProfileView extends React.Component {
         {text}
         <br />
         {checklist}
+        {zoomLinkText}
         {summary}
       </InnerView>
     );
