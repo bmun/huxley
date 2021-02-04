@@ -37,12 +37,12 @@ class NoteConversationSelector extends React.Component<NoteConversationSelectorP
                 <form onSubmit = {this._handleSubmit}>
                     <datalist id="delegations">
                         <option>Chair</option>
-                        {this.props.assignments.keys().map(country => <option>country</option>)}
+                        {Object.keys(this.props.assignments).map(country => <option>{country}</option>)}
                     </datalist>
                     <input  autoComplete="on" list="delegations" onChange = {this._handleChange}/> 
                     <input type= "submit" style = {{"display": "none"}}/>
                 </form>
-                <Button size = "small" onClick = {this._handleSubmit} color = "blue"></Button>
+                <Button size = "small" onClick = {this._handleSubmit} color = "blue">&#10140;</Button>
             </div> )
     }
 

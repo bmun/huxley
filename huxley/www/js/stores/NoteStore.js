@@ -31,7 +31,8 @@ class NoteStore extends Store {
   }
 
   getConversationNotes(senderID, recipientID, chair) {
-    var noteIDs = Object.keys(_notes);
+    console.log(recipientID);
+    let noteIDs;
     if (!_notesFetched) {
         if (chair) {
             ServerAPI.getNotesByConversationWithChair(senderID).then(value => 
@@ -42,10 +43,20 @@ class NoteStore extends Store {
                 NoteActions.notesFetched(value)
             );
         }
-
+      
       return [];
     }
-
+    console.log(_notes);
+    console.log(senderID);
+    if (chair) {
+      noteIDs = Object.keys(_notes).filter((noteID) => 
+                  (_notes[noteID].sender == senderID && _notes[noteID].is_chair == 2) ||
+                  (_notes[noteID].is_chair == 1 && _notes[noteID].recipient == senderID));
+    } else {
+      noteIDs = Object.keys(_notes).filter((noteID) => 
+                  (_notes[noteID].sender == senderID && _notes[noteID].recipient == recipientID) ||
+                  (_notes[noteID].sender == recipientID && _notes[noteID].recipient == senderID));
+    }
     return noteIDs.map(id => _notes[id]);
   }
 
