@@ -579,7 +579,6 @@ class RegistrationView extends React.Component {
   };
 
   _handleSuccess = (response) => {
-    console.log('success');
     if (response.registration.is_waitlisted) {
       history.redirect("/register/waitlist");
     } else {

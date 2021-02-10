@@ -5,34 +5,58 @@
 
 //@flow
 
-'use strict';
+"use strict";
 
 import React from "react";
 
-const {Button} = require('components/core/Button');
-const {TextTemplate} = require('components/core/TextTemplate');
-const {NoteStore} = require('stores/NoteStore');
+const { Button } = require("components/core/Button");
+const { TextTemplate } = require("components/core/TextTemplate");
+const { NoteStore } = require("stores/NoteStore");
 
+// $FlowFixMe
+require("css/notes/NoteMessageBox.less");
 
 type NoteMessageBoxProps = {
-    conversation: Array<any>,
-    sender_id: number
-}
+  conversation: Array<any>,
+  sender_id: ?number,
+};
 
 class NoteMessageBox extends React.Component<NoteMessageBoxProps> {
-
+  messageBox: ?HTMLDivElement;
   render(): any {
-    return this.props.conversation.map(note => (note.sender === this.props.sender_id) ? this.renderSent(note.msg) : this.renderReceived(note.msg));
+    return (
+      <div class="messageBox" ref = {(el) => { this.messageBox = el; }}>
+        <div>
+          {this.props.conversation.map((note) =>
+            note.sender === this.props.sender_id
+              ? this.renderSent(note.msg)
+              : this.renderReceived(note.msg)
+          )}
+        </div>
+      </div>
+    );
   }
+
+  componentDidMount() {
+    if (this.messageBox) {
+      this.messageBox.scrollTop = this.messageBox.scrollHeight;
+    }
+  }
+  
+  componentDidUpdate() {
+    if (this.messageBox) {
+      this.messageBox.scrollTop = this.messageBox.scrollHeight;
+    }
+  }
+  
 
   renderReceived: (string) => any = (msg) => {
-    return <div className='received' style={{"textAlign": "left"}}>{msg}</div>;
-  }
+    return <div className="message received">{msg}</div>;
+  };
 
   renderSent: (string) => any = (msg) => {
-    return <div className='sent' style={{"textAlign": "right"}}>{msg}</div>;
-  }
-
+    return <div className="message sent">{msg}</div>;
+  };
 }
 
-export {NoteMessageBox};
+export { NoteMessageBox };

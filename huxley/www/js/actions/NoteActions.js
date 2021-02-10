@@ -10,7 +10,6 @@ import {Dispatcher} from 'dispatcher/Dispatcher';
 
 var NoteActions = {
   addNote(note) {
-    console.log('action for add note');
     Dispatcher.dispatch({
       actionType: ActionConstants.ADD_NOTE,
       note: note,
@@ -18,7 +17,6 @@ var NoteActions = {
   },
 
   notesFetched(notes) {
-    console.log(notes);
     Dispatcher.dispatch({
       actionType: ActionConstants.NOTES_FETCHED,
       notes: notes,

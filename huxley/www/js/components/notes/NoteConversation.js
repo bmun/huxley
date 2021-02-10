@@ -3,6 +3,8 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  +*/
 
+ //@flow
+
 'use strict';
 
 import React from "react";
@@ -20,18 +22,12 @@ type NoteConversationProps = {
     conversation: Note[]
 }
 
-class NoteConversation extends React.Component {
-    static defaultProps : NoteInputBoxProps = {
-        sender_id: null,
-        recipient_id: null,
-        is_chair: 0
-    }
-
-    render() {
+class NoteConversation extends React.Component<NoteConversationProps> {
+    render(): any {
         return (
             <div>
                 <NoteMessageBox conversation={this.props.conversation} sender_id={this.props.sender_id} />
-                <NoteInputBox sender_id={this.props.sender_id} is_chair={this.props.is_chair} />
+                <NoteInputBox sender_id={this.props.sender_id} recipient_id={this.props.recipient_id} is_chair={this.props.is_chair} />
             </div>)
     }
 };

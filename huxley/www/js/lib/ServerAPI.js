@@ -197,12 +197,15 @@ var ServerAPI = {
     return _get('/api/notes', {committee_id})
   },
 
+  getNotesBySender(sender_id, last_sent_timestamp) {
+    return _get('/api/notes', {sender_id, timestamp:last_sent_timestamp});
+  },
+
   getNotesByConversation(sender_id, recipient_id)  {
-    return _get('/api/notes', {sender_id, recipient_id})
+    return _get('/api/notes', {sender_id, recipient_id});
   },
 
   getNotesByConversationWithChair(sender_id) {
-    _get('/api/notes', {sender_id, chair:true}).then(a => console.log(a));
     return _get('/api/notes', {sender_id, chair:true});
   },
 
