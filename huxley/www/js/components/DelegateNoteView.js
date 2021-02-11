@@ -21,12 +21,15 @@ const { NoteConversation } = require("components/notes/NoteConversation");
 const {
   NoteConversationSelector,
 } = require("components/notes/NoteConversationSelector");
+const { NoteSidebar } = require("components/notes/NoteSidebar");
 const { NoteStore } = require("stores/NoteStore");
 
 const { ServerAPI } = require("lib/ServerAPI");
 
+const { _filterOnConversation, _getLastMessage } = require("utils/_noteFilters")
+
 type DelegateNoteViewState = {
-  conversation: Array<any>,
+  notes: Array<any>,
   recipient: any,
   sender: any,
   assignments: Array<any>,
@@ -42,7 +45,7 @@ class DelegateNoteView extends React.Component<{}, DelegateNoteViewState> {
     super(props);
     const user = CurrentUserStore.getCurrentUser();
     const user_assignment = user.delegate.assignment;
-    const conversation = NoteStore.getConversationNotes(
+    const notes = NoteStore.getConversationNotes(
       user_assignment.id,
       null,
       true
@@ -53,7 +56,7 @@ class DelegateNoteView extends React.Component<{}, DelegateNoteViewState> {
     const countries = CountryStore.getCountries();
 
     this.state = {
-      conversation: conversation,
+      notes: notes,
       recipient: null,
       sender: user_assignment,
       assignments: assignments,
@@ -71,7 +74,7 @@ class DelegateNoteView extends React.Component<{}, DelegateNoteViewState> {
   componentDidMount() {
     this._conversationToken = NoteStore.addListener(() => {
       this.setState({
-        conversation: NoteStore.getConversationNotes(
+        notes: NoteStore.getConversationNotes(
           this.state.sender.id,
           this.state.recipient ? this.state.recipient.id : null,
           this.state.recipient ? 0 : 2
@@ -102,6 +105,7 @@ class DelegateNoteView extends React.Component<{}, DelegateNoteViewState> {
 
   render(): any {
     const assignment_map = {};
+    const last_message_map = {};
     if (
       this.state.assignments.length &&
       Object.keys(this.state.countries).length
@@ -111,6 +115,10 @@ class DelegateNoteView extends React.Component<{}, DelegateNoteViewState> {
           this.state.countries[assignment.country].name
         ] = assignment;
       }
+    }
+    if (assignment_map && this.state.notes) {
+      Object.keys(assignment_map).map((country) => last_message_map[country] = _getLastMessage(this.state.sender.id, assignment_map[country].id, false, this.state.notes));
+      last_message_map['Chair'] = _getLastMessage(this.state.sender.id, null, true, this.state.notes);
     }
     return (
       <InnerView>
@@ -123,6 +131,12 @@ class DelegateNoteView extends React.Component<{}, DelegateNoteViewState> {
                   onChairConversationChange={this._onChairConversationChange}
                   onConversationChange={this._onConversationChange}
                 />
+                <NoteSidebar
+                  assignments={assignment_map}
+                  last_messages={last_message_map}
+                  onChairConversationChange={this._onChairConversationChange}
+                  onConversationChange={this._onConversationChange}
+                />
               </td>
               <td width={"75%"}>
                 <NoteConversation
@@ -131,7 +145,7 @@ class DelegateNoteView extends React.Component<{}, DelegateNoteViewState> {
                     this.state.recipient ? this.state.recipient.id : null
                   }
                   is_chair={this.state.recipient ? 0 : 2}
-                  conversation={this.state.conversation}
+                  conversation={_filterOnConversation(this.state.sender.id, this.state.recipient ? this.state.recipient.id : null, this.state.recipient == null, this.state.notes)}
                 />
               </td>
             </tr>
@@ -143,7 +157,7 @@ class DelegateNoteView extends React.Component<{}, DelegateNoteViewState> {
 
   _onChairConversationChange: () => void = () => {
     this.setState({
-      conversation: NoteStore.getConversationNotes(
+      notes: NoteStore.getConversationNotes(
         this.state.sender.id,
         null,
         true
@@ -154,7 +168,7 @@ class DelegateNoteView extends React.Component<{}, DelegateNoteViewState> {
 
   _onConversationChange: (any) => void = (recipient) => {
     this.setState({
-      conversation: NoteStore.getConversationNotes(
+      notes: NoteStore.getConversationNotes(
         this.state.sender.id,
         recipient.id,
         false

@@ -32,10 +32,11 @@ class NoteStore extends Store {
   }
 
   getConversationNotes(senderID, recipientID, chair) {
-    let noteIDs;
+    let noteIDs = Object.keys(_notes);;
     // Subtracting 1s to ensure that polling the server doesn't always happen / there's no bad mutual recursion
     // Note: this might have issues on slower connections
-    // TOOD: look into better ways to ensure loading is finished
+    // TODO: look into better ways to ensure loading is finished
+    // TODO: getNoteConvosForChair
     if (_lastFetchedTimestamp < Date.now() - 1000) {
       ServerAPI.getNotesBySender(senderID, _lastFetchedTimestamp).then(value => 
         NoteActions.notesFetched(value));
@@ -52,15 +53,15 @@ class NoteStore extends Store {
       // Commented out because we do want to show the notes that already exist and avoid re-rendering a ton
       // return [];
     }
-    if (chair) {
-      noteIDs = Object.keys(_notes).filter((noteID) => 
-                  (_notes[noteID].sender == senderID && _notes[noteID].is_chair == 2) ||
-                  (_notes[noteID].is_chair == 1 && _notes[noteID].recipient == senderID));
-    } else {
-      noteIDs = Object.keys(_notes).filter((noteID) => 
-                  (_notes[noteID].sender == senderID && _notes[noteID].recipient == recipientID) ||
-                  (_notes[noteID].sender == recipientID && _notes[noteID].recipient == senderID));
-    }
+    // if (chair) {
+    //   noteIDs = Object.keys(_notes).filter((noteID) => 
+    //               (_notes[noteID].sender == senderID && _notes[noteID].is_chair == 2) ||
+    //               (_notes[noteID].is_chair == 1 && _notes[noteID].recipient == senderID));
+    // } else {
+    //   noteIDs = Object.keys(_notes).filter((noteID) => 
+    //               (_notes[noteID].sender == senderID && _notes[noteID].recipient == recipientID) ||
+    //               (_notes[noteID].sender == recipientID && _notes[noteID].recipient == senderID));
+    // }
     return noteIDs.map(id => _notes[id]);
   }
 
