@@ -17,6 +17,7 @@ const {
 // $FlowFixMe
 require("css/notes/NoteSidebar.less");
 type NoteSidebarProps = {
+  recipient_name: string,
   assignments: { [string]: any },
   last_messages: { [string]: any },
   onConversationChange: (any) => void,
@@ -49,10 +50,11 @@ class NoteSidebar extends React.Component<NoteSidebarProps, NoteSidebarState> {
       }
     );
     return (
-      <div class="sidebar">
+      <div className="sidebar">
         {sorted_countries.map((country) => (
-          <div onClick={(event) => this._handleClick(event, country)}>
+          <div key={country} onClick={(event) => this._handleClick(event, country)}>
             <NoteConversationPreview
+              recipient_name={this.props.recipient_name}
               country={country}
               last_message={this.props.last_messages[country]}
             />

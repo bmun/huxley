@@ -25,7 +25,7 @@ type NoteInputBoxProps = {
 };
 
 type NoteInputBoxState = {
-  msg: ?string,
+  msg: string,
 };
 
 class NoteInputBox extends React.Component<
@@ -41,24 +41,24 @@ class NoteInputBox extends React.Component<
     super(props);
 
     this.state = {
-      msg: null,
+      msg: "",
     };
   }
 
   render(): any {
     return (
-      <div class="inputBox">
+      <div className="inputBox">
         <form onSubmit={this._handleSubmit}>
           <input
             className="noteInput"
             type="text"
             value={this.state.msg}
             onChange={this._handleChange}
-            maxlength="1000"
+            maxLength="1000"
           />
           <input type="submit" style={{ display: "none" }} />
         </form>
-        <Button class="sendButton" size="small" onClick={this._handleSubmit} color="blue">
+        <Button className="sendButton" size="small" onClick={this._handleSubmit} color="blue">
           Send
         </Button>
       </div>
@@ -70,7 +70,7 @@ class NoteInputBox extends React.Component<
   };
 
   _handleSubmit: (any) => void = (event) => {
-    if (this.state.msg) {
+    if (this.state.msg !== "") {
       const note: Note = {
         sender_id: this.props.sender_id,
         recipient_id: this.props.recipient_id,

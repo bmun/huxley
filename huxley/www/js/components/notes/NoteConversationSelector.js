@@ -20,7 +20,7 @@ type NoteConversationSelectorProps = {
 };
 
 type NoteConversationSelectorState = {
-  selected: ?string,
+  selected: string,
 };
 
 class NoteConversationSelector extends React.Component<
@@ -30,22 +30,22 @@ class NoteConversationSelector extends React.Component<
   constructor(props: NoteConversationSelectorProps) {
     super(props);
     this.state = {
-      selected: null,
+      selected: "",
     };
   }
 
   render(): any {
     return (
-      <div class = "selector">
+      <div className="selector">
         <form onSubmit={this._handleSubmit}>
           <datalist id="delegations">
             <option>Chair</option>
             {Object.keys(this.props.assignments).map((country) => (
-              <option>{country}</option>
+              <option key={country}>{country}</option>
             ))}
           </datalist>
           <input
-            class="countrySelect"
+            className="countrySelect"
             autoComplete="on"
             value={this.state.selected}
             list="delegations"
@@ -54,7 +54,7 @@ class NoteConversationSelector extends React.Component<
           <input type="submit" style={{ display: "none" }} />
         </form>
         <Button
-          class="selectConversation"
+          className="selectConversation"
           size="small"
           onClick={this._handleSubmit}
           color="blue"
@@ -87,7 +87,8 @@ class NoteConversationSelector extends React.Component<
     } else if (
       this.state.selected &&
       this.state.selected in this.props.assignments
-    ) { // TODO: make this if case work if the user uses lowercase
+    ) {
+      // TODO: make this if case work if the user uses lowercase
       this.props.onConversationChange(
         this.props.assignments[this.state.selected]
       );

@@ -14,6 +14,7 @@ const { Button } = require("components/core/Button");
 // $FlowFixMe
 require("css/notes/NoteConversationPreview.less");
 type NoteConversationPreviewProps = {
+  recipient_name: ?string,
   country: string,
   last_message: any,
 };
@@ -34,13 +35,17 @@ class NoteConversationPreview extends React.Component<
   }
 
   render(): any {
-    let last_message_string = this.props.last_message
+    const last_message_string = this.props.last_message
       ? this.props.last_message.msg
       : "";
+    const textClass =
+      this.props.country == this.props.recipient_name
+        ? "countryNameSelected"
+        : "countryName";
     return (
-      <div class="conversationPreview">
-        <div class="conversationPreviewText">
-          <div class="countryName">{this.props.country}</div>
+      <div className="conversationPreview">
+        <div className="conversationPreviewText">
+          <div className={textClass}>{this.props.country}</div>
           {last_message_string}
         </div>
       </div>

@@ -15,10 +15,10 @@ require("css/Button.less");
 class Button extends React.Component {
   render() {
     var ButtonComponent = this.props.href ? Link : "button";
-
+    var {loading, ...newProps} = this.props;
     return (
       <ButtonComponent
-        {...this.props}
+        {...newProps}
         className={cx({
           button: true,
           "button-small": this.props.size == "small",

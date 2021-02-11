@@ -148,6 +148,9 @@ class DelegateNoteView extends React.Component<{}, DelegateNoteViewState> {
         this.state.notes
       );
     }
+    const recipient_name = this.state.recipient
+      ? this.state.countries[this.state.recipient.country].name
+      : "Chair";
     return (
       <InnerView>
         <table width={"100%"}>
@@ -160,6 +163,7 @@ class DelegateNoteView extends React.Component<{}, DelegateNoteViewState> {
                   onConversationChange={this._onConversationChange}
                 />
                 <NoteSidebar
+                  recipient_name={recipient_name}
                   assignments={assignment_map}
                   last_messages={last_message_map}
                   onChairConversationChange={this._onChairConversationChange}
@@ -168,6 +172,7 @@ class DelegateNoteView extends React.Component<{}, DelegateNoteViewState> {
               </td>
               <td width={"75%"}>
                 <NoteConversation
+                  recipient_name={recipient_name}
                   sender_id={this.state.sender.id}
                   recipient_id={
                     this.state.recipient ? this.state.recipient.id : null

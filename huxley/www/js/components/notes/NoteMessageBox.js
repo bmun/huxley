@@ -25,12 +25,19 @@ class NoteMessageBox extends React.Component<NoteMessageBoxProps> {
   messageBox: ?HTMLDivElement;
   render(): any {
     return (
-      <div class="messageBox" ref = {(el) => { this.messageBox = el; }}>
+      <div
+        className="messageBox"
+        ref={(el) => {
+          this.messageBox = el;
+        }}
+      >
         <div>
-          {this.props.conversation.map((note) =>
-            note.sender === this.props.sender_id
-              ? this.renderSent(note.msg)
-              : this.renderReceived(note.msg)
+          {this.props.conversation.map((note, index) =>
+            this.renderMessage(
+              note.msg,
+              index,
+              note.sender === this.props.sender_id ? "sent" : "received"
+            )
           )}
         </div>
       </div>
@@ -42,20 +49,19 @@ class NoteMessageBox extends React.Component<NoteMessageBoxProps> {
       this.messageBox.scrollTop = this.messageBox.scrollHeight;
     }
   }
-  
+
   componentDidUpdate() {
     if (this.messageBox) {
       this.messageBox.scrollTop = this.messageBox.scrollHeight;
     }
   }
-  
 
-  renderReceived: (string) => any = (msg) => {
-    return <div className="message received">{msg}</div>;
-  };
-
-  renderSent: (string) => any = (msg) => {
-    return <div className="message sent">{msg}</div>;
+  renderMessage: (string, number, string) => any = (msg, index, classes) => {
+    return (
+      <div className={"message " + classes} key={index}>
+        {msg}
+      </div>
+    );
   };
 }
 
