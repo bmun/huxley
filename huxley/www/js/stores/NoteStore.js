@@ -11,6 +11,8 @@ import { NoteActions } from "actions/NoteActions";
 import { Dispatcher } from "dispatcher/Dispatcher";
 import { ServerAPI } from "lib/ServerAPI";
 import { Store } from "flux/utils";
+import { PollingInterval } from "constants/NoteConstants";
+
 
 let _notes = {};
 let _notesFetched = false; // TODO: remove this, it's not necessary anymore probably
@@ -20,7 +22,7 @@ let _previousUserID = -1;
 class NoteStore extends Store {
   getCommitteeNotes(committeeID) {
     let noteIDs = Object.keys(_notes);
-    if (_lastFetchedTimestamp < Date.now() - 1000) { // TODO: modify committee retrieval so that it's also timestamp based
+    if (_lastFetchedTimestamp < Date.now() - PollingInterval / 2) { // TODO: modify committee retrieval so that it's also timestamp based
       ServerAPI.getNotesByCommitteee(committeeID).then(value => 
         NoteActions.notesFetched(value)
       );
@@ -37,31 +39,10 @@ class NoteStore extends Store {
     // Note: this might have issues on slower connections
     // TODO: look into better ways to ensure loading is finished
     // TODO: getNoteConvosForChair
-    if (_lastFetchedTimestamp < Date.now() - 1000) {
+    if (_lastFetchedTimestamp < Date.now() - PollingInterval / 2) {
       ServerAPI.getNotesBySender(senderID, _lastFetchedTimestamp).then(value => 
         NoteActions.notesFetched(value));
-        // if (chair) {
-        //     ServerAPI.getNotesByConversationWithChair(senderID).then(value => 
-        //         NoteActions.notesFetched(value)
-        //     );
-        // } else {
-        //     ServerAPI.getNotesByConversation(senderID, recipientID).then(value => 
-        //         NoteActions.notesFetched(value)
-        //     );
-        // }
-      
-      // Commented out because we do want to show the notes that already exist and avoid re-rendering a ton
-      // return [];
     }
-    // if (chair) {
-    //   noteIDs = Object.keys(_notes).filter((noteID) => 
-    //               (_notes[noteID].sender == senderID && _notes[noteID].is_chair == 2) ||
-    //               (_notes[noteID].is_chair == 1 && _notes[noteID].recipient == senderID));
-    // } else {
-    //   noteIDs = Object.keys(_notes).filter((noteID) => 
-    //               (_notes[noteID].sender == senderID && _notes[noteID].recipient == recipientID) ||
-    //               (_notes[noteID].sender == recipientID && _notes[noteID].recipient == senderID));
-    // }
     return noteIDs.map(id => _notes[id]);
   }
 
@@ -79,7 +60,7 @@ class NoteStore extends Store {
           _notes[note.id] = note;
         }
         // subtracting 1000ms to ensure that no notes are missed in the time it takes the server to communicate with the client
-        _lastFetchedTimestamp = Date.now() - 1000; 
+        _lastFetchedTimestamp = Date.now() - PollingInterval / 2; 
         _notesFetched = true;
         break;
       case ActionConstants.LOGIN:

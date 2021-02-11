@@ -8,12 +8,11 @@
  */
 function _filterOnConversation(senderID, recipientID, chair, notes) {
     let noteIDs = [];
-    if (chair) {
-        console.log('test');
+    if (chair && notes) {
         noteIDs = Object.keys(notes).filter((noteID) =>
             (notes[noteID].sender == senderID && notes[noteID].is_chair == 2) ||
             (notes[noteID].is_chair == 1 && notes[noteID].recipient == senderID));
-    } else {
+    } else if (recipientID && notes) {
         noteIDs = Object.keys(notes).filter((noteID) =>
             (notes[noteID].sender == senderID && notes[noteID].recipient == recipientID) ||
             (notes[noteID].sender == recipientID && notes[noteID].recipient == senderID));
@@ -23,9 +22,9 @@ function _filterOnConversation(senderID, recipientID, chair, notes) {
 }
 
 function _getLastMessage(senderID, recipientID, chair, notes) {
-    const conversation = _filterOnConversation(senderID, recipientID, chair)
+    const conversation = _filterOnConversation(senderID, recipientID, chair, notes);
     if (conversation.length > 0) {
-        return conversation.sort((note1, note2) => note1.timestamp - note2.timestamp)[0]
+        return conversation.sort((note1, note2) => note2.timestamp - note1.timestamp)[0];
     }
     return null;
 }
