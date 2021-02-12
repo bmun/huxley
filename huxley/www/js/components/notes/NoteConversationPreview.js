@@ -8,6 +8,7 @@
 "use strict";
 
 import React from "react";
+import type { Note } from "utils/types";
 
 const { Button } = require("components/core/Button");
 
@@ -16,7 +17,7 @@ require("css/notes/NoteConversationPreview.less");
 type NoteConversationPreviewProps = {
   recipient_name: ?string,
   country: string,
-  last_message: any,
+  last_message: ?Note,
 };
 
 type NoteConversationPreviewState = {
@@ -34,7 +35,7 @@ class NoteConversationPreview extends React.Component<
     };
   }
 
-  render(): any {
+  render(): React$Element<any> {
     const last_message_string = this.props.last_message
       ? this.props.last_message.msg
       : "";

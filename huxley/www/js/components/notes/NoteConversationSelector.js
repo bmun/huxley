@@ -8,14 +8,15 @@
 "use strict";
 
 import React from "react";
+import type { Assignment } from "utils/types";
 
 const { Button } = require("components/core/Button");
 
 // $FlowFixMe
 require("css/notes/NoteConversationSelector.less");
 type NoteConversationSelectorProps = {
-  assignments: { [string]: any },
-  onConversationChange: (any) => void,
+  assignments: { [string]: Assignment },
+  onConversationChange: (Assignment) => void,
   onChairConversationChange: () => void,
   onInputChange: (string) => void,
 };
@@ -35,7 +36,7 @@ class NoteConversationSelector extends React.Component<
     };
   }
 
-  render(): any {
+  render(): React$Element<any> {
     return (
       <div className="selector">
         <form onSubmit={this._handleSubmit}>
@@ -68,7 +69,6 @@ class NoteConversationSelector extends React.Component<
       this.setState({ selected: event.target.value });
       // $FlowFixMe flow has issues because this isn't directly below the if statement
       this.props.onInputChange(event.target.value);
-      
     }
   };
 

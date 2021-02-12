@@ -24,7 +24,7 @@ type NoteConversationProps = {
 }
 
 class NoteConversation extends React.Component<NoteConversationProps> {
-    render(): any {
+    render(): React$Element<any> {
         return (
             <div>
                 <h1>{this.props.recipient_name}</h1>

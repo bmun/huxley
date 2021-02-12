@@ -8,6 +8,7 @@
 "use strict";
 
 import React from "react";
+import type { Assignment, Note } from "utils/types";
 
 const { Button } = require("components/core/Button");
 const {
@@ -18,9 +19,9 @@ const {
 require("css/notes/NoteSidebar.less");
 type NoteSidebarProps = {
   recipient_name: string,
-  assignments: { [string]: any },
-  last_messages: { [string]: any },
-  onConversationChange: (any) => void,
+  assignments: { [string]: Assignment },
+  last_messages: { [string]: ?Note },
+  onConversationChange: (Assignment) => void,
   onChairConversationChange: () => void,
 };
 
@@ -36,14 +37,14 @@ class NoteSidebar extends React.Component<NoteSidebarProps, NoteSidebarState> {
     };
   }
 
-  render(): any {
+  render(): React$Element<any> {
     const sorted_countries = Object.keys(this.props.assignments).sort(
       (country1, country2) => {
         return (
-          (this.props.last_messages[country2]
+          (this.props.last_messages[country2] && this.props.last_messages[country2].timestamp
             ? this.props.last_messages[country2].timestamp
             : 0) -
-          (this.props.last_messages[country1]
+          (this.props.last_messages[country1] && this.props.last_messages[country1].timestamp
             ? this.props.last_messages[country1].timestamp
             : 0)
         );

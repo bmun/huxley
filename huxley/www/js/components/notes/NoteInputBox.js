@@ -45,7 +45,7 @@ class NoteInputBox extends React.Component<
     };
   }
 
-  render(): any {
+  render(): React$Element<any> {
     return (
       <div className="inputBox">
         <form onSubmit={this._handleSubmit}>
@@ -65,22 +65,23 @@ class NoteInputBox extends React.Component<
     );
   }
 
-  _handleChange: (any) => void = (event) => {
+  _handleChange: (SyntheticEvent<HTMLInputElement>) => void = (event) => {
+    if (event.target instanceof HTMLInputElement)
     this.setState({ msg: event.target.value });
   };
 
-  _handleSubmit: (any) => void = (event) => {
-    if (this.state.msg !== "") {
+  _handleSubmit: (SyntheticEvent<HTMLInputElement>) => void = (event) => {
+    if (this.state.msg.trim() !== "") {
       const note: Note = {
-        sender_id: this.props.sender_id,
-        recipient_id: this.props.recipient_id,
+        sender: this.props.sender_id,
+        recipient: this.props.recipient_id,
         is_chair: this.props.is_chair,
         msg: this.state.msg,
       };
       ServerAPI.createNote(
         note.is_chair,
-        note.sender_id,
-        note.recipient_id,
+        note.sender,
+        note.recipient,
         note.msg
       ).then(this._handleNoteInputSuccess, this._handleNoteInputError);
     }

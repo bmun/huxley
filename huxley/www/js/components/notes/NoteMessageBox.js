@@ -8,6 +8,7 @@
 "use strict";
 
 import React from "react";
+import type { Note } from "utils/types";
 
 const { Button } = require("components/core/Button");
 const { TextTemplate } = require("components/core/TextTemplate");
@@ -17,13 +18,13 @@ const { NoteStore } = require("stores/NoteStore");
 require("css/notes/NoteMessageBox.less");
 
 type NoteMessageBoxProps = {
-  conversation: Array<any>,
+  conversation: Array<Note>,
   sender_id: ?number,
 };
 
 class NoteMessageBox extends React.Component<NoteMessageBoxProps> {
   messageBox: ?HTMLDivElement;
-  render(): any {
+  render(): React$Element<any> {
     return (
       <div
         className="messageBox"

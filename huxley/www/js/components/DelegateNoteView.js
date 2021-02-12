@@ -9,6 +9,7 @@
 
 import React from "react";
 import { history } from "utils/history";
+import type { Assignment, Note } from "utils/types";
 
 const { AssignmentStore } = require("stores/AssignmentStore");
 const { Button } = require("components/core/Button");
@@ -33,10 +34,10 @@ const {
 const { PollingInterval } = require("constants/NoteConstants");
 
 type DelegateNoteViewState = {
-  notes: Array<any>,
+  notes: {[string]: Note},
   recipient: any,
   sender: any,
-  assignments: Array<any>,
+  assignments: Array<Assignment>,
   countries: any,
   search_string: string,
 };
@@ -45,7 +46,7 @@ class DelegateNoteView extends React.Component<{}, DelegateNoteViewState> {
   _conversationToken: any;
   _assignmentToken: any;
   _countryToken: any;
-  _notePoller: any;
+  _notePoller: IntervalID;
 
   constructor(props: {}) {
     super(props);
@@ -121,7 +122,7 @@ class DelegateNoteView extends React.Component<{}, DelegateNoteViewState> {
     clearInterval(this._notePoller);
   }
 
-  render(): any {
+  render(): React$Element<any> {
     const assignment_map = {};
     const last_message_map = {};
     if (
@@ -204,7 +205,7 @@ class DelegateNoteView extends React.Component<{}, DelegateNoteViewState> {
     });
   };
 
-  _onConversationChange: (any) => void = (recipient) => {
+  _onConversationChange: (Assignment) => void = (recipient) => {
     this.setState({
       notes: NoteStore.getConversationNotes(
         this.state.sender.id,
@@ -218,21 +219,26 @@ class DelegateNoteView extends React.Component<{}, DelegateNoteViewState> {
   _onCountrySearch: (string) => void = (search_string) => {
     this.setState({
       search_string: search_string,
-    })
-  }
+    });
+  };
 
-  _filterAssignmentMap: ({[string]: any}) => {[string]: any} = (assignment_map) => {
+  _filterAssignmentMap: ({ [string]: Assignment }) => { [string]: Assignment } = (
+    assignment_map
+  ) => {
     if (this.state.search_string === "") {
       return assignment_map;
     }
     const filtered_assignment_map = {};
     Object.keys(assignment_map).map((country) => {
-      if (country.toLowerCase().search(this.state.search_string.toLowerCase()) !== -1) {
+      if (
+        country.toLowerCase().search(this.state.search_string.toLowerCase()) !==
+        -1
+      ) {
         filtered_assignment_map[country] = assignment_map[country];
       }
-    })
+    });
     return filtered_assignment_map;
-  }
+  };
 }
 
 export { DelegateNoteView };
