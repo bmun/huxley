@@ -38,6 +38,7 @@ type DelegateNoteViewState = {
   sender: any,
   assignments: Array<any>,
   countries: any,
+  search_string: string,
 };
 
 class DelegateNoteView extends React.Component<{}, DelegateNoteViewState> {
@@ -66,6 +67,7 @@ class DelegateNoteView extends React.Component<{}, DelegateNoteViewState> {
       sender: user_assignment,
       assignments: assignments,
       countries: countries,
+      search_string: "",
     };
   }
 
@@ -116,6 +118,7 @@ class DelegateNoteView extends React.Component<{}, DelegateNoteViewState> {
     this._conversationToken && this._conversationToken.remove();
     this._assignmentToken && this._assignmentToken.remove();
     this._countryToken && this._countryToken.remove();
+    clearInterval(this._notePoller);
   }
 
   render(): any {
@@ -161,10 +164,11 @@ class DelegateNoteView extends React.Component<{}, DelegateNoteViewState> {
                   assignments={assignment_map}
                   onChairConversationChange={this._onChairConversationChange}
                   onConversationChange={this._onConversationChange}
+                  onInputChange={this._onCountrySearch}
                 />
                 <NoteSidebar
                   recipient_name={recipient_name}
-                  assignments={assignment_map}
+                  assignments={this._filterAssignmentMap(assignment_map)}
                   last_messages={last_message_map}
                   onChairConversationChange={this._onChairConversationChange}
                   onConversationChange={this._onConversationChange}
@@ -210,6 +214,25 @@ class DelegateNoteView extends React.Component<{}, DelegateNoteViewState> {
       recipient: recipient,
     });
   };
+
+  _onCountrySearch: (string) => void = (search_string) => {
+    this.setState({
+      search_string: search_string,
+    })
+  }
+
+  _filterAssignmentMap: ({[string]: any}) => {[string]: any} = (assignment_map) => {
+    if (this.state.search_string === "") {
+      return assignment_map;
+    }
+    const filtered_assignment_map = {};
+    Object.keys(assignment_map).map((country) => {
+      if (country.toLowerCase().search(this.state.search_string.toLowerCase()) !== -1) {
+        filtered_assignment_map[country] = assignment_map[country];
+      }
+    })
+    return filtered_assignment_map;
+  }
 }
 
 export { DelegateNoteView };

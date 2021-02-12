@@ -37,7 +37,7 @@ class NoteSidebar extends React.Component<NoteSidebarProps, NoteSidebarState> {
   }
 
   render(): any {
-    const sorted_countries = Object.keys(this.props.last_messages).sort(
+    const sorted_countries = Object.keys(this.props.assignments).sort(
       (country1, country2) => {
         return (
           (this.props.last_messages[country2]
@@ -51,6 +51,14 @@ class NoteSidebar extends React.Component<NoteSidebarProps, NoteSidebarState> {
     );
     return (
       <div className="sidebar">
+        {/* Ensure that chair is always at the top */}
+        <div onClick={(event) => this._handleClick(event, 'Chair')}>
+            <NoteConversationPreview
+              recipient_name={this.props.recipient_name}
+              country={'Chair'}
+              last_message={this.props.last_messages['Chair']}
+            />
+        </div>
         {sorted_countries.map((country) => (
           <div key={country} onClick={(event) => this._handleClick(event, country)}>
             <NoteConversationPreview

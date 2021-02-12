@@ -17,6 +17,7 @@ type NoteConversationSelectorProps = {
   assignments: { [string]: any },
   onConversationChange: (any) => void,
   onChairConversationChange: () => void,
+  onInputChange: (string) => void,
 };
 
 type NoteConversationSelectorState = {
@@ -38,17 +39,9 @@ class NoteConversationSelector extends React.Component<
     return (
       <div className="selector">
         <form onSubmit={this._handleSubmit}>
-          <datalist id="delegations">
-            <option>Chair</option>
-            {Object.keys(this.props.assignments).map((country) => (
-              <option key={country}>{country}</option>
-            ))}
-          </datalist>
           <input
             className="countrySelect"
-            autoComplete="on"
             value={this.state.selected}
-            list="delegations"
             onChange={this._handleChange}
           />
           <input type="submit" style={{ display: "none" }} />
@@ -72,11 +65,10 @@ class NoteConversationSelector extends React.Component<
         and https://stackoverflow.com/questions/31901351/how-to-fire-an-event-on-clicking-data-list-option-list 
         Currently does not work on Firefox; may be better to use a keydown event instead. */
     if (event.target instanceof HTMLInputElement) {
-      this.setState({ selected: event.target.value }, () => {
-        if (!(event.nativeEvent instanceof InputEvent)) {
-          this._handleSubmit(event);
-        }
-      });
+      this.setState({ selected: event.target.value });
+      // $FlowFixMe flow has issues because this isn't directly below the if statement
+      this.props.onInputChange(event.target.value);
+      
     }
   };
 
