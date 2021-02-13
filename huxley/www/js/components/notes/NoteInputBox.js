@@ -8,7 +8,6 @@
 "use strict";
 
 import React from "react";
-import type { Note } from "utils/types";
 
 const { Button } = require("components/core/Button");
 const { TextTemplate } = require("components/core/TextTemplate");
@@ -72,17 +71,11 @@ class NoteInputBox extends React.Component<
 
   _handleSubmit: (SyntheticEvent<HTMLInputElement>) => void = (event) => {
     if (this.state.msg.trim() !== "") {
-      const note: Note = {
-        sender: this.props.sender_id,
-        recipient: this.props.recipient_id,
-        is_chair: this.props.is_chair,
-        msg: this.state.msg,
-      };
       ServerAPI.createNote(
-        note.is_chair,
-        note.sender,
-        note.recipient,
-        note.msg
+        this.props.is_chair,
+        this.props.sender_id,
+        this.props.recipient_id,
+        this.state.msg
       ).then(this._handleNoteInputSuccess, this._handleNoteInputError);
     }
     event.preventDefault();

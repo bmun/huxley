@@ -14,16 +14,18 @@ function _filterOnConversation(
   senderID: number,
   recipientID: ?number,
   chair: boolean,
-  notes: { [string]: Note }
+  notes: Note[]
 ): Note[] {
   let noteIDs = [];
   if (chair && notes) {
+    //$FlowFixMe flow is wrong and Object.keys can be called on an array (see MDN docs)
     noteIDs = Object.keys(notes).filter(
       (noteID) => {
         return (notes[noteID].sender == senderID && notes[noteID].is_chair == 2) ||
         (notes[noteID].is_chair == 1 && notes[noteID].recipient == senderID);}
     );
   } else if (recipientID && notes) {
+    //$FlowFixMe flow is wrong and Object.keys can be called on an array (see MDN docs) 
     noteIDs = Object.keys(notes).filter(
       (noteID) =>
         (notes[noteID].sender == senderID &&
@@ -40,7 +42,7 @@ function _getLastMessage(
   senderID: number,
   recipientID: ?number,
   chair: boolean,
-  notes: { [string]: Note }
+  notes: Note[]
 ): ?Note {
   const conversation = _filterOnConversation(
     senderID,

@@ -2,6 +2,7 @@
  * Copyright (c) 2011-2021 Berkeley Model United Nations. All rights reserved.
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
+//@flow
 
 'use strict';
 
@@ -13,14 +14,16 @@ import { ServerAPI } from "lib/ServerAPI";
 import { Store } from "flux/utils";
 import { PollingInterval } from "constants/NoteConstants";
 
+import type {Note} from 'utils/types';
 
-let _notes = {};
+
+let _notes: {[string]: Note} = {};
 let _notesFetched = false; // TODO: remove this, it's not necessary anymore probably
 let _lastFetchedTimestamp = 0;
 let _previousUserID = -1;
 
 class NoteStore extends Store {
-  getCommitteeNotes(committeeID) {
+  getCommitteeNotes(committeeID: number): Note[] {
     let noteIDs = Object.keys(_notes);
     if (_lastFetchedTimestamp < Date.now() - PollingInterval / 2) { // TODO: modify committee retrieval so that it's also timestamp based
       ServerAPI.getNotesByCommitteee(committeeID).then(value => 
@@ -33,7 +36,7 @@ class NoteStore extends Store {
     return noteIDs.map(id => _notes[id]);
   }
 
-  getConversationNotes(senderID, recipientID, chair) {
+  getConversationNotes(senderID: number): Note[] {
     let noteIDs = Object.keys(_notes);;
     // Subtracting 1s to ensure that polling the server doesn't always happen / there's no bad mutual recursion
     // Note: this might have issues on slower connections
@@ -46,11 +49,11 @@ class NoteStore extends Store {
     return noteIDs.map(id => _notes[id]);
   }
 
-  addNote(note) {
-    _notes[note.id] = note;
+  addNote(note: Note): void {
+    _notes[note.id + ""] = note;
   }
 
-  __onDispatch(action) {
+  __onDispatch(action: any): void {
     switch (action.actionType) {
       case ActionConstants.ADD_NOTE:
         this.addNote(action.note);
@@ -59,7 +62,7 @@ class NoteStore extends Store {
         for (const note of action.notes) {
           _notes[note.id] = note;
         }
-        // subtracting 1000ms to ensure that no notes are missed in the time it takes the server to communicate with the client
+        // subtracting half of polling period to ensure that no notes are missed in the time it takes the server to communicate with the client
         _lastFetchedTimestamp = Date.now() - PollingInterval / 2; 
         _notesFetched = true;
         break;
@@ -80,5 +83,5 @@ class NoteStore extends Store {
   }
 }
 
-const noteStore = new NoteStore(Dispatcher);
+const noteStore: NoteStore = new NoteStore(Dispatcher);
 export { noteStore as NoteStore };

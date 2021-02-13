@@ -34,7 +34,7 @@ const {
 const { PollingInterval } = require("constants/NoteConstants");
 
 type DelegateNoteViewState = {
-  notes: {[string]: Note},
+  notes: Note[],
   recipient: any,
   sender: any,
   assignments: Array<Assignment>,
@@ -54,8 +54,6 @@ class DelegateNoteView extends React.Component<{}, DelegateNoteViewState> {
     const user_assignment = user.delegate.assignment;
     const notes = NoteStore.getConversationNotes(
       user_assignment.id,
-      null,
-      true
     );
     const assignments = AssignmentStore.getCommitteeAssignments(
       user_assignment.committee.id
@@ -84,8 +82,6 @@ class DelegateNoteView extends React.Component<{}, DelegateNoteViewState> {
       this.setState({
         notes: NoteStore.getConversationNotes(
           this.state.sender.id,
-          this.state.recipient ? this.state.recipient.id : null,
-          this.state.recipient ? 0 : 2
         ),
       });
     });
@@ -108,8 +104,6 @@ class DelegateNoteView extends React.Component<{}, DelegateNoteViewState> {
       this.setState({
         notes: NoteStore.getConversationNotes(
           this.state.sender.id,
-          this.state.recipient ? this.state.recipient.id : null,
-          this.state.recipient ? 0 : 2
         ),
       });
     }, PollingInterval);
@@ -200,7 +194,7 @@ class DelegateNoteView extends React.Component<{}, DelegateNoteViewState> {
 
   _onChairConversationChange: () => void = () => {
     this.setState({
-      notes: NoteStore.getConversationNotes(this.state.sender.id, null, true),
+      notes: NoteStore.getConversationNotes(this.state.sender.id),
       recipient: null,
     });
   };
@@ -209,8 +203,6 @@ class DelegateNoteView extends React.Component<{}, DelegateNoteViewState> {
     this.setState({
       notes: NoteStore.getConversationNotes(
         this.state.sender.id,
-        recipient.id,
-        false
       ),
       recipient: recipient,
     });
