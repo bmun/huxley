@@ -8,14 +8,15 @@
 import React from "react";
 import { history } from "utils/history";
 
-var { CommitteeFeedbackStore } = require("stores/CommitteeFeedbackStore");
-var { CurrentUserStore } = require("stores/CurrentUserStore");
-var { InnerView } = require("components/InnerView");
-var { TextTemplate } = require("components/core/TextTemplate");
-var { User } = require("utils/User");
+const { CommitteeFeedbackStore } = require("stores/CommitteeFeedbackStore");
+const { CurrentUserStore } = require("stores/CurrentUserStore");
+const { InnerView } = require("components/InnerView");
+const { Table } = require("components/core/Table");
+const { TextTemplate } = require("components/core/TextTemplate");
+const { User } = require("utils/User");
 
 require("css/Table.less");
-var ChairCommitteeFeedbackViewText = require("text/ChairCommitteeFeedbackViewText.md");
+const ChairCommitteeFeedbackViewText = require("text/ChairCommitteeFeedbackViewText.md");
 
 class ChairCommitteeFeedbackView extends React.Component {
   constructor(props) {
@@ -51,7 +52,7 @@ class ChairCommitteeFeedbackView extends React.Component {
       <InnerView>
         <TextTemplate>{ChairCommitteeFeedbackViewText}</TextTemplate>
         <div className="table-container">
-          <table
+          <Table
             style={{ margin: "10px auto 0px auto", tableLayout: "auto" }}
             emptyMessage="You have no feedback."
             isEmpty={!this.state.feedback.length}
@@ -63,7 +64,7 @@ class ChairCommitteeFeedbackView extends React.Component {
               </tr>
             </thead>
             <tbody>{this.renderFeedbackRows(this.state.feedback)}</tbody>
-          </table>
+          </Table>
         </div>
         {this.mapFeedbackToTable()}
       </InnerView>
@@ -103,7 +104,7 @@ class ChairCommitteeFeedbackView extends React.Component {
       if (data[entry].length) {
         tables.push(
           <div className="table-container">
-            <table
+            <Table
               style={{ margin: "10px auto 0px auto", tableLayout: "auto" }}
               emptyMessage="You have no feedback."
               isEmpty={!this.state.feedback.length}
@@ -115,7 +116,7 @@ class ChairCommitteeFeedbackView extends React.Component {
                 </tr>
               </thead>
               <tbody>{this.renderFeedbackRows(data[entry])}</tbody>
-            </table>
+            </Table>
           </div>
         );
       }
@@ -126,8 +127,8 @@ class ChairCommitteeFeedbackView extends React.Component {
   renderFeedbackRows = (obj) => {
     return obj.map(function (singleFeedback) {
       return (
-        <tr>
-          <td width={"90%"} nowrap>
+        <tr key={singleFeedback.id}>
+          <td width={"90%"} style={{whiteSpace:"nowrap"}}>
             {singleFeedback.comment || "No Comment"}
           </td>
           <td>{singleFeedback.rating || "No Rating"}</td>

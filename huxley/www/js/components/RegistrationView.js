@@ -355,7 +355,7 @@ class RegistrationView extends React.Component {
   renderCommittees = () => {
     return this.state.committees.map(function (committee) {
       return (
-        <li>
+        <li key={committee.id}>
           <label name="committee_prefs">
             <input
               className="choice"

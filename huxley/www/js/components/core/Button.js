@@ -2,20 +2,29 @@
  * Copyright (c) 2011-2015 Berkeley Model United Nations. All rights reserved.
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
+//@flow
 
 "use strict";
 
 import cx from "classnames";
-import React from "react";
+import * as React from 'react';
 import { Link } from "react-router-dom";
-import PropTypes from "prop-types";
 
+//$FlowFixMe
 require("css/Button.less");
 
-class Button extends React.Component {
-  render() {
+type ButtonProps = {
+  color?: "blue" | "green" | "yellow" | "red",
+  href?: string,
+  loading?: boolean,
+  size?: "small" | "medium" | "large",
+  success?: boolean,
+  children?: React.Node,
+};
+class Button extends React.Component<ButtonProps> {
+  render(): React$Element<any> {
     var ButtonComponent = this.props.href ? Link : "button";
-    var {loading, ...newProps} = this.props;
+    var {loading, success, ...newProps} = this.props;
     return (
       <ButtonComponent
         {...newProps}
@@ -39,13 +48,5 @@ class Button extends React.Component {
     );
   }
 }
-
-Button.propTypes = {
-  color: PropTypes.oneOf(["blue", "green", "yellow", "red"]),
-  href: PropTypes.string,
-  loading: PropTypes.bool,
-  size: PropTypes.oneOf(["small", "medium", "large"]),
-  success: PropTypes.bool,
-};
 
 export { Button };

@@ -50,7 +50,7 @@ class NoteStore extends Store {
   }
 
   addNote(note: Note): void {
-    _notes[note.id + ""] = note;
+    _notes[note.id.toString()] = note;
   }
 
   __onDispatch(action: any): void {

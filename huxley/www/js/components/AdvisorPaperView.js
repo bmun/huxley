@@ -175,7 +175,7 @@ class AdvisorPaperView extends React.Component {
         ) : null;
 
         return (
-          <div>
+          <div key={c}>
             <h4>{committee.name}</h4>
             <Table
               emptyMessage="You don't have any assignments."
@@ -195,8 +195,10 @@ class AdvisorPaperView extends React.Component {
                   <th>Total</th>
                 </tr>
               </thead>
+              <thead>
               {rubric_row_1}
               {rubric_row_2}
+              </thead>
               {this.renderCommitteeRows(
                 countryAssignments,
                 rubric,
@@ -366,7 +368,7 @@ class AdvisorPaperView extends React.Component {
           </tr>
         ) : null;
         return (
-          <tbody>
+          <tbody key={assignment.id}>
             {topic_1_row}
             {topic_2_row}
           </tbody>
