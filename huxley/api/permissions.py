@@ -368,6 +368,6 @@ def user_is_delegate(request, view, target_id, field=None):
 
 def user_is_in_committee(request, view, committee_id):
     user = request.user
-    if not user.is_authenticated or not user.is_delegate():
+    if not user.is_authenticated or not user.is_delegate() or not user.delegate:
         return False
     return user.delegate.assignment.committee_id == int(committee_id)
