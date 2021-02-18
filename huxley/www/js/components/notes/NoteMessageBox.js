@@ -51,9 +51,11 @@ class NoteMessageBox extends React.Component<NoteMessageBoxProps> {
     }
   }
 
-  componentDidUpdate() {
-    if (this.messageBox) {
-      this.messageBox.scrollTop = this.messageBox.scrollHeight;
+  componentDidUpdate(prevProps: NoteMessageBoxProps) {
+    if (this.props.conversation.length !== prevProps.conversation.length) {
+      if (this.messageBox) {
+        this.messageBox.scrollTop = this.messageBox.scrollHeight;
+      }
     }
   }
 

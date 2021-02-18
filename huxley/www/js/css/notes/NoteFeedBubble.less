@@ -1,6 +1,7 @@
-.message {
-    max-width:740px;
-    display: table;
+.messageContainer {
+    width:740px;
+    display: flex;
+    flex-direction:row;
 }
 
 .feedMessage {
@@ -16,12 +17,14 @@
     margin-top:1px;
     margin-bottom:1px;
     overflow-wrap: break-word;
-    display:table-cell;
 }
 
 .feedMessageInfo {
+    margin-top:1px;
+    margin-bottom:1px;
+    padding:4px;
     padding-left:10px;
-    display:table-cell;
     color: grey;
     max-width:40%;
+    align-items: center;
 }

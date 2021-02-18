@@ -41,7 +41,7 @@ class NoteFeedBubble extends React.Component<
   render(): React$Element<any> {
     return (
       <div
-        className="message"
+        className="messageContainer"
         onMouseOver={this._onMouseOver}
         onMouseOut={this._onMouseOut}
       >
@@ -52,16 +52,26 @@ class NoteFeedBubble extends React.Component<
   }
 
   renderNoteInfo: () => React$Element<any> = () => {
+    const date_map = {
+        "0": "Sun. ",
+        "1": "Mon. ",
+        "2": "Tues. ",
+        "3": "Wed. ",
+        "4": "Thurs. ",
+        "5": "Fri. ",
+        "6": "Sat. ",
+    }
     const sender_name = this.props.note.sender
       ? this.props.countries[this.props.note.sender]
       : "Chair";
     const recipient_name = this.props.note.recipient
       ? this.props.countries[this.props.note.recipient]
       : "Chair";
-    const timestamp = new Date(this.props.note.timestamp * 1000).toString();
+    const date = new Date(this.props.note.timestamp * 1000);
+    const timestamp = date_map[date.getDay().toString()] + date.toLocaleTimeString('en-US');
     return (
       <div className="feedMessageInfo">
-        {sender_name} -> {recipient_name} : {timestamp}
+        <strong>{sender_name} -> {recipient_name}</strong> [{timestamp}]
       </div>
     );
   };

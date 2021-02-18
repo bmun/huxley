@@ -24,13 +24,13 @@ type NoteFeedBoxProps = {
 }
 
 class NoteFeedBox extends React.Component<NoteFeedBoxProps> {
-  messageBox: ?HTMLDivElement;
+  feedBox: ?HTMLDivElement;
   render(): React$Element<any> {
     return (
       <div
         className="feedBox"
         ref={(el) => {
-          this.messageBox = el;
+          this.feedBox = el;
         }}
       >
         <div>
@@ -43,14 +43,16 @@ class NoteFeedBox extends React.Component<NoteFeedBoxProps> {
   }
 
   componentDidMount() {
-    if (this.messageBox) {
-      this.messageBox.scrollTop = this.messageBox.scrollHeight;
+    if (this.feedBox) {
+      this.feedBox.scrollTop = this.feedBox.scrollHeight;
     }
   }
 
-  componentDidUpdate() {
-    if (this.messageBox) {
-      this.messageBox.scrollTop = this.messageBox.scrollHeight;
+  componentDidUpdate(prevProps: NoteFeedBoxProps) {
+    if (this.props.notes.length !== prevProps.notes.length) {
+      if (this.feedBox) {
+        this.feedBox.scrollTop = this.feedBox.scrollHeight;
+      }
     }
   }
 }
