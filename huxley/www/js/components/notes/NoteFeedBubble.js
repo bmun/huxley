@@ -13,6 +13,7 @@ import type { Note } from "utils/types";
 const { Button } = require("components/core/Button");
 const { TextTemplate } = require("components/core/TextTemplate");
 const { NoteStore } = require("stores/NoteStore");
+const { SearchTerms } = require("constants/NoteConstants");
 
 // $FlowFixMe
 require("css/notes/NoteFeedBubble.less");
@@ -39,28 +40,34 @@ class NoteFeedBubble extends React.Component<
 
   messageBox: ?HTMLDivElement;
   render(): React$Element<any> {
+    const flagged = SearchTerms.some(
+      (term) =>
+        this.props.note.msg.toLowerCase().search(term.toLowerCase()) !== -1
+    );
     return (
-      <div
-        className="messageContainer"
-        onMouseOver={this._onMouseOver}
-        onMouseOut={this._onMouseOut}
-      >
-        <div className="feedMessage">{this.props.note.msg}</div>
-        {this.state.hover ? this.renderNoteInfo() : null}
+      <div className="messageContainer">
+        <div
+          className={flagged ? "feedMessage flagged" : "feedMessage"}
+          onMouseOver={this._onMouseOver}
+          onMouseOut={this._onMouseOut}
+        >
+          {this.props.note.msg}
+        </div>
+        {this.renderNoteInfo()}
       </div>
     );
   }
 
   renderNoteInfo: () => React$Element<any> = () => {
     const date_map = {
-        "0": "Sun. ",
-        "1": "Mon. ",
-        "2": "Tues. ",
-        "3": "Wed. ",
-        "4": "Thurs. ",
-        "5": "Fri. ",
-        "6": "Sat. ",
-    }
+      "0": "Sun. ",
+      "1": "Mon. ",
+      "2": "Tues. ",
+      "3": "Wed. ",
+      "4": "Thurs. ",
+      "5": "Fri. ",
+      "6": "Sat. ",
+    };
     const sender_name = this.props.note.sender
       ? this.props.countries[this.props.note.sender]
       : "Chair";
@@ -68,10 +75,19 @@ class NoteFeedBubble extends React.Component<
       ? this.props.countries[this.props.note.recipient]
       : "Chair";
     const date = new Date(this.props.note.timestamp * 1000);
-    const timestamp = date_map[date.getDay().toString()] + date.toLocaleTimeString('en-US');
+    const timestamp =
+      date_map[date.getDay().toString()] + date.toLocaleTimeString("en-US");
     return (
-      <div className="feedMessageInfo">
-        <strong>{sender_name} -> {recipient_name}</strong> [{timestamp}]
+      <div
+        className="feedMessageInfo"
+        style={this.state.hover ? {} : { display: "none" }}
+        onMouseOver={this._onMouseOver}
+        onMouseOut={this._onMouseOut}
+      >
+        <strong>
+          {sender_name} -> {recipient_name}
+        </strong>{" "}
+        [{timestamp}]
       </div>
     );
   };

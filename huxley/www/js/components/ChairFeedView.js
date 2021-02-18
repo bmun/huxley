@@ -52,11 +52,9 @@ class ChairFeedView extends React.Component<{}, ChairFeedViewState> {
     super(props);
     const user = CurrentUserStore.getCurrentUser();
     const user_committee_id = user.committee;
-    const notes = NoteStore.getCommitteeNotes(
-      user_committee_id,
-    );
+    const notes = NoteStore.getCommitteeNotes(user_committee_id);
     const assignments = AssignmentStore.getCommitteeAssignments(
-        user_committee_id,
+      user_committee_id
     );
     const countries = CountryStore.getCountries();
 
@@ -79,9 +77,7 @@ class ChairFeedView extends React.Component<{}, ChairFeedViewState> {
   componentDidMount() {
     this._conversationToken = NoteStore.addListener(() => {
       this.setState({
-        notes: NoteStore.getCommitteeNotes(
-          this.state.committee_id,
-        ),
+        notes: NoteStore.getCommitteeNotes(this.state.committee_id),
       });
     });
 
@@ -101,9 +97,7 @@ class ChairFeedView extends React.Component<{}, ChairFeedViewState> {
 
     this._notePoller = setInterval(() => {
       this.setState({
-        notes: NoteStore.getCommitteeNotes(
-          this.state.committee_id,
-        ),
+        notes: NoteStore.getCommitteeNotes(this.state.committee_id),
       });
     }, PollingInterval);
   }
@@ -122,38 +116,37 @@ class ChairFeedView extends React.Component<{}, ChairFeedViewState> {
       Object.keys(this.state.countries).length
     ) {
       for (let assignment of this.state.assignments) {
-        country_map[assignment.id] = this.state.countries[assignment.country].name;
+        country_map[assignment.id] = this.state.countries[
+          assignment.country
+        ].name;
       }
     }
     return (
       <InnerView>
-         <NoteFeedBox notes={this.state.notes} countries={country_map}/>
+        <NoteFeedBox
+          notes={this._filterConversations(this.state.notes)}
+          countries={country_map}
+        />
       </InnerView>
     );
   }
 
-  _onCountrySearch: (string) => void = (search_string) => {
+  _onNoteSearch: (string) => void = (search_string) => {
     this.setState({
       search_string: search_string,
     });
   };
 
-  _filterAssignmentMap: ({ [string]: Assignment }) => { [string]: Assignment } = (
-    assignment_map
-  ) => {
+  _filterConversations: (Note[]) => Note[] = (notes) => {
     if (this.state.search_string === "") {
-      return assignment_map;
+      return notes;
     }
-    const filtered_assignment_map = {};
-    Object.keys(assignment_map).map((country) => {
-      if (
-        country.toLowerCase().search(this.state.search_string.toLowerCase()) !==
-        -1
-      ) {
-        filtered_assignment_map[country] = assignment_map[country];
-      }
-    });
-    return filtered_assignment_map;
+    return notes.filter(
+      (note: Note) =>
+        note.msg
+          .toLowerCase()
+          .search(this.state.search_string.toLowerCase()) !== -1
+    );
   };
 }
 
