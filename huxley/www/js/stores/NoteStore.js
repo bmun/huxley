@@ -18,7 +18,6 @@ import type {Note} from 'utils/types';
 
 
 let _notes: {[string]: Note} = {};
-let _notesFetched = false; // TODO: remove this, it's not necessary anymore probably
 let _lastFetchedTimestamp = 0;
 let _previousUserID = -1;
 
@@ -26,11 +25,9 @@ class NoteStore extends Store {
   getCommitteeNotes(committeeID: number): Note[] {
     let noteIDs = Object.keys(_notes);
     if (_lastFetchedTimestamp < Date.now() - PollingInterval / 2) { // TODO: modify committee retrieval so that it's also timestamp based
-      ServerAPI.getNotesByCommitteee(committeeID).then(value => 
+      ServerAPI.getNotesByCommittee(committeeID, _lastFetchedTimestamp).then(value => 
         NoteActions.notesFetched(value)
       );
-
-      // return [];
     }
 
     return noteIDs.map(id => _notes[id]);
@@ -64,13 +61,11 @@ class NoteStore extends Store {
         }
         // subtracting half of polling period to ensure that no notes are missed in the time it takes the server to communicate with the client
         _lastFetchedTimestamp = Date.now() - PollingInterval / 2; 
-        _notesFetched = true;
         break;
       case ActionConstants.LOGIN:
         var userID = CurrentUserStore.getCurrentUser().id;
         if (userID != _previousUserID) {
           _notes = {};
-          _notesFetched = false;
           _lastFetchedTimestamp = 0;
           _previousUserID = userID;
         }

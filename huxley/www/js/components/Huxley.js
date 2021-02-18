@@ -20,6 +20,8 @@ var {
   ChairCommitteeFeedbackView,
 } = require("components/ChairCommitteeFeedbackView");
 var { ChairDelegateEmailView } = require("components/ChairDelegateEmailView");
+var { ChairFeedView } = require("components/ChairFeedView");
+var { ChairNoteView } = require("components/ChairNoteView");
 var { ChairPapersView } = require("components/ChairPapersView");
 var { ChairRubricView } = require("components/ChairRubricView");
 var { ChairSummaryView } = require("components/ChairSummaryView");
@@ -156,6 +158,12 @@ class Huxley extends React.Component {
               </Route>
               <Route path="/chair/rubric">
                 <ChairRubricView />
+              </Route>
+              <Route path="/chair/notes">
+                <ChairNoteView />
+              </Route>
+              <Route path="/chair/feed">
+                <ChairFeedView />
               </Route>
               <Route path="/chair/delegate_emails">
                 <ChairDelegateEmailView />

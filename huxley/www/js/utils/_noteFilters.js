@@ -22,7 +22,8 @@ function _filterOnConversation(
     noteIDs = Object.keys(notes).filter(
       (noteID) => {
         return (notes[noteID].sender == senderID && notes[noteID].is_chair == 2) ||
-        (notes[noteID].is_chair == 1 && notes[noteID].recipient == senderID);}
+          (notes[noteID].is_chair == 1 && notes[noteID].recipient == senderID);
+      }
     );
   } else if (recipientID && notes) {
     //$FlowFixMe flow is wrong and Object.keys can be called on an array (see MDN docs) 
@@ -34,6 +35,22 @@ function _filterOnConversation(
           notes[noteID].recipient == senderID)
     );
   }
+
+  return noteIDs.map((id) => notes[id]);
+}
+
+function _filterOnChairConversation(
+  recipientID: ?number,
+  notes: Note[]
+): Note[] {
+  let noteIDs = [];
+  //$FlowFixMe flow is wrong and Object.keys can be called on an array (see MDN docs)
+  noteIDs = Object.keys(notes).filter(
+    (noteID) => {
+      return (notes[noteID].sender == recipientID && notes[noteID].is_chair == 2) ||
+        (notes[noteID].is_chair == 1 && notes[noteID].recipient == recipientID);
+    }
+  );
 
   return noteIDs.map((id) => notes[id]);
 }
@@ -58,4 +75,20 @@ function _getLastMessage(
   return null;
 }
 
-export { _filterOnConversation, _getLastMessage };
+function _getChairLastMessage(
+  recipientID: ?number,
+  notes: Note[]
+): ?Note {
+  const conversation = _filterOnChairConversation(
+    recipientID,
+    notes
+  );
+  if (conversation.length > 0) {
+    return conversation.sort((note1, note2) =>
+      note1.timestamp && note2.timestamp ? note2.timestamp - note1.timestamp : 0
+    )[0];
+  }
+  return null;
+}
+
+export { _filterOnConversation, _filterOnChairConversation, _getLastMessage, _getChairLastMessage};

@@ -21,6 +21,7 @@ type NoteSidebarProps = {
   recipient_name: string,
   assignments: { [string]: Assignment },
   last_messages: { [string]: ?Note },
+  display_chair: boolean,
   onConversationChange: (Assignment) => void,
   onChairConversationChange: () => void,
 };
@@ -53,13 +54,15 @@ class NoteSidebar extends React.Component<NoteSidebarProps, NoteSidebarState> {
     return (
       <div className="sidebar">
         {/* Ensure that chair is always at the top */}
-        <div onClick={(event) => this._handleClick(event, 'Chair')}>
+        {/* Only display chair div if the viewer is a delegate */}
+        {(this.props.display_chair) ?
+          <div onClick={(event) => this._handleClick(event, 'Chair')}>
             <NoteConversationPreview
               recipient_name={this.props.recipient_name}
               country={'Chair'}
               last_message={this.props.last_messages['Chair']}
             />
-        </div>
+          </div> : null}
         {sorted_countries.map((country) => (
           <div key={country} onClick={(event) => this._handleClick(event, country)}>
             <NoteConversationPreview

@@ -193,20 +193,12 @@ var ServerAPI = {
     return _post('/api/note', {is_chair, sender, recipient, msg})
   },
 
-  getNotesByCommittee(committee_id) {
-    return _get('/api/notes', {committee_id})
+  getNotesByCommittee(committee_id, last_sent_timestamp) {
+    return _get('/api/notes', {committee_id, timestamp:last_sent_timestamp})
   },
 
   getNotesBySender(sender_id, last_sent_timestamp) {
     return _get('/api/notes', {sender_id, timestamp:last_sent_timestamp});
-  },
-
-  getNotesByConversation(sender_id, recipient_id)  {
-    return _get('/api/notes', {sender_id, recipient_id});
-  },
-
-  getNotesByConversationWithChair(sender_id) {
-    return _get('/api/notes', {sender_id, chair:true});
   },
 
 };

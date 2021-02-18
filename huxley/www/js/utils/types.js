@@ -146,6 +146,7 @@ type School = {
 
 export type {
   Assignment,
+  AssignmentNested,
   CommitteeFeedback,
   Committee,
   Country,
