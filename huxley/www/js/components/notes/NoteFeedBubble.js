@@ -18,59 +18,61 @@ const { NoteStore } = require("stores/NoteStore");
 require("css/notes/NoteFeedBubble.less");
 
 type NoteFeedBubbleProps = {
-    countries: { [number]: string },
-    note: Note,
+  countries: { [number]: string },
+  note: Note,
 };
 
 type NoteFeedBubbleState = {
-    hover: boolean,
-}
+  hover: boolean,
+};
 
-class NoteFeedBubble extends React.Component<NoteFeedBubbleProps, NoteFeedBubbleState> {
+class NoteFeedBubble extends React.Component<
+  NoteFeedBubbleProps,
+  NoteFeedBubbleState
+> {
+  constructor(props: NoteFeedBubbleProps) {
+    super(props);
+    this.state = {
+      hover: false,
+    };
+  }
 
-    constructor(props: NoteFeedBubbleProps) {
-        super(props);
-        this.state = {
-            hover: false
-        }
-    }
+  messageBox: ?HTMLDivElement;
+  render(): React$Element<any> {
+    return (
+      <div
+        className="message"
+        onMouseOver={this._onMouseOver}
+        onMouseOut={this._onMouseOut}
+      >
+        <div className="feedMessage">{this.props.note.msg}</div>
+        {this.state.hover ? this.renderNoteInfo() : null}
+      </div>
+    );
+  }
 
-    messageBox: ?HTMLDivElement;
-    render(): React$Element<any> {
-        return (
-            <div className="message">
-                <div
-                    className="feedMessage"
-                    onMouseOver={this._onMouseOver}
-                    onMouseOut={this._onMouseOut}
-                >
-                    {this.props.note.msg}
-                </div>
-                {this.state.hover ? this.renderNoteInfo() : null}
-            </div>
-        );
-    }
+  renderNoteInfo: () => React$Element<any> = () => {
+    const sender_name = this.props.note.sender
+      ? this.props.countries[this.props.note.sender]
+      : "Chair";
+    const recipient_name = this.props.note.recipient
+      ? this.props.countries[this.props.note.recipient]
+      : "Chair";
+    const timestamp = new Date(this.props.note.timestamp * 1000).toString();
+    return (
+      <div className="feedMessageInfo">
+        {sender_name} -> {recipient_name} : {timestamp}
+      </div>
+    );
+  };
 
-    renderNoteInfo: () => React$Element<any> = () => {
-        const sender_name = this.props.note.sender ? this.props.countries[this.props.note.sender] : "Chair";
-        const recipient_name = this.props.note.recipient ? this.props.countries[this.props.note.recipient] : "Chair";
-        const timestamp = new Date(this.props.note.timestamp * 1000).toString();
-        return (
-            <div 
-                classname="feedMessageInfo"
-            >
-            {sender_name} -> {recipient_name} : {timestamp}
-            </div>
-        );
-    }
+  _onMouseOver: (SyntheticEvent<any>) => void = (event) => {
+    this.setState({ hover: true });
+  };
 
-    _onMouseOver: (SyntheticEvent<any>) => void = (event) => {
-        this.setState({ hover: true })
-    }
-
-    _onMouseOut: (SyntheticEvent<any>) => void = (event) => {
-        this.setState({ hover: false })
-    }
+  _onMouseOut: (SyntheticEvent<any>) => void = (event) => {
+    this.setState({ hover: false });
+  };
 }
 
 export { NoteFeedBubble };
