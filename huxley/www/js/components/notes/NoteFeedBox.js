@@ -19,9 +19,9 @@ const { NoteStore } = require("stores/NoteStore");
 require("css/notes/NoteFeedBox.less");
 
 type NoteFeedBoxProps = {
-    countries: { [number]: string },
-    notes: Note[],
-}
+  countries: { [number]: string },
+  notes: Note[],
+};
 
 class NoteFeedBox extends React.Component<NoteFeedBoxProps> {
   feedBox: ?HTMLDivElement;
@@ -34,9 +34,13 @@ class NoteFeedBox extends React.Component<NoteFeedBoxProps> {
         }}
       >
         <div>
-          {this.props.notes.map((note, index) =>
-            <NoteFeedBubble note={note} key={index} countries={this.props.countries} />
-          )}
+          {this.props.notes.map((note, index) => (
+            <NoteFeedBubble
+              note={note}
+              key={index}
+              countries={this.props.countries}
+            />
+          ))}
         </div>
       </div>
     );
@@ -50,7 +54,13 @@ class NoteFeedBox extends React.Component<NoteFeedBoxProps> {
 
   componentDidUpdate(prevProps: NoteFeedBoxProps) {
     if (this.props.notes.length !== prevProps.notes.length) {
-      if (this.feedBox) {
+      // TODO: find a way to make this number not arbitrary + not 
+      // have issues if someone is scrolled all the way to the top
+      if (
+        this.feedBox &&
+        (this.feedBox.scrollTop === 0 ||
+          this.feedBox.scrollTop + 700 > this.feedBox.scrollHeight)
+      ) {
         this.feedBox.scrollTop = this.feedBox.scrollHeight;
       }
     }
