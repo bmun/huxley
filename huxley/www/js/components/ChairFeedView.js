@@ -23,6 +23,7 @@ const { NoteConversation } = require("components/notes/NoteConversation");
 const {
   NoteConversationSelector,
 } = require("components/notes/NoteConversationSelector");
+const { NoteFeedFilter } = require("components/notes/NoteFeedFilter");
 const { NoteSidebar } = require("components/notes/NoteSidebar");
 const { NoteStore } = require("stores/NoteStore");
 
@@ -31,6 +32,7 @@ const { ServerAPI } = require("lib/ServerAPI");
 const {
   _filterOnChairConversation,
   _getChairLastMessage,
+  _isMessageFlagged,
 } = require("utils/_noteFilters");
 const { PollingInterval } = require("constants/NoteConstants");
 
@@ -40,6 +42,9 @@ type ChairFeedViewState = {
   assignments: Array<Assignment>,
   countries: any,
   search_string: string,
+  filter_sender: ?Assignment,
+  filter_recipient: ?Assignment,
+  filter_flagged: boolean,
 };
 
 class ChairFeedView extends React.Component<{}, ChairFeedViewState> {
@@ -64,6 +69,9 @@ class ChairFeedView extends React.Component<{}, ChairFeedViewState> {
       assignments: assignments,
       countries: countries,
       search_string: "",
+      filter_sender: null,
+      filter_recipient: null,
+      filter_flagged: false,
     };
   }
 
@@ -111,6 +119,7 @@ class ChairFeedView extends React.Component<{}, ChairFeedViewState> {
 
   render(): React$Element<any> {
     const country_map = {};
+    const assignment_map = {};
     if (
       this.state.assignments.length &&
       Object.keys(this.state.countries).length
@@ -121,8 +130,24 @@ class ChairFeedView extends React.Component<{}, ChairFeedViewState> {
         ].name;
       }
     }
+
+    if (
+      this.state.assignments.length &&
+      Object.keys(this.state.countries).length
+    ) {
+      for (let assignment of this.state.assignments) {
+        assignment_map[
+          this.state.countries[assignment.country].name
+        ] = assignment;
+      }
+    }
+
     return (
       <InnerView>
+        <NoteFeedFilter
+          assignments={assignment_map}
+          onInputChange={this._onNoteSearch}
+        />
         <NoteFeedBox
           notes={this._filterConversations(this.state.notes)}
           countries={country_map}
@@ -131,13 +156,38 @@ class ChairFeedView extends React.Component<{}, ChairFeedViewState> {
     );
   }
 
-  _onNoteSearch: (string) => void = (search_string) => {
+  _onNoteSearch: (string, ?Assignment, ?Assignment, boolean) => void = (
+    search_string,
+    filter_sender,
+    filter_recipient,
+    filter_flagged
+  ) => {
     this.setState({
-      search_string: search_string,
+      search_string,
+      filter_sender,
+      filter_recipient,
+      filter_flagged,
     });
   };
 
+  _filterFlaggedMessages: (Note[]) => Note[] = (notes) => {
+    if (!this.state.filter_flagged) {
+      return notes;
+    }
+    return notes.filter(_isMessageFlagged);
+  };
+
   _filterConversations: (Note[]) => Note[] = (notes) => {
+    return this._filterFlaggedMessages(
+      this._filterConversationsByString(
+        this._filterConversationsBySender(
+          this._filterConversationsByRecipient(notes)
+        )
+      )
+    );
+  };
+
+  _filterConversationsByString: (Note[]) => Note[] = (notes) => {
     if (this.state.search_string === "") {
       return notes;
     }
@@ -146,6 +196,28 @@ class ChairFeedView extends React.Component<{}, ChairFeedViewState> {
         note.msg
           .toLowerCase()
           .search(this.state.search_string.toLowerCase()) !== -1
+    );
+  };
+
+  _filterConversationsBySender: (Note[]) => Note[] = (notes) => {
+    if (!this.state.filter_sender) {
+      return notes;
+    }
+    return notes.filter(
+      (note: Note) =>
+        // $FlowFixMe this is fine, we return something if it doesn't exist
+        note.sender === this.state.filter_sender.id
+    );
+  };
+
+  _filterConversationsByRecipient: (Note[]) => Note[] = (notes) => {
+    if (!this.state.filter_recipient) {
+      return notes;
+    }
+    return notes.filter(
+      (note: Note) =>
+        // $FlowFixMe this is fine, we return something if it doesn't exist
+        note.recipient === this.state.filter_recipient.id
     );
   };
 }

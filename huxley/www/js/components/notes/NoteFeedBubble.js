@@ -13,7 +13,7 @@ import type { Note } from "utils/types";
 const { Button } = require("components/core/Button");
 const { TextTemplate } = require("components/core/TextTemplate");
 const { NoteStore } = require("stores/NoteStore");
-const { SearchTerms } = require("constants/NoteConstants");
+const { _isMessageFlagged } = require("utils/_noteFilters");
 
 // $FlowFixMe
 require("css/notes/NoteFeedBubble.less");
@@ -40,10 +40,7 @@ class NoteFeedBubble extends React.Component<
 
   messageBox: ?HTMLDivElement;
   render(): React$Element<any> {
-    const flagged = SearchTerms.some(
-      (term) =>
-        this.props.note.msg.toLowerCase().search(term.toLowerCase()) !== -1
-    );
+    const flagged = _isMessageFlagged(this.props.note);
     return (
       <div className="messageContainer">
         <div

@@ -60,11 +60,6 @@ class NoteConversationSelector extends React.Component<
   }
 
   _handleChange: (SyntheticEvent<HTMLInputElement>) => void = (event) => {
-    /* Note: This feels hacky, possibly because it is. However, this seems to be the best way
-        determine if a change was a click on a datalist element or typing by the user.
-        See https://stackoverflow.com/questions/43898967/creating-onclick-event-for-datalist-option-in-react
-        and https://stackoverflow.com/questions/31901351/how-to-fire-an-event-on-clicking-data-list-option-list 
-        Currently does not work on Firefox; may be better to use a keydown event instead. */
     if (event.target instanceof HTMLInputElement) {
       this.setState({ selected: event.target.value });
       // $FlowFixMe flow has issues because this isn't directly below the if statement

@@ -6,6 +6,7 @@
 //@flow
 
 import type { Note } from "utils/types";
+import { SearchTerms } from "constants/NoteConstants";
 
 /**
  * Checks if the current date falls within the range of February 28th to March 31st
@@ -91,4 +92,13 @@ function _getChairLastMessage(
   return null;
 }
 
-export { _filterOnConversation, _filterOnChairConversation, _getLastMessage, _getChairLastMessage};
+function _isMessageFlagged(
+  note: Note,
+): boolean {
+  return SearchTerms.some(
+    (term) =>
+      note.msg.toLowerCase().search(term.toLowerCase()) !== -1
+  );
+}
+
+export { _filterOnConversation, _filterOnChairConversation, _getLastMessage, _getChairLastMessage, _isMessageFlagged};
