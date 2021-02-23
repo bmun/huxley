@@ -87,8 +87,7 @@ class NoteInputBox extends React.Component<
   };
 
   _handleNoteInputError: (any) => void = (response) => {
-    window.alert(`Message was unable to be sent`);
-    //TODO - fix this!
+    window.alert(`Message was unable to be sent: ${response['reason']}`);
   };
 }
 

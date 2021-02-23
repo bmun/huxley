@@ -14,7 +14,14 @@ class CommitteeList(generics.ListAPIView):
     serializer_class = CommitteeSerializer
 
 
-class CommitteeDetail(generics.RetrieveAPIView):
+class CommitteeDetail(generics.RetrieveUpdateAPIView):
     authentication_classes = (SessionAuthentication,)
     queryset = Committee.objects.all()
     serializer_class = CommitteeSerializer
+
+    def patch(self, request, *args, **kwargs):
+        print(request.data)
+        return super().patch(request, args, kwargs)
+
+    def put(self, request, *args, **kwargs):
+        return self.partial_update(request, *args, **kwargs)

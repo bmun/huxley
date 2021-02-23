@@ -114,6 +114,10 @@ var ServerAPI = {
     return _patch(`/api/assignments/${assignmentID}`, data);
   },
 
+  updateCommittee(committeeID, data) {
+    return _patch(`/api/committees/${committeeID}`, data);
+  },
+
   updateDelegate(delegateID, data) {
     return _patch(`/api/delegates/${delegateID}`, data);
   },

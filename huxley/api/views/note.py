@@ -4,12 +4,13 @@ import datetime
 
 from rest_framework import generics, status
 from rest_framework.authentication import SessionAuthentication
+from rest_framework.exceptions import PermissionDenied
 from rest_framework.response import Response
 
 from huxley.api.mixins import ListUpdateModelMixin
 from huxley.api import permissions
 from huxley.api.serializers import NoteSerializer
-from huxley.core.models import Note
+from huxley.core.models import Assignment, Note
 
 
 class NoteList(generics.ListCreateAPIView):
@@ -52,3 +53,11 @@ class NoteDetail(generics.CreateAPIView, generics.RetrieveAPIView):
     queryset = Note.objects.all()
     permission_classes = (permissions.NotePermission, )
     serializer_class = NoteSerializer
+
+    def post(self, request, *args, **kwargs):
+        if request.data['sender']:
+            sender = Assignment.objects.get(id=request.data['sender'])
+            committee = sender.committee
+            if not committee.notes_activated:
+                return Response({'reason': 'The chair has disabled notes for this committee'}, status=status.HTTP_403_FORBIDDEN)
+        return super().post(request, args, kwargs)

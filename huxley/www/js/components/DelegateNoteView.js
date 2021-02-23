@@ -32,6 +32,8 @@ const {
   _getLastMessage,
 } = require("utils/_noteFilters");
 const { PollingInterval } = require("constants/NoteConstants");
+// $FlowFixMe flow cannot currently understand markdown imports
+const DelegateNoteViewText = require("text/DelegateNoteViewText.md");
 
 type DelegateNoteViewState = {
   notes: Note[],
@@ -151,6 +153,7 @@ class DelegateNoteView extends React.Component<{}, DelegateNoteViewState> {
       : "Chair";
     return (
       <InnerView>
+        <TextTemplate>{DelegateNoteViewText}</TextTemplate>
         <table width={"100%"}>
           <tbody>
             <tr>

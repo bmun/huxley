@@ -28,6 +28,8 @@ const { NoteSidebar } = require("components/notes/NoteSidebar");
 const { NoteStore } = require("stores/NoteStore");
 
 const { ServerAPI } = require("lib/ServerAPI");
+// $FlowFixMe flow cannot currently understand markdown imports
+const ChairFeedViewText = require("text/ChairFeedViewText.md");
 
 const {
   _filterOnChairConversation,
@@ -144,6 +146,7 @@ class ChairFeedView extends React.Component<{}, ChairFeedViewState> {
 
     return (
       <InnerView>
+        <TextTemplate>{ChairFeedViewText}</TextTemplate>
         <NoteFeedFilter
           assignments={assignment_map}
           onInputChange={this._onNoteSearch}

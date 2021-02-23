@@ -32,6 +32,7 @@ type Committee = {
   name: string,
   rubric: Rubric,
   special: boolean,
+  notes_activated: boolean,
 };
 
 type Country = {

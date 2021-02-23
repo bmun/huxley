@@ -120,6 +120,7 @@ class Committee(models.Model):
     delegation_size = models.PositiveSmallIntegerField(default=2)
     special = models.BooleanField(default=False)
     rubric = models.OneToOneField(Rubric, on_delete=models.SET_NULL, blank=True, null=True)
+    notes_activated = models.BooleanField(default=False)
 
     @classmethod
     def create_rubric(cls, **kwargs):

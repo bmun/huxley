@@ -13,6 +13,8 @@ import type { Assignment, Committee, Note } from "utils/types";
 
 const { AssignmentStore } = require("stores/AssignmentStore");
 const { Button } = require("components/core/Button");
+const { CommitteeActions } = require("actions/CommitteeActions");
+const { CommitteeStore } = require("stores/CommitteeStore");
 const { CountryStore } = require("stores/CountryStore");
 const { CurrentUserStore } = require("stores/CurrentUserStore");
 const { InnerView } = require("components/InnerView");
@@ -32,7 +34,8 @@ const {
   _getChairLastMessage,
 } = require("utils/_noteFilters");
 const { PollingInterval } = require("constants/NoteConstants");
-
+// $FlowFixMe flow cannot currently understand markdown imports
+const ChairNoteViewText = require("text/ChairNoteViewText.md");
 type ChairNoteViewState = {
   notes: Note[],
   recipient: ?Assignment,
@@ -40,11 +43,13 @@ type ChairNoteViewState = {
   assignments: Array<Assignment>,
   countries: any,
   search_string: string,
+  committees: { [number]: Committee },
 };
 
 class ChairNoteView extends React.Component<{}, ChairNoteViewState> {
   _conversationToken: any;
   _assignmentToken: any;
+  _committeeToken: any;
   _countryToken: any;
   _notePoller: IntervalID;
 
@@ -52,12 +57,11 @@ class ChairNoteView extends React.Component<{}, ChairNoteViewState> {
     super(props);
     const user = CurrentUserStore.getCurrentUser();
     const user_committee_id = user.committee;
-    const notes = NoteStore.getCommitteeNotes(
-      user_committee_id,
-    );
+    const notes = NoteStore.getCommitteeNotes(user_committee_id);
     const assignments = AssignmentStore.getCommitteeAssignments(
-        user_committee_id,
+      user_committee_id
     );
+    const committees = CommitteeStore.getCommittees();
     const countries = CountryStore.getCountries();
 
     this.state = {
@@ -67,6 +71,7 @@ class ChairNoteView extends React.Component<{}, ChairNoteViewState> {
       assignments: assignments,
       countries: countries,
       search_string: "",
+      committees: committees,
     };
   }
 
@@ -80,9 +85,7 @@ class ChairNoteView extends React.Component<{}, ChairNoteViewState> {
   componentDidMount() {
     this._conversationToken = NoteStore.addListener(() => {
       this.setState({
-        notes: NoteStore.getCommitteeNotes(
-          this.state.committee_id,
-        ),
+        notes: NoteStore.getCommitteeNotes(this.state.committee_id),
       });
     });
 
@@ -94,6 +97,12 @@ class ChairNoteView extends React.Component<{}, ChairNoteViewState> {
       });
     });
 
+    this._committeeToken = CommitteeStore.addListener(() => {
+      this.setState({
+        committees: CommitteeStore.getCommittees(),
+      });
+    });
+
     this._countryToken = CountryStore.addListener(() => {
       this.setState({
         countries: CountryStore.getCountries(),
@@ -102,9 +111,7 @@ class ChairNoteView extends React.Component<{}, ChairNoteViewState> {
 
     this._notePoller = setInterval(() => {
       this.setState({
-        notes: NoteStore.getCommitteeNotes(
-          this.state.committee_id,
-        ),
+        notes: NoteStore.getCommitteeNotes(this.state.committee_id),
       });
     }, PollingInterval);
   }
@@ -143,6 +150,8 @@ class ChairNoteView extends React.Component<{}, ChairNoteViewState> {
       : "Chair";
     return (
       <InnerView>
+        <TextTemplate>{ChairNoteViewText}</TextTemplate>
+        {this._renderToggleButton()}
         <table width={"100%"}>
           <tbody>
             <tr>
@@ -183,6 +192,30 @@ class ChairNoteView extends React.Component<{}, ChairNoteViewState> {
     );
   }
 
+  _renderToggleButton: () => any = () => {
+    const activated = this.state.committees[this.state.committee_id]
+      ? this.state.committees[this.state.committee_id].notes_activated
+      : false;
+    return (
+      <div style={{ marginBottom: "5px" }}>
+        <h3>Notes are currently {activated ? "on. " : "off. "}</h3>
+        <Button
+          color={activated ? "red" : "green"}
+          size="medium"
+          onClick={() =>
+            CommitteeActions.updateCommittee(
+              this.state.committee_id,
+              { notes_activated: !activated },
+              () => {}
+            )
+          }
+        >
+          Turn notes {activated ? "off" : "on"}?
+        </Button>
+      </div>
+    );
+  };
+
   _onConversationChange: (Assignment) => void = (recipient) => {
     this.setState({
       recipient: recipient,
@@ -195,9 +228,9 @@ class ChairNoteView extends React.Component<{}, ChairNoteViewState> {
     });
   };
 
-  _filterAssignmentMap: ({ [string]: Assignment }) => { [string]: Assignment } = (
-    assignment_map
-  ) => {
+  _filterAssignmentMap: ({ [string]: Assignment }) => {
+    [string]: Assignment,
+  } = (assignment_map) => {
     if (this.state.search_string === "") {
       return assignment_map;
     }
