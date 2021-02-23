@@ -22,6 +22,7 @@ class DelegateView extends React.Component {
           <div className="navbar rounded-top">
             <NavTab href="/delegate/profile">Profile</NavTab>
             <NavTab href="/delegate/paper">Paper</NavTab>
+            <NavTab href="/delegate/notes">Notes</NavTab>
             <NavTab href="/delegate/committee_feedback">
               Committee Feedback
             </NavTab>

@@ -2,7 +2,7 @@
  * Copyright (c) 2011-2016 Berkeley Model United Nations. All rights reserved.
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
-
+//@flow
 "use strict";
 
 import ActionConstants from "constants/ActionConstants";
@@ -12,12 +12,14 @@ import { Dispatcher } from "dispatcher/Dispatcher";
 import { ServerAPI } from "lib/ServerAPI";
 import { Store } from "flux/utils";
 
-var _assignments = {};
+import type {Assignment} from "utils/types";
+
+var _assignments: {[string]: Assignment} = {};
 var _assignmentsFetched = false;
 var _previousUserID = -1;
 
 class AssignmentStore extends Store {
-  getSchoolAssignments(schoolID) {
+  getSchoolAssignments(schoolID: number): Assignment[] {
     var assignmentIDs = Object.keys(_assignments);
     if (!_assignmentsFetched) {
       ServerAPI.getAssignments(schoolID).then((value) => {
@@ -30,7 +32,7 @@ class AssignmentStore extends Store {
     return assignmentIDs.map((id) => _assignments[id]);
   }
 
-  getCommitteeAssignments(committeeID) {
+  getCommitteeAssignments(committeeID: number): Assignment[] {
     var assignmentIDs = Object.keys(_assignments);
     if (!_assignmentsFetched) {
       ServerAPI.getCommitteeAssignments(committeeID).then((value) => {
@@ -43,13 +45,13 @@ class AssignmentStore extends Store {
     return assignmentIDs.map((id) => _assignments[id]);
   }
 
-  updateAssignment(assignmentID, delta, onError) {
+  updateAssignment(assignmentID: string, delta: any, onError: any) {
     const assignment = { ..._assignments[assignmentID], ...delta };
     ServerAPI.updateAssignment(assignmentID, assignment).catch(onError);
     _assignments[assignmentID] = assignment;
   }
 
-  __onDispatch(action) {
+  __onDispatch(action: any) {
     switch (action.actionType) {
       case ActionConstants.ASSIGNMENTS_FETCHED:
         for (const assignment of action.assignments) {
@@ -80,5 +82,5 @@ class AssignmentStore extends Store {
   }
 }
 
-const assignmentStore = new AssignmentStore(Dispatcher);
+const assignmentStore: AssignmentStore = new AssignmentStore(Dispatcher);
 export { assignmentStore as AssignmentStore };

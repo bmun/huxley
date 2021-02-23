@@ -9,7 +9,7 @@ from django.core.exceptions import PermissionDenied
 from huxley.accounts.models import User
 from huxley.core.constants import ContactGender, ContactType, ProgramTypes
 
-from huxley.core.models import School, Committee, CommitteeFeedback, Country, Delegate, Assignment, Registration, Conference, PositionPaper, Rubric, SecretariatMember
+from huxley.core.models import School, Committee, CommitteeFeedback, Country, Delegate, Assignment, Registration, Conference, PositionPaper, Rubric, SecretariatMember, Note
 
 if not settings.TESTING:
     raise PermissionDenied
@@ -40,25 +40,26 @@ def new_superuser(*args, **kwargs):
 
 
 def new_school(**kwargs):
-    s = School(
-        name=kwargs.pop('name', 'Test School'),
-        address=kwargs.pop('address', '1 Schoolhouse Road'),
-        city=kwargs.pop('city', 'Berkeley'),
-        state=kwargs.pop('state', 'CA'),
-        zip_code=kwargs.pop('zip_code', '94024'),
-        country=kwargs.pop('country', 'United States of America'),
-        primary_name=kwargs.pop('primary_name', 'first'),
-        primary_gender=kwargs.pop('primary_gender', ContactGender.MALE),
-        primary_email=kwargs.pop('primary_email', 'e@mail.com'),
-        primary_phone=kwargs.pop('primary_phone', '1234567890'),
-        primary_type=kwargs.pop('primary_type', ContactType.FACULTY),
-        secondary_name=kwargs.pop('secondary_name', ''),
-        secondary_gender=kwargs.pop('secondary_gender', ContactGender.MALE),
-        secondary_email=kwargs.pop('secondary_email', ''),
-        secondary_phone=kwargs.pop('secondary_phone', ''),
-        secondary_type=kwargs.pop('secondary_type', ContactType.FACULTY),
-        program_type=kwargs.pop('program_type', ProgramTypes.CLUB),
-        times_attended=kwargs.pop('times_attended', 0))
+    s = School(name=kwargs.pop('name', 'Test School'),
+               address=kwargs.pop('address', '1 Schoolhouse Road'),
+               city=kwargs.pop('city', 'Berkeley'),
+               state=kwargs.pop('state', 'CA'),
+               zip_code=kwargs.pop('zip_code', '94024'),
+               country=kwargs.pop('country', 'United States of America'),
+               primary_name=kwargs.pop('primary_name', 'first'),
+               primary_gender=kwargs.pop('primary_gender', ContactGender.MALE),
+               primary_email=kwargs.pop('primary_email', 'e@mail.com'),
+               primary_phone=kwargs.pop('primary_phone', '1234567890'),
+               primary_type=kwargs.pop('primary_type', ContactType.FACULTY),
+               secondary_name=kwargs.pop('secondary_name', ''),
+               secondary_gender=kwargs.pop('secondary_gender',
+                                           ContactGender.MALE),
+               secondary_email=kwargs.pop('secondary_email', ''),
+               secondary_phone=kwargs.pop('secondary_phone', ''),
+               secondary_type=kwargs.pop('secondary_type',
+                                         ContactType.FACULTY),
+               program_type=kwargs.pop('program_type', ProgramTypes.CLUB),
+               times_attended=kwargs.pop('times_attended', 0))
 
     user = kwargs.pop('user', None)
     for attr, value in kwargs.items():
@@ -77,11 +78,10 @@ def new_school(**kwargs):
 
 
 def new_committee(**kwargs):
-    c = Committee(
-        name=kwargs.pop('name', 'testCommittee'),
-        full_name=kwargs.pop('fullName', 'testCommittee'),
-        delegation_size=kwargs.pop('delegation_size', 10),
-        special=kwargs.pop('special', False))
+    c = Committee(name=kwargs.pop('name', 'testCommittee'),
+                  full_name=kwargs.pop('fullName', 'testCommittee'),
+                  delegation_size=kwargs.pop('delegation_size', 10),
+                  special=kwargs.pop('special', False))
     c.save()
 
     user = kwargs.pop('user', None)
@@ -91,8 +91,9 @@ def new_committee(**kwargs):
     c.save()
 
     if user is None:
-        new_user(
-            username=str(uuid.uuid4()), committee=c, user_type=User.TYPE_CHAIR)
+        new_user(username=str(uuid.uuid4()),
+                 committee=c,
+                 user_type=User.TYPE_CHAIR)
     else:
         user.committee = c
         user.save()
@@ -135,7 +136,7 @@ def new_committee_feedback(**kwargs):
         chair_9_rating=kwargs.pop('chair_9_rating', 0),
         chair_10_name=kwargs.pop('chair_10_name', ""),
         chair_10_comment=kwargs.pop('chair_10_comment', ""),
-        chair_10_rating=kwargs.pop('chair_10_rating', 0), 
+        chair_10_rating=kwargs.pop('chair_10_rating', 0),
         berkeley_perception=kwargs.pop('berkeley_perception', 0),
         money_spent=kwargs.pop('money_spent', 0))
     feedback.save()
@@ -143,9 +144,8 @@ def new_committee_feedback(**kwargs):
 
 
 def new_country(**kwargs):
-    c = Country(
-        name=kwargs.pop('name', 'TestCountry'),
-        special=kwargs.pop('special', False))
+    c = Country(name=kwargs.pop('name', 'TestCountry'),
+                special=kwargs.pop('special', False))
     c.save()
     return c
 
@@ -160,7 +160,8 @@ def new_delegate(**kwargs):
         school=s,
         name=kwargs.pop('name', 'Nate Parke'),
         email=kwargs.pop('email', 'nate@earthlink.gov'),
-        summary=kwargs.pop('summary', 'He did well!'), )
+        summary=kwargs.pop('summary', 'He did well!'),
+    )
     d.save()
 
     if user:
@@ -180,7 +181,8 @@ def new_assignment(**kwargs):
         registration=test_registration,
         country=test_country,
         paper=test_paper,
-        rejected=kwargs.pop('rejected', False), )
+        rejected=kwargs.pop('rejected', False),
+    )
     a.save()
     return a
 
@@ -225,7 +227,29 @@ def new_secretariat_member(**kwargs):
     sm = SecretariatMember(
         name=test_name,
         committee=test_committee,
-        is_head_chair=test_is_head_chair, )
+        is_head_chair=test_is_head_chair,
+    )
 
     sm.save()
     return sm
+
+
+def new_note(**kwargs):
+    # None is a valid value for sender & recipient
+    test_sender = kwargs.pop('sender', -1)
+    test_sender = test_sender if test_sender != -1 else new_delegate()
+
+    test_recipient = kwargs.pop('recipient', -1)
+    test_recipient = test_recipient if test_recipient != -1 else new_delegate()
+
+    test_is_chair = kwargs.pop('is_chair', None) or 0
+
+    test_msg = kwargs.pop('msg', None) or 'hello'
+
+    note = Note(sender=test_sender,
+                recipient=test_recipient,
+                is_chair=test_is_chair,
+                msg=test_msg)
+
+    note.save()
+    return note

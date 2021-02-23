@@ -5,16 +5,16 @@
 
 "use strict";
 
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import React from "react";
 import PropTypes from "prop-types";
 
 class NavTab extends React.Component {
   render() {
     return (
-      <Link activeClassName="current" className="tab" to={this.props.href}>
+      <NavLink activeClassName="current" className="tab" to={this.props.href}>
         {this.props.children}
-      </Link>
+      </NavLink>
     );
   }
 }

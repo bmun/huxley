@@ -120,6 +120,7 @@ class Committee(models.Model):
     delegation_size = models.PositiveSmallIntegerField(default=2)
     special = models.BooleanField(default=False)
     rubric = models.OneToOneField(Rubric, on_delete=models.SET_NULL, blank=True, null=True)
+    notes_activated = models.BooleanField(default=False)
 
     @classmethod
     def create_rubric(cls, **kwargs):
@@ -685,3 +686,40 @@ class SecretariatMember(models.Model):
     def __str__(self):
         return self.name
 
+
+class Note(models.Model):
+    """Note objects allow delegates to send and receive notes over Huxley."""
+
+    #TODO add an export of notes so can reference note content later should there be any legal issues.
+
+    #is_chair - 0: Between two Assignments, 1: Sender is Chair, 2: Recipient is Chair
+    is_chair = models.SmallIntegerField(default= 0, choices = ((0, 0), (1, 1), (2, 2)))
+    sender = models.ForeignKey(Assignment, on_delete=models.CASCADE, null=True, blank=True, related_name = '+') 
+    recipient = models.ForeignKey(Assignment, on_delete=models.CASCADE, null=True, blank=True, related_name = '+') 
+    msg = models.CharField(max_length = 1000)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        committee, sender, recipient = "", "", ""
+        if self.is_chair == 0:
+            committee = str(self.sender.committee)
+            sender = str(self.sender.country)
+            recipient = str(self.recipient.country)
+
+        elif self.is_chair == 1:
+            committee = str(self.recipient.committee)
+            sender = 'Chair'
+            recipient = str(self.recipient.country)
+
+        else:
+            committee = str(self.sender.committee)
+            sender = str(self.sender.country)
+            recipient = 'Chair'
+            
+
+        return committee + ": " + sender + ' -> ' + recipient + ' - ' + str(self.id)
+
+    class Meta:
+        db_table = u'note'
+        ordering = ['timestamp']
+    
