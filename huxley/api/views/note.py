@@ -55,7 +55,7 @@ class NoteDetail(generics.CreateAPIView, generics.RetrieveAPIView):
     serializer_class = NoteSerializer
 
     def post(self, request, *args, **kwargs):
-        if request.data['sender']:
+        if request.data['sender'] and request.data['recipient']:
             sender = Assignment.objects.get(id=request.data['sender'])
             committee = sender.committee
             if not committee.notes_activated:

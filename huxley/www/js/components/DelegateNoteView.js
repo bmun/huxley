@@ -9,10 +9,11 @@
 
 import React from "react";
 import { history } from "utils/history";
-import type { Assignment, AssignmentNested, Note } from "utils/types";
+import type { Assignment, AssignmentNested, Committee, Note } from "utils/types";
 
 const { AssignmentStore } = require("stores/AssignmentStore");
 const { Button } = require("components/core/Button");
+const { CommitteeStore } = require("stores/CommitteeStore");
 const { CountryStore } = require("stores/CountryStore");
 const { CurrentUserStore } = require("stores/CurrentUserStore");
 const { InnerView } = require("components/InnerView");
@@ -34,6 +35,8 @@ const {
 const { PollingInterval } = require("constants/NoteConstants");
 // $FlowFixMe flow cannot currently understand markdown imports
 const DelegateNoteViewText = require("text/DelegateNoteViewText.md");
+// $FlowFixMe flow cannot currently understand markdown imports
+const DelegateNoteDisabledViewText = require("text/DelegateNoteDisabledViewText.md");
 
 type DelegateNoteViewState = {
   notes: Note[],
@@ -42,11 +45,13 @@ type DelegateNoteViewState = {
   assignments: Array<Assignment>,
   countries: any,
   search_string: string,
+  committees: { [number]: Committee },
 };
 
 class DelegateNoteView extends React.Component<{}, DelegateNoteViewState> {
   _conversationToken: any;
   _assignmentToken: any;
+  _committeeToken: any;
   _countryToken: any;
   _notePoller: IntervalID;
 
@@ -61,6 +66,7 @@ class DelegateNoteView extends React.Component<{}, DelegateNoteViewState> {
       user_assignment.committee.id
     );
     const countries = CountryStore.getCountries();
+    const committees = CommitteeStore.getCommittees();
 
     this.state = {
       notes: notes,
@@ -69,6 +75,7 @@ class DelegateNoteView extends React.Component<{}, DelegateNoteViewState> {
       assignments: assignments,
       countries: countries,
       search_string: "",
+      committees: committees,
     };
   }
 
@@ -96,6 +103,12 @@ class DelegateNoteView extends React.Component<{}, DelegateNoteViewState> {
       });
     });
 
+    this._committeeToken = CommitteeStore.addListener(() => {
+      this.setState({
+        committees: CommitteeStore.getCommittees(),
+      });
+    });
+
     this._countryToken = CountryStore.addListener(() => {
       this.setState({
         countries: CountryStore.getCountries(),
@@ -119,6 +132,18 @@ class DelegateNoteView extends React.Component<{}, DelegateNoteViewState> {
   }
 
   render(): React$Element<any> {
+    const activated = this.state.committees[this.state.sender.committee.id]
+      ? this.state.committees[this.state.sender.committee.id].notes_activated
+      : false;
+
+    // if (!activated) {
+    //   return(
+    //     <InnerView>
+    //       <TextTemplate>{DelegateNoteDisabledViewText}</TextTemplate>
+    //     </InnerView>
+    //   )
+    // }
+    
     const assignment_map = {};
     const last_message_map = {};
     if (
@@ -154,6 +179,7 @@ class DelegateNoteView extends React.Component<{}, DelegateNoteViewState> {
     return (
       <InnerView>
         <TextTemplate>{DelegateNoteViewText}</TextTemplate>
+        {/* {!activated ? <div><h3>Notes are currently disabled. You may still message the chair.</h3></div> : <div></div>} */}
         <table width={"100%"}>
           <tbody>
             <tr>

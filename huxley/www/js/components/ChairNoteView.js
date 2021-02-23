@@ -119,6 +119,7 @@ class ChairNoteView extends React.Component<{}, ChairNoteViewState> {
   componentWillUnmount() {
     this._conversationToken && this._conversationToken.remove();
     this._assignmentToken && this._assignmentToken.remove();
+    this._committeeToken && this._committeeToken.remove();
     this._countryToken && this._countryToken.remove();
     clearInterval(this._notePoller);
   }
@@ -172,6 +173,7 @@ class ChairNoteView extends React.Component<{}, ChairNoteViewState> {
                 />
               </td>
               <td width={"75%"}>
+                {this.state.recipient ? 
                 <NoteConversation
                   recipient_name={recipient_name}
                   sender_id={null}
@@ -183,11 +185,11 @@ class ChairNoteView extends React.Component<{}, ChairNoteViewState> {
                     this.state.recipient ? this.state.recipient.id : null,
                     this.state.notes
                   )}
-                />
+                /> : <div></div>}
               </td>
             </tr>
           </tbody>
-        </table>
+        </table> 
       </InnerView>
     );
   }
@@ -198,7 +200,7 @@ class ChairNoteView extends React.Component<{}, ChairNoteViewState> {
       : false;
     return (
       <div style={{ marginBottom: "5px" }}>
-        <h3>Notes are currently {activated ? "on. " : "off. "}</h3>
+        <h3>Notes are currently {activated ? "on. " : "off. Delegates can only message the chair."}</h3>
         <Button
           color={activated ? "red" : "green"}
           size="medium"
