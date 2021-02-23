@@ -15,6 +15,15 @@ var CommitteeActions = {
       committees: committees,
     });
   },
+
+  updateCommittee(committeeID, delta, onError) {
+    Dispatcher.dispatch({
+      actionType: ActionConstants.UPDATE_COMMITTEE,
+      committeeID: committeeID,
+      delta: delta,
+      onError: onError,
+    });
+  },
 };
 
 export { CommitteeActions };

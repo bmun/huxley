@@ -1,0 +1,13 @@
+[ignore]
+
+[include]
+
+[libs]
+
+[lints]
+
+[options]
+module.system.node.allow_root_relative=true
+module.system.node.root_relative_dirname=./huxley/www/js
+
+[strict]

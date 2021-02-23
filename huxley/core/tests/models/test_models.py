@@ -10,7 +10,7 @@ from django.test import TestCase
 
 from huxley.core.models import (
     Assignment, Committee, CommitteeFeedback, Conference, Country,
-    CountryPreference, Delegate, PositionPaper, Rubric, SecretariatMember)
+    CountryPreference, Delegate, Note, PositionPaper, Rubric, SecretariatMember)
 
 from huxley.utils.test import models
 
@@ -239,6 +239,15 @@ class DelegateTest(TestCase):
             name="Test Delegate",
             school=school,
             assignment=assignment)
+
+def NoteTest(TestCase):
+
+    fixtures = ['conference']
+
+    def test_timestamp(self):
+        '''Ensure that timestamp is automatically created on model save'''
+        note = models.new_note()
+        self.assertIsNotNone(note.timestamp)
 
 
 class RegistrationTest(TestCase):

@@ -17,4 +17,5 @@ class CommitteeSerializer(serializers.ModelSerializer):
                   'full_name',
                   'delegation_size',
                   'rubric',
-                  'special', )
+                  'special', 
+                  'notes_activated')

@@ -2,13 +2,14 @@
  * Copyright (c) 2011-2015 Berkeley Model United Nations. All rights reserved.
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
+//@flow
 
 "use strict";
 
 import React from "react";
 import cx from "classnames";
-import PropTypes from "prop-types";
 
+//$FlowFixMe
 require("css/TextInput.less");
 
 /**
@@ -16,11 +17,21 @@ require("css/TextInput.less");
  * Controlled inputs cannot preserve cursor position upon rendering.
  * See issue #519.
  */
-class TextInput extends React.Component {
-  render() {
+type TextInputProps = {
+  className?: string,
+  defaultValue?: string,
+  isControlled?: boolean,
+  onChange?: (any) => void,
+  placeholder?: string,
+  value?: string,
+  type?: "text" | "password",
+};
+class TextInput extends React.Component<TextInputProps> {
+  render(): React$Element<any> {
+    const { isControlled, ...newProps } = this.props;
     return (
       <input
-        {...this.props}
+        {...newProps}
         className={cx("text-input", this.props.className)}
         onChange={this._handleChange}
         type={this.props.type || "text"}
@@ -28,18 +39,9 @@ class TextInput extends React.Component {
       />
     );
   }
-  _handleChange = (event) => {
+  _handleChange: (any) => void = (event) => {
     this.props.onChange && this.props.onChange(event.target.value);
   };
 }
-
-TextInput.propTypes = {
-  defaultValue: PropTypes.string,
-  isControlled: PropTypes.bool,
-  onChange: PropTypes.func,
-  placeholder: PropTypes.string,
-  value: PropTypes.string,
-  type: PropTypes.oneOf(["text", "password"]),
-};
 
 export { TextInput };

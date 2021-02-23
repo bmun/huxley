@@ -323,7 +323,7 @@ class DelegateCommitteeFeedbackView extends React.Component {
             <NumberInput
               placeholder="Number of BMUN sessions attended"
               onChange={_handleChange.bind(this, "money_spent")}
-              value={this.state["money_spent"]}
+              value={this.state["money_spent"].toString()}
             />
           </label>
         </div>

@@ -114,6 +114,10 @@ var ServerAPI = {
     return _patch(`/api/assignments/${assignmentID}`, data);
   },
 
+  updateCommittee(committeeID, data) {
+    return _patch(`/api/committees/${committeeID}`, data);
+  },
+
   updateDelegate(delegateID, data) {
     return _patch(`/api/delegates/${delegateID}`, data);
   },
@@ -188,6 +192,19 @@ var ServerAPI = {
   updateRubric(rubric) {
     return _patch(`/api/rubrics/${rubric.id}`, rubric);
   },
+
+  createNote(is_chair, sender, recipient, msg) {
+    return _post('/api/note', {is_chair, sender, recipient, msg})
+  },
+
+  getNotesByCommittee(committee_id, last_sent_timestamp) {
+    return _get('/api/notes', {committee_id, timestamp:last_sent_timestamp})
+  },
+
+  getNotesBySender(sender_id, last_sent_timestamp) {
+    return _get('/api/notes', {sender_id, timestamp:last_sent_timestamp});
+  },
+
 };
 
 function _encodeQueryString(params) {
