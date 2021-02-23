@@ -23,13 +23,14 @@ class DelegateAdmin(admin.ModelAdmin):
         rows = []
 
         rows.append([
-            'Name', 'School', 'Committee', 'Country', 'Email', 'Waiver?',
+            'ID', 'Name', 'School', 'Committee', 'Country', 'Email', 'Waiver?',
             'Session One', 'Session Two', 'Session Three', 'Session Four'
         ])
 
         ordering = 'assignment__registration__school__name'
         for delegate in Delegate.objects.all().order_by(ordering):
             rows.append([
+                str(delegate.id),
                 str(delegate),
                 str(delegate.school),
                 str(delegate.committee),
@@ -153,18 +154,31 @@ class DelegateAdmin(admin.ModelAdmin):
 
     def sheets(self, request):
         if settings.SHEET_ID:
-            SHEET_RANGE = 'Delegates!A1:J'
+            SHEET_RANGE = 'Delegates!A1:K'
             # Store credentials
             creds = service_account.Credentials.from_service_account_file(
                 settings.SERVICE_ACCOUNT_FILE, scopes=settings.SCOPES)
+            
+            service = build('sheets', 'v4', credentials=creds)
+            
+            response = service.spreadsheets().values().get(
+                spreadsheetId=settings.SHEET_ID,
+                range=SHEET_RANGE,
+                majorDimension='ROWS').execute()
+            
+            for row in response['values'][1:]:
+                delegate = Delegate.objects.get(id=row[0])
+                if row[6] == "TRUE" or row[6] == "x":
+                    delegate.waiver_submitted = True
+                    delegate.save()
 
             data = self.get_rows()
 
             body = {
                 'values': data,
             }
-            service = build('sheets', 'v4', credentials=creds)
-            response = service.spreadsheets().values().update(
+            
+            service.spreadsheets().values().update(
                 spreadsheetId=settings.SHEET_ID,
                 range=SHEET_RANGE,
                 valueInputOption='USER_ENTERED',
