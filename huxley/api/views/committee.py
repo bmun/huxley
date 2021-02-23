@@ -4,6 +4,7 @@
 from rest_framework import generics
 from rest_framework.authentication import SessionAuthentication
 
+from huxley.api import permissions
 from huxley.api.serializers import CommitteeSerializer
 from huxley.core.models import Committee
 
@@ -17,10 +18,10 @@ class CommitteeList(generics.ListAPIView):
 class CommitteeDetail(generics.RetrieveUpdateAPIView):
     authentication_classes = (SessionAuthentication,)
     queryset = Committee.objects.all()
+    permission_classes = (permissions.CommitteeDetailPermission, )
     serializer_class = CommitteeSerializer
 
     def patch(self, request, *args, **kwargs):
-        print(request.data)
         return super().patch(request, args, kwargs)
 
     def put(self, request, *args, **kwargs):

@@ -138,6 +138,26 @@ class AssignmentListPermission(permissions.BasePermission):
 
         return False
 
+class CommitteeDetailPermission(permissions.BasePermission):
+    '''Accept requests to retrieve a committee from any user. 
+       Only allow superusers and chairs to update committees.'''
+
+    def has_permission(self, request, view):
+        if request.user.is_superuser:
+            return True
+
+        committee_id = view.kwargs.get('pk', None)
+        committee = Committee.objects.get(id=committee_id)
+        user = request.user
+        method = request.method
+
+        if method != 'GET':
+            return user_is_chair(request, view,
+                                   committee_id)
+
+        return True
+
+
 
 class DelegateDetailPermission(permissions.BasePermission):
     '''Accept requests to retrieve, update, and destroy a delegate from the
