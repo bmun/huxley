@@ -213,6 +213,7 @@ class DelegateNoteView extends React.Component<{}, DelegateNoteViewState> {
                     this.state.recipient == null,
                     this.state.notes
                   )}
+                  onRefreshNotes={this._onRefreshNotes}
                 />
               </td>
             </tr>
@@ -220,6 +221,14 @@ class DelegateNoteView extends React.Component<{}, DelegateNoteViewState> {
         </table>
       </InnerView>
     );
+  }
+
+  _onRefreshNotes: () => void = () => {
+    this.setState({
+      notes: NoteStore.getConversationNotes(
+        this.state.sender.id,
+      ),
+    });
   }
 
   _onChairConversationChange: () => void = () => {

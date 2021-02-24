@@ -10,8 +10,6 @@
 import React from "react";
 import type { Note } from "utils/types";
 
-const { Button } = require("components/core/Button");
-
 // $FlowFixMe
 require("css/notes/NoteConversationPreview.less");
 type NoteConversationPreviewProps = {

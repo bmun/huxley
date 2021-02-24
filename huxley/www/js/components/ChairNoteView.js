@@ -185,6 +185,7 @@ class ChairNoteView extends React.Component<{}, ChairNoteViewState> {
                     this.state.recipient ? this.state.recipient.id : null,
                     this.state.notes
                   )}
+                  onRefreshNotes={this._onRefreshNotes}
                 /> : <div></div>}
               </td>
             </tr>
@@ -192,6 +193,12 @@ class ChairNoteView extends React.Component<{}, ChairNoteViewState> {
         </table> 
       </InnerView>
     );
+  }
+
+  _onRefreshNotes: () => void = () => {
+    this.setState({
+      notes: NoteStore.getCommitteeNotes(this.state.committee_id),
+    });
   }
 
   _renderToggleButton: () => any = () => {
