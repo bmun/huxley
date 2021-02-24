@@ -194,7 +194,10 @@ class AssignmentTest(TestCase):
     def test_create_position_paper(self):
         '''Tests that an assigment creates a new position paper upon
            being saved for the first time, but not on subsequent saves.'''
-        a = Assignment(committee_id=1, country_id=1, registration_id=1)
+        committee = models.new_committee()
+        registration = models.new_registration()
+        country = models.new_country()
+        a = Assignment(committee_id=committee.id, country_id=country.id, registration_id=registration.id)
         self.assertTrue(a.paper == None)
         a.save()
         self.assertTrue(a.paper != None)
