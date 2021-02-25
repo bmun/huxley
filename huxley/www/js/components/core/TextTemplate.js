@@ -3,42 +3,42 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
-const React = require('react');
+import React from "react";
 
 const entityMap = {
-  '&': '&amp;',
-  '<': '&lt;',
-  '>': '&gt;',
-  '"': '&quot;',
-  "'": '&#39;',
-  '/': '&#x2F;',
-  '`': '&#x60;',
-  '=': '&#x3D;',
+  "&": "&amp;",
+  "<": "&lt;",
+  ">": "&gt;",
+  '"': "&quot;",
+  "'": "&#39;",
+  "/": "&#x2F;",
+  "`": "&#x60;",
+  "=": "&#x3D;",
 };
 
-const TextTemplate = React.createClass({
+class TextTemplate extends React.Component {
   render() {
     return <div dangerouslySetInnerHTML={this.createMarkup()} />;
-  },
+  }
 
-  createMarkup() {
+  createMarkup = () => {
     var text = this.props.children;
     for (const variable of Object.keys(this.props)) {
-      const regex = new RegExp('{{ ' + variable + ' }}', 'g');
+      const regex = new RegExp("{{ " + variable + " }}", "g");
       const value = this.escapeHtml(this.props[variable]);
       text = text.replace(regex, value);
     }
 
-    return {__html: text};
-  },
+    return { __html: text };
+  };
 
-  escapeHtml(string) {
-    return String(string).replace(/[&<>"'`=\/]/g, function(s) {
+  escapeHtml = (string) => {
+    return String(string).replace(/[&<>"'`=\/]/g, function (s) {
       return entityMap[s];
     });
-  },
-});
+  };
+}
 
-module.exports = TextTemplate;
+export { TextTemplate };

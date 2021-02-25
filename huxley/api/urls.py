@@ -89,6 +89,12 @@ urlpatterns = [
     url(r'^secretariat_member_committee/?$',
         views.secretariat_member.SecretariatMemberCommitteeList.as_view(),
         name='secretariat_member_committee_list'),
+    url(r'^notes/?$', 
+        views.note.NoteList.as_view(), 
+        name='note_list'), 
+    url(r'^note/?$',
+        views.note.NoteDetail.as_view(),
+        name='note_detail')
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

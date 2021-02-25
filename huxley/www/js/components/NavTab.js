@@ -3,23 +3,24 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
-var Link = require('react-router').Link;
-var React = require('react');
+import { NavLink } from "react-router-dom";
+import React from "react";
+import PropTypes from "prop-types";
 
-var NavTab = React.createClass({
-  propTypes: {
-    href: React.PropTypes.string.isRequired,
-  },
-
-  render: function() {
+class NavTab extends React.Component {
+  render() {
     return (
-      <Link activeClassName="current" className="tab" to={this.props.href}>
+      <NavLink activeClassName="current" className="tab" to={this.props.href}>
         {this.props.children}
-      </Link>
+      </NavLink>
     );
-  },
-});
+  }
+}
 
-module.exports = NavTab;
+NavTab.propTypes = {
+  href: PropTypes.string.isRequired,
+};
+
+export { NavTab };

@@ -10,7 +10,7 @@ from django.test import TestCase
 
 from huxley.core.models import (
     Assignment, Committee, CommitteeFeedback, Conference, Country,
-    CountryPreference, Delegate, PositionPaper, Rubric, SecretariatMember)
+    CountryPreference, Delegate, Note, PositionPaper, Rubric, SecretariatMember)
 
 from huxley.utils.test import models
 
@@ -194,7 +194,10 @@ class AssignmentTest(TestCase):
     def test_create_position_paper(self):
         '''Tests that an assigment creates a new position paper upon
            being saved for the first time, but not on subsequent saves.'''
-        a = Assignment(committee_id=1, country_id=1, registration_id=1)
+        committee = models.new_committee()
+        registration = models.new_registration()
+        country = models.new_country()
+        a = Assignment(committee_id=committee.id, country_id=country.id, registration_id=registration.id)
         self.assertTrue(a.paper == None)
         a.save()
         self.assertTrue(a.paper != None)
@@ -239,6 +242,15 @@ class DelegateTest(TestCase):
             name="Test Delegate",
             school=school,
             assignment=assignment)
+
+def NoteTest(TestCase):
+
+    fixtures = ['conference']
+
+    def test_timestamp(self):
+        '''Ensure that timestamp is automatically created on model save'''
+        note = models.new_note()
+        self.assertIsNotNone(note.timestamp)
 
 
 class RegistrationTest(TestCase):

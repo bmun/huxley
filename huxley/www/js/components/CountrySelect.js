@@ -3,19 +3,13 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
-var React = require('react');
+import React from "react";
+import PropTypes from "prop-types";
 
-var CountrySelect = React.createClass({
-  propTypes: {
-    onChange: React.PropTypes.func,
-    countries: React.PropTypes.array,
-    selectedCountryID: React.PropTypes.number,
-    countryPreferences: React.PropTypes.array,
-  },
-
-  shouldComponentUpdate: function(nextProps, nextState) {
+class CountrySelect extends React.Component {
+  shouldComponentUpdate(nextProps, nextState) {
     for (var i = 0; i < this.props.countryPreferences.length; i++) {
       if (
         this.props.countryPreferences[i] !== nextProps.countryPreferences[i]
@@ -27,33 +21,41 @@ var CountrySelect = React.createClass({
       nextProps.selectedCountryID !== this.props.selectedCountryID ||
       nextProps.countries.length !== this.props.countries.length
     );
-  },
+  }
 
-  render: function() {
+  render() {
     return (
       <select
         onChange={this.props.onChange}
-        value={this.props.selectedCountryID}>
+        value={this.props.selectedCountryID}
+      >
         <option value="0">No Preference</option>
         {this.renderCommitteeOptions()}
       </select>
     );
-  },
+  }
 
-  renderCommitteeOptions: function() {
+  renderCommitteeOptions = () => {
     return this.props.countries.map(
-      function(country) {
+      function (country) {
         if (!country.special) {
-          var index = this.props.countryPreferences.indexOf('' + country.id);
+          var index = this.props.countryPreferences.indexOf("" + country.id);
           return (
             <option key={country.id} value={country.id} disabled={index >= 0}>
               {country.name}
             </option>
           );
         }
-      }.bind(this),
+      }.bind(this)
     );
-  },
-});
+  };
+}
 
-module.exports = CountrySelect;
+CountrySelect.propTypes = {
+  onChange: PropTypes.func,
+  countries: PropTypes.array,
+  selectedCountryID: PropTypes.number,
+  countryPreferences: PropTypes.array,
+};
+
+export { CountrySelect };

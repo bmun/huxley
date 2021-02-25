@@ -3,26 +3,19 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
-var Button = require('components/core/Button');
+var { Button } = require("components/core/Button");
 
-var React = require('react');
+import React from "react";
+import PropTypes from "prop-types";
 
-var PaperAssignmentList = React.createClass({
-  propTypes: {
-    onChange: React.PropTypes.func,
-    assignments: React.PropTypes.array,
-    papers: React.PropTypes.object,
-    rubric: React.PropTypes.object,
-    countries: React.PropTypes.object,
-  },
-
+class PaperAssignmentList extends React.Component {
   render() {
     var assignments = this.props.assignments;
     var countries = this.props.countries;
     var papers = this.props.papers;
-    var rows = assignments.map(a => {
+    var rows = assignments.map((a) => {
       var buttonCell =
         a.paper.file != null ? (
           <Button color="green" onClick={this._handleChange.bind(this, a.id)}>
@@ -44,32 +37,32 @@ var PaperAssignmentList = React.createClass({
       if (this.props.rubric.use_topic_2) {
         var score = paper.graded ? (
           <div>
-            T1:{' '}
+            T1:{" "}
             <b>
               {score1} / {maxScore1}
-            </b>{' '}
+            </b>{" "}
             {category1}
             <br />
-            T2:{' '}
+            T2:{" "}
             <b>
               {score2} / {maxScore2}
-            </b>{' '}
+            </b>{" "}
             {category2}
           </div>
         ) : (
-          ''
+          ""
         );
       } else {
         var score = paper.graded ? (
           <div>
-            T1:{' '}
+            T1:{" "}
             <b>
               {score1} / {maxScore1}
-            </b>{' '}
+            </b>{" "}
             {category1}
           </div>
         ) : (
-          ''
+          ""
         );
       }
 
@@ -96,9 +89,8 @@ var PaperAssignmentList = React.createClass({
         <tbody>{rows}</tbody>
       </table>
     );
-  },
-
-  calculateTotalScore: function(paper, topic_2 = false) {
+  }
+  calculateTotalScore(paper, topic_2 = false) {
     var totalScore = -1;
     if (topic_2) {
       totalScore =
@@ -116,9 +108,8 @@ var PaperAssignmentList = React.createClass({
         paper.score_5;
     }
     return totalScore;
-  },
-
-  calculateMaxScore: function(rubric, topic_2 = false) {
+  }
+  calculateMaxScore(rubric, topic_2 = false) {
     var totalMaxScore = -1;
     if (topic_2) {
       totalMaxScore =
@@ -136,45 +127,51 @@ var PaperAssignmentList = React.createClass({
         rubric.grade_value_5;
     }
     return totalMaxScore;
-  },
-
-  calculateCategory: function(value, weight) {
+  }
+  calculateCategory = (value, weight) => {
     var interval = weight / 5;
     if (value >= interval * 5) {
-      return '5 - Exceeds Expectations';
+      return "5 - Exceeds Expectations";
     } else if (value >= interval * 4) {
-      return '4 - Exceeds Expectations';
+      return "4 - Exceeds Expectations";
     } else if (value >= interval * 3) {
-      return '3 - Meets Expectations';
+      return "3 - Meets Expectations";
     } else if (value >= interval * 2) {
-      return '2 - Attempts to Meet Expectations';
+      return "2 - Attempts to Meet Expectations";
     } else if (value >= interval) {
-      return '1 - Needs Improvement';
+      return "1 - Needs Improvement";
     } else {
-      ('0 - Needs Improvement');
+      ("0 - Needs Improvement");
     }
-  },
-
-  calculateScore: function(category, weight) {
+  }
+  calculateScore = (category, weight) => {
     var interval = weight / 5;
-    if (category == '5 - Exceeds Expectations') {
+    if (category == "5 - Exceeds Expectations") {
       return interval * 5;
-    } else if (category == '4 - Exceeds Expectations') {
+    } else if (category == "4 - Exceeds Expectations") {
       return interval * 4;
-    } else if (category == '3 - Meets Expectations') {
+    } else if (category == "3 - Meets Expectations") {
       return interval * 3;
-    } else if (category == '2 - Attempts to Meet Expectations') {
+    } else if (category == "2 - Attempts to Meet Expectations") {
       return interval * 2;
-    } else if (category == '1 - Needs Improvement') {
+    } else if (category == "1 - Needs Improvement") {
       return interval;
     } else {
       return 0;
     }
-  },
+  }
 
-  _handleChange: function(assignmentID, event) {
+  _handleChange = (assignmentID, event) => {
     this.props.onChange && this.props.onChange(assignmentID, event);
-  },
-});
+  }
+}
 
-module.exports = PaperAssignmentList;
+PaperAssignmentList.propTypes = {
+  onChange: PropTypes.func,
+  assignments: PropTypes.array,
+  papers: PropTypes.object,
+  rubric: PropTypes.object,
+  countries: PropTypes.object,
+};
+
+export { PaperAssignmentList };

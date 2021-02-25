@@ -3,14 +3,14 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
-var ActionConstants = require('constants/ActionConstants');
-var CurrentUserStore = require('stores/CurrentUserStore');
-var DelegateActions = require('actions/DelegateActions');
-var Dispatcher = require('dispatcher/Dispatcher');
-var ServerAPI = require('lib/ServerAPI');
-var {Store} = require('flux/utils');
+import ActionConstants from "constants/ActionConstants";
+import { CurrentUserStore } from "stores/CurrentUserStore";
+import { DelegateActions } from "actions/DelegateActions";
+import { Dispatcher } from "dispatcher/Dispatcher";
+import { ServerAPI } from "lib/ServerAPI";
+import { Store } from "flux/utils";
 
 var _delegates = {};
 var _delegatesFetched = false;
@@ -20,31 +20,31 @@ class DelegateStore extends Store {
   getSchoolDelegates(schoolID) {
     var delegateIDs = Object.keys(_delegates);
     if (!_delegatesFetched) {
-      ServerAPI.getDelegates(schoolID).then(value => {
+      ServerAPI.getDelegates(schoolID).then((value) => {
         DelegateActions.delegatesFetched(value);
       });
 
       return [];
     }
 
-    return delegateIDs.map(id => _delegates[id]);
+    return delegateIDs.map((id) => _delegates[id]);
   }
 
   getCommitteeDelegates(committeeID) {
     var delegateIDs = Object.keys(_delegates);
     if (!_delegatesFetched) {
-      ServerAPI.getCommitteeDelegates(committeeID).then(value => {
+      ServerAPI.getCommitteeDelegates(committeeID).then((value) => {
         DelegateActions.delegatesFetched(value);
       });
 
       return [];
     }
 
-    return delegateIDs.map(id => _delegates[id]);
+    return delegateIDs.map((id) => _delegates[id]);
   }
 
   deleteDelegate(delegateID, onError) {
-    ServerAPI.deleteDelegate(delegateID).catch(onError);
+    ServerAPI.deleteDelegate(delegateID).then(serverOK => serverOK ?? onError()).catch(onError);
     delete _delegates[delegateID];
   }
 
@@ -53,7 +53,7 @@ class DelegateStore extends Store {
   }
 
   updateDelegate(delegateID, delta, onError) {
-    const delegate = {..._delegates[delegateID], ...delta};
+    const delegate = { ..._delegates[delegateID], ...delta };
     ServerAPI.updateDelegate(delegateID, delegate).catch(onError);
     _delegates[delegateID] = delegate;
   }
@@ -98,7 +98,7 @@ class DelegateStore extends Store {
           action.schoolID,
           action.delegates,
           action.onSuccess,
-          action.onError,
+          action.onError
         );
         break;
       case ActionConstants.UPDATE_COMMITTEE_DELEGATES:
@@ -106,7 +106,7 @@ class DelegateStore extends Store {
           action.committeeID,
           action.delegates,
           action.onSuccess,
-          action.onError,
+          action.onError
         );
         break;
       case ActionConstants.LOGIN:
@@ -125,4 +125,5 @@ class DelegateStore extends Store {
   }
 }
 
-module.exports = new DelegateStore(Dispatcher);
+const delegateStore = new DelegateStore(Dispatcher);
+export { delegateStore as DelegateStore };

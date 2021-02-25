@@ -1,46 +1,39 @@
 /**
  * Copyright (c) 2011-2015 Berkeley Model United Nations. All rights reserved.
  * Use of this source code is governed by a BSD License (see LICENSE).
-*/
+ */
 
-'use strict';
+"use strict";
 
-var React = require('react');
-var ReactRouter = require('react-router');
+import React from "react";
+import PropTypes from "prop-types";
 
-var _accessSafe = require('utils/_accessSafe');
-var AssignmentActions = require('actions/AssignmentActions');
-var AssignmentStore = require('stores/AssignmentStore');
-var Button = require('components/core/Button');
-var CommitteeStore = require('stores/CommitteeStore');
-var ConferenceContext = require('components/ConferenceContext');
-var CountryStore = require('stores/CountryStore');
-var CurrentUserStore = require('stores/CurrentUserStore');
-var DelegateStore = require('stores/DelegateStore');
-var InnerView = require('components/InnerView');
-var RegistrationStore = require('stores/RegistrationStore');
-var Table = require('components/core/Table');
-var TextTemplate = require('components/core/TextTemplate');
+var { _accessSafe } = require("utils/_accessSafe");
+var { AssignmentStore } = require("stores/AssignmentStore");
+var { CommitteeStore } = require("stores/CommitteeStore");
+var { ConferenceContext } = require("components/ConferenceContext");
+var { CountryStore } = require("stores/CountryStore");
+var { CurrentUserStore } = require("stores/CurrentUserStore");
+var { DelegateStore } = require("stores/DelegateStore");
+var { InnerView } = require("components/InnerView");
+var { RegistrationStore } = require("stores/RegistrationStore");
+var { Table } = require("components/core/Table");
+var { TextTemplate } = require("components/core/TextTemplate");
 
-var AdvisorFeedbackViewText = require('text/AdvisorFeedbackViewText.md');
-var AdvisorWaitlistText = require('text/AdvisorWaitlistText.md');
+var AdvisorFeedbackViewText = require("text/AdvisorFeedbackViewText.md");
+var AdvisorWaitlistText = require("text/AdvisorWaitlistText.md");
 
-var AdvisorFeedbackView = React.createClass({
-  mixins: [ReactRouter.History],
-
-  contextTypes: {
-    conference: React.PropTypes.shape(ConferenceContext),
-  },
-
-  getInitialState: function() {
+class AdvisorFeedbackView extends React.Component {
+  constructor(props) {
+    super(props);
     var schoolID = CurrentUserStore.getCurrentUser().school.id;
     var delegates = DelegateStore.getSchoolDelegates(schoolID);
-    var conferenceID = this.context.conference.session;
+    var conferenceID = global.conference.session;
     var assignments = AssignmentStore.getSchoolAssignments(schoolID).filter(
-      assignment => !assignment.rejected,
+      (assignment) => !assignment.rejected
     );
     var feedback = this.prepareFeedback(delegates);
-    return {
+    this.state = {
       registration: RegistrationStore.getRegistration(schoolID, conferenceID),
       feedback: feedback,
       assignments: assignments,
@@ -49,11 +42,11 @@ var AdvisorFeedbackView = React.createClass({
       delegates: delegates,
       loading: false,
     };
-  },
+  }
 
-  componentDidMount: function() {
+  componentDidMount() {
     var schoolID = CurrentUserStore.getCurrentUser().school.id;
-    var conferenceID = this.context.conference.session;
+    var conferenceID = global.conference.session;
     this._registrationToken = RegistrationStore.addListener(() => {
       this.setState({
         registration: RegistrationStore.getRegistration(schoolID, conferenceID),
@@ -61,17 +54,17 @@ var AdvisorFeedbackView = React.createClass({
     });
 
     this._committeesToken = CommitteeStore.addListener(() => {
-      this.setState({committees: CommitteeStore.getCommittees()});
+      this.setState({ committees: CommitteeStore.getCommittees() });
     });
 
     this._countriesToken = CountryStore.addListener(() => {
-      this.setState({countries: CountryStore.getCountries()});
+      this.setState({ countries: CountryStore.getCountries() });
     });
 
     this._assignmentsToken = AssignmentStore.addListener(() => {
       this.setState({
         assignments: AssignmentStore.getSchoolAssignments(schoolID).filter(
-          assignment => !assignment.rejected,
+          (assignment) => !assignment.rejected
         ),
       });
     });
@@ -84,28 +77,29 @@ var AdvisorFeedbackView = React.createClass({
         feedback: feedback,
       });
     });
-  },
+  }
 
-  componentWillUnmount: function() {
+  componentWillUnmount() {
     this._registrationToken && this._registrationToken.remove();
     this._committeesToken && this._committeesToken.remove();
     this._countriesToken && this._countriesToken.remove();
     this._delegatesToken && this._delegatesToken.remove();
     this._assignmentsToken && this._assignmentsToken.remove();
-  },
+  }
 
-  render: function() {
+  render() {
     var registration = this.state.registration;
     var waitlisted =
-      _accessSafe(registration, 'is_waitlisted') == null
+      _accessSafe(registration, "is_waitlisted") == null
         ? null
         : registration.is_waitlisted;
     if (waitlisted) {
       return (
         <InnerView>
           <TextTemplate
-            conferenceSession={conference.session}
-            conferenceExternal={conference.external}>
+            conferenceSession={global.conference.session}
+            conferenceExternal={global.conference.external}
+          >
             {AdvisorWaitlistText}
           </TextTemplate>
         </InnerView>
@@ -116,7 +110,8 @@ var AdvisorFeedbackView = React.createClass({
           <TextTemplate>{AdvisorFeedbackViewText}</TextTemplate>
           <Table
             emptyMessage="You don't have any delegate feedback."
-            isEmpty={!Object.keys(this.state.feedback).length}>
+            isEmpty={!Object.keys(this.state.feedback).length}
+          >
             <thead>
               <tr>
                 <th>Committee</th>
@@ -133,20 +128,20 @@ var AdvisorFeedbackView = React.createClass({
         </InnerView>
       );
     }
-  },
+  }
 
-  renderAssignmentRows: function() {
+  renderAssignmentRows = () => {
     var assignments = this.state.assignments;
     var committees = this.state.committees;
     var countries = this.state.countries;
     var feedback = this.state.feedback;
-    return assignments.map(assignment => {
+    return assignments.map((assignment) => {
       var delegates = feedback[assignment.id];
-      if (delegates == null) {
+      if (delegates == null || committees[assignment.committee] === undefined || countries[assignment.country] === undefined) {
         return;
       }
       return (
-        <tr>
+        <tr key={assignment.id}>
           <td>{committees[assignment.committee].name}</td>
           <td>{countries[assignment.country].name}</td>
           <td>
@@ -184,7 +179,7 @@ var AdvisorFeedbackView = React.createClass({
           <td>
             <textarea
               className="text-input"
-              style={{width: '95%'}}
+              style={{ width: "95%" }}
               defaultValue={delegates.published_summary}
               disabled
             />
@@ -192,7 +187,7 @@ var AdvisorFeedbackView = React.createClass({
         </tr>
       );
     });
-  },
+  };
 
   /*
 
@@ -203,7 +198,7 @@ var AdvisorFeedbackView = React.createClass({
     country name instead of delegate name.
   */
 
-  prepareFeedback: function(delegates) {
+  prepareFeedback = (delegates) => {
     var feedback = {};
     for (var delegate of delegates) {
       if (delegate.assignment) {
@@ -211,7 +206,7 @@ var AdvisorFeedbackView = React.createClass({
       }
     }
     return feedback;
-  },
-});
+  };
+}
 
-module.exports = AdvisorFeedbackView;
+export { AdvisorFeedbackView };

@@ -1,6 +1,6 @@
 # Copyright (c) 2011-2015 Berkeley Model United Nations. All rights reserved.
 # Use of this source code is governed by a BSD License (see LICENSE).
-
+from huxley.accounts.models import User
 from huxley.api import tests
 from huxley.api.tests import auto
 from huxley.utils.test import models
@@ -22,20 +22,52 @@ class CommitteeDetailPutTestCase(tests.UpdateAPITestCase):
     params = {'name': 'DISC', 'special': True}
 
     def setUp(self):
-        self.committee = models.new_committee()
+        self.chair = models.new_user(username='chair',
+                                     password='chair',
+                                     user_type=User.TYPE_CHAIR)
+        self.committee = models.new_committee(user=self.chair)
 
     def test_anonymous_user(self):
         '''Unauthenticated users shouldn't be able to update committees.'''
         response = self.get_response(self.committee.id, params=self.params)
-        self.assertMethodNotAllowed(response, 'PUT')
+        self.assertNotAuthenticated(response)
 
-    def test_authenticated_user(self):
-        '''Authenticated users shouldn't be able to update committees.'''
-        models.new_user(username='user', password='user')
-        self.client.login(username='user', password='user')
+    def test_delegate(self):
+        '''Delegates shouldn't be able to update committees.'''
+        models.new_user(username='delegate',
+                        password='user',
+                        user_type=User.TYPE_DELEGATE)
+        self.client.login(username='delegate', password='user')
 
         response = self.get_response(self.committee.id, params=self.params)
-        self.assertMethodNotAllowed(response, 'PUT')
+        self.assertPermissionDenied(response)
+
+    def test_advisor(self):
+        '''Advisors shouldn't be able to update committees.'''
+        models.new_user(username='advisor',
+                        password='user',
+                        user_type=User.TYPE_ADVISOR)
+        self.client.login(username='advisor', password='user')
+
+        response = self.get_response(self.committee.id, params=self.params)
+        self.assertPermissionDenied(response)
+
+    def test_chair(self):
+        '''Chairs should be able to update committees.'''
+        self.client.login(username='chair', password='chair')
+
+        response = self.get_response(self.committee.id, params=self.params)
+        response.data.pop('rubric')
+        self.assertEqual(
+            response.data, {
+                'id': self.committee.id,
+                'name': 'DISC',
+                'full_name': self.committee.full_name,
+                'delegation_size': self.committee.delegation_size,
+                'special': True,
+                'notes_activated': self.committee.notes_activated,
+                'zoom_link': self.committee.zoom_link
+            })
 
     def test_superuser(self):
         '''Superusers shouldn't be able to update committees.'''
@@ -43,7 +75,17 @@ class CommitteeDetailPutTestCase(tests.UpdateAPITestCase):
         self.client.login(username='user', password='user')
 
         response = self.get_response(self.committee.id, params=self.params)
-        self.assertMethodNotAllowed(response, 'PUT')
+        response.data.pop('rubric')
+        self.assertEqual(
+            response.data, {
+                'id': self.committee.id,
+                'name': 'DISC',
+                'full_name': self.committee.full_name,
+                'delegation_size': self.committee.delegation_size,
+                'special': True,
+                'notes_activated': self.committee.notes_activated,
+                'zoom_link': self.committee.zoom_link
+            })
 
 
 class CommitteeDetailPatchTestCase(tests.PartialUpdateAPITestCase):
@@ -51,20 +93,52 @@ class CommitteeDetailPatchTestCase(tests.PartialUpdateAPITestCase):
     params = {'name': 'DISC', 'special': True}
 
     def setUp(self):
-        self.committee = models.new_committee()
+        self.chair = models.new_user(username='chair',
+                                     password='chair',
+                                     user_type=User.TYPE_CHAIR)
+        self.committee = models.new_committee(user=self.chair)
 
     def test_anonymous_user(self):
         '''Unauthenticated users shouldn't be able to update committees.'''
         response = self.get_response(self.committee.id, params=self.params)
-        self.assertMethodNotAllowed(response, 'PATCH')
+        self.assertNotAuthenticated(response)
 
-    def test_authenticated_user(self):
-        '''Authenticated users shouldn't be able to update committees.'''
-        models.new_user(username='user', password='user')
-        self.client.login(username='user', password='user')
+    def test_delegate(self):
+        '''Delegates shouldn't be able to update committees.'''
+        models.new_user(username='delegate',
+                        password='user',
+                        user_type=User.TYPE_DELEGATE)
+        self.client.login(username='delegate', password='user')
 
         response = self.get_response(self.committee.id, params=self.params)
-        self.assertMethodNotAllowed(response, 'PATCH')
+        self.assertPermissionDenied(response)
+
+    def test_advisor(self):
+        '''Advisors shouldn't be able to update committees.'''
+        models.new_user(username='advisor',
+                        password='user',
+                        user_type=User.TYPE_ADVISOR)
+        self.client.login(username='advisor', password='user')
+
+        response = self.get_response(self.committee.id, params=self.params)
+        self.assertPermissionDenied(response)
+
+    def test_chair(self):
+        '''Chairs should be able to update committees.'''
+        self.client.login(username='chair', password='chair')
+
+        response = self.get_response(self.committee.id, params=self.params)
+        response.data.pop('rubric')
+        self.assertEqual(
+            response.data, {
+                'id': self.committee.id,
+                'name': 'DISC',
+                'full_name': self.committee.full_name,
+                'delegation_size': self.committee.delegation_size,
+                'special': True,
+                'notes_activated': self.committee.notes_activated,
+                'zoom_link': self.committee.zoom_link
+            })
 
     def test_superuser(self):
         '''Superusers shouldn't be able to update committees.'''
@@ -72,7 +146,17 @@ class CommitteeDetailPatchTestCase(tests.PartialUpdateAPITestCase):
         self.client.login(username='user', password='user')
 
         response = self.get_response(self.committee.id, params=self.params)
-        self.assertMethodNotAllowed(response, 'PATCH')
+        response.data.pop('rubric')
+        self.assertEqual(
+            response.data, {
+                'id': self.committee.id,
+                'name': 'DISC',
+                'full_name': self.committee.full_name,
+                'delegation_size': self.committee.delegation_size,
+                'special': True,
+                'notes_activated': self.committee.notes_activated,
+                'zoom_link': self.committee.zoom_link
+            })
 
 
 class CommitteeDetailDeleteTestCase(auto.DestroyAPIAutoTestCase):
@@ -84,12 +168,12 @@ class CommitteeDetailDeleteTestCase(auto.DestroyAPIAutoTestCase):
 
     def test_anonymous_user(self):
         '''Anonymous users cannot delete committees.'''
-        self.do_test(expected_error=auto.EXP_DELETE_NOT_ALLOWED)
+        self.do_test(expected_error=auto.EXP_NOT_AUTHENTICATED)
 
     def test_authenticated_user(self):
         '''Authenticated users cannot delete committees.'''
         self.as_default_user().do_test(
-            expected_error=auto.EXP_DELETE_NOT_ALLOWED)
+            expected_error=auto.EXP_PERMISSION_DENIED)
 
     def test_superuser(self):
         '''Superusers cannot delete committees.'''
@@ -107,24 +191,32 @@ class CommitteeListGetTestCase(tests.ListAPITestCase):
         response = self.get_response()
         for r in response.data:
             r.pop('rubric')
-        self.assertEqual(response.data, [
-            {'delegation_size': c1.delegation_size,
-             'special': c1.special,
-             'id': c1.id,
-             'full_name': c1.full_name,
-             'name': c1.name}, {'delegation_size': c2.delegation_size,
-                                'special': c2.special,
-                                'id': c2.id,
-                                'full_name': c2.full_name,
-                                'name': c2.name}
-        ])
+        self.assertEqual(response.data, [{
+            'delegation_size': c1.delegation_size,
+            'special': c1.special,
+            'id': c1.id,
+            'full_name': c1.full_name,
+            'name': c1.name,
+            'notes_activated': c1.notes_activated,
+            'zoom_link': c1.zoom_link
+        }, {
+            'delegation_size': c2.delegation_size,
+            'special': c2.special,
+            'id': c2.id,
+            'full_name': c2.full_name,
+            'name': c2.name,
+            'notes_activated': c2.notes_activated,
+            'zoom_link': c2.zoom_link
+        }])
 
 
 class CommitteeListPostTestCase(tests.CreateAPITestCase):
     url_name = 'api:committee_list'
-    params = {'name': 'DISC',
-              'full_name': 'Disarmament and International Security',
-              'delegation_size': 100}
+    params = {
+        'name': 'DISC',
+        'full_name': 'Disarmament and International Security',
+        'delegation_size': 100
+    }
 
     def test_anonymous_user(self):
         '''Unauthenticated users shouldn't be able to create committees.'''

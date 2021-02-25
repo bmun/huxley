@@ -3,13 +3,13 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
-var ActionConstants = require('constants/ActionConstants');
-var SecretariatMemberActions = require('actions/SecretariatMemberActions');
-var Dispatcher = require('dispatcher/Dispatcher');
-var ServerAPI = require('lib/ServerAPI');
-var {Store} = require('flux/utils');
+import ActionConstants from "constants/ActionConstants";
+import { SecretariatMemberActions } from "actions/SecretariatMemberActions";
+import { Dispatcher } from "dispatcher/Dispatcher";
+import { ServerAPI } from "lib/ServerAPI";
+import { Store } from "flux/utils";
 
 var _secretariatMembers = {};
 var _secretariatMembersFetched = false;
@@ -18,12 +18,12 @@ class SecretariatMemberStore extends Store {
   getSecretariatMembers(committeeID) {
     var secretariatMemberIDs = Object.keys(_secretariatMembers);
     if (!_secretariatMembersFetched) {
-      ServerAPI.getSecretariatMembers(committeeID).then(value => {
+      ServerAPI.getSecretariatMembers(committeeID).then((value) => {
         SecretariatMemberActions.secretariatMembersFetched(value);
       });
       return [];
     }
-    return secretariatMemberIDs.map(id => _secretariatMembers[id]);
+    return secretariatMemberIDs.map((id) => _secretariatMembers[id]);
   }
 
   __onDispatch(action) {
@@ -42,4 +42,5 @@ class SecretariatMemberStore extends Store {
   }
 }
 
-module.exports = new SecretariatMemberStore(Dispatcher);
+const secretariatMemberStore = new SecretariatMemberStore(Dispatcher);
+export { secretariatMemberStore as SecretariatMemberStore };

@@ -3,40 +3,43 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
-var React = require('react');
+import React from "react";
+import PropTypes from "prop-types";
 
-var DelegateSelect = React.createClass({
-  propTypes: {
-    onChange: React.PropTypes.func,
-    delegates: React.PropTypes.array,
-    selectedDelegateID: React.PropTypes.number,
-    disabled: React.PropTypes.bool,
-  },
-
-  render: function() {
+class DelegateSelect extends React.Component {
+  render() {
     return (
       <select
         onChange={this.props.onChange}
         value={this.props.selectedDelegateID}
-        disabled={this.props.disabled}>
+        disabled={this.props.disabled}
+      >
         <option value="0">None</option>
         {this.renderDelegateOptions()}
       </select>
     );
-  },
+  }
 
-  renderDelegateOptions: function() {
-    return this.props.delegates.map(delegate => (
+  renderDelegateOptions = () => {
+    return this.props.delegates.map((delegate) => (
       <option
         key={delegate.id}
         value={delegate.id}
-        disabled={delegate.assignment}>
+        disabled={delegate.assignment}
+      >
         {delegate.name}
       </option>
     ));
-  },
-});
+  };
+}
 
-module.exports = DelegateSelect;
+DelegateSelect.propTypes = {
+  onChange: PropTypes.func,
+  delegates: PropTypes.array,
+  selectedDelegateID: PropTypes.number,
+  disabled: PropTypes.bool,
+};
+
+export { DelegateSelect };

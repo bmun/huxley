@@ -3,55 +3,52 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
-const React = require('react');
+import React from "react";
+import { Shaker } from "./Shaker";
 
-var _accessSafe = require('utils/_accessSafe');
-const AssignmentStore = require('stores/AssignmentStore');
-const Button = require('components/core/Button');
-const InnerView = require('components/InnerView');
-const LogoutButton = require('components/LogoutButton');
-const ConferenceContext = require('components/ConferenceContext');
-const CurrentUserActions = require('actions/CurrentUserActions');
-const DelegateStore = require('stores/DelegateStore');
-const PhoneInput = require('components/PhoneInput');
-const ProgramTypes = require('constants/ProgramTypes');
-const RegistrationStore = require('stores/RegistrationStore');
-const StatusLabel = require('components/core/StatusLabel');
-const Table = require('components/core/Table');
-const TextInput = require('components/core/TextInput');
-const TextTemplate = require('components/core/TextTemplate');
-const User = require('utils/User');
-const _handleChange = require('utils/_handleChange');
+var { _accessSafe } = require("utils/_accessSafe");
+const { AssignmentStore } = require("stores/AssignmentStore");
+const { Button } = require("components/core/Button");
+const { InnerView } = require("components/InnerView");
+const { CurrentUserActions } = require("actions/CurrentUserActions");
+const { CurrentUserStore } = require("stores/CurrentUserStore");
+const { DelegateStore } = require("stores/DelegateStore");
+const { PhoneInput } = require("components/PhoneInput");
+const { RegistrationStore } = require("stores/RegistrationStore");
+const { ShakerContext } = require('components/Shaker');
+const { StatusLabel } = require("components/core/StatusLabel");
+const { Table } = require("components/core/Table");
+const { TextInput } = require("components/core/TextInput");
+const { TextTemplate } = require("components/core/TextTemplate");
+const { User } = require("utils/User");
+const { _handleChange } = require("utils/_handleChange");
 
-const AdvisorProfileViewText = require('text/AdvisorProfileViewText.md');
-const AdvisorChecklistAssignmentsFinalizedText = require('text/checklists/AdvisorChecklistAssignmentsFinalizedText.md');
-const AdvisorChecklistDelegateFeeText = require('text/checklists/AdvisorChecklistDelegateFeeText.md');
-const AdvisorChecklistPositionPapersText = require('text/checklists/AdvisorChecklistPositionPapersText.md');
-const AdvisorChecklistTeamFeeText = require('text/checklists/AdvisorChecklistTeamFeeText.md');
-const AdvisorChecklistWaiversText = require('text/checklists/AdvisorChecklistWaiversText.md');
-const AdvisorWaitlistText = require('text/AdvisorWaitlistText.md');
+const AdvisorProfileViewText = require("text/AdvisorProfileViewText.md");
+const AdvisorChecklistAssignmentsFinalizedText = require("text/checklists/AdvisorChecklistAssignmentsFinalizedText.md");
+const AdvisorChecklistDelegateFeeText = require("text/checklists/AdvisorChecklistDelegateFeeText.md");
+const AdvisorChecklistPositionPapersText = require("text/checklists/AdvisorChecklistPositionPapersText.md");
+const AdvisorChecklistTeamFeeText = require("text/checklists/AdvisorChecklistTeamFeeText.md");
+const AdvisorChecklistWaiversText = require("text/checklists/AdvisorChecklistWaiversText.md");
+const AdvisorWaitlistText = require("text/AdvisorWaitlistText.md");
 
-const AdvisorProfileView = React.createClass({
+class AdvisorProfileView extends React.Component {
   // #489
   // The below code was commented out due to
   // https://github.com/reactjs/react-router/blob/master/upgrade-guides/v1.0.0.md#routehandler
   // see the last section. I am wary to remove for fear that we won't validate
   // propTypes: {
-  //   user: React.PropTypes.object.isRequired
+  //   user: PropTypes.object.isRequired
   // },
-
-  contextTypes: {
-    conference: React.PropTypes.shape(ConferenceContext),
-    shake: React.PropTypes.func,
-  },
-
-  getInitialState: function() {
-    var user = this.props.user;
+  static contextType = ShakerContext;
+  
+  constructor(props) {
+    super(props);
+    var user = CurrentUserStore.getCurrentUser();
     var school = User.getSchool(user);
-    var conferenceID = this.context.conference.session;
-    return {
+    var conferenceID = global.conference.session;
+    this.state = {
       errors: {},
       first_name: user.first_name,
       last_name: user.last_name,
@@ -71,11 +68,12 @@ const AdvisorProfileView = React.createClass({
       delegates: DelegateStore.getSchoolDelegates(school.id),
       assignments: AssignmentStore.getSchoolAssignments(school.id),
     };
-  },
+    this.user = user;
+  }
 
-  componentDidMount: function() {
-    var schoolID = User.getSchool(this.props.user).id;
-    var conferenceID = this.context.conference.session;
+  componentDidMount() {
+    var schoolID = User.getSchool(this.user).id;
+    var conferenceID = global.conference.session;
     this._registrationToken = RegistrationStore.addListener(() => {
       this.setState({
         registration: RegistrationStore.getRegistration(schoolID, conferenceID),
@@ -91,65 +89,65 @@ const AdvisorProfileView = React.createClass({
         assignments: AssignmentStore.getSchoolAssignments(schoolID),
       });
     });
-  },
+  }
 
-  componentWillUnmount: function() {
+  componentWillUnmount() {
     this._successTimout && clearTimeout(this._successTimeout);
     this._registrationToken && this._registrationToken.remove();
     this._delegatesToken && this._delegatesToken.remove();
     this._assignmentsToken && this._assignmentsToken.remove();
-  },
+  }
 
-  render: function() {
-    var conference = this.context.conference;
-    var user = this.props.user;
+  render() {
+    var conference = global.conference;
+    var user = this.user;
     var school = User.getSchool(user);
     var registration = this.state.registration;
     var delegates = this.state.delegates;
     var assignments = this.state.assignments;
     var fees_owed =
-      _accessSafe(registration, 'delegate_fees_owed') == null
+      _accessSafe(registration, "delegate_fees_owed") == null
         ? null
         : registration.delegate_fees_owed.toFixed(2);
     var fees_paid =
-      _accessSafe(registration, 'delegate_fees_paid') == null
+      _accessSafe(registration, "delegate_fees_paid") == null
         ? null
         : registration.delegate_fees_paid.toFixed(2);
     var paid_registration =
-      _accessSafe(registration, 'registration_fee_paid') == null
+      _accessSafe(registration, "registration_fee_paid") == null
         ? null
         : registration.registration_fee_paid;
     var waitlisted =
-      _accessSafe(registration, 'is_waitlisted') == null
+      _accessSafe(registration, "is_waitlisted") == null
         ? null
         : registration.is_waitlisted;
 
-    var teamFeePaid = '';
+    var teamFeePaid = "";
     if (registration && registration.registration_fee_paid) {
-      teamFeePaid = '\u2611';
+      teamFeePaid = "\u2611";
     } else {
-      teamFeePaid = '\u2610';
+      teamFeePaid = "\u2610";
     }
 
-    var allFeesPaid = '';
+    var allFeesPaid = "";
     if (
       registration &&
       registration.registration_fee_paid &&
       registration.delegate_fees_paid == registration.delegate_fees_owed
     ) {
-      allFeesPaid = '\u2611';
+      allFeesPaid = "\u2611";
     } else {
-      allFeesPaid = '\u2610';
+      allFeesPaid = "\u2610";
     }
 
-    var finalizeAssignments = '';
+    var finalizeAssignments = "";
     if (registration && registration.assignments_finalized) {
-      finalizeAssignments = '\u2611';
+      finalizeAssignments = "\u2611";
     } else {
-      finalizeAssignments = '\u2610';
+      finalizeAssignments = "\u2610";
     }
 
-    var positionPapersTurnedIn = '\u2611';
+    var positionPapersTurnedIn = "\u2611";
     if (assignments.length > 0) {
       for (var i = 0; i < assignments.length; i++) {
         if (
@@ -157,24 +155,24 @@ const AdvisorProfileView = React.createClass({
           assignments[i].paper == null ||
           assignments[i].paper.file == null
         ) {
-          positionPapersTurnedIn = '\u2610';
+          positionPapersTurnedIn = "\u2610";
           break;
         }
       }
     } else {
-      positionPapersTurnedIn = '\u2610';
+      positionPapersTurnedIn = "\u2610";
     }
 
-    var waiversTurnedIn = '\u2611';
+    var waiversTurnedIn = "\u2611";
     if (delegates.length > 0) {
       for (var i = 0; i < delegates.length; i++) {
         if (delegates[i] == null || !delegates[i].waiver_submitted) {
-          waiversTurnedIn = '\u2610';
+          waiversTurnedIn = "\u2610";
           break;
         }
       }
     } else {
-      waiversTurnedIn = '\u2610';
+      waiversTurnedIn = "\u2610";
     }
 
     var checklist = (
@@ -189,19 +187,20 @@ const AdvisorProfileView = React.createClass({
             <td>
               <b>{teamFeePaid} Team Fee Paid</b>
               <br />
-                <TextTemplate
-                  registrationFee={conference.registration_fee}
-                  conferenceTreasurer={conference.treasurer}
-                  regOpen={conference.reg_open}
-                  roundOneEnd={conference.round_one_end}
-                  roundTwoStart={conference.round_two_start}
-                  roundTwoEnd={conference.round_two_end}
-                  roundThreeStart={conference.round_three_start}
-                  roundThreeEnd={conference.round_three_end}
-                  roundFourStart={conference.round_four_start}
-                  regClose={conference.reg_close}>
-                  {AdvisorChecklistTeamFeeText}
-                </TextTemplate>
+              <TextTemplate
+                registrationFee={global.conference.registration_fee}
+                conferenceTreasurer={global.conference.treasurer}
+                regOpen={global.conference.reg_open}
+                roundOneEnd={global.conference.round_one_end}
+                roundTwoStart={global.conference.round_two_start}
+                roundTwoEnd={global.conference.round_two_end}
+                roundThreeStart={global.conference.round_three_start}
+                roundThreeEnd={global.conference.round_three_end}
+                roundFourStart={global.conference.round_four_start}
+                regClose={global.conference.reg_close}
+              >
+                {AdvisorChecklistTeamFeeText}
+              </TextTemplate>
             </td>
           </tr>
           <tr>
@@ -209,20 +208,21 @@ const AdvisorProfileView = React.createClass({
               <b>{allFeesPaid} All Fees Paid</b>
               <br />
               <TextTemplate
-                delegateFee={conference.delegate_fee}
-                conferenceTreasurer={conference.treasurer}
-                regOpen={conference.reg_open}
-                roundOneEnd={conference.round_one_end}
-                roundOneFeesDue={conference.round_one_fees_due}
-                roundTwoStart={conference.round_two_start}
-                roundTwoEnd={conference.round_two_end}
-                roundTwoFeesDue={conference.round_two_fees_due}
-                roundThreeStart={conference.round_three_start}
-                roundThreeEnd={conference.round_three_end}
-                roundFourStart={conference.round_four_start}
-                roundThreeFeesDue={conference.round_three_fees_due}
-                regClose={conference.reg_close}
-                roundFourFeesDue={conference.round_four_fees_due}>
+                delegateFee={global.conference.delegate_fee}
+                conferenceTreasurer={global.conference.treasurer}
+                regOpen={global.conference.reg_open}
+                roundOneEnd={global.conference.round_one_end}
+                roundOneFeesDue={global.conference.round_one_fees_due}
+                roundTwoStart={global.conference.round_two_start}
+                roundTwoEnd={global.conference.round_two_end}
+                roundTwoFeesDue={global.conference.round_two_fees_due}
+                roundThreeStart={global.conference.round_three_start}
+                roundThreeEnd={global.conference.round_three_end}
+                roundFourStart={global.conference.round_four_start}
+                roundThreeFeesDue={global.conference.round_three_fees_due}
+                regClose={global.conference.reg_close}
+                roundFourFeesDue={global.conference.round_four_fees_due}
+              >
                 {AdvisorChecklistDelegateFeeText}
               </TextTemplate>
             </td>
@@ -241,10 +241,15 @@ const AdvisorProfileView = React.createClass({
               <b>{positionPapersTurnedIn} Position Papers Turned In</b>
               <br />
               <TextTemplate
-                earlyPaperDeadlineMonth={conference.early_paper_deadline['month']}
-                earlyPaperDeadlineDay={conference.early_paper_deadline['day']}
-                paperDeadlineMonth={conference.paper_deadline['month']}
-                paperDeadlineDay={conference.paper_deadline['day']}>
+                earlyPaperDeadlineMonth={
+                  global.conference.early_paper_deadline["month"]
+                }
+                earlyPaperDeadlineDay={
+                  global.conference.early_paper_deadline["day"]
+                }
+                paperDeadlineMonth={global.conference.paper_deadline["month"]}
+                paperDeadlineDay={global.conference.paper_deadline["day"]}
+              >
                 {AdvisorChecklistPositionPapersText}
               </TextTemplate>
             </td>
@@ -254,10 +259,11 @@ const AdvisorProfileView = React.createClass({
               <b>{waiversTurnedIn} Waivers Turned In</b>
               <br />
               <TextTemplate
-                conferenceExternal={conference.external}
-                waiverAvail={conference.waiver_avail_date}
-                waiverDeadline={conference.waiver_deadline}
-                waiverLink={conference.waiver_link}>
+                conferenceExternal={global.conference.external}
+                waiverAvail={global.conference.waiver_avail_date}
+                waiverDeadline={global.conference.waiver_deadline}
+                waiverLink={global.conference.waiver_link}
+              >
                 {AdvisorChecklistWaiversText}
               </TextTemplate>
             </td>
@@ -275,8 +281,9 @@ const AdvisorProfileView = React.createClass({
     if (waitlisted) {
       header = (
         <TextTemplate
-          conferenceSession={conference.session}
-          conferenceExternal={conference.external}>
+          conferenceSession={global.conference.session}
+          conferenceExternal={global.conference.external}
+        >
           {AdvisorWaitlistText}
         </TextTemplate>
       );
@@ -285,8 +292,9 @@ const AdvisorProfileView = React.createClass({
         <TextTemplate
           firstName={user.first_name}
           schoolName={school.name}
-          conferenceSession={conference.session}
-          conferenceExternal={conference.external}>
+          conferenceSession={global.conference.session}
+          conferenceExternal={global.conference.external}
+        >
           {AdvisorProfileViewText}
         </TextTemplate>
       );
@@ -310,9 +318,9 @@ const AdvisorProfileView = React.createClass({
                   <TextInput
                     defaultValue={this.state.first_name}
                     value={this.state.first_name}
-                    onChange={_handleChange.bind(this, 'first_name')}
+                    onChange={_handleChange.bind(this, "first_name")}
                   />
-                  {this.renderError('first_name')}
+                  {this.renderError("first_name")}
                 </td>
               </tr>
               <tr>
@@ -321,9 +329,9 @@ const AdvisorProfileView = React.createClass({
                   <TextInput
                     defaultValue={this.state.last_name}
                     value={this.state.last_name}
-                    onChange={_handleChange.bind(this, 'last_name')}
+                    onChange={_handleChange.bind(this, "last_name")}
                   />
-                  {this.renderError('last_name')}
+                  {this.renderError("last_name")}
                 </td>
               </tr>
               <tr>
@@ -339,9 +347,9 @@ const AdvisorProfileView = React.createClass({
                   <TextInput
                     defaultValue={this.state.school_address}
                     value={this.state.school_address}
-                    onChange={_handleChange.bind(this, 'school_address')}
+                    onChange={_handleChange.bind(this, "school_address")}
                   />
-                  {this.renderError('address')}
+                  {this.renderError("address")}
                 </td>
               </tr>
               <tr>
@@ -350,9 +358,9 @@ const AdvisorProfileView = React.createClass({
                   <TextInput
                     defaultValue={this.state.school_city}
                     value={this.state.school_city}
-                    onChange={_handleChange.bind(this, 'school_city')}
+                    onChange={_handleChange.bind(this, "school_city")}
                   />
-                  {this.renderError('city')}
+                  {this.renderError("city")}
                 </td>
               </tr>
               <tr>
@@ -361,17 +369,17 @@ const AdvisorProfileView = React.createClass({
                   <TextInput
                     defaultValue={this.state.school_zip_code}
                     value={this.state.school_zip_code}
-                    onChange={_handleChange.bind(this, 'school_zip_code')}
+                    onChange={_handleChange.bind(this, "school_zip_code")}
                   />
-                  {this.renderError('zip_code')}
+                  {this.renderError("zip_code")}
                 </td>
               </tr>
               <tr>
                 <td>Waitlisted</td>
                 <td>
-                  {_accessSafe(registration, 'is_waitlisted') == true
-                    ? 'Yes'
-                    : 'No'}
+                  {_accessSafe(registration, "is_waitlisted") == true
+                    ? "Yes"
+                    : "No"}
                 </td>
               </tr>
               <tr>
@@ -379,7 +387,7 @@ const AdvisorProfileView = React.createClass({
               </tr>
               <tr>
                 <td>Program Type</td>
-                <td>{school.program_type === 1 ? 'Club' : 'Class'}</td>
+                <td>{school.program_type === 1 ? "Club" : "Class"}</td>
               </tr>
               <tr>
                 <td>Times Attended</td>
@@ -387,36 +395,36 @@ const AdvisorProfileView = React.createClass({
               </tr>
               <tr>
                 <td>Number of Beginner Delegates</td>
-                <td>{_accessSafe(registration, 'num_beginner_delegates')}</td>
+                <td>{_accessSafe(registration, "num_beginner_delegates")}</td>
               </tr>
               <tr>
                 <td>Number of Intermediate Delegates</td>
                 <td>
-                  {_accessSafe(registration, 'num_intermediate_delegates')}
+                  {_accessSafe(registration, "num_intermediate_delegates")}
                 </td>
               </tr>
               <tr>
                 <td>Number of Advanced Delegates</td>
-                <td>{_accessSafe(registration, 'num_advanced_delegates')}</td>
+                <td>{_accessSafe(registration, "num_advanced_delegates")}</td>
               </tr>
               <tr>
                 <td>Number of Spanish Speaking Delegates</td>
                 <td>
-                  {_accessSafe(registration, 'num_spanish_speaking_delegates')}
+                  {_accessSafe(registration, "num_spanish_speaking_delegates")}
                 </td>
               </tr>
               <tr>
                 <td>Number of Mandarin Speaking Delegates</td>
                 <td>
-                  {_accessSafe(registration, 'num_chinese_speaking_delegates')}
+                  {_accessSafe(registration, "num_chinese_speaking_delegates")}
                 </td>
               </tr>
               <tr>
                 <td>All Waivers Completed?</td>
                 <td>
-                  {_accessSafe(registration, 'waivers_completed')
-                    ? 'Yes'
-                    : 'No'}
+                  {_accessSafe(registration, "waivers_completed")
+                    ? "Yes"
+                    : "No"}
                 </td>
               </tr>
               <tr>
@@ -428,9 +436,9 @@ const AdvisorProfileView = React.createClass({
                   <TextInput
                     defaultValue={this.state.primary_name}
                     value={this.state.primary_name}
-                    onChange={_handleChange.bind(this, 'primary_name')}
+                    onChange={_handleChange.bind(this, "primary_name")}
                   />
-                  {this.renderError('primary_name')}
+                  {this.renderError("primary_name")}
                 </td>
               </tr>
               <tr>
@@ -439,9 +447,9 @@ const AdvisorProfileView = React.createClass({
                   <TextInput
                     defaultValue={this.state.primary_email}
                     value={this.state.primary_email}
-                    onChange={_handleChange.bind(this, 'primary_email')}
+                    onChange={_handleChange.bind(this, "primary_email")}
                   />
-                  {this.renderError('primary_email')}
+                  {this.renderError("primary_email")}
                 </td>
               </tr>
               <tr>
@@ -450,9 +458,9 @@ const AdvisorProfileView = React.createClass({
                   <PhoneInput
                     value={this.state.primary_phone}
                     isInternational={school.international}
-                    onChange={_handleChange.bind(this, 'primary_phone')}
+                    onChange={_handleChange.bind(this, "primary_phone")}
                   />
-                  {this.renderError('primary_phone')}
+                  {this.renderError("primary_phone")}
                 </td>
               </tr>
               <tr>
@@ -464,9 +472,9 @@ const AdvisorProfileView = React.createClass({
                   <TextInput
                     defaultValue={this.state.secondary_name}
                     value={this.state.secondary_name}
-                    onChange={_handleChange.bind(this, 'secondary_name')}
+                    onChange={_handleChange.bind(this, "secondary_name")}
                   />
-                  {this.renderError('secondary_name')}
+                  {this.renderError("secondary_name")}
                 </td>
               </tr>
               <tr>
@@ -475,9 +483,9 @@ const AdvisorProfileView = React.createClass({
                   <TextInput
                     defaultValue={this.state.secondary_email}
                     value={this.state.secondary_email}
-                    onChange={_handleChange.bind(this, 'secondary_email')}
+                    onChange={_handleChange.bind(this, "secondary_email")}
                   />
-                  {this.renderError('secondary_email')}
+                  {this.renderError("secondary_email")}
                 </td>
               </tr>
               <tr>
@@ -486,9 +494,9 @@ const AdvisorProfileView = React.createClass({
                   <PhoneInput
                     value={this.state.secondary_phone}
                     isInternational={school.international}
-                    onChange={_handleChange.bind(this, 'secondary_phone')}
+                    onChange={_handleChange.bind(this, "secondary_phone")}
                   />
-                  {this.renderError('secondary_phone')}
+                  {this.renderError("secondary_phone")}
                 </td>
               </tr>
               <tr>
@@ -500,15 +508,15 @@ const AdvisorProfileView = React.createClass({
               </tr>
               <tr>
                 <td>Delegate Fees Owed</td>
-                <td>{'$' + fees_owed}</td>
+                <td>{"$" + fees_owed}</td>
               </tr>
               <tr>
                 <td>Delegate Fees Paid</td>
-                <td>{'$' + fees_paid}</td>
+                <td>{"$" + fees_paid}</td>
               </tr>
               <tr>
                 <td>Remaining Balance</td>
-                <td>{'$' + (fees_owed - fees_paid)}</td>
+                <td>{"$" + (fees_owed - fees_paid)}</td>
               </tr>
             </tbody>
           </Table>
@@ -516,7 +524,8 @@ const AdvisorProfileView = React.createClass({
             color="green"
             loading={this.state.loading}
             success={this.state.success}
-            type="submit">
+            type="submit"
+          >
             Save
           </Button>
           <span className="help-text">
@@ -525,9 +534,9 @@ const AdvisorProfileView = React.createClass({
         </form>
       </InnerView>
     );
-  },
+  }
 
-  renderError: function(field) {
+  renderError = (field) => {
     if (this.state.errors[field]) {
       return (
         <StatusLabel status="error">{this.state.errors[field]}</StatusLabel>
@@ -543,12 +552,12 @@ const AdvisorProfileView = React.createClass({
     }
 
     return null;
-  },
+  };
 
-  _handleSubmit: function(event) {
+  _handleSubmit = (event) => {
     this._successTimout && clearTimeout(this._successTimeout);
-    this.setState({loading: true});
-    var user = this.props.user;
+    this.setState({ loading: true });
+    var user = this.user;
     CurrentUserActions.updateUser(
       user.id,
       {
@@ -567,12 +576,12 @@ const AdvisorProfileView = React.createClass({
         },
       },
       this._handleSuccess,
-      this._handleError,
+      this._handleError
     );
     event.preventDefault();
-  },
+  };
 
-  _handleSuccess: function(response) {
+  _handleSuccess = (response) => {
     this.setState({
       errors: {},
       loading: false,
@@ -580,12 +589,12 @@ const AdvisorProfileView = React.createClass({
     });
 
     this._successTimeout = setTimeout(
-      () => this.setState({success: false}),
-      2000,
+      () => this.setState({ success: false }),
+      2000
     );
-  },
+  };
 
-  _handleError: function(response) {
+  _handleError = (response) => {
     if (!response) {
       return;
     }
@@ -596,9 +605,10 @@ const AdvisorProfileView = React.createClass({
         loading: false,
       },
       () => {
-        this.context.shake && this.context.shake();
-      },
+        this.context && this.context();
+      }
     );
-  },
-});
-module.exports = AdvisorProfileView;
+  };
+}
+
+export { AdvisorProfileView };

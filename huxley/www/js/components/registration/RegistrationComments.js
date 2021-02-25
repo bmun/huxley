@@ -3,21 +3,16 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
-var React = require('react');
+import React from "react";
+import PropTypes from "prop-types";
 
-const RegistrationComments = React.createClass({
-  propTypes: {
-    handler: React.PropTypes.func,
-    value: React.PropTypes.string,
-  },
-
-  shouldComponentUpdate: function(nextProps, nextState) {
+class RegistrationComments extends React.Component {
+  shouldComponentUpdate(nextProps, nextState) {
     return this.props.value !== nextProps.value;
-  },
-
-  render: function() {
+  }
+  render() {
     return (
       <div id="comments">
         <h3>Comments</h3>
@@ -35,7 +30,12 @@ const RegistrationComments = React.createClass({
         />
       </div>
     );
-  },
-});
+  }
+}
 
-module.exports = RegistrationComments;
+RegistrationComments.propTypes = {
+  handler: PropTypes.func,
+  value: PropTypes.string,
+};
+
+export { RegistrationComments };

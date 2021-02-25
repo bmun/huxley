@@ -3,35 +3,34 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
-var React = require('react');
+import React from "react";
+import PropTypes from "prop-types";
 
-var PhoneInput = require('components/PhoneInput');
-var StatusLabel = require('components/core/StatusLabel');
+var { PhoneInput } = require("components/PhoneInput");
+var { StatusLabel } = require("components/core/StatusLabel");
 
-const RegistrationPhoneInput = React.createClass({
-  propTypes: {
-    errors: React.PropTypes.arrayOf(React.PropTypes.string),
-    onChange: React.PropTypes.func,
-    placeholder: React.PropTypes.string,
-    value: React.PropTypes.string,
-  },
-
+class RegistrationPhoneInput extends React.Component {
   render() {
-    const {errors, ...inputProps} = this.props;
+    const { errors, ...inputProps } = this.props;
     return (
       <div className="reg-field">
         <PhoneInput {...inputProps} />
         {errors &&
-          errors.map(error =>
-            <StatusLabel status="error">
-              {error}
-            </StatusLabel>,
-          )}
+          errors.map((error) => (
+            <StatusLabel status="error">{error}</StatusLabel>
+          ))}
       </div>
     );
-  },
-});
+  }
+}
 
-module.exports = RegistrationPhoneInput;
+RegistrationPhoneInput.propTypes = {
+  errors: PropTypes.arrayOf(PropTypes.string),
+  onChange: PropTypes.func,
+  placeholder: PropTypes.string,
+  value: PropTypes.string,
+};
+
+export { RegistrationPhoneInput };

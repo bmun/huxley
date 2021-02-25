@@ -3,29 +3,29 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  +*/
 
-'use strict';
+"use strict";
 
-var React = require('react');
-var ReactRouter = require('react-router');
+import React from "react";
+import { history } from "utils/history";
 
-var CommitteeFeedbackStore = require('stores/CommitteeFeedbackStore');
-var CurrentUserStore = require('stores/CurrentUserStore');
-var InnerView = require('components/InnerView');
-var TextTemplate = require('components/core/TextTemplate');
-var User = require('utils/User');
+const { CommitteeFeedbackStore } = require("stores/CommitteeFeedbackStore");
+const { CurrentUserStore } = require("stores/CurrentUserStore");
+const { InnerView } = require("components/InnerView");
+const { Table } = require("components/core/Table");
+const { TextTemplate } = require("components/core/TextTemplate");
+const { User } = require("utils/User");
 
-require('css/Table.less');
-var ChairCommitteeFeedbackViewText = require('text/ChairCommitteeFeedbackViewText.md');
+require("css/Table.less");
+const ChairCommitteeFeedbackViewText = require("text/ChairCommitteeFeedbackViewText.md");
 
-var ChairCommitteeFeedbackView = React.createClass({
-  mixins: [ReactRouter.History],
-
-  getInitialState() {
+class ChairCommitteeFeedbackView extends React.Component {
+  constructor(props) {
+    super(props);
     var committeeID = CurrentUserStore.getCurrentUser().committee;
-    return {
+    this.state = {
       feedback: CommitteeFeedbackStore.getCommitteeFeedback(committeeID),
     };
-  },
+  }
 
   componentDidMount() {
     this._committeeFeedbackToken = CommitteeFeedbackStore.addListener(() => {
@@ -34,28 +34,29 @@ var ChairCommitteeFeedbackView = React.createClass({
         feedback: CommitteeFeedbackStore.getCommitteeFeedback(committeeID),
       });
     });
-  },
+  }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     var user = CurrentUserStore.getCurrentUser();
     if (!User.isChair(user)) {
-      this.history.pushState(null, '/');
+      history.redirect("/");
     }
-  },
+  }
 
   componentsWillUnmount() {
     this._committeeFeedbackToken && this._committeeFeedbackToken.remove();
-  },
+  }
 
   render() {
     return (
       <InnerView>
         <TextTemplate>{ChairCommitteeFeedbackViewText}</TextTemplate>
         <div className="table-container">
-          <table
-            style={{margin: '10px auto 0px auto', tableLayout: 'auto'}}
+          <Table
+            style={{ margin: "10px auto 0px auto", tableLayout: "auto" }}
             emptyMessage="You have no feedback."
-            isEmpty={!this.state.feedback.length}>
+            isEmpty={!this.state.feedback.length}
+          >
             <thead>
               <tr>
                 <th>Overall Committee Feedback</th>
@@ -63,24 +64,24 @@ var ChairCommitteeFeedbackView = React.createClass({
               </tr>
             </thead>
             <tbody>{this.renderFeedbackRows(this.state.feedback)}</tbody>
-          </table>
+          </Table>
         </div>
         {this.mapFeedbackToTable()}
       </InnerView>
     );
-  },
+  }
 
-  mapFeedbackToTable() {
+  mapFeedbackToTable = () => {
     var data = {};
     for (var singleFeedback of this.state.feedback) {
       for (var i = 1; i <= 10; i++) {
-        var name_key = 'chair_' + i + '_name';
+        var name_key = "chair_" + i + "_name";
         if (singleFeedback[name_key] && singleFeedback[name_key].length) {
           if (!(singleFeedback[name_key] in data)) {
             data[singleFeedback[name_key]] = [];
           }
-          var comment_key = 'chair_' + i + '_comment';
-          var rating_key = 'chair_' + i + '_rating';
+          var comment_key = "chair_" + i + "_comment";
+          var rating_key = "chair_" + i + "_rating";
           if (singleFeedback[comment_key] || singleFeedback[rating_key]) {
             var d = {
               comment: singleFeedback[comment_key],
@@ -103,10 +104,11 @@ var ChairCommitteeFeedbackView = React.createClass({
       if (data[entry].length) {
         tables.push(
           <div className="table-container">
-            <table
-              style={{margin: '10px auto 0px auto', tableLayout: 'auto'}}
+            <Table
+              style={{ margin: "10px auto 0px auto", tableLayout: "auto" }}
               emptyMessage="You have no feedback."
-              isEmpty={!this.state.feedback.length}>
+              isEmpty={!this.state.feedback.length}
+            >
               <thead>
                 <tr>
                   <th>{entry}</th>
@@ -114,26 +116,26 @@ var ChairCommitteeFeedbackView = React.createClass({
                 </tr>
               </thead>
               <tbody>{this.renderFeedbackRows(data[entry])}</tbody>
-            </table>
-          </div>,
+            </Table>
+          </div>
         );
       }
     }
     return tables;
-  },
+  };
 
-  renderFeedbackRows(obj) {
-    return obj.map(function(singleFeedback) {
+  renderFeedbackRows = (obj) => {
+    return obj.map(function (singleFeedback) {
       return (
-        <tr>
-          <td width={'90%'} nowrap>
-            {singleFeedback.comment || 'No Comment'}
+        <tr key={singleFeedback.id}>
+          <td width={"90%"} style={{whiteSpace:"nowrap"}}>
+            {singleFeedback.comment || "No Comment"}
           </td>
-          <td>{singleFeedback.rating || 'No Rating'}</td>
+          <td>{singleFeedback.rating || "No Rating"}</td>
         </tr>
       );
     });
-  },
-});
+  };
+}
 
-module.exports = ChairCommitteeFeedbackView;
+export { ChairCommitteeFeedbackView };
