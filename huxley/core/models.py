@@ -37,18 +37,20 @@ class Conference(models.Model):
     open_reg = models.BooleanField(default=True)
     waitlist_reg = models.BooleanField(default=False)
     position_papers_accepted = models.BooleanField(default=False)
+    notes_enabled = models.BooleanField(default=False)
     early_paper_deadline = models.DateField()
     paper_deadline = models.DateField()
     waiver_avail_date = models.DateField()
     waiver_deadline = models.DateField()
     waiver_link = models.CharField(max_length=300)
+    opi_link = models.URLField(default="https://zoom.us")
     external = models.CharField(max_length=128)
     treasurer = models.CharField(max_length=128)
     registration_fee = models.DecimalField(
         max_digits=6, decimal_places=2, default=Decimal('50.00'))
     delegate_fee = models.DecimalField(
         max_digits=6, decimal_places=2, default=Decimal('50.00'))
-
+        
     @classmethod
     def get_current(cls):
         return Conference.objects.get(session=settings.SESSION)
@@ -120,6 +122,8 @@ class Committee(models.Model):
     delegation_size = models.PositiveSmallIntegerField(default=2)
     special = models.BooleanField(default=False)
     rubric = models.OneToOneField(Rubric, on_delete=models.SET_NULL, blank=True, null=True)
+    zoom_link = models.URLField(default="https://zoom.us")
+    notes_activated = models.BooleanField(default=False)
 
     @classmethod
     def create_rubric(cls, **kwargs):
@@ -685,3 +689,40 @@ class SecretariatMember(models.Model):
     def __str__(self):
         return self.name
 
+
+class Note(models.Model):
+    """Note objects allow delegates to send and receive notes over Huxley."""
+
+    #TODO add an export of notes so can reference note content later should there be any legal issues.
+
+    #is_chair - 0: Between two Assignments, 1: Sender is Chair, 2: Recipient is Chair
+    is_chair = models.SmallIntegerField(default= 0, choices = ((0, 0), (1, 1), (2, 2)))
+    sender = models.ForeignKey(Assignment, on_delete=models.CASCADE, null=True, blank=True, related_name = '+') 
+    recipient = models.ForeignKey(Assignment, on_delete=models.CASCADE, null=True, blank=True, related_name = '+') 
+    msg = models.CharField(max_length = 1000)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        committee, sender, recipient = "", "", ""
+        if self.is_chair == 0:
+            committee = str(self.sender.committee)
+            sender = str(self.sender.country)
+            recipient = str(self.recipient.country)
+
+        elif self.is_chair == 1:
+            committee = str(self.recipient.committee)
+            sender = 'Chair'
+            recipient = str(self.recipient.country)
+
+        else:
+            committee = str(self.sender.committee)
+            sender = str(self.sender.country)
+            recipient = 'Chair'
+            
+
+        return committee + ": " + sender + ' -> ' + recipient + ' - ' + str(self.id)
+
+    class Meta:
+        db_table = u'note'
+        ordering = ['timestamp']
+    

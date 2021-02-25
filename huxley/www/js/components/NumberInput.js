@@ -3,19 +3,21 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+//@flow
 
-var React = require('react');
-var TextInput = require('components/core/TextInput');
+"use strict";
 
-var NumberInput = React.createClass({
-  propTypes: {
-    onChange: React.PropTypes.func,
-    value: React.PropTypes.string,
-    placeholder: React.PropTypes.string,
-  },
+import React from "react";
+var { TextInput } = require("components/core/TextInput");
 
-  render: function() {
+type NumberInputProps = {
+  defaultValue?: string,
+  onChange: (any) => void,
+  value?: string,
+  placeholder?: string,
+}
+class NumberInput extends React.Component<NumberInputProps> {
+  render(): React$Element<any> {
     return (
       <TextInput
         {...this.props}
@@ -23,11 +25,11 @@ var NumberInput = React.createClass({
         onChange={this._handleChange}
       />
     );
-  },
+  }
 
-  _handleChange: function(value) {
-    this.props.onChange && this.props.onChange(value.replace(/[^\d]/, ''));
-  },
-});
+  _handleChange: (any) => void = (value) => {
+    this.props.onChange && this.props.onChange(value.replace(/[^\d]/, ""));
+  };
+}
 
-module.exports = NumberInput;
+export { NumberInput };

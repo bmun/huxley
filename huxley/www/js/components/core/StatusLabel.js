@@ -3,31 +3,32 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
-var React = require('react');
+import React from "react";
+import cx from "classnames";
+import PropTypes from "prop-types";
 
-var cx = require('classnames');
+require("css/StatusLabel.less");
 
-require('css/StatusLabel.less');
-
-var StatusLabel = React.createClass({
-  propTypes: {
-    status: React.PropTypes.oneOf(['success', 'error']).isRequired,
-  },
-
+class StatusLabel extends React.Component {
   render() {
     return (
       <label
         className={cx({
-          'status-label': true,
-          'label-success': this.props.status === 'success',
-          'label-error': this.props.status === 'error',
-        })}>
+          "status-label": true,
+          "label-success": this.props.status === "success",
+          "label-error": this.props.status === "error",
+        })}
+      >
         {this.props.children}
       </label>
     );
-  },
-});
+  }
+}
 
-module.exports = StatusLabel;
+StatusLabel.propTypes = {
+  status: PropTypes.oneOf(["success", "error"]).isRequired,
+};
+
+export { StatusLabel };

@@ -3,10 +3,10 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
-var ActionConstants = require('constants/ActionConstants');
-var Dispatcher = require('dispatcher/Dispatcher');
+import ActionConstants from "constants/ActionConstants";
+import { Dispatcher } from "dispatcher/Dispatcher";
 
 var CommitteeActions = {
   committeesFetched(committees) {
@@ -15,6 +15,15 @@ var CommitteeActions = {
       committees: committees,
     });
   },
+
+  updateCommittee(committeeID, delta, onError) {
+    Dispatcher.dispatch({
+      actionType: ActionConstants.UPDATE_COMMITTEE,
+      committeeID: committeeID,
+      delta: delta,
+      onError: onError,
+    });
+  },
 };
 
-module.exports = CommitteeActions;
+export { CommitteeActions };

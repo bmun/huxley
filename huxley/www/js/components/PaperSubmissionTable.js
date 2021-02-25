@@ -3,25 +3,15 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
-var Button = require('components/core/Button');
-var NumberInput = require('components/NumberInput');
-var inflateGrades = require('utils/inflateGrades');
+var { inflateGrades } = require("utils/inflateGrades");
 
-var cx = require('classnames');
-var React = require('react');
+import cx from "classnames";
+import React from "react";
+import PropTypes from "prop-types";
 
-var PaperSubmissionTable = React.createClass({
-  propTypes: {
-    onUpload: React.PropTypes.func,
-    onSubmit: React.PropTypes.func,
-    rubric: React.PropTypes.object,
-    paper: React.PropTypes.object,
-    files: React.PropTypes.object,
-    graded_files: React.PropTypes.object,
-  },
-
+class PaperSubmissionTable extends React.Component {
   render() {
     var rubric = this.props.rubric;
     var paper = this.props.paper;
@@ -37,18 +27,19 @@ var PaperSubmissionTable = React.createClass({
       var gradedHrefData = graded_files[paper.id]
         ? url.createObjectURL(graded_files[paper.id])
         : null;
-      var fileNames = paper.file.split('/');
+      var fileNames = paper.file.split("/");
       var fileName = fileNames[fileNames.length - 1];
       var gradedButton = paper.graded ? (
         <a
           className={cx({
             button: true,
-            'button-large': true,
-            'button-blue': true,
-            'rounded-small': true,
+            "button-large": true,
+            "button-blue": true,
+            "rounded-small": true,
           })}
           href={gradedHrefData}
-          download={'graded_' + fileName}>
+          download={"graded_" + fileName}
+        >
           Download Graded Paper
         </a>
       ) : null;
@@ -57,12 +48,13 @@ var PaperSubmissionTable = React.createClass({
           <a
             className={cx({
               button: true,
-              'button-large': true,
-              'button-green': true,
-              'rounded-small': true,
+              "button-large": true,
+              "button-green": true,
+              "rounded-small": true,
             })}
             href={hrefData}
-            download={fileName}>
+            download={fileName}
+          >
             Download Paper
           </a>
           {gradedButton}
@@ -133,9 +125,9 @@ var PaperSubmissionTable = React.createClass({
         {buttons}
       </div>
     );
-  },
+  }
 
-  _renderTopicTwo: function(rubric, paper) {
+  _renderTopicTwo = (rubric, paper) => {
     var paper = this.props.paper;
     var rubric = this.props.rubric;
     var score2 = this.calculateTotalScore(paper, rubric, true);
@@ -152,9 +144,9 @@ var PaperSubmissionTable = React.createClass({
         </tr>
       </tbody>
     );
-  },
+  }
 
-  calculateTotalScore: function(paper, rubric, topic_2 = false) {
+  calculateTotalScore(paper, rubric, topic_2 = false) {
     var totalScore = -1;
     if (topic_2) {
       totalScore =
@@ -172,9 +164,9 @@ var PaperSubmissionTable = React.createClass({
         inflateGrades(paper.score_5, rubric.grade_value_5);
     }
     return totalScore;
-  },
+  }
 
-  calculateMaxScore: function(rubric, topic_2 = false) {
+  calculateMaxScore(rubric, topic_2 = false) {
     var totalMaxScore = -1;
     if (topic_2) {
       totalMaxScore =
@@ -192,49 +184,58 @@ var PaperSubmissionTable = React.createClass({
         rubric.grade_value_5;
     }
     return totalMaxScore;
-  },
+  }
 
-  calculateCategory: function(value, weight) {
+  calculateCategory = (value, weight) => {
     var interval = weight / 5;
     if (value >= interval * 5) {
-      return '5 - Exceeds Expectations';
+      return "5 - Exceeds Expectations";
     } else if (value >= interval * 4) {
-      return '4 - Exceeds Expectations';
+      return "4 - Exceeds Expectations";
     } else if (value >= interval * 3) {
-      return '3 - Meets Expectations';
+      return "3 - Meets Expectations";
     } else if (value >= interval * 2) {
-      return '2 - Attempts to Meet Expectations';
+      return "2 - Attempts to Meet Expectations";
     } else if (value >= interval) {
-      return '1 - Needs Improvement';
+      return "1 - Needs Improvement";
     } else {
-      ('0 - Needs Improvement');
+      ("0 - Needs Improvement");
     }
-  },
+  }
 
-  calculateScore: function(category, weight) {
+  calculateScore = (category, weight) => {
     var interval = weight / 5;
-    if (category == '5 - Exceeds Expectations') {
+    if (category == "5 - Exceeds Expectations") {
       return interval * 5;
-    } else if (category == '4 - Exceeds Expectations') {
+    } else if (category == "4 - Exceeds Expectations") {
       return interval * 4;
-    } else if (category == '3 - Meets Expectations') {
+    } else if (category == "3 - Meets Expectations") {
       return interval * 3;
-    } else if (category == '2 - Attempts to Meet Expectations') {
+    } else if (category == "2 - Attempts to Meet Expectations") {
       return interval * 2;
-    } else if (category == '1 - Needs Improvement') {
+    } else if (category == "1 - Needs Improvement") {
       return interval;
     } else {
       return 0;
     }
-  },
+  }
 
-  _handleUpload: function(event) {
+  _handleUpload = (event) => {
     this.props.onUpload && this.props.onUpload(this.props.paper.id, event);
-  },
+  };
 
-  _handleSubmit: function(event) {
+  _handleSubmit = (event) => {
     this.props.onSubmit && this.props.onSubmit(this.props.paper.id, event);
-  },
-});
+  };
+}
 
-module.exports = PaperSubmissionTable;
+PaperSubmissionTable.propTypes = {
+  onUpload: PropTypes.func,
+  onSubmit: PropTypes.func,
+  rubric: PropTypes.object,
+  paper: PropTypes.object,
+  files: PropTypes.object,
+  graded_files: PropTypes.object,
+};
+
+export { PaperSubmissionTable };

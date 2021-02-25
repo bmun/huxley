@@ -3,27 +3,21 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
-var React = require('react');
+import React from "react";
+import PropTypes from "prop-types";
 
-var NumberInput = require('components/NumberInput');
-var _accessSafe = require('utils/_accessSafe');
+var { NumberInput } = require("components/NumberInput");
+var { _accessSafe } = require("utils/_accessSafe");
 
-const RegistrationSpecialCommitteePreferences = React.createClass({
-  propTypes: {
-    handlers: React.PropTypes.object,
-    errors: React.PropTypes.object,
-    specialCommitteePrefValues: React.PropTypes.object,
-    renderCommittees: React.PropTypes.func,
-  },
-
-  render: function() {
+class RegistrationSpecialCommitteePreferences extends React.Component {
+  render() {
     var accessHandlers = _accessSafe.bind(this, this.props.handlers);
     var accessErrors = _accessSafe.bind(this, this.props.errors);
     var accessValues = _accessSafe.bind(
       this,
-      this.props.specialCommitteePrefValues,
+      this.props.specialCommitteePrefValues
     );
     return (
       <div id="special_committee_preferences">
@@ -32,27 +26,35 @@ const RegistrationSpecialCommitteePreferences = React.createClass({
           Would your delegation be interested in being represented in the
           following small/specialized committees? Positions are limited and we
           may not be able to accommodate all preferences. You can find a
-          reference to our committees{' '}
+          reference to our committees{" "}
           <a href="http://www.bmun.org/committees" target="_blank">
             here
-          </a>.
+          </a>
+          .
         </p>
         <ul>{this.props.renderCommittees()}</ul>
         <NumberInput
           placeholder="Number of Spanish Speaking Delegates"
-          onChange={accessHandlers('num_spanish_speaking_delegates')}
-          value={accessValues('num_spanish_speaking_delegates')}
+          onChange={accessHandlers("num_spanish_speaking_delegates")}
+          value={accessValues("num_spanish_speaking_delegates")}
         />
-        {accessErrors('num_spanish_speaking_delegates')}
+        {accessErrors("num_spanish_speaking_delegates")}
         <NumberInput
           placeholder="Number of Mandarin Speaking Delegates"
-          onChange={accessHandlers('num_chinese_speaking_delegates')}
-          value={accessValues('num_chinese_speaking_delegates')}
+          onChange={accessHandlers("num_chinese_speaking_delegates")}
+          value={accessValues("num_chinese_speaking_delegates")}
         />
-        {accessErrors('num_chinese_speaking_delegates')}
+        {accessErrors("num_chinese_speaking_delegates")}
       </div>
     );
-  },
-});
+  }
+}
 
-module.exports = RegistrationSpecialCommitteePreferences;
+RegistrationSpecialCommitteePreferences.propTypes = {
+  handlers: PropTypes.object,
+  errors: PropTypes.object,
+  specialCommitteePrefValues: PropTypes.object,
+  renderCommittees: PropTypes.func,
+};
+
+export { RegistrationSpecialCommitteePreferences };

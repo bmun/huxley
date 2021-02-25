@@ -3,50 +3,47 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
-var React = require('react');
-var ReactRouter = require('react-router');
+import React from "react";
+import { history } from "utils/history";
 
-var Button = require('components/core/Button');
-var NavLink = require('components/NavLink');
-var OuterView = require('components/OuterView');
-var ServerAPI = require('lib/ServerAPI');
-var StatusLabel = require('components/core/StatusLabel');
-var TextInput = require('components/core/TextInput');
-var TextTemplate = require('components/core/TextTemplate');
+const { Button } = require("components/core/Button");
+const { NavLink } = require("components/NavLink");
+const { OuterView } = require("components/OuterView");
+const { ServerAPI } = require("lib/ServerAPI");
+const { ShakerContext } = require('components/Shaker');
+const { StatusLabel } = require("components/core/StatusLabel");
+const { TextInput } = require("components/core/TextInput");
+const { TextTemplate } = require("components/core/TextTemplate");
 
-require('css/LoginForm.less');
-var ForgotPasswordViewText = require('text/ForgotPasswordViewText.md');
+require("css/LoginForm.less");
+var ForgotPasswordViewText = require("text/ForgotPasswordViewText.md");
 
-var ForgotPasswordView = React.createClass({
-  mixins: [ReactRouter.History],
-
-  contextTypes: {
-    shake: React.PropTypes.func,
-  },
-
-  getInitialState: function() {
-    return {
-      username: '',
+class ForgotPasswordView extends React.Component {
+  static contextType = ShakerContext;
+  
+  constructor(props) {
+    super(props);
+    this.state = {
+      username: "",
       error: false,
       loading: false,
     };
-  },
+  }
 
-  render: function() {
+  render() {
     return (
       <OuterView>
-        <TextTemplate>
-          {ForgotPasswordViewText}
-        </TextTemplate>
+        <TextTemplate>{ForgotPasswordViewText}</TextTemplate>
         <NavLink direction="left" href="/login">
           Back to Login
         </NavLink>
         <hr />
         <form
           className="login-form password-reset"
-          onSubmit={this._handleSubmit}>
+          onSubmit={this._handleSubmit}
+        >
           <div className="login-fields">
             <TextInput
               placeholder="Username or Email"
@@ -62,9 +59,9 @@ var ForgotPasswordView = React.createClass({
         </form>
       </OuterView>
     );
-  },
+  }
 
-  renderError: function() {
+  renderError = () => {
     if (this.state.error) {
       return (
         <StatusLabel status="error">
@@ -72,26 +69,26 @@ var ForgotPasswordView = React.createClass({
         </StatusLabel>
       );
     }
-  },
+  };
 
-  _handleUsernameChange: function(username) {
-    this.setState({username});
-  },
+  _handleUsernameChange = (username) => {
+    this.setState({ username });
+  };
 
-  _handleSubmit: function(event) {
-    this.setState({loading: true});
+  _handleSubmit = (event) => {
+    this.setState({ loading: true });
     ServerAPI.resetPassword(this.state.username).then(
       this._handleSuccess,
-      this._handleError,
+      this._handleError
     );
     event.preventDefault();
-  },
+  };
 
-  _handleSuccess: function(response) {
-    this.history.pushState(null, '/password/reset');
-  },
+  _handleSuccess = (response) => {
+    history.redirect("/password/reset");
+  };
 
-  _handleError: function(response) {
+  _handleError = (response) => {
     if (!response.detail) {
       return;
     }
@@ -102,10 +99,10 @@ var ForgotPasswordView = React.createClass({
         loading: false,
       },
       () => {
-        this.context.shake && this.context.shake();
-      },
+        this.context && this.context();
+      }
     );
-  },
-});
+  };
+}
 
-module.exports = ForgotPasswordView;
+export { ForgotPasswordView };

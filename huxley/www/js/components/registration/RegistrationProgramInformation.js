@@ -3,24 +3,17 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
-var React = require('react');
+import React from "react";
+import PropTypes from "prop-types";
 
-var ProgramTypes = require('constants/ProgramTypes');
-var NumberInput = require('components/NumberInput');
-var _accessSafe = require('utils/_accessSafe');
+var { ProgramTypes } = require("constants/ProgramTypes");
+var { NumberInput } = require("components/NumberInput");
+var { _accessSafe } = require("utils/_accessSafe");
 
-const RegistrationProgramInformation = React.createClass({
-  propTypes: {
-    handlers: React.PropTypes.object,
-    errors: React.PropTypes.object,
-    programInformation: React.PropTypes.object,
-    handleProgramTypeChange: React.PropTypes.func,
-    programType: React.PropTypes.oneOf([ProgramTypes.CLUB, ProgramTypes.CLASS]),
-  },
-
-  shouldComponentUpdate: function(nextProps, nextState) {
+class RegistrationProgramInformation extends React.Component {
+  shouldComponentUpdate(nextProps, nextState) {
     for (let key in this.props.programInformation) {
       if (
         this.props.programInformation[key] !== nextProps.programInformation[key]
@@ -36,9 +29,9 @@ const RegistrationProgramInformation = React.createClass({
     }
 
     return this.props.programType !== nextProps.programType;
-  },
+  }
 
-  render: function() {
+  render() {
     var accessHandlers = _accessSafe.bind(this, this.props.handlers);
     var accessErrors = _accessSafe.bind(this, this.props.errors);
     var accessProgram = _accessSafe.bind(this, this.props.programInformation);
@@ -56,7 +49,7 @@ const RegistrationProgramInformation = React.createClass({
                 checked={this.props.programType == ProgramTypes.CLUB}
                 value={ProgramTypes.CLUB}
                 onChange={this.props.handleProgramTypeChange}
-              />{' '}
+              />{" "}
               Club
             </label>
           </li>
@@ -67,7 +60,7 @@ const RegistrationProgramInformation = React.createClass({
                 value={ProgramTypes.CLASS}
                 checked={this.props.programType == ProgramTypes.CLASS}
                 onChange={this.props.handleProgramTypeChange}
-              />{' '}
+              />{" "}
               Class
             </label>
           </li>
@@ -82,53 +75,53 @@ const RegistrationProgramInformation = React.createClass({
         </p>
         <NumberInput
           placeholder="Number of BMUN sessions attended"
-          onChange={accessHandlers('times_attended')}
-          value={accessProgram('times_attended')}
+          onChange={accessHandlers("times_attended")}
+          value={accessProgram("times_attended")}
         />
-        {accessErrors('times_attended')}
+        {accessErrors("times_attended")}
         <NumberInput
           placeholder="Tentative Number of Beginner Delegates"
-          onChange={accessHandlers('num_beginner_delegates')}
-          value={accessProgram('num_beginner_delegates')}
+          onChange={accessHandlers("num_beginner_delegates")}
+          value={accessProgram("num_beginner_delegates")}
         />
         <label className="hint">
           Beginner: Attended 0-3 conferences, not very familiar with Model
           United Nations.
         </label>
-        {accessErrors('num_beginner_delegates')}
+        {accessErrors("num_beginner_delegates")}
         <NumberInput
           placeholder="Tentative Number of Intermediate Delegates"
-          onChange={accessHandlers('num_intermediate_delegates')}
-          value={accessProgram('num_intermediate_delegates')}
+          onChange={accessHandlers("num_intermediate_delegates")}
+          value={accessProgram("num_intermediate_delegates")}
         />
         <label className="hint">
           Intermediate: Attended 4-7 conferences, little to no practice in
           advanced committees.
         </label>
-        {accessErrors('num_intermediate_delegates')}
+        {accessErrors("num_intermediate_delegates")}
         <NumberInput
           placeholder="Tentative Number of Advanced Delegates"
-          onChange={accessHandlers('num_advanced_delegates')}
-          value={accessProgram('num_advanced_delegates')}
+          onChange={accessHandlers("num_advanced_delegates")}
+          value={accessProgram("num_advanced_delegates")}
         />
         <label className="hint">
           Advanced: Attended more than seven conferences, has participated in
           many diverse committees.
         </label>
-        {accessErrors('num_advanced_delegates')}
+        {accessErrors("num_advanced_delegates")}
         <p className="instructions">
-          Tentative Total Number of Delegates:{' '}
+          Tentative Total Number of Delegates:{" "}
           {this._handleDelegateSum(
-            accessProgram('num_beginner_delegates'),
-            accessProgram('num_intermediate_delegates'),
-            accessProgram('num_advanced_delegates'),
+            accessProgram("num_beginner_delegates"),
+            accessProgram("num_intermediate_delegates"),
+            accessProgram("num_advanced_delegates")
           )}
         </p>
       </div>
     );
-  },
+  }
 
-  _handleDelegateSum: function(beginner, intermediate, advanced) {
+  _handleDelegateSum = (beginner, intermediate, advanced) => {
     var sum = 0;
     if (beginner) {
       sum += parseInt(beginner, 10) || 0;
@@ -140,7 +133,15 @@ const RegistrationProgramInformation = React.createClass({
       sum += parseInt(advanced, 10) || 0;
     }
     return sum;
-  },
-});
+  }
+}
 
-module.exports = RegistrationProgramInformation;
+RegistrationProgramInformation.propTypes = {
+  handlers: PropTypes.object,
+  errors: PropTypes.object,
+  programInformation: PropTypes.object,
+  handleProgramTypeChange: PropTypes.func,
+  programType: PropTypes.oneOf([ProgramTypes.CLUB, ProgramTypes.CLASS]),
+};
+
+export { RegistrationProgramInformation };

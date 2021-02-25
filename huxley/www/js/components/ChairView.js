@@ -3,17 +3,17 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
-var React = require('react');
+import React from "react";
 
-var NavTab = require('components/NavTab');
-var Shaker = require('components/Shaker');
-var TopBar = require('components/TopBar');
+var { NavTab } = require("components/NavTab");
+var { Shaker } = require("components/Shaker");
+var { TopBar } = require("components/TopBar");
 
-require('css/NavBar.less');
+require("css/NavBar.less");
 
-var ChairView = React.createClass({
+class ChairView extends React.Component {
   render() {
     return (
       <div>
@@ -23,15 +23,17 @@ var ChairView = React.createClass({
             <NavTab href="/chair/rubric">Rubric</NavTab>
             <NavTab href="/chair/papers">Papers</NavTab>
             <NavTab href="/chair/attendance">Attendance</NavTab>
+            <NavTab href="/chair/notes">Notes</NavTab>
+            <NavTab href="/chair/feed">Feed</NavTab>
             <NavTab href="/chair/summary">Summaries</NavTab>
             <NavTab href="/chair/committee_feedback">Committee Feedback</NavTab>
-            <NavTab href="chair/delegate_emails">Delegate Emails</NavTab>
+            <NavTab href="/chair/delegate_emails">Delegate Emails</NavTab>
           </div>
           {this.props.children}
         </Shaker>
       </div>
     );
-  },
-});
+  }
+}
 
-module.exports = ChairView;
+export { ChairView };

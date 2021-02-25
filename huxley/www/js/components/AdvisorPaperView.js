@@ -3,44 +3,33 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
-var React = require('react');
-var ReactRouter = require('react-router');
+import cx from "classnames";
+import React from "react";
 
-var _accessSafe = require('utils/_accessSafe');
-var AssignmentStore = require('stores/AssignmentStore');
-var Button = require('components/core/Button');
-var CommitteeStore = require('stores/CommitteeStore');
-var CountryStore = require('stores/CountryStore');
-var CurrentUserStore = require('stores/CurrentUserStore');
-var ConferenceContext = require('components/ConferenceContext');
-var InnerView = require('components/InnerView');
-var PositionPaperStore = require('stores/PositionPaperStore');
-var RubricStore = require('stores/RubricStore');
-var ServerAPI = require('lib/ServerAPI');
-var StatusLabel = require('components/core/StatusLabel');
-var Table = require('components/core/Table');
-var TextTemplate = require('components/core/TextTemplate');
-var inflateGrades = require('utils/inflateGrades');
-var _checkDate = require('utils/_checkDate');
-var _handleChange = require('utils/_handleChange');
+var { _accessSafe } = require("utils/_accessSafe");
+var { AssignmentStore } = require("stores/AssignmentStore");
+var { CommitteeStore } = require("stores/CommitteeStore");
+var { CountryStore } = require("stores/CountryStore");
+var { CurrentUserStore } = require("stores/CurrentUserStore");
+var { InnerView } = require("components/InnerView");
+var { PositionPaperStore } = require("stores/PositionPaperStore");
+var { RubricStore } = require("stores/RubricStore");
+var { StatusLabel } = require("components/core/StatusLabel");
+var { Table } = require("components/core/Table");
+var { TextTemplate } = require("components/core/TextTemplate");
+var { inflateGrades } = require("utils/inflateGrades");
 
-const cx = require('classnames');
-var AdvisorPaperViewText = require('text/AdvisorPaperViewText.md');
-var AdvisorWaitlistText = require('text/AdvisorWaitlistText.md');
+var AdvisorPaperViewText = require("text/AdvisorPaperViewText.md");
+var AdvisorWaitlistText = require("text/AdvisorWaitlistText.md");
 
-var AdvisorPaperView = React.createClass({
-  mixins: [ReactRouter.History],
-
-  contextTypes: {
-    conference: React.PropTypes.shape(ConferenceContext),
-  },
-
-  getInitialState: function() {
+class AdvisorPaperView extends React.Component {
+  constructor(props) {
+    super(props);
     var schoolID = CurrentUserStore.getCurrentUser().school.id;
-    var conferenceID = this.context.conference.session;
-    return {
+    var conferenceID = global.conference.session;
+    this.state = {
       assignments: AssignmentStore.getSchoolAssignments(schoolID),
       committees: CommitteeStore.getCommittees(),
       countries: CountryStore.getCountries(),
@@ -50,11 +39,11 @@ var AdvisorPaperView = React.createClass({
       loading: false,
       errors: {},
     };
-  },
+  }
 
-  componentDidMount: function() {
+  componentDidMount() {
     var schoolID = CurrentUserStore.getCurrentUser().school.id;
-    var conferenceID = this.context.conference.session;
+    var conferenceID = global.conference.session;
     this._committeesToken = CommitteeStore.addListener(() => {
       this.setState({
         committees: CommitteeStore.getCommittees(),
@@ -67,13 +56,13 @@ var AdvisorPaperView = React.createClass({
     });
     this._assignmentsToken = AssignmentStore.addListener(() => {
       var assignments = AssignmentStore.getSchoolAssignments(schoolID).filter(
-        assignment => !assignment.rejected,
+        (assignment) => !assignment.rejected
       );
       var assignment_ids = {};
       assignments.map(
-        function(a) {
+        function (a) {
           assignment_ids[a.id] = a;
-        }.bind(this),
+        }.bind(this)
       );
       this.setState({
         assignments: assignments,
@@ -91,32 +80,32 @@ var AdvisorPaperView = React.createClass({
         rubric: RubricStore.getRubric,
       });
     });
-  },
+  }
 
-  componentWillUnmount: function() {
+  componentWillUnmount() {
     this._registrationToken && this._registrationToken.remove();
     this._rubricsToken && this._rubricsToken.remove();
     this._papersToken && this._papersToken.remove();
     this._countriesToken && this._countriesToken.remove();
     this._committeesToken && this._committeesToken.remove();
     this._assignmentsToken && this._assignmentsToken.remove();
-  },
+  }
 
-  render: function() {
-    var conference = this.context.conference;
+  render() {
+    var conference = global.conference;
     var registration = this.state.registration;
     var waitlisted =
-      _accessSafe(registration, 'is_waitlisted') == null
+      _accessSafe(registration, "is_waitlisted") == null
         ? null
         : registration.is_waitlisted;
-    var disableEdit = _checkDate();
 
     if (waitlisted) {
       return (
         <InnerView>
           <TextTemplate
-            conferenceSession={conference.session}
-            conferenceExternal={conference.external}>
+            conferenceSession={global.conference.session}
+            conferenceExternal={global.conference.external}
+          >
             {AdvisorWaitlistText}
           </TextTemplate>
         </InnerView>
@@ -129,9 +118,9 @@ var AdvisorPaperView = React.createClass({
         </InnerView>
       );
     }
-  },
+  }
 
-  renderPaperTables: function() {
+  renderPaperTables = () => {
     var committees = {};
     var cm = this.state.committees;
     var countries = this.state.countries;
@@ -140,7 +129,7 @@ var AdvisorPaperView = React.createClass({
     var graded_files = this.state.graded_files;
     var get_rubric = this.state.rubric;
     this.state.assignments.map(
-      function(a) {
+      function (a) {
         var current_committee = cm[a.committee] ? cm[a.committee].name : null;
         if (current_committee) {
           committees[current_committee] =
@@ -148,16 +137,16 @@ var AdvisorPaperView = React.createClass({
               ? [a]
               : committees[current_committee].concat([a]);
         }
-      }.bind(this),
+      }.bind(this)
     );
 
     return Object.keys(committees).map(
-      function(c) {
+      function (c) {
         var countryAssignments = committees[c];
         var committee = cm[countryAssignments[0].committee];
         var rubric = committee.rubric;
 
-        var rows = rubric.use_topic_2 ? '2' : '1';
+        var rows = rubric.use_topic_2 ? "2" : "1";
         var rubric_row_1 = (
           <tr>
             <td rowSpan={rows}>Rubric</td>
@@ -186,11 +175,12 @@ var AdvisorPaperView = React.createClass({
         ) : null;
 
         return (
-          <div>
+          <div key={c}>
             <h4>{committee.name}</h4>
             <Table
               emptyMessage="You don't have any assignments."
-              isEmpty={!assignments.length}>
+              isEmpty={!assignments.length}
+            >
               <thead>
                 <tr>
                   <th width="13%">Assignment</th>
@@ -205,31 +195,33 @@ var AdvisorPaperView = React.createClass({
                   <th>Total</th>
                 </tr>
               </thead>
+              <thead>
               {rubric_row_1}
               {rubric_row_2}
+              </thead>
               {this.renderCommitteeRows(
                 countryAssignments,
                 rubric,
                 files,
                 graded_files,
-                rubric.use_topic_2,
+                rubric.use_topic_2
               )}
             </Table>
           </div>
         );
-      }.bind(this),
+      }.bind(this)
     );
-  },
+  };
 
-  renderCommitteeRows: function(
+  renderCommitteeRows = (
     countryAssignments,
     rubric,
     files,
     graded_files,
-    topic_2,
-  ) {
+    topic_2
+  ) => {
     return countryAssignments.map(
-      function(assignment) {
+      function (assignment) {
         var paper =
           assignment.paper && assignment.paper.file ? assignment.paper : null;
         var originalFile = paper
@@ -249,20 +241,21 @@ var AdvisorPaperView = React.createClass({
           graded_files[assignment.paper.id]
             ? window.URL.createObjectURL(graded_files[assignment.paper.id])
             : null;
-        var names = paper ? paper.file.split('/') : null;
+        var names = paper ? paper.file.split("/") : null;
         var graded = assignment.paper.graded;
         var fileName = names ? names[names.length - 1] : null;
-        var gradedFileName = fileName ? 'graded_' + fileName : null;
+        var gradedFileName = fileName ? "graded_" + fileName : null;
         var downloadPaper = paper ? (
           <a
             className={cx({
               button: true,
-              'button-small': true,
-              'button-green': true,
-              'rounded-small': true,
+              "button-small": true,
+              "button-green": true,
+              "rounded-small": true,
             })}
             href={originalHrefData}
-            download={fileName}>
+            download={fileName}
+          >
             &#10515;
           </a>
         ) : null;
@@ -271,12 +264,13 @@ var AdvisorPaperView = React.createClass({
             <a
               className={cx({
                 button: true,
-                'button-small': true,
-                'button-blpaperue': true,
-                'rounded-small': true,
+                "button-small": true,
+                "button-blpaperue": true,
+                "rounded-small": true,
               })}
               href={gradedHrefData}
-              download={gradedFileName}>
+              download={gradedFileName}
+            >
               &#10515;
             </a>
           ) : null;
@@ -293,30 +287,30 @@ var AdvisorPaperView = React.createClass({
         var shown3_t2 = null;
         var shown4_t2 = null;
         var shown5_t2 = null;
-        if (paper != null) {
+        if (paper != null && this.state.countries[assignment.country] != undefined) {
           var score1 = this.calculateTotalScore(paper, rubric);
           var maxScore1 = this.calculateMaxScore(rubric);
           var category1 = this.calculateCategory(score1, maxScore1);
 
           var shown1 = this.calculateCategory(
             paper.score_1,
-            rubric.grade_value_1,
+            rubric.grade_value_1
           );
           var shown2 = this.calculateCategory(
             paper.score_2,
-            rubric.grade_value_2,
+            rubric.grade_value_2
           );
           var shown3 = this.calculateCategory(
             paper.score_3,
-            rubric.grade_value_3,
+            rubric.grade_value_3
           );
           var shown4 = this.calculateCategory(
             paper.score_4,
-            rubric.grade_value_4,
+            rubric.grade_value_4
           );
           var shown5 = this.calculateCategory(
             paper.score_5,
-            rubric.grade_value_5,
+            rubric.grade_value_5
           );
 
           var score2 = this.calculateTotalScore(paper, rubric, true);
@@ -325,31 +319,31 @@ var AdvisorPaperView = React.createClass({
 
           var shown1_t2 = this.calculateCategory(
             paper.score_t2_1,
-            rubric.grade_t2_value_1,
+            rubric.grade_t2_value_1
           );
           var shown2_t2 = this.calculateCategory(
             paper.score_t2_2,
-            rubric.grade_t2_value_2,
+            rubric.grade_t2_value_2
           );
           var shown3_t2 = this.calculateCategory(
             paper.score_t2_3,
-            rubric.grade_t2_value_3,
+            rubric.grade_t2_value_3
           );
           var shown4_t2 = this.calculateCategory(
             paper.score_t2_4,
-            rubric.grade_t2_value_4,
+            rubric.grade_t2_value_4
           );
           var shown5_t2 = this.calculateCategory(
             paper.score_t2_5,
-            rubric.grade_t2_value_5,
+            rubric.grade_t2_value_5
           );
         }
 
-        var rows = topic_2 ? '2' : '1';
+        var rows = topic_2 ? "2" : "1";
         var topic_1_row = (
           <tr>
             <td rowSpan={rows}>
-              {this.state.countries[assignment.country].name}
+              {this.state.countries[assignment.country] ? this.state.countries[assignment.country].name: ''}
             </td>
             <td rowSpan={rows}>{downloadPaper}</td>
             <td rowSpan={rows}>{gradedPaper}</td>
@@ -374,16 +368,16 @@ var AdvisorPaperView = React.createClass({
           </tr>
         ) : null;
         return (
-          <tbody>
+          <tbody key={assignment.id}>
             {topic_1_row}
             {topic_2_row}
           </tbody>
         );
-      }.bind(this),
+      }.bind(this)
     );
-  },
+  }
 
-  calculateTotalScore: function(paper, rubric, topic_2 = false) {
+  calculateTotalScore = (paper, rubric, topic_2 = false) => {
     var totalScore = -1;
     if (topic_2) {
       totalScore =
@@ -401,9 +395,9 @@ var AdvisorPaperView = React.createClass({
         inflateGrades(paper.score_5, rubric.grade_value_5);
     }
     return totalScore;
-  },
+  }
 
-  calculateMaxScore: function(rubric, topic_2 = false) {
+  calculateMaxScore = (rubric, topic_2 = false) => {
     var totalMaxScore = -1;
     if (topic_2) {
       totalMaxScore =
@@ -421,43 +415,43 @@ var AdvisorPaperView = React.createClass({
         rubric.grade_value_5;
     }
     return totalMaxScore;
-  },
+  }
 
-  calculateCategory: function(value, weight) {
+  calculateCategory = (value, weight) => {
     var interval = weight / 5;
     if (value >= interval * 5) {
-      return '5 - Exceeds Expectations';
+      return "5 - Exceeds Expectations";
     } else if (value >= interval * 4) {
-      return '4 - Exceeds Expectations';
+      return "4 - Exceeds Expectations";
     } else if (value >= interval * 3) {
-      return '3 - Meets Expectations';
+      return "3 - Meets Expectations";
     } else if (value >= interval * 2) {
-      return '2 - Attempts to Meet Expectations';
+      return "2 - Attempts to Meet Expectations";
     } else if (value >= interval) {
-      return '1 - Needs Improvement';
+      return "1 - Needs Improvement";
     } else {
-      ('0 - Needs Improvement');
+      ("0 - Needs Improvement");
     }
-  },
+  }
 
-  calculateScore: function(category, weight) {
+  calculateScore = (category, weight) => {
     var interval = weight / 5;
-    if (category == '5 - Exceeds Expectations') {
+    if (category == "5 - Exceeds Expectations") {
       return interval * 5;
-    } else if (category == '4 - Exceeds Expectations') {
+    } else if (category == "4 - Exceeds Expectations") {
       return interval * 4;
-    } else if (category == '3 - Meets Expectations') {
+    } else if (category == "3 - Meets Expectations") {
       return interval * 3;
-    } else if (category == '2 - Attempts to Meet Expectations') {
+    } else if (category == "2 - Attempts to Meet Expectations") {
       return interval * 2;
-    } else if (category == '1 - Needs Improvement') {
+    } else if (category == "1 - Needs Improvement") {
       return interval;
     } else {
       return 0;
     }
-  },
+  }
 
-  renderError: function(field) {
+  renderError = (field) => {
     if (this.state.errors[field]) {
       return (
         <StatusLabel status="error">{this.state.errors[field]}</StatusLabel>
@@ -465,14 +459,14 @@ var AdvisorPaperView = React.createClass({
     }
 
     return null;
-  },
+  };
 
-  _handleError: function(response) {
+  _handleError = (response) => {
     this.setState({
       errors: response,
       loading: false,
     });
-  },
-});
+  };
+}
 
-module.exports = AdvisorPaperView;
+export { AdvisorPaperView };

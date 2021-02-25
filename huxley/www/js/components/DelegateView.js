@@ -3,17 +3,17 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
-var React = require('react');
+import React from "react";
 
-var NavTab = require('components/NavTab');
-var Shaker = require('components/Shaker');
-var TopBar = require('components/TopBar');
+var { NavTab } = require("components/NavTab");
+var { Shaker } = require("components/Shaker");
+var { TopBar } = require("components/TopBar");
 
-require('css/NavBar.less');
+require("css/NavBar.less");
 
-var DelegateView = React.createClass({
+class DelegateView extends React.Component {
   render() {
     return (
       <div>
@@ -22,6 +22,7 @@ var DelegateView = React.createClass({
           <div className="navbar rounded-top">
             <NavTab href="/delegate/profile">Profile</NavTab>
             <NavTab href="/delegate/paper">Paper</NavTab>
+            <NavTab href="/delegate/notes">Notes</NavTab>
             <NavTab href="/delegate/committee_feedback">
               Committee Feedback
             </NavTab>
@@ -30,7 +31,7 @@ var DelegateView = React.createClass({
         </Shaker>
       </div>
     );
-  },
-});
+  }
+}
 
-module.exports = DelegateView;
+export { DelegateView };

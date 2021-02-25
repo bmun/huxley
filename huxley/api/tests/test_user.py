@@ -96,11 +96,12 @@ class UserDetailGetTestCase(tests.RetrieveAPITestCase):
 
     def test_chair(self):
         '''It should have the correct fields for chairs.'''
+        committee = models.new_committee()
         user = models.new_user(
             username='testuser',
             password='test',
             user_type=User.TYPE_CHAIR,
-            committee_id=4)
+            committee_id=committee.id)
         self.client.login(username='testuser', password='test')
         response = self.get_response(user.id)
 

@@ -3,29 +3,25 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
-var React = require('react');
+import React from "react";
+import PropTypes from "prop-types";
 
-var ConferenceContext = require('components/ConferenceContext');
-var NavLink = require('components/NavLink');
-var OuterView = require('components/OuterView');
-var TextTemplate = require('components/core/TextTemplate');
+var { ConferenceContext } = require("components/ConferenceContext");
+var { NavLink } = require("components/NavLink");
+var { OuterView } = require("components/OuterView");
+var { TextTemplate } = require("components/core/TextTemplate");
 
-require('css/Letter.less');
-var RegistrationWaitlistViewText = require('text/RegistrationWaitlistViewText.md');
+require("css/Letter.less");
+var RegistrationWaitlistViewText = require("text/RegistrationWaitlistViewText.md");
 
-var RegistrationWaitlistView = React.createClass({
-  contextTypes: {
-    conference: React.PropTypes.shape(ConferenceContext),
-  },
-
-  render: function() {
-    var conference = this.context.conference;
+class RegistrationWaitlistView extends React.Component {
+  render() {
     return (
       <OuterView>
-        <div class="letter">
-          <TextTemplate conferenceSession={conference.session}>
+        <div className="letter">
+          <TextTemplate conferenceSession={global.conference.session}>
             {RegistrationWaitlistViewText}
           </TextTemplate>
         </div>
@@ -35,7 +31,7 @@ var RegistrationWaitlistView = React.createClass({
         </NavLink>
       </OuterView>
     );
-  },
-});
+  }
+}
 
-module.exports = RegistrationWaitlistView;
+export { RegistrationWaitlistView };

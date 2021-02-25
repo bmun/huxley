@@ -3,34 +3,18 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
-const Button = require('components/core/Button');
-const NumberInput = require('components/NumberInput');
-const TextTemplate = require('components/core/TextTemplate');
+const { Button } = require("components/core/Button");
+const { TextTemplate } = require("components/core/TextTemplate");
 
-const PaperGradeText = require('text/PaperGradeText.md');
+const PaperGradeText = require("text/PaperGradeText.md");
 
-const cx = require('classnames');
-const React = require('react');
+import cx from "classnames";
+import React from "react";
+import PropTypes from "prop-types";
 
-const PaperGradeTable = React.createClass({
-  propTypes: {
-    onChange: React.PropTypes.func,
-    onDownload: React.PropTypes.func,
-    onUnset: React.PropTypes.func,
-    onSave: React.PropTypes.func,
-    onUpload: React.PropTypes.func,
-    onSubmit: React.PropTypes.func,
-    rubric: React.PropTypes.object,
-    paper: React.PropTypes.object,
-    files: React.PropTypes.object,
-    graded_files: React.PropTypes.object,
-    countryName: React.PropTypes.string,
-    loading: React.PropTypes.bool,
-    success: React.PropTypes.bool,
-  },
-
+class PaperGradeTable extends React.Component {
   render() {
     const rubric = this.props.rubric;
     const paper = this.props.paper;
@@ -52,19 +36,20 @@ const PaperGradeTable = React.createClass({
         graded_files[paper.id] && paper.graded
           ? url.createObjectURL(graded_files[paper.id])
           : null;
-      var fileNames = paper.file.split('/');
+      var fileNames = paper.file.split("/");
       var fileName = fileNames[fileNames.length - 1];
-      var gradedName = gradedHrefData ? 'graded_' + fileName : null;
+      var gradedName = gradedHrefData ? "graded_" + fileName : null;
       var downloadGraded = gradedHrefData ? (
         <a
           className={cx({
             button: true,
-            'button-large': true,
-            'button-green': true,
-            'rounded-small': true,
+            "button-large": true,
+            "button-green": true,
+            "rounded-small": true,
           })}
           href={gradedHrefData}
-          download={gradedName}>
+          download={gradedName}
+        >
           Download Graded
         </a>
       ) : null;
@@ -76,12 +61,13 @@ const PaperGradeTable = React.createClass({
           <a
             className={cx({
               button: true,
-              'button-large': true,
-              'button-green': true,
-              'rounded-small': true,
+              "button-large": true,
+              "button-green": true,
+              "rounded-small": true,
             })}
             href={hrefData}
-            download={fileName}>
+            download={fileName}
+          >
             Download Original
           </a>
           {downloadGraded}
@@ -89,7 +75,8 @@ const PaperGradeTable = React.createClass({
             color="blue"
             onClick={this._handleSave}
             loading={this.props.loading}
-            success={this.props.success}>
+            success={this.props.success}
+          >
             Submit
           </Button>
         </div>
@@ -124,9 +111,9 @@ const PaperGradeTable = React.createClass({
               <td>{rubric.grade_category_1}</td>
               <td>
                 {this.renderDropdown(
-                  'score_1',
+                  "score_1",
                   paper.score_1,
-                  rubric.grade_value_1,
+                  rubric.grade_value_1
                 )}
               </td>
               <td>{rubric.grade_value_1}</td>
@@ -135,9 +122,9 @@ const PaperGradeTable = React.createClass({
               <td>{rubric.grade_category_2}</td>
               <td>
                 {this.renderDropdown(
-                  'score_2',
+                  "score_2",
                   paper.score_2,
-                  rubric.grade_value_2,
+                  rubric.grade_value_2
                 )}
               </td>
               <td>{rubric.grade_value_2}</td>
@@ -146,9 +133,9 @@ const PaperGradeTable = React.createClass({
               <td>{rubric.grade_category_3}</td>
               <td>
                 {this.renderDropdown(
-                  'score_3',
+                  "score_3",
                   paper.score_3,
-                  rubric.grade_value_3,
+                  rubric.grade_value_3
                 )}
               </td>
               <td>{rubric.grade_value_3}</td>
@@ -157,9 +144,9 @@ const PaperGradeTable = React.createClass({
               <td>{rubric.grade_category_4}</td>
               <td>
                 {this.renderDropdown(
-                  'score_4',
+                  "score_4",
                   paper.score_4,
-                  rubric.grade_value_4,
+                  rubric.grade_value_4
                 )}
               </td>
               <td>{rubric.grade_value_4}</td>
@@ -168,9 +155,9 @@ const PaperGradeTable = React.createClass({
               <td>{rubric.grade_category_5}</td>
               <td>
                 {this.renderDropdown(
-                  'score_5',
+                  "score_5",
                   paper.score_5,
-                  rubric.grade_value_5,
+                  rubric.grade_value_5
                 )}
               </td>
               <td>{rubric.grade_value_5}</td>
@@ -195,9 +182,9 @@ const PaperGradeTable = React.createClass({
         {buttons}
       </div>
     );
-  },
+  }
 
-  _renderTopicTwo: function(rubric, paper) {
+  _renderTopicTwo = (rubric, paper) => {
     return (
       <tbody>
         <tr>
@@ -207,9 +194,9 @@ const PaperGradeTable = React.createClass({
           <td>{rubric.grade_t2_category_1}</td>
           <td>
             {this.renderDropdown(
-              'score_t2_1',
+              "score_t2_1",
               paper.score_t2_1,
-              rubric.grade_t2_value_1,
+              rubric.grade_t2_value_1
             )}
           </td>
           <td>{rubric.grade_t2_value_1}</td>
@@ -218,9 +205,9 @@ const PaperGradeTable = React.createClass({
           <td>{rubric.grade_t2_category_2}</td>
           <td>
             {this.renderDropdown(
-              'score_t2_2',
+              "score_t2_2",
               paper.score_t2_2,
-              rubric.grade_t2_value_2,
+              rubric.grade_t2_value_2
             )}
           </td>
           <td>{rubric.grade_t2_value_2}</td>
@@ -229,9 +216,9 @@ const PaperGradeTable = React.createClass({
           <td>{rubric.grade_t2_category_3}</td>
           <td>
             {this.renderDropdown(
-              'score_t2_3',
+              "score_t2_3",
               paper.score_t2_3,
-              rubric.grade_t2_value_3,
+              rubric.grade_t2_value_3
             )}
           </td>
           <td>{rubric.grade_t2_value_3}</td>
@@ -240,9 +227,9 @@ const PaperGradeTable = React.createClass({
           <td>{rubric.grade_t2_category_4}</td>
           <td>
             {this.renderDropdown(
-              'score_t2_4',
+              "score_t2_4",
               paper.score_t2_4,
-              rubric.grade_t2_value_4,
+              rubric.grade_t2_value_4
             )}
           </td>
           <td>{rubric.grade_t2_value_4}</td>
@@ -251,111 +238,129 @@ const PaperGradeTable = React.createClass({
           <td>{rubric.grade_t2_category_5}</td>
           <td>
             {this.renderDropdown(
-              'score_t2_5',
+              "score_t2_5",
               paper.score_t2_5,
-              rubric.grade_t2_value_5,
+              rubric.grade_t2_value_5
             )}
           </td>
           <td>{rubric.grade_t2_value_5}</td>
         </tr>
       </tbody>
     );
-  },
-
-  calculateCategory: function(value, weight) {
+  }
+  calculateCategory = (value, weight) => {
     var interval = weight / 5;
     if (value >= interval * 5) {
-      return '5 - Exceeds Expectations';
+      return "5 - Exceeds Expectations";
     } else if (value >= interval * 4) {
-      return '4 - Exceeds Expectations';
+      return "4 - Exceeds Expectations";
     } else if (value >= interval * 3) {
-      return '3 - Meets Expectations';
+      return "3 - Meets Expectations";
     } else if (value >= interval * 2) {
-      return '2 - Attempts to Meet Expectations';
+      return "2 - Attempts to Meet Expectations";
     } else if (value >= interval) {
-      return '1 - Needs Improvement';
+      return "1 - Needs Improvement";
     } else {
-      ('0 - Missing Section');
+      ("0 - Missing Section");
     }
-  },
-
-  calculateScore: function(category, weight) {
+  }
+  calculateScore = (category, weight) => {
     var interval = weight / 5;
-    if (category == '5 - Exceeds Expectations') {
+    if (category == "5 - Exceeds Expectations") {
       return interval * 5;
-    } else if (category == '4 - Exceeds Expectations') {
+    } else if (category == "4 - Exceeds Expectations") {
       return interval * 4;
-    } else if (category == '3 - Meets Expectations') {
+    } else if (category == "3 - Meets Expectations") {
       return interval * 3;
-    } else if (category == '2 - Attempts to Meet Expectations') {
+    } else if (category == "2 - Attempts to Meet Expectations") {
       return interval * 2;
-    } else if (category == '1 - Needs Improvement') {
+    } else if (category == "1 - Needs Improvement") {
       return interval;
     } else {
       return 0;
     }
-  },
+  }
 
-  renderDropdown: function(name, score, max_score) {
+  renderDropdown = (name, score, max_score) => {
     var interval = this.calculateCategory(score, max_score);
     return (
       <select
         onChange={this._handleDropdownChange.bind(this, name, max_score)}
-        value={interval}>
-        <option key={'0 - Missing Section'} value={'0 - Missing Section'}>
+        value={interval}
+      >
+        <option key={"0 - Missing Section"} value={"0 - Missing Section"}>
           0 - Missing Section
         </option>
         <option
-          key={'5 - Exceeds Expectations'}
-          value={'5 - Exceeds Expectations'}>
+          key={"5 - Exceeds Expectations"}
+          value={"5 - Exceeds Expectations"}
+        >
           5 - Exceeds Expectations
         </option>
         <option
-          key={'4 - Exceeds Expectations'}
-          value={'4 - Exceeds Expectations'}>
+          key={"4 - Exceeds Expectations"}
+          value={"4 - Exceeds Expectations"}
+        >
           4 - Exceeds Expectations
         </option>
-        <option key={'3 - Meets Expectations'} value={'3 - Meets Expectations'}>
+        <option key={"3 - Meets Expectations"} value={"3 - Meets Expectations"}>
           3 - Meets Expectations
         </option>
         <option
-          key={'2 - Attempts to Meet Expectations'}
-          value={'2 - Attempts to Meet Expectations'}>
+          key={"2 - Attempts to Meet Expectations"}
+          value={"2 - Attempts to Meet Expectations"}
+        >
           2 - Attempts to Meet Expectations
         </option>
-        <option key={'1 - Needs Improvement'} value={'1 - Needs Improvement'}>
+        <option key={"1 - Needs Improvement"} value={"1 - Needs Improvement"}>
           1 - Needs Improvement
         </option>
       </select>
     );
-  },
+  }
 
-  _handleDropdownChange: function(field, max_score, event) {
+  _handleDropdownChange = (field, max_score, event) => {
     var new_score = this.calculateScore(event.target.value, max_score);
     this.props.onChange &&
       this.props.onChange(field, this.props.paper.id, new_score);
-  },
+  }
 
-  _handleChange: function(field, event) {
+  _handleChange = (field, event) => {
     this.props.onChange &&
       this.props.onChange(field, this.props.paper.id, event);
-  },
+  }
 
-  _handleUnset: function(event) {
+  _handleUnset = (event) => {
     this.props.onUnset && this.props.onUnset(event);
-  },
+  };
 
-  _handleSave: function(event) {
+  _handleSave = (event) => {
     this.props.onSave && this.props.onSave(this.props.paper.id, event);
-  },
+  };
 
-  _handleUpload: function(event) {
+  _handleUpload = (event) => {
     this.props.onUpload && this.props.onUpload(this.props.paper.id, event);
-  },
+  };
 
-  _handleSubmit: function(event) {
+  _handleSubmit = (event) => {
     this.props.onSubmit && this.props.onSubmit(this.props.paper.id, event);
-  },
-});
+  };
+}
 
-module.exports = PaperGradeTable;
+PaperGradeTable.propTypes = {
+  onChange: PropTypes.func,
+  onDownload: PropTypes.func,
+  onUnset: PropTypes.func,
+  onSave: PropTypes.func,
+  onUpload: PropTypes.func,
+  onSubmit: PropTypes.func,
+  rubric: PropTypes.object,
+  paper: PropTypes.object,
+  files: PropTypes.object,
+  graded_files: PropTypes.object,
+  countryName: PropTypes.string,
+  loading: PropTypes.bool,
+  success: PropTypes.bool,
+};
+
+export { PaperGradeTable };

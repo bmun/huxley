@@ -3,37 +3,32 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  +*/
 
-'use strict';
+"use strict";
 
-var React = require('react');
-var ReactRouter = require('react-router');
+import React from "react";
+import PropTypes from "prop-types";
+import { history } from "utils/history";
 
-var Button = require('components/core/Button');
-var ConferenceContext = require('components/ConferenceContext');
-var CurrentUserStore = require('stores/CurrentUserStore');
-var InnerView = require('components/InnerView');
-var PaperSubmissionTable = require('components/PaperSubmissionTable');
-var PositionPaperActions = require('actions/PositionPaperActions');
-var PositionPaperStore = require('stores/PositionPaperStore');
-var TextTemplate = require('components/core/TextTemplate');
-var User = require('utils/User');
-var inflateGrades = require('utils/inflateGrades');
+var { Button } = require("components/core/Button");
+var { ConferenceContext } = require("components/ConferenceContext");
+var { CurrentUserStore } = require("stores/CurrentUserStore");
+var { InnerView } = require("components/InnerView");
+var { PaperSubmissionTable } = require("components/PaperSubmissionTable");
+var { PositionPaperActions } = require("actions/PositionPaperActions");
+var { PositionPaperStore } = require("stores/PositionPaperStore");
+var { TextTemplate } = require("components/core/TextTemplate");
+var { User } = require("utils/User");
+var { inflateGrades } = require("utils/inflateGrades");
 
+var { ServerAPI } = require("lib/ServerAPI");
 
-var ServerAPI = require('lib/ServerAPI');
+require("css/Table.less");
+var DelegatePaperViewText = require("text/DelegatePaperViewText.md");
+var DelegatePaperNoSubmissionViewText = require("text/DelegatePaperNoSubmissionViewText.md");
 
-require('css/Table.less');
-var DelegatePaperViewText = require('text/DelegatePaperViewText.md');
-var DelegatePaperNoSubmissionViewText = require('text/DelegatePaperNoSubmissionViewText.md');
-
-var DelegatePaperView = React.createClass({
-  mixins: [ReactRouter.History],
-
-  contextTypes: {
-    conference: React.PropTypes.shape(ConferenceContext),
-  },
-
-  getInitialState() {
+class DelegatePaperView extends React.Component {
+  constructor(props) {
+    super(props);
     var user = CurrentUserStore.getCurrentUser();
     PositionPaperActions.storePositionPaper(user.delegate.assignment.paper);
     var papers = PositionPaperStore.getPapers();
@@ -44,21 +39,21 @@ var DelegatePaperView = React.createClass({
     var files = PositionPaperStore.getPositionPaperFiles();
     var graded_files = PositionPaperStore.getGradedPositionPaperFiles();
 
-    return {
+    this.state = {
       papers: papers,
       uploadedFile: null,
       files: files,
       graded_files: graded_files,
       errors: {},
     };
-  },
+  }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     var user = CurrentUserStore.getCurrentUser();
     if (!User.isDelegate(user)) {
-      this.history.pushState(null, '/');
+      history.redirect("/");
     }
-  },
+  }
 
   componentDidMount() {
     this._papersToken = PositionPaperStore.addListener(() => {
@@ -68,18 +63,18 @@ var DelegatePaperView = React.createClass({
         graded_files: PositionPaperStore.getGradedPositionPaperFiles(),
       });
     });
-  },
+  }
 
   componentWillUnmount() {
     this._papersToken && this._papersToken.remove();
     this._successTimeout && clearTimeout(this._successTimeout);
-  },
+  }
 
   render() {
-    if (this.context.conference.position_papers_accepted) {
+    if (global.conference.position_papers_accepted) {
       return (
         <InnerView>
-          <div style={{margin: 'auto 20px 20px 20px'}}>
+          <div style={{ margin: "auto 20px 20px 20px" }}>
             <TextTemplate>{DelegatePaperViewText}</TextTemplate>
           </div>
           <form>
@@ -90,15 +85,15 @@ var DelegatePaperView = React.createClass({
     } else {
       return (
         <InnerView>
-          <div style={{margin: 'auto 20px 20px 20px'}}>
+          <div style={{ margin: "auto 20px 20px 20px" }}>
             <TextTemplate>{DelegatePaperNoSubmissionViewText}</TextTemplate>
           </div>
         </InnerView>
       );
     }
-  },
+  }
 
-  renderRubric() {
+  renderRubric = () => {
     const user = CurrentUserStore.getCurrentUser();
     const paper = this.state.papers[user.delegate.assignment.paper.id];
     const files = this.state.files;
@@ -120,9 +115,8 @@ var DelegatePaperView = React.createClass({
     } else {
       return <div />;
     }
-  },
-
-  calculateTotalScore: function(paper, rubric, topic_2 = false) {
+  };
+  calculateTotalScore = (paper, rubric, topic_2 = false) => {
     var totalScore = -1;
     if (topic_2) {
       totalScore =
@@ -140,9 +134,8 @@ var DelegatePaperView = React.createClass({
         inflateGrades(paper.score_5, rubric.grade_value_5);
     }
     return totalScore;
-  },
-
-  calculateMaxScore: function(rubric, topic_2 = false) {
+  }
+  calculateMaxScore = (rubric, topic_2 = false) => {
     var totalMaxScore = -1;
     if (topic_2) {
       totalMaxScore =
@@ -160,83 +153,79 @@ var DelegatePaperView = React.createClass({
         rubric.grade_value_5;
     }
     return totalMaxScore;
-  },
-
-  calculateCategory: function(value, weight) {
+  }
+  calculateCategory = (value, weight) => {
     var interval = weight / 5;
     if (value >= interval * 5) {
-      return '5 - Exceeds Expectations';
+      return "5 - Exceeds Expectations";
     } else if (value >= interval * 4) {
-      return '4 - Exceeds Expectations';
+      return "4 - Exceeds Expectations";
     } else if (value >= interval * 3) {
-      return '3 - Meets Expectations';
+      return "3 - Meets Expectations";
     } else if (value >= interval * 2) {
-      return '2 - Attempts to Meet Expectations';
+      return "2 - Attempts to Meet Expectations";
     } else if (value >= interval) {
-      return '1 - Needs Improvement';
+      return "1 - Needs Improvement";
     } else {
-      ('0 - Needs Improvement');
+      ("0 - Needs Improvement");
     }
-  },
-
-  calculateScore: function(category, weight) {
+  }
+  calculateScore = (category, weight) => {
     var interval = weight / 5;
-    if (category == '5 - Exceeds Expectations') {
+    if (category == "5 - Exceeds Expectations") {
       return interval * 5;
-    } else if (category == '4 - Exceeds Expectations') {
+    } else if (category == "4 - Exceeds Expectations") {
       return interval * 4;
-    } else if (category == '3 - Meets Expectations') {
+    } else if (category == "3 - Meets Expectations") {
       return interval * 3;
-    } else if (category == '2 - Attempts to Meet Expectations') {
+    } else if (category == "2 - Attempts to Meet Expectations") {
       return interval * 2;
-    } else if (category == '1 - Needs Improvement') {
+    } else if (category == "1 - Needs Improvement") {
       return interval;
     } else {
       return 0;
     }
-  },
+  }
 
-  _handleUploadPaper(paperID, event) {
-    this.setState({uploadedFile: event.target.files[0]});
-  },
+  _handleUploadPaper = (paperID, event) => {
+    this.setState({ uploadedFile: event.target.files[0] });
+  }
 
-  _handleSubmitPaper(paperID, event) {
+  _handleSubmitPaper = (paperID, event) => {
     var file = this.state.uploadedFile;
     if (
       file != null &&
       window.confirm(
-        `Please make sure this is the file you intend to submit! You have uploaded: ${
-          file.name
-        }.`,
+        `Please make sure this is the file you intend to submit! You have uploaded: ${file.name}.`
       )
     ) {
-      var paper = {...this.state.papers[paperID]};
+      var paper = { ...this.state.papers[paperID] };
       paper.file = file.name;
 
       PositionPaperActions.uploadPaper(
         paper,
         file,
         this._handleSuccess,
-        this._handleError,
+        this._handleError
       );
 
       this.setState({
         uploadedFile: null,
       });
     }
-    this.history.pushState(null, '/');
+    history.redirect("/");
     event.preventDefault();
-  },
+  }
 
-  _handleSuccess: function(response) {
-    window.alert('Your paper has been successfully uploaded!');
-  },
+  _handleSuccess = (response) => {
+    window.alert("Your paper has been successfully uploaded!");
+  };
 
-  _handleError: function(response) {
+  _handleError = (response) => {
     window.alert(
-      'Something went wrong. Please refresh your page and try again.',
+      "Something went wrong. Please refresh your page and try again."
     );
-  },
-});
+  };
+}
 
-module.exports = DelegatePaperView;
+export { DelegatePaperView };

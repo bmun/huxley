@@ -3,7 +3,7 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
 var TYPE_ADVISOR = 1;
 var TYPE_CHAIR = 2;
@@ -11,7 +11,7 @@ var TYPE_DELEGATE = 3;
 
 var User = {
   isAnonymous(user) {
-    return !user.id;
+    return user ? !user.id : true;
   },
 
   isAdvisor(user) {
@@ -31,4 +31,4 @@ var User = {
   },
 };
 
-module.exports = User;
+export { User };

@@ -3,23 +3,18 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
-var React = require('react');
+import React from "react";
+import PropTypes from "prop-types";
 
-var RegistrationTextInput = require('components/registration/RegistrationTextInput');
-var _accessSafe = require('utils/_accessSafe');
+var {
+  RegistrationTextInput,
+} = require("components/registration/RegistrationTextInput");
+var { _accessSafe } = require("utils/_accessSafe");
 
-const RegistrationSchoolInformation = React.createClass({
-  propTypes: {
-    handlers: React.PropTypes.object,
-    errors: React.PropTypes.object,
-    schoolInformation: React.PropTypes.object,
-    handleInternationalChange: React.PropTypes.func,
-    schoolInternational: React.PropTypes.bool,
-  },
-
-  shouldComponentUpdate: function(nextProps, nextState) {
+class RegistrationSchoolInformation extends React.Component {
+  shouldComponentUpdate(nextProps, nextState) {
     for (let key in this.props.schoolInformation) {
       if (
         this.props.schoolInformation[key] !== nextProps.schoolInformation[key]
@@ -35,9 +30,9 @@ const RegistrationSchoolInformation = React.createClass({
     }
 
     return this.props.schoolInternational !== nextProps.schoolInternational;
-  },
+  }
 
-  render: function() {
+  render() {
     var accessErrors = _accessSafe.bind(this, this.props.errors);
     var accessHandlers = _accessSafe.bind(this, this.props.handlers);
     var accessSchool = _accessSafe.bind(this, this.props.schoolInformation);
@@ -53,7 +48,7 @@ const RegistrationSchoolInformation = React.createClass({
                 value=""
                 onChange={this.props.handleInternationalChange}
                 checked={!this.props.schoolInternational}
-              />{' '}
+              />{" "}
               United States of America
             </label>
           </li>
@@ -64,52 +59,60 @@ const RegistrationSchoolInformation = React.createClass({
                 value="international"
                 onChange={this.props.handleInternationalChange}
                 checked={this.props.schoolInternational}
-              />{' '}
+              />{" "}
               International
             </label>
           </li>
         </ul>
         <RegistrationTextInput
-          errors={accessErrors('school_name')}
+          errors={accessErrors("school_name")}
           placeholder="Official School Name"
-          onChange={accessHandlers('school_name')}
-          value={accessSchool('school_name')}
+          onChange={accessHandlers("school_name")}
+          value={accessSchool("school_name")}
         />
         <RegistrationTextInput
-          errors={accessErrors('school_address')}
+          errors={accessErrors("school_address")}
           placeholder="Street Address"
-          onChange={accessHandlers('school_address')}
-          value={accessSchool('school_address')}
+          onChange={accessHandlers("school_address")}
+          value={accessSchool("school_address")}
         />
         <RegistrationTextInput
-          errors={accessErrors('school_city')}
+          errors={accessErrors("school_city")}
           placeholder="City"
-          onChange={accessHandlers('school_city')}
-          value={accessSchool('school_city')}
+          onChange={accessHandlers("school_city")}
+          value={accessSchool("school_city")}
         />
         <RegistrationTextInput
-          errors={accessErrors('school_state')}
-          placeholder={this.props.schoolInternational ? 'Province' : 'State'}
-          onChange={accessHandlers('school_state')}
-          value={accessSchool('school_state')}
+          errors={accessErrors("school_state")}
+          placeholder={this.props.schoolInternational ? "Province" : "State"}
+          onChange={accessHandlers("school_state")}
+          value={accessSchool("school_state")}
         />
         <RegistrationTextInput
-          errors={accessErrors('school_zip')}
-          placeholder={this.props.schoolInternational ? 'Postal Code' : 'Zip'}
-          onChange={accessHandlers('school_zip')}
-          value={accessSchool('school_zip')}
+          errors={accessErrors("school_zip")}
+          placeholder={this.props.schoolInternational ? "Postal Code" : "Zip"}
+          onChange={accessHandlers("school_zip")}
+          value={accessSchool("school_zip")}
         />
         <RegistrationTextInput
-          errors={accessErrors('school_country')}
+          errors={accessErrors("school_country")}
           placeholder="Country"
-          onChange={accessHandlers('school_country')}
-          value={accessSchool('school_country')}
+          onChange={accessHandlers("school_country")}
+          value={accessSchool("school_country")}
           disabled={!this.props.schoolInternational}
           isControlled={true}
         />
       </div>
     );
-  },
-});
+  }
+}
 
-module.exports = RegistrationSchoolInformation;
+RegistrationSchoolInformation.propTypes = {
+  handlers: PropTypes.object,
+  errors: PropTypes.object,
+  schoolInformation: PropTypes.object,
+  handleInternationalChange: PropTypes.func,
+  schoolInternational: PropTypes.bool,
+};
+
+export { RegistrationSchoolInformation };

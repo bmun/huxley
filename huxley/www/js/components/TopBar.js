@@ -3,33 +3,34 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
 
-'use strict';
+"use strict";
 
-var cx = require('classnames');
-var React = require('react');
+import React from "react";
+import cx from "classnames";
 
-var ChangePasswordView = require('components/ChangePasswordView');
-var LogoutButton = require('components/LogoutButton');
+var { ChangePasswordView } = require("components/ChangePasswordView");
+var { LogoutButton } = require("components/LogoutButton");
 
-require('css/TopBar.less');
+require("css/TopBar.less");
 
-var TopBar = React.createClass({
-  getInitialState: function() {
-    return {
+class TopBar extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
       changePasswordVisible: false,
     };
-  },
+  }
 
-  componentDidMount: function() {
-    document.addEventListener('click', this._hideDropdown);
-  },
+  componentDidMount() {
+    document.addEventListener("click", this._hideDropdown);
+  }
 
-  componentWillUnmount: function() {
-    document.removeEventListener('click', this._hideDropdown);
-  },
+  componentWillUnmount() {
+    document.removeEventListener("click", this._hideDropdown);
+  }
 
-  render: function() {
-    var {user} = this.props;
+  render() {
+    var { user } = this.props;
 
     return (
       <div>
@@ -42,11 +43,12 @@ var TopBar = React.createClass({
               <li>
                 <a
                   className={cx({
-                    'change-password-link': true,
+                    "change-password-link": true,
                     active: this.state.changePasswordVisible,
                   })}
                   href="#"
-                  onClick={this._handleChangePasswordClick}>
+                  onClick={this._handleChangePasswordClick}
+                >
                   Change Password
                 </a>
               </li>
@@ -68,31 +70,31 @@ var TopBar = React.createClass({
         />
       </div>
     );
-  },
+  }
 
-  _handleChangePasswordClick: function(e) {
+  _handleChangePasswordClick = (e) => {
     e.preventDefault();
     this._stopPropagation(e);
     this.setState({
       changePasswordVisible: !this.state.changePasswordVisible,
     });
-  },
+  };
 
-  _handleDropdownClick: function(e) {
+  _handleDropdownClick = (e) => {
     this._stopPropagation(e);
-  },
+  };
 
-  _hideDropdown: function() {
-    this.setState({changePasswordVisible: false});
-  },
+  _hideDropdown = () => {
+    this.setState({ changePasswordVisible: false });
+  };
 
-  _stopPropagation: function(e) {
+  _stopPropagation = (e) => {
     e.stopPropagation();
 
     // TODO: display a warning if stopImmediatePropagation isn't supported.
     var ne = e.nativeEvent;
     ne.stopImmediatePropagation && ne.stopImmediatePropagation();
-  },
-});
+  };
+}
 
-module.exports = TopBar;
+export { TopBar };
