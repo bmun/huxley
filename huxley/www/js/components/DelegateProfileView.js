@@ -22,7 +22,7 @@ const DelegateProfileViewText = require("text/DelegateProfileViewText.md");
 const DelegateChecklistPositionPaperText = require("text/checklists/DelegateChecklistPositionPaperText.md");
 const DelegateChecklistWaiverText = require("text/checklists/DelegateChecklistWaiverText.md");
 const DelegateProfileNoZoomViewText = require("text/DelegateProfileNoZoomViewText.md");
-const DelegateProfileZoomViewText = require("text/DelegateProfileZoomViewText.md");
+// const DelegateProfileZoomViewText = require("text/DelegateProfileZoomViewText.md");
 
 class DelegateProfileView extends React.Component {
   constructor(props) {
@@ -145,7 +145,7 @@ class DelegateProfileView extends React.Component {
                     <th>Committee Zoom Link</th>
                     <b />
                     <TextTemplate
-                      opiLink = {committee.zoom_link}
+                      opiLink = {global.conference.opi_link}
                     >
                       {DelegateProfileNoZoomViewText}
                     </TextTemplate>

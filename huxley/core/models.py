@@ -43,6 +43,7 @@ class Conference(models.Model):
     waiver_avail_date = models.DateField()
     waiver_deadline = models.DateField()
     waiver_link = models.CharField(max_length=300)
+    opi_link = models.URLField(default="https://zoom.us")
     external = models.CharField(max_length=128)
     treasurer = models.CharField(max_length=128)
     registration_fee = models.DecimalField(

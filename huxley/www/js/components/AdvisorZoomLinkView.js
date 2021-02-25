@@ -53,7 +53,7 @@ class AdvisorZoomLinkView extends React.Component {
   render() {
     return (
       <InnerView>
-        <TextTemplate>{AdvisorZoomLinkViewText}</TextTemplate>
+        <TextTemplate opiLink = {global.conference.opi_link}>{AdvisorZoomLinkViewText}</TextTemplate>
         <form>
           <div className="table-container">
             <table>

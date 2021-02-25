@@ -71,6 +71,7 @@ def index(request):
         'registration_waitlist': conference.waitlist_reg,
         'position_papers_accepted': conference.position_papers_accepted,
         'notes_enabled': conference.notes_enabled,
+        'opi_link': conference.opi_link,
     }
 
     context = {
