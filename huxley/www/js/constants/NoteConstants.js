@@ -8,7 +8,7 @@
 const blacklistedWords = require('utils/_blacklistedWords.json');
 
 const PollingInterval = 4000;
-const webTerms = ["https", "http", "\.com", "\.org", "\.net", "\.edu", "www"];
+const webTerms = [`https`, "http", `\\.com`, `\\.org`, `\\.net`, `\\.edu`, `www`];
 const blacklistedWordsRegexp: Array<RegExp> = blacklistedWords["words"].map(
     word => RegExp(
         `([\\(\\)\\.\\-?!;:,\\s\u2026"]|^)${word.toLowerCase()}([\\(\\)\\.\\-?!;:,\\s\u2026"]|$)`

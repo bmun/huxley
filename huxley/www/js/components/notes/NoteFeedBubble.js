@@ -82,7 +82,7 @@ class NoteFeedBubble extends React.Component<
         onMouseOut={this._onMouseOut}
       >
         <strong>
-          {sender_name} -> {recipient_name}
+          {sender_name} &#10140; {recipient_name}
         </strong>{" "}
         [{timestamp}]
       </div>
