@@ -5,8 +5,12 @@ from rest_framework import serializers
 
 from huxley.core.models import Note
 
+class TimestampField(serializers.ReadOnlyField):
+    def to_representation(self, value):
+        return value.timestamp.timestamp()
 
 class NoteSerializer(serializers.ModelSerializer):
+    timestamp = TimestampField(source='*')
     class Meta:
         model = Note
         fields = ('id', 'is_chair', 'sender', 'recipient', 'msg', 'timestamp')

@@ -2,58 +2,55 @@
  * Copyright (c) 2011-2021 Berkeley Model United Nations. All rights reserved.
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
+//@flow
 
 'use strict';
 
-var ActionConstants = require('constants/ActionConstants');
-var CurrentUserStore = require('stores/CurrentUserStore');
-var NoteActions = require('actions/NoteActions');
-var Dispatcher = require('dispatcher/Dispatcher');
-var ServerAPI = require('lib/ServerAPI');
-var {Store} = require('flux/utils');
+import ActionConstants from 'constants/ActionConstants';
+import { CurrentUserStore } from "stores/CurrentUserStore";
+import { NoteActions } from "actions/NoteActions";
+import { Dispatcher } from "dispatcher/Dispatcher";
+import { ServerAPI } from "lib/ServerAPI";
+import { Store } from "flux/utils";
+import { PollingInterval } from "constants/NoteConstants";
 
-var _notes = {};
-var _notesFetched = false;
-var _previousUserID = -1;
+import type {Note} from 'utils/types';
+
+
+let _notes: {[string]: Note} = {};
+let _lastFetchedTimestamp = 0;
+let _previousUserID = -1;
 
 class NoteStore extends Store {
-  getCommitteeNotes(committeeID) {
-    var noteIDs = Object.keys(_notes);
-    if (!_notesFetched) {
-      ServerAPI.getNotesByCommitteee(committeeID).then(value => {
-        NoteActions.notesFetched(value);
-      });
-
-      return [];
+  getCommitteeNotes(committeeID: number): Note[] {
+    let noteIDs = Object.keys(_notes);
+    if (_lastFetchedTimestamp < Date.now() - PollingInterval / 2) { // TODO: modify committee retrieval so that it's also timestamp based
+      ServerAPI.getNotesByCommittee(committeeID, _lastFetchedTimestamp).then(value => 
+        NoteActions.notesFetched(value)
+      );
     }
 
     return noteIDs.map(id => _notes[id]);
   }
 
-  getConversationNotes(senderID, recipientID, chair) {
-    var noteIDs = Object.keys(_notes);
-    if (!_notesFetched) {
-        if (chair) {
-            ServerAPI.geteNotesByConversationWithChair(senderID).then(value => {
-                NoteActions.notesFetched(value);
-            });
-        } else {
-            ServerAPI.getNotesByConversation(senderID, recipientID).then(value => {
-                NoteActions.notesFetched(value);
-            });
-        }
-
-      return [];
+  getConversationNotes(senderID: number): Note[] {
+    let noteIDs = Object.keys(_notes);;
+    // Subtracting 1s to ensure that polling the server doesn't always happen / there's no bad mutual recursion
+    // Note: this might have issues on slower connections
+    // TODO: look into better ways to ensure loading is finished
+    // TODO: getNoteConvosForChair
+    if (_lastFetchedTimestamp < Date.now() - PollingInterval / 2) {
+      ServerAPI.getNotesBySender(senderID, _lastFetchedTimestamp).then(value => 
+        NoteActions.notesFetched(value));
     }
-
     return noteIDs.map(id => _notes[id]);
   }
 
-  addNote(note) {
-    _notes[note.id] = note;
+  addNote(note: Note): void {
+    _notes[note.id.toString()] = note;
   }
 
-  __onDispatch(action) {
+  __onDispatch(action: any): void {
     switch (action.actionType) {
       case ActionConstants.ADD_NOTE:
         this.addNote(action.note);
@@ -62,7 +59,16 @@ class NoteStore extends Store {
         for (const note of action.notes) {
           _notes[note.id] = note;
         }
-        _notesFetched = true;
+        // subtracting half of polling period to ensure that no notes are missed in the time it takes the server to communicate with the client
+        _lastFetchedTimestamp = Date.now() - PollingInterval / 2; 
+        break;
+      case ActionConstants.LOGIN:
+        var userID = CurrentUserStore.getCurrentUser().id;
+        if (userID != _previousUserID) {
+          _notes = {};
+          _lastFetchedTimestamp = 0;
+          _previousUserID = userID;
+        }
         break;
       default:
         return;
@@ -72,4 +78,5 @@ class NoteStore extends Store {
   }
 }
 
-module.exports = new NoteStore(Dispatcher);
+const noteStore: NoteStore = new NoteStore(Dispatcher);
+export { noteStore as NoteStore };

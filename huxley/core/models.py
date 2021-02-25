@@ -37,6 +37,7 @@ class Conference(models.Model):
     open_reg = models.BooleanField(default=True)
     waitlist_reg = models.BooleanField(default=False)
     position_papers_accepted = models.BooleanField(default=False)
+    notes_enabled = models.BooleanField(default=False)
     early_paper_deadline = models.DateField()
     paper_deadline = models.DateField()
     waiver_avail_date = models.DateField()
@@ -48,7 +49,7 @@ class Conference(models.Model):
         max_digits=6, decimal_places=2, default=Decimal('50.00'))
     delegate_fee = models.DecimalField(
         max_digits=6, decimal_places=2, default=Decimal('50.00'))
-
+        
     @classmethod
     def get_current(cls):
         return Conference.objects.get(session=settings.SESSION)
@@ -121,6 +122,7 @@ class Committee(models.Model):
     special = models.BooleanField(default=False)
     rubric = models.OneToOneField(Rubric, on_delete=models.SET_NULL, blank=True, null=True)
     zoom_link = models.URLField(default="https://zoom.us")
+    notes_activated = models.BooleanField(default=False)
 
     @classmethod
     def create_rubric(cls, **kwargs):
@@ -717,7 +719,7 @@ class Note(models.Model):
             recipient = 'Chair'
             
 
-        return committee + ": " + sender + ' -> ' + recipient + ' - ' + self.id
+        return committee + ": " + sender + ' -> ' + recipient + ' - ' + str(self.id)
 
     class Meta:
         db_table = u'note'

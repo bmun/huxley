@@ -21,6 +21,8 @@ var {
   ChairCommitteeFeedbackView,
 } = require("components/ChairCommitteeFeedbackView");
 var { ChairDelegateEmailView } = require("components/ChairDelegateEmailView");
+var { ChairFeedView } = require("components/ChairFeedView");
+var { ChairNoteView } = require("components/ChairNoteView");
 var { ChairPapersView } = require("components/ChairPapersView");
 var { ChairRubricView } = require("components/ChairRubricView");
 var { ChairSummaryView } = require("components/ChairSummaryView");
@@ -31,6 +33,7 @@ var {
 } = require("components/DelegateCommitteeFeedbackView");
 var { DelegatePaperView } = require("components/DelegatePaperView");
 var { DelegateProfileView } = require("components/DelegateProfileView");
+var { DelegateNoteView } = require("components/DelegateNoteView")
 var { DelegateView } = require("components/DelegateView");
 var { ForgotPasswordView } = require("components/ForgotPasswordView");
 var { LoginView } = require("components/LoginView");
@@ -160,6 +163,12 @@ class Huxley extends React.Component {
               <Route path="/chair/rubric">
                 <ChairRubricView />
               </Route>
+              <Route path="/chair/notes">
+                <ChairNoteView />
+              </Route>
+              <Route path="/chair/feed">
+                <ChairFeedView />
+              </Route>
               <Route path="/chair/delegate_emails">
                 <ChairDelegateEmailView />
               </Route>
@@ -193,6 +202,9 @@ class Huxley extends React.Component {
               </Route>
               <Route path="/delegate/paper">
                 <DelegatePaperView />
+              </Route>
+              <Route path="/delegate/notes">
+                <DelegateNoteView />
               </Route>
               <Route exact path="/">
                 <RedirectView />

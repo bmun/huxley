@@ -174,7 +174,7 @@ class AdvisorAssignmentsView extends React.Component {
     return this.state.assignments.map(
       function (assignment) {
         return (
-          <tr>
+          <tr key={assignment.id}>
             <td>{committees[assignment.committee] ? committees[assignment.committee].name : ''}</td>
             <td>{countries[assignment.country] ? countries[assignment.country].name : ''}</td>
             <td>{committees[assignment.committee] ? committees[assignment.committee].delegation_size : ''}</td>

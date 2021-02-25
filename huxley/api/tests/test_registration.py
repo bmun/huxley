@@ -22,6 +22,7 @@ class RegistrationListPostTest(tests.CreateAPITestCase):
     def test_valid(self):
         school = models.new_school()
         conference = Conference.get_current()
+        _, _ = models.new_country(), models.new_country()
         params = self.get_params()
         params['school'] = school.id
         params['conference'] = conference.session
@@ -85,6 +86,7 @@ class RegistrationListPostTest(tests.CreateAPITestCase):
         '''Fees should be read-only fields.'''
         school = models.new_school()
         conference = Conference.get_current()
+        _, _, _ = models.new_country(), models.new_country(), models.new_country()
         params = self.get_params(
             school=school.id,
             conference=conference.session,

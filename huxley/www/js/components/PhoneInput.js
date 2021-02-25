@@ -2,17 +2,21 @@
  * Copyright (c) 2011-2015 Berkeley Model United Nations. All rights reserved.
  * Use of this source code is governed by a BSD License (see LICENSE).
  */
-
+//@flow
 "use strict";
 
 import React from "react";
-import PropTypes from "prop-types";
 
 var { TextInput } = require("components/core/TextInput");
 var { formatPhone } = require("utils/formatPhone");
 
-class PhoneInput extends React.Component {
-  componentDidUpdate(prevProps, prevState) {
+type PhoneInputProps = {
+  onChange?: (any) => void,
+  value?: string,
+  isInternational: boolean,
+};
+class PhoneInput extends React.Component<PhoneInputProps> {
+  componentDidUpdate(prevProps: PhoneInputProps, prevState: void) {
     if (prevProps.isInternational !== this.props.isInternational) {
       var number = this._formatValue(
         this.props.value,
@@ -22,10 +26,11 @@ class PhoneInput extends React.Component {
     }
   }
 
-  render() {
+  render(): React$Element<any> {
+    const {isInternational, ...newProps} = this.props;
     return (
       <TextInput
-        {...this.props}
+        {...newProps}
         isControlled={true}
         placeholder="Phone Number"
         onChange={this._handleChange}
@@ -33,23 +38,17 @@ class PhoneInput extends React.Component {
     );
   }
 
-  _handleChange = (value) => {
+  _handleChange: (string) => void = (value) => {
     var number = this._formatValue(value, this.props.isInternational);
     this.props.onChange && this.props.onChange(number);
   };
 
-  _formatValue = (value, isInternational) => {
-    var value = value || "";
+  _formatValue: (?string, boolean) => string = (value, isInternational) => {
+    var valueOrEmpty: string = value ?? "";
     return isInternational
-      ? value.replace(/[^0-9+\(\)\-\s]/, "")
+      ? valueOrEmpty.replace(/[^0-9+\(\)\-\s]/, "")
       : formatPhone(value);
   }
 }
-
-PhoneInput.propTypes = {
-  onChange: PropTypes.func,
-  value: PropTypes.string,
-  isInternational: PropTypes.bool.isRequired,
-};
 
 export { PhoneInput };

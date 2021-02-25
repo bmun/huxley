@@ -5,11 +5,11 @@
 
 'use strict';
 
-var ActionConstants = require('constants/ActionConstants');
-var Dispatcher = require('dispatcher/Dispatcher');
+import ActionConstants from 'constants/ActionConstants';
+import {Dispatcher} from 'dispatcher/Dispatcher';
 
 var NoteActions = {
-  addNote(Note) {
+  addNote(note) {
     Dispatcher.dispatch({
       actionType: ActionConstants.ADD_NOTE,
       note: note,
@@ -24,4 +24,4 @@ var NoteActions = {
   },
 };
 
-module.exports = NoteActions;
+export { NoteActions };

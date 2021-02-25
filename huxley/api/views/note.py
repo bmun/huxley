@@ -1,14 +1,16 @@
 # Copyright (c) 2011-2021 Berkeley Model United Nations. All rights reserved.
 # Use of this source code is governed by a BSD License (see LICENSE).
+import datetime
 
 from rest_framework import generics, status
 from rest_framework.authentication import SessionAuthentication
+from rest_framework.exceptions import PermissionDenied
 from rest_framework.response import Response
 
 from huxley.api.mixins import ListUpdateModelMixin
 from huxley.api import permissions
 from huxley.api.serializers import NoteSerializer
-from huxley.core.models import Note
+from huxley.core.models import Assignment, Note
 
 
 class NoteList(generics.ListCreateAPIView):
@@ -20,24 +22,29 @@ class NoteList(generics.ListCreateAPIView):
         queryset = Note.objects.all()
         query_params = self.request.GET
         sender_id = query_params.get('sender_id', None)
-        recipient_id = query_params.get('recipient_id', None)
-        chair = query_params.get('chair', None)
-
+        timestamp = query_params.get('timestamp', None)
         committee_id = query_params.get('committee_id', None)
-        if committee_id:
-            queryset = queryset.filter(sender__committee_id=committee_id) | queryset.filter(
-                recipient__committee_id=committee_id)
 
+        if not timestamp:
+            return Note.objects.none()
 
-        if sender_id and recipient_id:
-            queryset = queryset.filter(sender_id = sender_id).filter(recipient_id = recipient_id) | queryset.filter(
-                sender_id = recipient_id).filter(recipient_id = sender_id)
+        # Divide by 1000 because fromtimestamp takes in value in seconds
+        timestamp_date = datetime.datetime.fromtimestamp(
+            int(timestamp) / 1000.0)
 
-        if sender_id and chair:
-            queryset = queryset.filter(sender_id = sender_id).filter(is_chair = 2) | queryset.filter(
-                is_chair = 1).filter(recipient_id = sender_id)
+        if committee_id and timestamp:
+            queryset = queryset.filter(
+                sender__committee_id=committee_id).filter(
+                    timestamp__gte=timestamp_date) | queryset.filter(
+                        recipient__committee_id=committee_id).filter(
+                            timestamp__gte=timestamp_date)
 
-        
+        if sender_id and timestamp:
+            queryset = queryset.filter(sender_id=sender_id).filter(
+                timestamp__gte=timestamp_date) | queryset.filter(
+                    recipient_id=sender_id).filter(
+                        timestamp__gte=timestamp_date)
+
         return queryset
 
 
@@ -47,3 +54,10 @@ class NoteDetail(generics.CreateAPIView, generics.RetrieveAPIView):
     permission_classes = (permissions.NotePermission, )
     serializer_class = NoteSerializer
 
+    def post(self, request, *args, **kwargs):
+        if request.data['sender'] and request.data['recipient']:
+            sender = Assignment.objects.get(id=request.data['sender'])
+            committee = sender.committee
+            if not committee.notes_activated:
+                return Response({'reason': 'The chair has disabled notes for this committee'}, status=status.HTTP_403_FORBIDDEN)
+        return super().post(request, args, kwargs)

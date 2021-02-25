@@ -18,4 +18,5 @@ class CommitteeSerializer(serializers.ModelSerializer):
                   'delegation_size',
                   'rubric',
                   'special',
-                  'zoom_link', )
+                  'zoom_link',
+                  'notes_activated')

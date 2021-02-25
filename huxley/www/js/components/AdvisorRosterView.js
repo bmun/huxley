@@ -202,9 +202,9 @@ class AdvisorRosterView extends React.Component {
     return this.state.delegates.map(
       function (delegate) {
         var editButton = disableEdit ? (
-          <td />
+          <td key={delegate.id} />
         ) : (
-          <td>
+          <td key={delegate.id} >
             <Button
               color="blue"
               size="small"
@@ -245,7 +245,7 @@ class AdvisorRosterView extends React.Component {
             : "\u2610";
 
         return (
-          <tr>
+          <tr key={delegate.id}>
             <td>{delegate.name}</td>
             <td>{delegate.email}</td>
             <td>{waiverCheck}</td>

@@ -355,7 +355,7 @@ class RegistrationView extends React.Component {
   renderCommittees = () => {
     return this.state.committees.map(function (committee) {
       return (
-        <li>
+        <li key={committee.id}>
           <label name="committee_prefs">
             <input
               className="choice"
@@ -579,7 +579,6 @@ class RegistrationView extends React.Component {
   };
 
   _handleSuccess = (response) => {
-    console.log('success');
     if (response.registration.is_waitlisted) {
       history.redirect("/register/waitlist");
     } else {

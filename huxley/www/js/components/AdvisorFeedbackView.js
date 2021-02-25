@@ -141,7 +141,7 @@ class AdvisorFeedbackView extends React.Component {
         return;
       }
       return (
-        <tr>
+        <tr key={assignment.id}>
           <td>{committees[assignment.committee].name}</td>
           <td>{countries[assignment.country].name}</td>
           <td>

@@ -19,7 +19,7 @@ var { TextTemplate } = require("components/core/TextTemplate");
 var { User } = require("utils/User");
 
 require("css/Table.less");
-var ChairDelegateEmailViewText = require("text/ChairDelegateEmailViewText.md");
+var AdvisorZoomLinkViewText = require("text/AdvisorZoomLinkViewText.md");
 
 class AdvisorZoomLinkView extends React.Component {
   constructor(props) {
@@ -53,7 +53,7 @@ class AdvisorZoomLinkView extends React.Component {
   render() {
     return (
       <InnerView>
-        <h2>Zoom Links</h2>
+        <TextTemplate>{AdvisorZoomLinkViewText}</TextTemplate>
         <form>
           <div className="table-container">
             <table>
