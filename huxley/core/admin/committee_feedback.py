@@ -78,13 +78,16 @@ class CommitteeFeedbackAdmin(admin.ModelAdmin):
                 settings.SERVICE_ACCOUNT_FILE, scopes=settings.SCOPES)
 
             data = self.get_rows()
-            print('\n', len(data[0]), '\n')
 
             body = {
                 'values': data,
             }
 
             service = build('sheets', 'v4', credentials=creds)
+            response = service.spreadsheets().values().clear(
+                spreadsheetId=settings.SHEET_ID,
+                range=SHEET_RANGE,
+            ).execute()
             response = service.spreadsheets().values().update(
                 spreadsheetId=settings.SHEET_ID,
                 range=SHEET_RANGE,

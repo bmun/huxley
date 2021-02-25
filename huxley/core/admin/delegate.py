@@ -177,7 +177,10 @@ class DelegateAdmin(admin.ModelAdmin):
             body = {
                 'values': data,
             }
-            
+            response = service.spreadsheets().values().clear(
+                spreadsheetId=settings.SHEET_ID,
+                range=SHEET_RANGE,
+            ).execute()
             service.spreadsheets().values().update(
                 spreadsheetId=settings.SHEET_ID,
                 range=SHEET_RANGE,

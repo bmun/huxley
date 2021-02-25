@@ -88,6 +88,10 @@ class RegistrationAdmin(admin.ModelAdmin):
             }
 
             service = build('sheets', 'v4', credentials=creds)
+            response = service.spreadsheets().values().clear(
+                spreadsheetId=settings.SHEET_ID,
+                range=SHEET_RANGE,
+            ).execute()
             response = service.spreadsheets().values().update(
                 spreadsheetId=settings.SHEET_ID,
                 range=SHEET_RANGE,
