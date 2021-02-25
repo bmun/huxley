@@ -97,7 +97,7 @@ function _isMessageFlagged(
 ): boolean {
   return SearchTerms.some(
     (term) =>
-      note.msg.toLowerCase().search(term.toLowerCase()) !== -1
+      note.msg.toLowerCase().search(term) !== -1
   );
 }
 

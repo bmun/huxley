@@ -43,6 +43,24 @@ type Country = {
 
 type Delegate = {
   id: number,
+  assignment: number,
+  committee_feedback_submitted: boolean,
+  created_at: string,
+  email: string,
+  name: string,
+  published_summary: string,
+  school: number,
+  session_four: boolean,
+  session_one: boolean,
+  session_three: boolean,
+  session_two: boolean,
+  summary: string,
+  voting: boolean,
+  waiver_submitted: boolean,
+};
+
+type DelegateNested = {
+  id: number,
   assignment: AssignmentNested,
   committee_feedback_submitted: boolean,
   created_at: string,
@@ -152,6 +170,7 @@ export type {
   Committee,
   Country,
   Delegate,
+  DelegateNested,
   Note,
   PositionPaper,
   Registration,

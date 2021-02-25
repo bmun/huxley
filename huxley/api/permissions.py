@@ -207,7 +207,8 @@ class DelegateListPermission(permissions.BasePermission):
             school_id = request.query_params.get('school_id', -1)
             committee_id = request.query_params.get('committee_id', -1)
             return (user_is_chair(request, view, committee_id) or
-                    user_is_advisor(request, view, school_id))
+                    user_is_advisor(request, view, school_id) or
+                    user_is_delegate(request, view, committee_id, 'committee'))
 
         if method == 'POST':
             return user_is_advisor(request, view, request.data['school'])
@@ -381,8 +382,10 @@ def user_is_delegate(request, view, target_id, field=None):
     if not user.is_authenticated or not user.is_delegate():
         return False
 
-    if field:
+    if field != 'committee':
         return getattr(user.delegate, field + '_id', -1) == int(target_id)
+    elif field == 'committee':
+        return getattr(getattr(user.delegate, 'assignment', -1), 'committee_id', -1) == int(target_id)
 
     return user.delegate_id == int(target_id)
 

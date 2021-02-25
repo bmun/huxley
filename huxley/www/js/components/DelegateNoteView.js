@@ -9,13 +9,20 @@
 
 import React from "react";
 import { history } from "utils/history";
-import type { Assignment, AssignmentNested, Committee, Note } from "utils/types";
+import type {
+  Assignment,
+  AssignmentNested,
+  Committee,
+  Delegate,
+  Note,
+} from "utils/types";
 
 const { AssignmentStore } = require("stores/AssignmentStore");
 const { Button } = require("components/core/Button");
 const { CommitteeStore } = require("stores/CommitteeStore");
 const { CountryStore } = require("stores/CountryStore");
 const { CurrentUserStore } = require("stores/CurrentUserStore");
+const { DelegateStore } = require("stores/DelegateStore");
 const { InnerView } = require("components/InnerView");
 const { TextTemplate } = require("components/core/TextTemplate");
 const { User } = require("utils/User");
@@ -43,6 +50,7 @@ type DelegateNoteViewState = {
   recipient: ?Assignment,
   sender: AssignmentNested,
   assignments: Array<Assignment>,
+  delegates: Array<Delegate>,
   countries: any,
   search_string: string,
   committees: { [number]: Committee },
@@ -52,6 +60,7 @@ class DelegateNoteView extends React.Component<{}, DelegateNoteViewState> {
   _conversationToken: any;
   _assignmentToken: any;
   _committeeToken: any;
+  _delegateToken: any;
   _countryToken: any;
   _notePoller: IntervalID;
 
@@ -59,10 +68,11 @@ class DelegateNoteView extends React.Component<{}, DelegateNoteViewState> {
     super(props);
     const user = CurrentUserStore.getCurrentUser();
     const user_assignment = user.delegate.assignment;
-    const notes = NoteStore.getConversationNotes(
-      user_assignment.id,
-    );
+    const notes = NoteStore.getConversationNotes(user_assignment.id);
     const assignments = AssignmentStore.getCommitteeAssignments(
+      user_assignment.committee.id
+    );
+    const delegates = DelegateStore.getCommitteeDelegates(
       user_assignment.committee.id
     );
     const countries = CountryStore.getCountries();
@@ -71,6 +81,7 @@ class DelegateNoteView extends React.Component<{}, DelegateNoteViewState> {
     this.state = {
       notes: notes,
       recipient: null,
+      delegates: delegates,
       sender: user_assignment,
       assignments: assignments,
       countries: countries,
@@ -89,9 +100,7 @@ class DelegateNoteView extends React.Component<{}, DelegateNoteViewState> {
   componentDidMount() {
     this._conversationToken = NoteStore.addListener(() => {
       this.setState({
-        notes: NoteStore.getConversationNotes(
-          this.state.sender.id,
-        ),
+        notes: NoteStore.getConversationNotes(this.state.sender.id),
       });
     });
 
@@ -115,11 +124,17 @@ class DelegateNoteView extends React.Component<{}, DelegateNoteViewState> {
       });
     });
 
+    this._delegateToken = DelegateStore.addListener(() => {
+      this.setState({
+        delegates: DelegateStore.getCommitteeDelegates(
+          this.state.sender.committee.id
+        ),
+      });
+    });
+
     this._notePoller = setInterval(() => {
       this.setState({
-        notes: NoteStore.getConversationNotes(
-          this.state.sender.id,
-        ),
+        notes: NoteStore.getConversationNotes(this.state.sender.id),
       });
     }, PollingInterval);
   }
@@ -127,7 +142,9 @@ class DelegateNoteView extends React.Component<{}, DelegateNoteViewState> {
   componentWillUnmount() {
     this._conversationToken && this._conversationToken.remove();
     this._assignmentToken && this._assignmentToken.remove();
+    this._committeeToken && this._committeeToken.remove();
     this._countryToken && this._countryToken.remove();
+    this._delegateToken && this._delegateToken.remove();
     clearInterval(this._notePoller);
   }
 
@@ -137,21 +154,26 @@ class DelegateNoteView extends React.Component<{}, DelegateNoteViewState> {
       : false;
 
     if (!global.conference.notes_enabled) {
-      return(
+      return (
         <InnerView>
           <TextTemplate>{DelegateNoteViewText}</TextTemplate>
           <TextTemplate>{DelegateNoteDisabledViewText}</TextTemplate>
         </InnerView>
-      )
+      );
     }
-    
+
+    const assignmentIDs = this.state.delegates.map(
+      (delegate) => delegate.assignment
+    );
+
+    const assignments = this.state.assignments.filter((assignment) =>
+      assignmentIDs.includes(assignment.id)
+    );
+
     const assignment_map = {};
     const last_message_map = {};
-    if (
-      this.state.assignments.length &&
-      Object.keys(this.state.countries).length
-    ) {
-      for (let assignment of this.state.assignments) {
+    if (assignments.length && Object.keys(this.state.countries).length) {
+      for (let assignment of assignments) {
         assignment_map[
           this.state.countries[assignment.country].name
         ] = assignment;
@@ -226,11 +248,9 @@ class DelegateNoteView extends React.Component<{}, DelegateNoteViewState> {
 
   _onRefreshNotes: () => void = () => {
     this.setState({
-      notes: NoteStore.getConversationNotes(
-        this.state.sender.id,
-      ),
+      notes: NoteStore.getConversationNotes(this.state.sender.id),
     });
-  }
+  };
 
   _onChairConversationChange: () => void = () => {
     this.setState({
@@ -250,9 +270,9 @@ class DelegateNoteView extends React.Component<{}, DelegateNoteViewState> {
     });
   };
 
-  _filterAssignmentMap: ({ [string]: Assignment }) => { [string]: Assignment } = (
-    assignment_map
-  ) => {
+  _filterAssignmentMap: ({ [string]: Assignment }) => {
+    [string]: Assignment,
+  } = (assignment_map) => {
     if (this.state.search_string === "") {
       return assignment_map;
     }

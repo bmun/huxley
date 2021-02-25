@@ -10,7 +10,7 @@ from rest_framework.response import Response
 from huxley.api.mixins import ListUpdateModelMixin
 from huxley.api import permissions
 from huxley.api.serializers import NoteSerializer
-from huxley.core.models import Assignment, Note
+from huxley.core.models import Assignment, Conference, Note
 
 
 class NoteList(generics.ListCreateAPIView):
@@ -20,12 +20,13 @@ class NoteList(generics.ListCreateAPIView):
 
     def get_queryset(self):
         queryset = Note.objects.all()
+        conference = Conference.get_current()
         query_params = self.request.GET
         sender_id = query_params.get('sender_id', None)
         timestamp = query_params.get('timestamp', None)
         committee_id = query_params.get('committee_id', None)
 
-        if not timestamp:
+        if not timestamp or not conference.notes_enabled:
             return Note.objects.none()
 
         # Divide by 1000 because fromtimestamp takes in value in seconds
@@ -55,9 +56,10 @@ class NoteDetail(generics.CreateAPIView, generics.RetrieveAPIView):
     serializer_class = NoteSerializer
 
     def post(self, request, *args, **kwargs):
+        conference = Conference.get_current()
         if request.data['sender'] and request.data['recipient']:
             sender = Assignment.objects.get(id=request.data['sender'])
             committee = sender.committee
-            if not committee.notes_activated:
+            if not committee.notes_activated or not conference.notes_enabled:
                 return Response({'reason': 'The chair has disabled notes for this committee'}, status=status.HTTP_403_FORBIDDEN)
         return super().post(request, args, kwargs)
