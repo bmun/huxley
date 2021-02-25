@@ -9,7 +9,7 @@
 
 import React from "react";
 import { history } from "utils/history";
-import type { Assignment, Committee, Note } from "utils/types";
+import type { Assignment, Committee, Delegate, Note } from "utils/types";
 
 const { AssignmentStore } = require("stores/AssignmentStore");
 const { Button } = require("components/core/Button");
@@ -17,6 +17,7 @@ const { CommitteeActions } = require("actions/CommitteeActions");
 const { CommitteeStore } = require("stores/CommitteeStore");
 const { CountryStore } = require("stores/CountryStore");
 const { CurrentUserStore } = require("stores/CurrentUserStore");
+const { DelegateStore } = require("stores/DelegateStore");
 const { InnerView } = require("components/InnerView");
 const { TextTemplate } = require("components/core/TextTemplate");
 const { User } = require("utils/User");
@@ -41,6 +42,7 @@ type ChairNoteViewState = {
   recipient: ?Assignment,
   committee_id: number,
   assignments: Array<Assignment>,
+  delegates: Array<Delegate>,
   countries: any,
   search_string: string,
   committees: { [number]: Committee },
@@ -50,6 +52,7 @@ class ChairNoteView extends React.Component<{}, ChairNoteViewState> {
   _conversationToken: any;
   _assignmentToken: any;
   _committeeToken: any;
+  _delegateToken: any;
   _countryToken: any;
   _notePoller: IntervalID;
 
@@ -61,12 +64,14 @@ class ChairNoteView extends React.Component<{}, ChairNoteViewState> {
     const assignments = AssignmentStore.getCommitteeAssignments(
       user_committee_id
     );
+    const delegates = DelegateStore.getCommitteeDelegates(user_committee_id);
     const committees = CommitteeStore.getCommittees();
     const countries = CountryStore.getCountries();
 
     this.state = {
       notes: notes,
       recipient: null,
+      delegates: delegates,
       committee_id: user_committee_id,
       assignments: assignments,
       countries: countries,
@@ -109,6 +114,12 @@ class ChairNoteView extends React.Component<{}, ChairNoteViewState> {
       });
     });
 
+    this._delegateToken = DelegateStore.addListener(() => {
+      this.setState({
+        delegates: DelegateStore.getCommitteeDelegates(this.state.committee_id),
+      });
+    });
+
     this._notePoller = setInterval(() => {
       this.setState({
         notes: NoteStore.getCommitteeNotes(this.state.committee_id),
@@ -121,17 +132,23 @@ class ChairNoteView extends React.Component<{}, ChairNoteViewState> {
     this._assignmentToken && this._assignmentToken.remove();
     this._committeeToken && this._committeeToken.remove();
     this._countryToken && this._countryToken.remove();
+    this._delegateToken && this._delegateToken.remove();
     clearInterval(this._notePoller);
   }
 
   render(): React$Element<any> {
+    const assignmentIDs = this.state.delegates.map(
+      (delegate) => delegate.assignment
+    );
+
+    const assignments = this.state.assignments.filter((assignment) =>
+      assignmentIDs.includes(assignment.id)
+    );
+
     const assignment_map = {};
     const last_message_map = {};
-    if (
-      this.state.assignments.length &&
-      Object.keys(this.state.countries).length
-    ) {
-      for (let assignment of this.state.assignments) {
+    if (assignments.length && Object.keys(this.state.countries).length) {
+      for (let assignment of assignments) {
         assignment_map[
           this.state.countries[assignment.country].name
         ] = assignment;
@@ -173,24 +190,27 @@ class ChairNoteView extends React.Component<{}, ChairNoteViewState> {
                 />
               </td>
               <td width={"75%"}>
-                {this.state.recipient ? 
-                <NoteConversation
-                  recipient_name={recipient_name}
-                  sender_id={null}
-                  recipient_id={
-                    this.state.recipient ? this.state.recipient.id : null
-                  }
-                  is_chair={1}
-                  conversation={_filterOnChairConversation(
-                    this.state.recipient ? this.state.recipient.id : null,
-                    this.state.notes
-                  )}
-                  onRefreshNotes={this._onRefreshNotes}
-                /> : <div></div>}
+                {this.state.recipient ? (
+                  <NoteConversation
+                    recipient_name={recipient_name}
+                    sender_id={null}
+                    recipient_id={
+                      this.state.recipient ? this.state.recipient.id : null
+                    }
+                    is_chair={1}
+                    conversation={_filterOnChairConversation(
+                      this.state.recipient ? this.state.recipient.id : null,
+                      this.state.notes
+                    )}
+                    onRefreshNotes={this._onRefreshNotes}
+                  />
+                ) : (
+                  <div></div>
+                )}
               </td>
             </tr>
           </tbody>
-        </table> 
+        </table>
       </InnerView>
     );
   }
@@ -199,7 +219,7 @@ class ChairNoteView extends React.Component<{}, ChairNoteViewState> {
     this.setState({
       notes: NoteStore.getCommitteeNotes(this.state.committee_id),
     });
-  }
+  };
 
   _renderToggleButton: () => any = () => {
     const activated = this.state.committees[this.state.committee_id]
@@ -207,7 +227,10 @@ class ChairNoteView extends React.Component<{}, ChairNoteViewState> {
       : false;
     return (
       <div style={{ marginBottom: "5px" }}>
-        <h3>Notes are currently {activated ? "on. " : "off. Delegates can only message the chair."}</h3>
+        <h3>
+          Notes are currently{" "}
+          {activated ? "on. " : "off. Delegates can only message the chair."}
+        </h3>
         <Button
           color={activated ? "red" : "green"}
           size="medium"
