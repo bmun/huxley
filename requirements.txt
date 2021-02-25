@@ -18,7 +18,7 @@ idna==2.8
 isort==4.3.21
 lazy-object-proxy==1.4.1
 mccabe==0.6.1
-Pillow==6.2.1
+Pillow==7.1.0
 protobuf==3.14.0
 pyasn1==0.4.8
 pyasn1-modules==0.2.8
