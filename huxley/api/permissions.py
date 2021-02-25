@@ -358,7 +358,7 @@ class NotePermission(permissions.BasePermission):
     '''Accept requests to view Notes when user is not an advisor'''
     def has_permission(self, request, view):
         user = request.user
-        if not user.is_advisor():
+        if user.is_authenticated and not user.is_advisor():
             return True
         return False
 
