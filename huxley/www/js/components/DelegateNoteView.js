@@ -136,13 +136,14 @@ class DelegateNoteView extends React.Component<{}, DelegateNoteViewState> {
       ? this.state.committees[this.state.sender.committee.id].notes_activated
       : false;
 
-    // if (!activated) {
-    //   return(
-    //     <InnerView>
-    //       <TextTemplate>{DelegateNoteDisabledViewText}</TextTemplate>
-    //     </InnerView>
-    //   )
-    // }
+    if (!global.conference.notes_enabled) {
+      return(
+        <InnerView>
+          <TextTemplate>{DelegateNoteViewText}</TextTemplate>
+          <TextTemplate>{DelegateNoteDisabledViewText}</TextTemplate>
+        </InnerView>
+      )
+    }
     
     const assignment_map = {};
     const last_message_map = {};

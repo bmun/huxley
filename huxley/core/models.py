@@ -37,6 +37,7 @@ class Conference(models.Model):
     open_reg = models.BooleanField(default=True)
     waitlist_reg = models.BooleanField(default=False)
     position_papers_accepted = models.BooleanField(default=False)
+    notes_enabled = models.BooleanField(default=False)
     early_paper_deadline = models.DateField()
     paper_deadline = models.DateField()
     waiver_avail_date = models.DateField()
@@ -48,7 +49,7 @@ class Conference(models.Model):
         max_digits=6, decimal_places=2, default=Decimal('50.00'))
     delegate_fee = models.DecimalField(
         max_digits=6, decimal_places=2, default=Decimal('50.00'))
-
+        
     @classmethod
     def get_current(cls):
         return Conference.objects.get(session=settings.SESSION)

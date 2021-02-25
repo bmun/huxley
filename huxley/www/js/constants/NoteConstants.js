@@ -7,6 +7,6 @@
 "use strict";
 
 const PollingInterval = 4000;
-const SearchTerms = ["https", "http", ".com", ".org", ".net", ".edu", "www"];
+const SearchTerms = ["https", "http", "\.com", "\.org", "\.net", "\.edu", "www"]
 
 export { PollingInterval, SearchTerms};
