@@ -166,11 +166,12 @@ class DelegateAdmin(admin.ModelAdmin):
                 range=SHEET_RANGE,
                 majorDimension='ROWS').execute()
             
-            for row in response['values'][1:]:
-                delegate = Delegate.objects.get(id=row[0])
-                if row[6] == "TRUE" or row[6] == "x":
-                    delegate.waiver_submitted = True
-                    delegate.save()
+            if 'values' in response and len(response['values']) > 1:
+                for row in response['values'][1:]:
+                    delegate = Delegate.objects.get(id=row[0])
+                    if row[6] == "TRUE" or row[6] == "x":
+                        delegate.waiver_submitted = True
+                        delegate.save()
 
             data = self.get_rows()
 
