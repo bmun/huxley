@@ -65,7 +65,8 @@ class CommitteeDetailPutTestCase(tests.UpdateAPITestCase):
                 'full_name': self.committee.full_name,
                 'delegation_size': self.committee.delegation_size,
                 'special': True,
-                'notes_activated': self.committee.notes_activated
+                'notes_activated': self.committee.notes_activated,
+                'zoom_link': self.committee.zoom_link
             })
 
     def test_superuser(self):
@@ -82,7 +83,8 @@ class CommitteeDetailPutTestCase(tests.UpdateAPITestCase):
                 'full_name': self.committee.full_name,
                 'delegation_size': self.committee.delegation_size,
                 'special': True,
-                'notes_activated': self.committee.notes_activated
+                'notes_activated': self.committee.notes_activated,
+                'zoom_link': self.committee.zoom_link
             })
 
 
@@ -134,7 +136,8 @@ class CommitteeDetailPatchTestCase(tests.PartialUpdateAPITestCase):
                 'full_name': self.committee.full_name,
                 'delegation_size': self.committee.delegation_size,
                 'special': True,
-                'notes_activated': self.committee.notes_activated
+                'notes_activated': self.committee.notes_activated,
+                'zoom_link': self.committee.zoom_link
             })
 
     def test_superuser(self):
@@ -151,7 +154,8 @@ class CommitteeDetailPatchTestCase(tests.PartialUpdateAPITestCase):
                 'full_name': self.committee.full_name,
                 'delegation_size': self.committee.delegation_size,
                 'special': True,
-                'notes_activated': self.committee.notes_activated
+                'notes_activated': self.committee.notes_activated,
+                'zoom_link': self.committee.zoom_link
             })
 
 
@@ -193,14 +197,16 @@ class CommitteeListGetTestCase(tests.ListAPITestCase):
             'id': c1.id,
             'full_name': c1.full_name,
             'name': c1.name,
-            'notes_activated': c1.notes_activated
+            'notes_activated': c1.notes_activated,
+            'zoom_link': c1.zoom_link
         }, {
             'delegation_size': c2.delegation_size,
             'special': c2.special,
             'id': c2.id,
             'full_name': c2.full_name,
             'name': c2.name,
-            'notes_activated': c1.notes_activated
+            'notes_activated': c2.notes_activated,
+            'zoom_link': c2.zoom_link
         }])
 
 

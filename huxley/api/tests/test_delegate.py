@@ -447,7 +447,8 @@ class DelegateListGetTestCase(tests.ListAPITestCase):
             registration=self.registration, committee=self.committee)
         self.assignment2 = models.new_assignment(
             registration=self.registration)
-        self.delegate1 = models.new_delegate(assignment=self.assignment1, )
+        self.delegate1 = models.new_delegate(assignment=self.assignment1, 
+            user=self.delegate_user)
         self.delegate2 = models.new_delegate(
             assignment=self.assignment2,
             name='Trevor Dowds',
@@ -492,7 +493,7 @@ class DelegateListGetTestCase(tests.ListAPITestCase):
 
         response = self.get_response(
             params={'committee_id': self.committee.id})
-        self.assertPermissionDenied(response)
+        self.assert_delegates_equal(response, [self.delegate1])
 
     def test_other_user(self):
         '''It rejects a request from another user.'''

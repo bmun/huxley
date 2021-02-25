@@ -382,7 +382,7 @@ def user_is_delegate(request, view, target_id, field=None):
     if not user.is_authenticated or not user.is_delegate():
         return False
 
-    if field != 'committee':
+    if field and field != 'committee':
         return getattr(user.delegate, field + '_id', -1) == int(target_id)
     elif field == 'committee':
         return getattr(getattr(user.delegate, 'assignment', -1), 'committee_id', -1) == int(target_id)
