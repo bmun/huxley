@@ -308,7 +308,7 @@ class DelegateCommitteeFeedbackView extends React.Component {
             </select>
           </label>
         </div>
-        <div>
+        {/* <div>
           <br />
           <hr />
           <br />
@@ -326,7 +326,7 @@ class DelegateCommitteeFeedbackView extends React.Component {
               value={this.state["money_spent"].toString()}
             />
           </label>
-        </div>
+        </div> */}
       </div>
     );
   };
