@@ -210,7 +210,6 @@ class DelegateNoteView extends React.Component<{}, DelegateNoteViewState> {
     return (
       <InnerView>
         <TextTemplate>{DelegateNoteViewText}</TextTemplate>
-        {/* {!activated ? <div><h3>Notes are currently disabled. You may still message the chair.</h3></div> : <div></div>} */}
         <table width={"100%"}>
           <tbody>
             <tr>
