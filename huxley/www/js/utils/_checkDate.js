@@ -10,7 +10,7 @@ function _checkDate() {
   var date = new Date();
 
   return (
-    (date.getDate() >= 28 && date.getMonth() == 1) ||
+    (date.getDate() >= 25 && date.getMonth() == 1) ||
     (date.getDate() <= 31 && date.getMonth() == 2)
   );
 }

@@ -60,7 +60,7 @@ class ChairCommitteeFeedbackView extends React.Component {
             <thead>
               <tr>
                 <th>Overall Committee Feedback</th>
-                <th>Rating</th>
+                {/* <th>Rating</th> */}
               </tr>
             </thead>
             <tbody>{this.renderFeedbackRows(this.state.feedback)}</tbody>
@@ -112,7 +112,7 @@ class ChairCommitteeFeedbackView extends React.Component {
               <thead>
                 <tr>
                   <th>{entry}</th>
-                  <th>Rating</th>
+                  {/* <th>Rating</th> */}
                 </tr>
               </thead>
               <tbody>{this.renderFeedbackRows(data[entry])}</tbody>
@@ -131,7 +131,7 @@ class ChairCommitteeFeedbackView extends React.Component {
           <td width={"90%"} style={{whiteSpace:"nowrap"}}>
             {singleFeedback.comment || "No Comment"}
           </td>
-          <td>{singleFeedback.rating || "No Rating"}</td>
+          {/* <td>{"No Rating"}</td> */}
         </tr>
       );
     });
