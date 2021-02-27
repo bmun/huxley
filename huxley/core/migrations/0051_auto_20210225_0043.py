@@ -11,11 +11,6 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AddField(
-            model_name='committee',
-            name='zoom_link',
-            field=models.URLField(default='https://zoom.us'),
-        ),
-        migrations.AddField(
             model_name='conference',
             name='opi_link',
             field=models.URLField(default='https://zoom.us'),

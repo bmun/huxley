@@ -3,6 +3,7 @@
 
 from .main import *
 from .conference import *
+from .logging import *
 
 try:
     from .local import *
