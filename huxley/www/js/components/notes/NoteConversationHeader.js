@@ -13,7 +13,7 @@ import type { Note } from "utils/types";
 const { Button } = require("components/core/Button");
 
 type NoteConversationHeaderProps = {
-  recipient_name: ?string,
+  recipient_name?: ?string,
   onRefreshNotes: () => void,
 };
 
@@ -21,7 +21,7 @@ class NoteConversationHeader extends React.Component<NoteConversationHeaderProps
   render(): React$Element<any> {
     return (
       <h1>
-        {this.props.recipient_name}{" "}
+        {this.props.recipient_name}{this.props.recipient_name ? " " : ""}
         <Button size="small" onClick={this.props.onRefreshNotes} color="green" style={{marginLeft: "10px"}}>
           Refresh
         </Button>

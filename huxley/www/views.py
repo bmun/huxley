@@ -72,6 +72,9 @@ def index(request):
         'position_papers_accepted': conference.position_papers_accepted,
         'notes_enabled': conference.notes_enabled,
         'opi_link': conference.opi_link,
+        'polling_interval': conference.polling_interval,
+        'max_refresh_interval': conference.max_refresh_interval,
+        'note_checkpoint_padding': conference.note_checkpoint_padding,
     }
 
     context = {

@@ -34,9 +34,11 @@ const {
   _filterOnChairConversation,
   _getChairLastMessage,
 } = require("utils/_noteFilters");
-const { PollingInterval } = require("constants/NoteConstants");
 // $FlowFixMe flow cannot currently understand markdown imports
 const ChairNoteViewText = require("text/ChairNoteViewText.md");
+
+const PollingInterval = global.conference.polling_interval;
+
 type ChairNoteViewState = {
   notes: Note[],
   recipient: ?Assignment,
@@ -106,6 +108,18 @@ class ChairNoteView extends React.Component<{}, ChairNoteViewState> {
       this.setState({
         committees: CommitteeStore.getCommittees(),
       });
+
+      const activated = this.state.committees[this.state.committee_id]
+        ? this.state.committees[this.state.committee_id].notes_activated
+        : false;
+
+      if (activated) {
+        this._notePoller = setInterval(() => {
+          this.setState({
+            notes: NoteStore.getCommitteeNotes(this.state.committee_id),
+          });
+        }, PollingInterval);
+      }
     });
 
     this._countryToken = CountryStore.addListener(() => {
@@ -119,12 +133,6 @@ class ChairNoteView extends React.Component<{}, ChairNoteViewState> {
         delegates: DelegateStore.getCommitteeDelegates(this.state.committee_id),
       });
     });
-
-    this._notePoller = setInterval(() => {
-      this.setState({
-        notes: NoteStore.getCommitteeNotes(this.state.committee_id),
-      });
-    }, PollingInterval);
   }
 
   componentWillUnmount() {
@@ -133,7 +141,7 @@ class ChairNoteView extends React.Component<{}, ChairNoteViewState> {
     this._committeeToken && this._committeeToken.remove();
     this._countryToken && this._countryToken.remove();
     this._delegateToken && this._delegateToken.remove();
-    clearInterval(this._notePoller);
+    this._notePoller && clearInterval(this._notePoller);
   }
 
   render(): React$Element<any> {

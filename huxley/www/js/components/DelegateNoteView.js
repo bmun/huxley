@@ -39,11 +39,12 @@ const {
   _filterOnConversation,
   _getLastMessage,
 } = require("utils/_noteFilters");
-const { PollingInterval } = require("constants/NoteConstants");
 // $FlowFixMe flow cannot currently understand markdown imports
 const DelegateNoteViewText = require("text/DelegateNoteViewText.md");
 // $FlowFixMe flow cannot currently understand markdown imports
 const DelegateNoteDisabledViewText = require("text/DelegateNoteDisabledViewText.md");
+
+const PollingInterval = global.conference.polling_interval;
 
 type DelegateNoteViewState = {
   notes: Note[],
@@ -116,6 +117,19 @@ class DelegateNoteView extends React.Component<{}, DelegateNoteViewState> {
       this.setState({
         committees: CommitteeStore.getCommittees(),
       });
+
+      const activated = this.state.committees[this.state.sender.committee.id]
+        ? this.state.committees[this.state.sender.committee.id].notes_activated
+        : false;
+
+      if (activated) {
+        this._notePoller = setInterval(() => {
+          this.setState({
+            notes: NoteStore.getConversationNotes(this.state.sender.id),
+          });
+        }, PollingInterval);
+      }
+
     });
 
     this._countryToken = CountryStore.addListener(() => {
@@ -131,12 +145,6 @@ class DelegateNoteView extends React.Component<{}, DelegateNoteViewState> {
         ),
       });
     });
-
-    this._notePoller = setInterval(() => {
-      this.setState({
-        notes: NoteStore.getConversationNotes(this.state.sender.id),
-      });
-    }, PollingInterval);
   }
 
   componentWillUnmount() {
@@ -145,7 +153,7 @@ class DelegateNoteView extends React.Component<{}, DelegateNoteViewState> {
     this._committeeToken && this._committeeToken.remove();
     this._countryToken && this._countryToken.remove();
     this._delegateToken && this._delegateToken.remove();
-    clearInterval(this._notePoller);
+    this._notePoller && clearInterval(this._notePoller);
   }
 
   render(): React$Element<any> {
@@ -182,12 +190,12 @@ class DelegateNoteView extends React.Component<{}, DelegateNoteViewState> {
     if (assignment_map && this.state.notes) {
       Object.keys(assignment_map).map(
         (country) =>
-          (last_message_map[country] = _getLastMessage(
-            this.state.sender.id,
-            assignment_map[country].id,
-            false,
-            this.state.notes
-          ))
+        (last_message_map[country] = _getLastMessage(
+          this.state.sender.id,
+          assignment_map[country].id,
+          false,
+          this.state.notes
+        ))
       );
       last_message_map["Chair"] = _getLastMessage(
         this.state.sender.id,

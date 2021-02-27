@@ -20,6 +20,7 @@ const { InnerView } = require("components/InnerView");
 const { TextTemplate } = require("components/core/TextTemplate");
 const { User } = require("utils/User");
 const { NoteConversation } = require("components/notes/NoteConversation");
+const { NoteConversationHeader } = require("components/notes/NoteConversationHeader");
 const {
   NoteConversationSelector,
 } = require("components/notes/NoteConversationSelector");
@@ -36,7 +37,8 @@ const {
   _getChairLastMessage,
   _isMessageFlagged,
 } = require("utils/_noteFilters");
-const { PollingInterval } = require("constants/NoteConstants");
+
+const PollingInterval = global.conference.polling_interval;
 
 type ChairFeedViewState = {
   notes: Note[],
@@ -116,7 +118,7 @@ class ChairFeedView extends React.Component<{}, ChairFeedViewState> {
     this._conversationToken && this._conversationToken.remove();
     this._assignmentToken && this._assignmentToken.remove();
     this._countryToken && this._countryToken.remove();
-    clearInterval(this._notePoller);
+    this._notePoller && clearInterval(this._notePoller);
   }
 
   render(): React$Element<any> {
@@ -147,6 +149,7 @@ class ChairFeedView extends React.Component<{}, ChairFeedViewState> {
     return (
       <InnerView>
         <TextTemplate>{ChairFeedViewText}</TextTemplate>
+        <NoteConversationHeader onRefreshNotes={this._onRefreshNotes}></NoteConversationHeader>
         <NoteFeedFilter
           assignments={assignment_map}
           onInputChange={this._onNoteSearch}
@@ -223,6 +226,13 @@ class ChairFeedView extends React.Component<{}, ChairFeedViewState> {
         note.recipient === this.state.filter_recipient.id
     );
   };
+
+  _onRefreshNotes: () => void = () => {
+    this.setState({
+      notes: NoteStore.getCommitteeNotes(this.state.committee_id),
+    });
+  };
+
 }
 
 export { ChairFeedView };
