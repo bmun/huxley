@@ -12,20 +12,25 @@ import { NoteActions } from "actions/NoteActions";
 import { Dispatcher } from "dispatcher/Dispatcher";
 import { ServerAPI } from "lib/ServerAPI";
 import { Store } from "flux/utils";
-import { PollingInterval } from "constants/NoteConstants";
 
 import type {Note} from 'utils/types';
 
 
 let _notes: {[string]: Note} = {};
 let _lastFetchedTimestamp = 0;
+let _noteCheckpointTimestamp = 0;
 let _previousUserID = -1;
+const PollingInterval = global.conference.polling_interval;
+const MaxRefreshInterval = global.conference.max_refresh_interval;
+const NoteCheckpointPadding = global.conference.note_checkpoint_padding;
+const _refreshInterval = (PollingInterval / 2 < MaxRefreshInterval) ? PollingInterval / 2 : MaxRefreshInterval;
 
 class NoteStore extends Store {
   getCommitteeNotes(committeeID: number): Note[] {
     let noteIDs = Object.keys(_notes);
-    if (_lastFetchedTimestamp < Date.now() - PollingInterval / 2) { // TODO: modify committee retrieval so that it's also timestamp based
-      ServerAPI.getNotesByCommittee(committeeID, _lastFetchedTimestamp).then(value => 
+    if (_lastFetchedTimestamp < Date.now() - _refreshInterval) { 
+      _lastFetchedTimestamp = Date.now() - 10;
+      ServerAPI.getNotesByCommittee(committeeID, _noteCheckpointTimestamp).then(value => 
         NoteActions.notesFetched(value)
       );
     }
@@ -35,12 +40,9 @@ class NoteStore extends Store {
 
   getConversationNotes(senderID: number): Note[] {
     let noteIDs = Object.keys(_notes);;
-    // Subtracting 1s to ensure that polling the server doesn't always happen / there's no bad mutual recursion
-    // Note: this might have issues on slower connections
-    // TODO: look into better ways to ensure loading is finished
-    // TODO: getNoteConvosForChair
-    if (_lastFetchedTimestamp < Date.now() - PollingInterval / 2) {
-      ServerAPI.getNotesBySender(senderID, _lastFetchedTimestamp).then(value => 
+    if (_lastFetchedTimestamp < Date.now() - _refreshInterval) {
+      _lastFetchedTimestamp = Date.now() - 10;
+      ServerAPI.getNotesBySender(senderID, _noteCheckpointTimestamp).then(value => 
         NoteActions.notesFetched(value));
     }
     return noteIDs.map(id => _notes[id]);
@@ -60,7 +62,8 @@ class NoteStore extends Store {
           _notes[note.id] = note;
         }
         // subtracting half of polling period to ensure that no notes are missed in the time it takes the server to communicate with the client
-        _lastFetchedTimestamp = Date.now() - PollingInterval / 2; 
+        //IF this is too big, bad for bandwith, if too small, delegates won't see notes.
+        _noteCheckpointTimestamp = Date.now() - NoteCheckpointPadding; 
         break;
       case ActionConstants.LOGIN:
         var userID = CurrentUserStore.getCurrentUser().id;

@@ -83,8 +83,6 @@ class AdvisorZoomLinkView extends React.Component {
 
   renderCommitteeRows = () => {
     var committees = this.state.committees;
-    console.log(this.state.committees);
-    console.log(typeof(this.state.committees));
     return committees.map((committee) => {
       return (
         <tr key={committee.id}>
