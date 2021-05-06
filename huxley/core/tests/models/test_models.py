@@ -34,7 +34,8 @@ class ConferenceTest(TestCase):
             early_paper_deadline=date(2013, 2, 28),
             paper_deadline=date(2013, 2, 28),
             waiver_avail_date=date(2013, 2, 28),
-            waiver_deadline=date(2013, 2, 28))
+            waiver_deadline=date(2013, 2, 28),
+            advisor_edit_deadline=date(2012, 2, 28))
 
     def test_default_fields(self):
         """ Tests that fields with default values are correctly set. """
@@ -197,7 +198,8 @@ class AssignmentTest(TestCase):
         committee = models.new_committee()
         registration = models.new_registration()
         country = models.new_country()
-        a = Assignment(committee_id=committee.id, country_id=country.id, registration_id=registration.id)
+        a = Assignment(committee_id=committee.id,
+                       country_id=country.id, registration_id=registration.id)
         self.assertTrue(a.paper == None)
         a.save()
         self.assertTrue(a.paper != None)
@@ -242,6 +244,7 @@ class DelegateTest(TestCase):
             name="Test Delegate",
             school=school,
             assignment=assignment)
+
 
 def NoteTest(TestCase):
 
