@@ -564,6 +564,18 @@ class Assignment(models.Model):
 
             assigned[key] = school.id
             old_assignment = assignment_dict.get(key)
+
+            if old_assignment and not old_assignment['rejected']:
+                # If the country is already assigned to a delegate and the delegate has not
+                # rejected the assignment, then do not allow the overwrite.
+                committee = str(committee.name)
+                country = str(country.name)
+                school = Registration.objects.get(id=int(old_assignment['registration_id'])).school
+                failed_assignments.append(
+                    str((committee, country)) +
+                    ' - COUNTRY ALREADY ASSIGNED TO '+str(school)+' AND NOT REJECTED')
+                continue
+
             paper = PositionPaper.objects.create()
             paper.save()
 
@@ -574,6 +586,7 @@ class Assignment(models.Model):
             if old_assignment['registration_id'] != registration:
                 # Remove the old assignment instead of just updating it
                 # so that its delegates are deleted by cascade.
+
                 remove(old_assignment)
                 add(committee, country, registration, paper, rejected)
 
