@@ -564,16 +564,16 @@ class Assignment(models.Model):
 
             assigned[key] = school.id
             old_assignment = assignment_dict.get(key)
+            old_school = Registration.objects.get(id=int(old_assignment['registration_id'])).school if old_assignment else None
 
-            if old_assignment and not old_assignment['rejected']:
+            if old_assignment and not old_assignment['rejected'] and old_school!=school:
                 # If the country is already assigned to a delegate and the delegate has not
                 # rejected the assignment, then do not allow the overwrite.
-                committee = str(committee.name)
-                country = str(country.name)
-                school = Registration.objects.get(id=int(old_assignment['registration_id'])).school
+                str_committee = str(committee.name)
+                str_country = str(country.name)
                 failed_assignments.append(
-                    str((committee, country)) +
-                    ' - COUNTRY ALREADY ASSIGNED TO '+str(school)+' AND NOT REJECTED')
+                    str((str_committee, str_country)) +
+                    ' - COUNTRY ALREADY ASSIGNED TO '+str(old_school)+' AND NOT REJECTED')
                 continue
 
             paper = PositionPaper.objects.create()

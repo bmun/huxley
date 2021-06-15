@@ -102,7 +102,6 @@ class AdvisorRosterView extends React.Component {
   }
 
   render() {
-    console.log("before 2")
     var registration = this.state.registration;
     var waitlisted =
       _accessSafe(registration, "is_waitlisted") == null
@@ -198,9 +197,7 @@ class AdvisorRosterView extends React.Component {
 
   renderRosterRows = () => {
     var assignment_ids = this.state.assignment_ids;
-    console.log("before 1")
     var disableEdit = _checkDate();
-    console.log("after 1")
 
     return this.state.delegates.map(
       function (delegate) {

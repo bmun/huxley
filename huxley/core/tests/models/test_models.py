@@ -166,7 +166,18 @@ class AssignmentTest(TestCase):
             (cm2.id, ct1.id, r1.id, False),
         ]
 
-        Assignment.update_assignments(updates)
+        # Expected to fail because ct2-cm2 assignment was already assigned to s1 and was not rejected by s1 so should not be overwritten.
+        failed_assignments = Assignment.update_assignments(updates)
+        self.assertTrue(failed_assignments)
+
+        # Modifying ct2-cm2 assignment so s1 has rejected the assignment
+        old_assignment = Assignment.objects.get(committee_id=cm2.id, country_id=ct2.id)
+        old_assignment.rejected = True
+        old_assignment.save()
+
+        #update should work
+        failed_assignments = Assignment.update_assignments(updates)
+        self.assertFalse(failed_assignments)
         assignments = [a[1:-1] for a in Assignment.objects.all().values_list()]
         delegates = Delegate.objects.all()
         self.assertEquals(set(all_assignments), set(assignments))
