@@ -22,14 +22,14 @@ class NotesAdmin(admin.ModelAdmin):
     def get_rows(self):
         '''Return the rows of data for huxley notes.'''
         rows = []
-        rows.append(['timestamp', 'summary', 'sender', 'sender is chair?', 'recipient',
+        rows.append(['timestamp', 'sender', 'sender is chair?', 'recipient',
                     'message'])
 
         for note in Note.objects.all().order_by(
                 'timestamp'):
             rows.append([
                 str(item) for item in [
-                    note.timestamp, note, note.sender, note.is_chair, note.recipient, note.msg
+                    note.timestamp, note.sender, note.is_chair, note.recipient, note.msg
                 ]
             ])
 
@@ -48,7 +48,7 @@ class NotesAdmin(admin.ModelAdmin):
 
     def sheets(self, request):
         if settings.SHEET_ID:
-            SHEET_RANGE = 'Notes!A1:F'
+            SHEET_RANGE = 'Notes!A1:E'
             # Store credentials
             creds = service_account.Credentials.from_service_account_file(
                 settings.SERVICE_ACCOUNT_FILE, scopes=settings.SCOPES)
