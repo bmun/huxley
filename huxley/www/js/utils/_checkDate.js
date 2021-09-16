@@ -10,16 +10,6 @@ function _checkDate() {
   const date = new Date();
   const advisorDeadline = Date.parse(global.conference.advisor_edit_deadline)
 
-  /*
-  * refer to global.conference
-  * could parse the date string as a data object
-  * multiply dates (a range)
-  */
-  // return (
-  //   (date.getDate() >= 25 && date.getMonth() == 1) ||
-  //   (date.getDate() <= 31 && date.getMonth() == 2)
-  // );
-
   return (date.getTime() >= advisorDeadline);
 }
 

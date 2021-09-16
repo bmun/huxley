@@ -14,7 +14,6 @@ from django.core.mail import send_mail
 from django.db import models, transaction
 from django.db.models.signals import post_init, post_save, pre_delete, pre_save
 from django.utils import timezone
-# from django.contrib.postgres.fields import DateRangeField
 
 from huxley.core.constants import ContactGender, ContactType, ProgramTypes
 
@@ -41,8 +40,6 @@ class Conference(models.Model):
     notes_enabled = models.BooleanField(default=False)
     polling_interval = models.PositiveIntegerField(default=60000)
     max_refresh_interval = models.PositiveIntegerField(default=10000)
-    # add a field date range from django.contrib.postgres.fields
-    # adding the date field:
     advisor_edit_deadline = models.DateField()
 
     note_checkpoint_padding = models.PositiveIntegerField(default=5000)
@@ -567,7 +564,7 @@ class Assignment(models.Model):
             old_school = Registration.objects.get(id=int(old_assignment['registration_id'])).school if old_assignment else None
 
             if old_assignment and not old_assignment['rejected'] and old_school!=school:
-                # If the country is already assigned to a delegate and the delegate has not
+                # If the country is already assigned to a school and the school has not
                 # rejected the assignment, then do not allow the overwrite.
                 str_committee = str(committee.name)
                 str_country = str(country.name)
@@ -586,7 +583,6 @@ class Assignment(models.Model):
             if old_assignment['registration_id'] != registration:
                 # Remove the old assignment instead of just updating it
                 # so that its delegates are deleted by cascade.
-
                 remove(old_assignment)
                 add(committee, country, registration, paper, rejected)
 
