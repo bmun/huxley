@@ -9,10 +9,8 @@ from django.contrib import admin
 from django.urls import reverse
 from django.http import HttpResponse, HttpResponseRedirect
 
-
 from googleapiclient.discovery import build
 from google.oauth2 import service_account
-
 
 from huxley.core.models import Note
 
