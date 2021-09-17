@@ -28,7 +28,8 @@
       "delegate_fee": 55.0,
       "waiver_avail_date": "2019-09-30",
       "waiver_deadline": "2019-09-30",
-      "waiver_link": "2019-09-30"
+      "waiver_link": "2019-09-30",
+      "advisor_edit_deadline": "2019-09-30"
     }
   }
 ]

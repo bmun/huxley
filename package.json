@@ -19,7 +19,9 @@
   "scripts": {
     "test": "jest",
     "build": "NODE_ENV=production ./node_modules/.bin/webpack --progress --watch",
+    "buildWindows": "NODE_ENV=production .\\node_modules\\.bin\\webpack --progress --watch",
     "develop": "NODE_ENV=development ./node_modules/.bin/webpack --progress --watch",
+    "developWindows": "NODE_ENV=development .\\node_modules\\.bin/webpack --progress --watch",
     "clean": "rm -rf ./node_modules",
     "flow": "flow"
   },

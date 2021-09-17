@@ -20,7 +20,10 @@ def makeFullDate(date):
         'month': date.strftime('%B'),
         'day': day,
         'year': date.strftime('%Y')
-        }
+    }
+
+def makeFullDateJSON(date):
+    return (date.isoformat()+" 23:59:59 GMT-0700")
 
 def makeShortDate(date):
     day = date.strftime('%d')
@@ -75,6 +78,7 @@ def index(request):
         'polling_interval': conference.polling_interval,
         'max_refresh_interval': conference.max_refresh_interval,
         'note_checkpoint_padding': conference.note_checkpoint_padding,
+        'advisor_edit_deadline': makeFullDateJSON(conference.advisor_edit_deadline)
     }
 
     context = {
