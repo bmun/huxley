@@ -1,6 +1,7 @@
 # Copyright (c) 2011-2015 Berkeley Model United Nations. All rights reserved.
 # Use of this source code is governed by a BSD License (see LICENSE).
 
+from huxley.core.admin.notes import NotesAdmin
 from django.contrib import admin
 
 from huxley.core.models import *
@@ -27,4 +28,4 @@ admin.site.register(Registration, RegistrationAdmin)
 admin.site.register(Rubric)
 admin.site.register(PositionPaper, PositionPaperAdmin)
 admin.site.register(SecretariatMember, SecretariatMemberAdmin)
-admin.site.register(Note)
+admin.site.register(Note, NotesAdmin)
