@@ -40,6 +40,8 @@ class Conference(models.Model):
     notes_enabled = models.BooleanField(default=False)
     polling_interval = models.PositiveIntegerField(default=60000)
     max_refresh_interval = models.PositiveIntegerField(default=10000)
+    advisor_edit_deadline = models.DateField()
+
     note_checkpoint_padding = models.PositiveIntegerField(default=5000)
     early_paper_deadline = models.DateField()
     paper_deadline = models.DateField()
@@ -53,7 +55,7 @@ class Conference(models.Model):
         max_digits=6, decimal_places=2, default=Decimal('50.00'))
     delegate_fee = models.DecimalField(
         max_digits=6, decimal_places=2, default=Decimal('50.00'))
-        
+
     @classmethod
     def get_current(cls):
         return Conference.objects.get(session=settings.SESSION)
@@ -124,7 +126,8 @@ class Committee(models.Model):
     countries = models.ManyToManyField(Country, through='Assignment')
     delegation_size = models.PositiveSmallIntegerField(default=2)
     special = models.BooleanField(default=False)
-    rubric = models.OneToOneField(Rubric, on_delete=models.SET_NULL, blank=True, null=True)
+    rubric = models.OneToOneField(
+        Rubric, on_delete=models.SET_NULL, blank=True, null=True)
     zoom_link = models.URLField(default="https://zoom.us")
     notes_activated = models.BooleanField(default=False)
 
@@ -154,7 +157,8 @@ class CommitteeFeedback(models.Model):
                (9, 9),
                (10, 10), )
 
-    LIKELY_CHOICES = ((0, 'Blank'), (1, 'No'), (2, 'No change/unsure'), (3, 'Yes'))
+    LIKELY_CHOICES = ((0, 'Blank'), (1, 'No'),
+                      (2, 'No change/unsure'), (3, 'Yes'))
 
     committee = models.ForeignKey(Committee, on_delete=models.CASCADE)
     comment = models.TextField(blank=True, default='')
@@ -203,11 +207,9 @@ class CommitteeFeedback(models.Model):
     chair_10_rating = models.IntegerField(
         blank=True, default=0, choices=CHOICES)
 
-
     berkeley_perception = models.IntegerField(
         blank=True, default=0, choices=LIKELY_CHOICES)
     money_spent = models.FloatField(blank=True, default=0)
-
 
     def __str__(self):
         return str(self.committee.name) + " - Comment " + str(self.id)
@@ -264,8 +266,10 @@ class School(models.Model):
 
 
 class Registration(models.Model):
-    school = models.ForeignKey(School, on_delete=models.CASCADE, related_name='registrations')
-    conference = models.ForeignKey(Conference, on_delete=models.CASCADE, related_name='registrations')
+    school = models.ForeignKey(
+        School, on_delete=models.CASCADE, related_name='registrations')
+    conference = models.ForeignKey(
+        Conference, on_delete=models.CASCADE, related_name='registrations')
 
     registered_at = models.DateTimeField(auto_now_add=True)
 
@@ -273,7 +277,8 @@ class Registration(models.Model):
     num_intermediate_delegates = models.PositiveSmallIntegerField()
     num_advanced_delegates = models.PositiveSmallIntegerField()
     num_spanish_speaking_delegates = models.PositiveSmallIntegerField()
-    num_chinese_speaking_delegates = models.PositiveSmallIntegerField(default=0)
+    num_chinese_speaking_delegates = models.PositiveSmallIntegerField(
+        default=0)
 
     country_preferences = models.ManyToManyField(
         Country, through='CountryPreference', blank=True)
@@ -482,9 +487,11 @@ post_save.connect(PositionPaper.delete_prev_file, sender=PositionPaper)
 class Assignment(models.Model):
     committee = models.ForeignKey(Committee, on_delete=models.CASCADE)
     country = models.ForeignKey(Country, on_delete=models.CASCADE)
-    registration = models.ForeignKey(Registration, on_delete=models.CASCADE, null=True)
+    registration = models.ForeignKey(
+        Registration, on_delete=models.CASCADE, null=True)
     rejected = models.BooleanField(default=False)
-    paper = models.OneToOneField(PositionPaper, on_delete=models.SET_NULL, blank=True, null=True)
+    paper = models.OneToOneField(
+        PositionPaper, on_delete=models.SET_NULL, blank=True, null=True)
 
     @classmethod
     def update_assignments(cls, new_assignments):
@@ -554,6 +561,18 @@ class Assignment(models.Model):
 
             assigned[key] = school.id
             old_assignment = assignment_dict.get(key)
+            old_school = Registration.objects.get(id=int(old_assignment['registration_id'])).school if old_assignment else None
+
+            if old_assignment and not old_assignment['rejected'] and old_school!=school:
+                # If the country is already assigned to a school and the school has not
+                # rejected the assignment, then do not allow the overwrite.
+                str_committee = str(committee.name)
+                str_country = str(country.name)
+                failed_assignments.append(
+                    str((str_committee, str_country)) +
+                    ' - COUNTRY ALREADY ASSIGNED TO '+str(old_school)+' AND NOT REJECTED')
+                continue
+
             paper = PositionPaper.objects.create()
             paper.save()
 
@@ -573,7 +592,7 @@ class Assignment(models.Model):
                 Assignment.objects.bulk_create(additions)
 
         else:
-            #If the update failed in some way we would like to delete the position paper
+            # If the update failed in some way we would like to delete the position paper
             # objects that were created in the process.
             PositionPaper.objects.filter(assignment=None).delete()
 
@@ -615,8 +634,10 @@ pre_save.connect(Assignment.create_position_paper, sender=Assignment)
 
 
 class CountryPreference(models.Model):
-    registration = models.ForeignKey(Registration, on_delete=models.CASCADE, null=True)
-    country = models.ForeignKey(Country, on_delete=models.CASCADE, limit_choices_to={'special': False})
+    registration = models.ForeignKey(
+        Registration, on_delete=models.CASCADE, null=True)
+    country = models.ForeignKey(
+        Country, on_delete=models.CASCADE, limit_choices_to={'special': False})
     rank = models.PositiveSmallIntegerField()
 
     def __str__(self):
@@ -630,7 +651,8 @@ class CountryPreference(models.Model):
 
 
 class Delegate(models.Model):
-    school = models.ForeignKey(School, on_delete=models.CASCADE, related_name='delegates', null=True)
+    school = models.ForeignKey(
+        School, on_delete=models.CASCADE, related_name='delegates', null=True)
     assignment = models.ForeignKey(
         Assignment,
         related_name='delegates',
@@ -686,7 +708,8 @@ class SecretariatMember(models.Model):
     # A lot more could be added here but this is a good start
 
     name = models.CharField(blank=False, default='', max_length=100)
-    committee = models.ForeignKey(Committee, on_delete=models.CASCADE) # TODO(shayna) decide whether this is correct behavior
+    # TODO(shayna) decide whether this is correct behavior
+    committee = models.ForeignKey(Committee, on_delete=models.CASCADE)
     is_head_chair = models.BooleanField(default=False)
 
     def __str__(self):
@@ -696,13 +719,16 @@ class SecretariatMember(models.Model):
 class Note(models.Model):
     """Note objects allow delegates to send and receive notes over Huxley."""
 
-    #TODO add an export of notes so can reference note content later should there be any legal issues.
+    # TODO add an export of notes so can reference note content later should there be any legal issues.
 
-    #is_chair - 0: Between two Assignments, 1: Sender is Chair, 2: Recipient is Chair
-    is_chair = models.SmallIntegerField(default= 0, choices = ((0, 0), (1, 1), (2, 2)))
-    sender = models.ForeignKey(Assignment, on_delete=models.CASCADE, null=True, blank=True, related_name = '+') 
-    recipient = models.ForeignKey(Assignment, on_delete=models.CASCADE, null=True, blank=True, related_name = '+') 
-    msg = models.CharField(max_length = 1000)
+    # is_chair - 0: Between two Assignments, 1: Sender is Chair, 2: Recipient is Chair
+    is_chair = models.SmallIntegerField(
+        default=0, choices=((0, 0), (1, 1), (2, 2)))
+    sender = models.ForeignKey(
+        Assignment, on_delete=models.CASCADE, null=True, blank=True, related_name='+')
+    recipient = models.ForeignKey(
+        Assignment, on_delete=models.CASCADE, null=True, blank=True, related_name='+')
+    msg = models.CharField(max_length=1000)
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -721,11 +747,9 @@ class Note(models.Model):
             committee = str(self.sender.committee)
             sender = str(self.sender.country)
             recipient = 'Chair'
-            
 
         return committee + ": " + sender + ' -> ' + recipient + ' - ' + str(self.id)
 
     class Meta:
         db_table = u'note'
         ordering = ['timestamp']
-    
