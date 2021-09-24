@@ -349,6 +349,9 @@ class Registration(models.Model):
             else:
                 registration_fee = conference.registration_fee
                 delegate_fee = conference.delegate_fee
+                conferenceStartDay = conference.start_date.day
+                conferenceEndDay = conference.end_date.day
+                conferenceStartYear = conference.start_date.year
                 send_mail(
                     'BMUN %d Registration Confirmation' % conference.session,
                     'Congratulations, you have officially been registered for BMUN %d. '
@@ -360,20 +363,21 @@ class Registration(models.Model):
                     'You can either pay online through the QuickBooks payment portal '
                     'or mail a check to the address listed on the invoice. '
                     'More information on payment methods and deadlines can be found '
-                    'in the invoice or at http://www.bmun.org/conference-fees/. '
-                    'If you do not pay by the deadline, then you will be dropped to our waitlist.\n\n'
+                    'in the invoice or at http://www.bmun.org/first-steps. '
+                    'Failure to pay the school fee by the round due date will result in your school being dropped to the next round of registration.\n\n'
                     'In addition to the school fee, there is also a delegate fee of $%d per student. '
                     'The invoice for this will be sent out with country assignments '
                     'shortly after that.\n\n'
                     'If you have any students that need financial assistance, '
                     'we encourage them to apply for our Alumni Scholarship '
                     'at http://bmun.org/alumni-scholarship/.\n\n'
-                    'If you have any questions, please contact info@bmun.org.\n\n'
+                    'If you have any questions regarding payments, please contact treasurer@bmun.org.\n\n'
+                    'If you have any general questions, please contact info@bmun.org.\n\n'
                     'Thank you for registering for BMUN, and we look forward to '
                     'seeing you at the oldest high school conference in the world '
-                    'on March 6-8, 2020.' %
+                    'on March %d-%d, %d.' %
                     (conference.session, int(registration_fee),
-                     int(delegate_fee)),
+                     int(delegate_fee), int(conferenceStartDay), int(conferenceEndDay), int(conferenceStartYear)),
                     'no-reply@bmun.org', [registration.school.primary_email],
                     fail_silently=False)
 
@@ -561,9 +565,10 @@ class Assignment(models.Model):
 
             assigned[key] = school.id
             old_assignment = assignment_dict.get(key)
-            old_school = Registration.objects.get(id=int(old_assignment['registration_id'])).school if old_assignment else None
+            old_school = Registration.objects.get(
+                id=int(old_assignment['registration_id'])).school if old_assignment else None
 
-            if old_assignment and not old_assignment['rejected'] and old_school!=school:
+            if old_assignment and not old_assignment['rejected'] and old_school != school:
                 # If the country is already assigned to a school and the school has not
                 # rejected the assignment, then do not allow the overwrite.
                 str_committee = str(committee.name)
