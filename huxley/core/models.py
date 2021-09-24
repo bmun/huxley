@@ -364,7 +364,7 @@ class Registration(models.Model):
                     'or mail a check to the address listed on the invoice. '
                     'More information on payment methods and deadlines can be found '
                     'in the invoice or at http://www.bmun.org/first-steps. '
-                    'If you do not pay by the deadline, then you will be dropped to our waitlist.\n\n'
+                    'Failure to pay the school fee by the round due date will result in your school being dropped to the next round of registration.\n\n'
                     'In addition to the school fee, there is also a delegate fee of $%d per student. '
                     'The invoice for this will be sent out with country assignments '
                     'shortly after that.\n\n'

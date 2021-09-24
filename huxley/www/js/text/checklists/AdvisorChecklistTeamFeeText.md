@@ -5,6 +5,6 @@ If you registered between **{{ roundTwoStart }}** and **{{ roundTwoEnd }}**, the
 If you registered between **{{ roundThreeStart }}** and **{{ roundThreeEnd }}**, these fees are due **{{ roundThreeEnd }}**.  
 If you registered between **{{ roundFourStart }}** and **{{ regClose }}**, these fees are due **{{ regClose }}**.
 
-Note that this fee is non-refundable and failure to pay this fee by your required deadline will result in placement on our waitlist. 
+Failure to pay the school fee by the round due date will result in your school being dropped to the next round of registration. 
 
 This checklist item is updated manually by BMUN's Treasurer, {{ conferenceTreasurer }}, every non-holiday Wednesday and Sunday night on a rolling basis. If you submitted a payment and this item has not been checked, please contact [treasurer@bmun.org](mailto:treasurer@bmun.org).
