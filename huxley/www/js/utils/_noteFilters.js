@@ -56,6 +56,9 @@ function _filterOnChairConversation(
   return noteIDs.map((id) => notes[id]);
 }
 
+/**
+  Gets the latest message by time stamp, intended for conversation preview.
+ */
 function _getLastMessage(
   senderID: number,
   recipientID: ?number,
