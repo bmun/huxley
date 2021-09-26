@@ -491,11 +491,6 @@ post_save.connect(PositionPaper.delete_prev_file, sender=PositionPaper)
 class Assignment(models.Model):
     committee = models.ForeignKey(Committee, on_delete=models.CASCADE)
     country = models.ForeignKey(Country, on_delete=models.CASCADE)
-    registration = models.ForeignKey(
-        Registration, on_delete=models.CASCADE, null=True)
-    rejected = models.BooleanField(default=False)
-    paper = models.OneToOneField(
-        PositionPaper, on_delete=models.SET_NULL, blank=True, null=True)
 
     @classmethod
     def update_assignments(cls, new_assignments):
@@ -505,26 +500,16 @@ class Assignment(models.Model):
         one (and delete its delegates), or create a new one if it doesn't
         exist.
         '''
-        assignments = cls.objects.all().values()
-        assignment_dict = {(a['committee_id'], a['country_id']): a
-                           for a in assignments}
         additions = []
         deletions = []
-        assigned = dict()
         failed_assignments = []
 
-        def add(committee, country, registration, paper, rejected):
+        def add(committee, country):
             additions.append(
                 cls(committee_id=committee.id,
-                    country_id=country.id,
-                    registration_id=registration.id,
-                    paper_id=paper.id,
-                    rejected=rejected, ))
+                    country_id=country.id,))
 
-        def remove(assignment_data):
-            deletions.append(assignment_data['id'])
-
-        for committee, country, school, rejected in new_assignments:
+        for committee, country in new_assignments:
             # If the assignemnt contains no bad cells, then each value should
             # have the type of its corresponding model.
             is_invalid = False
@@ -534,72 +519,19 @@ class Assignment(models.Model):
             if type(country) is not Country:
                 country = Country(name=country + ' - DOES NOT EXIST')
                 is_invalid = True
-            if type(school) is not School:
-                school = School(name=school + ' - DOES NOT EXIST')
-                is_invalid = True
-            else:
-                try:
-                    registration = Registration.objects.get(
-                        school_id=school.id)
-                except Registration.DoesNotExist:
-                    is_invalid = True
 
             if is_invalid:
                 failed_assignments.append(
-                    str((str(school.name), str(committee.name), str(
+                    str((str(committee.name), str(
                         country.name))))
                 continue
 
-            key = (committee.id, country.id)
-            if key in assigned.keys():
-                # Make sure that the same committee/country pair is not being
-                # given to more than one school in the upload
-                if assigned[key] == school.id:
-                    continue
-                committee = str(committee.name)
-                country = str(country.name)
-                failed_assignments.append(
-                    str((committee, country)) +
-                    ' - ASSIGNED TO MORE THAN ONE SCHOOL')
-                continue
-
-            assigned[key] = school.id
-            old_assignment = assignment_dict.get(key)
-            old_school = Registration.objects.get(
-                id=int(old_assignment['registration_id'])).school if old_assignment else None
-
-            if old_assignment and not old_assignment['rejected'] and old_school != school:
-                # If the country is already assigned to a school and the school has not
-                # rejected the assignment, then do not allow the overwrite.
-                str_committee = str(committee.name)
-                str_country = str(country.name)
-                failed_assignments.append(
-                    str((str_committee, str_country)) +
-                    ' - COUNTRY ALREADY ASSIGNED TO '+str(old_school)+' AND NOT REJECTED')
-                continue
-
-            paper = PositionPaper.objects.create()
-            paper.save()
-
-            if not old_assignment:
-                add(committee, country, registration, paper, rejected)
-                continue
-
-            if old_assignment['registration_id'] != registration:
-                # Remove the old assignment instead of just updating it
-                # so that its delegates are deleted by cascade.
-                remove(old_assignment)
-                add(committee, country, registration, paper, rejected)
+            add(committee, country)
 
         if not failed_assignments:
             with transaction.atomic():
                 Assignment.objects.filter(id__in=deletions).delete()
                 Assignment.objects.bulk_create(additions)
-
-        else:
-            # If the update failed in some way we would like to delete the position paper
-            # objects that were created in the process.
-            PositionPaper.objects.filter(assignment=None).delete()
 
         return failed_assignments
 
@@ -618,12 +550,6 @@ class Assignment(models.Model):
             Delegate.objects.filter(assignment_id=old_assignment.id).update(
                 assignment=None)
 
-    @classmethod
-    def create_position_paper(cls, **kwargs):
-        assignment = kwargs['instance']
-        if not assignment.paper:
-            assignment.paper = PositionPaper.objects.create()
-
     def __str__(self):
         return self.committee.name + " : " + self.country.name + " : " + (
             self.registration.school.name
@@ -635,7 +561,6 @@ class Assignment(models.Model):
 
 
 pre_save.connect(Assignment.update_assignment, sender=Assignment)
-pre_save.connect(Assignment.create_position_paper, sender=Assignment)
 
 
 class CountryPreference(models.Model):
@@ -656,8 +581,6 @@ class CountryPreference(models.Model):
 
 
 class Delegate(models.Model):
-    school = models.ForeignKey(
-        School, on_delete=models.CASCADE, related_name='delegates', null=True)
     assignment = models.ForeignKey(
         Assignment,
         related_name='delegates',
@@ -667,17 +590,6 @@ class Delegate(models.Model):
     name = models.CharField(max_length=64)
     email = models.EmailField()
     created_at = models.DateTimeField(auto_now_add=True)
-    summary = models.TextField(default='', blank=True, null=True)
-    published_summary = models.TextField(default='', blank=True, null=True)
-
-    voting = models.BooleanField(default=False)
-    session_one = models.BooleanField(default=False)
-    session_two = models.BooleanField(default=False)
-    session_three = models.BooleanField(default=False)
-    session_four = models.BooleanField(default=False)
-
-    committee_feedback_submitted = models.BooleanField(default=False)
-    waiver_submitted = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
@@ -696,17 +608,9 @@ class Delegate(models.Model):
 
         return None
 
-    def save(self, *args, **kwargs):
-        if (self.assignment_id and self.school_id and
-                self.school_id != self.assignment.registration.school_id):
-            raise ValidationError(
-                'Delegate school and delegate assignment school do not match.')
-
-        super(Delegate, self).save(*args, **kwargs)
-
     class Meta:
         db_table = u'delegate'
-        ordering = ['school']
+        ordering = ['assignment']
 
 
 class SecretariatMember(models.Model):

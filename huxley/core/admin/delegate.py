@@ -12,7 +12,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from googleapiclient.discovery import build
 from google.oauth2 import service_account
 
-from huxley.core.models import Assignment, Delegate, School
+from huxley.core.models import Assignment, Delegate
 
 
 class DelegateAdmin(admin.ModelAdmin):
@@ -106,7 +106,7 @@ class DelegateAdmin(admin.ModelAdmin):
         for row in reader:
             if (not row or row[0] == "Email"):
                 continue
-            #rows: email(0), name(1), school(2), committee(3), country(4)
+            # rows: email(0), name(1), school(2), committee(3), country(4)
             email = row[0]
             name = row[1]
             school = row[2]
@@ -127,7 +127,7 @@ class DelegateAdmin(admin.ModelAdmin):
                 delegate.save()
                 row.append("Successfully waived")
                 success += 1
-                #log the successful add
+                # log the successful add
             rows_to_write.append(row)
 
         num_total = Delegate.objects.all().count()
@@ -158,14 +158,14 @@ class DelegateAdmin(admin.ModelAdmin):
             # Store credentials
             creds = service_account.Credentials.from_service_account_file(
                 settings.SERVICE_ACCOUNT_FILE, scopes=settings.SCOPES)
-            
+
             service = build('sheets', 'v4', credentials=creds)
-            
+
             response = service.spreadsheets().values().get(
                 spreadsheetId=settings.SHEET_ID,
                 range=SHEET_RANGE,
                 majorDimension='ROWS').execute()
-            
+
             if 'values' in response and len(response['values']) > 1:
                 for row in response['values'][1:]:
                     if Delegate.objects.filter(id=row[0]):

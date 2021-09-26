@@ -1,7 +1,8 @@
 # Copyright (c) 2011-2015 Berkeley Model United Nations. All rights reserved.
 # Use of this source code is governed by a BSD License (see LICENSE).
 
-import os, sys
+import os
+import sys
 from .roots import HUXLEY_ROOT
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -61,8 +62,8 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-		'%s/templates/' % HUXLEY_ROOT,
-	],
+            '%s/templates/' % HUXLEY_ROOT,
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -84,7 +85,7 @@ WSGI_APPLICATION = 'huxley.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'NAME': os.path.join(BASE_DIR, 'db-notes.sqlite3'),
     }
 }
 
