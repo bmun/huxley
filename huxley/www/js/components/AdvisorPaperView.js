@@ -246,6 +246,14 @@ class AdvisorPaperView extends React.Component {
         var fileName = names ? names[names.length - 1] : null;
         var gradedFileName = fileName ? "graded_" + fileName : null;
         var downloadPaper = paper ? (
+          <Button
+            color="green"
+            size="small"
+            href={originalHrefData}
+            
+          >
+            &#10515;
+          </Button>
           <a
             className={cx({
               button: true,
