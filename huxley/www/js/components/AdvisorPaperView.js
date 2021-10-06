@@ -250,37 +250,21 @@ class AdvisorPaperView extends React.Component {
             color="green"
             size="small"
             href={originalHrefData}
-            
-          >
-            &#10515;
-          </Button>
-          <a
-            className={cx({
-              button: true,
-              "button-small": true,
-              "button-green": true,
-              "rounded-small": true,
-            })}
-            href={originalHrefData}
             download={fileName}
           >
             &#10515;
-          </a>
+          </Button>
         ) : null;
         var gradedPaper =
           paper && graded ? (
-            <a
-              className={cx({
-                button: true,
-                "button-small": true,
-                "button-blpaperue": true,
-                "rounded-small": true,
-              })}
+            <Button
+              color="green"
+              size="small"
               href={gradedHrefData}
               download={gradedFileName}
             >
               &#10515;
-            </a>
+            </Button>
           ) : null;
 
         var category1 = null;
