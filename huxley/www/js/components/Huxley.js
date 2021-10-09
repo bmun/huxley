@@ -66,9 +66,9 @@ class Huxley extends React.Component {
       } else if (User.isAdvisor(user)) {
         history.redirect("/advisor/profile");
       } else if (User.isChair(user)) {
-        history.redirect("/chair/attendance");
+        history.redirect("/chair/notes");
       } else if (User.isDelegate(user)) {
-        history.redirect("/delegate/profile");
+        history.redirect("/delegate/notes");
       }
     });
   }
@@ -154,7 +154,7 @@ class Huxley extends React.Component {
         <div>
           <ChairView user={user}>
             <Switch>
-              <Route path="/chair/attendance">
+              {/* <Route path="/chair/attendance">
                 <ChairAttendanceView />
               </Route>
               <Route path="/chair/papers">
@@ -162,7 +162,7 @@ class Huxley extends React.Component {
               </Route>
               <Route path="/chair/rubric">
                 <ChairRubricView />
-              </Route>
+              </Route> */}
               <Route path="/chair/notes">
                 <ChairNoteView />
               </Route>
@@ -172,12 +172,12 @@ class Huxley extends React.Component {
               <Route path="/chair/delegate_emails">
                 <ChairDelegateEmailView />
               </Route>
-              <Route path="/chair/committee_feedback">
+              {/* <Route path="/chair/committee_feedback">
                 <ChairCommitteeFeedbackView />
               </Route>
               <Route path="/chair/summary">
                 <ChairSummaryView />
-              </Route>
+              </Route> */}
               <Route exact path="/">
                 <RedirectView />
               </Route>
@@ -194,15 +194,15 @@ class Huxley extends React.Component {
         <div>
           <DelegateView user={user}>
             <Switch>
-              <Route path="/delegate/committee_feedback">
+              {/* <Route path="/delegate/committee_feedback">
                 <DelegateCommitteeFeedbackView />
-              </Route>
-              <Route path="/delegate/profile">
+              </Route> */}
+              {/* <Route path="/delegate/profile">
                 <DelegateProfileView />
               </Route>
               <Route path="/delegate/paper">
                 <DelegatePaperView />
-              </Route>
+              </Route> */}
               <Route path="/delegate/notes">
                 <DelegateNoteView />
               </Route>

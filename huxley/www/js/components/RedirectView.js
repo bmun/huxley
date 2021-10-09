@@ -20,9 +20,9 @@ class RedirectView extends React.Component {
     } else if (User.isAdvisor(user)) {
       history.redirect("/advisor/profile");
     } else if (User.isChair(user)) {
-      history.redirect("/chair/attendance");
+      history.redirect("/chair/notes");
     } else if (User.isDelegate(user)) {
-      history.redirect("/delegate/profile");
+      history.redirect("/delegate/notes");
     }
   }
 

@@ -551,9 +551,7 @@ class Assignment(models.Model):
                 assignment=None)
 
     def __str__(self):
-        return self.committee.name + " : " + self.country.name + " : " + (
-            self.registration.school.name
-            if self.registration else "Unassigned")
+        return self.committee.name + " : " + self.country.name
 
     class Meta:
         db_table = u'assignment'

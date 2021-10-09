@@ -22,17 +22,7 @@ class DelegateSerializer(serializers.ModelSerializer):
                   'assignment',
                   'name',
                   'email',
-                  'created_at',
-                  'summary',
-                  'published_summary',
-                  'school',
-                  'voting',
-                  'session_one',
-                  'session_two',
-                  'session_three',
-                  'session_four',
-                  'committee_feedback_submitted',
-                  'waiver_submitted', )
+                  'created_at',)
 
     def update(self, instance, validated_data):
         if ('assignment' in validated_data and
@@ -53,12 +43,12 @@ class DelegateSerializer(serializers.ModelSerializer):
                 last_login=datetime.now())
 
             send_mail('BMUN Account Created For {0}'.format(instance.name),
-                      'Username: {0}\n'.format(username) \
-                      + 'Password: {0}\n'.format(password) \
-                      + 'Welcome to Berkeley Model United Nations! \n' \
-                      + 'Please save these details to login to your BMUN Huxley account. ' \
-                      + 'You will need it to complete important actions ' \
-                      + 'before, during, and after BMUN. You can access ' \
+                      'Username: {0}\n'.format(username)
+                      + 'Password: {0}\n'.format(password)
+                      + 'Welcome to Berkeley Model United Nations! \n'
+                      + 'Please save these details to login to your BMUN Huxley account. '
+                      + 'You will need it to complete important actions '
+                      + 'before, during, and after BMUN. You can access '
                       + 'this account at huxley.bmun.org.',
                       'no-reply@bmun.org',
                       [instance.email], fail_silently=False)
@@ -75,7 +65,6 @@ class DelegateSerializer(serializers.ModelSerializer):
 
 class DelegateNestedSerializer(serializers.ModelSerializer):
     assignment = AssignmentNestedSerializer(read_only=True)
-    school = SchoolSerializer(read_only=True)
 
     class Meta:
         model = Delegate
@@ -83,14 +72,4 @@ class DelegateNestedSerializer(serializers.ModelSerializer):
                   'assignment',
                   'name',
                   'email',
-                  'created_at',
-                  'summary',
-                  'published_summary',
-                  'school',
-                  'voting',
-                  'session_one',
-                  'session_two',
-                  'session_three',
-                  'session_four',
-                  'committee_feedback_submitted',
-                  'waiver_submitted', )
+                  'created_at',)
