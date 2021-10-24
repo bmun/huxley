@@ -1,4 +1,4 @@
-# Welcome to Huxley
+# Welcome to Huxley Notes
 
 <span className="help-text"><i>for Berkeley Model United Nations</i></span>
 <br />

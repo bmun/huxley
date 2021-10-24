@@ -3,16 +3,25 @@
 
 import csv
 
+from datetime import datetime
+
+
 from django.conf import settings
 from django.conf.urls import url
 from django.contrib import admin, messages
+from django.contrib.auth.base_user import BaseUserManager
+
+from django.core.mail import send_mail
+from django.core.validators import EmailValidator, ValidationError
+
 from django.urls import reverse
 from django.http import HttpResponse, HttpResponseRedirect
 
 from googleapiclient.discovery import build
 from google.oauth2 import service_account
 
-from huxley.core.models import Assignment, Delegate
+from huxley.core.models import Assignment, Committee, Delegate
+from huxley.accounts.models import User
 
 
 class DelegateAdmin(admin.ModelAdmin):
@@ -23,21 +32,17 @@ class DelegateAdmin(admin.ModelAdmin):
         rows = []
 
         rows.append([
-            'ID', 'Name', 'School', 'Committee', 'Country', 'Email', 'Waiver?',
-            'Session One', 'Session Two', 'Session Three', 'Session Four'
+            'ID', 'Name', 'Committee', 'Country', 'Email'
         ])
 
-        ordering = 'assignment__registration__school__name'
+        ordering = 'name'
         for delegate in Delegate.objects.all().order_by(ordering):
             rows.append([
                 str(delegate.id),
                 str(delegate),
-                str(delegate.school),
                 str(delegate.committee),
                 str(delegate.country),
-                str(delegate.email), delegate.waiver_submitted,
-                delegate.session_one, delegate.session_two,
-                delegate.session_three, delegate.session_four
+                str(delegate.email)
             ])
         return rows
 
@@ -55,102 +60,50 @@ class DelegateAdmin(admin.ModelAdmin):
     def load(self, request):
         '''
         Loads new Assignments and/or updates assignments.
-        CSV format: Name, Committee, Country, School, Email"
+        CSV format: Name, Committee, Country, Email"
         '''
+        validator = EmailValidator()
+
         existing_delegates = Delegate.objects.all()
         delegates = request.FILES
         reader = csv.reader(
             delegates['csv'].read().decode('utf-8').splitlines())
         assignments = {}
         for assignment in Assignment.objects.all():
-            assignments[assignment.committee.name, assignment.country.name,
-                        assignment.registration.school.name, ] = assignment
-
+            assignments[(assignment.committee.name,
+                         assignment.country.name)] = assignment
+        failed_rows = []
         for row in reader:
-            if row:
-                if row[1] == 'Committee':
-                    continue
-                school = School.objects.get(name=str(row[3]))
-                assignment = assignments[str(row[1]), str(row[2]), row[3], ]
-                email = str(row[4])
-                delg = list(
-                    Delegate.objects.filter(name=str(row[0]), email=email))
-                if len(delg) == 1:
-                    Delegate.objects.filter(name=str(
-                        row[0]), email=email).update(assignment=assignment)
+            if row and row[0] != 'Name':
+                committee_check = Committee.objects.filter(
+                    name__exact=row[1]).exists()
+                email_check = True
+                try:
+                    validator(str(row[3]))
+                except ValidationError:
+                    email_check = False
+
+                if committee_check and email_check:
+                    assignment = assignments.get((str(row[1]), str(row[2])))
+                    # print(type(assignment))
+                    email = str(row[3])
+                    delg = list(
+                        Delegate.objects.filter(name=str(row[0]), email=email))
+                    if len(delg) == 1:
+                        Delegate.objects.filter(name=str(
+                            row[0]), email=email).update(assignment=assignment)
+                    else:
+                        Delegate.objects.create(name=row[0],
+                                                email=email,
+                                                assignment=assignment)
                 else:
-                    Delegate.objects.create(name=row[0],
-                                            school=school,
-                                            email=email,
-                                            assignment=assignment)
+                    failed_rows.append(row)
+        if failed_rows:
+            messages.error(
+                request, 'Not all delegates could upload. These rows failed because the committee could not be matched or email was invalid: '
+                + str(failed_rows))
 
         return HttpResponseRedirect(reverse('admin:core_delegate_changelist'))
-
-    def confirm_waivers(self, request):
-        '''Confirms delegate waivers'''
-        waiver_responses = request.FILES
-        reader = csv.reader(
-            waiver_responses['csv'].read().decode('utf-8').splitlines())
-
-        rows_to_write = []
-
-        waiver_input_response = HttpResponse(content_type='text/csv')
-        waiver_input_response[
-            'Content-Disposition'] = 'attachment; filename="waiver_input_response.csv"'
-        writer = csv.writer(waiver_input_response)
-
-        no_exist = 0
-        duplicate = 0
-        success = 0
-
-        for row in reader:
-            if (not row or row[0] == "Email"):
-                continue
-            # rows: email(0), name(1), school(2), committee(3), country(4)
-            email = row[0]
-            name = row[1]
-            school = row[2]
-            committee = row[3]
-            country = row[4]
-            row = [email, name, school, committee, country]
-            results = Delegate.objects.filter(email__iexact=email)
-            if (results.count() == 0):
-                row.append("Email does not exist")
-                no_exist += 1
-            elif (not results.count() == 1):
-                row.append("Email is duplicated")
-                duplicate += 1
-            else:
-                to_append = ""
-                delegate = results[0]
-                delegate.waiver_submitted = True
-                delegate.save()
-                row.append("Successfully waived")
-                success += 1
-                # log the successful add
-            rows_to_write.append(row)
-
-        num_total = Delegate.objects.all().count()
-        num_submitted = Delegate.objects.filter(waiver_submitted=True).count()
-        num_left = num_total - num_submitted
-
-        writer.writerow(['Number of delegates', num_total])
-        writer.writerow(['Number of non-pending waivers', num_submitted])
-        writer.writerow(['Number of pending waivers', num_left])
-        writer.writerow([])
-
-        writer.writerow(['Number of \'Successfully waived\'', success])
-        writer.writerow(['Number of \'Email does not exist\'', no_exist])
-        writer.writerow(['Number of \'Email is duplicated\'', duplicate])
-        writer.writerow([])
-
-        writer.writerow(
-            ['Email', 'Name', 'School', 'Committee', 'Country', 'Error'])
-
-        for row in rows_to_write:
-            writer.writerow(row)
-
-        return waiver_input_response
 
     def sheets(self, request):
         if settings.SHEET_ID:
@@ -191,6 +144,41 @@ class DelegateAdmin(admin.ModelAdmin):
 
         return HttpResponseRedirect(reverse('admin:core_delegate_changelist'))
 
+    def confirm_waivers(self):
+        # TODO THIS DOESNT MAKE ANY SENSE WHY IS THE METHOD STILL BEING CALLED
+        return
+
+    def create_accounts(self, request):
+        '''
+        Create an account for every delegate object that do not have yet accounts 
+        and send emails with account details
+        '''
+        for delegate in Delegate.objects.all():
+            if not User.objects.filter(delegate__id=delegate.id).exists():
+                username = delegate.name + "_" + str(delegate.id)
+                password = BaseUserManager().make_random_password(10)
+                user = User.objects.create_user(
+                    username=username,
+                    password=password,
+                    delegate=delegate,
+                    user_type=User.TYPE_DELEGATE,
+                    first_name=delegate.name.split()[0],
+                    last_name=delegate.name.split()[-1],
+                    email=delegate.email,
+                    last_login=datetime.now())
+
+                send_mail('BMUN Fall Conference Account Created For {0}'.format(delegate.name),
+                          'Username: {0}\n'.format(username)
+                          + 'Password: {0}\n'.format(password)
+                          + 'Welcome to Berkeley Model United Nations! \n'
+                          + 'Please save these details to login to your Huxley Notes account '
+                          + 'for Fall Conference 2021. You will need it send notes. '
+                          + 'during the conference. You can access '
+                          + 'this account at notes.huxley.bmun.org.',
+                          'no-reply@bmun.org',
+                          [delegate.email], fail_silently=True)
+        return HttpResponseRedirect(reverse('admin:core_delegate_changelist'))
+
     def get_urls(self):
         return super(DelegateAdmin, self).get_urls() + [
             url(
@@ -213,4 +201,9 @@ class DelegateAdmin(admin.ModelAdmin):
                 self.admin_site.admin_view(self.sheets),
                 name='core_delegate_sheets',
             ),
+            url(
+                r'create_accounts',
+                self.admin_site.admin_view(self.create_accounts),
+                name='core_delegate_create_accounts',
+            )
         ]

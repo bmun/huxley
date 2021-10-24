@@ -13,24 +13,23 @@ from django.utils import html
 from googleapiclient.discovery import build
 from google.oauth2 import service_account
 
-from huxley.core.models import Assignment, Committee, Country, School, PositionPaper
+from huxley.core.models import Assignment, Committee, Country
 
 
 class AssignmentAdmin(admin.ModelAdmin):
 
-    search_fields = ('country__name', 'registration__school__name',
-                     'committee__name', 'committee__full_name')
+    search_fields = ('country__name', 'committee__name',
+                     'committee__full_name')
 
     def get_rows(self):
         rows = []
-        rows.append(['School', 'Committee', 'Country', 'Rejected'])
+        rows.append(['Committee', 'Country'])
 
-        for assignment in Assignment.objects.all().order_by(
-                'registration__school__name', 'committee__name'):
+        for assignment in Assignment.objects.all().order_by('committee__name'):
             rows.append([
                 str(item) for item in [
-                    assignment.registration.school, assignment.committee,
-                    assignment.country, assignment.rejected
+                    assignment.committee,
+                    assignment.country
                 ]
             ])
 
@@ -65,32 +64,23 @@ class AssignmentAdmin(admin.ModelAdmin):
         def generate_assignments(reader):
             committees = {}
             countries = {}
-            schools = {}
 
             for row in reader:
                 if len(row) == 0:
                     continue
 
-                if (row[0] == 'School' and row[1] == 'Committee'
-                        and row[2] == 'Country'):
+                if (row[0] == 'Committee'
+                        and row[1] == 'Country'):
                     continue  # skip the first row if it is a header
 
-                while len(row) < 3:
+                while len(row) < 2:
                     row.append(
                         ""
                     )  # extend the row to have the minimum proper num of columns
 
-                if len(row) < 4:
-                    rejected = False  # allow for the rejected field to be null
-                else:
-                    rejected = (
-                        row[3].lower() == 'true'
-                    )  # use the provided value if admin provides it
-
-                committee = get_model(Committee, row[1], committees)
-                country = get_model(Country, row[2], countries)
-                school = get_model(School, row[0], schools)
-                yield (committee, country, school, rejected)
+                committee = get_model(Committee, row[0], committees)
+                country = get_model(Country, row[1], countries)
+                yield (committee, country)
 
         failed_rows = Assignment.update_assignments(
             generate_assignments(reader))
@@ -107,7 +97,7 @@ class AssignmentAdmin(admin.ModelAdmin):
 
     def sheets(self, request):
         if settings.SHEET_ID:
-            SHEET_RANGE = 'Assignments!A1:D'
+            SHEET_RANGE = 'Assignments!A1:B'
             # Store credentials
             creds = service_account.Credentials.from_service_account_file(
                 settings.SERVICE_ACCOUNT_FILE, scopes=settings.SCOPES)
@@ -143,19 +133,9 @@ class AssignmentAdmin(admin.ModelAdmin):
                 self.admin_site.admin_view(self.load),
                 name='core_assignment_load',
             ),
-            url(
-                r'sheets',
-                self.admin_site.admin_view(self.sheets),
-                name='core_assignment_sheets',
-            ),
+            # url(
+            #     r'sheets',
+            #     self.admin_site.admin_view(self.sheets),
+            #     name='core_assignment_sheets',
+            # ),
         ]
-
-    def delete_model(self, request, obj):
-        '''Deletes Rubric objects when individual committees are deleted'''
-        super().delete_model(request, obj)
-        PositionPaper.objects.filter(assignment=None).delete()
-
-    def delete_queryset(self, request, queryset):
-        '''Deletes Rubric objects when queryset of committees are deleted'''
-        super().delete_queryset(request, queryset)
-        PositionPaper.objects.filter(assignment=None).delete()

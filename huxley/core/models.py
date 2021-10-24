@@ -500,6 +500,10 @@ class Assignment(models.Model):
         one (and delete its delegates), or create a new one if it doesn't
         exist.
         '''
+        assignments = cls.objects.all().values()
+        assignment_dict = {(a['committee_id'], a['country_id']): a
+                           for a in assignments}
+
         additions = []
         deletions = []
         failed_assignments = []
@@ -526,7 +530,11 @@ class Assignment(models.Model):
                         country.name))))
                 continue
 
-            add(committee, country)
+            key = (committee.id, country.id)
+            old_assignment = assignment_dict.get(key)
+
+            if not old_assignment:
+                add(committee, country)
 
         if not failed_assignments:
             with transaction.atomic():

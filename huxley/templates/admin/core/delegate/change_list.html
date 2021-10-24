@@ -18,10 +18,15 @@
           </a>
         </li>
         <li>
-          <a href="{% url cl.opts|admin_urlname:'sheets' %}">
-            Update Sheets
+          <a href="{% url cl.opts|admin_urlname:'create_accounts' %}">
+            Create Accounts
           </a>
         </li>
+        <!-- <li>
+          <a href="{% url cl.opts|admin_urlname:'roster' %}">
+            Update Sheets
+          </a>
+        </li> -->
       {% endblock %}
     </ul>
   {% endif %}
@@ -32,10 +37,10 @@
     <input type="file" name="csv" />
     <input type="submit" />
   </form>
-  <form action="{% url cl.opts|admin_urlname:'confirm_waivers' %}" enctype="multipart/form-data" method="post">
+  <!-- <form action="{% url cl.opts|admin_urlname:'confirm_waivers' %}" enctype="multipart/form-data" method="post">
     {% csrf_token %}
     Add Waiver Confirmations
     <input type="file" name="csv" />
     <input type="submit" />
-  </form>
+  </form> -->
 {% endblock %}
