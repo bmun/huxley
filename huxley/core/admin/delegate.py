@@ -27,6 +27,7 @@ from huxley.accounts.models import User
 class DelegateAdmin(admin.ModelAdmin):
 
     search_fields = ('name', )
+    actions = ['create_accounts_for_selected']
 
     def get_rows(self):
         rows = []
@@ -148,12 +149,12 @@ class DelegateAdmin(admin.ModelAdmin):
         # TODO THIS DOESNT MAKE ANY SENSE WHY IS THE METHOD STILL BEING CALLED
         return
 
-    def create_accounts(self, request):
-        '''
-        Create an account for every delegate object that do not have yet accounts 
-        and send emails with account details
-        '''
-        for delegate in Delegate.objects.all():
+    def create_accounts_for_selected(self, request, queryset):
+        created = 0
+        for delegate in queryset:
+            # Buffer so we only allow up to 50 emails to be sent at a time
+            if created == 50:
+                break
             if not User.objects.filter(delegate__id=delegate.id).exists():
                 username = delegate.name + "_" + str(delegate.id)
                 password = BaseUserManager().make_random_password(10)
@@ -166,7 +167,6 @@ class DelegateAdmin(admin.ModelAdmin):
                     last_name=delegate.name.split()[-1],
                     email=delegate.email,
                     last_login=datetime.now())
-
                 send_mail('BMUN Fall Conference Account Created For {0}'.format(delegate.name),
                           'Username: {0}\n'.format(username)
                           + 'Password: {0}\n'.format(password)
@@ -177,6 +177,38 @@ class DelegateAdmin(admin.ModelAdmin):
                           + 'this account at notes.huxley.bmun.org.',
                           'no-reply@bmun.org',
                           [delegate.email], fail_silently=True)
+                created += 1
+        messages.info(request, "Created %s accounts" % str(created))
+
+    def create_accounts(self, request):
+        '''
+        Create an account for every delegate object that do not have yet accounts 
+        and send emails with account details
+        '''
+        # for delegate in Delegate.objects.all():
+        #     if not User.objects.filter(delegate__id=delegate.id).exists():
+        #         username = delegate.name + "_" + str(delegate.id)
+        #         password = BaseUserManager().make_random_password(10)
+        #         user = User.objects.create_user(
+        #             username=username,
+        #             password=password,
+        #             delegate=delegate,
+        #             user_type=User.TYPE_DELEGATE,
+        #             first_name=delegate.name.split()[0],
+        #             last_name=delegate.name.split()[-1],
+        #             email=delegate.email,
+        #             last_login=datetime.now())
+
+        #         send_mail('BMUN Fall Conference Account Created For {0}'.format(delegate.name),
+        #                   'Username: {0}\n'.format(username)
+        #                   + 'Password: {0}\n'.format(password)
+        #                   + 'Welcome to Berkeley Model United Nations! \n'
+        #                   + 'Please save these details to login to your Huxley Notes account '
+        #                   + 'for Fall Conference 2021. You will need it send notes. '
+        #                   + 'during the conference. You can access '
+        #                   + 'this account at notes.huxley.bmun.org.',
+        #                   'no-reply@bmun.org',
+        #                   [delegate.email], fail_silently=True)
         return HttpResponseRedirect(reverse('admin:core_delegate_changelist'))
 
     def get_urls(self):
