@@ -69,9 +69,9 @@ class LoginView extends React.Component {
             <Button color="blue" loading={this.state.loading} type="submit">
               Log In
             </Button>
-            <Button loading={false} color="green" href="/register">
+            {/* <Button loading={false} color="green" href="/register">
               Register for BMUN
-            </Button>
+            </Button> */}
           </div>
           <NavLink direction="left" href="/password">
             Forgot your password?

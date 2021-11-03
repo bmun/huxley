@@ -76,17 +76,15 @@ class DelegateAdmin(admin.ModelAdmin):
         failed_rows = []
         for row in reader:
             if row and row[0] != 'Name':
-                committee_check = Committee.objects.filter(
-                    name__exact=row[1]).exists()
+                assignment_check = (str(row[1]), str(row[2])) in assignments
                 email_check = True
                 try:
                     validator(str(row[3]))
                 except ValidationError:
                     email_check = False
 
-                if committee_check and email_check:
+                if assignment_check and email_check:
                     assignment = assignments.get((str(row[1]), str(row[2])))
-                    # print(type(assignment))
                     email = str(row[3])
                     delg = list(
                         Delegate.objects.filter(name=str(row[0]), email=email))
@@ -156,7 +154,8 @@ class DelegateAdmin(admin.ModelAdmin):
             if created == 50:
                 break
             if not User.objects.filter(delegate__id=delegate.id).exists():
-                username = delegate.name + "_" + str(delegate.id)
+                names = delegate.name.split(' ')
+                username = names[0] + '_' + str(delegate.id)
                 password = BaseUserManager().make_random_password(10)
                 user = User.objects.create_user(
                     username=username,

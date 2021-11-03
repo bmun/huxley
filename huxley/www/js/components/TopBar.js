@@ -57,7 +57,7 @@ class TopBar extends React.Component {
               </li>
             </ul>
             <div className="left">
-              <span className="title white">Huxley</span>
+              <span className="title white">Huxley Notes</span>
               &nbsp; &middot; &nbsp;
               <span>A Conference Management Tool by BMUN</span>
             </div>

@@ -164,7 +164,9 @@ class DelegateNoteView extends React.Component<{}, DelegateNoteViewState> {
     if (!global.conference.notes_enabled) {
       return (
         <InnerView>
-          <TextTemplate>{DelegateNoteViewText}</TextTemplate>
+          <TextTemplate delegateCountry={this.state.sender.country.name}
+            >{DelegateNoteViewText}
+          </TextTemplate>
           <TextTemplate>{DelegateNoteDisabledViewText}</TextTemplate>
         </InnerView>
       );
@@ -209,7 +211,7 @@ class DelegateNoteView extends React.Component<{}, DelegateNoteViewState> {
       : "Chair";
     return (
       <InnerView>
-        <TextTemplate>{DelegateNoteViewText}</TextTemplate>
+        <TextTemplate delegateCountry={this.state.sender.country.name}>{DelegateNoteViewText}</TextTemplate>
         <table width={"100%"}>
           <tbody>
             <tr>
