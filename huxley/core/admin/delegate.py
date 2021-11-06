@@ -171,7 +171,7 @@ class DelegateAdmin(admin.ModelAdmin):
                           + 'Password: {0}\n'.format(password)
                           + 'Welcome to Berkeley Model United Nations! \n'
                           + 'Please save these details to login to your Huxley Notes account '
-                          + 'for Fall Conference 2021. You will need it send notes. '
+                          + 'for Fall Conference 2021. You will need it send notes '
                           + 'during the conference. You can access '
                           + 'this account at notes.huxley.bmun.org.',
                           'no-reply@bmun.org',
