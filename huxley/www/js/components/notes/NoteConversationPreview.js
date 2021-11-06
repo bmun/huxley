@@ -41,10 +41,13 @@ class NoteConversationPreview extends React.Component<
       this.props.country == this.props.recipient_name
         ? "countryNameSelected"
         : "countryName";
-    return (
+    const countryNameTruncated = this.props.country.length >= 20 
+      ?  this.props.country.substring(0, 20).concat(`...`) 
+      : this.props.country
+        return (
       <div className="conversationPreview">
         <div className="conversationPreviewText">
-          <div className={textClass}>{this.props.country}</div>
+          <div className={textClass}>{countryNameTruncated}</div>
           {last_message_string}
         </div>
       </div>
