@@ -17,6 +17,7 @@ class CountryAdmin(admin.ModelAdmin):
 
     def load(self, request):
         '''Import a CSV file containing countries.'''
+        # IMPORTANT: If the CSV file requirements change, make sure to update huxley/templates/admin/core/country/change_list.html
         countries = request.FILES
         reader = csv.reader(countries['csv'].read().decode('utf-8').splitlines())
         for row in reader:

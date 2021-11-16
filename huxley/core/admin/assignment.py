@@ -63,6 +63,7 @@ class AssignmentAdmin(admin.ModelAdmin):
             return cache[name]
 
         def generate_assignments(reader):
+            # IMPORTANT: If the CSV file requirements change, make sure to update huxley/templates/admin/core/assignment/change_list.html
             committees = {}
             countries = {}
             schools = {}
