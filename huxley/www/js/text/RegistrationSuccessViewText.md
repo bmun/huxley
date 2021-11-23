@@ -9,9 +9,10 @@ Thank you for registering for BMUN {{ conferenceSession }}! Country assignments 
 * ${{ conferenceDelegateFee }} (per delegate)
 
 ### Payment Instructions
-An electronic invoice will be sent to the primary email you provided for registration via our QuickBooks Accounting Software. You may view and pay your delegate fees here. This is the preferred method of payment. If you prefer sending a physical check, we ask that you compile delegate fees into ONE check - please do not have your students mail individual checks.
+An electronic invoice will be sent to the primary email you provided for registration via our QuickBooks Accounting Software. You may view and pay your delegate fees here. This is the preferred method of payment. If you prefer sending a check, we ask you either send one check with combined school and delegate fees or two checks separately
+ - please do not have your students mail individual checks.
 
-Check and online payment via QuickBooks are the only two accepted forms of payment for BMUN 68.
+Check and online payment via QuickBooks are the only two accepted forms of payment for BMUN {{ conferenceSession }}.
 
 Please mail all checks out to:
 
@@ -24,9 +25,9 @@ Please mail all checks out to:
 </div>
 <br />
 
-Please allow 5-7 business days for processing for physical checks. 
+Please allow 5-7 business days for processing for physical checks. For information regarding payments, please contact BMUN's treasurer at [treasurer@bmun.org](mailto:treasurer@bmun.org).
 
-If you have any questions or concerns, please feel free to contact me at [info@bmun.org](mailto:info@bmun.org). We look forward to seeing you in March!
+If you have any other questions or concerns, please feel free to contact me at [info@bmun.org](mailto:info@bmun.org). We look forward to seeing you in March!
 
 Sincerely,
 <p class="sender">
