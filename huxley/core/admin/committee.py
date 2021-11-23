@@ -15,6 +15,7 @@ from huxley.core.models import Rubric
 class CommitteeAdmin(admin.ModelAdmin):
     def load(self, request):
         '''Import a CSV file containing committees.'''
+        # IMPORTANT: If the CSV file requirements change, make sure to update huxley/templates/admin/core/committee/change_list.html
         committees = request.FILES
         reader = csv.reader(committees['csv'].read().decode('utf-8').splitlines())
         for row in reader:

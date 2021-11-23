@@ -57,6 +57,7 @@ class DelegateAdmin(admin.ModelAdmin):
         Loads new Assignments and/or updates assignments.
         CSV format: Name, Committee, Country, School, Email"
         '''
+        # IMPORTANT: If the CSV file requirements change, make sure to update huxley/templates/admin/core/delegate/change_list.html
         existing_delegates = Delegate.objects.all()
         delegates = request.FILES
         reader = csv.reader(
@@ -88,6 +89,7 @@ class DelegateAdmin(admin.ModelAdmin):
 
     def confirm_waivers(self, request):
         '''Confirms delegate waivers'''
+        # IMPORTANT: If the CSV file requirements change, make sure to update huxley/templates/admin/core/delegate/change_list.html
         waiver_responses = request.FILES
         reader = csv.reader(
             waiver_responses['csv'].read().decode('utf-8').splitlines())
