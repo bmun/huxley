@@ -34,7 +34,8 @@ class ConferenceTest(TestCase):
             early_paper_deadline=date(2013, 2, 28),
             paper_deadline=date(2013, 2, 28),
             waiver_avail_date=date(2013, 2, 28),
-            waiver_deadline=date(2013, 2, 28))
+            waiver_deadline=date(2013, 2, 28),
+            advisor_edit_deadline=date(2012, 2, 28))
 
     def test_default_fields(self):
         """ Tests that fields with default values are correctly set. """
@@ -169,7 +170,18 @@ class AssignmentTest(TestCase):
             (cm2.id, ct1.id, r1.id, False),
         ]
 
-        Assignment.update_assignments(updates)
+        # Expected to fail because ct2-cm2 assignment was already assigned to s1 and was not rejected by s1 so should not be overwritten.
+        failed_assignments = Assignment.update_assignments(updates)
+        self.assertTrue(failed_assignments)
+
+        # Modifying ct2-cm2 assignment so s1 has rejected the assignment
+        old_assignment = Assignment.objects.get(committee_id=cm2.id, country_id=ct2.id)
+        old_assignment.rejected = True
+        old_assignment.save()
+
+        #update should work
+        failed_assignments = Assignment.update_assignments(updates)
+        self.assertFalse(failed_assignments)
         assignments = [a[1:-1] for a in Assignment.objects.all().values_list()]
         delegates = Delegate.objects.all()
         self.assertEquals(set(all_assignments), set(assignments))
@@ -201,7 +213,8 @@ class AssignmentTest(TestCase):
         committee = models.new_committee()
         registration = models.new_registration()
         country = models.new_country()
-        a = Assignment(committee_id=committee.id, country_id=country.id, registration_id=registration.id)
+        a = Assignment(committee_id=committee.id,
+                       country_id=country.id, registration_id=registration.id)
         self.assertTrue(a.paper == None)
         a.save()
         self.assertTrue(a.paper != None)
@@ -246,6 +259,7 @@ class DelegateTest(TestCase):
             name="Test Delegate",
             school=school,
             assignment=assignment)
+
 
 def NoteTest(TestCase):
 

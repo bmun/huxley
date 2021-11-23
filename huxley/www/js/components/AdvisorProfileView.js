@@ -188,6 +188,7 @@ class AdvisorProfileView extends React.Component {
               <b>{teamFeePaid} Team Fee Paid</b>
               <br />
               <TextTemplate
+                conferenceSession={global.conference.session}
                 registrationFee={global.conference.registration_fee}
                 conferenceTreasurer={global.conference.treasurer}
                 regOpen={global.conference.reg_open}
@@ -260,6 +261,7 @@ class AdvisorProfileView extends React.Component {
               <br />
               <TextTemplate
                 conferenceExternal={global.conference.external}
+                conferenceTreasurer={global.conference.treasurer}
                 waiverAvail={global.conference.waiver_avail_date}
                 waiverDeadline={global.conference.waiver_deadline}
                 waiverLink={global.conference.waiver_link}
@@ -294,6 +296,7 @@ class AdvisorProfileView extends React.Component {
           schoolName={school.name}
           conferenceSession={global.conference.session}
           conferenceExternal={global.conference.external}
+          conferenceTreasurer={global.conference.treasurer}
         >
           {AdvisorProfileViewText}
         </TextTemplate>
