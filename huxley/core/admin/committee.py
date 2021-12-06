@@ -20,7 +20,7 @@ class CommitteeAdmin(admin.ModelAdmin):
         reader = csv.reader(committees['csv'].read().decode('utf-8').splitlines())
         for row in reader:
             if row and row[0] != 'Name':
-                special = False if row[3] == '0' or row[3] == 'False' or not row[3] else True
+                special = False if not row[3] or row[3].strip() == '0' or row[3].strip().lower() == 'false' or row[3].strip().lower() == 'n' else True
                 com = Committee(name=row[0],
                                 full_name=row[1],
                                 delegation_size=int(row[2]),
