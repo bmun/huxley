@@ -22,7 +22,6 @@ class CountryAdmin(admin.ModelAdmin):
         reader = csv.reader(countries['csv'].read().decode('utf-8').splitlines())
         for row in reader:
             special = False if not row[1] or row[1].strip() == '0' or row[1].strip().lower() == 'false' or row[1].strip().lower() == 'n' else True
-            print(row[1])
             c = Country(name=row[0], special=special)
             c.save()
 
