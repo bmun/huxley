@@ -59,6 +59,21 @@ require("css/IEWarning.less");
 
 class Huxley extends React.Component {
 
+  componentDidMount() {
+    CurrentUserStore.addListener(() => {
+      var user = CurrentUserStore.getCurrentUser();
+      if (User.isAnonymous(user)) {
+        history.redirect("/login");
+      } else if (User.isAdvisor(user)) {
+        history.redirect("/advisor/profile");
+      } else if (User.isChair(user)) {
+        history.redirect("/chair/attendance");
+      } else if (User.isDelegate(user)) {
+        history.redirect("/delegate/profile");
+      }
+    });
+  }
+  
   render() {
     var user = CurrentUserStore.getCurrentUser();
     if (User.isAnonymous(user)) {
