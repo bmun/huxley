@@ -58,11 +58,8 @@ class AdvisorRosterView extends React.Component {
     };
   }
 
-  UNSAFE_componentWillMount() {
-    Modal.setAppElement("body");
-  }
-
   componentDidMount() {
+    Modal.setAppElement("body");
     var schoolID = CurrentUserStore.getCurrentUser().school.id;
     var conferenceID = global.conference.session;
     this._registrationToken = RegistrationStore.addListener(() => {

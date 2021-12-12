@@ -82,13 +82,6 @@ class ChairNoteView extends React.Component<{}, ChairNoteViewState> {
     };
   }
 
-  UNSAFE_componentWillMount() {
-    var user = CurrentUserStore.getCurrentUser();
-    if (!User.isChair(user)) {
-      history.redirect("/");
-    }
-  }
-
   componentDidMount() {
     this._conversationToken = NoteStore.addListener(() => {
       this.setState({

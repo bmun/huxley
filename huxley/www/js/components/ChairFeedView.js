@@ -9,7 +9,7 @@
 
 import React from "react";
 import { history } from "utils/history";
-import type { Assignment, Committee, Note } from "utils/types";
+import type { Assignment, Note } from "utils/types";
 import { NoteFeedBox } from "./notes/NoteFeedBox";
 
 const { AssignmentStore } = require("stores/AssignmentStore");
@@ -77,13 +77,6 @@ class ChairFeedView extends React.Component<{}, ChairFeedViewState> {
       filter_recipient: null,
       filter_flagged: false,
     };
-  }
-
-  UNSAFE_componentWillMount() {
-    var user = CurrentUserStore.getCurrentUser();
-    if (!User.isChair(user)) {
-      history.redirect("/");
-    }
   }
 
   componentDidMount() {

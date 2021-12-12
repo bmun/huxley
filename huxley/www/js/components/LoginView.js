@@ -36,16 +36,6 @@ class LoginView extends React.Component {
     };
   }
 
-  UNSAFE_componentWillMount() {
-    var user = CurrentUserStore.getCurrentUser();
-    if (User.isAnonymous(user)) {
-      return;
-    }
-    if (User.isAdvisor(user)) {
-      history.redirect("/advisor/profile");
-    }
-  }
-
   render() {
     return (
       <OuterView header={this.renderHeader()}>
