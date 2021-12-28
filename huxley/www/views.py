@@ -25,7 +25,6 @@ def makeFullDate(date):
 
 
 def makeFullDateJSON(date):
-    # return json.dumps(date.isoformat())
     return (date.isoformat()+" 23:59:59 GMT-0700")
 
 
