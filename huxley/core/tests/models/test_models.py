@@ -59,6 +59,10 @@ class CountryTest(TestCase):
         """ Tests that the object's __str__ outputs correctly. """
         self.assertTrue(self.country.__str__() == 'Lolville')
 
+    def test_duplicate(self):
+        with self.assertRaises(IntegrityError) as context:
+            Country.objects.create(name=self.country.name)
+
 
 class CommitteeTest(TestCase):
     def setUp(self):
