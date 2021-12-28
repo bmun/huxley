@@ -143,8 +143,11 @@ def new_committee_feedback(**kwargs):
     return feedback
 
 
+_country_num_counter = 0
 def new_country(**kwargs):
-    c = Country(name=kwargs.pop('name', 'TestCountry'),
+    global _country_num_counter
+    _country_num_counter += 1
+    c = Country(name=kwargs.pop('name', f'TestCountry{_country_num_counter}'),
                 special=kwargs.pop('special', False))
     c.save()
     return c
