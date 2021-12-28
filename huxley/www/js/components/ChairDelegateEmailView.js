@@ -1,5 +1,5 @@
 /**
-* Copyright (c) 2011-2017 Berkeley Model United Nations. All rights reserved.
+* Copyright (c) 2011-2021 Berkeley Model United Nations. All rights reserved.
 * Use of this source code is governed by a BSD License (see LICENSE).
 +*/
 
@@ -7,8 +7,10 @@
 
 import React from "react";
 import { history } from "utils/history";
+import { Table } from "./core/Table";
 
 var { AssignmentStore } = require("stores/AssignmentStore");
+var { Button } = require("components/core/Button");
 var { CountryStore } = require("stores/CountryStore");
 var { CurrentUserStore } = require("stores/CurrentUserStore");
 var { DelegateStore } = require("stores/DelegateStore");
@@ -90,29 +92,35 @@ class ChairDelegateEmailView extends React.Component {
   render() {
     return (
       <InnerView>
-        <TextTemplate>{ChairDelegateEmailViewText}</TextTemplate>
+        <TextTemplate style={{width: "50%"}}>{ChairDelegateEmailViewText}</TextTemplate>
         <form>
-          <div className="table-container">
-            <table>
-              <thead>
-                <tr>
-                  <th>Assignment</th>
-                  <th>Email</th>
-                </tr>
-              </thead>
-            </table>
-            <div>
-              <table className="table highlight-cells">
-                <tbody>
-                  {Object.keys(this.state.countries).length > 0 ? (
-                    this.renderEmailRows()
-                  ) : (
-                    <tr />
-                  )}
-                </tbody>
-              </table>
-            </div>
-          </div>
+          <Table
+            emptyMessage="You don't have any delegates in your committee."
+            isEmpty={!this.state.delegates.length}
+          >
+            <thead>
+              <tr>
+                <th>Assignment</th>
+                <th>Email
+                  <Button
+                    color="blue"
+                    size="small"
+                    style={{float: "right"}}
+                    onClick={this._copyEmailsToClipboard}
+                  >
+                    Copy emails to clipboard
+                  </Button>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {Object.keys(this.state.countries).length > 0 ? (
+                this.renderEmailRows()
+              ) : (
+                <tr />
+              )}
+            </tbody>
+          </Table>
         </form>
       </InnerView>
     );
@@ -137,6 +145,16 @@ class ChairDelegateEmailView extends React.Component {
       );
     });
   };
+
+  _copyEmailsToClipboard = (event) => {
+    var str = '';
+    for (var del of this.state.delegates) {
+      str += del.email;
+      str += ", ";
+    }
+    navigator.clipboard.writeText(str);
+    event.preventDefault();
+  }
 }
 
 export { ChairDelegateEmailView };
