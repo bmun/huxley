@@ -760,3 +760,18 @@ class Note(models.Model):
     class Meta:
         db_table = u'note'
         ordering = ['timestamp']
+
+
+class Waiver(models.Model):
+    '''Waiver objects represent signed waivers retrieved from a
+    third party waiver management platform.'''
+
+    autotag = models.CharField(max_length=64)
+    username = models.CharField(max_length=64)
+    name = models.CharField(max_length=64)
+    email = models.EmailField()
+    delegate = models.ForeignKey(
+        Delegate, on_delete=models.CASCADE, null=True, blank=True, related_name='+')
+
+    def __str__(self):
+        return self.autotag
