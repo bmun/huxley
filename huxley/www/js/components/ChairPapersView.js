@@ -13,6 +13,7 @@ var { AssignmentStore } = require("stores/AssignmentStore");
 var { CommitteeStore } = require("stores/CommitteeStore");
 var { CountryStore } = require("stores/CountryStore");
 var { CurrentUserStore } = require("stores/CurrentUserStore");
+var { DelegateStore } = require("stores/DelegateStore");
 var { InnerView } = require("components/InnerView");
 var { PaperAssignmentList } = require("components/PaperAssignmentList");
 var { PaperGradeTable } = require("components/PaperGradeTable");
@@ -34,6 +35,7 @@ class ChairPapersView extends React.Component {
     var assignments = AssignmentStore.getCommitteeAssignments(user.committee);
     var countries = CountryStore.getCountries();
     var committees = CommitteeStore.getCommittees();
+    var delegates = DelegateStore.getCommitteeDelegates(user.committee);
     var papers = PositionPaperStore.getPapers();
     var files = PositionPaperStore.getPositionPaperFiles();
     var graded_files = PositionPaperStore.getGradedPositionPaperFiles();
@@ -55,6 +57,7 @@ class ChairPapersView extends React.Component {
       assignments: assignments,
       committees: committees,
       countries: countries,
+      delegates: delegates,
       papers: papers,
       rubric: rubric,
       current_assignment: null,
@@ -112,6 +115,11 @@ class ChairPapersView extends React.Component {
       });
     });
 
+    this._delegatesToken = DelegateStore.addListener(() => {
+      var delegates = DelegateStore.getCommitteeDelegates(user.committee);
+      this.setState({ delegates: delegates });
+    });
+
     this._papersToken = PositionPaperStore.addListener(() => {
       this.setState({
         files: PositionPaperStore.getPositionPaperFiles(),
@@ -134,6 +142,7 @@ class ChairPapersView extends React.Component {
     this._countriesToken && this._countriesToken.remove();
     this._committeesToken && this._committeesToken.remove();
     this._assignmentsToken && this._assignmentsToken.remove();
+    this._delegatesToken && this._delegatesToken.remove();
     this._papersToken && this._papersToken.remove();
     this._rubricToken && this._rubricToken.remove();
     this._successTimeout && clearTimeout(this._successTimeout);
@@ -193,11 +202,12 @@ class ChairPapersView extends React.Component {
   };
 
   renderAssignmentList = () => {
-    const assignments = this.state.assignments;
+    const delegates = this.state.delegates;
+    const assignments = delegates.map((delegate) =>
+      this.state.assignments.find((a) => a.id == delegate.assignment))
     const countries = this.state.countries;
     const papers = this.state.papers;
     const rubric = this.state.rubric;
-
     if (Object.keys(countries).length && Object.keys(papers).length && rubric) {
       return (
         <PaperAssignmentList
