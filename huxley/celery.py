@@ -2,12 +2,14 @@ import os
 import django
 
 from celery import Celery
-from huxley.core.tasks import add
 
 # Set the default Django settings module for the 'celery' program.
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'huxley.settings.main')
 
 django.setup()
+
+# import the tasks once django is setup
+# from huxley.core.tasks import poll_waiver
 
 app = Celery('huxley')
 
@@ -21,15 +23,10 @@ app.config_from_object('django.conf:settings', namespace='CELERY')
 app.autodiscover_tasks()
 
 
-@app.on_after_configure.connect
-def setup_periodic_tasks(sender, **kwargs):
-    # Calls test('hello') every 10 seconds.
-    sender.add_periodic_task(10.0, add.s(6, 7), name='add every 10')
-
-
-@app.task
-def hello(s):
-    return s
+# @app.on_after_configure.connect
+# def setup_periodic_tasks(sender, **kwargs):
+#     # Calls test('hello') every 10 seconds.
+#     sender.add_periodic_task(10.0, poll_waiver.s(), name='polling for waivers')
 
 
 @app.task(bind=True)

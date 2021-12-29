@@ -140,6 +140,9 @@ SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
 SERVICE_ACCOUNT_FILE = 'huxley/service.json'
 SHEET_ID = None
 
+# Smartwaiver integration
+SMARTWAIVER_API_KEY = None
+
 # Celery Configuration Options
 CELERY_RESULT_BACKEND = 'django-db'
 # CELERY_RESULT_BACKEND = 'django-cache'

@@ -765,7 +765,7 @@ class Note(models.Model):
 class Waiver(models.Model):
     '''Waiver objects represent signed waivers retrieved from a
     third party waiver management platform.'''
-
+    uniqueId = models.CharField(max_length=64)
     autotag = models.CharField(max_length=64)
     username = models.CharField(max_length=64)
     name = models.CharField(max_length=64)
