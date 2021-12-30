@@ -765,13 +765,13 @@ class Note(models.Model):
 class Waiver(models.Model):
     '''Waiver objects represent signed waivers retrieved from a
     third party waiver management platform.'''
-    uniqueId = models.CharField(max_length=64)
-    autotag = models.CharField(max_length=64)
-    username = models.CharField(max_length=64)
+    unique_id = models.CharField(max_length=64)
+    # autotag = models.CharField(max_length=64)
+    # username = models.CharField(max_length=64)
     name = models.CharField(max_length=64)
-    email = models.EmailField()
+    # email = models.EmailField()
     delegate = models.ForeignKey(
         Delegate, on_delete=models.CASCADE, null=True, blank=True, related_name='+')
 
     def __str__(self):
-        return self.autotag
+        return self.unique_id
