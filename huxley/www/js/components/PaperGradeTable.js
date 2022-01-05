@@ -44,7 +44,7 @@ class PaperGradeTable extends React.Component {
           color="green"
           size="large"
           href={gradedHrefData}
-          download={gradedFileName}
+          download={gradedName}
         >
           Download Graded
         </Button>
@@ -58,7 +58,7 @@ class PaperGradeTable extends React.Component {
             color="green"
             size="large"
             href={gradedHrefData}
-            download={gradedFileName}
+            download={fileName}
           >
             Download Original
           </Button>
