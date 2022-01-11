@@ -42,5 +42,3 @@ env/
 .vscode/
 
 huxley/service.json
-
-huxley-venv/

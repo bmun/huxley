@@ -74,6 +74,7 @@ class PaperSubmissionTable extends React.Component {
               </tr>
               <tr>
                 <td>Uploaded file:</td>
+                <td>{fileName}</td>
                 <td>{buttons}</td>
               </tr>
             </tbody>
