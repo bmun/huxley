@@ -62,7 +62,7 @@ def create_waiver_and_update_delegate(waiver, message_id):
     first_name = waiver['waiver']['firstName']
     last_name = waiver['waiver']['lastName']
     name = first_name + ' ' + last_name
-    username = waiver['waiver']['participants'][0]['customParticipantFields']['61ccf3af74569']['value']
+    username = waiver['waiver']['participants'][0]['customParticipantFields'][settings.DELEGATE_USERNAME_GUID]['value']
 
     # validate the waiver to a user's username
     users_list = list(User.objects.filter(username=username))

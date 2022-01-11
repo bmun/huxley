@@ -142,6 +142,7 @@ SHEET_ID = None
 
 # Smartwaiver integration
 SMARTWAIVER_API_KEY = None
+DELEGATE_USERNAME_GUID = None
 
 # Celery Configuration Options
 CELERY_RESULT_BACKEND = 'django-db'
