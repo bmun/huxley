@@ -12,7 +12,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from googleapiclient.discovery import build
 from google.oauth2 import service_account
 
-from huxley.core.models import Assignment, Delegate, School
+from huxley.core.models import Assignment, Delegate, School, Committee
 
 
 class DelegateAdmin(admin.ModelAdmin):
@@ -66,23 +66,31 @@ class DelegateAdmin(admin.ModelAdmin):
             assignments[assignment.committee.name, assignment.country.name,
                         assignment.registration.school.name, ] = assignment
 
+        failed_uploads = []
         for row in reader:
-            if row:
-                if row[1] == 'Committee':
-                    continue
-                school = School.objects.get(name=str(row[3]))
-                assignment = assignments[str(row[1]), str(row[2]), row[3], ]
-                email = str(row[4])
-                delg = list(
-                    Delegate.objects.filter(name=str(row[0]), email=email))
-                if len(delg) == 1:
-                    Delegate.objects.filter(name=str(
-                        row[0]), email=email).update(assignment=assignment)
+            if row and row[0] != 'Name':
+                committee_check = Committee.objects.filter(name__exact=row[1]).exists()
+                school_check = School.objects.filter(name=row[3]).exists()
+                if committee_check and school_check:
+                    school = School.objects.get(name=str(row[3]))
+                    assignment = assignments[str(row[1]), str(row[2]), row[3], ]
+                    email = str(row[4])
+                    delg = list(
+                        Delegate.objects.filter(name=str(row[0]), email=email))
+                    if len(delg) == 1:
+                        Delegate.objects.filter(name=str(
+                            row[0]), email=email).update(assignment=assignment)
+                    else:
+                        Delegate.objects.create(name=row[0],
+                                                school=school,
+                                                email=email,
+                                                assignment=assignment)
                 else:
-                    Delegate.objects.create(name=row[0],
-                                            school=school,
-                                            email=email,
-                                            assignment=assignment)
+                    failed_uploads.append(row)
+        if failed_uploads:
+            messages.error(
+                request, 'Not all delegates could upload. These rows failed because the committee or school could not be matched: '
+                    +  str(failed_uploads))
 
         return HttpResponseRedirect(reverse('admin:core_delegate_changelist'))
 
