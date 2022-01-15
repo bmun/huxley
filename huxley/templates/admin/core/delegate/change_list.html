@@ -32,10 +32,12 @@
     <input type="file" name="csv" />
     <input type="submit" />
   </form>
+  Files must be in CSV format: Name, Committee, Country, School, Email
   <form action="{% url cl.opts|admin_urlname:'confirm_waivers' %}" enctype="multipart/form-data" method="post">
     {% csrf_token %}
     Add Waiver Confirmations
     <input type="file" name="csv" />
     <input type="submit" />
   </form>
+  Files must be in CSV format: Email, Name, School, Committee, Country
 {% endblock %}
