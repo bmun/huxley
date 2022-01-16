@@ -19,11 +19,12 @@ class CountryAdmin(admin.ModelAdmin):
 
     def load(self, request):
         '''Import a CSV file containing countries.'''
+        # IMPORTANT: If the CSV file requirements change, make sure to update huxley/templates/admin/core/country/change_list.html
         countries = request.FILES
         reader = csv.reader(countries['csv'].read().decode('utf-8').splitlines())
         failed = []
         for row in reader:
-            special = False if row[1].strip() == '0' or row[1].strip() == 'False' or not row[1] else True
+            special = False if not row[1] or row[1].strip() == '0' or row[1].strip().lower() == 'false' or row[1].strip().lower() == 'n' else True
             c = Country(name=row[0], special=special)
             try:
                 c.save()
