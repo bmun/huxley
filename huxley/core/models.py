@@ -8,6 +8,7 @@ import os
 
 from decimal import Decimal
 
+from django.apps import apps
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.mail import send_mail
@@ -766,12 +767,40 @@ class Waiver(models.Model):
     '''Waiver objects represent signed waivers retrieved from a
     third party waiver management platform.'''
     unique_id = models.CharField(max_length=64)
-    # autotag = models.CharField(max_length=64)
     # username = models.CharField(max_length=64)
     name = models.CharField(max_length=64)
     # email = models.EmailField()
     delegate = models.ForeignKey(
         Delegate, on_delete=models.CASCADE, null=True, blank=True, related_name='+')
+
+    @classmethod
+    def create_waiver(cls, waiver):
+        unique_id = waiver['unique_id']
+        name = waiver['name']
+        username = waiver['username']
+
+        # validate the waiver to a user's username
+        User = apps.get_model('accounts', 'User')
+        users_list = list(User.objects.filter(username=username))
+        print("users matched:", users_list)
+
+        delegate = None
+
+        if len(users_list) == 1 and users_list[0].is_delegate():
+            delegate = users_list[0].delegate
+            # validate the waiver to that user's Delegate by name
+            if not delegate.name == name:
+                delegate = None
+
+        # Create the waiver object with a foreign key
+        new_waiver = Waiver(unique_id=unique_id, name=name, delegate=delegate)
+        new_waiver.save()
+
+        # update the delegate's waiver submitted
+        if delegate:
+            delegate.waiver_submitted = True
+            delegate.save()
+            return delegate.name
 
     def __str__(self):
         return self.unique_id

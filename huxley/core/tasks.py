@@ -11,14 +11,8 @@ from huxley.core.models import Waiver
 
 @shared_task
 def poll_waiver():
-    waiver_id, message_id = get_waiver_id()
-    # check that a new signed waiver exists in the queue that is not yet processed
-    if waiver_id and not Waiver.objects.filter(unique_id=waiver_id).exists():
-        waiver = get_waiver(waiver_id)
-        return create_waiver_and_update_delegate(waiver, message_id)
 
-
-def get_waiver_id():
+    # retrieve the waiver id
     headers = {'sw-api-key': settings.SMARTWAIVER_API_KEY}
     # params = {'delete': 'true'}
 
@@ -29,63 +23,66 @@ def get_waiver_id():
         # If the response was successful, no Exception will be raised
         response.raise_for_status()
     except HTTPError as http_err:
-        print(f'HTTP error occurred: {http_err}')
+        return (f'HTTP error occurred: {http_err}')
     except Exception as err:
-        print(f'Other error occurred: {err}')
+        return (f'Other error occurred: {err}')
     else:
         response = response.json()
         print("webhook response:", response)
         if response['api_webhook_account_message_get'] is not None:
-            return (response['api_webhook_account_message_get']['payload']['unique_id'],
-                    response['api_webhook_account_message_get']['messageId'])
-    return (None, None)
+            waiver_id, message_id = (response['api_webhook_account_message_get']['payload']['unique_id'],
+                                     response['api_webhook_account_message_get']['messageId'])
+        else:
+            return "error parsing webhook message"
 
+    # check that a new signed waiver exists in the queue that is not yet processed
+    if waiver_id and not Waiver.objects.filter(unique_id=waiver_id).exists():
+        waiver = None
 
-def get_waiver(waiver_id):
-    headers = {'sw-api-key': settings.SMARTWAIVER_API_KEY}
-    try:
-        response = requests.get(
-            'https://api.smartwaiver.com/v4/waivers/' + waiver_id, headers=headers)
+        # retrieve the waiver by waiver id
+        headers = {'sw-api-key': settings.SMARTWAIVER_API_KEY}
+        try:
+            response = requests.get(
+                'https://api.smartwaiver.com/v4/waivers/' + waiver_id, headers=headers)
 
-        # If the response was successful, no Exception will be raised
-        response.raise_for_status()
-    except HTTPError as http_err:
-        print(f'HTTP error occurred: {http_err}')
-    except Exception as err:
-        print(f'Other error occurred: {err}')
+            # If the response was successful, no Exception will be raised
+            response.raise_for_status()
+        except HTTPError as http_err:
+            return (f'HTTP error occurred: {http_err}')
+        except Exception as err:
+            return (f'Other error occurred: {err}')
+        else:
+            waiver = response.json()
+            print(waiver)
+            if waiver['waiver']['title'] == settings.WAIVER_NAME:
+                waiver_dict = {
+                    'unique_id': waiver['waiver']['waiverId'],
+                    'name': waiver['waiver']['firstName'] + ' ' + waiver['waiver']['lastName'],
+                    'username': waiver['waiver']['participants'][0]['customParticipantFields'][settings.DELEGATE_USERNAME_GUID]['value']
+                }
+            else:
+                return "different waivers found in queue"
+            # create the waivers and update delegate object
+            print(Waiver.create_waiver(waiver_dict))
+
+            # TODO more error handling if something goes wrong with waiver creation
+
+            # delete the waiver id by message id
+            try:
+                response = requests.delete(
+                    'https://api.smartwaiver.com/v4/webhooks/queues/account/' + message_id, headers=headers)
+
+                # If the response was successful, no Exception will be raised
+                response.raise_for_status()
+            except HTTPError as http_err:
+                return (f'HTTP error occurred: {http_err}')
+            except Exception as err:
+                return (f'Other error occurred: {err}')
+            else:
+                return response.json()
+
     else:
-        return response.json()
+        return "matching waiver object already exists"
 
 
-def create_waiver_and_update_delegate(waiver, message_id):
-    unique_id = waiver['waiver']['waiverId']
-    first_name = waiver['waiver']['firstName']
-    last_name = waiver['waiver']['lastName']
-    name = first_name + ' ' + last_name
-    username = waiver['waiver']['participants'][0]['customParticipantFields'][settings.DELEGATE_USERNAME_GUID]['value']
-
-    # validate the waiver to a user's username
-    users_list = list(User.objects.filter(username=username))
-    print("users matched:", users_list)
-
-    delegate = None
-
-    if len(users_list) == 1 and users_list[0].is_delegate():
-        delegate = users_list[0].delegate
-        print(delegate)
-        # validate the waiver to that user's Delegate by name
-        if not delegate.name == name:
-            delegate = None
-
-    # Create the waiver object with a foreign key
-    new_waiver = Waiver(unique_id=unique_id, name=name, delegate=delegate)
-    new_waiver.save()
-
-    # update the delegate's waiver submitted
-    if delegate:
-        delegate.waiver_submitted = True
-        delegate.save()
-
-    return new_waiver.name
-
-    # delete the waiver message
+# delete the waiver message
