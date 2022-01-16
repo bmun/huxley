@@ -1,4 +1,4 @@
-# Copyright (c) 2011-2016 Berkeley Model United Nations. All rights reserved.
+# Copyright (c) 2011-2022 Berkeley Model United Nations. All rights reserved.
 # Use of this source code is governed by a BSD License (see LICENSE).
 
 import json
@@ -69,7 +69,7 @@ class Conference(models.Model):
 
 
 class Country(models.Model):
-    name = models.CharField(max_length=128)
+    name = models.CharField(max_length=128, unique=True)
     special = models.BooleanField(default=False)
 
     def __str__(self):

@@ -1,4 +1,4 @@
-# Copyright (c) 2011-2016 Berkeley Model United Nations. All rights reserved.
+# Copyright (c) 2011-2022 Berkeley Model United Nations. All rights reserved.
 # Use of this source code is governed by a BSD License (see LICENSE).
 
 import uuid
@@ -143,8 +143,11 @@ def new_committee_feedback(**kwargs):
     return feedback
 
 
+_country_num_counter = 0
 def new_country(**kwargs):
-    c = Country(name=kwargs.pop('name', 'TestCountry'),
+    global _country_num_counter
+    _country_num_counter += 1
+    c = Country(name=kwargs.pop('name', f'TestCountry{_country_num_counter}'),
                 special=kwargs.pop('special', False))
     c.save()
     return c

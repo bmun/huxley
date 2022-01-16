@@ -1,4 +1,4 @@
-# Copyright (c) 2011-2016 Berkeley Model United Nations. All rights reserved.
+# Copyright (c) 2011-2022 Berkeley Model United Nations. All rights reserved.
 # Use of this source code is governed by a BSD License (see LICENSE).
 
 # -*- coding: utf-8 -*-
@@ -58,6 +58,10 @@ class CountryTest(TestCase):
     def test_str(self):
         """ Tests that the object's __str__ outputs correctly. """
         self.assertTrue(self.country.__str__() == 'Lolville')
+
+    def test_duplicate(self):
+        with self.assertRaises(IntegrityError) as context:
+            Country.objects.create(name=self.country.name)
 
 
 class CommitteeTest(TestCase):
