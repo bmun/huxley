@@ -259,10 +259,7 @@ class AdvisorRosterView extends React.Component {
                   size="small"
                   onClick={e => 
                     window.confirm(`Are you sure you wish to reset the password for ${delegate.name}? The delegate will no longer be able to log in with the old password. Please ensure that the delegate's email is entered correctly: ${delegate.email}`) 
-                    && this._handleDelegatePasswordChange.bind(
-                      this,
-                      delegate
-                  )()}
+                    && this._handleDelegatePasswordChange(delegate)}
                 >
                   Reset Password
                 </Button>
