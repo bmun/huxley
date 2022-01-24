@@ -213,12 +213,12 @@ class DelegatePaperView extends React.Component {
         uploadedFile: null,
       });
     }
-    history.redirect("/");
     event.preventDefault();
   }
 
   _handleSuccess = (response) => {
     window.alert("Your paper has been successfully uploaded!");
+    history.redirect("/");
   };
 
   _handleError = (response) => {
