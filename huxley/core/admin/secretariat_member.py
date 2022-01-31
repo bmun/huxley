@@ -14,6 +14,7 @@ from huxley.core.models import Committee, SecretariatMember
 class SecretariatMemberAdmin(admin.ModelAdmin):
     def load(self, request):
         '''Import a CSV file containing secretariat members.'''
+        # IMPORTANT: If the CSV file requirements change, make sure to update huxley/templates/admin/core/secretariatmember/change_list.html
         members = request.FILES
         reader = csv.reader(members['csv'].read().decode('utf-8').splitlines())
         for row in reader:

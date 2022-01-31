@@ -63,6 +63,7 @@ class AssignmentAdmin(admin.ModelAdmin):
             return cache[name]
 
         def generate_assignments(reader):
+            # IMPORTANT: If the CSV file requirements change, make sure to update huxley/templates/admin/core/assignment/change_list.html
             committees = {}
             countries = {}
             schools = {}
@@ -86,6 +87,7 @@ class AssignmentAdmin(admin.ModelAdmin):
                     rejected = (
                         row[3].lower() == 'true'
                     )  # use the provided value if admin provides it
+                    # This is almost never used as the Advisor is the one that rejects assignments.
 
                 committee = get_model(Committee, row[1], committees)
                 country = get_model(Country, row[2], countries)
