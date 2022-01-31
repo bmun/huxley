@@ -18,6 +18,7 @@ from django.utils import timezone
 # from django.contrib.postgres.fields import DateRangeField
 
 from huxley.core.constants import ContactGender, ContactType, ProgramTypes
+from huxley.logging.models import WaiverLog
 
 
 class Conference(models.Model):
@@ -707,6 +708,43 @@ class Delegate(models.Model):
 
         super(Delegate, self).save(*args, **kwargs)
 
+    @classmethod
+    def process_waiver(cls, waiver):
+        '''Processes a waiver retrieved via external API and logs unmatched waivers'''
+        unique_id = waiver['unique_id']
+        name = waiver['name']
+        username = waiver['username']
+        email = waiver['email']
+
+        # validate the waiver to a user's username
+        User = apps.get_model('accounts', 'User')
+        users_list = list(User.objects.filter(username=username))
+        print("users matched:", users_list)
+
+        if len(users_list) == 1 and users_list[0].is_delegate():
+            delegate = users_list[0].delegate
+            delegate.waiver_submitted = True
+            delegate.save()
+            return "Successfully confirmed waiver for %s." % delegate.name
+        else:
+            # try matching by email and name
+            delegates_list = list(
+                Delegate.objects.filter(name=name, email=email))
+            if len(delegates_list) == 1:
+                delegate = delegates_list[0]
+                delegate.waiver_submitted = True
+                delegate.save()
+                return "Successfully confirmed waiver for %s." % delegate.name
+
+        # log the unmatched waiver
+        error_waiver_log = WaiverLog(
+            waiver_unique_id=unique_id,
+            signer_username=username,
+            signer_name=name,
+            signer_email=email)
+        error_waiver_log.save()
+        return "Failed to match waiver %s." % str(error_waiver_log)
+
     class Meta:
         db_table = u'delegate'
         ordering = ['school']
@@ -761,46 +799,3 @@ class Note(models.Model):
     class Meta:
         db_table = u'note'
         ordering = ['timestamp']
-
-
-class Waiver(models.Model):
-    '''Waiver objects represent signed waivers retrieved from a
-    third party waiver management platform.'''
-    unique_id = models.CharField(max_length=64)
-    # username = models.CharField(max_length=64)
-    name = models.CharField(max_length=64)
-    # email = models.EmailField()
-    delegate = models.ForeignKey(
-        Delegate, on_delete=models.CASCADE, null=True, blank=True, related_name='+')
-
-    @classmethod
-    def create_waiver(cls, waiver):
-        unique_id = waiver['unique_id']
-        name = waiver['name']
-        username = waiver['username']
-
-        # validate the waiver to a user's username
-        User = apps.get_model('accounts', 'User')
-        users_list = list(User.objects.filter(username=username))
-        print("users matched:", users_list)
-
-        delegate = None
-
-        if len(users_list) == 1 and users_list[0].is_delegate():
-            delegate = users_list[0].delegate
-            # validate the waiver to that user's Delegate by name
-            if not delegate.name == name:
-                delegate = None
-
-        # Create the waiver object with a foreign key
-        new_waiver = Waiver(unique_id=unique_id, name=name, delegate=delegate)
-        new_waiver.save()
-
-        # update the delegate's waiver submitted
-        if delegate:
-            delegate.waiver_submitted = True
-            delegate.save()
-            return delegate.name
-
-    def __str__(self):
-        return self.unique_id

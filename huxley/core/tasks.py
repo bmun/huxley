@@ -6,15 +6,14 @@ from django.conf import settings
 from requests.exceptions import HTTPError
 from huxley.accounts.models import User
 
-from huxley.core.models import Waiver
+from huxley.core.models import Delegate
 
 
 @shared_task
-def poll_waiver():
+def poll_waiver(waiver_name, delegate_username_guid):
 
     # retrieve the waiver id
     headers = {'sw-api-key': settings.SMARTWAIVER_API_KEY}
-    # params = {'delete': 'true'}
 
     try:
         response = requests.get(
@@ -28,15 +27,15 @@ def poll_waiver():
         return (f'Other error occurred: {err}')
     else:
         response = response.json()
-        print("webhook response:", response)
+        # print("webhook response:", response)
         if response['api_webhook_account_message_get'] is not None:
             waiver_id, message_id = (response['api_webhook_account_message_get']['payload']['unique_id'],
                                      response['api_webhook_account_message_get']['messageId'])
         else:
             return "error parsing webhook message"
 
-    # check that a new signed waiver exists in the queue that is not yet processed
-    if waiver_id and not Waiver.objects.filter(unique_id=waiver_id).exists():
+    # check that a new signed waiver exists was retrieved from the queue
+    if waiver_id:
         waiver = None
 
         # retrieve the waiver by waiver id
@@ -53,19 +52,18 @@ def poll_waiver():
             return (f'Other error occurred: {err}')
         else:
             waiver = response.json()
-            print(waiver)
-            if waiver['waiver']['title'] == settings.WAIVER_NAME:
+            # print(waiver)
+            if waiver['waiver']['title'] == waiver_name:
                 waiver_dict = {
                     'unique_id': waiver['waiver']['waiverId'],
                     'name': waiver['waiver']['firstName'] + ' ' + waiver['waiver']['lastName'],
-                    'username': waiver['waiver']['participants'][0]['customParticipantFields'][settings.DELEGATE_USERNAME_GUID]['value']
+                    'username': waiver['waiver']['participants'][0]['customParticipantFields'][delegate_username_guid]['value'],
+                    'email': waiver['waiver']['email']
                 }
             else:
                 return "different waivers found in queue"
-            # create the waivers and update delegate object
-            print(Waiver.create_waiver(waiver_dict))
-
-            # TODO more error handling if something goes wrong with waiver creation
+            # update delegates and create error waiver logs
+            print(Delegate.process_waiver(waiver_dict))
 
             # delete the waiver id by message id
             try:
@@ -83,6 +81,3 @@ def poll_waiver():
 
     else:
         return "matching waiver object already exists"
-
-
-# delete the waiver message
