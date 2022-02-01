@@ -28,7 +28,6 @@ django-easy-pdf==0.1.1
 django-timezone-field==4.2.1
 djangorestframework==3.12.4
 dnspython==1.16.0
-eventlet==0.31.1
 future==0.18.2
 google-api-core==1.30.0
 google-api-python-client==2.9.0
