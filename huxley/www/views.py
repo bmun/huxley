@@ -12,6 +12,7 @@ from huxley.api.serializers import UserSerializer
 from huxley.core.constants import ContactGender, ContactType, ProgramTypes
 from huxley.core.models import Conference
 
+
 def makeFullDate(date):
     day = date.strftime('%d')
     if day[0] == "0":
@@ -22,8 +23,10 @@ def makeFullDate(date):
         'year': date.strftime('%Y')
     }
 
+
 def makeFullDateJSON(date):
     return (date.isoformat()+" 23:59:59 GMT-0700")
+
 
 def makeShortDate(date):
     day = date.strftime('%d')
@@ -33,6 +36,10 @@ def makeShortDate(date):
     if month[0] == "0":
         month = month[1:]
     return month + "/" + day
+
+# get the date from models by doing conference.
+# then parse it into a js object
+
 
 def index(request):
     if request.user.is_superuser:
@@ -80,6 +87,8 @@ def index(request):
         'note_checkpoint_padding': conference.note_checkpoint_padding,
         'advisor_edit_deadline': makeFullDateJSON(conference.advisor_edit_deadline)
     }
+    # need to parse dates to int in dictionary above
+    # need to write a new parsing function to pass data to frontend
 
     context = {
         'user_json': json.dumps(user_dict).replace('</', '<\\/'),
