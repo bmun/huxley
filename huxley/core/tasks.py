@@ -1,10 +1,8 @@
 from celery import shared_task
-from django.core.exceptions import NON_FIELD_ERRORS
 import requests
 
 from django.conf import settings
 from requests.exceptions import HTTPError
-from huxley.accounts.models import User
 
 from huxley.core.models import Delegate
 
@@ -27,7 +25,6 @@ def poll_waiver(waiver_name, delegate_username_guid):
         return (f'Other error occurred: {err}')
     else:
         response = response.json()
-        # print("webhook response:", response)
         if response['api_webhook_account_message_get'] is not None:
             waiver_id, message_id = (response['api_webhook_account_message_get']['payload']['unique_id'],
                                      response['api_webhook_account_message_get']['messageId'])
@@ -52,7 +49,6 @@ def poll_waiver(waiver_name, delegate_username_guid):
             return (f'Other error occurred: {err}')
         else:
             waiver = response.json()
-            # print(waiver)
             if waiver['waiver']['title'] == waiver_name:
                 waiver_dict = {
                     'unique_id': waiver['waiver']['waiverId'],
@@ -63,6 +59,7 @@ def poll_waiver(waiver_name, delegate_username_guid):
             else:
                 return "different waivers found in queue"
             # update delegates and create error waiver logs
+            # TODO come up with a better way to hande the return value of process waiver
             print(Delegate.process_waiver(waiver_dict))
 
             # delete the waiver id by message id
@@ -78,6 +75,3 @@ def poll_waiver(waiver_name, delegate_username_guid):
                 return (f'Other error occurred: {err}')
             else:
                 return response.json()
-
-    else:
-        return "matching waiver object already exists"

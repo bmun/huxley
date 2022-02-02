@@ -142,17 +142,6 @@ SHEET_ID = None
 
 # Smartwaiver integration
 SMARTWAIVER_API_KEY = None
-DELEGATE_USERNAME_GUID = None
 
 # Celery Configuration Options
 CELERY_RESULT_BACKEND = 'django-db'
-# CELERY_RESULT_BACKEND = 'django-cache'
-# CELERY_CACHE_BACKEND = 'default'
-
-# # django caches
-# CACHES = {
-#     'default': {
-#         'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
-#         'LOCATION': 'my_cache_table',
-#     }
-# }
