@@ -124,35 +124,35 @@ class DelegateProfileView extends React.Component {
       </table>
     );
 
-    if (committee) { 
-      if (delegate && delegate.waiver_submitted) {
-        zoomLinkText = (
-                  <div>
-                    <th>Committee Zoom Link</th>
-                    <br />
-                    <Button
-                      color="blue"
-                      size="small"
-                      onClick={() => window.open(committee.zoom_link, "_blank")}
-                    >
-                      Click here to join committee!
-                    </Button>
-                  </div>
-                  );
-      } else {
-        zoomLinkText = (
-                  <div>
-                    <th>Committee Zoom Link</th>
-                    <b />
-                    <TextTemplate
-                      opiLink = {global.conference.opi_link}
-                    >
-                      {DelegateProfileNoZoomViewText}
-                    </TextTemplate>
-                  </div>
-                  );
-      }    
-    }
+    // if (committee) { 
+    //   if (delegate && delegate.waiver_submitted) {
+    //     zoomLinkText = (
+    //               <div>
+    //                 <th>Committee Zoom Link</th>
+    //                 <br />
+    //                 <Button
+    //                   color="blue"
+    //                   size="small"
+    //                   onClick={() => window.open(committee.zoom_link, "_blank")}
+    //                 >
+    //                   Click here to join committee!
+    //                 </Button>
+    //               </div>
+    //               );
+    //   } else {
+    //     zoomLinkText = (
+    //               <div>
+    //                 <th>Committee Zoom Link</th>
+    //                 <b />
+    //                 <TextTemplate
+    //                   opiLink = {global.conference.opi_link}
+    //                 >
+    //                   {DelegateProfileNoZoomViewText}
+    //                 </TextTemplate>
+    //               </div>
+    //               );
+    //   }    
+    // }
 
     if (delegate.published_summary) {
       summary = (
