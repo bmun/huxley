@@ -8,14 +8,17 @@ import os
 
 from decimal import Decimal
 
+from django.apps import apps
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.mail import send_mail
 from django.db import models, transaction
 from django.db.models.signals import post_init, post_save, pre_delete, pre_save
 from django.utils import timezone
+# from django.contrib.postgres.fields import DateRangeField
 
 from huxley.core.constants import ContactGender, ContactType, ProgramTypes
+from huxley.logging.models import WaiverLog
 
 
 class Conference(models.Model):
@@ -588,6 +591,7 @@ class Assignment(models.Model):
             if old_assignment['registration_id'] != registration:
                 # Remove the old assignment instead of just updating it
                 # so that its delegates are deleted by cascade.
+
                 remove(old_assignment)
                 add(committee, country, registration, paper, rejected)
 
@@ -703,6 +707,43 @@ class Delegate(models.Model):
                 'Delegate school and delegate assignment school do not match.')
 
         super(Delegate, self).save(*args, **kwargs)
+
+    @classmethod
+    def process_waiver(cls, waiver):
+        '''Processes a waiver retrieved via external API and logs unmatched waivers'''
+        unique_id = waiver['unique_id']
+        name = waiver['name']
+        username = waiver['username']
+        email = waiver['email']
+
+        # validate the waiver to a user's username
+        User = apps.get_model('accounts', 'User')
+        users_list = list(User.objects.filter(username=username))
+        print("users matched:", users_list)
+
+        if len(users_list) == 1 and users_list[0].is_delegate():
+            delegate = users_list[0].delegate
+            delegate.waiver_submitted = True
+            delegate.save()
+            return "Successfully confirmed waiver for %s." % delegate.name
+        else:
+            # try matching by email and name
+            delegates_list = list(
+                Delegate.objects.filter(name=name, email=email))
+            if len(delegates_list) == 1:
+                delegate = delegates_list[0]
+                delegate.waiver_submitted = True
+                delegate.save()
+                return "Successfully confirmed waiver for %s." % delegate.name
+
+        # log the unmatched waiver
+        error_waiver_log = WaiverLog(
+            waiver_unique_id=unique_id,
+            signer_username=username,
+            signer_name=name,
+            signer_email=email)
+        error_waiver_log.save()
+        return "Failed to match waiver %s." % str(error_waiver_log)
 
     class Meta:
         db_table = u'delegate'

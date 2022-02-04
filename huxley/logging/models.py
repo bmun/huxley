@@ -3,6 +3,7 @@
 
 from django.db import models
 
+
 class LogEntry(models.Model):
     level = models.CharField(max_length=200)
     message = models.TextField()
@@ -14,3 +15,14 @@ class LogEntry(models.Model):
 
     def __str__(self):
         return u'%s: %s' % (self.level, self.timestamp)
+
+
+class WaiverLog(models.Model):
+    waiver_unique_id = models.CharField(max_length=64)
+    signer_username = models.CharField(max_length=64)
+    signer_name = models.CharField(max_length=64)
+    signer_email = models.EmailField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return '%s: %s' % (self.signer_username, self.signer_name)

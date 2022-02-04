@@ -1,7 +1,8 @@
 # Copyright (c) 2011-2022 Berkeley Model United Nations. All rights reserved.
 # Use of this source code is governed by a BSD License (see LICENSE).
 
-import os, sys
+import os
+import sys
 from .roots import HUXLEY_ROOT
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -41,6 +42,8 @@ INSTALLED_APPS = [
     'huxley.accounts',
     'huxley.www',
     'huxley.logging',
+    'django_celery_results',
+    'django_celery_beat',
 ]
 
 MIDDLEWARE = [
@@ -61,8 +64,8 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-		'%s/templates/' % HUXLEY_ROOT,
-	],
+            '%s/templates/' % HUXLEY_ROOT,
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -136,3 +139,9 @@ STATIC_URL = '/static/'
 SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
 SERVICE_ACCOUNT_FILE = 'huxley/service.json'
 SHEET_ID = None
+
+# Smartwaiver integration
+SMARTWAIVER_API_KEY = None
+
+# Celery Configuration Options
+CELERY_RESULT_BACKEND = 'django-db'
