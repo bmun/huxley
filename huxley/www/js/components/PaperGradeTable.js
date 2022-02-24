@@ -38,7 +38,9 @@ class PaperGradeTable extends React.Component {
           : null;
       var fileNames = paper.file.split("/");
       var fileName = fileNames[fileNames.length - 1];
-      var gradedName = gradedHrefData ? "graded_" + fileName : null;
+      var gradedFileNames = paper.graded_file.split("/");
+      var gradedFileName = gradedFileNames[gradedFileNames.length - 1];
+      var gradedName = gradedHrefData ? "graded_" + gradedFileName : null;
       var downloadGraded = gradedHrefData ? (
         <a
           className={cx({
