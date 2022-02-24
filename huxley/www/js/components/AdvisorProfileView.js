@@ -152,8 +152,9 @@ class AdvisorProfileView extends React.Component {
       for (var i = 0; i < assignments.length; i++) {
         if (
           assignments[i] == null ||
-          assignments[i].paper == null ||
-          assignments[i].paper.file == null
+          (assignments[i].rejected == false &&
+          (assignments[i].paper == null ||
+          assignments[i].paper.file == null))
         ) {
           positionPapersTurnedIn = "\u2610";
           break;
