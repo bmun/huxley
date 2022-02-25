@@ -44,7 +44,7 @@ class PaperSubmissionTable extends React.Component {
             "rounded-small": true,
           })}
           href={gradedHrefData}
-          download={"graded_" + gradedName}
+          download={gradedName}
         >
           Download Graded Paper
         </a>
