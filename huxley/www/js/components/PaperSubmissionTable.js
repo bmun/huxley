@@ -24,11 +24,17 @@ class PaperSubmissionTable extends React.Component {
       var hrefData = files[paper.id]
         ? url.createObjectURL(files[paper.id])
         : null;
-      var gradedHrefData = graded_files[paper.id]
-        ? url.createObjectURL(graded_files[paper.id])
-        : null;
+      var gradedHrefData =  
+          paper.graded &&
+          paper.graded_file &&
+          graded_files[paper.id]
+            ? url.createObjectURL(graded_files[paper.id])
+            : null;
       var fileNames = paper.file.split("/");
       var fileName = fileNames[fileNames.length - 1];
+      var gradedFileNames = gradedHrefData ? paper.graded_file.split("/") : null;
+      var gradedFileName = gradedFileNames ? gradedFileNames[gradedFileNames.length - 1] : null;
+      var gradedName = gradedHrefData ? "graded_" + gradedFileName : null;
       var gradedButton = paper.graded ? (
         <a
           className={cx({
@@ -38,7 +44,7 @@ class PaperSubmissionTable extends React.Component {
             "rounded-small": true,
           })}
           href={gradedHrefData}
-          download={"graded_" + fileName}
+          download={"graded_" + gradedName}
         >
           Download Graded Paper
         </a>
