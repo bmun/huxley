@@ -49,7 +49,7 @@ def poll_waiver(waiver_name, delegate_username_guid):
             return (f'Other error occurred: {err}')
         else:
             waiver = response.json()
-            if waiver['waiver']['title'] == waiver_name:
+            if waiver['waiver']['title'] == waiver_name and not waiver['waiver']['expired']:
                 waiver_dict = {
                     'unique_id': waiver['waiver']['waiverId'],
                     'name': waiver['waiver']['firstName'] + ' ' + waiver['waiver']['lastName'],
@@ -57,7 +57,7 @@ def poll_waiver(waiver_name, delegate_username_guid):
                     'email': waiver['waiver']['email']
                 }
             else:
-                return "different waivers found in queue"
+                return "different waivers found in queue or waiver expired"
             # update delegates and create error waiver logs
             # TODO come up with a better way to hande the return value of process waiver
             print(Delegate.process_waiver(waiver_dict))
