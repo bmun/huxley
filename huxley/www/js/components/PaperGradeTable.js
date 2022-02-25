@@ -33,13 +33,15 @@ class PaperGradeTable extends React.Component {
       var url = window.URL;
       var hrefData = url.createObjectURL(files[paper.id]);
       var gradedHrefData =
-        graded_files[paper.id] && paper.graded
+        graded_files[paper.id] && 
+        paper.graded &&
+        paper.graded_file
           ? url.createObjectURL(graded_files[paper.id])
           : null;
       var fileNames = paper.file.split("/");
       var fileName = fileNames[fileNames.length - 1];
-      var gradedFileNames = paper.graded_file.split("/");
-      var gradedFileName = gradedFileNames[gradedFileNames.length - 1];
+      var gradedFileNames = gradedHrefData ? paper.graded_file.split("/") : null;
+      var gradedFileName = gradedFileNames ? gradedFileNames[gradedFileNames.length - 1] : null;
       var gradedName = gradedHrefData ? "graded_" + gradedFileName : null;
       var downloadGraded = gradedHrefData ? (
         <a

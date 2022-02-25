@@ -133,7 +133,7 @@ class AdvisorProfileView extends React.Component {
     if (
       registration &&
       registration.registration_fee_paid &&
-      registration.delegate_fees_paid == registration.delegate_fees_owed
+      registration.delegate_fees_paid >= registration.delegate_fees_owed
     ) {
       allFeesPaid = "\u2611";
     } else {

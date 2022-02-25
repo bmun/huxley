@@ -244,7 +244,9 @@ class AdvisorPaperView extends React.Component {
         var names = paper ? paper.file.split("/") : null;
         var graded = assignment.paper.graded;
         var fileName = names ? names[names.length - 1] : null;
-        var gradedFileName = fileName ? "graded_" + fileName : null;
+        var gradedFileNames = gradedHrefData ? paper.graded_file.split("/") : null;
+        var gradedFileName = gradedFileNames ? gradedFileNames[gradedFileNames.length - 1] : null;
+        var gradedName = gradedHrefData ? "graded_" + gradedFileName : null;
         var downloadPaper = paper ? (
           <a
             className={cx({
@@ -269,7 +271,7 @@ class AdvisorPaperView extends React.Component {
                 "rounded-small": true,
               })}
               href={gradedHrefData}
-              download={gradedFileName}
+              download={gradedName}
             >
               &#10515;
             </a>
