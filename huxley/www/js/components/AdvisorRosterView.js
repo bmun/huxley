@@ -257,10 +257,9 @@ class AdvisorRosterView extends React.Component {
                 <Button
                   color="yellow"
                   size="small"
-                  onClick={this._handleDelegatePasswordChange.bind(
-                    this,
-                    delegate
-                  )}
+                  onClick={e => 
+                    window.confirm(`Are you sure you wish to reset the password for ${delegate.name}? The delegate will no longer be able to log in with the old password. Please ensure that the delegate's email is entered correctly: ${delegate.email}`) 
+                    && this._handleDelegatePasswordChange(delegate)}
                 >
                   Reset Password
                 </Button>
@@ -329,7 +328,7 @@ class AdvisorRosterView extends React.Component {
 
   _handleDelegatePasswordChange = (delegate) => {
     ServerAPI.resetDelegatePassword(delegate.id).then(
-      this._handlePasswordChangeSuccess,
+      ()=>this._handlePasswordChangeSuccess(delegate.email),
       this._handlePasswordChangeError
     );
   };
@@ -342,12 +341,12 @@ class AdvisorRosterView extends React.Component {
     });
   };
 
-  _handlePasswordChangeSuccess = () => {
+  _handlePasswordChangeSuccess = (email) => {
     this.setState({
       loading: false,
       modal_open: false,
     });
-    window.alert(`Password successfully reset.`);
+    window.alert(`Password successfully reset. An email containing the password has been sent to ${email}.`);
   };
 
   _handlePasswordChangeError = () => {
