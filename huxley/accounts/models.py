@@ -80,11 +80,12 @@ class User(AbstractUser):
         new_password = cls.objects.make_random_password(length=10)
         user.set_password(new_password)
         user.save()
-
+        
         user.email_user(
-            'Huxley Password Reset',
-            'The password for user %s '
-            'has been reset to %s.\n'
+            'Berkeley Model UN Huxley Password Reset',
+            'Your password has been successfully reset!\n'
+            'Username: %s\n'
+            'Password: %s\n'
             'Thank you for using Huxley!' % (user.username, new_password),
             from_email='no-reply@bmun.org')
 
