@@ -20,7 +20,8 @@ require("css/Table.less");
 const DelegateProfileViewText = require("text/DelegateProfileViewText.md");
 
 const DelegateChecklistPositionPaperText = require("text/checklists/DelegateChecklistPositionPaperText.md");
-const DelegateChecklistWaiverText = require("text/checklists/DelegateChecklistWaiverText.md");
+const DelegateChecklistWaiverTextWhenAvailable = require("text/checklists/DelegateChecklistWaiverTextWhenAvailable.md");
+const DelegateChecklistWaiverTextBeforeAvailable = require("text/checklists/DelegateChecklistWaiverTextBeforeAvailable.md");
 const DelegateProfileNoZoomViewText = require("text/DelegateProfileNoZoomViewText.md");
 // const DelegateProfileZoomViewText = require("text/DelegateProfileZoomViewText.md");
 
@@ -78,6 +79,20 @@ class DelegateProfileView extends React.Component {
       waiverCheck = "\u2611";
     } else {
       waiverCheck = "\u2610";
+    }
+
+    const d = new Date();
+    let currentMonth = d.getMonth() + 1;
+    let currentDate = d.getDate();
+    let waiverAvailability = global.conference.waiver_avail_date.split("/");
+    let availabilityMonth = waiverAvailability[0]
+    let availabilityDate = waiverAvailability[1]
+
+    if (currentMonth >= availabilityMonth && currentDate >= availabilityDate) {
+      var DelegateChecklistWaiverText = DelegateChecklistWaiverTextWhenAvailable
+    }
+    else {
+      var DelegateChecklistWaiverText = DelegateChecklistWaiverTextBeforeAvailable
     }
 
     var checklist = (
