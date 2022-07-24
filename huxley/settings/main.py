@@ -145,3 +145,11 @@ SMARTWAIVER_API_KEY = None
 
 # Celery Configuration Options
 CELERY_RESULT_BACKEND = 'django-db'
+
+# TODO: Replace with prod versions during deployment
+# Quickbooks constants
+CLIENT_ID = "ABYdHrqfKuQBK7bDiZpCK9C6Cq9bhayJJZbPCRyJLu7rO2nNqX"
+CLIENT_SECRET = "KKJQ9uQJdlydvcCZigkZ3PlbEXQ8ZUjohKrEwzjN"
+
+# Quickbooks tokens
+REFRESH_TOKEN = "AB11667363349c93rhkisENljWb2z9zKRD3ltFWU3WmM8WMAoP"
