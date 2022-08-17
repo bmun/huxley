@@ -10,7 +10,6 @@ from invoice_automation.src.model.Address import Address
 from invoice_automation.src.model.School import School
 from invoice_automation.src.util import QuickBooksUtils
 
-
 # TODO: Replace with prod versions during deployment
 # Should probably move these to settings/main.py at some point
 # Quickbooks constants
@@ -73,7 +72,7 @@ class QuickBooksModule:
 
         :param schoolNames: List of strings containing school names
         :return: List of school objects corresponding to customers which were found
-        :raises: QuickbooksException
+        :raises QuickbooksException:
         """
         try:
             qbCustomers = Customer.choose(schoolNames, "DisplayName", self.quickBooksClient)
@@ -90,7 +89,7 @@ class QuickBooksModule:
 
         :param school: School to create Customer from
         :return: None
-        :raises: QuickbooksException
+        :raises QuickbooksException:
         """
         try:
             customer = QuickBooksUtils.getCustomerFromSchool(school)
@@ -101,20 +100,35 @@ class QuickBooksModule:
             print(e.detail)
             raise e
 
+    def updateCustomerFromSchool(self, customerId: str, school: School) -> None:
+        """
+        Updates QuickBooks with id# customerId using passed School object
+
+        :param customerId: QuickBooks Id of Customer to update
+        :param school: School object to parse for details to update
+        :return: None
+        :raises QuickBooksException:
+        """
+        try:
+            customer = QuickBooksUtils.getCustomerFromSchool(school)
+            customer.Id = customerId
+            customer.save(self.quickBooksClient)
+        except QuickbooksException as e:
+            print(e.message)
+            print(e.error_code)
+            print(e.detail)
+            raise e
+
 
 qbm = QuickBooksModule()
+cid = qbm.querySchoolsAsCustomers(["Updated Cool Cars"])[0].id
+updatedName = "Updated Updated Cool Cars"
 school = School(
-    "Test School",
-    "test@school.com",
-    ["6467849311"],
-    Address(
-        "2404 Fulton St",
-        "Apt 202",
-        "Berkeley",
-        "CA",
-        "USA",
-        "94704"
-    )
+    updatedName,
+    None,
+    None,
+    None
 )
-#qbm.createCustomerFromSchool(school)
-print(qbm.querySchoolsAsCustomers(["Test School"]))
+qbm.updateCustomerFromSchool(cid, school)
+updatedFoundName = qbm.querySchoolsAsCustomers([updatedName])[0].schoolName
+print(f"Updated name: {updatedFoundName}")

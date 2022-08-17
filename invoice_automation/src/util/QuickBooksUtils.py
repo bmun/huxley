@@ -19,17 +19,26 @@ def getCustomerFromSchool(school: School) -> Customer | None:
         raise TypeError(f"Expected a School object, was {type(school)}")
 
     customer = Customer()
+
     customer.CompanyName = school.schoolName
     customer.DisplayName = school.schoolName
-    customer.PrimaryEmailAddr = EmailAddress()
-    customer.PrimaryEmailAddr.Address = school.email
-    if len(school.phoneNumbers) > 0:
-        customer.PrimaryPhone = PhoneNumber()
-        customer.PrimaryPhone.FreeFormNumber = school.phoneNumbers[0]
-    if len(school.phoneNumbers) > 1:
-        customer.AlternatePhone = PhoneNumber()
-        customer.AlternatePhone.FreeFormNumber = school.phoneNumbers[1]
+
+    if school.email is None:
+        customer.PrimaryEmailAddr = None
+    else:
+        customer.PrimaryEmailAddr = EmailAddress()
+        customer.PrimaryEmailAddr.Address = school.email
+
+    if school.phoneNumbers is not None:
+        if len(school.phoneNumbers) > 0:
+            customer.PrimaryPhone = PhoneNumber()
+            customer.PrimaryPhone.FreeFormNumber = school.phoneNumbers[0]
+        if len(school.phoneNumbers) > 1:
+            customer.AlternatePhone = PhoneNumber()
+            customer.AlternatePhone.FreeFormNumber = school.phoneNumbers[1]
+
     customer.BillAddr = getQuickBooksAddressFromAddress(school.address)
+
     return customer
 
 
@@ -45,12 +54,14 @@ def getSchoolFromCustomer(customer: Customer) -> School | None:
     if not isinstance(customer, Customer):
         raise TypeError(f"Expected a Customer object, was {type(customer)}")
 
-    return School(
+    school = School(
         schoolName=customer.DisplayName,
         email=customer.PrimaryEmailAddr,
         phoneNumbers=[customer.PrimaryPhone, customer.AlternatePhone],
         address=getAddressFromQuickBooksAddress(customer.BillAddr)
     )
+    school.id = customer.Id
+    return school
 
 
 def getQuickBooksAddressFromAddress(address: Address) -> quickbooks.objects.Address | None:
@@ -76,13 +87,15 @@ def getQuickBooksAddressFromAddress(address: Address) -> quickbooks.objects.Addr
     return qbAddress
 
 
-def getAddressFromQuickBooksAddress(address: quickbooks.objects.Address) -> Address:
+def getAddressFromQuickBooksAddress(address: quickbooks.objects.Address) -> Address | None:
     """
     Converts QuickBooks Address object to Address object
     :param address: QuickBooks Address object to parse
     :return: Converted Address object, None if None is passed
     :raises: TypeError if QuickBooks Address object is not passed
     """
+    if address is None:
+        return None
     if not isinstance(address, quickbooks.objects.Address):
         raise TypeError(f"Expected a QuickBooks Address object, was {type(address)}")
 
