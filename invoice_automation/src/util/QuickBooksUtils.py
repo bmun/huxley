@@ -1,5 +1,5 @@
 import quickbooks.objects
-from quickbooks.objects import Customer, PhoneNumber
+from quickbooks.objects import Customer, PhoneNumber, EmailAddress
 
 from invoice_automation.src.model.Address import Address
 from invoice_automation.src.model.School import School
@@ -20,7 +20,9 @@ def getCustomerFromSchool(school: School) -> Customer | None:
 
     customer = Customer()
     customer.CompanyName = school.schoolName
-    customer.PrimaryEmailAddr = school.email
+    customer.DisplayName = school.schoolName
+    customer.PrimaryEmailAddr = EmailAddress()
+    customer.PrimaryEmailAddr.Address = school.email
     if len(school.phoneNumbers) > 0:
         customer.PrimaryPhone = PhoneNumber()
         customer.PrimaryPhone.FreeFormNumber = school.phoneNumbers[0]
@@ -28,6 +30,7 @@ def getCustomerFromSchool(school: School) -> Customer | None:
         customer.AlternatePhone = PhoneNumber()
         customer.AlternatePhone.FreeFormNumber = school.phoneNumbers[1]
     customer.BillAddr = getQuickBooksAddressFromAddress(school.address)
+    return customer
 
 
 def getSchoolFromCustomer(customer: Customer) -> School | None:
