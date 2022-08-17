@@ -5,6 +5,8 @@ from intuitlib.client import AuthClient
 from quickbooks import QuickBooks
 from quickbooks.exceptions import QuickbooksException
 from quickbooks.objects.customer import Customer
+
+from invoice_automation.src.model.Address import Address
 from invoice_automation.src.model.School import School
 from invoice_automation.src.util import QuickBooksUtils
 
@@ -71,6 +73,7 @@ class QuickBooksModule:
 
         :param schoolNames: List of strings containing school names
         :return: List of school objects corresponding to customers which were found
+        :raises: QuickbooksException
         """
         try:
             qbCustomers = Customer.choose(schoolNames, "DisplayName", self.quickBooksClient)
@@ -81,8 +84,37 @@ class QuickBooksModule:
             print(e.detail)
             raise e
 
+    def createCustomerFromSchool(self, school: School) -> None:
+        """
+        Creates Customer in QuickBooks using passed School
+
+        :param school: School to create Customer from
+        :return: None
+        :raises: QuickbooksException
+        """
+        try:
+            customer = QuickBooksUtils.getCustomerFromSchool(school)
+            customer.save(qb=self.quickBooksClient)
+        except QuickbooksException as e:
+            print(e.message)
+            print(e.error_code)
+            print(e.detail)
+            raise e
+
 
 qbm = QuickBooksModule()
-schools = qbm.querySchoolsAsCustomers(["Kookies by Kathy", "Mark Cho"])
-for s in schools:
-    print(s.phoneNumbers[0].FreeFormNumber)
+school = School(
+    "Test School",
+    "test@school.com",
+    ["6467849311"],
+    Address(
+        "2404 Fulton St",
+        "Apt 202",
+        "Berkeley",
+        "CA",
+        "USA",
+        "94704"
+    )
+)
+#qbm.createCustomerFromSchool(school)
+print(qbm.querySchoolsAsCustomers(["Test School"]))
