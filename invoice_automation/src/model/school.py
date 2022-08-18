@@ -1,6 +1,6 @@
 from typing import List
 
-from invoice_automation.src.model.Address import Address
+from invoice_automation.src.model.address import Address
 
 
 class School:
@@ -10,11 +10,11 @@ class School:
 
     Attributes
     ----------
-    schoolName: str
+    school_name: str
         Name of the school
     email: str
         Email of school's point of contact
-    phoneNumbers: List[str]
+    phone_numbers: List[str]
         School's primary phone number, optional secondary phone number
     address: Address
         School's billing address
@@ -22,9 +22,9 @@ class School:
         Id of QB Customer corresponding to this school
     """
 
-    def __init__(self, schoolName: str, email: str, phoneNumbers: List[str], address: Address) -> None:
-        self.schoolName = schoolName
+    def __init__(self, school_name: str, email: str, phone_numbers: List[str], address: Address) -> None:
+        self.school_name = school_name
         self.email = email
-        self.phoneNumbers = phoneNumbers
+        self.phone_numbers = phone_numbers
         self.address = address
         self.id = None

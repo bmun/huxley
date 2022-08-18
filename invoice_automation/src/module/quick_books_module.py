@@ -6,9 +6,8 @@ from quickbooks import QuickBooks
 from quickbooks.exceptions import QuickbooksException
 from quickbooks.objects.customer import Customer
 
-from invoice_automation.src.model.Address import Address
-from invoice_automation.src.model.School import School
-from invoice_automation.src.util import QuickBooksUtils
+from invoice_automation.src.model.school import School
+from invoice_automation.src.util import quick_books_utils
 
 # TODO: Replace with prod versions during deployment
 # Should probably move these to settings/main.py at some point
@@ -28,9 +27,9 @@ class QuickBooksModule:
 
     Attributes
     ----------
-    authClient: AuthClient
+    auth_client: AuthClient
         OAuth2 authentication client for authenticating to QuickBooks API
-    quickBooksClient: QuickBooks
+    quickbooks_client: QuickBooks
         QuickBooksClient which makes actual API calls to QuickBooks
 
     Methods
@@ -48,15 +47,15 @@ class QuickBooksModule:
         ------
         QuickbooksException
         """
-        self.authClient = AuthClient(
+        self.auth_client = AuthClient(
             client_id=CLIENT_ID,
             client_secret=CLIENT_SECRET,
             redirect_uri="http://localhost:8000/callback",
             environment="sandbox"
         )
         try:
-            self.quickBooksClient = QuickBooks(
-                auth_client=self.authClient,
+            self.quickbooks_client = QuickBooks(
+                auth_client=self.auth_client,
                 refresh_token=REFRESH_TOKEN,
                 company_id=COMPANY_ID
             )
@@ -66,24 +65,24 @@ class QuickBooksModule:
             print(e.detail)
             raise e
 
-    def querySchoolsAsCustomers(self, schoolNames: List[str]) -> List[School]:
+    def query_schools_as_customers(self, school_names: List[str]) -> List[School]:
         """
         Looks for existing customers with the same display names as the passed school names
 
-        :param schoolNames: List of strings containing school names
+        :param school_names: List of strings containing school names
         :return: List of school objects corresponding to customers which were found
         :raises QuickbooksException:
         """
         try:
-            qbCustomers = Customer.choose(schoolNames, "DisplayName", self.quickBooksClient)
-            return [QuickBooksUtils.getSchoolFromCustomer(customer) for customer in qbCustomers]
+            qbCustomers = Customer.choose(school_names, "DisplayName", self.quickbooks_client)
+            return [quick_books_utils.get_school_from_customer(customer) for customer in qbCustomers]
         except QuickbooksException as e:
             print(e.message)
             print(e.error_code)
             print(e.detail)
             raise e
 
-    def createCustomerFromSchool(self, school: School) -> None:
+    def create_customer_from_school(self, school: School) -> None:
         """
         Creates Customer in QuickBooks using passed School
 
@@ -92,27 +91,27 @@ class QuickBooksModule:
         :raises QuickbooksException:
         """
         try:
-            customer = QuickBooksUtils.getCustomerFromSchool(school)
-            customer.save(qb=self.quickBooksClient)
+            customer = quick_books_utils.get_customer_from_school(school)
+            customer.save(qb=self.quickbooks_client)
         except QuickbooksException as e:
             print(e.message)
             print(e.error_code)
             print(e.detail)
             raise e
 
-    def updateCustomerFromSchool(self, customerId: str, school: School) -> None:
+    def update_customer_from_school(self, customer_id: str, school: School) -> None:
         """
         Updates QuickBooks with id# customerId using passed School object
 
-        :param customerId: QuickBooks Id of Customer to update
+        :param customer_id: QuickBooks Id of Customer to update
         :param school: School object to parse for details to update
         :return: None
         :raises QuickBooksException:
         """
         try:
-            customer = QuickBooksUtils.getCustomerFromSchool(school)
-            customer.Id = customerId
-            customer.save(self.quickBooksClient)
+            customer = quick_books_utils.get_customer_from_school(school)
+            customer.Id = customer_id
+            customer.save(self.quickbooks_client)
         except QuickbooksException as e:
             print(e.message)
             print(e.error_code)
@@ -121,7 +120,7 @@ class QuickBooksModule:
 
 
 qbm = QuickBooksModule()
-cid = qbm.querySchoolsAsCustomers(["Updated Cool Cars"])[0].id
+cid = qbm.query_schools_as_customers(["Updated Cool Cars"])[0].id
 updatedName = "Updated Updated Cool Cars"
 school = School(
     updatedName,
@@ -129,6 +128,6 @@ school = School(
     None,
     None
 )
-qbm.updateCustomerFromSchool(cid, school)
-updatedFoundName = qbm.querySchoolsAsCustomers([updatedName])[0].schoolName
+qbm.update_customer_from_school(cid, school)
+updatedFoundName = qbm.query_schools_as_customers([updatedName])[0].school_name
 print(f"Updated name: {updatedFoundName}")
