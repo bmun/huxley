@@ -117,17 +117,3 @@ class QuickBooksModule:
             print(e.error_code)
             print(e.detail)
             raise e
-
-
-qbm = QuickBooksModule()
-cid = qbm.query_schools_as_customers(["Updated Cool Cars"])[0].id
-updatedName = "Updated Updated Cool Cars"
-school = School(
-    updatedName,
-    None,
-    None,
-    None
-)
-qbm.update_customer_from_school(cid, school)
-updatedFoundName = qbm.query_schools_as_customers([updatedName])[0].school_name
-print(f"Updated name: {updatedFoundName}")
