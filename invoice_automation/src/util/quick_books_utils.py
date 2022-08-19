@@ -5,7 +5,7 @@ from invoice_automation.src.model.address import Address
 from invoice_automation.src.model.school import School
 
 
-def get_customer_from_school(school: School) -> Customer | None:
+def get_customer_from_school(school: School | None) -> Customer | None:
     """
     Converts School object to QuickBooks Customer object
     :param school: School object to convert
@@ -15,8 +15,6 @@ def get_customer_from_school(school: School) -> Customer | None:
     """
     if school is None:
         return None
-    if not isinstance(school, School):
-        raise TypeError(f"Expected a School object, was {type(school)}")
 
     customer = Customer()
 
@@ -38,11 +36,12 @@ def get_customer_from_school(school: School) -> Customer | None:
             customer.AlternatePhone.FreeFormNumber = school.phone_numbers[1]
 
     customer.BillAddr = get_quickbooks_address_from_address(school.address)
+    customer.ShipAddr = customer.BillAddr
 
     return customer
 
 
-def get_school_from_customer(customer: Customer) -> School | None:
+def get_school_from_customer(customer: Customer | None) -> School | None:
     """
     Converts QuickBooks Customer object to School object
     :param customer: QuickBooks Customer object to parse
@@ -51,20 +50,24 @@ def get_school_from_customer(customer: Customer) -> School | None:
     """
     if customer is None:
         return None
-    if not isinstance(customer, Customer):
-        raise TypeError(f"Expected a Customer object, was {type(customer)}")
+
+    phone_numbers = []
+    if customer.PrimaryPhone is not None:
+        phone_numbers.append(customer.PrimaryPhone.FreeFormNumber)
+    if customer.AlternatePhone is not None:
+        phone_numbers.append(customer.AlternatePhone.FreeFormNumber)
 
     school = School(
         school_name=customer.DisplayName,
-        email=customer.PrimaryEmailAddr,
-        phone_numbers=[customer.PrimaryPhone, customer.AlternatePhone],
+        email=customer.PrimaryEmailAddr.Address,
+        phone_numbers=phone_numbers,
         address=get_address_from_quickbooks_address(customer.BillAddr)
     )
     school.id = customer.Id
     return school
 
 
-def get_quickbooks_address_from_address(address: Address) -> quickbooks.objects.Address | None:
+def get_quickbooks_address_from_address(address: Address | None) -> quickbooks.objects.Address | None:
     """
     Converts Address object to QuickBooks Address object
     :param address: Address object to parse
@@ -73,8 +76,6 @@ def get_quickbooks_address_from_address(address: Address) -> quickbooks.objects.
     """
     if address is None:
         return None
-    if not isinstance(address, Address):
-        raise TypeError(f"Expected an Address object, was {type(address)}")
 
     qbAddress = quickbooks.objects.Address()
     qbAddress.Line1 = address.line1
@@ -87,7 +88,7 @@ def get_quickbooks_address_from_address(address: Address) -> quickbooks.objects.
     return qbAddress
 
 
-def get_address_from_quickbooks_address(address: quickbooks.objects.Address) -> Address | None:
+def get_address_from_quickbooks_address(address: quickbooks.objects.Address | None) -> Address | None:
     """
     Converts QuickBooks Address object to Address object
     :param address: QuickBooks Address object to parse
@@ -96,8 +97,6 @@ def get_address_from_quickbooks_address(address: quickbooks.objects.Address) -> 
     """
     if address is None:
         return None
-    if not isinstance(address, quickbooks.objects.Address):
-        raise TypeError(f"Expected a QuickBooks Address object, was {type(address)}")
 
     return Address(
         address.Line1,
