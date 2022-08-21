@@ -8,17 +8,8 @@ from invoice_automation.src.model.address import Address
 from invoice_automation.src.model.school import School
 from invoice_automation.src.util.quick_books_utils import get_customer_from_school, get_school_from_customer, \
     get_quickbooks_address_from_address, get_address_from_quickbooks_address
-
-INVOICE_AUTOMATION = "invoice_automation"
-SRC = "src"
-UTIL = "util"
-QUICK_BOOKS_UTILS = "quick_books_utils"
-GET_QUICKBOOKS_ADDRESS_FROM_ADDRESS = "get_quickbooks_address_from_address"
-GET_ADDRESS_FROM_QUICKBOOKS_ADDRESS = "get_address_from_quickbooks_address"
-
-QUICK_BOOKS_UTILS_PATH = ".".join([INVOICE_AUTOMATION, SRC, UTIL, QUICK_BOOKS_UTILS])
-GET_QUICKBOOKS_ADDRESS_FROM_ADDRESS_PATH = QUICK_BOOKS_UTILS_PATH + "." + GET_QUICKBOOKS_ADDRESS_FROM_ADDRESS
-GET_ADDRESS_FROM_QUICKBOOKS_ADDRESS_PATH = QUICK_BOOKS_UTILS_PATH + "." + GET_ADDRESS_FROM_QUICKBOOKS_ADDRESS
+from invoice_automation.tst.paths import GET_QUICKBOOKS_ADDRESS_FROM_ADDRESS_PATH, \
+    GET_ADDRESS_FROM_QUICKBOOKS_ADDRESS_PATH
 
 SCHOOL_NAME = "berkeley"
 EMAIL = "carol@berkeley.edu"

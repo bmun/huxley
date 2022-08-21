@@ -20,6 +20,11 @@ COMPANY_ID = "4620816365199192370"
 # Quickbooks tokens
 REFRESH_TOKEN = "AB11669491025T4PgHV7qio9chs0pTSBkNE2TIXoHq8Xx0YQ70"
 
+REDIRECT_URI = "http://localhost:8000/callback"
+SANDBOX = "sandbox"
+
+DISPLAY_NAME = "DisplayName"
+
 
 class QuickBooksModule:
     """
@@ -38,7 +43,15 @@ class QuickBooksModule:
         Looks for already registered schools using their names
     """
 
-    def __init__(self) -> None:
+    def __init__(
+            self,
+            client_id: str,
+            client_secret: str,
+            redirect_uri: str,
+            environment: str,
+            refresh_token: str,
+            company_id: str
+    ) -> None:
         """
         Instantiates authClient using hardcoded CLIENT_ID and CLIENT_SECRET
         then uses it to instantiate a QuickBooks instance
@@ -48,16 +61,16 @@ class QuickBooksModule:
         QuickbooksException
         """
         self.auth_client = AuthClient(
-            client_id=CLIENT_ID,
-            client_secret=CLIENT_SECRET,
-            redirect_uri="http://localhost:8000/callback",
-            environment="sandbox"
+            client_id=client_id,
+            client_secret=client_secret,
+            redirect_uri=redirect_uri,
+            environment=environment
         )
         try:
             self.quickbooks_client = QuickBooks(
                 auth_client=self.auth_client,
-                refresh_token=REFRESH_TOKEN,
-                company_id=COMPANY_ID
+                refresh_token=refresh_token,
+                company_id=company_id
             )
         except QuickbooksException as e:
             print(e.message)
@@ -74,13 +87,14 @@ class QuickBooksModule:
         :raises QuickbooksException:
         """
         try:
-            qbCustomers = Customer.choose(school_names, "DisplayName", self.quickbooks_client)
-            return [quick_books_utils.get_school_from_customer(customer) for customer in qbCustomers]
+            qbCustomers = Customer.choose(school_names, DISPLAY_NAME, self.quickbooks_client)
         except QuickbooksException as e:
             print(e.message)
             print(e.error_code)
             print(e.detail)
             raise e
+
+        return [quick_books_utils.get_school_from_customer(customer) for customer in qbCustomers]
 
     def create_customer_from_school(self, school: School) -> None:
         """
@@ -111,7 +125,7 @@ class QuickBooksModule:
         try:
             customer = quick_books_utils.get_customer_from_school(school)
             customer.Id = customer_id
-            customer.save(self.quickbooks_client)
+            customer.save(qb=self.quickbooks_client)
         except QuickbooksException as e:
             print(e.message)
             print(e.error_code)
