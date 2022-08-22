@@ -710,3 +710,27 @@ class TestQuickBooksModule:
         assert mock_invoice.CustomerRef == mock_customer_ref
         assert mock_invoice.Line == [mock_school_fee_SalesItemLine, mock_delegate_fee_SalesItemLine]
         mock_invoice.save.assert_called_once_with(qb=happy_path_qbm.quickbooks_client)
+
+    def test_send_invoice_happyPath(self, mock_invoice: Invoice, happy_path_qbm: QuickBooksModule):
+        # Setup
+        mock_invoice.send.return_value = None
+
+        # Act
+        happy_path_qbm.send_invoice(mock_invoice)
+
+        # Verify
+        mock_invoice.send.assert_called_once_with(qb=happy_path_qbm.quickbooks_client)
+
+    def test_send_invoice_sendRaises(self, mock_invoice: Invoice, happy_path_qbm: QuickBooksModule):
+        # Setup
+        mock_invoice.send.side_effect = QUICKBOOKS_EXCEPTION
+
+        # Act
+        try:
+            happy_path_qbm.send_invoice(mock_invoice)
+        except QuickbooksException as e:
+            exn = e
+
+        # Verify
+        assert exn == QUICKBOOKS_EXCEPTION
+        mock_invoice.send.assert_called_once_with(qb=happy_path_qbm.quickbooks_client)

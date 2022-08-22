@@ -255,6 +255,20 @@ class QuickBooksModule:
             print(e.detail)
             raise e
 
+    def send_invoice(self, invoice: Invoice):
+        """
+        Sends invoice to email address specified in passed invoice
+        :param invoice:
+        :return:
+        """
+        try:
+            invoice.send(qb=self.quickbooks_client)
+        except QuickbooksException as e:
+            print(e.message)
+            print(e.error_code)
+            print(e.detail)
+            raise e
+
     # Item methods
 
     def query_line_items_from_conference(self, conference: Conference) -> List[Item]:
