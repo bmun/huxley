@@ -659,7 +659,7 @@ class TestQuickBooksModule:
         mock_invoice.save.return_value = None
 
         # Act
-        happy_path_qbm.create_invoice_from_registration(happy_path_registration)
+        happy_path_qbm.create_invoice_from_registration(happy_path_registration, "")
 
         # Verify
         get_customer_ref_from_school_patch.assert_called_once_with(happy_path_registration.school)
@@ -697,7 +697,7 @@ class TestQuickBooksModule:
 
         # Act
         try:
-            happy_path_qbm.create_invoice_from_registration(happy_path_registration)
+            happy_path_qbm.create_invoice_from_registration(happy_path_registration, "")
         except QuickbooksException as e:
             exn = e
 
