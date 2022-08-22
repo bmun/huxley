@@ -1,0 +1,42 @@
+from invoice_automation.src.model.registration import Registration
+from invoice_automation.src.module.quick_books_module import QuickBooksModule
+
+
+class RegistrationHandler:
+    def __init__(self,
+                 client_id: str,
+                 client_secret: str,
+                 redirect_uri: str,
+                 environment: str,
+                 refresh_token: str,
+                 company_id: str):
+        self.quickbooks_module = QuickBooksModule(
+            client_id,
+            client_secret,
+            redirect_uri,
+            environment,
+            refresh_token,
+            company_id
+        )
+
+    def handle_registration(self, registration: Registration):
+        customer_ref = self.quickbooks_module.get_customer_ref_from_school(registration.school)
+
+        if customer_ref is None:
+            customer = self.quickbooks_module.create_customer_from_school(registration.school)
+        else:
+            customer = self.quickbooks_module.update_customer_from_school(
+                customer_id=customer_ref.value,
+                school=registration.school
+            )
+
+        invoice = self.quickbooks_module.query_invoice_from_registration(registration)
+
+        if invoice is None:
+            invoice = self.quickbooks_module.create_invoice_from_registration(
+                registration,
+                customer.PrimaryEmailAddr.Address
+            )
+
+        if not invoice.email_sent:
+            self.quickbooks_module.send_invoice(invoice)

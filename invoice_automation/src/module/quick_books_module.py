@@ -1,11 +1,10 @@
-import datetime
 from typing import List
 
 from intuitlib.client import AuthClient
 
 from quickbooks import QuickBooks
 from quickbooks.exceptions import QuickbooksException
-from quickbooks.objects import Invoice, Ref, Item
+from quickbooks.objects import Invoice, Ref, Item, EmailAddress
 from quickbooks.objects.customer import Customer
 
 from invoice_automation.src.model.conference import Conference
@@ -106,7 +105,7 @@ class QuickBooksModule:
 
         return [quick_books_utils.get_school_from_customer(customer) for customer in qbCustomers]
 
-    def create_customer_from_school(self, school: School) -> None:
+    def create_customer_from_school(self, school: School) -> Customer:
         """
         Creates Customer in QuickBooks using passed School
 
@@ -114,16 +113,17 @@ class QuickBooksModule:
         :return: None
         :raises QuickbooksException:
         """
+        customer = quick_books_utils.get_customer_from_school(school)
         try:
-            customer = quick_books_utils.get_customer_from_school(school)
             customer.save(qb=self.quickbooks_client)
         except QuickbooksException as e:
             print(e.message)
             print(e.error_code)
             print(e.detail)
             raise e
+        return customer
 
-    def update_customer_from_school(self, customer_id: str, school: School) -> None:
+    def update_customer_from_school(self, customer_id: str, school: School) -> Customer:
         """
         Updates QuickBooks with id# customerId using passed School object
 
@@ -132,15 +132,16 @@ class QuickBooksModule:
         :return: None
         :raises QuickBooksException:
         """
+        customer = quick_books_utils.get_customer_from_school(school)
+        customer.Id = customer_id
         try:
-            customer = quick_books_utils.get_customer_from_school(school)
-            customer.Id = customer_id
             customer.save(qb=self.quickbooks_client)
         except QuickbooksException as e:
             print(e.message)
             print(e.error_code)
             print(e.detail)
             raise e
+        return customer
 
     def get_customer_ref_from_school(self, school: School | None) -> Ref | None:
         """
@@ -226,10 +227,11 @@ class QuickBooksModule:
                 return invoice
         return None
 
-    def create_invoice_from_registration(self, registration: Registration):
+    def create_invoice_from_registration(self, registration: Registration, email: str) -> Invoice:
         """
         Creates invoice in Quickbooks from passed registration
         Note: Does not check to see if a matching invoice already exists
+        :param email:
         :param registration:
         :return:
         """
@@ -247,6 +249,10 @@ class QuickBooksModule:
         invoice.CustomerRef = customer_ref
         invoice.Line = lines
 
+        invoice.BillEmail = EmailAddress()
+        invoice.BillEmail.Address = email
+        invoice.EmailStatus = "NeedToSend"
+
         try:
             invoice.save(qb=self.quickbooks_client)
         except QuickbooksException as e:
@@ -254,6 +260,8 @@ class QuickBooksModule:
             print(e.error_code)
             print(e.detail)
             raise e
+
+        return invoice
 
     def send_invoice(self, invoice: Invoice):
         """
