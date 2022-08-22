@@ -1,13 +1,15 @@
+from typing import List
 from unittest.mock import Mock, patch
 
 import pytest
 import quickbooks.objects
-from quickbooks.objects import Customer, EmailAddress, PhoneNumber
+from quickbooks.objects import Customer, EmailAddress, PhoneNumber, Invoice, DetailLine, SalesItemLineDetail, \
+    SalesItemLine, Ref
 
 from invoice_automation.src.model.address import Address
 from invoice_automation.src.model.school import School
 from invoice_automation.src.util.quick_books_utils import get_customer_from_school, get_school_from_customer, \
-    get_quickbooks_address_from_address, get_address_from_quickbooks_address
+    get_quickbooks_address_from_address, get_address_from_quickbooks_address, check_invoice_matches_items_and_counts
 from invoice_automation.tst.paths import GET_QUICKBOOKS_ADDRESS_FROM_ADDRESS_PATH, \
     GET_ADDRESS_FROM_QUICKBOOKS_ADDRESS_PATH
 
@@ -22,6 +24,9 @@ CITY = "Berkeley"
 COUNTRYSUBDIVISIONCODE = "CA"
 COUNTRY = "USA"
 POSTALCODE = "94720"
+SCHOOL_FEE = "School Fee"
+DELEGATE_FEE = "Delegate Fee"
+DELEGATE_FEE_LINE_DETAIL_QTY = 20
 
 
 def assert_qb_phone_number(p: PhoneNumber, expectedNumber: str):
@@ -199,3 +204,76 @@ class TestQuickbooksUtils:
 
         # Verify
         assert address is None
+
+    @pytest.fixture
+    def mock_school_fee_salesitemline(self) -> SalesItemLine:
+        detail = Mock(spec=SalesItemLineDetail)
+        detail.ItemRef = Ref()
+        detail.ItemRef.name = SCHOOL_FEE
+        detail.Qty = 1
+        line = SalesItemLine()
+        line.SalesItemLineDetail = detail
+        return line
+
+    @pytest.fixture
+    def mock_delegate_fee_salesitemline(self) -> SalesItemLine:
+        detail = Mock(spec=SalesItemLineDetail)
+        detail.ItemRef = Ref()
+        detail.ItemRef.name = DELEGATE_FEE
+        detail.Qty = DELEGATE_FEE_LINE_DETAIL_QTY
+        line = SalesItemLine()
+        line.SalesItemLineDetail = detail
+        return line
+
+    @pytest.fixture
+    def mock_line(self,
+                  mock_school_fee_salesitemline: SalesItemLine,
+                  mock_delegate_fee_salesitemline: SalesItemLine) -> List[DetailLine]:
+        return [mock_school_fee_salesitemline, mock_delegate_fee_salesitemline]
+
+    @pytest.fixture
+    def mock_invoice(self, mock_line: List[DetailLine]) -> Invoice:
+        invoice = Mock(spec=Invoice)
+        invoice.Line = mock_line
+        return invoice
+
+    def test_check_invoice_matches_items_and_counts_happyPath(self,
+                                                              mock_invoice: Invoice):
+        # Act
+        invoice_matches = check_invoice_matches_items_and_counts(
+            mock_invoice,
+            [SCHOOL_FEE, DELEGATE_FEE],
+            [1, DELEGATE_FEE_LINE_DETAIL_QTY]
+        )
+
+        # Verify
+        assert invoice_matches is True
+
+    def test_check_invoice_matches_items_and_counts_itemCountLengthMismatch(self,
+                                                                            mock_invoice: Invoice):
+        # Act
+        try:
+            invoice_matches = check_invoice_matches_items_and_counts(
+                mock_invoice,
+                [SCHOOL_FEE, DELEGATE_FEE],
+                [1]
+            )
+        except ValueError as e:
+            exn = e
+
+        # Verify
+        assert str(exn) == "item_refs and item_counts were expected to have the same length"
+
+    def test_check_invoice_matches_items_and_counts_nonMatchingInvoice(self,
+                                                                       mock_invoice: Invoice,
+                                                                       mock_school_fee_salesitemline: SalesItemLine,
+                                                                       mock_delegate_fee_salesitemline: SalesItemLine):
+        # Act
+        invoice_matches = check_invoice_matches_items_and_counts(
+            mock_invoice,
+            [SCHOOL_FEE],
+            [1]
+        )
+
+        # Verify
+        assert invoice_matches is False

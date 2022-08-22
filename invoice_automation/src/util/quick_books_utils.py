@@ -1,8 +1,27 @@
+from typing import List
+
 import quickbooks.objects
-from quickbooks.objects import Customer, PhoneNumber, EmailAddress
+from quickbooks.objects import Customer, PhoneNumber, EmailAddress, Invoice
 
 from invoice_automation.src.model.address import Address
+from invoice_automation.src.model.conference import Conference
 from invoice_automation.src.model.school import School
+
+DELEGATE_FEE_TEMPLATE = "{} Delegate Fee"
+SCHOOL_FEE_TEMPLATE = "{} School Fee"
+SALES_ITEM_LINE_DETAIL_TYPE = "SalesItemLineDetail"
+
+CONFERENCE_TO_LINE_ITEM_NAMES = {
+    Conference.BMUN71: [
+        DELEGATE_FEE_TEMPLATE.format(Conference.BMUN71.value), SCHOOL_FEE_TEMPLATE.format(Conference.BMUN71.value)
+    ],
+    Conference.FC: [
+        DELEGATE_FEE_TEMPLATE.format(Conference.FC.value), SCHOOL_FEE_TEMPLATE.format(Conference.FC.value)
+    ],
+    Conference.TEST: [
+        DELEGATE_FEE_TEMPLATE.format(Conference.TEST.value), SCHOOL_FEE_TEMPLATE.format(Conference.TEST.value)
+    ]
+}
 
 
 def get_customer_from_school(school: School | None) -> Customer | None:
@@ -11,7 +30,6 @@ def get_customer_from_school(school: School | None) -> Customer | None:
     :param school: School object to convert
     :return: QuickBooks Customer object corresponding to passed School object,
              None if None is passed
-    :raises: TypeError if School object is not passed
     """
     if school is None:
         return None
@@ -46,7 +64,6 @@ def get_school_from_customer(customer: Customer | None) -> School | None:
     Converts QuickBooks Customer object to School object
     :param customer: QuickBooks Customer object to parse
     :return: Converted School object, None if None is passed
-    :raises: TypeError if Customer object is not passed
     """
     if customer is None:
         return None
@@ -72,7 +89,6 @@ def get_quickbooks_address_from_address(address: Address | None) -> quickbooks.o
     Converts Address object to QuickBooks Address object
     :param address: Address object to parse
     :return: Converted QuickBooks Address object, None if None is passed
-    :raises: TypeError if Address object is not passed
     """
     if address is None:
         return None
@@ -93,7 +109,6 @@ def get_address_from_quickbooks_address(address: quickbooks.objects.Address | No
     Converts QuickBooks Address object to Address object
     :param address: QuickBooks Address object to parse
     :return: Converted Address object, None if None is passed
-    :raises: TypeError if QuickBooks Address object is not passed
     """
     if address is None:
         return None
@@ -106,3 +121,35 @@ def get_address_from_quickbooks_address(address: quickbooks.objects.Address | No
         address.Country,
         address.PostalCode
     )
+
+
+def check_invoice_matches_items_and_counts(invoice: Invoice, item_names: List[str], item_counts: List[int]) -> bool:
+    """
+    Checks that the passed invoice match the passed items and counts
+    Invoice should consist exactly of items with correct counts
+    item_names[i] is expected to have count item_counts[i]
+    Only SalesItemLines are checked from the invoice
+    :param invoice:
+    :param item_names:
+    :param item_counts:
+    :return:
+    """
+    if len(item_names) != len(item_counts):
+        raise ValueError("item_refs and item_counts were expected to have the same length")
+
+    line_items = list(filter(lambda i: i.DetailType == SALES_ITEM_LINE_DETAIL_TYPE, invoice.Line))
+    if len(line_items) != len(item_names):
+        return False
+
+    invoice_item_counts = set()
+    for item in line_items:
+        invoice_item_name = item.SalesItemLineDetail.ItemRef.name
+        # the item name in the invoice could have a category prepended
+        if ":" in invoice_item_name:
+            invoice_item_name = invoice_item_name.split(":")[1]
+        invoice_item_count = item.SalesItemLineDetail.Qty
+        invoice_item_counts.add((invoice_item_name, invoice_item_count))
+
+    ref_item_counts = {item_count_tuple for item_count_tuple in zip(item_names, item_counts)}
+
+    return invoice_item_counts == ref_item_counts

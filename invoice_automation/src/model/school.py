@@ -19,10 +19,14 @@ class School:
     address: Address
         School's billing address
     id: str
-        Id of QB Customer corresponding to this school
+        ID of QB Customer corresponding to this school
     """
 
-    def __init__(self, school_name: str, email: str, phone_numbers: List[str], address: Address) -> None:
+    def __init__(self,
+                 school_name: str,
+                 email: str = None,
+                 phone_numbers: List[str] = None,
+                 address: Address = None) -> None:
         self.school_name = school_name
         self.email = email
         self.phone_numbers = phone_numbers
