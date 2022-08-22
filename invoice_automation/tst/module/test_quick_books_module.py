@@ -5,7 +5,7 @@ import pytest
 from intuitlib.client import AuthClient
 from quickbooks import QuickBooks
 from quickbooks.exceptions import QuickbooksException
-from quickbooks.objects import Customer, Ref, Invoice
+from quickbooks.objects import Customer, Ref, Invoice, Item, SalesItemLine
 
 import invoice_automation.src.module.quick_books_module
 from invoice_automation.src.model.conference import Conference
@@ -15,7 +15,8 @@ from invoice_automation.src.module.quick_books_module import QuickBooksModule, D
 from invoice_automation.tst.paths import AUTHCLIENT_PATH, QUICKBOOKS_CLIENT_PATH, CUSTOMER_CHOOSE_PATH, \
     GET_SCHOOL_FROM_CUSTOMER_PATH, GET_CUSTOMER_FROM_SCHOOL_PATH, CONFERENCE_TO_LINE_ITEM_NAMES_PATH, ITEM_CHOOSE_PATH, \
     INVOICE_QUERY_PATH, CONSTRUCT_INVOICE_QUERY_PATH, GET_CUSTOMER_REF_FROM_SCHOOL, QUERY_INVOICES_FROM_CUSTOMER_REF, \
-    CHECK_INVOICE_MATCHES_ITEMS_AND_COUNTS_PATH
+    CHECK_INVOICE_MATCHES_ITEMS_AND_COUNTS_PATH, QUERY_LINE_ITEMS_FROM_CONFERENCE, CREATE_SALESITEMLINE_PATH, \
+    INVOICE_PATH
 
 CLIENT_ID = "CLIENT"
 CLIENT_SECRET = "SECRET"
@@ -593,3 +594,119 @@ class TestQuickBooksModule:
             call(happy_path_mock_matching_invoice, expected_item_names, expected_item_counts)
         ]
         check_invoice_matches_items_and_counts_patch.assert_has_calls(expected_check_invoice_matches_calls)
+
+    @pytest.fixture
+    def mock_school_fee_item(self) -> Item:
+        item = Mock(spec=Item)
+        item.Name = TEST_SCHOOL_FEE
+        return item
+
+    @pytest.fixture
+    def mock_delegate_fee_item(self) -> Item:
+        item = Mock(spec=Item)
+        item.Name = TEST_DELEGATE_FEE
+        return item
+
+    @pytest.fixture
+    def mock_school_fee_SalesItemLine(self) -> SalesItemLine:
+        return Mock(spec=SalesItemLine)
+
+    @pytest.fixture
+    def mock_delegate_fee_SalesItemLine(self) -> SalesItemLine:
+        return Mock(spec=SalesItemLine)
+
+    @pytest.fixture
+    def create_SalesItemLine_sideEffect(
+            self,
+            mock_school_fee_SalesItemLine: SalesItemLine,
+            mock_delegate_fee_SalesItemLine: SalesItemLine,
+            mock_school_fee_item: Item,
+            mock_delegate_fee_item: Item) -> Callable[[Item, int], SalesItemLine]:
+        def create_SalesItemLine(item: Item, quantity: int):
+            if item == mock_school_fee_item:
+                return mock_school_fee_SalesItemLine
+            elif item == mock_delegate_fee_item:
+                return mock_delegate_fee_SalesItemLine
+        return create_SalesItemLine
+
+    @pytest.fixture
+    def mock_invoice(self) -> Invoice:
+        return Mock(spec=Invoice)
+
+    @patch.object(invoice_automation.src.module.quick_books_module.QuickBooksModule, GET_CUSTOMER_REF_FROM_SCHOOL)
+    @patch.object(invoice_automation.src.module.quick_books_module.QuickBooksModule, QUERY_LINE_ITEMS_FROM_CONFERENCE)
+    @patch(CREATE_SALESITEMLINE_PATH)
+    @patch(INVOICE_PATH)
+    def test_create_invoice_from_registration_happyPath(self,
+                                                        invoice_patch: Mock,
+                                                        create_SalesItemLine_patch: Mock,
+                                                        query_line_items_from_conference_patch: Mock,
+                                                        get_customer_ref_from_school_patch: Mock,
+                                                        mock_customer_ref: Ref,
+                                                        mock_school_fee_item: Item,
+                                                        mock_delegate_fee_item: Item,
+                                                        create_SalesItemLine_sideEffect: Callable[[Item, int], SalesItemLine],
+                                                        mock_invoice: Invoice,
+                                                        happy_path_qbm: QuickBooksModule,
+                                                        happy_path_registration: Registration,
+                                                        mock_school_fee_SalesItemLine: SalesItemLine,
+                                                        mock_delegate_fee_SalesItemLine: SalesItemLine):
+        # Setup
+        get_customer_ref_from_school_patch.return_value = mock_customer_ref
+        query_line_items_from_conference_patch.return_value = [mock_school_fee_item, mock_delegate_fee_item]
+        create_SalesItemLine_patch.side_effect = create_SalesItemLine_sideEffect
+        invoice_patch.return_value = mock_invoice
+        mock_invoice.save.return_value = None
+
+        # Act
+        happy_path_qbm.create_invoice_from_registration(happy_path_registration)
+
+        # Verify
+        get_customer_ref_from_school_patch.assert_called_once_with(happy_path_registration.school)
+        query_line_items_from_conference_patch.assert_called_once_with(happy_path_registration.conference)
+        create_SalesItemLine_calls = [call(mock_school_fee_item, 1), call(mock_delegate_fee_item, NUM_DELEGATES)]
+        create_SalesItemLine_patch.assert_has_calls(create_SalesItemLine_calls)
+        assert mock_invoice.CustomerRef == mock_customer_ref
+        assert mock_invoice.Line == [mock_school_fee_SalesItemLine, mock_delegate_fee_SalesItemLine]
+        mock_invoice.save.assert_called_once_with(qb=happy_path_qbm.quickbooks_client)
+
+    @patch.object(invoice_automation.src.module.quick_books_module.QuickBooksModule, GET_CUSTOMER_REF_FROM_SCHOOL)
+    @patch.object(invoice_automation.src.module.quick_books_module.QuickBooksModule, QUERY_LINE_ITEMS_FROM_CONFERENCE)
+    @patch(CREATE_SALESITEMLINE_PATH)
+    @patch(INVOICE_PATH)
+    def test_create_invoice_from_registration_saveRaises(self,
+                                                        invoice_patch: Mock,
+                                                        create_SalesItemLine_patch: Mock,
+                                                        query_line_items_from_conference_patch: Mock,
+                                                        get_customer_ref_from_school_patch: Mock,
+                                                        mock_customer_ref: Ref,
+                                                        mock_school_fee_item: Item,
+                                                        mock_delegate_fee_item: Item,
+                                                        create_SalesItemLine_sideEffect: Callable[[Item, int], SalesItemLine],
+                                                        mock_invoice: Invoice,
+                                                        happy_path_qbm: QuickBooksModule,
+                                                        happy_path_registration: Registration,
+                                                        mock_school_fee_SalesItemLine: SalesItemLine,
+                                                        mock_delegate_fee_SalesItemLine: SalesItemLine):
+        # Setup
+        get_customer_ref_from_school_patch.return_value = mock_customer_ref
+        query_line_items_from_conference_patch.return_value = [mock_school_fee_item, mock_delegate_fee_item]
+        create_SalesItemLine_patch.side_effect = create_SalesItemLine_sideEffect
+        invoice_patch.return_value = mock_invoice
+        mock_invoice.save.side_effect = QUICKBOOKS_EXCEPTION
+
+        # Act
+        try:
+            happy_path_qbm.create_invoice_from_registration(happy_path_registration)
+        except QuickbooksException as e:
+            exn = e
+
+        # Verify
+        assert exn == QUICKBOOKS_EXCEPTION
+        get_customer_ref_from_school_patch.assert_called_once_with(happy_path_registration.school)
+        query_line_items_from_conference_patch.assert_called_once_with(happy_path_registration.conference)
+        create_SalesItemLine_calls = [call(mock_school_fee_item, 1), call(mock_delegate_fee_item, NUM_DELEGATES)]
+        create_SalesItemLine_patch.assert_has_calls(create_SalesItemLine_calls)
+        assert mock_invoice.CustomerRef == mock_customer_ref
+        assert mock_invoice.Line == [mock_school_fee_SalesItemLine, mock_delegate_fee_SalesItemLine]
+        mock_invoice.save.assert_called_once_with(qb=happy_path_qbm.quickbooks_client)

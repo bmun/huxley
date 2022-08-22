@@ -17,7 +17,7 @@ from invoice_automation.src.util import quick_books_utils
 # Should probably move these to settings/main.py at some point
 # Quickbooks constants
 from invoice_automation.src.util.query_utils import construct_invoice_query
-from invoice_automation.src.util.quick_books_utils import check_invoice_matches_items_and_counts
+from invoice_automation.src.util.quick_books_utils import check_invoice_matches_items_and_counts, create_SalesItemLine
 
 CLIENT_ID = "ABYdHrqfKuQBK7bDiZpCK9C6Cq9bhayJJZbPCRyJLu7rO2nNqX"
 CLIENT_SECRET = "KKJQ9uQJdlydvcCZigkZ3PlbEXQ8ZUjohKrEwzjN"
@@ -30,14 +30,8 @@ REDIRECT_URI = "http://localhost:8000/callback"
 SANDBOX = "sandbox"
 
 DISPLAY_NAME = "DisplayName"
-
-# Query templates
-CUSTOMER_REF_VALUE_WHERE_TEMPLATE = "CustomerRef.value = '{}'"
-CUSTOMER_REF_NAME_WHERE_TEMPLATE = "CustomerRef.name = '{}'"
-INVOICE_FILTER_START_DATE = datetime.datetime(2022, 8, 1)
-INVOICE_FILTER_START_DATE_FORMAT = "%Y-%m-%dT%X%z"
-INVOICE_FILTER_START_DATE_WHERE_TEMPLATE = "MetaData.CreateTime >= '{}'"
-INVOICE_QUERY_TEMPLATE = "SELECT * FROM Invoice WHERE {}"
+SCHOOL_FEE = "School Fee"
+DELEGATE_FEE = "Delegate Fee"
 
 
 class QuickBooksModule:
@@ -91,6 +85,8 @@ class QuickBooksModule:
             print(e.error_code)
             print(e.detail)
             raise e
+
+    # Customer methods:
 
     def query_schools_as_customers(self, school_names: List[str]) -> List[School]:
         """
@@ -169,6 +165,8 @@ class QuickBooksModule:
             return None
         return customer_matches[0].to_ref()
 
+    # Invoice methods:
+
     def query_invoices_from_customer_ref(self, customer_ref: Ref) -> List[Invoice] | None:
         """
         Queries Quickbooks for invoices which were billed to the passed customer
@@ -228,7 +226,44 @@ class QuickBooksModule:
                 return invoice
         return None
 
+    def create_invoice_from_registration(self, registration: Registration):
+        """
+        Creates invoice in Quickbooks from passed registration
+        Note: Does not check to see if a matching invoice already exists
+        :param registration:
+        :return:
+        """
+        # get customer_ref
+        customer_ref = self.get_customer_ref_from_school(registration.school)
+        # create line items
+        items = self.query_line_items_from_conference(registration.conference)
+        lines = []
+        for item in items:
+            if SCHOOL_FEE in item.Name:
+                lines.append(create_SalesItemLine(item, 1))
+            elif DELEGATE_FEE in item.Name:
+                lines.append(create_SalesItemLine(item, registration.num_delegates))
+        invoice = Invoice()
+        invoice.CustomerRef = customer_ref
+        invoice.Line = lines
+
+        try:
+            invoice.save(qb=self.quickbooks_client)
+        except QuickbooksException as e:
+            print(e.message)
+            print(e.error_code)
+            print(e.detail)
+            raise e
+
+    # Item methods
+
     def query_line_items_from_conference(self, conference: Conference) -> List[Item]:
+        """
+        Query QuickBooks for items corresponding to the passed conference
+
+        :param conference:
+        :return:
+        """
         item_names = quick_books_utils.CONFERENCE_TO_LINE_ITEM_NAMES[conference]
 
         try:
