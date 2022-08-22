@@ -1,7 +1,8 @@
 from typing import List
 
 import quickbooks.objects
-from quickbooks.objects import Customer, PhoneNumber, EmailAddress, Invoice
+from quickbooks.objects import Customer, PhoneNumber, EmailAddress, Invoice, Ref, SalesItemLine, SalesItemLineDetail, \
+    Item
 
 from invoice_automation.src.model.address import Address
 from invoice_automation.src.model.conference import Conference
@@ -153,3 +154,20 @@ def check_invoice_matches_items_and_counts(invoice: Invoice, item_names: List[st
     ref_item_counts = {item_count_tuple for item_count_tuple in zip(item_names, item_counts)}
 
     return invoice_item_counts == ref_item_counts
+
+
+def create_SalesItemLine(item: Item, quantity: int) -> SalesItemLine:
+    """
+    Creates a SalesItemLine for use in an invoice
+    :param item:
+    :param quantity:
+    :return:
+    """
+    line = SalesItemLine()
+    line.Amount = quantity * item.UnitPrice
+    detail = SalesItemLineDetail()
+    detail.ItemRef = item.to_ref()
+    detail.Qty = quantity
+    detail.UnitPrice = item.UnitPrice
+    line.SalesItemLineDetail = detail
+    return line

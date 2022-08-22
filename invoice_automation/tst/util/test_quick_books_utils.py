@@ -4,12 +4,13 @@ from unittest.mock import Mock, patch
 import pytest
 import quickbooks.objects
 from quickbooks.objects import Customer, EmailAddress, PhoneNumber, Invoice, DetailLine, SalesItemLineDetail, \
-    SalesItemLine, Ref
+    SalesItemLine, Ref, Item
 
 from invoice_automation.src.model.address import Address
 from invoice_automation.src.model.school import School
 from invoice_automation.src.util.quick_books_utils import get_customer_from_school, get_school_from_customer, \
-    get_quickbooks_address_from_address, get_address_from_quickbooks_address, check_invoice_matches_items_and_counts
+    get_quickbooks_address_from_address, get_address_from_quickbooks_address, check_invoice_matches_items_and_counts, \
+    create_SalesItemLine
 from invoice_automation.tst.paths import GET_QUICKBOOKS_ADDRESS_FROM_ADDRESS_PATH, \
     GET_ADDRESS_FROM_QUICKBOOKS_ADDRESS_PATH
 
@@ -277,3 +278,32 @@ class TestQuickbooksUtils:
 
         # Verify
         assert invoice_matches is False
+
+    @pytest.fixture
+    def mock_item(self) -> Item:
+        return Mock(spec=Item)
+
+    @pytest.fixture
+    def mock_item_ref(self) -> Ref:
+        return Mock(spec=Ref)
+
+    def test_create_SalesItemLine_happyPath(self,
+                                  mock_item: Item,
+                                  mock_item_ref: Ref):
+        unit_price = 85
+        quantity = 20
+        # Setup
+        mock_item.UnitPrice = unit_price
+        mock_item.to_ref.return_value = mock_item_ref
+
+        # Act
+        line = create_SalesItemLine(mock_item, quantity)
+
+        # Verify
+        assert isinstance(line, SalesItemLine)
+        assert line.Amount == unit_price * quantity
+        detail = line.SalesItemLineDetail
+        assert isinstance(detail, SalesItemLineDetail)
+        assert detail.ItemRef == mock_item_ref
+        assert detail.Qty == quantity
+        assert detail.UnitPrice == unit_price
