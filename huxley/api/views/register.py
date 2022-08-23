@@ -1,5 +1,6 @@
 # Copyright (c) 2011-2022 Berkeley Model United Nations. All rights reserved.
 # Use of this source code is governed by a BSD License (see LICENSE).
+from typing import List
 
 from django.db import transaction
 
@@ -7,8 +8,13 @@ from rest_framework import generics, response, status
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.exceptions import PermissionDenied
 
+import invoice_automation.src.model.school
 from huxley.api.serializers import CreateUserSerializer, RegistrationSerializer
 from huxley.core.models import Conference, School
+from invoice_automation.src import handler
+from invoice_automation.src.model.address import Address
+from invoice_automation.src.model.registration import Registration
+from invoice_automation.src.model.conference import Conference as invoiceConference
 
 
 class Register(generics.GenericAPIView):
@@ -50,6 +56,40 @@ class Register(generics.GenericAPIView):
             registration_serializer.is_valid(raise_exception=True)
             registration_serializer.save()
 
+        school_data = user_data['school']
+        address = Address(line1=school_data['address'],
+                          line2='',
+                          city=school_data['city'],
+                          country_sub_division_code=school_data['state'],
+                          country=school_data['country'],
+                          zip_code=school_data['zip_code'])
+        num_delegates = sum(
+            registration_data['num_beginner_delegates'],
+            registration_data['num_intermediate_delegates'],
+            registration_data['num_advanced_delegates']
+        )
+        call_invoice_handler(
+            school_name=school_data['name'],
+            email=school_data['primary_email'],
+            phone_numbers=[school_data['primary_phone'], school_data['secondary_phone']],
+            address=address,
+            num_delegates=num_delegates
+        )
+
         data = {'user': user_serializer.data,
                 'registration': registration_serializer.data}
         return response.Response(data, status=status.HTTP_200_OK)
+
+
+def call_invoice_handler(school_name: str,
+                         email: str,
+                         phone_numbers: List[str],
+                         address: Address,
+                         num_delegates: int):
+    school = invoice_automation.src.model.school.School(school_name, email, phone_numbers, address)
+    registration = invoice_automation.src.model.registration.Registration(
+        school,
+        num_delegates,
+        invoiceConference.BMUN71
+    )
+    handler.handle_registration(registration)
