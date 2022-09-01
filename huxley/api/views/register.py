@@ -63,10 +63,16 @@ class Register(generics.GenericAPIView):
                           country_sub_division_code=school_data['state'],
                           country=school_data['country'],
                           zip_code=school_data['zip_code'])
+
         num_delegates = sum(
-            registration_data['num_beginner_delegates'],
-            registration_data['num_intermediate_delegates'],
-            registration_data['num_advanced_delegates']
+            map(
+                int,
+                [
+                    registration_data['num_beginner_delegates'],
+                    registration_data['num_intermediate_delegates'],
+                    registration_data['num_advanced_delegates']
+                ]
+            )
         )
         call_invoice_handler(
             school_name=school_data['name'],

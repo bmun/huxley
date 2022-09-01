@@ -4,9 +4,10 @@ from intuitlib.client import AuthClient
 
 from quickbooks import QuickBooks
 from quickbooks.exceptions import QuickbooksException
-from quickbooks.objects import Invoice, Ref, Item, EmailAddress
+from quickbooks.objects import Invoice, Ref, Item, EmailAddress, PhoneNumber
 from quickbooks.objects.customer import Customer
 
+from invoice_automation.src.authentication.authenticator import Authenticator
 from invoice_automation.src.model.conference import Conference
 from invoice_automation.src.model.registration import Registration
 from invoice_automation.src.model.school import School
@@ -17,16 +18,6 @@ from invoice_automation.src.util import quick_books_utils
 # Quickbooks constants
 from invoice_automation.src.util.query_utils import construct_invoice_query
 from invoice_automation.src.util.quick_books_utils import check_invoice_matches_items_and_counts, create_SalesItemLine
-
-CLIENT_ID = "ABYdHrqfKuQBK7bDiZpCK9C6Cq9bhayJJZbPCRyJLu7rO2nNqX"
-CLIENT_SECRET = "KKJQ9uQJdlydvcCZigkZ3PlbEXQ8ZUjohKrEwzjN"
-COMPANY_ID = "4620816365199192370"
-
-# Quickbooks tokens
-REFRESH_TOKEN = "AB11669491025T4PgHV7qio9chs0pTSBkNE2TIXoHq8Xx0YQ70"
-
-REDIRECT_URI = "http://localhost:8000/callback"
-SANDBOX = "sandbox"
 
 DISPLAY_NAME = "DisplayName"
 SCHOOL_FEE = "School Fee"
@@ -54,10 +45,9 @@ class QuickBooksModule:
             self,
             client_id: str,
             client_secret: str,
-            redirect_uri: str,
-            environment: str,
-            refresh_token: str,
-            company_id: str
+            refresh_token="",
+            realm_id="",
+            access_token=""
     ) -> None:
         """
         Instantiates authClient using hardcoded CLIENT_ID and CLIENT_SECRET
@@ -67,17 +57,22 @@ class QuickBooksModule:
         ------
         QuickbooksException
         """
-        self.auth_client = AuthClient(
-            client_id=client_id,
-            client_secret=client_secret,
-            redirect_uri=redirect_uri,
-            environment=environment
-        )
+        if len(refresh_token) == 0:
+            authenticator = Authenticator(client_id=client_id, client_secret=client_secret)
+            self.auth_client = authenticator.authenticate()
+        else:
+            self.auth_client = AuthClient(
+                client_id=client_id,
+                client_secret=client_secret,
+                redirect_uri=Authenticator.REDIRECT_URI,
+                environment=Authenticator.ENVIRONMENT,
+                access_token=access_token
+            )
         try:
             self.quickbooks_client = QuickBooks(
                 auth_client=self.auth_client,
                 refresh_token=refresh_token,
-                company_id=company_id
+                company_id=realm_id,
             )
         except QuickbooksException as e:
             print(e.message)
@@ -123,25 +118,47 @@ class QuickBooksModule:
             raise e
         return customer
 
-    def update_customer_from_school(self, customer_id: str, school: School) -> Customer:
+    def update_customer_from_school(self, school: School) -> Customer:
         """
         Updates QuickBooks with id# customerId using passed School object
 
-        :param customer_id: QuickBooks Id of Customer to update
         :param school: School object to parse for details to update
         :return: None
         :raises QuickBooksException:
         """
-        customer = quick_books_utils.get_customer_from_school(school)
-        customer.Id = customer_id
+        existing_customer = self.get_customer_from_school(school)
+
+        updated_customer = quick_books_utils.get_customer_from_school(school)
+        updated_customer.Id = existing_customer.Id
+        updated_customer.SyncToken = existing_customer.SyncToken
+
         try:
-            customer.save(qb=self.quickbooks_client)
+            updated_customer.save(qb=self.quickbooks_client)
         except QuickbooksException as e:
             print(e.message)
             print(e.error_code)
             print(e.detail)
             raise e
-        return customer
+        return updated_customer
+
+    def get_customer_from_school(self, school: School) -> Customer | None:
+        """
+        Gets the customer object corresponding to the passed school by matching display name
+
+        :param school:
+        :return:
+        """
+        try:
+            customer_matches = Customer.choose([school.school_name], field="DisplayName", qb=self.quickbooks_client)
+        except QuickbooksException as e:
+            print(e.message)
+            print(e.error_code)
+            print(e.detail)
+            raise e
+
+        if len(customer_matches) < 1:
+            return None
+        return customer_matches[0]
 
     def get_customer_ref_from_school(self, school: School | None) -> Ref | None:
         """
@@ -154,17 +171,10 @@ class QuickBooksModule:
         if school is None:
             return None
 
-        try:
-            customer_matches = Customer.choose([school.school_name], field="DisplayName", qb=self.quickbooks_client)
-        except QuickbooksException as e:
-            print(e.message)
-            print(e.error_code)
-            print(e.detail)
-            raise e
-
-        if len(customer_matches) < 1:
+        customer = self.get_customer_from_school(school)
+        if customer is None:
             return None
-        return customer_matches[0].to_ref()
+        return customer.to_ref()
 
     # Invoice methods:
 
