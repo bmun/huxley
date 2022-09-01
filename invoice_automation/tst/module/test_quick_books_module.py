@@ -215,7 +215,7 @@ class TestQuickBooksModule:
         get_customer_from_school_patch.return_value = mock_qb_customer
 
         # Act
-        happy_path_qbm.update_customer_from_school(CUSTOMER_ID, mock_school)
+        happy_path_qbm.update_customer_from_school(mock_school)
 
         # Verify
         get_customer_from_school_patch.assert_called_once_with(mock_school)
@@ -234,7 +234,7 @@ class TestQuickBooksModule:
 
         # Act
         try:
-            happy_path_qbm.update_customer_from_school(CUSTOMER_ID, mock_school)
+            happy_path_qbm.update_customer_from_school(mock_school)
         except QuickbooksException as e:
             exn = e
 

@@ -164,7 +164,7 @@ def create_SalesItemLine(item: Item, quantity: int) -> SalesItemLine:
     :return:
     """
     line = SalesItemLine()
-    line.Amount = quantity * item.UnitPrice
+    line.Amount = int(quantity) * item.UnitPrice
     detail = SalesItemLineDetail()
     detail.ItemRef = item.to_ref()
     detail.Qty = quantity
