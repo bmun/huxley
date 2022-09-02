@@ -100,46 +100,30 @@ class QuickBooksModule:
 
         return [quick_books_utils.get_school_from_customer(customer) for customer in qbCustomers]
 
-    def create_customer_from_school(self, school: School) -> Customer:
+    def update_or_create_customer_from_school(self, school: School) -> Customer:
         """
-        Creates Customer in QuickBooks using passed School
+        Creates or updates Customer in QuickBooks using passed school
+        Uses existing customer id and sync token when updating
 
-        :param school: School to create Customer from
-        :return: None
-        :raises QuickbooksException:
-        """
-        customer = quick_books_utils.get_customer_from_school(school)
-        try:
-            customer.save(qb=self.quickbooks_client)
-        except QuickbooksException as e:
-            print(e.message)
-            print(e.error_code)
-            print(e.detail)
-            raise e
-        return customer
-
-    def update_customer_from_school(self, school: School) -> Customer:
-        """
-        Updates QuickBooks with id# customerId using passed School object
-
-        :param school: School object to parse for details to update
-        :return: None
-        :raises QuickBooksException:
+        :param school:
+        :return:
         """
         existing_customer = self.get_customer_from_school(school)
+        new_customer = quick_books_utils.get_customer_from_school(school)
 
-        updated_customer = quick_books_utils.get_customer_from_school(school)
-        updated_customer.Id = existing_customer.Id
-        updated_customer.SyncToken = existing_customer.SyncToken
+        if existing_customer:
+            new_customer.Id = existing_customer.Id
+            new_customer.SyncToken = existing_customer.SyncToken
 
         try:
-            updated_customer.save(qb=self.quickbooks_client)
+            new_customer.save(qb=self.quickbooks_client)
         except QuickbooksException as e:
             print(e.message)
             print(e.error_code)
             print(e.detail)
             raise e
-        return updated_customer
+
+        return new_customer
 
     def get_customer_from_school(self, school: School) -> Customer | None:
         """
