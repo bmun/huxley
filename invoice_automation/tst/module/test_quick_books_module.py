@@ -515,7 +515,7 @@ class TestQuickBooksModule:
         check_invoice_matches_items_and_counts_patch.side_effect = check_invoice_matches_items_and_counts_replacement
 
         # Act
-        invoice = happy_path_qbm.query_invoice_from_registration(happy_path_registration)
+        invoice = happy_path_qbm.query_invoices_from_registration(happy_path_registration)
 
         # Verify
         assert invoice == happy_path_mock_matching_invoice
@@ -531,7 +531,7 @@ class TestQuickBooksModule:
 
     def test_check_invoice_matches_items_and_counts_registrationIsNone(self, happy_path_qbm: QuickBooksModule):
         # Act
-        invoice = happy_path_qbm.query_invoice_from_registration(None)
+        invoice = happy_path_qbm.query_invoices_from_registration(None)
 
         # Verify
         assert invoice is None
@@ -552,7 +552,7 @@ class TestQuickBooksModule:
         query_invoices_from_customer_ref_patch.return_value = None
 
         # Act
-        invoice = happy_path_qbm.query_invoice_from_registration(happy_path_registration)
+        invoice = happy_path_qbm.query_invoices_from_registration(happy_path_registration)
 
         # Verify
         assert invoice is None
@@ -581,7 +581,7 @@ class TestQuickBooksModule:
         check_invoice_matches_items_and_counts_patch.side_effect = lambda i, i_n, i_c: False
 
         # Act
-        invoice = happy_path_qbm.query_invoice_from_registration(happy_path_registration)
+        invoice = happy_path_qbm.query_invoices_from_registration(happy_path_registration)
 
         # Verify
         assert invoice is None

@@ -1,10 +1,10 @@
-from typing import List
+from typing import List, Dict
 
 from intuitlib.client import AuthClient
 
 from quickbooks import QuickBooks
 from quickbooks.exceptions import QuickbooksException
-from quickbooks.objects import Invoice, Ref, Item, EmailAddress, PhoneNumber
+from quickbooks.objects import Invoice, Ref, Item, EmailAddress, PhoneNumber, DetailLine
 from quickbooks.objects.customer import Customer
 
 from invoice_automation.src.authentication.authenticator import Authenticator
@@ -184,18 +184,19 @@ class QuickBooksModule:
             return None
         return invoices
 
-    def query_invoice_from_registration(self, registration: Registration) -> Invoice | None:
+    def query_invoices_from_registration(self, registration: Registration) -> Dict[str, Invoice] | None:
         """
-        Queries Quickbooks to see if a matching invoice already exists
+        Queries Quickbooks to see if matching invoices already exist
         An invoice is considered matching if all the following conditions are met:
         - Customer matches school on registration
         - Line items correspond to conference on registration
         - Delegate fee quantity matches registration's number of delegates
-        If it does, it returns the invoice, otherwise, it returns None
-        We only expect one invoice at most to match
+        If existing, we expect two invoices, one for school fee and one for delegate fee
+        If they do, returns the two invoices, otherwise, returns None
+        We only expect two invoices at most to match
         TODO: See if invoices can be filtered by line items (the issue is we can't use JOINs)
         :param registration: Registration to match against
-        :return: Matching invoice, None if one is not found
+        :return: Matching invoices, None if none are found
         """
         if registration is None:
             return registration
@@ -214,14 +215,28 @@ class QuickBooksModule:
         if invoices is None:
             return None
         # get line items
-        item_names = quick_books_utils.CONFERENCE_TO_LINE_ITEM_NAMES[registration.conference]
-        item_counts = [registration.num_delegates, 1]
+        fee_to_invoice = {}
+        delegate_fee_line_item_name, school_fee_line_item_name \
+            = quick_books_utils.CONFERENCE_TO_LINE_ITEM_NAMES[registration.conference]
         for invoice in invoices:
-            if check_invoice_matches_items_and_counts(invoice, item_names, item_counts):
-                return invoice
-        return None
+            if check_invoice_matches_items_and_counts(
+                    invoice,
+                    [delegate_fee_line_item_name],
+                    [registration.num_delegates]
+            ):
+                fee_to_invoice[DELEGATE_FEE] = invoice
+            elif check_invoice_matches_items_and_counts(
+                invoice,
+                [school_fee_line_item_name],
+                [1]
+            ):
+                fee_to_invoice[SCHOOL_FEE] = invoice
+        if fee_to_invoice:
+            return fee_to_invoice
+        else:
+            return None
 
-    def create_invoice_from_registration(self, registration: Registration, email: str) -> Invoice:
+    def create_invoices_from_registration(self, registration: Registration, email: str) -> Dict[str, Invoice]:
         """
         Creates invoice in Quickbooks from passed registration
         Note: Does not check to see if a matching invoice already exists
@@ -233,12 +248,27 @@ class QuickBooksModule:
         customer_ref = self.get_customer_ref_from_school(registration.school)
         # create line items
         items = self.query_line_items_from_conference(registration.conference)
-        lines = []
+        invoices = {}
         for item in items:
             if SCHOOL_FEE in item.Name:
-                lines.append(create_SalesItemLine(item, 1))
+                invoices[SCHOOL_FEE] = self.create_invoice(customer_ref, [create_SalesItemLine(item, 1)], email)
             elif DELEGATE_FEE in item.Name:
-                lines.append(create_SalesItemLine(item, registration.num_delegates))
+                invoices[DELEGATE_FEE] = self.create_invoice(
+                    customer_ref,
+                    [create_SalesItemLine(item, registration.num_delegates)],
+                    email
+                )
+        return invoices
+
+    def create_invoice(self, customer_ref: Ref, lines: List[DetailLine], email: str) -> Invoice:
+        """
+        Creates a new invoice in quickbooks with passed metadata
+        Does not check to see if matching invoice already exists
+        :param customer_ref:
+        :param lines:
+        :param email:
+        :return: Created invoice
+        """
         invoice = Invoice()
         invoice.CustomerRef = customer_ref
         invoice.Line = lines
