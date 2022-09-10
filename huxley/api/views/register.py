@@ -1,5 +1,6 @@
 # Copyright (c) 2011-2022 Berkeley Model United Nations. All rights reserved.
 # Use of this source code is governed by a BSD License (see LICENSE).
+import datetime
 from typing import List
 
 from django.db import transaction
@@ -94,8 +95,9 @@ def call_invoice_handler(school_name: str,
                          num_delegates: int):
     school = invoice_automation.src.model.school.School(school_name, email, phone_numbers, address)
     registration = invoice_automation.src.model.registration.Registration(
-        school,
-        num_delegates,
-        invoiceConference.BMUN71
+        school=school,
+        num_delegates=num_delegates,
+        conference=invoiceConference.BMUN71,
+        registration_date=datetime.today()
     )
     handler.handle_registration(registration)

@@ -1,3 +1,4 @@
+import datetime
 from typing import List
 
 import quickbooks.objects
@@ -6,11 +7,12 @@ from quickbooks.objects import Customer, PhoneNumber, EmailAddress, Invoice, Ref
 
 from invoice_automation.src.model.address import Address
 from invoice_automation.src.model.conference import Conference
+from invoice_automation.src.model.fee_type import FeeType
+from invoice_automation.src.model.reg_round import RegRound
 from invoice_automation.src.model.school import School
 
 DELEGATE_FEE_TEMPLATE = "{} Delegate Fee"
 SCHOOL_FEE_TEMPLATE = "{} School Fee"
-SALES_ITEM_LINE_DETAIL_TYPE = "SalesItemLineDetail"
 
 CONFERENCE_TO_LINE_ITEM_NAMES = {
     Conference.BMUN71: [
@@ -155,6 +157,7 @@ def check_invoice_matches_items_and_counts(invoice: Invoice, item_names: List[st
 
     return invoice_item_counts == ref_item_counts
 
+SALES_ITEM_LINE_DETAIL_TYPE = "SalesItemLineDetail"
 
 def create_SalesItemLine(item: Item, quantity: int) -> SalesItemLine:
     """
@@ -171,3 +174,70 @@ def create_SalesItemLine(item: Item, quantity: int) -> SalesItemLine:
     detail.UnitPrice = item.UnitPrice
     line.SalesItemLineDetail = detail
     return line
+
+
+END_DATES = {
+    Conference.BMUN71: {
+        RegRound.R1: datetime.date(2022, 10, 7),
+        RegRound.R2: datetime.date(2022, 11, 4),
+        RegRound.R3: datetime.date(2022, 12, 9),
+        RegRound.R4: datetime.date(2023, 1, 6)
+    },
+    Conference.FC: {
+        RegRound.R1: datetime.date(2022, 9, 16),
+        RegRound.R2: datetime.date(2022, 10, 7)
+    }
+}
+
+
+DUE_DATES = {
+    Conference.BMUN71: {
+        RegRound.R1: {
+            FeeType.SCHOOL_FEE: datetime.date(2022, 10, 7),
+            FeeType.DELEGATE_FEE: datetime.date(2022, 10, 28)
+        },
+        RegRound.R2: {
+            FeeType.SCHOOL_FEE: datetime.date(2022, 11, 4),
+            FeeType.DELEGATE_FEE: datetime.date(2022, 11, 25)
+        },
+        RegRound.R3: {
+            FeeType.SCHOOL_FEE: datetime.date(2022, 12, 9),
+            FeeType.DELEGATE_FEE: datetime.date(2023, 1, 6)
+        },
+        RegRound.R4: {
+            FeeType.SCHOOL_FEE: datetime.date(2023, 1, 6),
+            FeeType.DELEGATE_FEE: datetime.date(2023, 1, 27)
+        }
+    },
+    Conference.FC: {
+        RegRound.R1: {
+            FeeType.SCHOOL_FEE: datetime.date(2022, 9, 16),
+            FeeType.DELEGATE_FEE: datetime.date(2022, 9, 16)
+        },
+        RegRound.R2: {
+            FeeType.SCHOOL_FEE: datetime.date(2022, 10, 7),
+            FeeType.DELEGATE_FEE: datetime.date(2022, 10, 7)
+        }
+    }
+}
+
+
+def get_reg_round_from_conference_and_reg_time(conference: Conference, reg_date: datetime.datetime) -> RegRound:
+    """
+    Returns registration round based on conference and registration time
+    :param conference:
+    :param reg_date:
+    :return:
+    """
+    for reg_round in END_DATES[conference]:
+        if reg_date <= END_DATES[conference][reg_round]:
+            return reg_round
+    return RegRound.Late
+
+
+def get_due_date_from_conference_fee_type_reg_time(
+        reg_time: datetime.datetime,
+        fee_type: FeeType,
+        conference: Conference) -> datetime.date:
+    reg_round = get_reg_round_from_conference_and_reg_time(conference, reg_time)
+    return DUE_DATES[conference][reg_round][fee_type]

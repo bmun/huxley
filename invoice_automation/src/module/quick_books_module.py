@@ -1,3 +1,4 @@
+import datetime
 from typing import List, Dict
 
 from intuitlib.client import AuthClient
@@ -9,6 +10,7 @@ from quickbooks.objects.customer import Customer
 
 from invoice_automation.src.authentication.authenticator import Authenticator
 from invoice_automation.src.model.conference import Conference
+from invoice_automation.src.model.fee_type import FeeType
 from invoice_automation.src.model.registration import Registration
 from invoice_automation.src.model.school import School
 from invoice_automation.src.util import quick_books_utils
@@ -17,7 +19,8 @@ from invoice_automation.src.util import quick_books_utils
 # Should probably move these to settings/main.py at some point
 # Quickbooks constants
 from invoice_automation.src.util.query_utils import construct_invoice_query
-from invoice_automation.src.util.quick_books_utils import check_invoice_matches_items_and_counts, create_SalesItemLine
+from invoice_automation.src.util.quick_books_utils import check_invoice_matches_items_and_counts, create_SalesItemLine, \
+    get_due_date_from_conference_fee_type_reg_time
 
 DISPLAY_NAME = "DisplayName"
 SCHOOL_FEE = "School Fee"
@@ -251,19 +254,38 @@ class QuickBooksModule:
         invoices = {}
         for item in items:
             if SCHOOL_FEE in item.Name:
-                invoices[SCHOOL_FEE] = self.create_invoice(customer_ref, [create_SalesItemLine(item, 1)], email)
+                invoices[SCHOOL_FEE] = self.create_invoice(
+                    customer_ref,
+                    [create_SalesItemLine(item, 1)],
+                    email,
+                    get_due_date_from_conference_fee_type_reg_time(
+                        registration.registration_date,
+                        FeeType.SCHOOL_FEE,
+                        registration.conference
+                    )
+                )
             elif DELEGATE_FEE in item.Name:
                 invoices[DELEGATE_FEE] = self.create_invoice(
                     customer_ref,
                     [create_SalesItemLine(item, registration.num_delegates)],
-                    email
+                    email,
+                    get_due_date_from_conference_fee_type_reg_time(
+                        registration.registration_date,
+                        FeeType.DELEGATE_FEE,
+                        registration.conference
+                    )
                 )
         return invoices
 
-    def create_invoice(self, customer_ref: Ref, lines: List[DetailLine], email: str) -> Invoice:
+    def create_invoice(self,
+                       customer_ref: Ref,
+                       lines: List[DetailLine],
+                       email: str,
+                       due_date: datetime.date) -> Invoice:
         """
         Creates a new invoice in quickbooks with passed metadata
         Does not check to see if matching invoice already exists
+        :param due_date:
         :param customer_ref:
         :param lines:
         :param email:
@@ -276,6 +298,8 @@ class QuickBooksModule:
         invoice.BillEmail = EmailAddress()
         invoice.BillEmail.Address = email
         invoice.EmailStatus = "NeedToSend"
+
+        invoice.DueDate = due_date.isoformat()
 
         try:
             invoice.save(qb=self.quickbooks_client)
