@@ -1,4 +1,6 @@
 import os.path
+import re
+import datetime
 from typing import List
 
 from google.auth.transport.requests import Request
@@ -19,6 +21,8 @@ SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly']
 # The ID and range of a sample spreadsheet.
 SAMPLE_SPREADSHEET_ID = '1w-Xt-LmWnWvmzDJ6EAp-_I6WCJe9XDlHyAcWOsZ0ZWI'
 SAMPLE_RANGE_NAME = 'Test!A1:K'
+
+TIMESTAMP_REGEX = r"(\d{1,2})\/(\d{1,2})\/(\d{4})"
 
 
 def main():
@@ -89,8 +93,20 @@ def process_registration(registration: List[str]):
         zip_code=zip_code
     )
     school = School(school_name=school_name, email=email, phone_numbers=[phone_number], address=address)
-    reg_object = Registration(school=school, num_delegates=num_delegates, conference=Conference.FC)
+    reg_datetime = date_from_sheets_timestamp(timestamp)
+    reg_object = Registration(
+        school=school,
+        num_delegates=num_delegates,
+        conference=Conference.FC,
+        registration_date=reg_datetime
+    )
     handler.handle_registration(reg_object)
+
+
+def date_from_sheets_timestamp(timestamp: str) -> datetime.date:
+    date_match = re.match(TIMESTAMP_REGEX, timestamp)
+    month, day, year = date_match.groups()
+    return datetime.date(int(year), int(month), int(day))
 
 
 if __name__ == "__main__":
