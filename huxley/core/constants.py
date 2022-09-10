@@ -34,3 +34,8 @@ class ProgramTypes(Constants):
     '''Type of a school's MUN program.'''
     CLUB = 1
     CLASS = 2
+
+class PaymentTypes(Constants):
+    '''Type of a payment method'''
+    CARD = 1
+    CHECK = 2

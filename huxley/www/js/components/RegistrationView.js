@@ -47,6 +47,9 @@ const { ShakerContext } = require('components/Shaker');
 const { StatusLabel } = require("components/core/StatusLabel");
 const { TextTemplate } = require("components/core/TextTemplate");
 const { _handleChange } = require("utils/_handleChange");
+const {
+  RegistrationPaymentInformation,
+} = require("components/registration/RegistrationPaymentInformation")
 
 require("css/RegistrationView.less");
 
@@ -304,6 +307,17 @@ class RegistrationView extends React.Component {
             renderCommittees={this.renderCommittees}
           />
           <hr />
+          <RegistrationPaymentInformation
+            handlers={{
+            }}
+            errors={{
+            }}
+            paymentInformation={{
+            }}
+            handleProgramTypeChange={this._handleProgramTypeChange}
+            paymentType={this.state.payment_type}
+          />
+          <hr />
           <RegistrationComments
             handler={_handleChange.bind(this, "registration_comments")}
             value={this.state.registration_comments}
@@ -478,6 +492,12 @@ class RegistrationView extends React.Component {
   _handleProgramTypeChange = (event) => {
     this.setState({ program_type: parseInt(event.target.value) });
   };
+
+  _handlePaymentTypeChange = (event) => {
+    this.setState({ payment_type: parseInt(event.target.value) });
+  };
+
+  //TODO: add payment_type to registration model/var
 
   _handleCommitteePreferenceChange = (committee) => {
     var index = this.state.committee_prefs.indexOf(committee.id);
