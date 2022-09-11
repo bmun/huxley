@@ -302,6 +302,8 @@ class QuickBooksModule:
 
         invoice.DueDate = due_date.isoformat()
 
+        invoice.AllowOnlineCreditCardPayment = True
+
         try:
             invoice.save(qb=self.quickbooks_client)
         except QuickbooksException as e:
