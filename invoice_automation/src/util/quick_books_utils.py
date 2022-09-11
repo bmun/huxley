@@ -157,13 +157,22 @@ def check_invoice_matches_items_and_counts(invoice: Invoice, item_names: List[st
 
     return invoice_item_counts == ref_item_counts
 
+
 SALES_ITEM_LINE_DETAIL_TYPE = "SalesItemLineDetail"
 
-def create_SalesItemLine(item: Item, quantity: int) -> SalesItemLine:
+
+SERVICE_DATES = {
+    Conference.BMUN71: datetime.date(2023, 3, 5),
+    Conference.FC: datetime.date(2022, 11, 12)
+}
+
+
+def create_SalesItemLine(item: Item, quantity: int, service_date: datetime.date) -> SalesItemLine:
     """
     Creates a SalesItemLine for use in an invoice
     :param item:
     :param quantity:
+    :param service_date:
     :return:
     """
     line = SalesItemLine()
@@ -172,6 +181,7 @@ def create_SalesItemLine(item: Item, quantity: int) -> SalesItemLine:
     detail.ItemRef = item.to_ref()
     detail.Qty = quantity
     detail.UnitPrice = item.UnitPrice
+    detail.ServiceDate = service_date.isoformat()
     line.SalesItemLineDetail = detail
     return line
 

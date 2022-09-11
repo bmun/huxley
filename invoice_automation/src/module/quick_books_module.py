@@ -252,11 +252,12 @@ class QuickBooksModule:
         # create line items
         items = self.query_line_items_from_conference(registration.conference)
         invoices = {}
+        service_date = quick_books_utils.SERVICE_DATES[registration.conference]
         for item in items:
             if SCHOOL_FEE in item.Name:
                 invoices[SCHOOL_FEE] = self.create_invoice(
                     customer_ref,
-                    [create_SalesItemLine(item, 1)],
+                    [create_SalesItemLine(item, 1, service_date)],
                     email,
                     get_due_date_from_conference_fee_type_reg_time(
                         registration.registration_date,
@@ -267,7 +268,7 @@ class QuickBooksModule:
             elif DELEGATE_FEE in item.Name:
                 invoices[DELEGATE_FEE] = self.create_invoice(
                     customer_ref,
-                    [create_SalesItemLine(item, registration.num_delegates)],
+                    [create_SalesItemLine(item, registration.num_delegates, service_date)],
                     email,
                     get_due_date_from_conference_fee_type_reg_time(
                         registration.registration_date,
