@@ -67,11 +67,10 @@ class RegistrationProgramInformation extends React.Component {
         </ul>
         <p className="instructions">
           Please tell us a bit more about your delegation this year. Provide us
-          with the tentative number of beginner, intermediate, and advanced
-          delegates you intend to bring to BMUN. Try to provide us with
-          realistic estimates for your delegate numbers in each category so we
+          with the number of beginner, intermediate, and advanced
+          delegates you intend to bring to BMUN so we
           can provide your delegation with the appropriate number and type of
-          assignments.
+          assignments. Please email info@bmun.org if any of this information changes. 
         </p>
         <NumberInput
           placeholder="Number of BMUN sessions attended"

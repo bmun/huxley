@@ -8,7 +8,7 @@
  import React from "react";
  import PropTypes from "prop-types";
 
-var { PaymentTypes } = require("constants/PaymentTypes");
+// var { PaymentTypes } = require("constants/PaymentTypes");
 var { NumberInput } = require("components/NumberInput");
 var { _accessSafe } = require("utils/_accessSafe");
 
@@ -44,7 +44,7 @@ var { _accessSafe } = require("utils/_accessSafe");
                 <label>
                     <input
                     type="radio"
-                    value={PaymentTypes.CARD}
+                    //value={PaymentTypes.CARD}
                     onChange={this.props.handleInternationalChange}
                     checked={!this.props.schoolInternational}
                     />{" "}
@@ -55,7 +55,7 @@ var { _accessSafe } = require("utils/_accessSafe");
                 <label>
                     <input
                     type="radio"
-                    value={PaymentTypes.CHECK}
+                    //value={PaymentTypes.CHECK}
                     onChange={this.props.handleInternationalChange}
                     checked={this.props.schoolInternational}
                     />{" "}
@@ -73,7 +73,7 @@ RegistrationPaymentInformation.propTypes = {
     errors: PropTypes.object,
     paymentInformation: PropTypes.object,
     handlepaymentTypeChange: PropTypes.func,
-    paymentType: PropTypes.oneOf([PaymentTypes.CHECK, PaymentTypes.CARD]),
+    // paymentType: PropTypes.oneOf([PaymentTypes.CHECK, PaymentTypes.CARD]),
   };
 
 export { RegistrationPaymentInformation };
