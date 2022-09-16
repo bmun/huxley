@@ -8,7 +8,7 @@
 import React from "react";
 import { history } from "utils/history";
 
-//const { PaymentTypes } = require(("constants/PaymentTypes");
+const { PaymentTypes } = require("constants/PaymentTypes");
 const { Button } = require("components/core/Button");
 const { CommitteeStore } = require("stores/CommitteeStore");
 const { ContactTypes } = require("constants/ContactTypes");
@@ -108,7 +108,7 @@ class RegistrationView extends React.Component {
       registration_comments: "",
       loading: false,
       passwordValidating: false,
-      //payment_type: PaymentTypes.UNSPECIFIED
+      payment_type: PaymentTypes.UNSPECIFIED
     };
   }
 
@@ -316,7 +316,7 @@ class RegistrationView extends React.Component {
             }}
             paymentInformation={{
             }}
-            handleProgramTypeChange={this._handleProgramTypeChange}
+            handlePaymentTypeChange={this._handlePaymentTypeChange}
             paymentType={this.state.payment_type}
           />
           <hr />
@@ -369,7 +369,7 @@ class RegistrationView extends React.Component {
   };
 
   renderCommittees = () => {
-    return this.state.commrittees.map(function (committee) {
+    return this.state.committees.map(function (committee) {
       return (
         <li key={committee.id}>
           <label name="committee_prefs">

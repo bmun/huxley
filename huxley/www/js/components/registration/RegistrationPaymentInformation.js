@@ -45,8 +45,8 @@ var { _accessSafe } = require("utils/_accessSafe");
                     <input
                     type="radio"
                     //value={PaymentTypes.CARD}
-                    onChange={this.props.handleInternationalChange}
-                    checked={!this.props.schoolInternational}
+                    onChange={this.props.handlepaymentTypeChange}
+                    checked={!this.props.paymentType} //TODO: change this to be paymenttypes with constant
                     />{" "}
                     Credit Card
                 </label>
@@ -56,8 +56,8 @@ var { _accessSafe } = require("utils/_accessSafe");
                     <input
                     type="radio"
                     //value={PaymentTypes.CHECK}
-                    onChange={this.props.handleInternationalChange}
-                    checked={this.props.schoolInternational}
+                    onChange={this.props.handlePaymentTypeChange}
+                    checked={this.props.paymentType}
                     />{" "}
                     Check
                 </label>
@@ -72,7 +72,7 @@ RegistrationPaymentInformation.propTypes = {
     handlers: PropTypes.object,
     errors: PropTypes.object,
     paymentInformation: PropTypes.object,
-    handlepaymentTypeChange: PropTypes.func,
+    handlePaymentTypeChange: PropTypes.func,
     // paymentType: PropTypes.oneOf([PaymentTypes.CHECK, PaymentTypes.CARD]),
   };
 
