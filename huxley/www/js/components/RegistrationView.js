@@ -7,8 +7,8 @@
 
 import React from "react";
 import { history } from "utils/history";
-import { PaymentTypes } from "../constants/PaymentTypes";
 
+//const { PaymentTypes } = require(("constants/PaymentTypes");
 const { Button } = require("components/core/Button");
 const { CommitteeStore } = require("stores/CommitteeStore");
 const { ContactTypes } = require("constants/ContactTypes");
@@ -108,7 +108,7 @@ class RegistrationView extends React.Component {
       registration_comments: "",
       loading: false,
       passwordValidating: false,
-      payment_type: PaymentTypes.UNSPECIFIED
+      //payment_type: PaymentTypes.UNSPECIFIED
     };
   }
 
