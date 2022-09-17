@@ -2,7 +2,7 @@ import datetime
 from typing import List
 
 import quickbooks.objects
-from quickbooks.objects import Customer, PhoneNumber, EmailAddress, Invoice, Ref, SalesItemLine, SalesItemLineDetail, \
+from quickbooks.objects import Customer, PhoneNumber, EmailAddress, Invoice, SalesItemLine, SalesItemLineDetail, \
     Item
 
 from invoice_automation.src.model.address import Address
@@ -186,6 +186,25 @@ def create_SalesItemLine(item: Item, quantity: int, service_date: datetime.date)
     return line
 
 
+def create_credit_card_fee_SalesItemLine(amount: float, cc_fee_item: Item) -> SalesItemLine:
+    """
+
+    :param cc_fee_item:
+    :param amount: Pre-tax amount
+    :return:
+    """
+    fee_amount = get_adjustment_fee_from_subtotal(amount)
+    line = SalesItemLine()
+    line.Amount = fee_amount
+
+    detail = SalesItemLineDetail()
+    detail.ItemRef = cc_fee_item.to_ref()
+    detail.ServiceDate = datetime.date.today().isoformat()
+    line.SalesItemLineDetail = detail
+
+    return line
+
+
 END_DATES = {
     Conference.BMUN71: {
         RegRound.R1: datetime.date(2022, 10, 7),
@@ -251,3 +270,7 @@ def get_due_date_from_conference_fee_type_reg_time(
         conference: Conference) -> datetime.date:
     reg_round = get_reg_round_from_conference_and_reg_time(conference, reg_time)
     return DUE_DATES[conference][reg_round][fee_type]
+
+
+def get_adjustment_fee_from_subtotal(subtotal: float) -> float:
+    return round((0.029 * subtotal + 0.25) / 0.971, 2)

@@ -25,6 +25,7 @@ from invoice_automation.src.util.quick_books_utils import check_invoice_matches_
 DISPLAY_NAME = "DisplayName"
 SCHOOL_FEE = "School Fee"
 DELEGATE_FEE = "Delegate Fee"
+CC_FEE_ITEM_NAME = "Credit Card Processing Fee"
 
 
 class QuickBooksModule:
@@ -82,6 +83,8 @@ class QuickBooksModule:
             print(e.error_code)
             print(e.detail)
             raise e
+
+        self.credit_card_processing_fee = None
 
     # Customer methods:
 
@@ -207,6 +210,8 @@ class QuickBooksModule:
         try:
             # construct CustomerRef
             customer_ref = self.get_customer_ref_from_school(registration.school)
+            if customer_ref is None:
+                raise ValueError("Customer Ref not found")
             # issue invoice query
             invoices = self.query_invoices_from_customer_ref(customer_ref)
         except QuickbooksException as e:
@@ -224,14 +229,14 @@ class QuickBooksModule:
         for invoice in invoices:
             if check_invoice_matches_items_and_counts(
                     invoice,
-                    [delegate_fee_line_item_name],
-                    [registration.num_delegates]
+                    [delegate_fee_line_item_name, CC_FEE_ITEM_NAME],
+                    [registration.num_delegates, 0]
             ):
                 fee_to_invoice[DELEGATE_FEE] = invoice
             elif check_invoice_matches_items_and_counts(
                 invoice,
-                [school_fee_line_item_name],
-                [1]
+                [school_fee_line_item_name, CC_FEE_ITEM_NAME],
+                [1, 0]
             ):
                 fee_to_invoice[SCHOOL_FEE] = invoice
         if fee_to_invoice:
@@ -255,9 +260,14 @@ class QuickBooksModule:
         service_date = quick_books_utils.SERVICE_DATES[registration.conference]
         for item in items:
             if SCHOOL_FEE in item.Name:
+                line = create_SalesItemLine(item, 1, service_date)
+                cc_fee_line = quick_books_utils.create_credit_card_fee_SalesItemLine(
+                    line.Amount,
+                    self.get_credit_card_processing_fee_item()
+                )
                 invoices[SCHOOL_FEE] = self.create_invoice(
                     customer_ref,
-                    [create_SalesItemLine(item, 1, service_date)],
+                    [line, cc_fee_line],
                     email,
                     get_due_date_from_conference_fee_type_reg_time(
                         registration.registration_date,
@@ -266,9 +276,14 @@ class QuickBooksModule:
                     )
                 )
             elif DELEGATE_FEE in item.Name:
+                line = create_SalesItemLine(item, registration.num_delegates, service_date)
+                cc_fee_line = quick_books_utils.create_credit_card_fee_SalesItemLine(
+                    line.Amount,
+                    self.get_credit_card_processing_fee_item()
+                )
                 invoices[DELEGATE_FEE] = self.create_invoice(
                     customer_ref,
-                    [create_SalesItemLine(item, registration.num_delegates, service_date)],
+                    [line, cc_fee_line],
                     email,
                     get_due_date_from_conference_fee_type_reg_time(
                         registration.registration_date,
@@ -328,6 +343,16 @@ class QuickBooksModule:
             print(e.detail)
             raise e
 
+        invoice.EmailStatus = "EmailSent"
+
+        try:
+            invoice.save(qb=self.quickbooks_client)
+        except QuickbooksException as e:
+            print(e.message)
+            print(e.error_code)
+            print(e.detail)
+            raise e
+
     # Item methods
 
     def query_line_items_from_conference(self, conference: Conference) -> List[Item]:
@@ -346,3 +371,19 @@ class QuickBooksModule:
             print(e.error_code)
             print(e.detail)
             raise e
+
+    def get_credit_card_processing_fee_item(self) -> Item:
+        if self.credit_card_processing_fee is None:
+            try:
+                items = Item.choose(
+                    [CC_FEE_ITEM_NAME],
+                    field="Name",
+                    qb=self.quickbooks_client
+                )
+                self.credit_card_processing_fee = items[0]
+            except QuickbooksException as e:
+                print(e.message)
+                print(e.error_code)
+                print(e.detail)
+                raise e
+        return self.credit_card_processing_fee
