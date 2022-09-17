@@ -20,7 +20,7 @@ SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly']
 
 # The ID and range of a sample spreadsheet.
 SAMPLE_SPREADSHEET_ID = '1w-Xt-LmWnWvmzDJ6EAp-_I6WCJe9XDlHyAcWOsZ0ZWI'
-SAMPLE_RANGE_NAME = 'Test!A1:K'
+SAMPLE_RANGE_NAME = 'Responses for Invoicing!A2:K'
 
 TIMESTAMP_REGEX = r"(\d{1,2})\/(\d{1,2})\/(\d{4})"
 
@@ -61,15 +61,13 @@ def main():
         if not values:
             print('No data found.')
             return
-
-        for row in values:
-            # Print columns A and E, which correspond to indices 0 and 4.
-            print(row)
     except HttpError as err:
         print(err)
 
     for row in values:
+        print(row)
         process_registration(row)
+        print("Invoices sent")
 
 
 def process_registration(registration: List[str]):
@@ -79,6 +77,7 @@ def process_registration(registration: List[str]):
     [Timestamp, email, phone number, street address, city, state, country, zip-code, num-delegates, school_name, invoice_sent]
     :return:
     """
+    registration = [value.strip() for value in registration]
     timestamp, email, phone_number, street_address, city, state, country, zip_code, num_delegates, school_name, invoice_sent = registration
 
     if invoice_sent == "TRUE":

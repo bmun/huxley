@@ -98,6 +98,6 @@ def call_invoice_handler(school_name: str,
         school=school,
         num_delegates=num_delegates,
         conference=invoiceConference.BMUN71,
-        registration_date=datetime.today()
+        registration_date=datetime.date.today()
     )
     handler.handle_registration(registration)
