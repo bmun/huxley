@@ -43,7 +43,7 @@ class RegisterTestCase(tests.CreateAPITestCase):
             },
         },
         'registration': {
-            'conference': 70,
+            'conference': 71,
             'num_beginner_delegates': 1,
             'num_intermediate_delegates': 0,
             'num_advanced_delegates': 0,
@@ -124,7 +124,8 @@ class RegisterTestCase(tests.CreateAPITestCase):
                 'delegate_fees_owed': float(registration.delegate_fees_owed),
                 'delegate_fees_paid': float(registration.delegate_fees_paid),
                 'registration_fee_paid': registration.registration_fee_paid,
-                'modified_at': registration.modified_at.isoformat()
+                'modified_at': registration.modified_at.isoformat(),
+                'payment_type': registration.payment_type
             }
         })
 
@@ -202,7 +203,7 @@ class RegisterTestCase(tests.CreateAPITestCase):
         '''It does not create User and School model instances on an invalid
            input for Registration and valid inputs for User and School.'''
         params = self.get_params(registration={
-            'conference': '70',
+            'conference': '71',
             'num_beginner_delegates': 1,
             'num_intermediate_delegates': 0,
             'num_advanced_delegates': 0,

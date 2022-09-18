@@ -58,6 +58,7 @@ class RegistrationListPostTest(tests.CreateAPITestCase):
             'registration_fee_paid': registration.registration_fee_paid,
             'assignments_finalized': registration.assignments_finalized,
             'modified_at': registration.modified_at.isoformat(),
+            'payment_type': registration.payment_type
         })
 
     def test_empty_fields(self):
@@ -212,7 +213,8 @@ class RegistrationListGetTest(tests.ListAPITestCase):
                 self.registration.registration_fee_paid,
                 'assignments_finalized':
                 self.registration.assignments_finalized,
-                'modified_at': self.registration.modified_at.isoformat()
+                'modified_at': self.registration.modified_at.isoformat(), 
+                'payment_type': self.registration.payment_type
             })
 
     def test_superuser(self):
@@ -254,7 +256,8 @@ class RegistrationListGetTest(tests.ListAPITestCase):
                 self.registration.registration_fee_paid,
                 'assignments_finalized':
                 self.registration.assignments_finalized,
-                'modified_at': self.registration.modified_at.isoformat()
+                'modified_at': self.registration.modified_at.isoformat(),
+                'payment_type': self.registration.payment_type
             })
 
 
@@ -342,7 +345,8 @@ class RegistrationDetailPutTest(tests.UpdateAPITestCase):
             'delegate_fees_paid': float(self.registration.delegate_fees_paid),
             'registration_fee_paid': self.registration.registration_fee_paid,
             'assignments_finalized': True,
-            'modified_at': self.registration.modified_at.isoformat()
+            'modified_at': self.registration.modified_at.isoformat(),
+            'payment_type': self.registration.payment_type
         })
 
     def test_superuser(self):
@@ -373,7 +377,8 @@ class RegistrationDetailPutTest(tests.UpdateAPITestCase):
             'delegate_fees_paid': float(self.registration.delegate_fees_paid),
             'registration_fee_paid': self.registration.registration_fee_paid,
             'assignments_finalized': True,
-            'modified_at': self.registration.modified_at.isoformat()
+            'modified_at': self.registration.modified_at.isoformat(),
+            'payment_type': self.registration.payment_type
         })
 
 
@@ -431,7 +436,8 @@ class RegistrationDetailPatchTest(tests.PartialUpdateAPITestCase):
             'delegate_fees_paid': float(self.registration.delegate_fees_paid),
             'registration_fee_paid': self.registration.registration_fee_paid,
             'assignments_finalized': True,
-            'modified_at': self.registration.modified_at.isoformat()
+            'modified_at': self.registration.modified_at.isoformat(),
+            'payment_type': self.registration.payment_type
         })
 
     def test_superuser(self):
@@ -462,7 +468,8 @@ class RegistrationDetailPatchTest(tests.PartialUpdateAPITestCase):
             'delegate_fees_paid': float(self.registration.delegate_fees_paid),
             'registration_fee_paid': self.registration.registration_fee_paid,
             'assignments_finalized': True,
-            'modified_at': self.registration.modified_at.isoformat()
+            'modified_at': self.registration.modified_at.isoformat(),
+            'payment_type': self.registration.payment_type
         })
 
 
