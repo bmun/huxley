@@ -27,7 +27,7 @@ CONFERENCE_TO_LINE_ITEM_NAMES = {
 }
 
 
-def get_customer_from_school(school: School | None) -> Customer | None:
+def get_customer_from_school(school: School) -> Customer:
     """
     Converts School object to QuickBooks Customer object
     :param school: School object to convert
@@ -62,7 +62,7 @@ def get_customer_from_school(school: School | None) -> Customer | None:
     return customer
 
 
-def get_school_from_customer(customer: Customer | None) -> School | None:
+def get_school_from_customer(customer: Customer) -> School:
     """
     Converts QuickBooks Customer object to School object
     :param customer: QuickBooks Customer object to parse
@@ -87,7 +87,7 @@ def get_school_from_customer(customer: Customer | None) -> School | None:
     return school
 
 
-def get_quickbooks_address_from_address(address: Address | None) -> quickbooks.objects.Address | None:
+def get_quickbooks_address_from_address(address: Address) -> quickbooks.objects.Address:
     """
     Converts Address object to QuickBooks Address object
     :param address: Address object to parse
@@ -107,7 +107,7 @@ def get_quickbooks_address_from_address(address: Address | None) -> quickbooks.o
     return qbAddress
 
 
-def get_address_from_quickbooks_address(address: quickbooks.objects.Address | None) -> Address | None:
+def get_address_from_quickbooks_address(address: quickbooks.objects.Address) -> Address:
     """
     Converts QuickBooks Address object to Address object
     :param address: QuickBooks Address object to parse

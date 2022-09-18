@@ -131,7 +131,7 @@ class QuickBooksModule:
 
         return new_customer
 
-    def get_customer_from_school(self, school: School) -> Customer | None:
+    def get_customer_from_school(self, school: School) -> Customer:
         """
         Gets the customer object corresponding to the passed school by matching display name
 
@@ -150,7 +150,7 @@ class QuickBooksModule:
             return None
         return customer_matches[0]
 
-    def get_customer_ref_from_school(self, school: School | None) -> Ref | None:
+    def get_customer_ref_from_school(self, school: School) -> Ref:
         """
         Gets a CustomerRef object from a School object, for use in other objects, such as invoices
         Query for a customer with a matching name, and uses its toref method
@@ -168,7 +168,7 @@ class QuickBooksModule:
 
     # Invoice methods:
 
-    def query_invoices_from_customer_ref(self, customer_ref: Ref) -> List[Invoice] | None:
+    def query_invoices_from_customer_ref(self, customer_ref: Ref) -> List[Invoice]:
         """
         Queries Quickbooks for invoices which were billed to the passed customer
         Filters queries for those from the past year
@@ -190,7 +190,7 @@ class QuickBooksModule:
             return None
         return invoices
 
-    def query_invoices_from_registration(self, registration: Registration) -> Dict[str, Invoice] | None:
+    def query_invoices_from_registration(self, registration: Registration) -> Dict[str, Invoice]:
         """
         Queries Quickbooks to see if matching invoices already exist
         An invoice is considered matching if all the following conditions are met:
