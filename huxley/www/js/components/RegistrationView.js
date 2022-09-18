@@ -108,7 +108,7 @@ class RegistrationView extends React.Component {
       registration_comments: "",
       loading: false,
       passwordValidating: false,
-      payment_type: PaymentTypes.UNSPECIFIED
+      payment_type: PaymentTypes.CARD
     };
   }
 
@@ -311,10 +311,13 @@ class RegistrationView extends React.Component {
           <hr />
           <RegistrationPaymentInformation
             handlers={{
+              payment_type: _handleChange.bind(this, "payment_type"),
             }}
             errors={{
+              payment_type: this.renderError("payment_type"),
             }}
             paymentInformation={{
+              payment_type: this.state.payment_type, 
             }}
             handlePaymentTypeChange={this._handlePaymentTypeChange}
             paymentType={this.state.payment_type}
@@ -499,7 +502,6 @@ class RegistrationView extends React.Component {
     this.setState({ payment_type: parseInt(event.target.value) });
   };
 
-  //TODO: add payment_type to registration model/var
 
   _handleCommitteePreferenceChange = (committee) => {
     var index = this.state.committee_prefs.indexOf(committee.id);
@@ -593,6 +595,7 @@ class RegistrationView extends React.Component {
           this.state.country_pref9,
           this.state.country_pref10,
         ],
+        payment_type: this.state.payment_type,
         committee_preferences: this.state.committee_prefs,
         registration_comments: this.state.registration_comments.trim(),
       },

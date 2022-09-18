@@ -79,7 +79,7 @@ class RegistrationProgramInformation extends React.Component {
         />
         {accessErrors("times_attended")}
         <NumberInput
-          placeholder="Tentative Number of Beginner Delegates"
+          placeholder="Number of Beginner Delegates"
           onChange={accessHandlers("num_beginner_delegates")}
           value={accessProgram("num_beginner_delegates")}
         />
@@ -89,7 +89,7 @@ class RegistrationProgramInformation extends React.Component {
         </label>
         {accessErrors("num_beginner_delegates")}
         <NumberInput
-          placeholder="Tentative Number of Intermediate Delegates"
+          placeholder="Number of Intermediate Delegates"
           onChange={accessHandlers("num_intermediate_delegates")}
           value={accessProgram("num_intermediate_delegates")}
         />
@@ -99,7 +99,7 @@ class RegistrationProgramInformation extends React.Component {
         </label>
         {accessErrors("num_intermediate_delegates")}
         <NumberInput
-          placeholder="Tentative Number of Advanced Delegates"
+          placeholder="Number of Advanced Delegates"
           onChange={accessHandlers("num_advanced_delegates")}
           value={accessProgram("num_advanced_delegates")}
         />
@@ -109,7 +109,7 @@ class RegistrationProgramInformation extends React.Component {
         </label>
         {accessErrors("num_advanced_delegates")}
         <p className="instructions">
-          Tentative Total Number of Delegates:{" "}
+          Total Number of Delegates:{" "}
           {this._handleDelegateSum(
             accessProgram("num_beginner_delegates"),
             accessProgram("num_intermediate_delegates"),

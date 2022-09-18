@@ -41,7 +41,8 @@ class RegistrationSerializer(serializers.ModelSerializer):
                   'delegate_fees_paid',
                   'registration_fee_paid',
                   'assignments_finalized',
-                  'modified_at', )
+                  'modified_at', 
+                  'payment_type', )
         extra_kwargs = {
             'committee_preferences': {'required': False},
             'country_preferences': {'required': False},

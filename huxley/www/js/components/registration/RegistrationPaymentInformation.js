@@ -8,15 +8,15 @@
  import React from "react";
  import PropTypes from "prop-types";
 
-// var { PaymentTypes } = require("constants/PaymentTypes");
+var { PaymentTypes } = require("constants/PaymentTypes");
 var { NumberInput } = require("components/NumberInput");
 var { _accessSafe } = require("utils/_accessSafe");
 
  class RegistrationPaymentInformation extends React.Component {
     shouldComponentUpdate(nextProps, nextState) {
-        for (let key in this.props.programInformation) {
+        for (let key in this.props.paymentInformation) {
             if (
-            this.props.programInformation[key] !== nextProps.programInformation[key]
+            this.props.paymentInformation[key] !== nextProps.paymentInformation[key]
             ) {
             return true;
             }
@@ -28,7 +28,7 @@ var { _accessSafe } = require("utils/_accessSafe");
             }
         }
 
-        return this.props.programType !== nextProps.programType;
+        return this.props.paymentType !== nextProps.paymentType;
     }
 
     render() {
@@ -44,20 +44,21 @@ var { _accessSafe } = require("utils/_accessSafe");
                 <label>
                     <input
                     type="radio"
-                    //value={PaymentTypes.CARD}
-                    onChange={this.props.handlepaymentTypeChange}
-                    checked={!this.props.paymentType} //TODO: change this to be paymenttypes with constant
+                    value={PaymentTypes.CARD}
+                    onChange={this.props.handlePaymentTypeChange}
+                    checked={this.props.paymentType == PaymentTypes.CARD}
                     />{" "}
                     Credit Card
                 </label>
                 </li>
+
                 <li>
                 <label>
                     <input
                     type="radio"
-                    //value={PaymentTypes.CHECK}
+                    value={PaymentTypes.CHECK}s
                     onChange={this.props.handlePaymentTypeChange}
-                    checked={this.props.paymentType}
+                    checked={this.props.paymentType == PaymentTypes.CHECK}
                     />{" "}
                     Check
                 </label>
@@ -73,7 +74,7 @@ RegistrationPaymentInformation.propTypes = {
     errors: PropTypes.object,
     paymentInformation: PropTypes.object,
     handlePaymentTypeChange: PropTypes.func,
-    // paymentType: PropTypes.oneOf([PaymentTypes.CHECK, PaymentTypes.CARD]),
+    paymentType: PropTypes.oneOf([PaymentTypes.CARD, PaymentTypes.CHECK]),
   };
 
 export { RegistrationPaymentInformation };
