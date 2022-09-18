@@ -53,4 +53,4 @@ xhtml2pdf==0.2.5
 intuit-oauth==1.2.4
 python-quickbooks==0.9.1
 pytest==7.1.2
-PyPika==0.0.5
+PyPika==0.48.9
