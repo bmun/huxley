@@ -17,7 +17,7 @@ from django.db.models.signals import post_init, post_save, pre_delete, pre_save
 from django.utils import timezone
 # from django.contrib.postgres.fields import DateRangeField
 
-from huxley.core.constants import ContactGender, ContactType, ProgramTypes
+from huxley.core.constants import ContactGender, ContactType, ProgramTypes, PaymentTypes
 from huxley.logging.models import WaiverLog
 
 
@@ -269,6 +269,9 @@ class School(models.Model):
 
 
 class Registration(models.Model):
+    PAYMENT_TYPE_OPTIONS = ((PaymentTypes.CARD, 'Card'),
+                            (PaymentTypes.CHECK, 'Check'), )
+
     school = models.ForeignKey(
         School, on_delete=models.CASCADE, related_name='registrations')
     conference = models.ForeignKey(
@@ -301,6 +304,9 @@ class Registration(models.Model):
     registration_fee_paid = models.BooleanField(default=False)
 
     modified_at = models.DateTimeField(default=timezone.now)
+
+    payment_type = models.PositiveSmallIntegerField(
+        choices=PAYMENT_TYPE_OPTIONS, default=PaymentTypes.CARD)
 
     @classmethod
     def update_fees(cls, **kwargs):

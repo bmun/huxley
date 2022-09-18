@@ -8,6 +8,7 @@
 import React from "react";
 import { history } from "utils/history";
 
+const { PaymentTypes } = require("constants/PaymentTypes");
 const { Button } = require("components/core/Button");
 const { CommitteeStore } = require("stores/CommitteeStore");
 const { ContactTypes } = require("constants/ContactTypes");
@@ -47,6 +48,9 @@ const { ShakerContext } = require('components/Shaker');
 const { StatusLabel } = require("components/core/StatusLabel");
 const { TextTemplate } = require("components/core/TextTemplate");
 const { _handleChange } = require("utils/_handleChange");
+const {
+  RegistrationPaymentInformation,
+} = require("components/registration/RegistrationPaymentInformation")
 
 require("css/RegistrationView.less");
 
@@ -104,6 +108,7 @@ class RegistrationView extends React.Component {
       registration_comments: "",
       loading: false,
       passwordValidating: false,
+      payment_type: PaymentTypes.CARD
     };
   }
 
@@ -304,6 +309,20 @@ class RegistrationView extends React.Component {
             renderCommittees={this.renderCommittees}
           />
           <hr />
+          <RegistrationPaymentInformation
+            handlers={{
+              payment_type: _handleChange.bind(this, "payment_type"),
+            }}
+            errors={{
+              payment_type: this.renderError("payment_type"),
+            }}
+            paymentInformation={{
+              payment_type: this.state.payment_type, 
+            }}
+            handlePaymentTypeChange={this._handlePaymentTypeChange}
+            paymentType={this.state.payment_type}
+          />
+          <hr />
           <RegistrationComments
             handler={_handleChange.bind(this, "registration_comments")}
             value={this.state.registration_comments}
@@ -479,6 +498,11 @@ class RegistrationView extends React.Component {
     this.setState({ program_type: parseInt(event.target.value) });
   };
 
+  _handlePaymentTypeChange = (event) => {
+    this.setState({ payment_type: parseInt(event.target.value) });
+  };
+
+
   _handleCommitteePreferenceChange = (committee) => {
     var index = this.state.committee_prefs.indexOf(committee.id);
     if (index < 0) {
@@ -571,6 +595,7 @@ class RegistrationView extends React.Component {
           this.state.country_pref9,
           this.state.country_pref10,
         ],
+        payment_type: this.state.payment_type,
         committee_preferences: this.state.committee_prefs,
         registration_comments: this.state.registration_comments.trim(),
       },

@@ -67,11 +67,10 @@ class RegistrationProgramInformation extends React.Component {
         </ul>
         <p className="instructions">
           Please tell us a bit more about your delegation this year. Provide us
-          with the tentative number of beginner, intermediate, and advanced
-          delegates you intend to bring to BMUN. Try to provide us with
-          realistic estimates for your delegate numbers in each category so we
+          with the number of beginner, intermediate, and advanced
+          delegates you intend to bring to BMUN so we
           can provide your delegation with the appropriate number and type of
-          assignments.
+          assignments. Please email info@bmun.org if any of this information changes. 
         </p>
         <NumberInput
           placeholder="Number of BMUN sessions attended"
@@ -80,7 +79,7 @@ class RegistrationProgramInformation extends React.Component {
         />
         {accessErrors("times_attended")}
         <NumberInput
-          placeholder="Tentative Number of Beginner Delegates"
+          placeholder="Number of Beginner Delegates"
           onChange={accessHandlers("num_beginner_delegates")}
           value={accessProgram("num_beginner_delegates")}
         />
@@ -90,7 +89,7 @@ class RegistrationProgramInformation extends React.Component {
         </label>
         {accessErrors("num_beginner_delegates")}
         <NumberInput
-          placeholder="Tentative Number of Intermediate Delegates"
+          placeholder="Number of Intermediate Delegates"
           onChange={accessHandlers("num_intermediate_delegates")}
           value={accessProgram("num_intermediate_delegates")}
         />
@@ -100,7 +99,7 @@ class RegistrationProgramInformation extends React.Component {
         </label>
         {accessErrors("num_intermediate_delegates")}
         <NumberInput
-          placeholder="Tentative Number of Advanced Delegates"
+          placeholder="Number of Advanced Delegates"
           onChange={accessHandlers("num_advanced_delegates")}
           value={accessProgram("num_advanced_delegates")}
         />
@@ -110,7 +109,7 @@ class RegistrationProgramInformation extends React.Component {
         </label>
         {accessErrors("num_advanced_delegates")}
         <p className="instructions">
-          Tentative Total Number of Delegates:{" "}
+          Total Number of Delegates:{" "}
           {this._handleDelegateSum(
             accessProgram("num_beginner_delegates"),
             accessProgram("num_intermediate_delegates"),
