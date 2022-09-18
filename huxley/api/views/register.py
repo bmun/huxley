@@ -57,31 +57,32 @@ class Register(generics.GenericAPIView):
             registration_serializer.is_valid(raise_exception=True)
             registration_serializer.save()
 
-        school_data = user_data['school']
-        address = Address(line1=school_data['address'],
-                          line2='',
-                          city=school_data['city'],
-                          country_sub_division_code=school_data['state'],
-                          country=school_data['country'],
-                          zip_code=school_data['zip_code'])
+        if handler is not None:
+            school_data = user_data['school']
+            address = Address(line1=school_data['address'],
+                              line2='',
+                              city=school_data['city'],
+                              country_sub_division_code=school_data['state'],
+                              country=school_data['country'],
+                              zip_code=school_data['zip_code'])
 
-        num_delegates = sum(
-            map(
-                int,
-                [
-                    registration_data['num_beginner_delegates'],
-                    registration_data['num_intermediate_delegates'],
-                    registration_data['num_advanced_delegates']
-                ]
+            num_delegates = sum(
+                map(
+                    int,
+                    [
+                        registration_data['num_beginner_delegates'],
+                        registration_data['num_intermediate_delegates'],
+                        registration_data['num_advanced_delegates']
+                    ]
+                )
             )
-        )
-        call_invoice_handler(
-            school_name=school_data['name'],
-            email=school_data['primary_email'],
-            phone_numbers=[school_data['primary_phone'], school_data['secondary_phone']],
-            address=address,
-            num_delegates=num_delegates
-        )
+            call_invoice_handler(
+                school_name=school_data['name'],
+                email=school_data['primary_email'],
+                phone_numbers=[school_data['primary_phone'], school_data['secondary_phone']],
+                address=address,
+                num_delegates=num_delegates
+            )
 
         data = {'user': user_serializer.data,
                 'registration': registration_serializer.data}

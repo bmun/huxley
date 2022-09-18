@@ -7,6 +7,7 @@ from quickbooks import QuickBooks
 from quickbooks.exceptions import QuickbooksException
 from quickbooks.objects import Customer, Ref, Invoice, Item, SalesItemLine
 
+import huxley
 from huxley.invoice_automation.src.model.conference import Conference
 from huxley.invoice_automation.src.model.registration import Registration
 from huxley.invoice_automation.src.model.school import School

@@ -1,6 +1,7 @@
 import os
 
 import django
+import quickbooks.exceptions
 from django.conf import settings
 
 from huxley.invoice_automation.src.handler.registration_handler import RegistrationHandler
@@ -9,12 +10,15 @@ from huxley.invoice_automation.src.handler.registration_handler import Registrat
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'huxley.settings')
 
 django.setup()
-
-handler = RegistrationHandler(
-    settings.CLIENT_ID,
-    settings.CLIENT_SECRET,
-    settings.REFRESH_TOKEN,
-    settings.REALM_ID,
-    settings.ACCESS_TOKEN
-)
-print(handler)
+try:
+    handler = RegistrationHandler(
+        settings.CLIENT_ID,
+        settings.CLIENT_SECRET,
+        settings.REFRESH_TOKEN,
+        settings.REALM_ID,
+        settings.ACCESS_TOKEN
+    )
+    print(handler)
+except quickbooks.exceptions.AuthorizationException as e:
+    print("QuickBooks authentication failed")
+    handler = None

@@ -61,23 +61,22 @@ class QuickBooksModule:
         ------
         QuickbooksException
         """
-        if len(refresh_token) == 0:
-            authenticator = Authenticator(client_id=client_id, client_secret=client_secret)
-            self.auth_client = authenticator.authenticate()
-        else:
-            self.auth_client = AuthClient(
-                client_id=client_id,
-                client_secret=client_secret,
-                redirect_uri=Authenticator.REDIRECT_URI,
-                environment=Authenticator.ENVIRONMENT,
-                access_token=access_token
-            )
+
+        self.auth_client = AuthClient(
+            client_id=client_id,
+            client_secret=client_secret,
+            redirect_uri=Authenticator.REDIRECT_URI,
+            environment=Authenticator.ENVIRONMENT,
+            access_token=access_token
+        )
         try:
             self.quickbooks_client = QuickBooks(
                 auth_client=self.auth_client,
                 refresh_token=refresh_token,
                 company_id=realm_id,
             )
+            # Check connection
+            Customer.all(qb=self.quickbooks_client)
         except QuickbooksException as e:
             print(e.message)
             print(e.error_code)
