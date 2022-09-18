@@ -1,7 +1,7 @@
 import datetime
 
-from invoice_automation.src.model.conference import Conference
-from invoice_automation.src.model.school import School
+from huxley.invoice_automation.src.model.conference import Conference
+from huxley.invoice_automation.src.model.school import School
 
 
 class Registration:

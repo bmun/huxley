@@ -1,6 +1,6 @@
 from quickbooks.objects import Ref
 
-from invoice_automation.src.util.query_utils import construct_invoice_query
+from huxley.invoice_automation.src.util.query_utils import construct_invoice_query
 
 
 class TestQueryUtils:
