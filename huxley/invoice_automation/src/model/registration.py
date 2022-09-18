@@ -1,6 +1,7 @@
 import datetime
 
 from huxley.invoice_automation.src.model.conference import Conference
+from huxley.invoice_automation.src.model.payment_method import PaymentMethod
 from huxley.invoice_automation.src.model.school import School
 
 
@@ -25,8 +26,10 @@ class Registration:
                  school: School,
                  num_delegates: int,
                  conference: Conference,
-                 registration_date: datetime.datetime) -> None:
+                 registration_date: datetime.datetime,
+                 payment_method: PaymentMethod) -> None:
         self.school = school
         self.num_delegates = num_delegates
         self.conference = conference
         self.registration_date = registration_date
+        self.payment_method = payment_method

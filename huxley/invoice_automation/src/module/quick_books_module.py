@@ -11,6 +11,7 @@ from quickbooks.objects.customer import Customer
 from huxley.invoice_automation.src.authentication.authenticator import Authenticator
 from huxley.invoice_automation.src.model.conference import Conference
 from huxley.invoice_automation.src.model.fee_type import FeeType
+from huxley.invoice_automation.src.model.payment_method import PaymentMethod
 from huxley.invoice_automation.src.model.registration import Registration
 from huxley.invoice_automation.src.model.school import School
 from huxley.invoice_automation.src.util import quick_books_utils
@@ -226,18 +227,28 @@ class QuickBooksModule:
         delegate_fee_line_item_name, school_fee_line_item_name \
             = quick_books_utils.CONFERENCE_TO_LINE_ITEM_NAMES[registration.conference]
         for invoice in invoices:
-            if check_invoice_matches_items_and_counts(
+            if registration.payment_method == PaymentMethod.Check:
+                if check_invoice_matches_items_and_counts(
+                        invoice,
+                        [delegate_fee_line_item_name],
+                        [registration.num_delegates]
+                ):
+                    fee_to_invoice[DELEGATE_FEE] = invoice
+                elif check_invoice_matches_items_and_counts(invoice, [school_fee_line_item_name], [1]):
+                    fee_to_invoice[SCHOOL_FEE] = invoice
+            else:
+                if check_invoice_matches_items_and_counts(
+                        invoice,
+                        [delegate_fee_line_item_name, CC_FEE_ITEM_NAME],
+                        [registration.num_delegates, 0]
+                ):
+                    fee_to_invoice[DELEGATE_FEE] = invoice
+                elif check_invoice_matches_items_and_counts(
                     invoice,
-                    [delegate_fee_line_item_name, CC_FEE_ITEM_NAME],
-                    [registration.num_delegates, 0]
-            ):
-                fee_to_invoice[DELEGATE_FEE] = invoice
-            elif check_invoice_matches_items_and_counts(
-                invoice,
-                [school_fee_line_item_name, CC_FEE_ITEM_NAME],
-                [1, 0]
-            ):
-                fee_to_invoice[SCHOOL_FEE] = invoice
+                    [school_fee_line_item_name, CC_FEE_ITEM_NAME],
+                    [1, 0]
+                ):
+                    fee_to_invoice[SCHOOL_FEE] = invoice
         if fee_to_invoice:
             return fee_to_invoice
         else:
@@ -260,13 +271,16 @@ class QuickBooksModule:
         for item in items:
             if SCHOOL_FEE in item.Name:
                 line = create_SalesItemLine(item, 1, service_date)
-                cc_fee_line = quick_books_utils.create_credit_card_fee_SalesItemLine(
-                    line.Amount,
-                    self.get_credit_card_processing_fee_item()
-                )
+                lines = [line]
+                if registration.payment_method == PaymentMethod.Card:
+                    cc_fee_line = quick_books_utils.create_credit_card_fee_SalesItemLine(
+                        line.Amount,
+                        self.get_credit_card_processing_fee_item()
+                    )
+                    lines.append(cc_fee_line)
                 invoices[SCHOOL_FEE] = self.create_invoice(
                     customer_ref,
-                    [line, cc_fee_line],
+                    lines,
                     email,
                     get_due_date_from_conference_fee_type_reg_time(
                         registration.registration_date,
@@ -276,13 +290,16 @@ class QuickBooksModule:
                 )
             elif DELEGATE_FEE in item.Name:
                 line = create_SalesItemLine(item, registration.num_delegates, service_date)
-                cc_fee_line = quick_books_utils.create_credit_card_fee_SalesItemLine(
-                    line.Amount,
-                    self.get_credit_card_processing_fee_item()
-                )
+                lines = [line]
+                if registration.payment_method == PaymentMethod.Card:
+                    cc_fee_line = quick_books_utils.create_credit_card_fee_SalesItemLine(
+                        line.Amount,
+                        self.get_credit_card_processing_fee_item()
+                    )
+                    lines.append(cc_fee_line)
                 invoices[DELEGATE_FEE] = self.create_invoice(
                     customer_ref,
-                    [line, cc_fee_line],
+                    lines,
                     email,
                     get_due_date_from_conference_fee_type_reg_time(
                         registration.registration_date,

@@ -10,10 +10,12 @@ from rest_framework.authentication import SessionAuthentication
 from rest_framework.exceptions import PermissionDenied
 
 from huxley.api.serializers import CreateUserSerializer, RegistrationSerializer
+from huxley.core.constants import PaymentTypes
 from huxley.core.models import Conference
 from huxley.invoice_automation.src import handler
 from huxley.invoice_automation.src.model.address import Address
 from huxley.invoice_automation.src.model.conference import Conference as invoiceConference
+from huxley.invoice_automation.src.model.payment_method import PaymentMethod
 from huxley.invoice_automation.src.model.school import School as invoiceSchool
 from huxley.invoice_automation.src.model.registration import Registration as invoiceRegistration
 
@@ -59,12 +61,14 @@ class Register(generics.GenericAPIView):
 
         if handler is not None:
             school_data = user_data['school']
-            address = Address(line1=school_data['address'],
-                              line2='',
-                              city=school_data['city'],
-                              country_sub_division_code=school_data['state'],
-                              country=school_data['country'],
-                              zip_code=school_data['zip_code'])
+            address = Address(
+                line1=school_data['address'],
+                line2='',
+                city=school_data['city'],
+                country_sub_division_code=school_data['state'],
+                country=school_data['country'],
+                zip_code=school_data['zip_code']
+            )
 
             num_delegates = sum(
                 map(
@@ -76,12 +80,19 @@ class Register(generics.GenericAPIView):
                     ]
                 )
             )
+
+            if int(registration_data['payment_type']) == PaymentTypes.CARD:
+                payment_method = PaymentMethod.Card
+            else:
+                payment_method = PaymentMethod.Check
+
             call_invoice_handler(
                 school_name=school_data['name'],
                 email=school_data['primary_email'],
                 phone_numbers=[school_data['primary_phone'], school_data['secondary_phone']],
                 address=address,
-                num_delegates=num_delegates
+                num_delegates=num_delegates,
+                payment_method=payment_method
             )
 
         data = {'user': user_serializer.data,
@@ -93,12 +104,14 @@ def call_invoice_handler(school_name: str,
                          email: str,
                          phone_numbers: List[str],
                          address: Address,
-                         num_delegates: int):
+                         num_delegates: int,
+                         payment_method: PaymentMethod):
     school = invoiceSchool(school_name, email, phone_numbers, address)
     registration = invoiceRegistration(
         school=school,
         num_delegates=num_delegates,
         conference=invoiceConference.BMUN71,
-        registration_date=datetime.date.today()
+        registration_date=datetime.date.today(),
+        payment_method=payment_method
     )
     handler.handle_registration(registration)

@@ -35,6 +35,7 @@ class ProgramTypes(Constants):
     CLUB = 1
     CLASS = 2
 
+
 class PaymentTypes(Constants):
     '''Type of a payment method'''
     CARD = 1
