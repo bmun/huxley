@@ -5,21 +5,21 @@ from intuitlib.client import AuthClient
 
 from quickbooks import QuickBooks
 from quickbooks.exceptions import QuickbooksException
-from quickbooks.objects import Invoice, Ref, Item, EmailAddress, PhoneNumber, DetailLine
+from quickbooks.objects import Invoice, Ref, Item, EmailAddress, DetailLine
 from quickbooks.objects.customer import Customer
 
-from invoice_automation.src.authentication.authenticator import Authenticator
-from invoice_automation.src.model.conference import Conference
-from invoice_automation.src.model.fee_type import FeeType
-from invoice_automation.src.model.registration import Registration
-from invoice_automation.src.model.school import School
-from invoice_automation.src.util import quick_books_utils
+from huxley.invoice_automation.src.authentication.authenticator import Authenticator
+from huxley.invoice_automation.src.model.conference import Conference
+from huxley.invoice_automation.src.model.fee_type import FeeType
+from huxley.invoice_automation.src.model.registration import Registration
+from huxley.invoice_automation.src.model.school import School
+from huxley.invoice_automation.src.util import quick_books_utils
 
 # TODO: Replace with prod versions during deployment
 # Should probably move these to settings/main.py at some point
 # Quickbooks constants
-from invoice_automation.src.util.query_utils import construct_invoice_query
-from invoice_automation.src.util.quick_books_utils import check_invoice_matches_items_and_counts, create_SalesItemLine, \
+from huxley.invoice_automation.src.util.query_utils import construct_invoice_query
+from huxley.invoice_automation.src.util.quick_books_utils import check_invoice_matches_items_and_counts, create_SalesItemLine, \
     get_due_date_from_conference_fee_type_reg_time
 
 DISPLAY_NAME = "DisplayName"

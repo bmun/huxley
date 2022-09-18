@@ -1,6 +1,6 @@
 from typing import List
 
-from invoice_automation.src.model.address import Address
+from huxley.invoice_automation.src.model.address import Address
 
 
 class School:

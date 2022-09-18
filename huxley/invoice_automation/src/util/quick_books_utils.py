@@ -5,11 +5,11 @@ import quickbooks.objects
 from quickbooks.objects import Customer, PhoneNumber, EmailAddress, Invoice, SalesItemLine, SalesItemLineDetail, \
     Item
 
-from invoice_automation.src.model.address import Address
-from invoice_automation.src.model.conference import Conference
-from invoice_automation.src.model.fee_type import FeeType
-from invoice_automation.src.model.reg_round import RegRound
-from invoice_automation.src.model.school import School
+from huxley.invoice_automation.src.model.address import Address
+from huxley.invoice_automation.src.model.conference import Conference
+from huxley.invoice_automation.src.model.fee_type import FeeType
+from huxley.invoice_automation.src.model.reg_round import RegRound
+from huxley.invoice_automation.src.model.school import School
 
 DELEGATE_FEE_TEMPLATE = "{} Delegate Fee"
 SCHOOL_FEE_TEMPLATE = "{} School Fee"

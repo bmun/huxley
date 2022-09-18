@@ -7,12 +7,11 @@ from quickbooks import QuickBooks
 from quickbooks.exceptions import QuickbooksException
 from quickbooks.objects import Customer, Ref, Invoice, Item, SalesItemLine
 
-import invoice_automation.src.module.quick_books_module
-from invoice_automation.src.model.conference import Conference
-from invoice_automation.src.model.registration import Registration
-from invoice_automation.src.model.school import School
-from invoice_automation.src.module.quick_books_module import QuickBooksModule, DISPLAY_NAME
-from invoice_automation.tst.paths import AUTHCLIENT_PATH, QUICKBOOKS_CLIENT_PATH, CUSTOMER_CHOOSE_PATH, \
+from huxley.invoice_automation.src.model.conference import Conference
+from huxley.invoice_automation.src.model.registration import Registration
+from huxley.invoice_automation.src.model.school import School
+from huxley.invoice_automation.src.module.quick_books_module import QuickBooksModule, DISPLAY_NAME
+from huxley.invoice_automation.tst.paths import AUTHCLIENT_PATH, QUICKBOOKS_CLIENT_PATH, CUSTOMER_CHOOSE_PATH, \
     GET_SCHOOL_FROM_CUSTOMER_PATH, GET_CUSTOMER_FROM_SCHOOL_PATH, CONFERENCE_TO_LINE_ITEM_NAMES_PATH, ITEM_CHOOSE_PATH, \
     INVOICE_QUERY_PATH, CONSTRUCT_INVOICE_QUERY_PATH, GET_CUSTOMER_REF_FROM_SCHOOL, QUERY_INVOICES_FROM_CUSTOMER_REF, \
     CHECK_INVOICE_MATCHES_ITEMS_AND_COUNTS_PATH, QUERY_LINE_ITEMS_FROM_CONFERENCE, CREATE_SALESITEMLINE_PATH, \
@@ -492,8 +491,8 @@ class TestQuickBooksModule:
                 return False
         return side_effect
 
-    @patch.object(invoice_automation.src.module.quick_books_module.QuickBooksModule, GET_CUSTOMER_REF_FROM_SCHOOL)
-    @patch.object(invoice_automation.src.module.quick_books_module.QuickBooksModule, QUERY_INVOICES_FROM_CUSTOMER_REF)
+    @patch.object(huxley.invoice_automation.src.module.quick_books_module.QuickBooksModule, GET_CUSTOMER_REF_FROM_SCHOOL)
+    @patch.object(huxley.invoice_automation.src.module.quick_books_module.QuickBooksModule, QUERY_INVOICES_FROM_CUSTOMER_REF)
     @patch(CHECK_INVOICE_MATCHES_ITEMS_AND_COUNTS_PATH)
     def test_check_invoice_matches_items_and_counts_happyPath(
             self,
@@ -536,8 +535,8 @@ class TestQuickBooksModule:
         # Verify
         assert invoice is None
 
-    @patch.object(invoice_automation.src.module.quick_books_module.QuickBooksModule, GET_CUSTOMER_REF_FROM_SCHOOL)
-    @patch.object(invoice_automation.src.module.quick_books_module.QuickBooksModule, QUERY_INVOICES_FROM_CUSTOMER_REF)
+    @patch.object(huxley.invoice_automation.src.module.quick_books_module.QuickBooksModule, GET_CUSTOMER_REF_FROM_SCHOOL)
+    @patch.object(huxley.invoice_automation.src.module.quick_books_module.QuickBooksModule, QUERY_INVOICES_FROM_CUSTOMER_REF)
     def test_check_invoice_matches_items_and_counts_noInvoicesReturned(
             self,
             query_invoices_from_customer_ref_patch: Mock,
@@ -559,8 +558,8 @@ class TestQuickBooksModule:
         get_customer_ref_from_school_patch.assert_called_once_with(happy_path_school)
         query_invoices_from_customer_ref_patch.assert_called_once_with(happy_path_customer_ref)
 
-    @patch.object(invoice_automation.src.module.quick_books_module.QuickBooksModule, GET_CUSTOMER_REF_FROM_SCHOOL)
-    @patch.object(invoice_automation.src.module.quick_books_module.QuickBooksModule, QUERY_INVOICES_FROM_CUSTOMER_REF)
+    @patch.object(huxley.invoice_automation.src.module.quick_books_module.QuickBooksModule, GET_CUSTOMER_REF_FROM_SCHOOL)
+    @patch.object(huxley.invoice_automation.src.module.quick_books_module.QuickBooksModule, QUERY_INVOICES_FROM_CUSTOMER_REF)
     @patch(CHECK_INVOICE_MATCHES_ITEMS_AND_COUNTS_PATH)
     def test_check_invoice_matches_items_and_counts_noMatchingInvoices(
             self,
@@ -633,8 +632,8 @@ class TestQuickBooksModule:
     def mock_invoice(self) -> Invoice:
         return Mock(spec=Invoice)
 
-    @patch.object(invoice_automation.src.module.quick_books_module.QuickBooksModule, GET_CUSTOMER_REF_FROM_SCHOOL)
-    @patch.object(invoice_automation.src.module.quick_books_module.QuickBooksModule, QUERY_LINE_ITEMS_FROM_CONFERENCE)
+    @patch.object(huxley.invoice_automation.src.module.quick_books_module.QuickBooksModule, GET_CUSTOMER_REF_FROM_SCHOOL)
+    @patch.object(huxley.invoice_automation.src.module.quick_books_module.QuickBooksModule, QUERY_LINE_ITEMS_FROM_CONFERENCE)
     @patch(CREATE_SALESITEMLINE_PATH)
     @patch(INVOICE_PATH)
     def test_create_invoice_from_registration_happyPath(self,
@@ -670,8 +669,8 @@ class TestQuickBooksModule:
         assert mock_invoice.Line == [mock_school_fee_SalesItemLine, mock_delegate_fee_SalesItemLine]
         mock_invoice.save.assert_called_once_with(qb=happy_path_qbm.quickbooks_client)
 
-    @patch.object(invoice_automation.src.module.quick_books_module.QuickBooksModule, GET_CUSTOMER_REF_FROM_SCHOOL)
-    @patch.object(invoice_automation.src.module.quick_books_module.QuickBooksModule, QUERY_LINE_ITEMS_FROM_CONFERENCE)
+    @patch.object(huxley.invoice_automation.src.module.quick_books_module.QuickBooksModule, GET_CUSTOMER_REF_FROM_SCHOOL)
+    @patch.object(huxley.invoice_automation.src.module.quick_books_module.QuickBooksModule, QUERY_LINE_ITEMS_FROM_CONFERENCE)
     @patch(CREATE_SALESITEMLINE_PATH)
     @patch(INVOICE_PATH)
     def test_create_invoice_from_registration_saveRaises(self,

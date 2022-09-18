@@ -10,11 +10,11 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
 # If modifying these scopes, delete the file token.json.
-from invoice_automation.src import handler
-from invoice_automation.src.model.address import Address
-from invoice_automation.src.model.conference import Conference
-from invoice_automation.src.model.registration import Registration
-from invoice_automation.src.model.school import School
+from huxley.invoice_automation.src import handler
+from huxley.invoice_automation.src.model.address import Address
+from huxley.invoice_automation.src.model.conference import Conference
+from huxley.invoice_automation.src.model.registration import Registration
+from huxley.invoice_automation.src.model.school import School
 
 SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly']
 

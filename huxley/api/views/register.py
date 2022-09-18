@@ -9,13 +9,13 @@ from rest_framework import generics, response, status
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.exceptions import PermissionDenied
 
-import invoice_automation.src.model.school
 from huxley.api.serializers import CreateUserSerializer, RegistrationSerializer
-from huxley.core.models import Conference, School
-from invoice_automation.src import handler
-from invoice_automation.src.model.address import Address
-from invoice_automation.src.model.registration import Registration
-from invoice_automation.src.model.conference import Conference as invoiceConference
+from huxley.core.models import Conference
+from huxley.invoice_automation.src import handler
+from huxley.invoice_automation.src.model.address import Address
+from huxley.invoice_automation.src.model.conference import Conference as invoiceConference
+from huxley.invoice_automation.src.model.school import School as invoiceSchool
+from huxley.invoice_automation.src.model.registration import Registration as invoiceRegistration
 
 
 class Register(generics.GenericAPIView):
@@ -93,8 +93,8 @@ def call_invoice_handler(school_name: str,
                          phone_numbers: List[str],
                          address: Address,
                          num_delegates: int):
-    school = invoice_automation.src.model.school.School(school_name, email, phone_numbers, address)
-    registration = invoice_automation.src.model.registration.Registration(
+    school = invoiceSchool(school_name, email, phone_numbers, address)
+    registration = invoiceRegistration(
         school=school,
         num_delegates=num_delegates,
         conference=invoiceConference.BMUN71,

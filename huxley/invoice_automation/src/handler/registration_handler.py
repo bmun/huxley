@@ -1,5 +1,5 @@
-from invoice_automation.src.model.registration import Registration
-from invoice_automation.src.module.quick_books_module import QuickBooksModule
+from huxley.invoice_automation.src.model.registration import Registration
+from huxley.invoice_automation.src.module.quick_books_module import QuickBooksModule
 
 
 class RegistrationHandler:

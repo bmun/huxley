@@ -6,12 +6,12 @@ import quickbooks.objects
 from quickbooks.objects import Customer, EmailAddress, PhoneNumber, Invoice, DetailLine, SalesItemLineDetail, \
     SalesItemLine, Ref, Item
 
-from invoice_automation.src.model.address import Address
-from invoice_automation.src.model.school import School
-from invoice_automation.src.util.quick_books_utils import get_customer_from_school, get_school_from_customer, \
+from huxley.invoice_automation.src.model.address import Address
+from huxley.invoice_automation.src.model.school import School
+from huxley.invoice_automation.src.util.quick_books_utils import get_customer_from_school, get_school_from_customer, \
     get_quickbooks_address_from_address, get_address_from_quickbooks_address, check_invoice_matches_items_and_counts, \
     create_SalesItemLine
-from invoice_automation.tst.paths import GET_QUICKBOOKS_ADDRESS_FROM_ADDRESS_PATH, \
+from huxley.invoice_automation.tst.paths import GET_QUICKBOOKS_ADDRESS_FROM_ADDRESS_PATH, \
     GET_ADDRESS_FROM_QUICKBOOKS_ADDRESS_PATH
 
 SCHOOL_NAME = "berkeley"
