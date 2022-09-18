@@ -4,7 +4,7 @@ from typing import List, Dict
 from intuitlib.client import AuthClient
 
 from quickbooks import QuickBooks
-from quickbooks.exceptions import QuickbooksException
+from quickbooks.exceptions import QuickbooksException, AuthorizationException
 from quickbooks.objects import Invoice, Ref, Item, EmailAddress, DetailLine
 from quickbooks.objects.customer import Customer
 
@@ -70,21 +70,38 @@ class QuickBooksModule:
             environment=Authenticator.ENVIRONMENT,
             access_token=access_token
         )
+        self.auth_client.refresh_token = refresh_token
+
+        self.quickbooks_client = QuickBooks(
+            auth_client=self.auth_client,
+            refresh_token=refresh_token,
+            company_id=realm_id,
+        )
+        # Check connection, refresh if needed
+        self.try_with_refresh(Customer.all, qb=self.quickbooks_client)
+
+        self.credit_card_processing_fee = None
+
+    def try_with_refresh(self, func, *args, **kwargs):
+        """
+        Tries calling func, a quickbooks api call
+        If it fails due to an AuthorizationException, tries refreshing the access_token and then retries
+        :param func:
+        :param args:
+        :param kwargs:
+        :return:
+        """
         try:
-            self.quickbooks_client = QuickBooks(
-                auth_client=self.auth_client,
-                refresh_token=refresh_token,
-                company_id=realm_id,
-            )
-            # Check connection
-            Customer.all(qb=self.quickbooks_client)
+            try:
+                return func(*args, **kwargs)
+            except AuthorizationException:
+                self.auth_client.refresh()
+                return func(*args, **kwargs)
         except QuickbooksException as e:
             print(e.message)
             print(e.error_code)
             print(e.detail)
             raise e
-
-        self.credit_card_processing_fee = None
 
     # Customer methods:
 
@@ -96,13 +113,8 @@ class QuickBooksModule:
         :return: List of school objects corresponding to customers which were found
         :raises QuickbooksException:
         """
-        try:
-            qbCustomers = Customer.choose(school_names, DISPLAY_NAME, self.quickbooks_client)
-        except QuickbooksException as e:
-            print(e.message)
-            print(e.error_code)
-            print(e.detail)
-            raise e
+        # qbCustomers = Customer.choose(school_names, DISPLAY_NAME, self.quickbooks_client)
+        qbCustomers = self.try_with_refresh(Customer.choose, school_names, DISPLAY_NAME, self.quickbooks_client)
 
         return [quick_books_utils.get_school_from_customer(customer) for customer in qbCustomers]
 
@@ -121,13 +133,8 @@ class QuickBooksModule:
             new_customer.Id = existing_customer.Id
             new_customer.SyncToken = existing_customer.SyncToken
 
-        try:
-            new_customer.save(qb=self.quickbooks_client)
-        except QuickbooksException as e:
-            print(e.message)
-            print(e.error_code)
-            print(e.detail)
-            raise e
+        # new_customer.save(qb=self.quickbooks_client)
+        self.try_with_refresh(new_customer.save, qb=self.quickbooks_client)
 
         return new_customer
 
@@ -138,13 +145,13 @@ class QuickBooksModule:
         :param school:
         :return:
         """
-        try:
-            customer_matches = Customer.choose([school.school_name], field="DisplayName", qb=self.quickbooks_client)
-        except QuickbooksException as e:
-            print(e.message)
-            print(e.error_code)
-            print(e.detail)
-            raise e
+        # customer_matches = Customer.choose([school.school_name], field=DISPLAY_NAME, qb=self.quickbooks_client)
+        customer_matches = self.try_with_refresh(
+            Customer.choose,
+            [school.school_name],
+            field=DISPLAY_NAME,
+            qb=self.quickbooks_client
+        )
 
         if len(customer_matches) < 1:
             return None
@@ -178,13 +185,8 @@ class QuickBooksModule:
         # construct query
         query = construct_invoice_query(customer_ref)
         # issue query
-        try:
-            invoices = Invoice.query(query, qb=self.quickbooks_client)
-        except QuickbooksException as e:
-            print(e.message)
-            print(e.error_code)
-            print(e.detail)
-            raise e
+        # invoices = Invoice.query(query, qb=self.quickbooks_client)
+        invoices = self.try_with_refresh(Invoice.query, query, qb=self.quickbooks_client)
 
         if len(invoices) < 1:
             return None
@@ -207,18 +209,12 @@ class QuickBooksModule:
         if registration is None:
             return registration
 
-        try:
-            # construct CustomerRef
-            customer_ref = self.get_customer_ref_from_school(registration.school)
-            if customer_ref is None:
-                raise ValueError("Customer Ref not found")
-            # issue invoice query
-            invoices = self.query_invoices_from_customer_ref(customer_ref)
-        except QuickbooksException as e:
-            print(e.message)
-            print(e.error_code)
-            print(e.detail)
-            raise e
+        # construct CustomerRef
+        customer_ref = self.get_customer_ref_from_school(registration.school)
+        if customer_ref is None:
+            raise ValueError("Customer Ref not found")
+        # issue invoice query
+        invoices = self.query_invoices_from_customer_ref(customer_ref)
 
         if invoices is None:
             return None
@@ -335,13 +331,8 @@ class QuickBooksModule:
 
         invoice.AllowOnlineCreditCardPayment = True
 
-        try:
-            invoice.save(qb=self.quickbooks_client)
-        except QuickbooksException as e:
-            print(e.message)
-            print(e.error_code)
-            print(e.detail)
-            raise e
+        # invoice.save(qb=self.quickbooks_client)
+        self.try_with_refresh(invoice.save, qb=self.quickbooks_client)
 
         return invoice
 
@@ -351,23 +342,13 @@ class QuickBooksModule:
         :param invoice:
         :return:
         """
-        try:
-            invoice.send(qb=self.quickbooks_client)
-        except QuickbooksException as e:
-            print(e.message)
-            print(e.error_code)
-            print(e.detail)
-            raise e
+        # invoice.send(qb=self.quickbooks_client)
+        self.try_with_refresh(invoice.send, qb=self.quickbooks_client)
 
         invoice.EmailStatus = "EmailSent"
 
-        try:
-            invoice.save(qb=self.quickbooks_client)
-        except QuickbooksException as e:
-            print(e.message)
-            print(e.error_code)
-            print(e.detail)
-            raise e
+        # invoice.save(qb=self.quickbooks_client)
+        self.try_with_refresh(invoice.save, qb=self.quickbooks_client)
 
     # Item methods
 
@@ -380,26 +361,17 @@ class QuickBooksModule:
         """
         item_names = quick_books_utils.CONFERENCE_TO_LINE_ITEM_NAMES[conference]
 
-        try:
-            return Item.choose(item_names, field="Name", qb=self.quickbooks_client)
-        except QuickbooksException as e:
-            print(e.message)
-            print(e.error_code)
-            print(e.detail)
-            raise e
+        # return Item.choose(item_names, field="Name", qb=self.quickbooks_client)
+        return self.try_with_refresh(Item.choose, item_names, field="Name", qb=self.quickbooks_client)
 
     def get_credit_card_processing_fee_item(self) -> Item:
         if self.credit_card_processing_fee is None:
-            try:
-                items = Item.choose(
-                    [CC_FEE_ITEM_NAME],
-                    field="Name",
-                    qb=self.quickbooks_client
-                )
-                self.credit_card_processing_fee = items[0]
-            except QuickbooksException as e:
-                print(e.message)
-                print(e.error_code)
-                print(e.detail)
-                raise e
+            # items = Item.choose([CC_FEE_ITEM_NAME], field="Name", qb=self.quickbooks_client)
+            items = self.try_with_refresh(Item.choose, [CC_FEE_ITEM_NAME], field="Name", qb=self.quickbooks_client)
+
+            if len(items) < 1:
+                raise ValueError("Credit Card Processing Fee item not found in QuickBooks")
+
+            self.credit_card_processing_fee = items[0]
+
         return self.credit_card_processing_fee
