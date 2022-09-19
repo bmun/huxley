@@ -264,6 +264,7 @@ class QuickBooksModule:
         items = self.query_line_items_from_conference(registration.conference)
         invoices = {}
         service_date = quick_books_utils.SERVICE_DATES[registration.conference]
+        allow_card_payment = registration.payment_method == PaymentMethod.Card
         for item in items:
             if SCHOOL_FEE in item.Name:
                 line = create_SalesItemLine(item, 1, service_date)
@@ -282,7 +283,8 @@ class QuickBooksModule:
                         registration.registration_date,
                         FeeType.SCHOOL_FEE,
                         registration.conference
-                    )
+                    ),
+                    allow_card_payment
                 )
             elif DELEGATE_FEE in item.Name:
                 line = create_SalesItemLine(item, registration.num_delegates, service_date)
@@ -301,7 +303,8 @@ class QuickBooksModule:
                         registration.registration_date,
                         FeeType.DELEGATE_FEE,
                         registration.conference
-                    )
+                    ),
+                    allow_card_payment
                 )
         return invoices
 
@@ -309,10 +312,12 @@ class QuickBooksModule:
                        customer_ref: Ref,
                        lines: List[DetailLine],
                        email: str,
-                       due_date: datetime.date) -> Invoice:
+                       due_date: datetime.date,
+                       allow_card_payment: bool) -> Invoice:
         """
         Creates a new invoice in quickbooks with passed metadata
         Does not check to see if matching invoice already exists
+        :param allow_card_payment:
         :param due_date:
         :param customer_ref:
         :param lines:
@@ -329,7 +334,7 @@ class QuickBooksModule:
 
         invoice.DueDate = due_date.isoformat()
 
-        invoice.AllowOnlineCreditCardPayment = True
+        invoice.AllowOnlineCreditCardPayment = allow_card_payment
 
         # invoice.save(qb=self.quickbooks_client)
         self.try_with_refresh(invoice.save, qb=self.quickbooks_client)
