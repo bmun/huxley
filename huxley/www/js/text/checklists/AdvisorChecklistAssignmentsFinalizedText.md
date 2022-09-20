@@ -1,3 +1,1 @@
-In order to ensure delegates have enough time to research their committee topics and that the BMUN secretariat has enough time to prepare for conference, schools will need to finalize their list of assignments by **January 21**.  This can be done by clicking the “assignments” tab and selecting which delegates will be in which committees. 
-
-More information on partial refund deadlines will be posted in the coming weeks.
+In order to ensure delegates have enough time to research their committee topics and that the BMUN secretariat has enough time to prepare for conference, schools will need to finalize their list of assignments by their round’s delegate fee deadline. This can be done by clicking the “assignments” tab and selecting which delegates will be in which committees.

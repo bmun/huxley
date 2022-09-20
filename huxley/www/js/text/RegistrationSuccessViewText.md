@@ -1,6 +1,6 @@
 # Thank You
 
-Thank you for registering for BMUN {{ conferenceSession }}! Country assignments will be made available soon in your Huxley account. You will be notified via email when assignments become available. A summary of fees is listed below:
+Thank you for registering for BMUN {{ conferenceSession }}! Country assignments will be made available in your Huxley account by your respective round release dates once your school fee payments are made on time. You will be notified via email when assignments become available. A summary of fees is listed below:
 
 ### School Registration Fee
 * ${{ conferenceRegistrationFee }}

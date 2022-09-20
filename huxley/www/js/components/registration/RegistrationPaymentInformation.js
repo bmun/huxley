@@ -5,8 +5,8 @@
 
  "use strict";
 
- import React from "react";
- import PropTypes from "prop-types";
+import React from "react";
+import PropTypes from "prop-types";
 
 var { PaymentTypes } = require("constants/PaymentTypes");
 var { NumberInput } = require("components/NumberInput");
