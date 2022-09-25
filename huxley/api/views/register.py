@@ -110,7 +110,7 @@ def call_invoice_handler(school_name: str,
     registration = invoiceRegistration(
         school=school,
         num_delegates=num_delegates,
-        conference=invoiceConference.BMUN71,
+        conference=invoiceConference.BMUN,
         registration_date=datetime.date.today(),
         payment_method=payment_method
     )

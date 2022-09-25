@@ -15,8 +15,8 @@ DELEGATE_FEE_TEMPLATE = "{} Delegate Fee"
 SCHOOL_FEE_TEMPLATE = "{} School Fee"
 
 CONFERENCE_TO_LINE_ITEM_NAMES = {
-    Conference.BMUN71: [
-        DELEGATE_FEE_TEMPLATE.format(Conference.BMUN71.value), SCHOOL_FEE_TEMPLATE.format(Conference.BMUN71.value)
+    Conference.BMUN: [
+        DELEGATE_FEE_TEMPLATE.format(Conference.BMUN.value), SCHOOL_FEE_TEMPLATE.format(Conference.BMUN.value)
     ],
     Conference.FC: [
         DELEGATE_FEE_TEMPLATE.format(Conference.FC.value), SCHOOL_FEE_TEMPLATE.format(Conference.FC.value)
@@ -162,7 +162,7 @@ SALES_ITEM_LINE_DETAIL_TYPE = "SalesItemLineDetail"
 
 
 SERVICE_DATES = {
-    Conference.BMUN71: datetime.date(2023, 3, 5),
+    Conference.BMUN: datetime.date(2023, 3, 5),
     Conference.FC: datetime.date(2022, 11, 12)
 }
 
@@ -206,7 +206,7 @@ def create_credit_card_fee_SalesItemLine(amount: float, cc_fee_item: Item) -> Sa
 
 
 END_DATES = {
-    Conference.BMUN71: {
+    Conference.BMUN: {
         RegRound.R1: datetime.date(2022, 10, 7),
         RegRound.R2: datetime.date(2022, 11, 4),
         RegRound.R3: datetime.date(2022, 12, 9),
@@ -220,7 +220,7 @@ END_DATES = {
 
 
 DUE_DATES = {
-    Conference.BMUN71: {
+    Conference.BMUN: {
         RegRound.R1: {
             FeeType.SCHOOL_FEE: datetime.date(2022, 10, 7),
             FeeType.DELEGATE_FEE: datetime.date(2022, 10, 28)
