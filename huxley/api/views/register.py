@@ -59,7 +59,7 @@ class Register(generics.GenericAPIView):
             registration_serializer.is_valid(raise_exception=True)
             registration_serializer.save()
 
-        if handler is not None:
+        if Conference.get_current().invoicing_enabled and handler is not None:
             school_data = user_data['school']
             address = Address(
                 line1=school_data['address'],
