@@ -45,6 +45,8 @@ class QuickBooksModule:
     querySchoolsAsCustomers(schoolNames: List[str]) -> List[School]:
         Looks for already registered schools using their names
     """
+    REDIRECT_URI = "http://localhost:8000"
+    ENVIRONMENT = "production"
 
     def __init__(
             self,
@@ -66,8 +68,8 @@ class QuickBooksModule:
         self.auth_client = AuthClient(
             client_id=client_id,
             client_secret=client_secret,
-            redirect_uri=Authenticator.REDIRECT_URI,
-            environment=Authenticator.ENVIRONMENT,
+            redirect_uri=self.REDIRECT_URI,
+            environment=self.ENVIRONMENT,
             access_token=access_token
         )
         self.auth_client.refresh_token = refresh_token
