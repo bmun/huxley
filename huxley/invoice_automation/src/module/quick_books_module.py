@@ -8,7 +8,6 @@ from quickbooks.exceptions import QuickbooksException, AuthorizationException
 from quickbooks.objects import Invoice, Ref, Item, EmailAddress, DetailLine
 from quickbooks.objects.customer import Customer
 
-from huxley.invoice_automation.src.authentication.authenticator import Authenticator
 from huxley.invoice_automation.src.model.conference import Conference
 from huxley.invoice_automation.src.model.fee_type import FeeType
 from huxley.invoice_automation.src.model.payment_method import PaymentMethod
