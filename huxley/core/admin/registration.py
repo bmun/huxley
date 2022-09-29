@@ -23,11 +23,11 @@ class RegistrationAdmin(admin.ModelAdmin):
             "Beginners", "Intermediates", "Advanced", "Spanish Speakers",
             "Chinese Speakers", "Assignments Finalized", "Waivers Complete",
             "Delegate Fees Paid", "Delegate Fees Owed",
-            "Paid Registration Fee?", "Country 1", "Country 2", "Country 3",
+            "Paid Registration Fee?", "Invoice Sent", "Payment Type", "Country 1", "Country 2", "Country 3",
             "Country 4", "Country 5", "Country 6", "Country 7", "Country 8",
             "Country 9", "Country 10", "Committee Preferences",
             "Registration Comments"
-        ])
+        ]) 
 
         for registration in Registration.objects.all().order_by(
                 'school__name'):
@@ -41,6 +41,7 @@ class RegistrationAdmin(admin.ModelAdmin):
                 ', '.join(cp.name
                           for cp in registration.committee_preferences.all())
             ]
+            payment_type_string = ['Credit Card' if registration.payment_type == 1 else 'Check']
 
             rows.append([
                 str(field) for field in [
@@ -55,9 +56,11 @@ class RegistrationAdmin(admin.ModelAdmin):
                     registration.num_chinese_speaking_delegates, registration.
                     assignments_finalized, registration.waivers_completed,
                     registration.delegate_fees_paid, registration.
-                    delegate_fees_owed, registration.registration_fee_paid
+                    delegate_fees_owed, registration.registration_fee_paid,
+                    registration.invoices_sent
                 ]
-            ] + country_preferences + committee_preferences +
+            ] + payment_type_string +
+            country_preferences + committee_preferences +
                         [str(registration.registration_comments)])
         return rows
 
@@ -76,7 +79,7 @@ class RegistrationAdmin(admin.ModelAdmin):
 
     def sheets(self, request):
         if settings.SHEET_ID:
-            SHEET_RANGE = 'Registration!A1:Y'
+            SHEET_RANGE = 'Registration!A1:AA'
             # Store credentials
             creds = service_account.Credentials.from_service_account_file(
                 settings.SERVICE_ACCOUNT_FILE, scopes=settings.SCOPES)
