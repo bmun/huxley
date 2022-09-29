@@ -310,6 +310,8 @@ class Registration(models.Model):
     payment_type = models.PositiveSmallIntegerField(
         choices=PAYMENT_TYPE_OPTIONS, default=PaymentTypes.CARD)
 
+    invoices_sent = models.BooleanField(default=False)
+
     @classmethod
     def update_fees(cls, **kwargs):
         registration = kwargs['instance']

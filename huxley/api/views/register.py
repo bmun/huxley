@@ -88,7 +88,7 @@ class Register(generics.GenericAPIView):
             else:
                 payment_method = PaymentMethod.Check
 
-            call_invoice_handler(
+            invoices_sent = call_invoice_handler(
                 school_name=school_data['name'],
                 email=school_data['primary_email'],
                 phone_numbers=[school_data['primary_phone'], school_data['secondary_phone']],
@@ -96,6 +96,11 @@ class Register(generics.GenericAPIView):
                 num_delegates=num_delegates,
                 payment_method=payment_method
             )
+
+            if invoices_sent:
+                reg_object = registration_serializer.instance
+                reg_object.invoices_sent = True
+                reg_object.save()
 
         data = {'user': user_serializer.data,
                 'registration': registration_serializer.data}
@@ -107,7 +112,16 @@ def call_invoice_handler(school_name: str,
                          phone_numbers: List[str],
                          address: Address,
                          num_delegates: int,
-                         payment_method: PaymentMethod):
+                         payment_method: PaymentMethod) -> bool:
+    """
+    :param school_name:
+    :param email:
+    :param phone_numbers:
+    :param address:
+    :param num_delegates:
+    :param payment_method:
+    :return bool: whether the invoices were successfully sent and created or not
+    """
     school = invoiceSchool(school_name, email, phone_numbers, address)
     registration = invoiceRegistration(
         school=school,
@@ -118,6 +132,7 @@ def call_invoice_handler(school_name: str,
     )
     try:
         handler.handle_registration(registration)
+        return True
     except QuickbooksException as e:
         log_entry = LogEntry(
             level="ERROR",
@@ -128,4 +143,5 @@ def call_invoice_handler(school_name: str,
             username=""
         )
         log_entry.save()
+        return False
 
