@@ -59,6 +59,8 @@ class Conference(models.Model):
     delegate_fee = models.DecimalField(
         max_digits=6, decimal_places=2, default=Decimal('50.00'))
 
+    invoicing_enabled = models.BooleanField(default=True)
+
     @classmethod
     def get_current(cls):
         return Conference.objects.get(session=settings.SESSION)
@@ -307,6 +309,8 @@ class Registration(models.Model):
 
     payment_type = models.PositiveSmallIntegerField(
         choices=PAYMENT_TYPE_OPTIONS, default=PaymentTypes.CARD)
+
+    invoices_sent = models.BooleanField(default=False)
 
     @classmethod
     def update_fees(cls, **kwargs):

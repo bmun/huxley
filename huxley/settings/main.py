@@ -145,3 +145,10 @@ SMARTWAIVER_API_KEY = None
 
 # Celery Configuration Options
 CELERY_RESULT_BACKEND = 'django-db'
+
+# Intuit Keys
+CLIENT_ID = None
+CLIENT_SECRET = None
+REFRESH_TOKEN = None
+REALM_ID = None
+ACCESS_TOKEN = None

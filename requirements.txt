@@ -39,7 +39,7 @@ python-crontab==2.6.0
 python-dateutil==2.8.2
 pytz==2021.3
 reportlab==3.5.67
-requests==2.22.0
+requests==2.26.0
 rsa==4.7
 six==1.15.0
 sqlparse==0.4.1
@@ -50,3 +50,7 @@ vine==5.0.0
 wcwidth==0.2.5
 webencodings==0.5.1
 xhtml2pdf==0.2.5
+intuit-oauth==1.2.4
+python-quickbooks==0.9.1
+pytest==7.1.2
+PyPika==0.48.9
