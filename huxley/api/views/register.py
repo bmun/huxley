@@ -4,6 +4,7 @@ import datetime
 from typing import List
 
 from django.db import transaction
+from quickbooks.exceptions import QuickbooksException
 
 from rest_framework import generics, response, status
 from rest_framework.authentication import SessionAuthentication
@@ -18,6 +19,7 @@ from huxley.invoice_automation.src.model.conference import Conference as invoice
 from huxley.invoice_automation.src.model.payment_method import PaymentMethod
 from huxley.invoice_automation.src.model.school import School as invoiceSchool
 from huxley.invoice_automation.src.model.registration import Registration as invoiceRegistration
+from huxley.logging.models import LogEntry
 
 
 class Register(generics.GenericAPIView):
@@ -114,4 +116,16 @@ def call_invoice_handler(school_name: str,
         registration_date=datetime.date.today(),
         payment_method=payment_method
     )
-    handler.handle_registration(registration)
+    try:
+        handler.handle_registration(registration)
+    except QuickbooksException as e:
+        log_entry = LogEntry(
+            level="ERROR",
+            message=e.message,
+            timestamp=datetime.datetime.now(),
+            uri="/api/register",
+            status_code=500,
+            username=""
+        )
+        log_entry.save()
+
