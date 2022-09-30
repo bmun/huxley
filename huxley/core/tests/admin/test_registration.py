@@ -25,6 +25,7 @@ class RegistrationAdminTest(TestCase):
             "Beginners", "Intermediates", "Advanced", "Spanish Speakers",
             "Chinese Speakers",  "Assignments Finalized", "Waivers Complete", 
             "Delegate Fees Paid", "Delegate Fees Owed", "Paid Registration Fee?", 
+            "Invoice Sent", "Payment Type",
             "Country 1", "Country 2", "Country 3", "Country 4", "Country 5", 
             "Country 6", "Country 7", "Country 8", "Country 9", "Country 10", 
             "Committee Preferences", "Registration Comments"
@@ -38,6 +39,8 @@ class RegistrationAdminTest(TestCase):
         country_preferences += [''] * (10 - len(country_preferences))
         committee_preferences = [', '.join(
             cp.name for cp in registration.committee_preferences.all())]
+
+        payment_type_string = ['Credit Card' if registration.payment_type == 1 else 'Check']
 
         fields = [
             registration.registered_at,
@@ -54,8 +57,10 @@ class RegistrationAdminTest(TestCase):
             registration.waivers_completed,
             registration.delegate_fees_paid,
             registration.delegate_fees_owed,
-            registration.registration_fee_paid
+            registration.registration_fee_paid,
+            registration.invoices_sent
         ]
+        fields.extend(payment_type_string)
         fields.extend(country_preferences)
         fields.extend(committee_preferences)
         fields.extend(registration.registration_comments)
