@@ -1,7 +1,6 @@
 # Huxley
 Huxley is a web application designed to manage the annual [Berkeley Model United Nations](http://bmun.org/) conference.
 
-[![Build Status](https://travis-ci.com/bmun/huxley.svg?branch=master)](https://travis-ci.com/bmun/huxley)
 [![styled with prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
 
 
