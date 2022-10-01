@@ -1,6 +1,8 @@
 # Huxley
 Huxley is a web application designed to manage the annual [Berkeley Model United Nations](http://bmun.org/) conference.
 
+
+[![Django CI](https://github.com/bmun/huxley/actions/workflows/django.yml/badge.svg)](https://github.com/bmun/huxley/actions/workflows/django.yml)
 [![styled with prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
 
 
