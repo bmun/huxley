@@ -13,7 +13,6 @@ const { CurrentUserStore } = require("stores/CurrentUserStore");
 const { InnerView } = require("components/InnerView");
 const { Table } = require("components/core/Table");
 const { TextTemplate } = require("components/core/TextTemplate");
-const { User } = require("utils/User");
 
 require("css/Table.less");
 const ChairCommitteeFeedbackViewText = require("text/ChairCommitteeFeedbackViewText.md");
@@ -34,13 +33,6 @@ class ChairCommitteeFeedbackView extends React.Component {
         feedback: CommitteeFeedbackStore.getCommitteeFeedback(committeeID),
       });
     });
-  }
-
-  UNSAFE_componentWillMount() {
-    var user = CurrentUserStore.getCurrentUser();
-    if (!User.isChair(user)) {
-      history.redirect("/");
-    }
   }
 
   componentsWillUnmount() {

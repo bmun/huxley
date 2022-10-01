@@ -51,13 +51,6 @@ class ChairSummaryView extends React.Component {
     };
   }
 
-  UNSAFE_componentWillMount() {
-    var user = CurrentUserStore.getCurrentUser();
-    if (!User.isChair(user)) {
-      history.redirect("/");
-    }
-  }
-
   componentDidMount() {
     var user = CurrentUserStore.getCurrentUser();
 

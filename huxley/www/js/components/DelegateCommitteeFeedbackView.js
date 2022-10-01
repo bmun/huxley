@@ -108,13 +108,6 @@ class DelegateCommitteeFeedbackView extends React.Component {
     });
   }
 
-  UNSAFE_componentWillMount() {
-    var user = CurrentUserStore.getCurrentUser();
-    if (!User.isDelegate(user)) {
-      history.redirect("/");
-    }
-  }
-
   componentWillUnmount() {
     this._committeeFeedbackToken && this._committeeFeedbackToken.remove();
     this._secretariatMembersToken && this._secretariatMembersToken.remove();

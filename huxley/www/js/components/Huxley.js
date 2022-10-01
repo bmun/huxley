@@ -58,7 +58,8 @@ require("css/JSWarning.less");
 require("css/IEWarning.less");
 
 class Huxley extends React.Component {
-  UNSAFE_componentWillMount() {
+
+  componentDidMount() {
     CurrentUserStore.addListener(() => {
       var user = CurrentUserStore.getCurrentUser();
       if (User.isAnonymous(user)) {
@@ -72,7 +73,7 @@ class Huxley extends React.Component {
       }
     });
   }
-
+  
   render() {
     var user = CurrentUserStore.getCurrentUser();
     if (User.isAnonymous(user)) {

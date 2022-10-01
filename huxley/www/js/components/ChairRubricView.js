@@ -41,13 +41,6 @@ class ChairRubricView extends React.Component {
     };
   }
 
-  UNSAFE_componentWillMount() {
-    var user = CurrentUserStore.getCurrentUser();
-    if (!User.isChair(user)) {
-      history.redirect("/");
-    }
-  }
-
   componentDidMount() {
     this._committeesToken = CommitteeStore.addListener(() => {
       var user = CurrentUserStore.getCurrentUser();
