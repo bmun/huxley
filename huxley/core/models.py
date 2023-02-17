@@ -746,6 +746,9 @@ class Delegate(models.Model):
                 delegate.save()
                 return "Successfully confirmed waiver for %s." % delegate.name
 
+        #check if advisor
+        if len(users_list) == 1 and users_list[0].is_advisor():
+            return "Advisor waiver unneeded."
         # log the unmatched waiver
         error_waiver_log = WaiverLog(
             waiver_unique_id=unique_id,
