@@ -162,8 +162,10 @@ class CommitteeFeedback(models.Model):
                (9, 9),
                (10, 10), )
 
-    LIKELY_CHOICES = ((0, 'Blank'), (1, 'No'),
-                      (2, 'No change/unsure'), (3, 'Yes'))
+    LIKELY_CHOICES = ((0, 'Blank'), (1, 'No'), (2, 'Unsure'), (3, 'Yes'))
+    
+    CLUB_OR_CLASS = ((0, 'Blank'), (1, 'Club'), (2, 'Class'), (3, 'Other/unsure'))
+    DW_OR_FC = ((0, 'Blank'), (1, 'Delegate Workshop Only'), (2, 'Fall Conference Only'), (3,'Delegate Workshop and Fall Conference'), (4, 'Neither/I do not know what these are'))
 
     committee = models.ForeignKey(Committee, on_delete=models.CASCADE)
     comment = models.TextField(blank=True, default='')
@@ -215,7 +217,13 @@ class CommitteeFeedback(models.Model):
     berkeley_perception = models.IntegerField(
         blank=True, default=0, choices=LIKELY_CHOICES)
     money_spent = models.FloatField(blank=True, default=0)
-
+    conferences_attended = models.FloatField(blank=True, default=1)
+    team_format = models.IntegerField(
+        blank = True, default=0, choices=CLUB_OR_CLASS)
+    other_events = models.IntegerField(
+        blank = True, default=0, choices=DW_OR_FC)
+    outreach_sessions = models.IntegerField(
+        blank = True, default=0, choices=LIKELY_CHOICES)
     def __str__(self):
         return str(self.committee.name) + " - Comment " + str(self.id)
 

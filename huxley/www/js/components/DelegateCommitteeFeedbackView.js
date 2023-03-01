@@ -321,10 +321,98 @@ class DelegateCommitteeFeedbackView extends React.Component {
             </font>
             <br></br>
             <NumberInput
-              placeholder="Number of BMUN sessions attended"
+              placeholder="Food estimate"
               onChange={_handleChange.bind(this, "money_spent")}
               value={this.state["money_spent"].toString()}
             />
+          </label>
+        </div>
+        <div>
+          <br />
+          <hr />
+          <br />
+          <label>
+            <font size={3}>
+              <b>
+                How many MUN conferences have you been to, including this one?
+              </b>
+            </font>
+            <br></br>
+            <NumberInput
+              placeholder="Number of conferences attended"
+              onChange={_handleChange.bind(this, "conferences_attended")}
+              value={this.state["conferences_attended"]}
+            />
+          </label>
+        </div>
+        <div>
+          <br />
+          <hr />
+          <br />
+          <label>
+            <font size={3}>
+              <b>
+                Is Model UN  a club or a class at your school?
+              </b>
+            </font>
+            <br></br>
+            <select
+              onChange={_handleChange.bind(this, "team_format")}
+              value={this.state["team_format"]}
+              default={0}
+            >
+              <option value={0}>-</option>
+              <option value={1}>Club</option>
+              <option value={2}>Class</option>
+              <option value={3}>Other/unsure</option>
+            </select>
+          </label>
+        </div>
+        <div>
+          <br />
+          <hr />
+          <br />
+          <label>
+            <font size={3}>
+              <b>
+                Did you attend delegate workshop and/or fall conference?
+              </b>
+            </font>
+            <br></br>
+            <select
+              onChange={_handleChange.bind(this, "other_events")}
+              value={this.state["other_events"]}
+              default={0}
+            >
+              <option value={0}>-</option>
+              <option value={1}>Delegate Workshop Only</option>
+              <option value={2}>Fall Conference Only</option>
+              <option value={3}>Delegate Workshop and Fall Conference</option>
+              <option value={4}>Neither/I do not know what these are</option>
+            </select>
+          </label>
+        </div>
+        <div>
+          <br />
+          <hr />
+          <br />
+          <label>
+            <font size={3}>
+              <b>
+                Did your school have any BMUN outreach sessions?
+              </b>
+            </font>
+            <br></br>
+            <select
+              onChange={_handleChange.bind(this, "outreach_sessions")}
+              value={this.state["outreach_sessions"]}
+              default={0}
+            >
+              <option value={0}>-</option>
+              <option value={1}>No</option>
+              <option value={2}>Unsure</option>
+              <option value={3}>Yes</option>
+            </select>
           </label>
         </div>
       </div>
