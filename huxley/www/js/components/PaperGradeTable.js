@@ -44,36 +44,28 @@ class PaperGradeTable extends React.Component {
       var gradedFileName = gradedFileNames ? gradedFileNames[gradedFileNames.length - 1] : null;
       var gradedName = gradedHrefData ? "graded_" + gradedFileName : null;
       var downloadGraded = gradedHrefData ? (
-        <a
-          className={cx({
-            button: true,
-            "button-large": true,
-            "button-green": true,
-            "rounded-small": true,
-          })}
+        <Button
+          color="green"
+          size="large"
           href={gradedHrefData}
           download={gradedName}
         >
           Download Graded
-        </a>
+        </Button>
       ) : null;
       buttons = (
         <div>
           <Button color="red" onClick={this._handleUnset}>
             Go Back
           </Button>
-          <a
-            className={cx({
-              button: true,
-              "button-large": true,
-              "button-green": true,
-              "rounded-small": true,
-            })}
-            href={hrefData}
+          <Button
+            color="green"
+            size="large"
+            href={gradedHrefData}
             download={fileName}
           >
             Download Original
-          </a>
+          </Button>
           {downloadGraded}
           <Button
             color="blue"
