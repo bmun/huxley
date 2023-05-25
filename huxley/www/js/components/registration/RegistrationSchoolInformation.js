@@ -82,12 +82,7 @@ class RegistrationSchoolInformation extends React.Component {
           onChange={accessHandlers("school_city")}
           value={accessSchool("school_city")}
         />
-        <RegistrationTextInput
-          errors={accessErrors("school_state")}
-          placeholder={this.props.schoolInternational ? "Province" : "State"}
-          onChange={accessHandlers("school_state")}
-          value={accessSchool("school_state")}
-        />
+        {this.props.renderStateTypesDropdown("school_state")}
         <RegistrationTextInput
           errors={accessErrors("school_zip")}
           placeholder={this.props.schoolInternational ? "Postal Code" : "Zip"}
@@ -113,6 +108,7 @@ RegistrationSchoolInformation.propTypes = {
   schoolInformation: PropTypes.object,
   handleInternationalChange: PropTypes.func,
   schoolInternational: PropTypes.bool,
+  renderStateTypesDropdown: PropTypes.func,
 };
 
 export { RegistrationSchoolInformation };

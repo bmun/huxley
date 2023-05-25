@@ -8,6 +8,7 @@
 import React from "react";
 import { history } from "utils/history";
 
+const { StateTypes } = require("constants/StateTypes")
 const { PaymentTypes } = require("constants/PaymentTypes");
 const { Button } = require("components/core/Button");
 const { CommitteeStore } = require("stores/CommitteeStore");
@@ -73,7 +74,7 @@ class RegistrationView extends React.Component {
       school_name: "",
       school_address: "",
       school_city: "",
-      school_state: "",
+      school_state: StateTypes.ALABAMA,
       school_zip: "",
       school_country: "",
       school_international: false,
@@ -195,6 +196,7 @@ class RegistrationView extends React.Component {
             }}
             handleInternationalChange={this._handleInternationalChange}
             schoolInternational={this.state.school_international}
+            renderStateTypesDropdown = {this.renderStateTypesDropdown}
           />
           <hr />
           <RegistrationProgramInformation
@@ -434,6 +436,74 @@ class RegistrationView extends React.Component {
       </select>
     );
   };
+
+  renderStateTypesDropdown = (name) => {
+    return (
+      <select
+        className="state-select reg-field"
+        onChange={_handleChange.bind(this, name)}
+        value={this.state[name]}
+      > 
+        <option key={StateTypes.ALABAMA} value={StateTypes.ALABAMA}> Alabama </option>
+        <option key={StateTypes.ALASKA} value={StateTypes.ALASKA}> Alaska </option>
+        <option key={StateTypes.AMERICAN_SAMOA} value={StateTypes.AMERICAN_SAMOA}> American Samoa </option>
+        <option key={StateTypes.ARIZONA} value={StateTypes.ARIZONA}> Arizona </option>
+        <option key={StateTypes.ARKANSAS} value={StateTypes.ARKANSAS}> Arkansas </option>
+        <option key={StateTypes.CALIFORNIA} value={StateTypes.CALIFORNIA}> California </option>
+        <option key={StateTypes.COLORADO} value={StateTypes.COLORADO}> Colorado </option>
+        <option key={StateTypes.CONNECTICUT} value={StateTypes.CONNECTICUT}> Connecticut </option>
+        <option key={StateTypes.DELAWARE} value={StateTypes.DELAWARE}> Delaware </option>
+        <option key={StateTypes.DISTRICT_OF_COLUMBIA} value={StateTypes.DISTRICT_OF_COLUMBIA}> District of Columbia </option>
+        <option key={StateTypes.FLORIDA} value={StateTypes.FLORIDA}> Florida </option>
+        <option key={StateTypes.GEORGIA} value={StateTypes.GEORGIA}> Georgia </option>
+        <option key={StateTypes.GUAM} value={StateTypes.GUAM}> Guam </option>
+        <option key={StateTypes.HAWAII} value={StateTypes.HAWAII}> Hawaii </option>
+        <option key={StateTypes.IDAHO} value={StateTypes.IDAHO}> Idaho </option>
+        <option key={StateTypes.ILLINOIS} value={StateTypes.ILLINOIS}> Illinois </option>
+        <option key={StateTypes.INDIANA} value={StateTypes.INDIANA}> Indiana </option>
+        <option key={StateTypes.IOWA} value={StateTypes.IOWA}> Iowa </option>
+        <option key={StateTypes.KANSAS} value={StateTypes.KANSAS}> Kansas </option>
+        <option key={StateTypes.KENTUCKY} value={StateTypes.KENTUCKY}> Kentucky </option>
+        <option key={StateTypes.LOUISIANA} value={StateTypes.LOUISIANA}> Louisiana </option>
+        <option key={StateTypes.MAINE} value={StateTypes.MAINE}> Maine </option>
+        <option key={StateTypes.MARYLAND} value={StateTypes.MARYLAND}> Maryland </option>
+        <option key={StateTypes.MASSACHUSETTS} value={StateTypes.MASSACHUSETTS}> Massachusetts </option>
+        <option key={StateTypes.MICHIGAN} value={StateTypes.MICHIGAN}> Michigan </option>
+        <option key={StateTypes.MINNESOTA} value={StateTypes.MINNESOTA}> Minnesota </option>
+        <option key={StateTypes.MISSISSIPPI} value={StateTypes.MISSISSIPPI}> Mississippi </option>
+        <option key={StateTypes.MISSOURI} value={StateTypes.MISSOURI}> Missouri </option>
+        <option key={StateTypes.MONTANA} value={StateTypes.MONTANA}> Montana </option>
+        <option key={StateTypes.NEBRASKA} value={StateTypes.NEBRASKA}> Nebraska </option>
+        <option key={StateTypes.NEVADA} value={StateTypes.NEVADA}> Nevada </option>
+        <option key={StateTypes.NEW_HAMPSHIRE} value={StateTypes.NEW_HAMPSHIRE}> New Hampshire </option>
+        <option key={StateTypes.NEW_JERSEY} value={StateTypes.NEW_JERSEY}> New Jersey </option>
+        <option key={StateTypes.NEW_MEXICO} value={StateTypes.NEW_MEXICO}> New Mexico </option>
+        <option key={StateTypes.NEW_YORK} value={StateTypes.NEW_YORK}> New York </option>
+        <option key={StateTypes.NORTH_CAROLINA} value={StateTypes.NORTH_CAROLINA}> North Carolina </option>
+        <option key={StateTypes.NORTH_DAKOTA} value={StateTypes.NORTH_DAKOTA}> North Dakota </option>
+        <option key={StateTypes.NORTHERN_MARIANA_IS} value={StateTypes.NORTHERN_MARIANA_IS}> Northern Mariana Islands </option>
+        <option key={StateTypes.OHIO} value={StateTypes.OHIO}> Ohio </option>
+        <option key={StateTypes.OKLAHOMA} value={StateTypes.OKLAHOMA}> Oklahoma </option>
+        <option key={StateTypes.OREGON} value={StateTypes.OREGON}> Oregon </option>
+        <option key={StateTypes.PENNSYLVANIA} value={StateTypes.PENNSYLVANIA}> Pennsylvania </option>
+        <option key={StateTypes.PUERTO_RICO} value={StateTypes.PUERTO_RICO}> Puerto Rico </option>
+        <option key={StateTypes.RHODE_ISLAND} value={StateTypes.RHODE_ISLAND}> Rhode Island </option>
+        <option key={StateTypes.SOUTH_CAROLINA} value={StateTypes.SOUTH_CAROLINA}> South Carolina </option>
+        <option key={StateTypes.SOUTH_DAKOTA} value={StateTypes.SOUTH_DAKOTA}> South Dakota </option>
+        <option key={StateTypes.TENNESSEE} value={StateTypes.TENNESSEE}> Tennessee </option>
+        <option key={StateTypes.TEXAS} value={StateTypes.TEXAS}> Texas </option>
+        <option key={StateTypes.UTAH} value={StateTypes.UTAH}> Utah </option>
+        <option key={StateTypes.VERMONT} value={StateTypes.VERMONT}> Vermont </option>
+        <option key={StateTypes.VIRGINIA} value={StateTypes.VIRGINIA}> Virginia </option>
+        <option key={StateTypes.VIRGIN_ISLANDS} value={StateTypes.VIRGIN_ISLANDS}> Virgin Islands </option>
+        <option key={StateTypes.WASHINGTON} value={StateTypes.WASHINGTON}> Washington </option>
+        <option key={StateTypes.WEST_VIRGINIA} value={StateTypes.WEST_VIRGINIA}> West Virginia </option>
+        <option key={StateTypes.WISCONSIN} value={StateTypes.WISCONSIN}> Wisconsin </option>
+        <option key={StateTypes.WYOMING} value={StateTypes.WYOMING}> Wyoming </option>
+      </select>
+    )
+
+  }
 
   renderError = (field) => {
     if (this.state.errors[field]) {

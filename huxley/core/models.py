@@ -17,7 +17,7 @@ from django.db.models.signals import post_init, post_save, pre_delete, pre_save
 from django.utils import timezone
 # from django.contrib.postgres.fields import DateRangeField
 
-from huxley.core.constants import ContactGender, ContactType, ProgramTypes, PaymentTypes
+from huxley.core.constants import ContactGender, ContactType, ProgramTypes, PaymentTypes, StateTypes
 from huxley.logging.models import WaiverLog
 
 
@@ -245,11 +245,67 @@ class School(models.Model):
                       (ContactGender.FEMALE, 'Female'),
                       (ContactGender.OTHER, 'Other'),
                       (ContactGender.UNSPECIFIED, 'Unspecified'), )
-
+    
+    STATE_OPTIONS = ((StateTypes.ALABAMA, 'AL'),
+                    (StateTypes.ALASKA, 'AK'),
+                    (StateTypes.AMERICAN_SAMOA, 'AS'),
+                    (StateTypes.ARIZONA, 'AZ'),
+                    (StateTypes.ARKANSAS, 'AR'),
+                    (StateTypes.CALIFORNIA, 'CA'),
+                    (StateTypes.COLORADO, 'CO'),
+                    (StateTypes.CONNECTICUT, 'CT'),
+                    (StateTypes.DELAWARE, 'DE'),
+                    (StateTypes.DISTRICT_OF_COLUMBIA, 'DC'),
+                    (StateTypes.FLORIDA, 'FL'),
+                    (StateTypes.GEORGIA, 'GA'),
+                    (StateTypes.GUAM, 'GU'),
+                    (StateTypes.HAWAII, 'HI'),
+                    (StateTypes.IDAHO, 'ID'),
+                    (StateTypes.ILLINOIS, 'IL'),
+                    (StateTypes.INDIANA, 'IN'),
+                    (StateTypes.IOWA, 'IA'),
+                    (StateTypes.KANSAS, 'KS'),
+                    (StateTypes.KENTUCKY, 'KY'),
+                    (StateTypes.LOUISIANA, 'LA'),
+                    (StateTypes.MAINE, 'ME'),
+                    (StateTypes.MARYLAND, 'MD'),
+                    (StateTypes.MASSACHUSETTS, 'MA'),
+                    (StateTypes.MICHIGAN, 'MI'),
+                    (StateTypes.MINNESOTA, 'MN'),
+                    (StateTypes.MISSISSIPPI, 'MS'),
+                    (StateTypes.MISSOURI, 'MO'),
+                    (StateTypes.MONTANA, 'MT'),
+                    (StateTypes.NEBRASKA, 'NE'),
+                    (StateTypes.NEVADA, 'NV'),
+                    (StateTypes.NEW_HAMPSHIRE, 'NH'),
+                    (StateTypes.NEW_JERSEY, 'NJ'),
+                    (StateTypes.NEW_MEXICO, 'NM'),
+                    (StateTypes.NEW_YORK, 'NY'),
+                    (StateTypes.NORTH_CAROLINA, 'NC'),
+                    (StateTypes.NORTH_DAKOTA, 'ND'),
+                    (StateTypes.NORTHERN_MARIANA_IS, 'MP'),
+                    (StateTypes.OHIO, 'OH'),
+                    (StateTypes.OKLAHOMA, 'OK'),
+                    (StateTypes.OREGON, 'OR'),
+                    (StateTypes.PENNSYLVANIA, 'PA'),
+                    (StateTypes.PUERTO_RICO, 'PR'),
+                    (StateTypes.RHODE_ISLAND, 'RI'),
+                    (StateTypes.SOUTH_CAROLINA, 'SC'),
+                    (StateTypes.SOUTH_DAKOTA, 'SD'),
+                    (StateTypes.TENNESSEE, 'TN'),
+                    (StateTypes.TEXAS, 'TX'),
+                    (StateTypes.UTAH, 'UT'),
+                    (StateTypes.VERMONT, 'VT'),
+                    (StateTypes.VIRGIN_ISLANDS, 'VI'),
+                    (StateTypes.VIRGINIA, 'VA'),
+                    (StateTypes.WASHINGTON, 'WA'),
+                    (StateTypes.WEST_VIRGINIA, 'WV'),
+                    (StateTypes.WISCONSIN, 'WI'),
+                    (StateTypes.WYOMING, 'WY'), )
     name = models.CharField(max_length=128)
     address = models.CharField(max_length=128)
     city = models.CharField(max_length=128)
-    state = models.CharField(max_length=16)
+    state = models.CharField(max_length=32, choices=STATE_OPTIONS, default=StateTypes.ALABAMA)
     zip_code = models.CharField(max_length=16)
     country = models.CharField(max_length=64)
     primary_name = models.CharField(max_length=128)

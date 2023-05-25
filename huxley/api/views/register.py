@@ -12,6 +12,7 @@ from rest_framework.exceptions import PermissionDenied
 
 from huxley.api.serializers import CreateUserSerializer, RegistrationSerializer
 from huxley.core.constants import PaymentTypes
+from huxley.core.constants import StateTypes
 from huxley.core.models import Conference
 from huxley.invoice_automation.src import handler
 from huxley.invoice_automation.src.model.address import Address

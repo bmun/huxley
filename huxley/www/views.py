@@ -9,7 +9,7 @@ from django.shortcuts import redirect, render
 from django.template import RequestContext
 
 from huxley.api.serializers import UserSerializer
-from huxley.core.constants import ContactGender, ContactType, ProgramTypes, PaymentTypes
+from huxley.core.constants import ContactGender, ContactType, ProgramTypes, PaymentTypes, StateTypes
 from huxley.core.models import Conference
 
 
@@ -97,6 +97,7 @@ def index(request):
         'contact_types': ContactType.to_json(),
         'program_types': ProgramTypes.to_json(),
         'payment_types': PaymentTypes.to_json(),
+        'state_types': StateTypes.to_json()
     }
 
     return render(request, 'www.html', context)
