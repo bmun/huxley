@@ -70,7 +70,7 @@ class LoginView extends React.Component {
               Log In
             </Button>
             <Button loading={false} color="green" href="/register">
-              Register for BMUN
+              Register for BMUN's waitlist
             </Button>
           </div>
           <NavLink direction="left" href="/password">
