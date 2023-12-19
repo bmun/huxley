@@ -82,7 +82,7 @@ class RegistrationAdmin(admin.ModelAdmin):
 
     def sheets(self, request):
         if settings.SHEET_ID:
-            SHEET_RANGE = 'Registration!A1:AA'
+            SHEET_RANGE = 'Registration!A1:AB'
             # Store credentials
             creds = service_account.Credentials.from_service_account_file(
                 settings.SERVICE_ACCOUNT_FILE, scopes=settings.SCOPES)
