@@ -41,6 +41,7 @@ class RegistrationAdminTest(TestCase):
             cp.name for cp in registration.committee_preferences.all())]
 
         payment_type_string = ['Credit Card' if registration.payment_type == 1 else 'Check']
+        is_waitlisted_string = ['Yes' if registration.is_waitlisted == 1 else 'No']
 
         fields = [
             registration.registered_at,
@@ -64,6 +65,7 @@ class RegistrationAdminTest(TestCase):
         fields.extend(country_preferences)
         fields.extend(committee_preferences)
         fields.extend(registration.registration_comments)
+        fields.extend(is_waitlisted_string)
 
         fields_csv += ','.join(map(str, fields))
         self.assertEquals(fields_csv, response.content[:-3].decode('utf-8'))
