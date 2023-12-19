@@ -23,10 +23,10 @@ class RegistrationAdmin(admin.ModelAdmin):
             "Beginners", "Intermediates", "Advanced", "Spanish Speakers",
             "Chinese Speakers", "Assignments Finalized", "Waivers Complete",
             "Delegate Fees Paid", "Delegate Fees Owed",
-            "Paid Registration Fee?", "Invoice Sent", "Payment Type", "Country 1", "Country 2", "Country 3",
+            "Paid Registration Fee?", "Invoice Sent", "Payment Type", "Waitlisted", "Country 1", "Country 2", "Country 3",
             "Country 4", "Country 5", "Country 6", "Country 7", "Country 8",
             "Country 9", "Country 10", "Committee Preferences",
-            "Registration Comments", "Waitlisted"
+            "Registration Comments"
         ]) 
 
         for registration in Registration.objects.all().order_by(
@@ -61,10 +61,10 @@ class RegistrationAdmin(admin.ModelAdmin):
                     registration.invoices_sent
                 ]
             ] + payment_type_string +
+            is_waitlisted_string +
             country_preferences + 
             committee_preferences +
-            [str(registration.registration_comments)] +
-            is_waitlisted_string )
+            [str(registration.registration_comments)])
         return rows
 
     def info(self, request):

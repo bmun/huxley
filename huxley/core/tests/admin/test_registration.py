@@ -25,10 +25,10 @@ class RegistrationAdminTest(TestCase):
             "Beginners", "Intermediates", "Advanced", "Spanish Speakers",
             "Chinese Speakers",  "Assignments Finalized", "Waivers Complete", 
             "Delegate Fees Paid", "Delegate Fees Owed", "Paid Registration Fee?", 
-            "Invoice Sent", "Payment Type",
+            "Invoice Sent", "Payment Type", "Waitlisted", 
             "Country 1", "Country 2", "Country 3", "Country 4", "Country 5", 
             "Country 6", "Country 7", "Country 8", "Country 9", "Country 10", 
-            "Committee Preferences", "Registration Comments", "Waitlisted"
+            "Committee Preferences", "Registration Comments"
         ]
 
         fields_csv = ",".join(map(str, header)) + "\r\n"
@@ -62,10 +62,10 @@ class RegistrationAdminTest(TestCase):
             registration.invoices_sent
         ]
         fields.extend(payment_type_string)
+        fields.extend(is_waitlisted_string)
         fields.extend(country_preferences)
         fields.extend(committee_preferences)
         fields.extend(registration.registration_comments)
-        fields.extend(is_waitlisted_string)
 
         fields_csv += ','.join(map(str, fields))
         self.assertEquals(fields_csv, response.content[:-3].decode('utf-8'))
