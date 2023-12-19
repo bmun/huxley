@@ -28,7 +28,7 @@ class RegistrationAdminTest(TestCase):
             "Invoice Sent", "Payment Type",
             "Country 1", "Country 2", "Country 3", "Country 4", "Country 5", 
             "Country 6", "Country 7", "Country 8", "Country 9", "Country 10", 
-            "Committee Preferences", "Registration Comments"
+            "Committee Preferences", "Registration Comments", "Waitlisted"
         ]
 
         fields_csv = ",".join(map(str, header)) + "\r\n"
