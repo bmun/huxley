@@ -26,7 +26,7 @@ class RegistrationAdmin(admin.ModelAdmin):
             "Paid Registration Fee?", "Invoice Sent", "Payment Type", "Country 1", "Country 2", "Country 3",
             "Country 4", "Country 5", "Country 6", "Country 7", "Country 8",
             "Country 9", "Country 10", "Committee Preferences",
-            "Registration Comments"
+            "Registration Comments", "Waitlisted"
         ]) 
 
         for registration in Registration.objects.all().order_by(
@@ -42,6 +42,7 @@ class RegistrationAdmin(admin.ModelAdmin):
                           for cp in registration.committee_preferences.all())
             ]
             payment_type_string = ['Credit Card' if registration.payment_type == 1 else 'Check']
+            is_waitlisted_string = ['Yes' if registration.is_waitlisted == 1 else 'No']
 
             rows.append([
                 str(field) for field in [
@@ -60,8 +61,10 @@ class RegistrationAdmin(admin.ModelAdmin):
                     registration.invoices_sent
                 ]
             ] + payment_type_string +
-            country_preferences + committee_preferences +
-                        [str(registration.registration_comments)])
+            country_preferences + 
+            committee_preferences +
+            [str(registration.registration_comments)] +
+            is_waitlisted_string )
         return rows
 
     def info(self, request):
