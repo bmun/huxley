@@ -23,7 +23,7 @@ class RegistrationAdmin(admin.ModelAdmin):
             "Beginners", "Intermediates", "Advanced", "Spanish Speakers",
             "Chinese Speakers", "Assignments Finalized", "Waivers Complete",
             "Delegate Fees Paid", "Delegate Fees Owed",
-            "Paid Registration Fee?", "Invoice Sent", "Payment Type", "Country 1", "Country 2", "Country 3",
+            "Paid Registration Fee?", "Invoice Sent", "Payment Type", "Waitlisted", "Country 1", "Country 2", "Country 3",
             "Country 4", "Country 5", "Country 6", "Country 7", "Country 8",
             "Country 9", "Country 10", "Committee Preferences",
             "Registration Comments"
@@ -42,6 +42,7 @@ class RegistrationAdmin(admin.ModelAdmin):
                           for cp in registration.committee_preferences.all())
             ]
             payment_type_string = ['Credit Card' if registration.payment_type == 1 else 'Check']
+            is_waitlisted_string = ['Yes' if registration.is_waitlisted == 1 else 'No']
 
             rows.append([
                 str(field) for field in [
@@ -60,8 +61,10 @@ class RegistrationAdmin(admin.ModelAdmin):
                     registration.invoices_sent
                 ]
             ] + payment_type_string +
-            country_preferences + committee_preferences +
-                        [str(registration.registration_comments)])
+            is_waitlisted_string +
+            country_preferences + 
+            committee_preferences +
+            [str(registration.registration_comments)])
         return rows
 
     def info(self, request):
@@ -79,7 +82,7 @@ class RegistrationAdmin(admin.ModelAdmin):
 
     def sheets(self, request):
         if settings.SHEET_ID:
-            SHEET_RANGE = 'Registration!A1:AA'
+            SHEET_RANGE = 'Registration!A1:AB'
             # Store credentials
             creds = service_account.Credentials.from_service_account_file(
                 settings.SERVICE_ACCOUNT_FILE, scopes=settings.SCOPES)

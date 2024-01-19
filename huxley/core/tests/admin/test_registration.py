@@ -25,7 +25,7 @@ class RegistrationAdminTest(TestCase):
             "Beginners", "Intermediates", "Advanced", "Spanish Speakers",
             "Chinese Speakers",  "Assignments Finalized", "Waivers Complete", 
             "Delegate Fees Paid", "Delegate Fees Owed", "Paid Registration Fee?", 
-            "Invoice Sent", "Payment Type",
+            "Invoice Sent", "Payment Type", "Waitlisted", 
             "Country 1", "Country 2", "Country 3", "Country 4", "Country 5", 
             "Country 6", "Country 7", "Country 8", "Country 9", "Country 10", 
             "Committee Preferences", "Registration Comments"
@@ -41,6 +41,7 @@ class RegistrationAdminTest(TestCase):
             cp.name for cp in registration.committee_preferences.all())]
 
         payment_type_string = ['Credit Card' if registration.payment_type == 1 else 'Check']
+        is_waitlisted_string = ['Yes' if registration.is_waitlisted == 1 else 'No']
 
         fields = [
             registration.registered_at,
@@ -61,6 +62,7 @@ class RegistrationAdminTest(TestCase):
             registration.invoices_sent
         ]
         fields.extend(payment_type_string)
+        fields.extend(is_waitlisted_string)
         fields.extend(country_preferences)
         fields.extend(committee_preferences)
         fields.extend(registration.registration_comments)
