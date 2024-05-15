@@ -3,7 +3,7 @@
  * Use of this source code is governed by a BSD License (see LICENSE).
  +*/
 
-//@flow
+// @flow
 
 "use strict";
 
@@ -89,13 +89,6 @@ class DelegateNoteView extends React.Component<{}, DelegateNoteViewState> {
       search_string: "",
       committees: committees,
     };
-  }
-
-  UNSAFE_componentWillMount() {
-    var user = CurrentUserStore.getCurrentUser();
-    if (!User.isDelegate(user)) {
-      history.redirect("/");
-    }
   }
 
   componentDidMount() {

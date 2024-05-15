@@ -48,13 +48,6 @@ class DelegatePaperView extends React.Component {
     };
   }
 
-  UNSAFE_componentWillMount() {
-    var user = CurrentUserStore.getCurrentUser();
-    if (!User.isDelegate(user)) {
-      history.redirect("/");
-    }
-  }
-
   componentDidMount() {
     this._papersToken = PositionPaperStore.addListener(() => {
       this.setState({

@@ -6,17 +6,11 @@
 "use strict";
 
 import React from "react";
-import { history } from "utils/history";
 
-var { AssignmentStore } = require("stores/AssignmentStore");
 const { Button } = require("components/core/Button");
-var { CountryStore } = require("stores/CountryStore");
 var { CommitteeStore } = require("stores/CommitteeStore");
-var { CurrentUserStore } = require("stores/CurrentUserStore");
-var { DelegateStore } = require("stores/DelegateStore");
 var { InnerView } = require("components/InnerView");
 var { TextTemplate } = require("components/core/TextTemplate");
-var { User } = require("utils/User");
 
 require("css/Table.less");
 var AdvisorZoomLinkViewText = require("text/AdvisorZoomLinkViewText.md");
@@ -29,13 +23,6 @@ class AdvisorZoomLinkView extends React.Component {
     this.state = {
       committees: committees,
     };
-  }
-
-  UNSAFE_componentWillMount() {
-    var user = CurrentUserStore.getCurrentUser();
-    if (!User.isAdvisor(user)) {
-      history.redirect("/");
-    }
   }
 
   componentDidMount() {
