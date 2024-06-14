@@ -136,7 +136,7 @@ def call_invoice_handler(school_name: str,
     except QuickbooksException as e:
         log_entry = LogEntry(
             level="ERROR",
-            message=e.message,
+            message=f"{e.message}\n{e.detail}",
             timestamp=datetime.datetime.now(),
             uri="/api/register",
             status_code=500,
