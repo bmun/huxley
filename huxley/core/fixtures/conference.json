@@ -3,7 +3,7 @@
     "pk": 1,
     "model": "core.conference",
     "fields": {
-      "session": 72,
+      "session": 73,
       "start_date": "2020-03-06",
       "end_date": "2020-03-08",
       "reg_open": "2019-09-01",
