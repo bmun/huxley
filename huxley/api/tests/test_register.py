@@ -43,7 +43,7 @@ class RegisterTestCase(tests.CreateAPITestCase):
             },
         },
         'registration': {
-            'conference': 72,
+            'conference': 73,
             'num_beginner_delegates': 1,
             'num_intermediate_delegates': 0,
             'num_advanced_delegates': 0,
@@ -203,7 +203,7 @@ class RegisterTestCase(tests.CreateAPITestCase):
         '''It does not create User and School model instances on an invalid
            input for Registration and valid inputs for User and School.'''
         params = self.get_params(registration={
-            'conference': '72',
+            'conference': '73',
             'num_beginner_delegates': 1,
             'num_intermediate_delegates': 0,
             'num_advanced_delegates': 0,
