@@ -29,7 +29,7 @@ kombu==5.2.3
 packaging==20.9
 Pillow==8.2.0
 prompt-toolkit==3.0.26
-protobuf==3.14.0
+protobuf==3.18.3
 pyasn1==0.4.8
 pyasn1-modules==0.2.8
 pyparsing==2.4.7
