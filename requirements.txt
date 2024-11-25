@@ -27,7 +27,7 @@ httplib2==0.19.1
 idna==2.8
 kombu==5.2.3
 packaging==20.9
-Pillow==8.2.0
+Pillow==9.3.0
 prompt-toolkit==3.0.26
 protobuf==3.14.0
 pyasn1==0.4.8
