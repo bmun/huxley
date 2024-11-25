@@ -36,33 +36,25 @@ class PaperSubmissionTable extends React.Component {
       var gradedFileName = gradedFileNames ? gradedFileNames[gradedFileNames.length - 1] : null;
       var gradedName = gradedHrefData ? "graded_" + gradedFileName : null;
       var gradedButton = paper.graded ? (
-        <a
-          className={cx({
-            button: true,
-            "button-large": true,
-            "button-blue": true,
-            "rounded-small": true,
-          })}
+        <Button
+          size="large"
+          color="blue"  
           href={gradedHrefData}
           download={gradedName}
         >
           Download Graded Paper
-        </a>
+        </Button>
       ) : null;
       buttons = (
         <div>
-          <a
-            className={cx({
-              button: true,
-              "button-large": true,
-              "button-green": true,
-              "rounded-small": true,
-            })}
+          <Button
+            size="large"
+            color="green"  
             href={hrefData}
             download={fileName}
           >
             Download Paper
-          </a>
+          </Button>
           {gradedButton}
         </div>
       );

@@ -10,6 +10,7 @@ import React from "react";
 
 var { _accessSafe } = require("utils/_accessSafe");
 var { AssignmentStore } = require("stores/AssignmentStore");
+var { Button } = require("components/core/Button");
 var { CommitteeStore } = require("stores/CommitteeStore");
 var { CountryStore } = require("stores/CountryStore");
 var { CurrentUserStore } = require("stores/CurrentUserStore");
@@ -248,33 +249,25 @@ class AdvisorPaperView extends React.Component {
         var gradedFileName = gradedFileNames ? gradedFileNames[gradedFileNames.length - 1] : null;
         var gradedName = gradedHrefData ? "graded_" + gradedFileName : null;
         var downloadPaper = paper ? (
-          <a
-            className={cx({
-              button: true,
-              "button-small": true,
-              "button-green": true,
-              "rounded-small": true,
-            })}
+          <Button
+            color="green"
+            size="small"
             href={originalHrefData}
             download={fileName}
           >
             &#10515;
-          </a>
+          </Button>
         ) : null;
         var gradedPaper =
           paper && graded ? (
-            <a
-              className={cx({
-                button: true,
-                "button-small": true,
-                "button-blpaperue": true,
-                "rounded-small": true,
-              })}
+            <Button
+              color="green"
+              size="small"
               href={gradedHrefData}
               download={gradedName}
             >
               &#10515;
-            </a>
+            </Button>
           ) : null;
 
         var category1 = null;
