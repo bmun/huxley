@@ -42,7 +42,7 @@ reportlab==3.5.67
 requests==2.26.0
 rsa==4.7
 six==1.15.0
-sqlparse==0.4.1
+sqlparse==0.4.2
 typed-ast==1.4.3
 uritemplate==3.0.1
 urllib3==1.25.3
